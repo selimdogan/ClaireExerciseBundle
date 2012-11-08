@@ -10,9 +10,16 @@
             "email": "technique@simple-it.fr"
         }
     ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://packages.simple-it.fr"
+        }
+    ],
     "require": {
         "php": ">=5.3.3",
-        "symfony/symfony": "2.1.*"
+        "symfony/symfony": "2.1.*",
+        "simpleit/app-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": {
