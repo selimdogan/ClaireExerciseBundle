@@ -1,0 +1,22 @@
+{
+    "name": "simpleit/claire-app-bundle",
+    "type": "symfony-bundle",
+    "description": "Simple IT ClaireAppBundle",
+    "keywords": ["claire","api","app"],
+    "homepage": "https://github.com/simpleit/ClaireAppBundle",
+    "authors": [
+        {
+            "name": "Simple IT",
+            "email": "technique@simple-it.fr"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/symfony": "2.1.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "SimpleIT": "src/"
+        }
+    }
+}
