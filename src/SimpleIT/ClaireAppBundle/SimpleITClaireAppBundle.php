@@ -9,5 +9,9 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class SimpleITClaireAppBundle extends Bundle
 {
+    public function getParent()
+    {
+        return 'SimpleITAppBundle';
+    }
 
 }
