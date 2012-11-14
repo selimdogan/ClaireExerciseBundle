@@ -288,7 +288,7 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:simpleit/AppBundle.git",
-                "reference": "4bc756fb5e75d2b3a10a4b956d43da35fe1c8bac"
+                "reference": "da7c28a8e610fd461273aa7e984e29304cf66979"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -296,7 +296,7 @@
                 "jms/serializer-bundle": "1.0.x-dev",
                 "sensio/buzz-bundle": "dev-master"
             },
-            "time": "1352384049",
+            "time": "1352900019",
             "type": "symfony-bundle",
             "installation-source": "source",
             "autoload": {
