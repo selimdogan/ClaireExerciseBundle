@@ -6,6 +6,8 @@
 
     <parameters>
         <parameter key="simple_it.claire.http.token.transport.listener.class">Buzz\Listener\BasicAuthListener</parameter>
+        <parameter key="simple_it.claire.http.transport.class">SimpleIT\AppBundle\Services\HttpTransport</parameter>
+        <parameter key="simple_it.claire.api.token.class">SimpleIT\ClaireAppBundle\Services\OAuth2Service</parameter>
     </parameters>
 
     <services>
@@ -14,14 +16,23 @@
                  class="%simple_it.claire.http.token.transport.listener.class%" />
 
         <service id="simple_it.claire.http.transport"
-                 parent="buzz" />
+                 parent="buzz"
+                 class="%simple_it.claire.http.transport.class%" />
 
         <service id="simple_it.claire.http.token.transport"
-                 parent="buzz">
+                 parent="buzz"
+                 class="%simple_it.claire.http.transport.class%">
             <call method="addListener">
                 <argument type="service" id="simple_it.claire.http.token.transport.listener" />
             </call>
         </service>
+
+        <service id="simple_it.claire.api.token" class="%simple_it.claire.api.token.class%">
+            <call method="setTransportService">
+                <argument type="service" id="simple_it.claire.http.token.transport" />
+            </call>
+        </service>
+
     </services>
 
 </container>
