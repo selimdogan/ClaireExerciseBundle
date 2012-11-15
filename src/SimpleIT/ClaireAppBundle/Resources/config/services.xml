@@ -15,9 +15,13 @@
 
         <service id="simple_it.claire.http.transport"
                  parent="buzz" />
-        
+
         <service id="simple_it.claire.http.token.transport"
-                 parent="buzz" />
+                 parent="buzz">
+            <call method="addListener">
+                <argument type="service" id="simple_it.claire.http.token.transport.listener" />
+            </call>
+        </service>
     </services>
 
 </container>
