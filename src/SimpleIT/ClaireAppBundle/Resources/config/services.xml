@@ -13,7 +13,7 @@
     <services>
         <service id="claire_api" class="%simple_it.claire_api.class%" parent="api">
                 <call method="setHost">
-                    <argument>%simple_it_app.host%</argument>
+                    <argument>%simple_it_claire_app.host%</argument>
                 </call>
         </service>
 

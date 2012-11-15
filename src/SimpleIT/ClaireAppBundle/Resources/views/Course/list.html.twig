@@ -3,7 +3,7 @@
 {% block body %}
     <h1>Liste des cours</h1>
 
-    {% if courses.elements is not empty %}
+    {% if courses.elements is defined %}
         <ul>
             {% for course in courses.elements %}
                 <li>
