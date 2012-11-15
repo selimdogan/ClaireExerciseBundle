@@ -4,13 +4,20 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+
     <parameters>
+        <parameter key="simple_it.claire_api.class">SimpleIT\ClaireAppBundle\Api\ClaireApi</parameter>
         <parameter key="simple_it.claire.http.token.transport.listener.class">Buzz\Listener\BasicAuthListener</parameter>
         <parameter key="simple_it.claire.http.transport.class">SimpleIT\AppBundle\Services\HttpTransport</parameter>
         <parameter key="simple_it.claire.api.token.class">SimpleIT\ClaireAppBundle\Services\OAuth2Service</parameter>
     </parameters>
 
     <services>
+        <service id="claire_api" class="%simple_it.claire_api.class%" parent="api">
+                <call method="setHost">
+                    <argument>%simple_it_claire_app.host%</argument>
+                </call>
+        </service>
 
         <service id="simple_it.claire.http.token.transport.listener"
                  class="%simple_it.claire.http.token.transport.listener.class%" />

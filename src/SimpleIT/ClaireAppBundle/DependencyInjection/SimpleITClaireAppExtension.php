@@ -33,5 +33,7 @@ class SimpleITClaireAppExtension extends Extension
 
         $listener->addArgument($config['client_id']);
         $listener->addArgument($config['client_secret']);
+
+        $container->setParameter('simple_it_claire_app.host', $config['host']);
     }
 }
