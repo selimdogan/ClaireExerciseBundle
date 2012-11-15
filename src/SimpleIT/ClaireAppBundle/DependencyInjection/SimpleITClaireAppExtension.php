@@ -25,5 +25,10 @@ class SimpleITClaireAppExtension extends Extension
         $loader->load('services.xml');
 
         $container->addCompilerPass(new TransportCompilerPass);
+
+        $listener = $container->getDefinition('simple_it.claire.http.token.transport.listener');
+
+        $listener->addArgument($config['client_id']);
+        $listener->addArgument($config['client_secret']);
     }
 }

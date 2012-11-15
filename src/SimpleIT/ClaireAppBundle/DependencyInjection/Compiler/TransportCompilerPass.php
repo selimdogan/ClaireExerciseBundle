@@ -15,16 +15,16 @@ class TransportCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('simple_it.api.transport')) {
+        if (!$container->hasDefinition('simple_it.claire.http.transport')) {
             return;
         }
 
         $definition = $container->getDefinition(
-            'simple_it.api.transport'
+            'simple_it.claire.http.transport'
         );
 
         $taggedServices = $container->findTaggedServiceIds(
-            'simple_it.api.transport.listener'
+            'simple_it.claire.http.transport.listener'
         );
         foreach ($taggedServices as $id => $attributes) {
             $definition->addMethodCall(

@@ -20,6 +20,14 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('simpleit_claire_app');
 
+        $rootNode
+            ->children()
+                ->scalarNode('host')->isRequired()->end()
+                ->scalarNode('client_id')->isRequired()->end()
+                ->scalarNode('client_secret')->isRequired()->end()
+            ->end()
+        ;
+
         return $treeBuilder;
     }
 }
