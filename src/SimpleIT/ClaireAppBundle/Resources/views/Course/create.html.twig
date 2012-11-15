@@ -1,0 +1,15 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <h1>Ajout d'un cours</h1>
+
+    <form action="{{ path('course_create') }}" method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+
+        <input type="submit" />
+    </form>
+
+    <hr>
+
+    <p><a href="{{ path('course_list') }}">List of courses</a></p>
+{% endblock %}
