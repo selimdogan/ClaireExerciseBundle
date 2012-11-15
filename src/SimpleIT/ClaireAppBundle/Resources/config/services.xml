@@ -7,6 +7,7 @@
 
     <parameters>
         <parameter key="simple_it.claire_api.class">SimpleIT\ClaireAppBundle\Api\ClaireApi</parameter>
+        <parameter key="simple_it.claire.http.token.transport.listener.class">Buzz\Listener\BasicAuthListener</parameter>
     </parameters>
 
     <services>
@@ -15,5 +16,19 @@
                     <argument>%simple_it_app.host%</argument>
                 </call>
         </service>
+
+        <service id="simple_it.claire.http.token.transport.listener"
+                 class="%simple_it.claire.http.token.transport.listener.class%" />
+
+        <service id="simple_it.claire.http.transport"
+                 parent="buzz" />
+
+        <service id="simple_it.claire.http.token.transport"
+                 parent="buzz">
+            <call method="addListener">
+                <argument type="service" id="simple_it.claire.http.token.transport.listener" />
+            </call>
+        </service>
     </services>
+
 </container>
