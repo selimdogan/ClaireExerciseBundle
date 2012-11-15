@@ -19,14 +19,14 @@ class OAuth2Service extends ApiService
             'password' => $password,
         );
 
-        $this->transportService->submit('/oauth2/token', $param);
+        $this->getTransportService()->submit('/oauth2/token', $param);
 
-        if($this->transportService->getLastResponse()->getStatusCode() != 200)
+        if($this->getTransportService()->getLastResponse()->getStatusCode() != 200)
         {
-            throw new \Exception('Error from claire api : ' . $this->transportService->getLastResponse()->getContent());
+            throw new \Exception('Error from claire api : ' . $this->getTransportService()->getLastResponse()->getContent());
         }
 
-        return json_decode($this->transportService->getLastResponse()->getContent(), true);
+        return json_decode($this->getTransportService()->getLastResponse()->getContent(), true);
     }
 
     public function requestAccessTokenWithClientCredentials()
@@ -35,14 +35,14 @@ class OAuth2Service extends ApiService
             'grant_type' => 'client_credentials',
         );
 
-        $this->transportService->submit('/oauth2/token', $param);
+        $this->getTransportService()->submit('/oauth2/token', $param);
 
-        if($this->transportService->getLastResponse()->getStatusCode() != 200)
+        if($this->getTransportService()->getLastResponse()->getStatusCode() != 200)
         {
-            throw new \Exception('Error from claire api : ' . $this->transportService->getLastResponse()->getContent());
+            throw new \Exception('Error from claire api : ' . $this->getTransportService()->getLastResponse()->getContent());
         }
 
-        return json_decode($this->transportService->getLastResponse()->getContent(), true);
+        return json_decode($this->getTransportService()->getLastResponse()->getContent(), true);
     }
 }
 
