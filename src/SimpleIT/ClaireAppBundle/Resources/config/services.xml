@@ -13,22 +13,23 @@
     </parameters>
 
     <services>
-        <service id="claire_api" class="%simple_it.claire_api.class%" parent="api">
-                <call method="setHost">
-                    <argument>%simple_it_claire_app.host%</argument>
-                </call>
+        <service id="simple_it.claire.http.transport"
+                 parent="buzz"
+                 class="%simple_it.claire.http.transport.class%">
+            <call method="setHost">
+                <argument>%simple_it_claire_app.host%</argument>
+            </call>
         </service>
 
         <service id="simple_it.claire.http.token.transport.listener"
                  class="%simple_it.claire.http.token.transport.listener.class%" />
 
-        <service id="simple_it.claire.http.transport"
-                 parent="buzz"
-                 class="%simple_it.claire.http.transport.class%" />
-
         <service id="simple_it.claire.http.token.transport"
                  parent="buzz"
                  class="%simple_it.claire.http.transport.class%">
+            <call method="setHost">
+                <argument>%simple_it_claire_app.host%</argument>
+            </call>
             <call method="addListener">
                 <argument type="service" id="simple_it.claire.http.token.transport.listener" />
             </call>
@@ -38,6 +39,12 @@
             <call method="setTransportService">
                 <argument type="service" id="simple_it.claire.http.token.transport" />
             </call>
+        </service>
+
+        <service id="claire_api" class="%simple_it.claire_api.class%" parent="api">
+                <call method="setTransportService">
+                    <argument type="service" id="simple_it.claire.http.transport" />
+                </call>
         </service>
 
     </services>

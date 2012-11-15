@@ -9,8 +9,8 @@ use SimpleIT\AppBundle\Services\ApiService;
  */
 class ClaireApi extends ApiService
 {
-    const branches = 'branches/';
-    const elements = 'elements/';
+    const branches = '/branches/';
+    const elements = '/elements/';
 
     /**
      * Get a course from slug
@@ -21,13 +21,13 @@ class ClaireApi extends ApiService
      */
     public function getCourse($slug)
     {
-        $branches = $this->getTransportService()->get($this->getHost().self::branches.'?reference='.$slug)->getContent();
+        $branches = $this->getTransportService()->get(self::branches.'?reference='.$slug)->getContent();
 
         $branches = json_decode($branches, true);
         $rootElement = $branches['branches'][0]['rootElement']['id'];
-        $course = $this->getTransportService()->get($this->getHost().self::elements.$rootElement, array('Accept' => 'application/json'))->getContent();
+        $course = $this->getTransportService()->get(self::elements.$rootElement, array('Accept' => 'application/json'))->getContent();
         $course = json_decode($course, true);
-        $course['content'] = $this->getTransportService()->get($this->getHost().self::elements.$rootElement, array('Accept' => 'text/html'))->getContent();
+        $course['content'] = $this->getTransportService()->get(self::elements.$rootElement, array('Accept' => 'text/html'))->getContent();
 
         return $course;
     }
@@ -39,7 +39,7 @@ class ClaireApi extends ApiService
      */
     public function getCourses()
     {
-        $courses = $this->getTransportService()->get($this->getHost().self::elements.'?level=0&element-subtype=course', array(
+        $courses = $this->getTransportService()->get(self::elements.'?level=0&element-subtype=course', array(
             'Accept' => 'application/json',
             'Range' => 'items=0-49'))->getContent();
 
@@ -55,13 +55,13 @@ class ClaireApi extends ApiService
      */
     public function createCourse($course)
     {
-        $course = $this->getTransportService()->post($this->getHost().self::elements, array('Accept' => 'application/json'), $course)->getContent();
+        $course = $this->getTransportService()->post(self::elements, array('Accept' => 'application/json'), $course)->getContent();
 
         $course = json_decode($course, true);
         $data = array('rootElement' => $course['id'], 'reference' => $course['reference']['id']);
 
         /* Create branch */
-        $this->getTransportService()->post($this->getHost().self::branches, array('Accept' => 'application/json'), $data);
+        $this->getTransportService()->post(self::branches, array('Accept' => 'application/json'), $data);
 
         return $course;
     }
@@ -75,13 +75,13 @@ class ClaireApi extends ApiService
      */
     public function updateCourse($course)
     {
-        $branches = $this->getTransportService()->get($this->getHost().self::branches.'?reference='.$course['reference']['slug'])->getContent();
+        $branches = $this->getTransportService()->get(self::branches.'?reference='.$course['reference']['slug'])->getContent();
         $branches = json_decode($branches, true);
         $rootElement = $branches['branches'][0]['rootElement'];
         $branch = $branches['branches'][0];
 
         $data = array('rootElement' => $rootElement['id'], 'branch' => $branch['id'], 'content' => $course['content']);
-        $course = $this->getTransportService()->put($this->getHost().self::elements.$course['id'], array('Accept' => 'application/json'), http_build_query($data))->getContent();
+        $course = $this->getTransportService()->put(self::elements.$course['id'], array('Accept' => 'application/json'), http_build_query($data))->getContent();
         $course = json_decode($course, true);
 
         return $course;
