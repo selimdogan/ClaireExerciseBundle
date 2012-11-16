@@ -9,7 +9,7 @@
         <parameter key="simple_it.claire_api.class">SimpleIT\ClaireAppBundle\Api\ClaireApi</parameter>
         <parameter key="simple_it.claire.http.token.transport.listener.class">Buzz\Listener\BasicAuthListener</parameter>
         <parameter key="simple_it.claire.http.transport.class">SimpleIT\AppBundle\Services\HttpTransport</parameter>
-        <parameter key="simple_it.claire.api.token.class">SimpleIT\AppBundle\Services\OAuth2Service</parameter>
+        <parameter key="simple_it.claire.api.token.class">SimpleIT\AppBundle\Api\OAuth2Service</parameter>
     </parameters>
 
     <services>
