@@ -3,14 +3,14 @@
 {% block body %}
     <h1>Liste des cours</h1>
 
-    {% if courses.elements is defined %}
+    {% if courses.branches is defined %}
         <ul>
-            {% for course in courses.elements %}
+            {% for branch in courses.branches %}
                 <li>
-                    <a href="{{ path('course_view', {'slug': course.reference.slug }) }}"
-                    title="{{ course.title }}"
+                    <a href="{{ path('course_view', {'slug': branch.reference.slug }) }}"
+                    title="{{ branch.rootElement.title }}"
                     >
-                        {{ course.title }}
+                        {{ branch.rootElement.title }}
                     </a>
                 </li>
             {% endfor %}

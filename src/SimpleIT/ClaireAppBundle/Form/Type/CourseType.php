@@ -10,7 +10,12 @@ class CourseType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('content', 'textarea');
+        $builder->add('content', 'textarea', array(
+            'attr' => array(
+                'class' => 'tinymce',
+                'data-theme' => 'advanced' // simple, advanced, bbcode
+            )
+        ));
 
     }
 

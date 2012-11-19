@@ -44,7 +44,7 @@ class CourseController extends BaseController
                 $course = $this->getApi()->updateCourse($course);
 
                 $slug = $course['reference']['slug'];
-                return $this->redirect($this->generateUrl('course_view', array('slug' => $slug)));
+                return $this->redirect($this->generateUrl('course_edit', array('slug' => $slug)));
             }
         }
 

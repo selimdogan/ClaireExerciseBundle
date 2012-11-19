@@ -39,11 +39,11 @@ class ClaireApi extends ApiService
      */
     public function getCourses()
     {
-        $courses = $this->getTransportService()->get(self::elements.'?level=0&element-subtype=course', array(
+        $branches = $this->getTransportService()->get(self::branches, array(
             'Accept' => 'application/json',
             'Range' => 'items=0-49'))->getContent();
 
-        return json_decode($courses, true);
+        return json_decode($branches, true);
     }
 
     /**
@@ -84,6 +84,7 @@ class ClaireApi extends ApiService
         $course = $this->getTransportService()->put(self::elements.$course['id'], array('Accept' => 'application/json'), http_build_query($data))->getContent();
         $course = json_decode($course, true);
 
+        print_r($course);
         return $course;
     }
 }
