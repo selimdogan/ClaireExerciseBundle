@@ -16,4 +16,14 @@ class BaseController extends Controller
     {
         return $this->get('claire_api');
     }
+
+    /**
+     * Get api service
+     *
+     * @return SimpleIT\ClaireAppBundle\Api\ClaireApi
+     */
+    public function getCoursesApi()
+    {
+        return $this->get('claire_courses_api');
+    }
 }
