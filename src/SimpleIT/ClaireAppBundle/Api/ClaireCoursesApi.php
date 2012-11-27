@@ -11,6 +11,7 @@ class ClaireCoursesApi extends ClaireApi
 {
     const branches = '/branches/';
     const elements = '/elements/';
+    const courses = '/courses/';
 
     /**
      * Get a course from slug
@@ -19,17 +20,27 @@ class ClaireCoursesApi extends ClaireApi
      *
      * @return string Course at the html format
      */
-    public function getCourse($slug)
+    public function getCourse($chapterSlug, $rootSlug)
     {
-        $branches = $this->getTransportService()->get(self::branches.'?reference='.$slug)->getContent();
+        $course = $this->getTransportService()->get(self::courses.$rootSlug.'/'.$chapterSlug, array('Accept' => 'application/json'))->getContent();
 
-        $branches = json_decode($branches, true);
-        $rootElement = $branches['branches'][0]['rootElement']['id'];
-        $course = $this->getTransportService()->get(self::elements.$rootElement, array('Accept' => 'application/json'))->getContent();
         $course = json_decode($course, true);
-        $course['content'] = $this->getTransportService()->get(self::elements.$rootElement, array('Accept' => 'text/html'))->getContent();
 
         return $course;
+    }
+
+    /**
+     * Get a toc from slug
+     *
+     * @param string $slug Slug
+     *
+     * @return string Toc at the html format
+     */
+    public function getToc($slug)
+    {
+        $toc = $this->getTransportService()->get(self::courses.$slug.'/toc', array('Accept' => 'application/json'))->getContent();
+        $toc = json_decode($toc, true);
+        return $toc;
     }
 
     /**
