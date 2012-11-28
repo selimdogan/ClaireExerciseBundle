@@ -12,22 +12,32 @@
         <parameter key="simple_it.claire.http.transport.class">SimpleIT\AppBundle\Services\HttpTransport</parameter>
         <parameter key="simple_it.claire.api.token.class">SimpleIT\AppBundle\Api\OAuth2Service</parameter>
         <parameter key="simple_it.claire.tutorial.class">SimpleIT\ClaireAppBundle\Services\TutorialService</parameter>
+
+        <parameter key="simple_it.claire.buzz.client.class">SimpleIT\AppBundle\Buzz\Client\Curl</parameter>
+        <parameter key="buzz.browser.class">Buzz\Browser</parameter>
     </parameters>
 
     <services>
+        <service id="simple_it.claire.http.token.transport.listener"
+                 class="%simple_it.claire.http.token.transport.listener.class%" />
+
+        <service id="simple_it.claire.buzz.client" class="%simple_it.claire.buzz.client.class%" public="false" />
+
+        <service id="simple_it.claire.buzz" class="%buzz.browser.class%">
+          <argument type="service" id="simple_it.claire.buzz.client" />
+          <argument type="service" id="buzz.message_factory" />
+        </service>
+
         <service id="simple_it.claire.http.transport"
-                 parent="buzz"
+                 parent="simple_it.claire.buzz"
                  class="%simple_it.claire.http.transport.class%">
             <call method="setHost">
                 <argument>%simple_it_claire_app.host%</argument>
             </call>
         </service>
 
-        <service id="simple_it.claire.http.token.transport.listener"
-                 class="%simple_it.claire.http.token.transport.listener.class%" />
-
         <service id="simple_it.claire.http.token.transport"
-                 parent="buzz"
+                 parent="simple_it.claire.buzz"
                  class="%simple_it.claire.http.transport.class%">
             <call method="setHost">
                 <argument>%simple_it_claire_app.host%</argument>
