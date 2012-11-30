@@ -16,81 +16,52 @@ class TutorialService
      */
     public function setPagination($tutorial, $toc)
     {
-        if(!isset($tutorial['leftElement']['reference']['slug']))
-        {
-            $tutorial['prev'] = $this->getLeftSibling($tutorial, $toc);
-        }
-        else
-        {
-            $tutorial['prev'] = $tutorial['leftElement'];
-        }
+        $flatToc = $this->getFlatToc($toc);
+        $prev = $toc;
+        $found = false;
 
-        if(!isset($tutorial['rightElement']['reference']['slug']))
+        foreach($flatToc as $element)
         {
-            $tutorial['next'] = $this->getRightSibling($tutorial, $toc);
-        }
-        else
-        {
-            $tutorial['next'] = $tutorial['rightElement'];
+            if($found)
+            {
+                $tutorial['next'] = $element;
+                break;
+            }
+
+            if($element['id'] == $tutorial['id'])
+            {
+                $tutorial['prev'] = $prev;
+                $found = true;
+            }
+            else
+            {
+                $prev = $element;
+            }
         }
 
         return $tutorial;
     }
 
     /**
-     * Get the left sibling of a tutorial if needed
+     * Get toc as a flat array
      *
-     * @param array $tutorial The tutorial as array
-     * @param array $toc      The toc as array
+     * @param array $toc ToC
      *
-     * @return array Tutorial
+     * @return array
      */
-    private function getLeftSibling($tutorial, $toc)
+    private function getFlatToc($toc)
     {
+        $flatToc = array();
+
         foreach($toc['children'] as $child)
         {
-            if($child['id'] == $tutorial['id'])
-            {
-                return $toc;
-            }
-
+            $flatToc[] = $child;
             foreach($child['children'] as $subchild)
             {
-                if($subchild['id'] == $tutorial['id'])
-                {
-                    return $child;
-                }
-            }
-        }
-    }
-
-    /**
-     * Get the right sibling of a tutorial if needed
-     *
-     * @param array $tutorial The tutorial as array
-     * @param array $toc      The toc as array
-     *
-     * @return array Tutorial
-     */
-    private function getRightSibling($tutorial, $toc)
-    {
-        $found = false;
-        foreach($toc['children'] as $child)
-        {
-            if($found)
-            {
-                return $child;
-            }
-
-            foreach($child['children'] as $subchild)
-            {
-                if($subchild['id'] == $tutorial['id'])
-                {
-                    $found = true;
-                }
+                $flatToc[] = $subchild;
             }
         }
 
-        return null;
+        return $flatToc;
     }
 }
