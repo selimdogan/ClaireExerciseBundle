@@ -10,7 +10,27 @@ use SimpleIT\ClaireAppBundle\Form\Type\CourseType;
  */
 class CategoryController extends BaseController
 {
+    /**
+     * View a category
+     *
+     * @param Request $request Request
+     *
+     * @return Response
+     */
+    public function viewAction(Request $request)
+    {
+        $categorySlug = $request->get('slug');
 
+        $this->getCategoriesApi()->getCategory($categorySlug);
+        $this->getCategoriesApi()->getTags($categorySlug);
+        $category = $this->getCategoriesApi()->getData();
+
+        return $this->render('TutorialBundle:Category:view.html.twig',
+            array(
+                'category' => $category
+            )
+        );
+    }
 
     /**
      * List categories
@@ -21,8 +41,13 @@ class CategoryController extends BaseController
      */
     public function listAction(Request $request)
     {
-        $categories = $this->getCategoriesApi()->getCategories();
+        $this->getCategoriesApi()->getCategories();
+        $categories = $this->getCategoriesApi()->getData();
 
-        return $this->render('SimpleITClaireAppBundle:Categories:list.html.twig', array('categories' => $categories));
+        return $this->render('TutorialBundle:Category:list.html.twig',
+            array(
+                'categories' => $categories
+            )
+        );
     }
 }

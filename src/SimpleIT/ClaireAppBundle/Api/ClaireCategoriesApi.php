@@ -10,20 +10,41 @@ use SimpleIT\ClaireAppBundle\Api\ClaireApi;
 class ClaireCategoriesApi extends ClaireApi
 {
     const categories = '/categories/';
+
     /**
-     * Get a course from slug
-     *
-     * @param string $slug Slug
-     *
-     * @return string Course at the html format
+     * Get categories
      */
-    public function getCategories($chapterSlug, $rootSlug)
+    public function getCategories()
     {
-        $course = $this->getTransportService()->get(self::categories.$rootSlug.'/'.$chapterSlug, array('Accept' => 'application/json'))->getContent();
+        $this->responses['categories'] = $this->getTransportService()->get(self::categories, array(
+            'Accept' => 'application/json',
+            'Range' => 'items=0-49'));
+    }
 
-        $course = json_decode($course, true);
+    /**
+     * Get a category from slug
+     *
+     * @param string $categorySlug Slug
+     */
+    public function getCategory($categorySlug)
+    {
+        $this->responses['category'] = $this->getTransportService()->get(
+            self::categories.$categorySlug,
+            array('Accept' => 'application/json')
+        );
+    }
 
-        return $course;
+    /**
+     * Get tags from slug
+     *
+     * @param string $categorySlug Slug
+     */
+    public function getTags($categorySlug)
+    {
+        $this->responses['category'] = $this->getTransportService()->get(
+            self::categories.$categorySlug.'/tags',
+            array('Accept' => 'application/json')
+        );
     }
 
 }
