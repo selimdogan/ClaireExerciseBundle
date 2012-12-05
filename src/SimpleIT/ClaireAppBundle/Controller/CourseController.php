@@ -84,9 +84,9 @@ class CourseController extends BaseController
             $chapterSlug = $request->get('slug');
         }
 
-        $this->getCoursesApi()->getToc($rootSlug);
-        $this->getCoursesApi()->getCourse($chapterSlug, $rootSlug);
-        $tutorial = $this->getCoursesApi()->getData();
+        $this->getCoursesApi()->prepareToc($rootSlug);
+        $this->getCoursesApi()->prepareCourse($chapterSlug, $rootSlug);
+        $tutorial = $this->getCoursesApi()->getResult();
 
         $tutorial['tutorial'] = $this->get('simpleit.claire.tutorial')->setPagination($tutorial['tutorial'], $tutorial['toc']);
 
@@ -108,8 +108,8 @@ class CourseController extends BaseController
     public function listAction(Request $request)
     {
         $this->getCoursesApi()->getCourses();
-        $data = $this->getCoursesApi()->getData();
+        $tutorials = $this->getCoursesApi()->getData();
 
-        return $this->render('SimpleITClaireAppBundle:Course:list.html.twig', array('courses' => $data));
+        return $this->render('SimpleITClaireAppBundle:Course:list.html.twig', array('courses' => $tutorials));
     }
 }

@@ -13,26 +13,6 @@ class ClaireCoursesApi extends ClaireApi
     const elements = '/elements/';
     const courses = '/courses/';
 
-    private $responses = array();
-
-    /**
-     * Get data from all requests as json
-     *
-     * @return array
-     */
-    public function getData()
-    {
-        $data = array();
-        $this->getTransportService()->getClient()->flush();
-
-        foreach($this->responses as $key => $response)
-        {
-            $data[$key] = json_decode($response->getContent(), true);
-        }
-
-        return $data;
-    }
-
     /**
      * Get a course from slug
      *
@@ -40,7 +20,7 @@ class ClaireCoursesApi extends ClaireApi
      *
      * @return string Course at the html format
      */
-    public function getCourse($chapterSlug, $rootSlug)
+    public function prepareCourse($chapterSlug, $rootSlug)
     {
         $this->responses['tutorial'] = $this->getTransportService()->get(
             self::courses.$rootSlug.'/'.$chapterSlug,
@@ -55,7 +35,7 @@ class ClaireCoursesApi extends ClaireApi
      *
      * @return string Toc at the html format
      */
-    public function getToc($slug)
+    public function prepareToc($slug)
     {
         $this->responses['toc'] = $this->getTransportService()->get(
             self::courses.$slug.'/toc',
@@ -68,7 +48,7 @@ class ClaireCoursesApi extends ClaireApi
      *
      * @return array
      */
-    public function getCourses()
+    public function prepareCourses()
     {
         $this->responses['branches'] = $this->getTransportService()->get(self::branches, array(
             'Accept' => 'application/json',
