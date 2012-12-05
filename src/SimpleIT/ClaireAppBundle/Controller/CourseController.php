@@ -75,11 +75,27 @@ class CourseController extends BaseController
      *
      * @return Response
      */
-    public function viewAction(Request $request)
+    public function readAction(Request $request)
     {
-        $course = $this->getCoursesApi()->getCourse($request->get('slug'));
+        $rootSlug = $request->get('slug');
+        $chapterSlug = $request->get('chapterSlug', false);
+        if(!$chapterSlug)
+        {
+            $chapterSlug = $request->get('slug');
+        }
 
-        return $this->render('SimpleITClaireAppBundle:Course:view.html.twig', array('course' => $course));
+        $this->getCoursesApi()->getToc($rootSlug);
+        $this->getCoursesApi()->getCourse($chapterSlug, $rootSlug);
+        $tutorial = $this->getCoursesApi()->getData();
+
+        $tutorial['tutorial'] = $this->get('simpleit.claire.tutorial')->setPagination($tutorial['tutorial'], $tutorial['toc']);
+
+        return $this->render('TutorialBundle:Tutorial:view.html.twig',
+            array(
+                'tutorial' => $tutorial['tutorial'],
+                'toc' => $tutorial['toc']
+            )
+        );
     }
 
     /**
@@ -91,8 +107,9 @@ class CourseController extends BaseController
      */
     public function listAction(Request $request)
     {
-        $courses = $this->getCoursesApi()->getCourses();
+        $this->getCoursesApi()->getCourses();
+        $data = $this->getCoursesApi()->getData();
 
-        return $this->render('SimpleITClaireAppBundle:Course:list.html.twig', array('courses' => $courses));
+        return $this->render('SimpleITClaireAppBundle:Course:list.html.twig', array('courses' => $data));
     }
 }

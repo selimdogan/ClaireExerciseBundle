@@ -13,6 +13,26 @@ class ClaireCoursesApi extends ClaireApi
     const elements = '/elements/';
     const courses = '/courses/';
 
+    private $responses = array();
+
+    /**
+     * Get data from all requests as json
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        $data = array();
+        $this->getTransportService()->getClient()->flush();
+
+        foreach($this->responses as $key => $response)
+        {
+            $data[$key] = json_decode($response->getContent(), true);
+        }
+
+        return $data;
+    }
+
     /**
      * Get a course from slug
      *
@@ -22,11 +42,10 @@ class ClaireCoursesApi extends ClaireApi
      */
     public function getCourse($chapterSlug, $rootSlug)
     {
-        $course = $this->getTransportService()->get(self::courses.$rootSlug.'/'.$chapterSlug, array('Accept' => 'application/json'))->getContent();
-
-        $course = json_decode($course, true);
-
-        return $course;
+        $this->responses['tutorial'] = $this->getTransportService()->get(
+            self::courses.$rootSlug.'/'.$chapterSlug,
+            array('Accept' => 'application/json')
+        );
     }
 
     /**
@@ -38,9 +57,10 @@ class ClaireCoursesApi extends ClaireApi
      */
     public function getToc($slug)
     {
-        $toc = $this->getTransportService()->get(self::courses.$slug.'/toc', array('Accept' => 'application/json'))->getContent();
-        $toc = json_decode($toc, true);
-        return $toc;
+        $this->responses['toc'] = $this->getTransportService()->get(
+            self::courses.$slug.'/toc',
+            array('Accept' => 'application/json')
+        );
     }
 
     /**
@@ -50,11 +70,9 @@ class ClaireCoursesApi extends ClaireApi
      */
     public function getCourses()
     {
-        $branches = $this->getTransportService()->get(self::branches, array(
+        $this->responses['branches'] = $this->getTransportService()->get(self::branches, array(
             'Accept' => 'application/json',
-            'Range' => 'items=0-49'))->getContent();
-
-        return json_decode($branches, true);
+            'Range' => 'items=0-49'));
     }
 
     /**
@@ -74,7 +92,6 @@ class ClaireCoursesApi extends ClaireApi
         /* Create branch */
         $this->getTransportService()->post(self::branches, array('Accept' => 'application/json'), $data);
 
-        print_r($course);
         return $course;
     }
 

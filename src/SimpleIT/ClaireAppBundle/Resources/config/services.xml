@@ -13,7 +13,7 @@
         <parameter key="simple_it.claire.api.token.class">SimpleIT\AppBundle\Api\OAuth2Service</parameter>
         <parameter key="simple_it.claire.tutorial.class">SimpleIT\ClaireAppBundle\Services\TutorialService</parameter>
 
-        <parameter key="simple_it.claire.buzz.client.class">SimpleIT\AppBundle\Buzz\Client\Curl</parameter>
+        <parameter key="simple_it.claire.buzz.client.class">SimpleIT\AppBundle\Buzz\Client\MultiCurl</parameter>
         <parameter key="buzz.browser.class">Buzz\Browser</parameter>
     </parameters>
 
