@@ -1,24 +1,7 @@
-course_view:
-    pattern:  /{slug}
-    defaults: { _controller: SimpleITClaireAppBundle:Course:view }
-    requirements:
-        _method: get
-        slug: \w+
+ClaireCourses:
+    resource: "@SimpleITClaireAppBundle/Resources/config/Courses/routing.yml"
+    prefix: /courses
 
-course_list:
-    pattern:  /
-    defaults: { _controller: SimpleITClaireAppBundle:Course:list }
-    requirements:
-        _method: get
-
-course_create:
-    pattern:  /create
-    defaults: { _controller: SimpleITClaireAppBundle:Course:create }
-    requirements:
-        _method: get|post
-
-course_edit:
-    pattern:  /edit/{slug}
-    defaults: { _controller: SimpleITClaireAppBundle:Course:edit }
-    requirements:
-        _method: get|post
+ClaireCategories:
+    resource: "@SimpleITClaireAppBundle/Resources/config/Categories/routing.yml"
+    prefix: /categories
