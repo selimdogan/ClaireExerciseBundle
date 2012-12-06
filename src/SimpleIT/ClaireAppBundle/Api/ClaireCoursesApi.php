@@ -12,6 +12,20 @@ class ClaireCoursesApi extends ClaireApi
     const branches = '/branches/';
     const elements = '/elements/';
     const courses = '/courses/';
+    const metadatas = '/metadatas/';
+
+    /**
+     * Get metadatas for course from slug
+     *
+     * @param string $slug Slug
+     */
+    public function prepareMetadatas($slug)
+    {
+        $this->responses['metadatas'] = $this->getTransportService()->get(
+            self::courses.$slug.self::metadatas,
+            array('Accept' => 'application/json')
+        );
+    }
 
     /**
      * Get a course from slug
@@ -20,10 +34,10 @@ class ClaireCoursesApi extends ClaireApi
      *
      * @return string Course at the html format
      */
-    public function prepareCourse($chapterSlug, $rootSlug)
+    public function prepareCourse($rootSlug, $chapterSlug)
     {
-        $this->responses['tutorial'] = $this->getTransportService()->get(
-            self::courses.$rootSlug.'/'.$chapterSlug,
+        $this->responses['course'] = $this->getTransportService()->get(
+            self::courses.$rootSlug.((!empty($chapterSlug)) ? '/'.$chapterSlug : ''),
             array('Accept' => 'application/json')
         );
     }

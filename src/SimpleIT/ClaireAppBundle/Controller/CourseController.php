@@ -79,21 +79,23 @@ class CourseController extends BaseController
     {
         $rootSlug = $request->get('slug');
         $chapterSlug = $request->get('chapterSlug', false);
-        if(!$chapterSlug)
-        {
-            $chapterSlug = $request->get('slug');
-        }
 
         $this->getCoursesApi()->prepareToc($rootSlug);
-        $this->getCoursesApi()->prepareCourse($chapterSlug, $rootSlug);
-        $tutorial = $this->getCoursesApi()->getResult();
+        $this->getCoursesApi()->prepareCourse($rootSlug, $chapterSlug);
+        $this->getCoursesApi()->prepareMetadatas($rootSlug);
+        $result = $this->getCoursesApi()->getResult();
 
-        $tutorial['tutorial'] = $this->get('simpleit.claire.course')->setPagination($tutorial['tutorial'], $tutorial['toc']);
+        $result['course'] = $this->get('simpleit.claire.course')->setPagination($result['course'], $result['toc']);
+
+        echo '<pre>';
+        print_r($result);
+        echo '</pre>';
 
         return $this->render('TutorialBundle:Tutorial:view.html.twig',
             array(
-                'tutorial' => $tutorial['tutorial'],
-                'toc' => $tutorial['toc']
+                'course' => $result['course'],
+                'metadatas' => $result['metadatas'],
+                'toc' => $result['toc'],
             )
         );
     }

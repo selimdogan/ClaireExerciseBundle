@@ -1,0 +1,15 @@
+
+{% if metadata.key == 'CreativeWork/aggregateRating' %}
+    <p>Note</p>
+    <p>{{ metadata.value }} / 5</p>
+{% endif %}
+
+{% if metadata.key == 'CreativeWork/difficulty' %}
+    <p>Difficulty</p>
+    <p>{{ metadata.value }}</p>
+{% endif %}
+
+{% if metadata.key == 'CreativeWork/duration' %}
+    <p>Durée</p>
+    <p>{{ metadata.value }}</p>
+{% endif %}
