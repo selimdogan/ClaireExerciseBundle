@@ -53,7 +53,7 @@ class CourseService
     {
         static $flatToc = array();
 
-        if (isset($toc['children']))
+        if (isset($toc['children']) && is_array($toc['children']))
         {
             foreach($toc['children'] as $child)
             {
