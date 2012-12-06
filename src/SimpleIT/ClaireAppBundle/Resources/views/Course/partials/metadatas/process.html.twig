@@ -1,15 +1,12 @@
 
-{% if metadata.key == 'CreativeWork/aggregateRating' %}
-    <p>Note</p>
-    <p>{{ metadata.value }} / 5</p>
-{% endif %}
+{% if
 
-{% if metadata.key == 'CreativeWork/difficulty' %}
-    <p>Difficulty</p>
-    <p>{{ metadata.value }}</p>
-{% endif %}
+metadata.key == 'CreativeWork/aggregateRating' or
+metadata.key == 'CreativeWork/difficulty' or
+metadata.key == 'CreativeWork/duration'
 
-{% if metadata.key == 'CreativeWork/duration' %}
-    <p>Durée</p>
+%}
+{{ 'claire.metadatas.'~metadata.slug}}
+    <p>{{ 'claire.metadatas.'~metadata.slug|trans([], 'SimpleITClaireAppBundle') }}</p>
     <p>{{ metadata.value }}</p>
 {% endif %}
