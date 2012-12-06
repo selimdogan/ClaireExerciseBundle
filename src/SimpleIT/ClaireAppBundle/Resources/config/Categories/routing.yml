@@ -1,5 +1,19 @@
 categories_list:
-    pattern:  /categories/
+    pattern:  /
     defaults: { _controller: SimpleITClaireAppBundle:Category:list }
     requirements:
         _method: get
+
+category_view:
+    pattern:  /{slug}
+    defaults: { _controller: SimpleITClaireAppBundle:Category:view, slug: null }
+    requirements:
+        _method: get
+
+category_tags_view:
+    pattern:  /{categorySlug}/tags/{slug}
+    defaults: { _controller: SimpleITClaireAppBundle:Category:viewTags, categorySlug: null, slug: null }
+    requirements:
+        _method: get
+
+

@@ -21,7 +21,7 @@ class CategoryController extends BaseController
         $this->getCategoriesApi()->prepareCategories();
         $categories = $this->getCategoriesApi()->getResult();
 
-        return $this->render('TutorialBundle:Category:list.html.twig', array('categories' => $categories['categories']));
+        return $this->render('SimpleITClaireAppBundle:Category:list.html.twig', array('categories' => $categories['categories']));
     }
 
     /**
@@ -43,11 +43,28 @@ class CategoryController extends BaseController
         $category = $this->getCategoriesApi()->getResult();
         $courses = $this->getCoursesApi()->getResult();
 
-        return $this->render('TutorialBundle:Category:view.html.twig',
+        return $this->render('SimpleITClaireAppBundle:Category:view.html.twig',
             array(
                 'category' => $category['category'],
                 'tags' => $category['tags']['tags'],
-                'courses' => $courses['branches']
+                'branches' => $courses['branches']['branches']
+            )
+        );
+    }
+
+    public function viewTagsAction(Request $request)
+    {
+        $categorySlug = $request->get('categorySlug');
+        $tagSlug = $request->get('slug');
+
+        $this->getCategoriesApi()->prepareTag($categorySlug, $tagSlug);
+        //$this->getCategoriesApi()->prepareAssociatedTags($categorySlug, $tagSlug);
+
+        $tag = $this->getCategoriesApi()->getResult();
+
+        return $this->render('SimpleITClaireAppBundle:Category:viewTag.html.twig',
+            array(
+                'tag' => $tag['tags']
             )
         );
     }
