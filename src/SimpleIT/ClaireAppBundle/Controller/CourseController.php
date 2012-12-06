@@ -87,31 +87,54 @@ class CourseController extends BaseController
 
         $result['course'] = $this->get('simpleit.claire.course')->setPagination($result['course'], $result['toc']);
 
-        echo '<pre>';
-        print_r($result);
-        echo '</pre>';
-
         return $this->render('TutorialBundle:Tutorial:view.html.twig',
             array(
                 'course' => $result['course'],
-                'metadatas' => $result['metadatas'],
+                'difficulty' => $this->getOneMetadata('CreativeWork/difficulty', $result['metadatas']),
+                'duration' => $this->getOneMetadata('CreativeWork/duration', $result['metadatas']),
+                'licence' => $this->getOneMetadata('CreativeWork/license', $result['metadatas']),
+                'description' => $this->getOneMetadata('Thing/Description ', $result['metadatas']),
+                'rate' => $this->getOneMetadata('CreativeWork/aggregateRating', $result['metadatas']),
+                'icon' => $this->getOneMetadata('Thing/image', $result['metadatas']),
                 'toc' => $result['toc'],
             )
         );
     }
 
     /**
-     * List courses
+     * Get One metadata
      *
-     * @param Request $request Request
+     * @param type  $key  Key to search
+     * @param array $list Array list of metadata
+     *
+     * @return string | null
+     */
+    private function getOneMetadata($key, array $metadatas)
+    {
+        $value = '';
+
+        foreach($metadatas as $metadata)
+        {
+            if ($metadata['key'] == $key)
+            {
+                $value = $metadata['value'];
+                break;
+            }
+        }
+
+        return $value;
+    }
+
+    /**
+     * List courses
      *
      * @return Response
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         $this->getCoursesApi()->getCourses();
-        $tutorials = $this->getCoursesApi()->getData();
+        $courses = $this->getCoursesApi()->getData();
 
-        return $this->render('SimpleITClaireAppBundle:Course:list.html.twig', array('courses' => $tutorials));
+        return $this->render('SimpleITClaireAppBundle:Course:list.html.twig', array('courses' => $courses));
     }
 }
