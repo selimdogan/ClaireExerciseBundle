@@ -51,14 +51,14 @@ class TutorialService
      */
     private function getFlatToc($toc)
     {
-        $flatToc = array();
+        static $flatToc = array();
 
-        foreach($toc['children'] as $child)
+        if (isset($toc['children']))
         {
-            $flatToc[] = $child;
-            foreach($child['children'] as $subchild)
+            foreach($toc['children'] as $child)
             {
-                $flatToc[] = $subchild;
+                $flatToc[] = $child;
+                $this->getFlatToc($child);
             }
         }
 
