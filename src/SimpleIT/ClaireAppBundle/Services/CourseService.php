@@ -2,9 +2,9 @@
 namespace SimpleIT\ClaireAppBundle\Services;
 
 /**
- * TutorialService
+ * CourseService
  */
-class TutorialService
+class CourseService
 {
     /**
      * Set the prev and next index for a tutorial

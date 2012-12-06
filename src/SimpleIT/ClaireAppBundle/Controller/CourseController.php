@@ -88,7 +88,7 @@ class CourseController extends BaseController
         $this->getCoursesApi()->prepareCourse($chapterSlug, $rootSlug);
         $tutorial = $this->getCoursesApi()->getResult();
 
-        $tutorial['tutorial'] = $this->get('simpleit.claire.tutorial')->setPagination($tutorial['tutorial'], $tutorial['toc']);
+        $tutorial['tutorial'] = $this->get('simpleit.claire.course')->setPagination($tutorial['tutorial'], $tutorial['toc']);
 
         return $this->render('TutorialBundle:Tutorial:view.html.twig',
             array(
