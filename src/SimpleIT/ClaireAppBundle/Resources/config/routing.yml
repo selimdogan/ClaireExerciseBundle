@@ -1,7 +1,0 @@
-ClaireCourses:
-    resource: "@SimpleITClaireAppBundle/Resources/config/Courses/routing.yml"
-    prefix: /courses
-
-ClaireCategories:
-    resource: "@SimpleITClaireAppBundle/Resources/config/Categories/routing.yml"
-    prefix: /categories

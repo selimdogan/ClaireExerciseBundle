@@ -15,7 +15,7 @@
     <ul>
         {% for branch in branches %}
             <li>
-                <a href="#">
+                <a href="{{ path('SimpleIT_Claire_course_view', {slug: branch.reference.slug}) }}">
                     {{ branch.rootElement.title }}
                 </a>
             </li>
@@ -30,7 +30,7 @@
     <ul>
         {% for tag in tags %}
             <li>
-                <a href="{{ path('category_tags_view', { categorySlug: category.slug, slug: tag.slug }) }}">
+                <a href="{{ path('SimpleIT_Claire_categories_tags_view', { categorySlug: category.slug, slug: tag.slug }) }}">
                     {{ tag.name }}
                 </a>
             </li>
