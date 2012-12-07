@@ -13,6 +13,20 @@ class ClaireCoursesApi extends ClaireApi
     const elements = '/elements/';
     const courses = '/courses/';
     const metadatas = '/metadatas/';
+    const tags = '/tags/';
+
+    /**
+     * Get timeline for course from slug
+     *
+     * @param string $slug Slug
+     */
+    public function prepareTimeline($slug)
+    {
+        $this->responses['timeline'] = $this->getTransportService()->get(
+            self::courses.$slug.'/toc?level=3&type=title-1+title-2+title-3',
+            array('Accept' => 'application/json')
+        );
+    }
 
     /**
      * Get metadatas for course from slug
@@ -34,10 +48,25 @@ class ClaireCoursesApi extends ClaireApi
      *
      * @return string Course at the html format
      */
-    public function prepareCourse($rootSlug, $chapterSlug)
+    public function prepareCourse($rootSlug, $chapterSlug, $type)
     {
         $this->responses['course'] = $this->getTransportService()->get(
-            self::courses.$rootSlug.((!empty($chapterSlug)) ? '/'.$chapterSlug : ''),
+            self::courses.$rootSlug.((!empty($chapterSlug)) ? '/'.$type.'/'.$chapterSlug : ''),
+            array('Accept' => 'application/json')
+        );
+    }
+
+    /**
+     * Get tags for course
+     *
+     * @param string $rootSlug RootSlug
+     *
+     * @return string Course at the html format
+     */
+    public function prepareCourseTags($rootSlug)
+    {
+        $this->responses['tags'] = $this->getTransportService()->get(
+            self::courses.$rootSlug.self::tags,
             array('Accept' => 'application/json')
         );
     }

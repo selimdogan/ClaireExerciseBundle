@@ -9,28 +9,28 @@ class CourseService
     /**
      * Set the prev and next index for a tutorial
      *
-     * @param array $tutorial The tutorial as array
-     * @param array $toc      The toc as array
+     * @param array $course The tutorial as array
+     * @param array $toc    The toc as array
      *
      * @return array Tutorial
      */
-    public function setPagination($tutorial, $toc)
+    public function setPagination($course, $toc)
     {
-        $flatToc = $this->getFlatToc($toc);
-        $prev = $toc;
         $found = false;
-
-        foreach($flatToc as $element)
+        foreach($toc as $element)
         {
             if($found)
             {
-                $tutorial['next'] = $element;
+                $course['next'] = $element;
                 break;
             }
 
-            if($element['id'] == $tutorial['id'])
+            if($element['id'] == $course['id'])
             {
-                $tutorial['prev'] = $prev;
+                if (isset($prev))
+                {
+                    $course['prev'] = $prev;
+                }
                 $found = true;
             }
             else
@@ -39,29 +39,6 @@ class CourseService
             }
         }
 
-        return $tutorial;
-    }
-
-    /**
-     * Get toc as a flat array
-     *
-     * @param array $toc ToC
-     *
-     * @return array
-     */
-    private function getFlatToc($toc)
-    {
-        static $flatToc = array();
-
-        if (isset($toc['children']) && is_array($toc['children']))
-        {
-            foreach($toc['children'] as $child)
-            {
-                $flatToc[] = $child;
-                $this->getFlatToc($child);
-            }
-        }
-
-        return $flatToc;
+        return $course;
     }
 }
