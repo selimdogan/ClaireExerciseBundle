@@ -1,5 +1,0 @@
-categories_list:
-    pattern:  /categories/
-    defaults: { _controller: SimpleITClaireAppBundle:Category:list }
-    requirements:
-        _method: get

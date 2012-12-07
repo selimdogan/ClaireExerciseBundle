@@ -14,7 +14,7 @@ class ClaireCategoriesApi extends ClaireApi
     /**
      * Get categories
      */
-    public function getCategories()
+    public function prepareCategories()
     {
         $this->responses['categories'] = $this->getTransportService()->get(self::categories, array(
             'Accept' => 'application/json',
@@ -26,7 +26,7 @@ class ClaireCategoriesApi extends ClaireApi
      *
      * @param string $categorySlug Slug
      */
-    public function getCategory($categorySlug)
+    public function prepareCategory($categorySlug)
     {
         $this->responses['category'] = $this->getTransportService()->get(
             self::categories.$categorySlug,
@@ -35,14 +35,27 @@ class ClaireCategoriesApi extends ClaireApi
     }
 
     /**
-     * Get tags from slug
+     * Get tags from category slug
      *
      * @param string $categorySlug Slug
      */
-    public function getTags($categorySlug)
+    public function prepareTags($categorySlug)
     {
-        $this->responses['category'] = $this->getTransportService()->get(
+        $this->responses['tags'] = $this->getTransportService()->get(
             self::categories.$categorySlug.'/tags',
+            array('Accept' => 'application/json')
+        );
+    }
+
+    /**
+     * Get single tag from category and tag slug
+     *
+     * @param string $categorySlug Slug
+     */
+    public function prepareTag($categorySlug, $tagSlug)
+    {
+        $this->responses['tags'] = $this->getTransportService()->get(
+            self::categories.$categorySlug.'/tags/'.$tagSlug,
             array('Accept' => 'application/json')
         );
     }

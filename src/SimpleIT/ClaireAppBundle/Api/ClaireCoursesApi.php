@@ -91,9 +91,15 @@ class ClaireCoursesApi extends ClaireApi
      *
      * @return array
      */
-    public function prepareCourses()
+    public function prepareCourses($parameters)
     {
-        $this->responses['branches'] = $this->getTransportService()->get(self::branches, array(
+        $filter = '?';
+        foreach($parameters as $field => $value)
+        {
+            $filter .= $field.'='.$value.'&';
+        }
+
+        $this->responses['branches'] = $this->getTransportService()->get(self::branches.$filter, array(
             'Accept' => 'application/json',
             'Range' => 'items=0-49'));
     }

@@ -1,0 +1,19 @@
+{% extends '::base.html.twig' %}
+
+
+{% block body %}
+
+    <h1>Liste des catégories</h1>
+    {% if categories.categories is defined %}
+        <ul>
+        {% for category in categories.categories %}
+            <li>
+                <a href="{{ path('SimpleIT_Claire_categories_view', { slug: category.slug }) }}">{{ category.title }}</a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    <hr>
+
+{% endblock %}

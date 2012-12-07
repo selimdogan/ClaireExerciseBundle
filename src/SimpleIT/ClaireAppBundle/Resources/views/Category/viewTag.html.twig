@@ -1,0 +1,13 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+    <h1>{{ tag.name }}</h1>
+
+    {% autoescape false %}
+        {{ tag.description }}
+    {% endautoescape %}
+
+    <hr>
+
+{% endblock %}

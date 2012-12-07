@@ -1,0 +1,41 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+    <h1>{{ category.title }}</h1>
+
+    {% autoescape false %}
+        {{ category.description }}
+    {% endautoescape %}
+
+    <hr>
+
+    <h2>Cours associés</h2>
+    {% if branches is defined %}
+    <ul>
+        {% for branch in branches %}
+            <li>
+                <a href="{{ path('SimpleIT_Claire_course_view', {slug: branch.reference.slug}) }}">
+                    {{ branch.rootElement.title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <hr>
+
+    <h2>Thématiques</h2>
+    {% if tags is defined %}
+    <ul>
+        {% for tag in tags %}
+            <li>
+                <a href="{{ path('SimpleIT_Claire_categories_tags_view', { categorySlug: category.slug, slug: tag.slug }) }}">
+                    {{ tag.name }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+{% endblock %}
