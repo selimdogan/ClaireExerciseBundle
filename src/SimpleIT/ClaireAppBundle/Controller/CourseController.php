@@ -110,6 +110,7 @@ class CourseController extends BaseController
         {
             $this->getCoursesApi()->prepareCourseContent($rootSlug, $titleSlug, $titleType);
         }
+
         $this->getCoursesApi()->prepareCourseTags($rootSlug);
         $this->getCoursesApi()->prepareToc($rootSlug);
         $this->getCoursesApi()->prepareMetadatas($rootSlug);
@@ -133,6 +134,15 @@ class CourseController extends BaseController
                 'description' => $this->getOneMetadata('Thing/Description ', $result['metadatas']),
                 'rate' => $this->getOneMetadata('CreativeWork/aggregateRating', $result['metadatas']),
                 'icon' => $this->getOneMetadata('Thing/image', $result['metadatas']),
+                'toc' => $result['toc'],
+                'tags' => $result['tags'],
+                'timeline' => $result['timeline']['toc'],
+                'content' => $result['content'],
+                'rootSlug' => $rootSlug,
+                'title1Slug' => $title1Slug,
+                'title2Slug' => $title2Slug,
+                'title3Slug' => $title3Slug,
+>>>>>>> 2c31ed5582746a2ef880607d2b07fe33e56a0134
             )
         );
     }

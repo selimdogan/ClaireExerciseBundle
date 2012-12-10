@@ -10,6 +10,7 @@ use SimpleIT\ClaireAppBundle\Api\ClaireApi;
 class ClaireCategoriesApi extends ClaireApi
 {
     const categories = '/categories/';
+    const tags = '/tags/';
 
     /**
      * Get categories
@@ -42,7 +43,20 @@ class ClaireCategoriesApi extends ClaireApi
     public function prepareTags($categorySlug)
     {
         $this->responses['tags'] = $this->getTransportService()->get(
-            self::categories.$categorySlug.'/tags',
+            self::categories.$categorySlug.self::tags,
+            array('Accept' => 'application/json')
+        );
+    }
+
+    /**
+     * Get associated tags for this tag
+     *
+     * @param string $categorySlug Slug
+     */
+    public function prepareAssociatedTags($categorySlug, $tagSlug)
+    {
+        $this->responses['tags'] = $this->getTransportService()->get(
+            self::categories.$categorySlug.self::tags.$tagSlug.'/associated-tags',
             array('Accept' => 'application/json')
         );
     }
@@ -54,8 +68,8 @@ class ClaireCategoriesApi extends ClaireApi
      */
     public function prepareTag($categorySlug, $tagSlug)
     {
-        $this->responses['tags'] = $this->getTransportService()->get(
-            self::categories.$categorySlug.'/tags/'.$tagSlug,
+        $this->responses['tag'] = $this->getTransportService()->get(
+            self::categories.$categorySlug.self::tags.$tagSlug,
             array('Accept' => 'application/json')
         );
     }
