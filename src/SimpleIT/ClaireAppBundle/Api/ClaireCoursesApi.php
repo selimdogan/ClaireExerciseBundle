@@ -57,6 +57,21 @@ class ClaireCoursesApi extends ClaireApi
     }
 
     /**
+     * Get a course from slug
+     *
+     * @param string $slug Slug
+     *
+     * @return string Course at the html format
+     */
+    public function prepareCourseHtml($rootSlug, $chapterSlug, $type)
+    {
+        $this->responses['content'] = $this->getTransportService()->get(
+            self::courses.$rootSlug.((!empty($chapterSlug)) ? '/'.$type.'/'.$chapterSlug : ''),
+            array('Accept' => 'text/html')
+        );
+    }
+
+    /**
      * Get tags for course
      *
      * @param string $rootSlug RootSlug

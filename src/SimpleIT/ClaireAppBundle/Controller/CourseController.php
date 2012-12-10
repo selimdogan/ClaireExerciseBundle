@@ -81,6 +81,7 @@ class CourseController extends BaseController
         $type = ((!empty($title3Slug)) ? 'title-3' : (!empty($title2Slug)) ? 'title-2' : 'title-1');
 
         $this->getCoursesApi()->prepareCourse($rootSlug, $slug, $type);
+        $this->getCoursesApi()->prepareCourseHtml($rootSlug, $slug, $type);
         $this->getCoursesApi()->prepareCourseTags($rootSlug);
         $this->getCoursesApi()->prepareToc($rootSlug);
         $this->getCoursesApi()->prepareMetadatas($rootSlug);
@@ -102,7 +103,9 @@ class CourseController extends BaseController
                 'rate' => $this->getOneMetadata('CreativeWork/aggregateRating', $result['metadatas']),
                 'icon' => $this->getOneMetadata('Thing/image', $result['metadatas']),
                 'toc' => $result['toc'],
+                'tags' => $result['tags'],
                 'timeline' => $result['timeline']['toc'],
+                'content' => $result['content'],
                 'rootSlug' => $rootSlug,
                 'title1Slug' => $title1Slug,
                 'title2Slug' => $title2Slug,
