@@ -8,6 +8,18 @@
         {{ tag.description }}
     {% endautoescape %}
 
-    <hr>
+    {% if associatedTags is defined %}
+        <hr />
+        <h2>Thématiques connexes</h2>
+        <ul>
+            {% for tag in associatedTags %}
+                <li>
+                    <a href="{{ path('SimpleIT_Claire_categories_tag_view', { categorySlug: category.slug, slug: tag.slug }) }}">
+                        {{ tag.name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
 {% endblock %}

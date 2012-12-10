@@ -3,7 +3,6 @@ SimpleIT_Claire_course_view:
     defaults: { _controller: SimpleITClaireAppBundle:Course:view }
     requirements:
         _method: get
-        slug: \w+
 
 SimpleIT_Claire_course_list:
     pattern:  /
