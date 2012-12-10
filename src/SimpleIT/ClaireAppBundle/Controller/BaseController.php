@@ -12,9 +12,9 @@ class BaseController extends Controller
      *
      * @return SimpleIT\ClaireAppBundle\Api\ClaireApi
      */
-    public function getApi()
+    public function getApiService()
     {
-        return $this->get('claire_api');
+        return $this->get('claire_api_service');
     }
 
     /**

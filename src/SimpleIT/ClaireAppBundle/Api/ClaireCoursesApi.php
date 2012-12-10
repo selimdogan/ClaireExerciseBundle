@@ -2,15 +2,12 @@
 namespace SimpleIT\ClaireAppBundle\Api;
 
 use Symfony\Component\HttpFoundation\Request;
-use SimpleIT\ClaireAppBundle\Api\ClaireApi;
 
 /**
  * Claire courses api
  */
-class ClaireCoursesApi extends ClaireApi
+class ClaireCoursesApi
 {
-    const branches = '/branches/';
-    const elements = '/elements/';
     const courses = '/courses/';
     const metadatas = '/metadatas/';
     const tags = '/tags/';
@@ -114,9 +111,30 @@ class ClaireCoursesApi extends ClaireApi
             $filter .= $field.'='.$value.'&';
         }
 
-        $this->responses['branches'] = $this->getTransportService()->get(self::branches.$filter, array(
+        $this->responses['branches'] = $this->getTransportService()->get(self::courses.$filter, array(
             'Accept' => 'application/json',
             'Range' => 'items=0-49'));
+    }
+
+    /**
+     * Get tags from category slug
+     *
+     * @param string $categorySlug Slug
+     */
+    public function getCourses($parameters)
+    {
+        $filter = '?';
+        foreach($parameters as $field => $value)
+        {
+            $filter .= $field.'='.$value.'&';
+        }
+
+        $request = array();
+        $request[ClaireApi::URL] = self::courses.$filter;
+        $request[ClaireApi::METHOD] = ClaireApi::METHOD_GET;
+        $request[ClaireApi::FORMAT] = ClaireApi::FORMAT_JSON;
+
+        return $request;
     }
 
     /**
@@ -134,7 +152,7 @@ class ClaireCoursesApi extends ClaireApi
         $data = array('rootElement' => $course['id'], 'reference' => $course['reference']['id']);
 
         /* Create branch */
-        $this->getTransportService()->post(self::branches, array('Accept' => 'application/json'), $data);
+        $this->getTransportService()->post(self::courses, array('Accept' => 'application/json'), $data);
 
         return $course;
     }
@@ -148,7 +166,7 @@ class ClaireCoursesApi extends ClaireApi
      */
     public function updateCourse($course)
     {
-        $branches = $this->getTransportService()->get(self::branches.'?reference='.$course['reference']['slug'])->getContent();
+        $branches = $this->getTransportService()->get(self::courses.'?reference='.$course['reference']['slug'])->getContent();
         $branches = json_decode($branches, true);
         $rootElement = $branches['branches'][0]['rootElement'];
         $branch = $branches['branches'][0];

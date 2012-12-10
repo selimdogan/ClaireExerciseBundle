@@ -2,12 +2,11 @@
 namespace SimpleIT\ClaireAppBundle\Api;
 
 use Symfony\Component\HttpFoundation\Request;
-use SimpleIT\ClaireAppBundle\Api\ClaireApi;
 
 /**
  * Claire categories api
  */
-class ClaireCategoriesApi extends ClaireApi
+class ClaireCategoriesApi
 {
     const categories = '/categories/';
     const tags = '/tags/';
@@ -35,6 +34,36 @@ class ClaireCategoriesApi extends ClaireApi
         );
     }
 
+        /**
+     * Get a category from slug
+     *
+     * @param string $categorySlug Slug
+     */
+    public function getCategory($categorySlug)
+    {
+        $request = array();
+        $request[ClaireApi::URL] = self::categories.$categorySlug;
+        $request[ClaireApi::METHOD] = ClaireApi::METHOD_GET;
+        $request[ClaireApi::FORMAT] = ClaireApi::FORMAT_JSON;
+
+        return $request;
+    }
+
+    /**
+     * Get tags from category slug
+     *
+     * @param string $categorySlug Slug
+     */
+    public function getTags($categorySlug)
+    {
+        $request = array();
+        $request[ClaireApi::URL] = self::categories.$categorySlug.self::tags.'?sort=name asc';
+        $request[ClaireApi::METHOD] = ClaireApi::METHOD_GET;
+        $request[ClaireApi::FORMAT] = ClaireApi::FORMAT_JSON;
+
+        return $request;
+    }
+    
     /**
      * Get tags from category slug
      *
@@ -43,7 +72,7 @@ class ClaireCategoriesApi extends ClaireApi
     public function prepareTags($categorySlug)
     {
         $this->responses['tags'] = $this->getTransportService()->get(
-            self::categories.$categorySlug.self::tags,
+            self::categories.$categorySlug.self::tags.'?sort=name asc',
             array('Accept' => 'application/json')
         );
     }

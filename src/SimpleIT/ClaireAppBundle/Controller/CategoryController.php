@@ -41,18 +41,19 @@ class CategoryController extends BaseController
         $parameters = $request->query->all();
         $parameters['category'] = $categorySlug;
 
-        $this->getCategoriesApi()->prepareCategory($categorySlug);
-        $this->getCategoriesApi()->prepareTags($categorySlug);
-        $this->getCoursesApi()->prepareCourses($parameters);
+        $requests['category'] = $this->getCategoriesApi()->getCategory($categorySlug);
+        $requests['tags'] = $this->getCategoriesApi()->getTags($categorySlug);
+        $requests['courses'] = $this->getCoursesApi()->getCourses($parameters);
 
-        $category = $this->getCategoriesApi()->getResult();
-        $courses = $this->getCoursesApi()->getResult();
+        $results = $this->getApiService()->getResults($requests);
+
 
         $this->view = 'SimpleITClaireAppBundle:Category:view.html.twig';
         $this->viewParameters = array(
-                'category' => $category['category'],
-                'tags' => $category['tags'],
-                'branches' => $courses['branches']['branches']
+                'category' => $results['category']['content'],
+                'tags' => $results['tags']['content'],
+                'courses' => $results['courses']['content'],
+                'appPager' => $results['courses']['pager'],
             );
 
         return $this->generateView($this->view, $this->viewParameters);
@@ -82,7 +83,7 @@ class CategoryController extends BaseController
         return $this->generateView($this->view, $this->viewParameters);
     }
 
-    private function generateView($view, $viewParameters)
+    protected function generateView($view, $viewParameters)
     {
         return $this->render($view, $viewParameters);
     }

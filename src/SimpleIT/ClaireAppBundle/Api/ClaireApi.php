@@ -9,4 +9,9 @@ use SimpleIT\AppBundle\Services\ApiService;
  */
 class ClaireApi extends ApiService
 {
+
+    const FORMAT_DEFAULT = 'application/json';
+
+    const RANGE_DEFAULT = 'items=0-49';
+
 }
