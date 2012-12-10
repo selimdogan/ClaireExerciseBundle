@@ -57,6 +57,21 @@ class ClaireCoursesApi extends ClaireApi
     }
 
     /**
+     * Get a course from slug
+     *
+     * @param string $slug Slug
+     *
+     * @return string Course at the html format
+     */
+    public function prepareCourseContent($rootSlug, $chapterSlug, $type)
+    {
+        $this->responses['content'] = $this->getTransportService()->get(
+            self::courses.$rootSlug.((!empty($chapterSlug)) ? '/'.$type.'/'.$chapterSlug : ''),
+            array('Accept' => 'text/html')
+        );
+    }
+
+    /**
      * Get tags for course
      *
      * @param string $rootSlug RootSlug
@@ -91,7 +106,7 @@ class ClaireCoursesApi extends ClaireApi
      *
      * @return array
      */
-    public function prepareCourses($parameters)
+    public function prepareCourses(array $parameters = array())
     {
         $filter = '?';
         foreach($parameters as $field => $value)

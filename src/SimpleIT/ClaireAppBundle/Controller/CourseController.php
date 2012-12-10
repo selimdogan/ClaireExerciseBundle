@@ -75,38 +75,64 @@ class CourseController extends BaseController
      *
      * @return Response
      */
-    public function readAction(Request $request, $rootSlug, $title1Slug = false, $title2Slug = false, $title3Slug = false)
+    public function readAction(Request $request, $categorySlug, $rootSlug, $titleType = 'title-1', $titleSlug = null)
     {
-        $slug = ((!empty($title3Slug)) ? $title3Slug : (!empty($title2Slug)) ? $title2Slug : $title1Slug);
-        $type = ((!empty($title3Slug)) ? 'title-3' : (!empty($title2Slug)) ? 'title-2' : 'title-1');
+        // Verification titletype
+        if (!in_array($titleType, array('title-2', 'title-3')))
+        {
+            $titleType = 'title-1';
+        }
 
-        $this->getCoursesApi()->prepareCourse($rootSlug, $slug, $type);
+        // Category API
+        $this->getCategoriesApi()->prepareCategory($categorySlug);
+        $result = $this->getCategoriesApi()->getResult();
+
+        // Category exist
+        if (!isset($result['category']) || empty($result['category']))
+        {
+            throw $this->createNotFoundException('Category not found !');
+        }
+        $category = $result['category'];
+
+        // Course API
+        $this->getCoursesApi()->prepareCourse($rootSlug, $titleSlug, $titleType);
+        $result = $this->getCoursesApi()->getResult();
+
+        // Course exist
+        if (!isset($result['course']) || empty($result['course']))
+        {
+            throw $this->createNotFoundException('Course not found !');
+        }
+        $course = $result['course'];
+
+        // Other informations
+        if ('title-3' == $titleType)
+        {
+            $this->getCoursesApi()->prepareCourseContent($rootSlug, $titleSlug, $titleType);
+        }
         $this->getCoursesApi()->prepareCourseTags($rootSlug);
         $this->getCoursesApi()->prepareToc($rootSlug);
         $this->getCoursesApi()->prepareMetadatas($rootSlug);
         $this->getCoursesApi()->prepareTimeline($rootSlug);
         $result = $this->getCoursesApi()->getResult();
 
-        $result['course'] = $this->get('simpleit.claire.course')->setPagination($result['course'], $result['toc']);
+        $course = $this->get('simpleit.claire.course')->setPagination($course, $result['toc']);
 
-        echo '<pre>';
-        print_r($result);
-        echo '</pre>';
         return $this->render('TutorialBundle:Tutorial:view.html.twig',
             array(
-                'course' => $result['course'],
+                'course' => $course,
+                'toc' => $result['toc'],
+                'tags' => $result['tags'],
+                'content' => (isset($result['content'])) ? $result['content'] : '',
+                'timeline' => $result['timeline']['toc'],
+                'rootSlug' => $rootSlug,
+                'category' => $category,
                 'difficulty' => $this->getOneMetadata('CreativeWork/difficulty', $result['metadatas']),
                 'duration' => $this->getOneMetadata('CreativeWork/duration', $result['metadatas']),
                 'licence' => $this->getOneMetadata('CreativeWork/license', $result['metadatas']),
                 'description' => $this->getOneMetadata('Thing/Description ', $result['metadatas']),
                 'rate' => $this->getOneMetadata('CreativeWork/aggregateRating', $result['metadatas']),
                 'icon' => $this->getOneMetadata('Thing/image', $result['metadatas']),
-                'toc' => $result['toc'],
-                'timeline' => $result['timeline']['toc'],
-                'rootSlug' => $rootSlug,
-                'title1Slug' => $title1Slug,
-                'title2Slug' => $title2Slug,
-                'title3Slug' => $title3Slug,
             )
         );
     }
