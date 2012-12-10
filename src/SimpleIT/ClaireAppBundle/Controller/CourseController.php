@@ -75,18 +75,24 @@ class CourseController extends BaseController
      *
      * @return Response
      */
-    public function readAction(Request $request)
+    public function readAction(Request $request, $rootSlug, $title1Slug = false, $title2Slug = false, $title3Slug = false)
     {
-        $rootSlug = $request->get('slug');
-        $chapterSlug = $request->get('chapterSlug', false);
+        $slug = ((!empty($title3Slug)) ? $title3Slug : (!empty($title2Slug)) ? $title2Slug : $title1Slug);
+        $type = ((!empty($title3Slug)) ? 'title-3' : (!empty($title2Slug)) ? 'title-2' : 'title-1');
 
+        $this->getCoursesApi()->prepareCourse($rootSlug, $slug, $type);
+        $this->getCoursesApi()->prepareCourseHtml($rootSlug, $slug, $type);
+        $this->getCoursesApi()->prepareCourseTags($rootSlug);
         $this->getCoursesApi()->prepareToc($rootSlug);
-        $this->getCoursesApi()->prepareCourse($rootSlug, $chapterSlug);
         $this->getCoursesApi()->prepareMetadatas($rootSlug);
+        $this->getCoursesApi()->prepareTimeline($rootSlug);
         $result = $this->getCoursesApi()->getResult();
 
         $result['course'] = $this->get('simpleit.claire.course')->setPagination($result['course'], $result['toc']);
 
+        echo '<pre>';
+        print_r($result);
+        echo '</pre>';
         return $this->render('TutorialBundle:Tutorial:view.html.twig',
             array(
                 'course' => $result['course'],
@@ -97,6 +103,13 @@ class CourseController extends BaseController
                 'rate' => $this->getOneMetadata('CreativeWork/aggregateRating', $result['metadatas']),
                 'icon' => $this->getOneMetadata('Thing/image', $result['metadatas']),
                 'toc' => $result['toc'],
+                'tags' => $result['tags'],
+                'timeline' => $result['timeline']['toc'],
+                'content' => $result['content'],
+                'rootSlug' => $rootSlug,
+                'title1Slug' => $title1Slug,
+                'title2Slug' => $title2Slug,
+                'title3Slug' => $title3Slug,
             )
         );
     }
@@ -104,21 +117,24 @@ class CourseController extends BaseController
     /**
      * Get One metadata
      *
-     * @param type  $key  Key to search
-     * @param array $list Array list of metadata
+     * @param string $key  Key to search
+     * @param array  $list Array list of metadata
      *
      * @return string | null
      */
-    private function getOneMetadata($key, array $metadatas)
+    private function getOneMetadata($key, $metadatas)
     {
         $value = '';
 
-        foreach($metadatas as $metadata)
+        if (is_array($metadatas))
         {
-            if ($metadata['key'] == $key)
+            foreach($metadatas as $metadata)
             {
-                $value = $metadata['value'];
-                break;
+                if ($metadata['key'] == $key)
+                {
+                    $value = $metadata['value'];
+                    break;
+                }
             }
         }
 
