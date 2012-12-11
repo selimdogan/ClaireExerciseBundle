@@ -4,6 +4,7 @@ namespace SimpleIT\ClaireAppBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use SimpleIT\ClaireAppBundle\Controller\BaseController;
 use SimpleIT\ClaireAppBundle\Form\Type\CourseType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
  * Category controller
@@ -11,29 +12,31 @@ use SimpleIT\ClaireAppBundle\Form\Type\CourseType;
 class CategoryController extends BaseController
 {
     /**
-     * Category list
+     * View the Categories list
      *
      * @return Symfony\Component\HttpFoundation\Response
-     *
      */
     public function listAction()
     {
-        $this->getCategoriesApi()->prepareCategories();
-        $categories = $this->getCategoriesApi()->getResult();
+        /* Get the categories */
+        $categoryRequest = $this->getCategoryRouteService()->getCategory();
+        $categories = $this->getApiService()->getResult($categoryRequest);
 
+        /* Prepare view and parameters */
         $this->view = 'SimpleITClaireAppBundle:Category:list.html.twig';
         $this->viewParameters = array(
-            'categories' => $categories['categories']
+            'categories' => $categories->getContent()
         );
 
         return $this->generateView($this->view, $this->viewParameters);
     }
 
     /**
-     * Category list
+     * View a single category
+     *
+     * @param Request $request The request
      *
      * @return Symfony\Component\HttpFoundation\Response
-     *
      */
     public function viewAction(Request $request)
     {
@@ -41,48 +44,78 @@ class CategoryController extends BaseController
         $parameters = $request->query->all();
         $parameters['category'] = $categorySlug;
 
-        $this->getCategoriesApi()->prepareCategory($categorySlug);
-        $this->getCategoriesApi()->prepareTags($categorySlug);
-        $this->getCoursesApi()->prepareCourses($parameters);
+        /* Get the category */
+        $categoryRequest = $this->getCategoryRouteService()->getCategory($categorySlug);
+        $category = $this->getApiService()->getResult($categoryRequest);
 
-        $category = $this->getCategoriesApi()->getResult();
-        $courses = $this->getCoursesApi()->getResult();
+        /* Throw 404 if object not found */
+        $this->checkObjectFound($category);
 
+        /* get related Tags and courses */
+        $requests['tags'] = $this->getCategoryRouteService()->getTags($categorySlug);
+        $requests['courses'] = $this->getCourseRouteService()->getCourses($parameters);
+        $results = $this->getApiService()->getResult($requests);
+
+        /* Prepare view and parameters */
         $this->view = 'SimpleITClaireAppBundle:Category:view.html.twig';
         $this->viewParameters = array(
-                'category' => $category['category'],
-                'tags' => $category['tags'],
-                'branches' => $courses['branches']['branches']
+                'category' => $category->getContent(),
+                'tags' => $results['tags']->getContent(),
+                'courses' => $results['courses']->getContent(),
+                'appPager' => $results['courses']->getPager(),
             );
 
         return $this->generateView($this->view, $this->viewParameters);
     }
 
 
-
+    /**
+     * View single Tag
+     *
+     * @param Request $request The request
+     *
+     * @return Symfony\Component\HttpFoundation\Response
+     */
     public function viewTagAction(Request $request)
     {
         $categorySlug = $request->get('categorySlug');
         $tagSlug = $request->get('slug');
 
-        $this->getCategoriesApi()->prepareCategory($categorySlug);
-        $this->getCategoriesApi()->prepareTag($categorySlug, $tagSlug);
-        $this->getCategoriesApi()->prepareAssociatedTags($categorySlug, $tagSlug);
+        /* Get the category */
+        $categoryRequest = $this->getCategoryRouteService()->getCategory($categorySlug);
+        $category = $this->getApiService()->getResult($categoryRequest);
 
-        $tag = $this->getCategoriesApi()->getResult();
+        /* Throw 404 if object not found */
+        $this->checkObjectFound($category);
 
+        /* get Tag and associated tags */
+        $requests['tag'] = $this->getCategoryRouteService()->getTag($categorySlug, $tagSlug);
+        $requests['associated-tags'] = $this->getCategoryRouteService()->getAssociatedTags(
+            $categorySlug,
+            $tagSlug
+        );
+        $tag = $this->getApiService()->getResult($requests);
+
+        /* Prepare view and parameters */
         $this->view = 'TutorialBundle:Category:viewTag.html.twig';
         $this->viewParameters = array(
-            'tag' => $tag['tag'],
-            'category' => $tag['category'],
-            'associatedTags' => $tag['tags']
+            'tag' => $tag['tag']->getContent(),
+            'category' => $category->getContent(),
+            'associatedTags' => $tag['associated-tags']->getContent()
         );
-
 
         return $this->generateView($this->view, $this->viewParameters);
     }
 
-    private function generateView($view, $viewParameters)
+    /**
+     * Generate the rendered response
+     *
+     * @param string $view           The view name
+     * @param array  $viewParameters Associated view parameters
+     *
+     * @return Response A Response instance
+     */
+    protected function generateView($view, $viewParameters)
     {
         return $this->render($view, $viewParameters);
     }

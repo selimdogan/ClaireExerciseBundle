@@ -84,62 +84,52 @@ class CourseController extends BaseController
         }
 
         // Category API
-        $this->getCategoriesApi()->prepareCategory($categorySlug);
-        $result = $this->getCategoriesApi()->getResult();
+        $categoryRequest = $this->getCategoryRouteService()->getCategory($categorySlug);
+        $category = $this->getApiService()->getResult($categoryRequest);
 
-        // Category exist
-        if (!isset($result['category']) || empty($result['category']))
-        {
-            throw $this->createNotFoundException('Category not found !');
-        }
-        $category = $result['category'];
+        /* Throw 404 if object not found */
+        $this->checkObjectFound($category);
 
         // Course API
-        $this->getCoursesApi()->prepareCourse($rootSlug, $titleSlug, $titleType);
-        $result = $this->getCoursesApi()->getResult();
+        $courseRequest = $this->getCourseRouteService()->getCourse($rootSlug, $titleSlug, $titleType);
+        $course = $this->getApiService()->getResult($courseRequest);
 
-        // Course exist
-        if (!isset($result['course']) || empty($result['course']))
-        {
-            throw $this->createNotFoundException('Course not found !');
-        }
-        $course = $result['course'];
+        $this->checkObjectFound($course);
 
         // Other informations
         if ('title-3' == $titleType)
         {
-            $this->getCoursesApi()->prepareCourseContent($rootSlug, $titleSlug, $titleType);
+            $requests['courseContent'] = $this->getCourseRouteService()->getCourseContent($rootSlug, $titleSlug, $titleType);
         }
 
-        $this->getCoursesApi()->prepareCourseTags($rootSlug);
-        $this->getCoursesApi()->prepareToc($rootSlug);
-        $this->getCoursesApi()->prepareMetadatas($rootSlug);
-        $this->getCoursesApi()->prepareTimeline($rootSlug);
-        $result = $this->getCoursesApi()->getResult();
-
-        $course = $this->get('simpleit.claire.course')->setPagination($course, $result['toc']);
+        $requests['courseTags'] = $this->getCourseRouteService()->getCourseTags($rootSlug);
+        $requests['courseToc'] = $this->getCourseRouteService()->getCourseToc($rootSlug);
+        $requests['courseMetadatas'] = $this->getCourseRouteService()->getCourseMetadatas($rootSlug);
+        $requests['courseTimeline'] = $this->getCourseRouteService()->getCourseTimeline($rootSlug);
+        $results = $this->getApiService()->getResult($requests);
+        $toc = $results['courseToc']->getContent();
+        $course = $this->get('simpleit.claire.course')->setPagination($course->getContent(), $toc['toc']);
         $course['type'] = $titleType;
-        $toc = $this->get('simpleit.claire.course')->restrictTocForTitle2($course, $result['toc']);
+        $toc = $this->get('simpleit.claire.course')->restrictTocForTitle2($course, $toc['toc']);
+
+        $timeline = $results['courseTimeline']->getContent();
 
         return $this->render('TutorialBundle:Tutorial:view.html.twig',
             array(
                 'course' => $course,
                 'toc' => $toc,
-                'tags' => $result['tags'],
-                'contentHtml' => (isset($result['content'])) ? $result['content'] : '',
-                'timeline' => $result['timeline']['toc'],
+                'tags' => $results['courseTags']->getContent(),
+                'contentHtml' => (isset($requests['courseContent'])) ? $results['courseContent']->getContent() : '',
+                'timeline' => $timeline['toc'],
                 'rootSlug' => $rootSlug,
-                'category' => $category,
-                'difficulty' => $this->getOneMetadata('CreativeWork/difficulty', $result['metadatas']),
-                'duration' => $this->getOneMetadata('CreativeWork/duration', $result['metadatas']),
-                'licence' => $this->getOneMetadata('CreativeWork/license', $result['metadatas']),
-                'description' => $this->getOneMetadata('Thing/Description ', $result['metadatas']),
-                'rate' => $this->getOneMetadata('CreativeWork/aggregateRating', $result['metadatas']),
-                'icon' => $this->getOneMetadata('Thing/image', $result['metadatas']),
-                'tags' => $result['tags'],
-                'timeline' => $result['timeline']['toc'],
-                'content' => (isset($result['content']) ? $result['content'] : ''),
-                'rootSlug' => $rootSlug,
+                'category' => $category->getContent(),
+                'difficulty' => $this->getOneMetadata('CreativeWork/difficulty', $results['courseMetadatas']->getContent()),
+                'duration' => $this->getOneMetadata('CreativeWork/duration', $results['courseMetadatas']->getContent()),
+                'licence' => $this->getOneMetadata('CreativeWork/license', $results['courseMetadatas']->getContent()),
+                'description' => $this->getOneMetadata('Thing/Description ', $results['courseMetadatas']->getContent()),
+                'rate' => $this->getOneMetadata('CreativeWork/aggregateRating', $results['courseMetadatas']->getContent()),
+                'icon' => $this->getOneMetadata('Thing/image', $results['courseMetadatas']->getContent()),
+
                 'titleType' => $titleType
             )
         );
