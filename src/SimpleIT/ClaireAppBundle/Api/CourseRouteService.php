@@ -2,13 +2,15 @@
 namespace SimpleIT\ClaireAppBundle\Api;
 
 use Symfony\Component\HttpFoundation\Request;
+use SimpleIT\AppBundle\Utils\ApiRequest;
 
 /**
  * Claire courses api
  */
-class ClaireCoursesApi
+class CourseRouteService
 {
-    const courses = '/courses/';
+    const URL_COURSES = '/courses/';
+    const URL_COURSES_TOC = '/toc/';
     const metadatas = '/metadatas/';
     const tags = '/tags/';
 
@@ -90,30 +92,14 @@ class ClaireCoursesApi
      *
      * @return string Toc at the html format
      */
-    public function prepareToc($slug)
+    public function getToc($slug, $format = null)
     {
-        $this->responses['toc'] = $this->getTransportService()->get(
-            self::courses.$slug.'/toc',
-            array('Accept' => 'application/json')
-        );
-    }
+        $apiRequest = new ApiRequest();
+        $apiRequest->setUrl(self::URL_COURSES.$slug.self::URL_COURSES_TOC);
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+        $apiRequest->setFormat($format);
 
-    /**
-     * Get a list of courses
-     *
-     * @return array
-     */
-    public function prepareCourses($parameters)
-    {
-        $filter = '?';
-        foreach($parameters as $field => $value)
-        {
-            $filter .= $field.'='.$value.'&';
-        }
-
-        $this->responses['branches'] = $this->getTransportService()->get(self::courses.$filter, array(
-            'Accept' => 'application/json',
-            'Range' => 'items=0-49'));
+        return $apiRequest;
     }
 
     /**
@@ -121,7 +107,7 @@ class ClaireCoursesApi
      *
      * @param string $categorySlug Slug
      */
-    public function getCourses($parameters)
+    public function getCourses($parameters, $format = null)
     {
         $filter = '?';
         foreach($parameters as $field => $value)
@@ -129,12 +115,13 @@ class ClaireCoursesApi
             $filter .= $field.'='.$value.'&';
         }
 
-        $request = array();
-        $request[ClaireApi::URL] = self::courses.$filter;
-        $request[ClaireApi::METHOD] = ClaireApi::METHOD_GET;
-        $request[ClaireApi::FORMAT] = ClaireApi::FORMAT_JSON;
+        $apiRequest = new ApiRequest();
+        $apiRequest->setUrl(self::URL_COURSES.$filter);
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+        $apiRequest->setFormat($format);
 
-        return $request;
+        return $apiRequest;
+
     }
 
     /**

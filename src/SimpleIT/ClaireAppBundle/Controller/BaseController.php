@@ -4,7 +4,12 @@ namespace SimpleIT\ClaireAppBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use SimpleIT\ClaireAppBundle\Api\ClaireApi;
+use SimpleIT\AppBundle\Services\ApiService;
+use \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * Base Controller
+ */
 class BaseController extends Controller
 {
     /**
@@ -22,7 +27,7 @@ class BaseController extends Controller
      *
      * @return SimpleIT\ClaireAppBundle\Api\ClaireApi
      */
-    public function getCoursesApi()
+    public function getCourseRouteService()
     {
         return $this->get('claire_courses_api');
     }
@@ -32,8 +37,24 @@ class BaseController extends Controller
      *
      * @return SimpleIT\ClaireAppBundle\Api\ClaireApi
      */
-    public function getCategoriesApi()
+    public function getCategoryRouteService()
     {
         return $this->get('claire_categories_api');
+    }
+
+    /**
+     * Check if ressource has been retrieved
+     *
+     * @param ApiResult $apiResult
+     *
+     * @throws NotFoundHttpException
+     */
+    public function checkObjectFound($apiResult)
+    {
+        if(!ApiService::isObjectFound($apiResult))
+        {
+            throw new NotFoundHttpException('Ressource not found');
+        }
+
     }
 }
