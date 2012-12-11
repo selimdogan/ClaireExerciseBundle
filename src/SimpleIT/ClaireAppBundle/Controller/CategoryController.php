@@ -80,28 +80,32 @@ class CategoryController extends BaseController
     {
         $categorySlug = $request->get('categorySlug');
         $tagSlug = $request->get('slug');
-
-        /* Get the category */
-        $categoryRequest = $this->getCategoryRouteService()->getCategory($categorySlug);
-        $category = $this->getApiService()->getResult($categoryRequest);
-
-        /* Throw 404 if object not found */
-        $this->checkObjectFound($category);
+        $parameters = $request->query->all();
 
         /* get Tag and associated tags */
-        $requests['tag'] = $this->getCategoryRouteService()->getTag($categorySlug, $tagSlug);
+        $tagRequest = $this->getCategoryRouteService()->getTag($categorySlug, $tagSlug);
+        $tag = $this->getApiService()->getResult($tagRequest);
+
+        /* Throw 404 if object not found */
+        $this->checkObjectFound($tag);
+
+        $requests['category'] = $this->getCategoryRouteService()->getCategory($categorySlug);
+        $requests['courses'] = $this->getCategoryRouteService()->getTagCourses($tagSlug, $parameters);
+
         $requests['associated-tags'] = $this->getCategoryRouteService()->getAssociatedTags(
             $categorySlug,
             $tagSlug
         );
-        $tag = $this->getApiService()->getResult($requests);
+        $results = $this->getApiService()->getResult($requests);
 
         /* Prepare view and parameters */
         $this->view = 'TutorialBundle:Category:viewTag.html.twig';
         $this->viewParameters = array(
-            'tag' => $tag['tag']->getContent(),
-            'category' => $category->getContent(),
-            'associatedTags' => $tag['associated-tags']->getContent()
+            'tag' => $tag->getContent(),
+            'category' =>  $results['category']->getContent(),
+            'associatedTags' => $results['associated-tags']->getContent(),
+            'courses' => $results['courses']->getContent(),
+            'appPager' => $results['courses']->getPager(),
         );
 
         return $this->generateView($this->view, $this->viewParameters);

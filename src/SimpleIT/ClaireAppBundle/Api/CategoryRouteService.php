@@ -18,6 +18,8 @@ class CategoryRouteService
     /* URL for associated tags ressources */
     const URL_ASSOCIATED_TAGS = '/associated-tags/';
 
+    /* URL for related courses */
+    const URL_COURSES = '/courses';
 
     /**
      * Get a category from slug
@@ -95,5 +97,30 @@ class CategoryRouteService
         return $apiRequest;
     }
 
+    /**
+     * Get associated tags for this tag
+     *
+     * @param string $categorySlug The requested category slug
+     * @param string $tagSlug      The requested tag slug
+     * @param string $format       The requested format
+     *
+     * @return apiRequest
+     */
+    public function getTagCourses($tagSlug, array $parameters = array(), $format = null)
+    {
+        $filter = '?';
+        foreach($parameters as $field => $value)
+        {
+            $filter .= $field.'='.$value.'&';
+        }
 
+        $apiRequest = new ApiRequest();
+        $apiRequest->setUrl(
+            self::URL_TAGS.$tagSlug.CategoryRouteService::URL_COURSES
+        );
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+        $apiRequest->setFormat($format);
+
+        return $apiRequest;
+    }
 }

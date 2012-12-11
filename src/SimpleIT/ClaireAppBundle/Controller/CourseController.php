@@ -169,9 +169,9 @@ class CourseController extends BaseController
      */
     public function listAction()
     {
-        $this->getCoursesApi()->prepareCourses();
-        $courses = $this->getCoursesApi()->getData();
+        $coursesRequest = $this->getCourseRouteService()->getCourses();
+        $courses = $this->getApiService()->getResult($coursesRequest);
 
-        return $this->render('SimpleITClaireAppBundle:Course:list.html.twig', array('courses' => $courses));
+        return $this->render('SimpleITClaireAppBundle:Course:list.html.twig', array('courses' => $courses->getContent()));
     }
 }
