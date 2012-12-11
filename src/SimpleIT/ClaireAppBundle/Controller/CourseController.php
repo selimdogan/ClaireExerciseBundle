@@ -75,12 +75,12 @@ class CourseController extends BaseController
      *
      * @return Response
      */
-    public function readAction(Request $request, $categorySlug, $rootSlug, $titleType = 'title-1', $titleSlug = null)
+    public function readAction(Request $request, $categorySlug, $rootSlug, $titleType = null, $titleSlug = null)
     {
         // Verification titletype
-        if (!in_array($titleType, array('title-2', 'title-3')))
+        if (!in_array($titleType, array(null, 'title-2', 'title-3')))
         {
-            $titleType = 'title-1';
+            throw $this->createNotFoundException('Title 1 not accepted !');
         }
 
         // Category API
@@ -118,13 +118,15 @@ class CourseController extends BaseController
         $result = $this->getCoursesApi()->getResult();
 
         $course = $this->get('simpleit.claire.course')->setPagination($course, $result['toc']);
+        $course['type'] = $titleType;
+        $toc = $this->get('simpleit.claire.course')->restrictTocForTitle2($course, $result['toc']);
 
         return $this->render('TutorialBundle:Tutorial:view.html.twig',
             array(
                 'course' => $course,
-                'toc' => $result['toc'],
+                'toc' => $toc,
                 'tags' => $result['tags'],
-                'content' => (isset($result['content'])) ? $result['content'] : '',
+                'contentHtml' => (isset($result['content'])) ? $result['content'] : '',
                 'timeline' => $result['timeline']['toc'],
                 'rootSlug' => $rootSlug,
                 'category' => $category,
@@ -134,15 +136,11 @@ class CourseController extends BaseController
                 'description' => $this->getOneMetadata('Thing/Description ', $result['metadatas']),
                 'rate' => $this->getOneMetadata('CreativeWork/aggregateRating', $result['metadatas']),
                 'icon' => $this->getOneMetadata('Thing/image', $result['metadatas']),
-                'toc' => $result['toc'],
                 'tags' => $result['tags'],
                 'timeline' => $result['timeline']['toc'],
-                'content' => $result['content'],
+                'content' => (isset($result['content']) ? $result['content'] : ''),
                 'rootSlug' => $rootSlug,
-                'title1Slug' => $title1Slug,
-                'title2Slug' => $title2Slug,
-                'title3Slug' => $title3Slug,
->>>>>>> 2c31ed5582746a2ef880607d2b07fe33e56a0134
+                'titleType' => $titleType
             )
         );
     }
