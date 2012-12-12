@@ -75,43 +75,43 @@ class CourseController extends BaseController
      *
      * @return Response
      */
-    public function readAction(Request $request, $categorySlug, $rootSlug, $titleType = null, $titleSlug = null)
+    public function readAction(Request $request, $categorySlug, $rootSlug, $titleSlug = null)
     {
+        // Category API
+        $categoryRequest = $this->getCategoryRouteService()->getCategory($categorySlug);
+        $category = $this->getApiService()->getResult($categoryRequest);
+        $this->checkObjectFound($category);
+
+        // Get toc
+        $requests['courseToc'] = $this->getCourseRouteService()->getCourseToc($rootSlug);
+        $results = $this->getApiService()->getResult($requests);
+        $toc = $results['courseToc']->getContent();
+        $titleType = $this->get('simpleit.claire.course')->getTitleType($titleSlug, $toc);
+
+        // Course API
+        $courseRequest = $this->getCourseRouteService()->getCourse($rootSlug, $titleSlug, $titleType);
+        $course = $this->getApiService()->getResult($courseRequest);
+        $this->checkObjectFound($course);
+
         // Verification titletype
         if (!in_array($titleType, array(null, 'title-2', 'title-3')))
         {
             throw $this->createNotFoundException('Title 1 not accepted !');
         }
 
-        // Category API
-        $categoryRequest = $this->getCategoryRouteService()->getCategory($categorySlug);
-        $category = $this->getApiService()->getResult($categoryRequest);
-
-        /* Throw 404 if object not found */
-        $this->checkObjectFound($category);
-
-        // Course API
-        $courseRequest = $this->getCourseRouteService()->getCourse($rootSlug, $titleSlug, $titleType);
-        $course = $this->getApiService()->getResult($courseRequest);
-
-        $this->checkObjectFound($course);
-
         // Other informations
         if ('title-3' == $titleType)
         {
-            $requests['courseContent'] = $this->getCourseRouteService()->getCourseContent($rootSlug, $titleSlug, $titleType);
+            $requests['courseContent'] = $this->getCourseRouteService()->getCourseContent($rootSlug, $titleSlug, $titleType, 'text/html');
         }
 
         $requests['courseTags'] = $this->getCourseRouteService()->getCourseTags($rootSlug);
-        $requests['courseToc'] = $this->getCourseRouteService()->getCourseToc($rootSlug);
         $requests['courseMetadatas'] = $this->getCourseRouteService()->getCourseMetadatas($rootSlug);
         $requests['courseTimeline'] = $this->getCourseRouteService()->getCourseTimeline($rootSlug);
         $results = $this->getApiService()->getResult($requests);
-        $toc = $results['courseToc']->getContent();
-        $course = $this->get('simpleit.claire.course')->setPagination($course->getContent(), $toc['toc']);
+        $course = $this->get('simpleit.claire.course')->setPagination($course->getContent(), $toc);
         $course['type'] = $titleType;
-        $toc = $this->get('simpleit.claire.course')->restrictTocForTitle2($course, $toc['toc']);
-
+        $toc = $this->get('simpleit.claire.course')->restrictTocForTitle2($course, $toc);
         $timeline = $results['courseTimeline']->getContent();
 
         return $this->render('TutorialBundle:Tutorial:view.html.twig',
@@ -120,7 +120,7 @@ class CourseController extends BaseController
                 'toc' => $toc,
                 'tags' => $results['courseTags']->getContent(),
                 'contentHtml' => (isset($requests['courseContent'])) ? $results['courseContent']->getContent() : '',
-                'timeline' => $timeline['toc'],
+                'timeline' => $timeline,
                 'rootSlug' => $rootSlug,
                 'category' => $category->getContent(),
                 'difficulty' => $this->getOneMetadata('CreativeWork/difficulty', $results['courseMetadatas']->getContent()),
@@ -129,7 +129,6 @@ class CourseController extends BaseController
                 'description' => $this->getOneMetadata('Thing/Description ', $results['courseMetadatas']->getContent()),
                 'rate' => $this->getOneMetadata('CreativeWork/aggregateRating', $results['courseMetadatas']->getContent()),
                 'icon' => $this->getOneMetadata('Thing/image', $results['courseMetadatas']->getContent()),
-
                 'titleType' => $titleType
             )
         );

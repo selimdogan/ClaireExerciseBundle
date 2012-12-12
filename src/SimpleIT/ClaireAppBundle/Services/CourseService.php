@@ -6,6 +6,40 @@ namespace SimpleIT\ClaireAppBundle\Services;
  */
 class CourseService
 {
+    /**
+     * Get title type for one course
+     *
+     * @param array $slug Slug Course
+     * @param array $toc  TOC
+     *
+     * @return array
+     */
+    public function getTitleType($slug = null, $toc = array())
+    {
+        $result = null;
+        if (!empty($toc))
+        {
+            foreach($toc as $key => $element)
+            {
+                if($toc[$key]['slug'] == $slug)
+                {
+                    $result = $toc[$key]['type'];
+                    break;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Restrict title for title 2
+     *
+     * @param array $course Course
+     * @param array $toc    TOC
+     *
+     * @return array
+     */
     public function restrictTocForTitle2($course, $toc = array())
     {
         $points = array(
@@ -51,31 +85,34 @@ class CourseService
      */
     public function setPagination($course, $toc)
     {
-        foreach($toc as $key => $element)
+        if (!empty($toc))
         {
-            if($element['id'] == $course['id'])
+            foreach($toc as $key => $element)
             {
-                $tmp = $key - 1;
-                while($tmp >= 0)
+                if($element['id'] == $course['id'])
                 {
-                    if ($toc[$tmp]['type'] != 'title-1')
+                    $tmp = $key - 1;
+                    while($tmp >= 0)
                     {
-                        $course['prev'] = $toc[$tmp];
-                        break;
+                        if ($toc[$tmp]['type'] != 'title-1')
+                        {
+                            $course['prev'] = $toc[$tmp];
+                            break;
+                        }
+                        $tmp--;
                     }
-                    $tmp--;
-                }
 
-                $tmp = $key + 1;
-                $cpt = count($toc);
-                while($tmp <= $cpt-1)
-                {
-                    if ($toc[$tmp]['type'] != 'title-1')
+                    $tmp = $key + 1;
+                    $cpt = count($toc);
+                    while($tmp <= $cpt-1)
                     {
-                        $course['next'] = $toc[$tmp];
-                        break;
+                        if ($toc[$tmp]['type'] != 'title-1')
+                        {
+                            $course['next'] = $toc[$tmp];
+                            break;
+                        }
+                        $tmp++;
                     }
-                    $tmp++;
                 }
             }
         }
