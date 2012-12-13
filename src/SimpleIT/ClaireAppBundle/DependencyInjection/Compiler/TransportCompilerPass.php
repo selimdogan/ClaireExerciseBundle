@@ -26,6 +26,7 @@ class TransportCompilerPass implements CompilerPassInterface
         $taggedServices = $container->findTaggedServiceIds(
             'simple_it.claire.http.transport.listener'
         );
+
         foreach ($taggedServices as $id => $attributes) {
             $definition->addMethodCall(
                 'addListener',
