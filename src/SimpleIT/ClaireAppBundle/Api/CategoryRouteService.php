@@ -50,7 +50,7 @@ class CategoryRouteService
     public function getTags($categorySlug, $format = null)
     {
         $apiRequest = new ApiRequest();
-        $apiRequest->setUrl(self::URL_CATEGORIES.$categorySlug.self::URL_TAGS.'?sort=name asc');
+        $apiRequest->setUrl(self::URL_CATEGORIES.$categorySlug.self::URL_TAGS.'?sort=name%20asc');
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
         $apiRequest->setFormat($format);
 
