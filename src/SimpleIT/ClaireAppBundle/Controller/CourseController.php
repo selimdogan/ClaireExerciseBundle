@@ -97,7 +97,6 @@ class CourseController extends BaseController
         $baseCourse = $this->getApiService()->getResult($courseRequest);
         $this->checkObjectFound($baseCourse);
         $baseCourse = $baseCourse->getContent();
-        $baseCourse['display'] = 1;
 
         // Course API
         $courseRequest = $this->getCourseRouteService()->getCourse($rootSlug, $titleSlug, $titleType);
@@ -105,13 +104,17 @@ class CourseController extends BaseController
         $this->checkObjectFound($course);
 
         // Alterate
-        $course = $this->get('simpleit.claire.course')->setPagination($course->getContent(), $toc);
+        $course = $this->get('simpleit.claire.course')->setPagination(
+                $course->getContent(),
+                $toc,
+                ($baseCourse['displayLevel'] == 1) ? array('title-2', 'title-3') : array('title-1')
+            );
         $course['type'] = $titleType;
         $date = new \DateTime();
         $course['updatedAt'] = $date->setTimestamp(strtotime($course['updatedAt']));
 
         // Verification titletype
-        $currentConfig = $configuration[$baseCourse['display']];
+        $currentConfig = $configuration[$baseCourse['displayLevel']];
         if (!in_array($titleType, $currentConfig))
         {
             throw $this->createNotFoundException('Title not accepted !');

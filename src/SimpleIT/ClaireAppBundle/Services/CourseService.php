@@ -90,7 +90,7 @@ class CourseService
      *
      * @return array Tutorial
      */
-    public function setPagination($course, $toc)
+    public function setPagination($course, $toc, $restrictions = array('title-1'))
     {
         if (!empty($toc))
         {
@@ -101,7 +101,7 @@ class CourseService
                     $tmp = $key - 1;
                     while($tmp >= 0)
                     {
-                        if ($toc[$tmp]['type'] != 'title-1')
+                        if (!in_array($toc[$tmp]['type'], $restrictions))
                         {
                             $course['prev'] = $toc[$tmp];
                             break;
@@ -113,7 +113,7 @@ class CourseService
                     $cpt = count($toc);
                     while($tmp <= $cpt-1)
                     {
-                        if ($toc[$tmp]['type'] != 'title-1')
+                        if (!in_array($toc[$tmp]['type'], $restrictions))
                         {
                             $course['next'] = $toc[$tmp];
                             break;
