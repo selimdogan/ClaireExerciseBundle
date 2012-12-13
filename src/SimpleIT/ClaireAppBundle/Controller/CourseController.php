@@ -88,6 +88,11 @@ class CourseController extends BaseController
         $toc = $results['courseToc']->getContent();
         $titleType = $this->get('simpleit.claire.course')->getTitleType($titleSlug, $toc);
 
+        // Root Course API
+        $courseRequest = $this->getCourseRouteService()->getCourse($rootSlug, null, null);
+        $baseCourse = $this->getApiService()->getResult($courseRequest);
+        $this->checkObjectFound($baseCourse);
+
         // Course API
         $courseRequest = $this->getCourseRouteService()->getCourse($rootSlug, $titleSlug, $titleType);
         $course = $this->getApiService()->getResult($courseRequest);
@@ -105,22 +110,30 @@ class CourseController extends BaseController
             $requests['courseContent'] = $this->getCourseRouteService()->getCourseContent($rootSlug, $titleSlug, $titleType, 'text/html');
         }
 
+        // Requesting
         $requests['courseTags'] = $this->getCourseRouteService()->getCourseTags($rootSlug);
         $requests['courseMetadatas'] = $this->getCourseRouteService()->getCourseMetadatas($rootSlug);
         $requests['courseTimeline'] = $this->getCourseRouteService()->getCourseTimeline($rootSlug);
         $results = $this->getApiService()->getResult($requests);
+
+        // Alterate
         $course = $this->get('simpleit.claire.course')->setPagination($course->getContent(), $toc);
         $course['type'] = $titleType;
-        $toc = $this->get('simpleit.claire.course')->restrictTocForTitle2($course, $toc);
-        $timeline = $results['courseTimeline']->getContent();
+        $date = new \DateTime();
+        $course['updatedAt'] = $date->setTimestamp(strtotime($course['updatedAt']));
+        $this->makeBreadcrumb($baseCourse->getContent(), $category->getContent(), $course, $toc);
 
-        return $this->render('TutorialBundle:Tutorial:view.html.twig',
+        // Restrict TOC
+        $toc = $this->get('simpleit.claire.course')->restrictTocForTitle2($course, $toc);
+
+        return $this->render('TutorialBundle:Tutorial:viewBig.html.twig',
             array(
                 'course' => $course,
+                'baseCourse' => $baseCourse->getContent(),
                 'toc' => $toc,
                 'tags' => $results['courseTags']->getContent(),
                 'contentHtml' => (isset($requests['courseContent'])) ? $results['courseContent']->getContent() : '',
-                'timeline' => $timeline,
+                'timeline' => $results['courseTimeline']->getContent(),
                 'rootSlug' => $rootSlug,
                 'category' => $category->getContent(),
                 'difficulty' => $this->getOneMetadata('CreativeWork/difficulty', $results['courseMetadatas']->getContent()),
@@ -132,6 +145,58 @@ class CourseController extends BaseController
                 'titleType' => $titleType
             )
         );
+    }
+
+    /**
+     * Make Breadcrumb
+     *
+     * @param array $baseCourse Base Course
+     * @param array $category   Category
+     * @param array $course     Course
+     * @param array $toc        TOC
+     */
+    private function makeBreadcrumb($baseCourse, $category, $course, $toc)
+    {
+        // BreadCrumb
+        $breadcrumb = $this->get('apy_breadcrumb_trail');
+        $breadcrumb->add($category['title'], 'SimpleIT_Claire_categories_view', array('slug' => $category['slug']));
+
+        if ($baseCourse['slug'] != $course['slug'])
+        {
+            $breadcrumb->add($baseCourse['title'], 'course_view',
+                    array(
+                        'categorySlug' => $category['slug'],
+                        'rootSlug'     => $baseCourse['slug'],
+                        ));
+        }
+
+        if (!empty($toc))
+        {
+            foreach($toc as $key => $element)
+            {
+                if ($element['slug'] == $course['slug'])
+                {
+                    $types = array('title-1', $element['type']);
+                    for($i = $key - 1; $i >= 0; $i--)
+                    {
+                        if (!in_array($toc[$i]['type'], $types))
+                        {
+                            $types[] = $toc[$i]['type'];
+                            $breadcrumb->add($toc[$i]['title'],
+                                    'course_view',
+                                    array(
+                                        'categorySlug' => $category['slug'],
+                                        'rootSlug'     => $baseCourse['slug'],
+                                        'titleSlug'    => $toc[$i]['slug']
+                                        )
+                                    );
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        $breadcrumb->add($course['title']);
     }
 
     /**
