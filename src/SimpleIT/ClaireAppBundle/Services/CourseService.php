@@ -21,7 +21,7 @@ class CourseService
         {
             foreach($toc as $key => $element)
             {
-                if($toc[$key]['slug'] == $slug)
+                if($element['slug'] == $slug)
                 {
                     $result = $toc[$key]['type'];
                     break;
@@ -40,27 +40,34 @@ class CourseService
      *
      * @return array
      */
-    public function restrictTocForTitle2($course, $toc = array())
+    public function restrictTocForTitle($course, $toc = array(), $titleRef = 'title-2')
     {
         $points = array(
+            'course' => 0,
             'title-1' => 1,
             'title-2' => 2,
             'title-3' => 3,
         );
 
+        $type = (is_null($course['type'])) ? 'course' : $course['type'];
         $result = $toc;
         $bool = false;
-        if (!empty($toc) && $course['type'] == 'title-2')
+        if (!empty($toc) && $type == $titleRef)
         {
             $result = array();
             foreach($toc as $title)
             {
-                if ($bool && $points[$course['type']] >= $points[$title['type']])
+                if ($type == 'course')
+                {
+                    $bool = true;
+                }
+
+                if ($bool && $type != 'course' && $points[$type] >= $points[$title['type']])
                 {
                     $bool = false;
                 }
 
-                if ($bool && $points[$course['type']] + 1 == $points[$title['type']])
+                if ($bool && $points[$type] + 1 == $points[$title['type']])
                 {
                     $result[] = $title;
                 }

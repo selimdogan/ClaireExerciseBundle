@@ -77,6 +77,10 @@ class CourseController extends BaseController
      */
     public function readAction(Request $request, $categorySlug, $rootSlug, $titleSlug = null)
     {
+        $configuration = array(
+            '1' => array(null, 'title-1'),
+            '2' => array(null, 'title-2', 'title-3')
+        );
         // Category API
         $categoryRequest = $this->getCategoryRouteService()->getCategory($categorySlug);
         $category = $this->getApiService()->getResult($categoryRequest);
@@ -92,20 +96,29 @@ class CourseController extends BaseController
         $courseRequest = $this->getCourseRouteService()->getCourse($rootSlug, null, null);
         $baseCourse = $this->getApiService()->getResult($courseRequest);
         $this->checkObjectFound($baseCourse);
+        $baseCourse = $baseCourse->getContent();
+        $baseCourse['display'] = 1;
 
         // Course API
         $courseRequest = $this->getCourseRouteService()->getCourse($rootSlug, $titleSlug, $titleType);
         $course = $this->getApiService()->getResult($courseRequest);
         $this->checkObjectFound($course);
 
+        // Alterate
+        $course = $this->get('simpleit.claire.course')->setPagination($course->getContent(), $toc);
+        $course['type'] = $titleType;
+        $date = new \DateTime();
+        $course['updatedAt'] = $date->setTimestamp(strtotime($course['updatedAt']));
+
         // Verification titletype
-        if (!in_array($titleType, array(null, 'title-2', 'title-3')))
+        $currentConfig = $configuration[$baseCourse['display']];
+        if (!in_array($titleType, $currentConfig))
         {
-            throw $this->createNotFoundException('Title 1 not accepted !');
+            throw $this->createNotFoundException('Title not accepted !');
         }
 
         // Other informations
-        if ('title-3' == $titleType)
+        if ($currentConfig[count($currentConfig) - 1]== $titleType)
         {
             $requests['courseContent'] = $this->getCourseRouteService()->getCourseContent($rootSlug, $titleSlug, $titleType, 'text/html');
         }
@@ -116,20 +129,19 @@ class CourseController extends BaseController
         $requests['courseTimeline'] = $this->getCourseRouteService()->getCourseTimeline($rootSlug);
         $results = $this->getApiService()->getResult($requests);
 
-        // Alterate
-        $course = $this->get('simpleit.claire.course')->setPagination($course->getContent(), $toc);
-        $course['type'] = $titleType;
-        $date = new \DateTime();
-        $course['updatedAt'] = $date->setTimestamp(strtotime($course['updatedAt']));
-        $this->makeBreadcrumb($baseCourse->getContent(), $category->getContent(), $course, $toc);
+        // Breadcrumb
+        $this->makeBreadcrumb(
+                $baseCourse,
+                $category->getContent(),
+                $course,
+                $toc);
 
         // Restrict TOC
-        $toc = $this->get('simpleit.claire.course')->restrictTocForTitle2($course, $toc);
-
-        return $this->render('TutorialBundle:Tutorial:viewBig.html.twig',
+        $toc = $this->get('simpleit.claire.course')->restrictTocForTitle($course, $toc, (is_null($titleType) ? 'course' : $titleType));
+        return $this->render('TutorialBundle:Tutorial:view.html.twig',
             array(
                 'course' => $course,
-                'baseCourse' => $baseCourse->getContent(),
+                'baseCourse' => $baseCourse,
                 'toc' => $toc,
                 'tags' => $results['courseTags']->getContent(),
                 'contentHtml' => (isset($requests['courseContent'])) ? $results['courseContent']->getContent() : '',
