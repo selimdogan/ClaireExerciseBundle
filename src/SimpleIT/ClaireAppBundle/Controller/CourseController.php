@@ -176,6 +176,13 @@ class CourseController extends BaseController
      */
     private function makeBreadcrumb($baseCourse, $category, $course, $toc)
     {
+       $points = array(
+            'course' => 0,
+            'title-1' => 1,
+            'title-2' => 2,
+            'title-3' => 3,
+        );
+
         // BreadCrumb
         $breadcrumb = $this->get('apy_breadcrumb_trail');
         $breadcrumb->add($category['title'], 'SimpleIT_Claire_categories_view', array('slug' => $category['slug']));
@@ -198,7 +205,7 @@ class CourseController extends BaseController
                     $types = array('title-1', $element['type']);
                     for($i = $key - 1; $i >= 0; $i--)
                     {
-                        if (!in_array($toc[$i]['type'], $types))
+                        if (!in_array($toc[$i]['type'], $types) && $points[$toc[$i]['type']] < $points[$element['type']])
                         {
                             $types[] = $toc[$i]['type'];
                             $breadcrumb->add($toc[$i]['title'],
