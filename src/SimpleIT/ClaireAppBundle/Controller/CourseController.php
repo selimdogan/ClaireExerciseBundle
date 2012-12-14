@@ -155,12 +155,12 @@ class CourseController extends BaseController
                 'timeline' => $results['courseTimeline']->getContent(),
                 'rootSlug' => $rootSlug,
                 'category' => $category->getContent(),
-                'difficulty' => $this->getOneMetadata('CreativeWork/difficulty', $results['courseMetadatas']->getContent()),
-                'duration' => $this->getOneMetadata('CreativeWork/duration', $results['courseMetadatas']->getContent()),
-                'licence' => $this->getOneMetadata('CreativeWork/license', $results['courseMetadatas']->getContent()),
-                'description' => $this->getOneMetadata('Thing/Description ', $results['courseMetadatas']->getContent()),
-                'rate' => $this->getOneMetadata('CreativeWork/aggregateRating', $results['courseMetadatas']->getContent()),
-                'icon' => $this->getOneMetadata('Thing/image', $results['courseMetadatas']->getContent()),
+                'difficulty' => $this->getOneMetadata('difficulty', $results['courseMetadatas']->getContent()),
+                'duration' => $this->getOneMetadata('duration', $results['courseMetadatas']->getContent()),
+                'licence' => $this->getOneMetadata('license', $results['courseMetadatas']->getContent()),
+                'description' => $this->getOneMetadata('description ', $results['courseMetadatas']->getContent()),
+                'rate' => $this->getOneMetadata('aggregateRating', $results['courseMetadatas']->getContent()),
+                'icon' => $this->getOneMetadata('image', $results['courseMetadatas']->getContent()),
                 'titleType' => $titleType
             )
         );
