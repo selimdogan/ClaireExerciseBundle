@@ -137,7 +137,7 @@ class CourseRouteService
     public function getCourseToc($slug, $format = null)
     {
         $apiRequest = new ApiRequest();
-        $apiRequest->setUrl(self::URL_COURSES.$slug.self::URL_COURSES_TOC);
+        $apiRequest->setUrl(self::URL_COURSES.$slug.self::URL_COURSES_TOC.'?level=3&type=title-1+title-2+title-3');
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
         $apiRequest->setFormat($format);
 
