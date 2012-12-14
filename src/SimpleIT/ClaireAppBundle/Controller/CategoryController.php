@@ -4,7 +4,9 @@ namespace SimpleIT\ClaireAppBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use SimpleIT\ClaireAppBundle\Controller\BaseController;
 use SimpleIT\ClaireAppBundle\Form\Type\CourseType;
+use SimpleIT\AppBundle\Model\ApiRequestOptions;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 
 /**
  * Category controller
@@ -42,28 +44,46 @@ class CategoryController extends BaseController
     {
         $categorySlug = $request->get('slug');
         $parameters = $request->query->all();
-        $parameters['category'] = $categorySlug;
+
+        $options = new ApiRequestOptions();
+        $options->setItemsPerPage(18);
+        $options->setPageNumber($request->get('page', 1));
+        $options->bindFilter($parameters, array('sort'));
 
         /* Get the category */
-        $categoryRequest = $this->getCategoryRouteService()->getCategory($categorySlug);
-        $category = $this->getApiService()->getResult($categoryRequest);
+        $categoryRequest = $this->getClaireApi('categories')->getCategory($categorySlug);
+        $category = $this->getClaireApi()->getResult($categoryRequest);
 
         /* Throw 404 if object not found */
         $this->checkObjectFound($category);
 
         /* get related Tags and courses */
-        $requests['tags'] = $this->getCategoryRouteService()->getTags($categorySlug);
-        $requests['courses'] = $this->getCourseRouteService()->getCourses($parameters);
-        $results = $this->getApiService()->getResult($requests);
+        $requests['tags'] = $this->getClaireApi('categories')->getTags($categorySlug);
+        // @FIXME USE THIS REQUEST
+        //$requests['courses'] = $this->getClaireApi('courses')->getCoursesByCategory($options);
+        $options->addFilter('category', $categorySlug);
+        $requests['courses'] = $this->getClaireApi('courses')->getCourses($options);
+
+        $results = $this->getClaireApi()->getResults($requests);
+
+        if(is_null($results['courses']->getPager()))
+        {
+            $totalItems = count($results['courses']->getContent());
+        }
+        else
+        {
+            $totalItems = $results['courses']->getPager()->getTotalItems();
+        }
 
         /* Prepare view and parameters */
         $this->view = 'SimpleITClaireAppBundle:Category:view.html.twig';
         $this->viewParameters = array(
-                'category' => $category->getContent(),
-                'tags' => $results['tags']->getContent(),
-                'courses' => $results['courses']->getContent(),
-                'appPager' => $results['courses']->getPager(),
-            );
+            'category' => $category->getContent(),
+            'tags' => $results['tags']->getContent(),
+            'courses' => $results['courses']->getContent(),
+            'appPager' => $results['courses']->getPager(),
+            'totalItems' =>  $totalItems
+        );
 
         return $this->generateView($this->view, $this->viewParameters);
     }
@@ -82,21 +102,35 @@ class CategoryController extends BaseController
         $tagSlug = $request->get('slug');
         $parameters = $request->query->all();
 
+        $options = new ApiRequestOptions();
+        $options->setItemsPerPage(18);
+        $options->setPageNumber($request->get('page', 1));
+        $options->bindFilter($parameters, array('sort'));
+
         /* get Tag and associated tags */
-        $tagRequest = $this->getCategoryRouteService()->getTag($categorySlug, $tagSlug);
-        $tag = $this->getApiService()->getResult($tagRequest);
+        $tagRequest = $this->getClaireApi('categories')->getTag($categorySlug, $tagSlug);
+        $tag = $this->getClaireApi()->getResult($tagRequest);
 
         /* Throw 404 if object not found */
         $this->checkObjectFound($tag);
 
-        $requests['category'] = $this->getCategoryRouteService()->getCategory($categorySlug);
-        $requests['courses'] = $this->getCategoryRouteService()->getTagCourses($tagSlug, $parameters);
+        $requests['category'] = $this->getClaireApi('categories')->getCategory($categorySlug);
+        $requests['courses'] = $this->getClaireApi('categories')->getTagCourses($tagSlug, $options);
 
-        $requests['associated-tags'] = $this->getCategoryRouteService()->getAssociatedTags(
+        $requests['associated-tags'] = $this->getClaireApi('categories')->getAssociatedTags(
             $categorySlug,
             $tagSlug
         );
-        $results = $this->getApiService()->getResult($requests);
+        $results = $this->getClaireApi()->getResults($requests);
+
+        if(is_null($results['courses']->getPager()))
+        {
+            $totalItems = count($results['courses']->getContent());
+        }
+        else
+        {
+            $totalItems = $results['courses']->getPager()->getTotalItems();
+        }
 
         /* Prepare view and parameters */
         $this->view = 'TutorialBundle:Category:viewTag.html.twig';
@@ -106,6 +140,7 @@ class CategoryController extends BaseController
             'associatedTags' => $results['associated-tags']->getContent(),
             'courses' => $results['courses']->getContent(),
             'appPager' => $results['courses']->getPager(),
+            'totalItems' =>  $totalItems
         );
 
         return $this->generateView($this->view, $this->viewParameters);

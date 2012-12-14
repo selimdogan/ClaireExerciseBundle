@@ -17,29 +17,19 @@ class BaseController extends Controller
      *
      * @return SimpleIT\ClaireAppBundle\Api\ClaireApi
      */
-    public function getApiService()
+    public function getClaireApi($serviceName = null)
     {
-        return $this->get('claire_api_service');
+        $service = $this->get('claire_api_service');
+
+        if(!is_null($serviceName))
+            $service = $this->getService($serviceName);
+
+        return $service;
     }
 
-    /**
-     * Get api service
-     *
-     * @return SimpleIT\ClaireAppBundle\Api\ClaireApi
-     */
-    public function getCourseRouteService()
+    public function getService($serviceName)
     {
-        return $this->get('claire_courses_api');
-    }
-
-    /**
-     * Get api service
-     *
-     * @return SimpleIT\ClaireAppBundle\Api\ClaireApi
-     */
-    public function getCategoryRouteService()
-    {
-        return $this->get('claire_categories_api');
+        return $this->get('claire_'.$serviceName.'_api');
     }
 
     /**

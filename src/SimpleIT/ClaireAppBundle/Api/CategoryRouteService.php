@@ -2,12 +2,13 @@
 namespace SimpleIT\ClaireAppBundle\Api;
 
 use Symfony\Component\HttpFoundation\Request;
-use SimpleIT\AppBundle\Utils\ApiRequest;
+use SimpleIT\AppBundle\Model\ApiRequest;
+use SimpleIT\AppBundle\Services\ApiRouteService;
 
 /**
  * Claire categories api
  */
-class CategoryRouteService
+class CategoryRouteService extends ApiRouteService
 {
     /* URL for categories ressources */
     const URL_CATEGORIES = '/categories/';
@@ -21,6 +22,11 @@ class CategoryRouteService
     /* URL for related courses */
     const URL_COURSES = '/courses';
 
+
+    public function getItemsPerPageDefault()
+    {
+        return self::ITEM_PER_PAGE_DEFAULT;
+    }
     /**
      * Get a category from slug
      *
@@ -29,12 +35,17 @@ class CategoryRouteService
      *
      * @return apiRequest
      */
-    public function getCategory($categorySlug = '', $format = null)
+    public function getCategory($categorySlug, $apiRequestOptions = null)
     {
         $apiRequest = new ApiRequest();
-        $apiRequest->setUrl(self::URL_CATEGORIES.$categorySlug);
+        $apiRequest->setBaseUrl(self::URL_CATEGORIES.$categorySlug);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
-        $apiRequest->setFormat($format);
+
+        if(!is_null($apiRequestOptions))
+        {
+            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
+            $apiRequest->setOptions($apiRequestOptions);
+        }
 
         return $apiRequest;
     }
@@ -47,12 +58,17 @@ class CategoryRouteService
      *
      * @return apiRequest
      */
-    public function getTags($categorySlug, $format = null)
+    public function getTags($categorySlug, $apiRequestOptions = null)
     {
         $apiRequest = new ApiRequest();
-        $apiRequest->setUrl(self::URL_CATEGORIES.$categorySlug.self::URL_TAGS.'?sort=name%20asc');
+        $apiRequest->setBaseUrl(self::URL_CATEGORIES.$categorySlug.self::URL_TAGS);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
-        $apiRequest->setFormat($format);
+
+        if(!is_null($apiRequestOptions))
+        {
+            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
+            $apiRequest->setOptions($apiRequestOptions);
+        }
 
         return $apiRequest;
     }
@@ -66,12 +82,17 @@ class CategoryRouteService
      *
      * @return apiRequest
      */
-    public function getTag($categorySlug, $tagSlug, $format = null)
+    public function getTag($categorySlug, $tagSlug, $apiRequestOptions = null)
     {
         $apiRequest = new ApiRequest();
-        $apiRequest->setUrl(self::URL_CATEGORIES.$categorySlug.self::URL_TAGS.$tagSlug);
+        $apiRequest->setBaseUrl(self::URL_CATEGORIES.$categorySlug.self::URL_TAGS.$tagSlug);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
-        $apiRequest->setFormat($format);
+
+        if(!is_null($apiRequestOptions))
+        {
+            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
+            $apiRequest->setOptions($apiRequestOptions);
+        }
 
         return $apiRequest;
     }
@@ -85,14 +106,19 @@ class CategoryRouteService
      *
      * @return apiRequest
      */
-    public function getAssociatedTags($categorySlug, $tagSlug, $format = null)
+    public function getAssociatedTags($categorySlug, $tagSlug, $apiRequestOptions = null)
     {
         $apiRequest = new ApiRequest();
-        $apiRequest->setUrl(
+        $apiRequest->setBaseUrl(
             self::URL_CATEGORIES.$categorySlug.self::URL_TAGS.$tagSlug.self::URL_ASSOCIATED_TAGS
         );
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
-        $apiRequest->setFormat($format);
+
+        if(!is_null($apiRequestOptions))
+        {
+            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
+            $apiRequest->setOptions($apiRequestOptions);
+        }
 
         return $apiRequest;
     }
@@ -106,20 +132,19 @@ class CategoryRouteService
      *
      * @return apiRequest
      */
-    public function getTagCourses($tagSlug, array $parameters = array(), $format = null)
+    public function getTagCourses($tagSlug, $apiRequestOptions = null)
     {
-        $filter = '?';
-        foreach($parameters as $field => $value)
-        {
-            $filter .= $field.'='.$value.'&';
-        }
-
         $apiRequest = new ApiRequest();
-        $apiRequest->setUrl(
+        $apiRequest->setBaseUrl(
             self::URL_TAGS.$tagSlug.CategoryRouteService::URL_COURSES
         );
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
-        $apiRequest->setFormat($format);
+
+        if(!is_null($apiRequestOptions))
+        {
+            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
+            $apiRequest->setOptions($apiRequestOptions);
+        }
 
         return $apiRequest;
     }

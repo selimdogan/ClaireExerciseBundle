@@ -2,12 +2,13 @@
 namespace SimpleIT\ClaireAppBundle\Api;
 
 use Symfony\Component\HttpFoundation\Request;
-use SimpleIT\AppBundle\Utils\ApiRequest;
+use SimpleIT\AppBundle\Model\ApiRequest;
+use SimpleIT\AppBundle\Services\ApiRouteService;
 
 /**
  * Claire courses api
  */
-class CourseRouteService
+class CourseRouteService extends ApiRouteService
 {
     const URL_COURSES = '/courses/';
     const URL_COURSES_TOC = '/toc';
@@ -134,21 +135,42 @@ class CourseRouteService
      *
      * @param string $categorySlug Slug
      */
-    public function getCourses(array $parameters = array(), $format = null)
+    public function getCourses($apiRequestOptions = null)
     {
-        $filter = '?';
-        foreach($parameters as $field => $value)
+        $apiRequest = new ApiRequest();
+        $apiRequest->setBaseUrl(self::URL_COURSES);
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        if(!is_null($apiRequestOptions))
         {
-            $filter .= $field.'='.$value.'&';
+
+            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
+            $apiRequest->setOptions($apiRequestOptions);
         }
 
+        return $apiRequest;
+    }
+
+
+    /**
+     * Get tags from category slug
+     *
+     * @param string $categorySlug Slug
+     */
+    public function getCoursesByCategory($categorySlug, $apiRequestOptions = null)
+    {
         $apiRequest = new ApiRequest();
-        $apiRequest->setUrl(self::URL_COURSES.$filter);
+        $apiRequest->setBaseUrl(CategoryRouteService::URL_CATEGORIES.$categorySlug.self::URL_COURSES);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
-        $apiRequest->setFormat($format);
+
+        if(!is_null($apiRequestOptions))
+        {
+
+            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
+            $apiRequest->setOptions($apiRequestOptions);
+        }
 
         return $apiRequest;
-
     }
 
     /**
