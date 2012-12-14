@@ -4,6 +4,7 @@ namespace SimpleIT\ClaireAppBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use SimpleIT\ClaireAppBundle\Controller\BaseController;
 use SimpleIT\ClaireAppBundle\Form\Type\CourseType;
+use SimpleIT\AppBundle\Model\ApiRequestOptions;
 
 /**
  * Course controller
@@ -259,11 +260,36 @@ class CourseController extends BaseController
      *
      * @return Response
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
-        $coursesRequest = $this->getCourseRouteService()->getCourses();
-        $courses = $this->getApiService()->getResult($coursesRequest);
+        $parameters = $request->query->all();
 
-        return $this->render('SimpleITClaireAppBundle:Course:list.html.twig', array('courses' => $courses->getContent()));
+        $options = new ApiRequestOptions();
+        $options->setItemsPerPage(18);
+        $options->setPageNumber($request->get('page', 1));
+        $options->bindFilter($parameters, array('sort'));
+
+        $coursesRequest = $this->getClaireApi('courses')->getCourses($options);
+        $courses = $this->getClaireApi()->getResult($coursesRequest);
+
+        $this->view = 'SimpleITClaireAppBundle:Course:list.html.twig';
+        $this->viewParameters = array(
+            'courses' => $courses->getContent(),
+            'appPager' => $courses->getPager()
+        );
+        return $this->generateView($this->view, $this->viewParameters);
+    }
+
+    /**
+     * Generate the rendered response
+     *
+     * @param string $view           The view name
+     * @param array  $viewParameters Associated view parameters
+     *
+     * @return Response A Response instance
+     */
+    protected function generateView($view, $viewParameters)
+    {
+        return $this->render($view, $viewParameters);
     }
 }
