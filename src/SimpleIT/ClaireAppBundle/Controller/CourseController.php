@@ -140,7 +140,11 @@ class CourseController extends BaseController
                 $toc);
 
         // Restrict TOC
-        $toc = $this->get('simpleit.claire.course')->restrictTocForTitle($course, $toc, (is_null($titleType) ? 'course' : $titleType));
+        $toc = $this->get('simpleit.claire.course')->restrictTocForTitle(
+                $course,
+                $toc,
+                (is_null($titleType) && $baseCourse['displayLevel'] == 1)  ? 'course' : $titleType);
+
         return $this->render('TutorialBundle:Tutorial:view.html.twig',
             array(
                 'course' => $course,
