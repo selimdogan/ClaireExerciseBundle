@@ -21,7 +21,7 @@ class CourseService
         {
             foreach($toc as $key => $element)
             {
-                if($toc[$key]['slug'] == $slug)
+                if($element['slug'] == $slug)
                 {
                     $result = $toc[$key]['type'];
                     break;
@@ -40,27 +40,34 @@ class CourseService
      *
      * @return array
      */
-    public function restrictTocForTitle2($course, $toc = array())
+    public function restrictTocForTitle($course, $toc = array(), $titleRef = 'title-2')
     {
         $points = array(
+            'course' => 0,
             'title-1' => 1,
             'title-2' => 2,
             'title-3' => 3,
         );
 
+        $type = (is_null($course['type'])) ? 'course' : $course['type'];
         $result = $toc;
         $bool = false;
-        if (!empty($toc) && $course['type'] == 'title-2')
+        if (!empty($toc) && $type == $titleRef)
         {
             $result = array();
             foreach($toc as $title)
             {
-                if ($bool && $points[$course['type']] >= $points[$title['type']])
+                if ($type == 'course')
+                {
+                    $bool = true;
+                }
+
+                if ($bool && $type != 'course' && $points[$type] >= $points[$title['type']])
                 {
                     $bool = false;
                 }
 
-                if ($bool && $points[$course['type']] + 1 == $points[$title['type']])
+                if ($bool && $points[$type] + 1 == $points[$title['type']])
                 {
                     $result[] = $title;
                 }
@@ -83,7 +90,7 @@ class CourseService
      *
      * @return array Tutorial
      */
-    public function setPagination($course, $toc)
+    public function setPagination($course, $toc, $restrictions = array('title-1'))
     {
         if (!empty($toc))
         {
@@ -94,7 +101,7 @@ class CourseService
                     $tmp = $key - 1;
                     while($tmp >= 0)
                     {
-                        if ($toc[$tmp]['type'] != 'title-1')
+                        if (!in_array($toc[$tmp]['type'], $restrictions))
                         {
                             $course['prev'] = $toc[$tmp];
                             break;
@@ -106,7 +113,7 @@ class CourseService
                     $cpt = count($toc);
                     while($tmp <= $cpt-1)
                     {
-                        if ($toc[$tmp]['type'] != 'title-1')
+                        if (!in_array($toc[$tmp]['type'], $restrictions))
                         {
                             $course['next'] = $toc[$tmp];
                             break;
