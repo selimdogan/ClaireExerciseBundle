@@ -130,7 +130,9 @@ class CourseController extends BaseController
         $requests['courseTags'] = $this->getCourseRouteService()->getCourseTags($rootSlug);
         $requests['courseMetadatas'] = $this->getCourseRouteService()->getCourseMetadatas($rootSlug);
         $requests['courseTimeline'] = $this->getCourseRouteService()->getCourseTimeline($rootSlug);
+        $requests['courseIntroduction'] = $this->getCourseRouteService()->getIntroduction($rootSlug, $titleSlug, $titleType);
         $results = $this->getApiService()->getResult($requests);
+        $course['introduction'] = $results['courseIntroduction']->getContent();
 
         // Breadcrumb
         $this->makeBreadcrumb(

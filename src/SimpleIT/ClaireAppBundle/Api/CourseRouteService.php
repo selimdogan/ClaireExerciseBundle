@@ -68,6 +68,21 @@ class CourseRouteService
      *
      * @return string Course at the html format
      */
+    public function getIntroduction($rootSlug, $chapterSlug, $type)
+    {
+        $apiRequest = $this->getCourse($rootSlug, $chapterSlug, $type, 'text/html');
+        $apiRequest->setUrl(self::URL_COURSES.$rootSlug.((!empty($chapterSlug)) ? '/'.$type.'/'.$chapterSlug : '').'/introduction');
+
+        return $apiRequest;
+    }
+
+    /**
+     * Get a course from slug
+     *
+     * @param string $slug Slug
+     *
+     * @return string Course at the html format
+     */
     public function getCourseByCategory($categorySlug, $rootSlug, $chapterSlug, $type, $format = null)
     {
         $apiRequest = new ApiRequest();
