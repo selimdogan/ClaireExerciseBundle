@@ -60,7 +60,7 @@ class CategoryController extends BaseController
         $options = new ApiRequestOptions(array('sort'));
         $options->setItemsPerPage(18);
         $options->setPageNumber($request->get('page', 1));
-        $options->setFilters($parameters);
+        $options->addFilters($parameters, array('sort'));
         $options->addFilter('category', $categorySlug);
 
         $requests['courses'] = $this->getClaireApi('courses')->getCourses($options);

@@ -28,7 +28,7 @@ class CourseRouteService extends ApiRouteService
             $apiRequestOptions = new ApiRequestOptions();
         }
 
-        $apiRequestOptions->bindFilter(array('level' => 3, 'type' => 'title-1+title-2+title-3'));
+        $apiRequestOptions->addFilters(array('level' => 3, 'type' => 'title-1+title-2+title-3'));
 
         $apiRequest = new ApiRequest();
         $apiRequest->setBaseUrl( self::URL_COURSES.$slug.'/toc');
@@ -181,7 +181,7 @@ class CourseRouteService extends ApiRouteService
             $apiRequestOptions = new ApiRequestOptions();
         }
 
-        $apiRequestOptions->bindFilter(array('level' => 3, 'type' => 'title-1+title-2+title-3'));
+        $apiRequestOptions->addFilters(array('level' => 3, 'type' => 'title-1+title-2+title-3'));
 
         $apiRequest = new ApiRequest();
         $apiRequest->setBaseUrl(self::URL_COURSES.$slug.self::URL_COURSES_TOC);
