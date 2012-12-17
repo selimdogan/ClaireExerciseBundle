@@ -45,11 +45,6 @@ class CategoryController extends BaseController
         $categorySlug = $request->get('slug');
         $parameters = $request->query->all();
 
-        $options = new ApiRequestOptions();
-        $options->setItemsPerPage(18);
-        $options->setPageNumber($request->get('page', 1));
-        $options->bindFilter($parameters, array('sort'));
-
         /* Get the category */
         $categoryRequest = $this->getClaireApi('categories')->getCategory($categorySlug);
         $category = $this->getClaireApi()->getResult($categoryRequest);
@@ -61,7 +56,13 @@ class CategoryController extends BaseController
         $requests['tags'] = $this->getClaireApi('categories')->getTags($categorySlug);
         // @FIXME USE THIS REQUEST
         //$requests['courses'] = $this->getClaireApi('courses')->getCoursesByCategory($options);
+
+        $options = new ApiRequestOptions(array('sort'));
+        $options->setItemsPerPage(18);
+        $options->setPageNumber($request->get('page', 1));
+        $options->setFilters($parameters);
         $options->addFilter('category', $categorySlug);
+
         $requests['courses'] = $this->getClaireApi('courses')->getCourses($options);
 
         $results = $this->getClaireApi()->getResults($requests);

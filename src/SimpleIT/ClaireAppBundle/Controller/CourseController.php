@@ -82,31 +82,38 @@ class CourseController extends BaseController
             '2' => array(null, 'title-2', 'title-3')
         );
         // Category API
-        $categoryRequest = $this->getCategoryRouteService()->getCategory($categorySlug);
-        $category = $this->getApiService()->getResult($categoryRequest);
+        $categoryRequest = $this->getClaireApi('categories')->getCategory($categorySlug);
+        $category = $this->getClaireApi()->getResult($categoryRequest);
         $this->checkObjectFound($category);
-
-        // Get toc
-        $requests['courseToc'] = $this->getCourseRouteService()->getCourseToc($rootSlug);
-        $results = $this->getApiService()->getResult($requests);
-        $toc = $results['courseToc']->getContent();
-        $titleType = $this->get('simpleit.claire.course')->getTitleType($titleSlug, $toc);
-
-        // Root Course API
-        $courseRequest = $this->getCourseRouteService()->getCourse($rootSlug, null, null);
-        $baseCourse = $this->getApiService()->getResult($courseRequest);
-        $this->checkObjectFound($baseCourse);
-        $baseCourse = $baseCourse->getContent();
 
         // Course API
         $courseRequest = $this->getCourseRouteService()->getCourse($rootSlug, $titleSlug, $titleType);
         $course = $this->getApiService()->getResult($courseRequest);
         $this->checkObjectFound($course);
 
+        if($course['category']['id'] != $category['id'])
+        {
+            throw new HttpNotFoundException('Unable to find this course in this category');
+        }
+
+        // Get toc
+        $requests['courseToc'] = $this->getClaireApi('courses')->getCourseToc($rootSlug);
+
+        // Root Course API
+        $requests['course'] = $this->getCourseRouteService()->getCourse($rootSlug, null, null);
+
+        $results = $this->getClaireApi()->getResults($requests);
+
+        $this->checkObjectFound($results['course']);
+        $baseCourse = $results['course']->getContent();
+        $titleType = $this->get('simpleit.claire.course')->getTitleType($titleSlug, $results['courseToc']);
+
+        $toc = $results['courseToc'];
+
         // Alterate
         $course = $this->get('simpleit.claire.course')->setPagination(
                 $course->getContent(),
-                $toc,
+                $results['courseToc'],
                 ($baseCourse['displayLevel'] == 1) ? array('title-2', 'title-3') : array('title-1')
             );
         $course['type'] = $titleType;
@@ -123,15 +130,19 @@ class CourseController extends BaseController
         // Other informations
         if ($currentConfig[count($currentConfig) - 1]== $titleType)
         {
-            $requests['courseContent'] = $this->getCourseRouteService()->getCourseContent($rootSlug, $titleSlug, $titleType, 'text/html');
+            $options = new ApiRequestOptions();
+            $options->setFormat(\SimpleIT\AppBundle\Model\ApiRequest::FORMAT_HTML);
+            $requests['courseContent'] = $this->getClaireApi('courses')->getCourseContent($rootSlug, $titleSlug, $titleType);
         }
 
         // Requesting
-        $requests['courseTags'] = $this->getCourseRouteService()->getCourseTags($rootSlug);
-        $requests['courseMetadatas'] = $this->getCourseRouteService()->getCourseMetadatas($rootSlug);
-        $requests['courseTimeline'] = $this->getCourseRouteService()->getCourseTimeline($rootSlug);
-        $requests['courseIntroduction'] = $this->getCourseRouteService()->getIntroduction($rootSlug, $titleSlug, $titleType);
+        $requests['courseTags'] = $this->getClaireApi('courses')->getCourseTags($rootSlug);
+        $requests['courseMetadatas'] = $this->getClaireApi('courses')->getCourseMetadatas($rootSlug);
+        $requests['courseTimeline'] = $this->getClaireApi('courses')->getCourseTimeline($rootSlug);
+        $requests['courseIntroduction'] = $this->getClaireApi('courses')->getIntroduction($rootSlug, $titleSlug, $titleType);
+
         $results = $this->getApiService()->getResult($requests);
+
         $course['introduction'] = $results['courseIntroduction']->getContent();
 
         // Breadcrumb

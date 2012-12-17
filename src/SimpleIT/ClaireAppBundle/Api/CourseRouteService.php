@@ -20,12 +20,19 @@ class CourseRouteService extends ApiRouteService
      *
      * @param string $slug Slug
      */
-    public function getCourseTimeline($slug, $format = null)
+    public function getCourseTimeline($slug, $apiRequestOptions = null)
     {
+        $apiRequestOptions->bindFilters(array('level' => 3, 'type' => 'title-1+title-2+title-3'));
+
         $apiRequest = new ApiRequest();
-        $apiRequest->setUrl( self::URL_COURSES.$slug.'/toc?level=3&type=title-1+title-2+title-3');
+        $apiRequest->setBaseUrl( self::URL_COURSES.$slug.'/toc');
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
-        $apiRequest->setFormat($format);
+
+        if(!is_null($apiRequestOptions))
+        {
+            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
+            $apiRequest->setOptions($apiRequestOptions);
+        }
 
         return $apiRequest;
     }
@@ -35,12 +42,17 @@ class CourseRouteService extends ApiRouteService
      *
      * @param string $slug Slug
      */
-    public function getCourseMetadatas($slug, $format = null)
+    public function getCourseMetadatas($slug, $apiRequestOptions = null)
     {
         $apiRequest = new ApiRequest();
-        $apiRequest->setUrl( self::URL_COURSES.$slug.self::URL_METADATAS);
+        $apiRequest->setBaseUrl( self::URL_COURSES.$slug.self::URL_METADATAS);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
-        $apiRequest->setFormat($format);
+
+        if(!is_null($apiRequestOptions))
+        {
+            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
+            $apiRequest->setOptions($apiRequestOptions);
+        }
 
         return $apiRequest;
     }
@@ -52,12 +64,17 @@ class CourseRouteService extends ApiRouteService
      *
      * @return string Course at the html format
      */
-    public function getCourse($rootSlug, $chapterSlug, $type, $format = null)
+    public function getCourse($rootSlug, $chapterSlug, $type, $apiRequestOptions = null)
     {
         $apiRequest = new ApiRequest();
-        $apiRequest->setUrl( self::URL_COURSES.$rootSlug.((!empty($chapterSlug)) ? '/'.$type.'/'.$chapterSlug : ''));
+        $apiRequest->setBaseUrl( self::URL_COURSES.$rootSlug.((!empty($chapterSlug)) ? '/'.$type.'/'.$chapterSlug : ''));
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
-        $apiRequest->setFormat($format);
+
+        if(!is_null($apiRequestOptions))
+        {
+            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
+            $apiRequest->setOptions($apiRequestOptions);
+        }
 
         return $apiRequest;
     }
@@ -69,10 +86,17 @@ class CourseRouteService extends ApiRouteService
      *
      * @return string Course at the html format
      */
-    public function getIntroduction($rootSlug, $chapterSlug, $type)
+    public function getIntroduction($rootSlug, $chapterSlug, $type, $apiRequestOptions = null)
     {
-        $apiRequest = $this->getCourse($rootSlug, $chapterSlug, $type, 'text/html');
-        $apiRequest->setUrl(self::URL_COURSES.$rootSlug.((!empty($chapterSlug)) ? '/'.$type.'/'.$chapterSlug : '').'/introduction');
+        $apiRequestOptions->setFormat('text/html');
+        $apiRequest = $this->getCourse($rootSlug, $chapterSlug, $type, $apiRequestOptions);
+        $apiRequest->setBaseUrl(self::URL_COURSES.$rootSlug.((!empty($chapterSlug)) ? '/'.$type.'/'.$chapterSlug : '').'/introduction');
+
+        if(!is_null($apiRequestOptions))
+        {
+            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
+            $apiRequest->setOptions($apiRequestOptions);
+        }
 
         return $apiRequest;
     }
@@ -84,12 +108,17 @@ class CourseRouteService extends ApiRouteService
      *
      * @return string Course at the html format
      */
-    public function getCourseByCategory($categorySlug, $rootSlug, $chapterSlug, $type, $format = null)
+    public function getCourseByCategory($categorySlug, $rootSlug, $chapterSlug, $type, $apiRequestOptions = null)
     {
         $apiRequest = new ApiRequest();
-        $apiRequest->setUrl( CategoryRouteService::URL_CATEGORIES.$categorySlug.self::URL_COURSES.$rootSlug.((!empty($chapterSlug)) ? '/'.$type.'/'.$chapterSlug : ''));
+        $apiRequest->setBaseUrl( CategoryRouteService::URL_CATEGORIES.$categorySlug.self::URL_COURSES.$rootSlug.((!empty($chapterSlug)) ? '/'.$type.'/'.$chapterSlug : ''));
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
-        $apiRequest->setFormat($format);
+
+        if(!is_null($apiRequestOptions))
+        {
+            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
+            $apiRequest->setOptions($apiRequestOptions);
+        }
 
         return $apiRequest;
     }
@@ -101,12 +130,17 @@ class CourseRouteService extends ApiRouteService
      *
      * @return string Course at the html format
      */
-    public function getCourseContent($rootSlug, $chapterSlug, $type, $format = null)
+    public function getCourseContent($rootSlug, $chapterSlug, $type, $apiRequestOptions = null)
     {
         $apiRequest = new ApiRequest();
-        $apiRequest->setUrl(self::URL_COURSES.$rootSlug.((!empty($chapterSlug)) ? '/'.$type.'/'.$chapterSlug : ''));
+        $apiRequest->setBaseUrl(self::URL_COURSES.$rootSlug.((!empty($chapterSlug)) ? '/'.$type.'/'.$chapterSlug : ''));
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
-        $apiRequest->setFormat($format);
+
+        if(!is_null($apiRequestOptions))
+        {
+            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
+            $apiRequest->setOptions($apiRequestOptions);
+        }
 
         return $apiRequest;
     }
@@ -118,12 +152,17 @@ class CourseRouteService extends ApiRouteService
      *
      * @return string Course at the html format
      */
-    public function getCourseTags($rootSlug, $format = null)
+    public function getCourseTags($rootSlug, $apiRequestOptions = null)
     {
         $apiRequest = new ApiRequest();
-        $apiRequest->setUrl(self::URL_COURSES.$rootSlug.CategoryRouteService::URL_TAGS);
+        $apiRequest->setBaseUrl(self::URL_COURSES.$rootSlug.CategoryRouteService::URL_TAGS);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
-        $apiRequest->setFormat($format);
+
+        if(!is_null($apiRequestOptions))
+        {
+            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
+            $apiRequest->setOptions($apiRequestOptions);
+        }
 
         return $apiRequest;
     }
@@ -135,12 +174,19 @@ class CourseRouteService extends ApiRouteService
      *
      * @return string Toc at the html format
      */
-    public function getCourseToc($slug, $format = null)
+    public function getCourseToc($slug, $apiRequestOptions = null)
     {
+        $apiRequestOptions->bindFilters(array('level' => 3, 'type' => 'title-1+title-2+title-3'));
+
         $apiRequest = new ApiRequest();
-        $apiRequest->setUrl(self::URL_COURSES.$slug.self::URL_COURSES_TOC.'?level=3&type=title-1+title-2+title-3');
+        $apiRequest->setBaseUrl(self::URL_COURSES.$slug.self::URL_COURSES_TOC);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
-        $apiRequest->setFormat($format);
+
+        if(!is_null($apiRequestOptions))
+        {
+            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
+            $apiRequest->setOptions($apiRequestOptions);
+        }
 
         return $apiRequest;
     }
@@ -166,7 +212,6 @@ class CourseRouteService extends ApiRouteService
         return $apiRequest;
     }
 
-
     /**
      * Get tags from category slug
      *
@@ -180,7 +225,6 @@ class CourseRouteService extends ApiRouteService
 
         if(!is_null($apiRequestOptions))
         {
-
             $apiRequestOptions = $this->bindOptions($apiRequestOptions);
             $apiRequest->setOptions($apiRequestOptions);
         }
