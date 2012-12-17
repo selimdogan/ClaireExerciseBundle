@@ -103,12 +103,6 @@ class CourseRouteService extends ApiRouteService
         $apiRequest = $this->getCourse($rootSlug, $chapterSlug, $type, $apiRequestOptions);
         $apiRequest->setBaseUrl(self::URL_COURSES.$rootSlug.((!empty($chapterSlug)) ? '/'.$type.'/'.$chapterSlug : '').'/introduction');
 
-        if(!is_null($apiRequestOptions))
-        {
-            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
-            $apiRequest->setOptions($apiRequestOptions);
-        }
-
         return $apiRequest;
     }
 

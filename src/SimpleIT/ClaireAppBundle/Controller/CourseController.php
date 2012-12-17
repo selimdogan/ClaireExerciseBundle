@@ -144,9 +144,7 @@ class CourseController extends BaseController
         $requests['courseMetadatas'] = $this->getClaireApi('courses')->getCourseMetadatas($rootSlug);
 
         $requests['courseIntroduction'] = $this->getClaireApi('courses')->getIntroduction($rootSlug, $titleSlug, $titleType);
-
         $results = $this->getClaireApi()->getResults($requests);
-
         $course['introduction'] = $results['courseIntroduction']->getContent();
 
         // Breadcrumb
