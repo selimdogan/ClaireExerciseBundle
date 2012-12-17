@@ -13,7 +13,7 @@ class CourseRouteService extends ApiRouteService
 {
     const URL_COURSES = '/courses/';
     const URL_COURSES_TOC = '/toc';
-    const URL_METADATAS = '/metadatas';
+    const URL_METADATAS = '/metadatas/';
     const URL_TAGS = '/tags/';
 
     /**
