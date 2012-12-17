@@ -17,33 +17,6 @@ class CourseRouteService extends ApiRouteService
     const URL_TAGS = '/tags/';
 
     /**
-     * Get timeline for course from slug
-     *
-     * @param string $slug Slug
-     */
-    public function getCourseTimeline($slug, $apiRequestOptions = null)
-    {
-        if(is_null($apiRequestOptions))
-        {
-            $apiRequestOptions = new ApiRequestOptions();
-        }
-
-        $apiRequestOptions->bindFilter(array('level' => 3, 'type' => 'title-1+title-2+title-3'));
-
-        $apiRequest = new ApiRequest();
-        $apiRequest->setBaseUrl( self::URL_COURSES.$slug.'/toc');
-        $apiRequest->setMethod(ApiRequest::METHOD_GET);
-
-        if(!is_null($apiRequestOptions))
-        {
-            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
-            $apiRequest->setOptions($apiRequestOptions);
-        }
-
-        return $apiRequest;
-    }
-
-    /**
      * Get metadatas for course from slug
      *
      * @param string $slug Slug
@@ -70,10 +43,10 @@ class CourseRouteService extends ApiRouteService
      *
      * @return string Course at the html format
      */
-    public function getCourse($rootSlug, $chapterSlug, $type, $apiRequestOptions = null)
+    public function getCourse($rootSlug, $apiRequestOptions = null)
     {
         $apiRequest = new ApiRequest();
-        $apiRequest->setBaseUrl( self::URL_COURSES.$rootSlug.((!empty($chapterSlug)) ? '/'.$type.'/'.$chapterSlug : ''));
+        $apiRequest->setBaseUrl(self::URL_COURSES.$rootSlug);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
 
         if(!is_null($apiRequestOptions))
@@ -92,16 +65,20 @@ class CourseRouteService extends ApiRouteService
      *
      * @return string Course at the html format
      */
-    public function getIntroduction($rootSlug, $chapterSlug, $type, $apiRequestOptions = null)
+    public function getIntroduction($rootSlug, $apiRequestOptions = null)
     {
         if(is_null($apiRequestOptions))
         {
             $apiRequestOptions = new ApiRequestOptions();
         }
 
+        $apiRequest = new ApiRequest();
+        $apiRequest->setBaseUrl(self::URL_COURSES.$rootSlug.'/introduction');
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
         $apiRequestOptions->setFormat('text/html');
-        $apiRequest = $this->getCourse($rootSlug, $chapterSlug, $type, $apiRequestOptions);
-        $apiRequest->setBaseUrl(self::URL_COURSES.$rootSlug.((!empty($chapterSlug)) ? '/'.$type.'/'.$chapterSlug : '').'/introduction');
+        $apiRequestOptions = $this->bindOptions($apiRequestOptions);
+        $apiRequest->setOptions($apiRequestOptions);
 
         return $apiRequest;
     }
@@ -124,23 +101,6 @@ class CourseRouteService extends ApiRouteService
             $apiRequestOptions = $this->bindOptions($apiRequestOptions);
             $apiRequest->setOptions($apiRequestOptions);
         }
-
-        return $apiRequest;
-    }
-
-    /**
-     * Get a course from slug
-     *
-     * @param string $slug Slug
-     *
-     * @return string Course at the html format
-     */
-    public function getCourseContent($rootSlug, $chapterSlug, $type, $apiRequestOptions = null)
-    {
-        $apiRequest = new ApiRequest();
-        $apiRequest->setBaseUrl(self::URL_COURSES.$rootSlug.((!empty($chapterSlug)) ? '/'.$type.'/'.$chapterSlug : ''));
-        $apiRequest->setMethod(ApiRequest::METHOD_GET);
-        $apiRequest->setFormat(\SimpleIT\AppBundle\Model\ApiRequest::FORMAT_HTML);
 
         return $apiRequest;
     }
@@ -176,13 +136,6 @@ class CourseRouteService extends ApiRouteService
      */
     public function getCourseToc($slug, $apiRequestOptions = null)
     {
-        if(is_null($apiRequestOptions))
-        {
-            $apiRequestOptions = new ApiRequestOptions();
-        }
-
-        $apiRequestOptions->bindFilter(array('level' => 3, 'type' => 'title-1+title-2+title-3'));
-
         $apiRequest = new ApiRequest();
         $apiRequest->setBaseUrl(self::URL_COURSES.$slug.self::URL_COURSES_TOC);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
@@ -235,46 +188,5 @@ class CourseRouteService extends ApiRouteService
         }
 
         return $apiRequest;
-    }
-
-    /**
-     * Create a new course
-     *
-     * @param array $course Data of the course to create
-     *
-     * @return array Data of the course
-     */
-    public function createCourse($course)
-    {
-        $course = $this->getTransportService()->post(self::elements, array('Accept' => 'application/json'), $course)->getContent();
-
-        $course = json_decode($course, true);
-        $data = array('rootElement' => $course['id'], 'reference' => $course['reference']['id']);
-
-        /* Create branch */
-        $this->getTransportService()->post(self::courses, array('Accept' => 'application/json'), $data);
-
-        return $course;
-    }
-
-    /**
-     * Update a course
-     *
-     * @param array $course Data of the course to update
-     *
-     * @return array Data of the course
-     */
-    public function updateCourse($course)
-    {
-        $branches = $this->getTransportService()->get(self::courses.'?reference='.$course['reference']['slug'])->getContent();
-        $branches = json_decode($branches, true);
-        $rootElement = $branches['branches'][0]['rootElement'];
-        $branch = $branches['branches'][0];
-
-        $data = array('rootElement' => $rootElement['id'], 'branch' => $branch['id'], 'content' => $course['content']);
-        $course = $this->getTransportService()->put(self::elements.$course['id'], array('Accept' => 'application/json'), http_build_query($data))->getContent();
-        $course = json_decode($course, true);
-
-        return $course;
     }
 }
