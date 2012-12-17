@@ -88,7 +88,7 @@ class CourseController extends BaseController
         $this->checkObjectFound($category);
 
         // Course API
-        $courseRequest = $this->getCourseRouteService()->getCourse($rootSlug, $titleSlug, $titleType);
+        $courseRequest = $this->getClaireApi('courses')->getCourse($rootSlug, $titleSlug, $titleType);
         $course = $this->getApiService()->getResult($courseRequest);
         $this->checkObjectFound($course);
 
@@ -101,7 +101,7 @@ class CourseController extends BaseController
         $requests['courseToc'] = $this->getClaireApi('courses')->getCourseToc($rootSlug);
 
         // Root Course API
-        $requests['course'] = $this->getCourseRouteService()->getCourse($rootSlug, null, null);
+        $requests['course'] = $this->getClaireApi('courses')->getCourse($rootSlug, null, null);
 
         $results = $this->getClaireApi()->getResults($requests);
 
