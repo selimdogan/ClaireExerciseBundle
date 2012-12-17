@@ -4,6 +4,7 @@ namespace SimpleIT\ClaireAppBundle\Api;
 use Symfony\Component\HttpFoundation\Request;
 use SimpleIT\AppBundle\Model\ApiRequest;
 use SimpleIT\AppBundle\Services\ApiRouteService;
+use SimpleIT\AppBundle\Model\ApiRequestOptions;
 
 /**
  * Claire courses api
@@ -22,7 +23,12 @@ class CourseRouteService extends ApiRouteService
      */
     public function getCourseTimeline($slug, $apiRequestOptions = null)
     {
-        $apiRequestOptions->bindFilters(array('level' => 3, 'type' => 'title-1+title-2+title-3'));
+        if(is_null($apiRequestOptions))
+        {
+            $apiRequestOptions = new ApiRequestOptions();
+        }
+
+        $apiRequestOptions->bindFilter(array('level' => 3, 'type' => 'title-1+title-2+title-3'));
 
         $apiRequest = new ApiRequest();
         $apiRequest->setBaseUrl( self::URL_COURSES.$slug.'/toc');
@@ -88,6 +94,11 @@ class CourseRouteService extends ApiRouteService
      */
     public function getIntroduction($rootSlug, $chapterSlug, $type, $apiRequestOptions = null)
     {
+        if(is_null($apiRequestOptions))
+        {
+            $apiRequestOptions = new ApiRequestOptions();
+        }
+
         $apiRequestOptions->setFormat('text/html');
         $apiRequest = $this->getCourse($rootSlug, $chapterSlug, $type, $apiRequestOptions);
         $apiRequest->setBaseUrl(self::URL_COURSES.$rootSlug.((!empty($chapterSlug)) ? '/'.$type.'/'.$chapterSlug : '').'/introduction');
@@ -135,12 +146,7 @@ class CourseRouteService extends ApiRouteService
         $apiRequest = new ApiRequest();
         $apiRequest->setBaseUrl(self::URL_COURSES.$rootSlug.((!empty($chapterSlug)) ? '/'.$type.'/'.$chapterSlug : ''));
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
-
-        if(!is_null($apiRequestOptions))
-        {
-            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
-            $apiRequest->setOptions($apiRequestOptions);
-        }
+        $apiRequest->setFormat(\SimpleIT\AppBundle\Model\ApiRequest::FORMAT_HTML);
 
         return $apiRequest;
     }
@@ -176,7 +182,12 @@ class CourseRouteService extends ApiRouteService
      */
     public function getCourseToc($slug, $apiRequestOptions = null)
     {
-        $apiRequestOptions->bindFilters(array('level' => 3, 'type' => 'title-1+title-2+title-3'));
+        if(is_null($apiRequestOptions))
+        {
+            $apiRequestOptions = new ApiRequestOptions();
+        }
+
+        $apiRequestOptions->bindFilter(array('level' => 3, 'type' => 'title-1+title-2+title-3'));
 
         $apiRequest = new ApiRequest();
         $apiRequest->setBaseUrl(self::URL_COURSES.$slug.self::URL_COURSES_TOC);
