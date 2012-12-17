@@ -25,20 +25,27 @@ class CourseController extends BaseController
         $options->setPageNumber(1);
         $options->addFilter('sort', 'updatedAt desc');
 
-        $coursesRequest = $this->getClaireApi('courses')->getCourses($options);
-        $courses = $this->getClaireApi()->getResult($coursesRequest);
+        $requests['courses'] = $this->getClaireApi('courses')->getCourses($options);
 
         $optionsCategories = new ApiRequestOptions();
         $optionsCategories->setItemsPerPage(3);
         $optionsCategories->setPageNumber(1);
 
-        $categoriesRequest = $this->getClaireApi('categories')->getCategories($optionsCategories);
-        $categories = $this->getClaireApi()->getResult($categoriesRequest);
+        $requests['categories'] = $this->getClaireApi('categories')->getCategories($optionsCategories);
+
+        $optionsTags = new ApiRequestOptions();
+        $optionsTags->setPageNumber(1);
+
+        $requests['tags'] = $this->getClaireApi('categories')->getTags($optionsTags);
+
+        $responses = $this->getClaireApi()->getResults($requests);
+
 
         $this->view = 'SimpleITClaireAppBundle:Course:list.html.twig';
         $this->viewParameters = array(
-            'courses' => $courses->getContent(),
-            'categories' => $categories->getContent()
+            'courses' => $responses['courses']->getContent(),
+            'categories' => $responses['categories']->getContent(),
+            'tags' => $responses['tags']->getContent()
         );
         return $this->generateView($this->view, $this->viewParameters);
     }
@@ -311,7 +318,7 @@ class CourseController extends BaseController
         $options = new ApiRequestOptions();
         $options->setItemsPerPage(18);
         $options->setPageNumber($request->get('page', 1));
-        $options->bindFilter($parameters, array('sort'));
+        $options->addFilters($parameters, array('sort'));
 
         $coursesRequest = $this->getClaireApi('courses')->getCourses($options);
         $courses = $this->getClaireApi()->getResult($coursesRequest);

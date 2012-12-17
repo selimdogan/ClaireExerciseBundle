@@ -53,7 +53,7 @@ class CategoryController extends BaseController
         $this->checkObjectFound($category);
 
         /* get related Tags and courses */
-        $requests['tags'] = $this->getClaireApi('categories')->getTags($categorySlug);
+        $requests['tags'] = $this->getClaireApi('categories')->getTagsByCategory($categorySlug);
         // @FIXME USE THIS REQUEST
         //$requests['courses'] = $this->getClaireApi('courses')->getCoursesByCategory($options);
 
@@ -106,7 +106,7 @@ class CategoryController extends BaseController
         $options = new ApiRequestOptions();
         $options->setItemsPerPage(18);
         $options->setPageNumber($request->get('page', 1));
-        $options->bindFilter($parameters, array('sort'));
+        $options->addFilters($parameters, array('sort'));
 
         /* get Tag and associated tags */
         $tagRequest = $this->getClaireApi('categories')->getTag($categorySlug, $tagSlug);

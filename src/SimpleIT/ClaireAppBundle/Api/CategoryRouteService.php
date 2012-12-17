@@ -81,10 +81,31 @@ class CategoryRouteService extends ApiRouteService
      *
      * @return apiRequest
      */
-    public function getTags($categorySlug, $apiRequestOptions = null)
+    public function getTagsByCategory($categorySlug, $apiRequestOptions = null)
     {
         $apiRequest = new ApiRequest();
         $apiRequest->setBaseUrl(self::URL_CATEGORIES.$categorySlug.self::URL_TAGS);
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        if(!is_null($apiRequestOptions))
+        {
+            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
+            $apiRequest->setOptions($apiRequestOptions);
+        }
+
+        return $apiRequest;
+    }
+
+    /**
+     * Get all tags
+     *
+     *
+     * @return apiRequest
+     */
+    public function getTags($apiRequestOptions = null)
+    {
+        $apiRequest = new ApiRequest();
+        $apiRequest->setBaseUrl(self::URL_TAGS);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
 
         if(!is_null($apiRequestOptions))
