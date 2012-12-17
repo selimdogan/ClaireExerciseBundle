@@ -27,6 +27,29 @@ class CategoryRouteService extends ApiRouteService
     {
         return self::ITEM_PER_PAGE_DEFAULT;
     }
+
+    /**
+     * Get all categories
+     *
+     * @param string $format       The requested format
+     *
+     * @return apiRequest
+     */
+    public function getCategories($apiRequestOptions = null)
+    {
+        $apiRequest = new ApiRequest();
+        $apiRequest->setBaseUrl(self::URL_CATEGORIES);
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        if(!is_null($apiRequestOptions))
+        {
+            $apiRequestOptions = $this->bindOptions($apiRequestOptions);
+            $apiRequest->setOptions($apiRequestOptions);
+        }
+
+        return $apiRequest;
+    }
+
     /**
      * Get a category from slug
      *

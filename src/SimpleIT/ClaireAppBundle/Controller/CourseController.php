@@ -11,6 +11,38 @@ use SimpleIT\AppBundle\Model\ApiRequestOptions;
  */
 class CourseController extends BaseController
 {
+
+    /**
+     * Courses homepage
+     *
+     * @return Response
+     */
+    public function indexAction(Request $request)
+    {
+
+        $options = new ApiRequestOptions();
+        $options->setItemsPerPage(9);
+        $options->setPageNumber(1);
+        $options->addFilter('sort', 'updatedAt desc');
+
+        $coursesRequest = $this->getClaireApi('courses')->getCourses($options);
+        $courses = $this->getClaireApi()->getResult($coursesRequest);
+
+        $optionsCategories = new ApiRequestOptions();
+        $optionsCategories->setItemsPerPage(3);
+        $optionsCategories->setPageNumber(1);
+
+        $categoriesRequest = $this->getClaireApi('categories')->getCategories($optionsCategories);
+        $categories = $this->getClaireApi()->getResult($categoriesRequest);
+
+        $this->view = 'SimpleITClaireAppBundle:Course:list.html.twig';
+        $this->viewParameters = array(
+            'courses' => $courses->getContent(),
+            'categories' => $categories->getContent()
+        );
+        return $this->generateView($this->view, $this->viewParameters);
+    }
+
     /**
      * Create a new course
      *
