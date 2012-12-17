@@ -3,14 +3,13 @@
 {% block body %}
     <h1>Liste des cours</h1>
 
-    {% if courses.branches is defined %}
+    {% if courses|length > 0 %}
         <ul>
-            {% for branch in courses.branches %}
+            {% for course in courses %}
                 <li>
-                    <a href="{{ path('course_view', {'slug': branch.reference.slug }) }}"
-                    title="{{ branch.rootElement.title }}"
-                    >
-                        {{ branch.rootElement.title }}
+                    <a href="{{ path('SimpleIT_Claire_course_view', {'slug': course.slug }) }}"
+                    title="{{ course.title }}">
+                        {{ course.title }}
                     </a>
                 </li>
             {% endfor %}
@@ -19,5 +18,5 @@
 
     <hr>
 
-    <p><a href="{{ path('course_create') }}">Create a new course</a></p>
+    <p><a href="{{ path('SimpleIT_Claire_course_create') }}">Create a new course</a></p>
 {% endblock %}
