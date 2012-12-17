@@ -119,16 +119,6 @@ class CourseController extends BaseController
         $category = $this->getClaireApi()->getResult($categoryRequest);
         $this->checkObjectFound($category);
 
-        // Course API
-        $courseRequest = $this->getClaireApi('courses')->getCourse($rootSlug, $titleSlug, $titleType);
-        $course = $this->getApiService()->getResult($courseRequest);
-        $this->checkObjectFound($course);
-
-        if($course['category']['id'] != $category['id'])
-        {
-            throw new HttpNotFoundException('Unable to find this course in this category');
-        }
-
         // Get toc
         $requests['courseToc'] = $this->getClaireApi('courses')->getCourseToc($rootSlug);
 
@@ -139,14 +129,26 @@ class CourseController extends BaseController
 
         $this->checkObjectFound($results['course']);
         $baseCourse = $results['course']->getContent();
-        $titleType = $this->get('simpleit.claire.course')->getTitleType($titleSlug, $results['courseToc']);
+        $titleType = $this->get('simpleit.claire.course')->getTitleType($titleSlug, $results['courseToc']->getContent());
 
-        $toc = $results['courseToc'];
+        // Course API
+        $courseRequest = $this->getClaireApi('courses')->getCourse($rootSlug, $titleSlug, $titleType);
+        $course = $this->getClaireApi()->getResult($courseRequest);
+
+        $this->checkObjectFound($course);
+
+        $tmpCat = $category->getContent();
+        if($baseCourse['category']['id'] != $tmpCat['id'])
+        {
+            throw $this->createNotFoundException('Unable to find this course in this category');
+        }
+
+        $toc = $results['courseToc']->getContent();
 
         // Alterate
         $course = $this->get('simpleit.claire.course')->setPagination(
                 $course->getContent(),
-                $results['courseToc'],
+                $results['courseToc']->getContent(),
                 ($baseCourse['displayLevel'] == 1) ? array('title-2', 'title-3') : array('title-1')
             );
         $course['type'] = $titleType;
@@ -163,19 +165,18 @@ class CourseController extends BaseController
         // Other informations
         if ($currentConfig[count($currentConfig) - 1]== $titleType)
         {
-            $options = new ApiRequestOptions();
-            $options->setFormat(\SimpleIT\AppBundle\Model\ApiRequest::FORMAT_HTML);
             $requests['courseContent'] = $this->getClaireApi('courses')->getCourseContent($rootSlug, $titleSlug, $titleType);
         }
+
+        $request = $this->getClaireApi('courses')->getCourseTimeline($rootSlug);
+        $timeline = $this->getClaireApi()->getResult($request);
 
         // Requesting
         $requests['courseTags'] = $this->getClaireApi('courses')->getCourseTags($rootSlug);
         $requests['courseMetadatas'] = $this->getClaireApi('courses')->getCourseMetadatas($rootSlug);
-        $requests['courseTimeline'] = $this->getClaireApi('courses')->getCourseTimeline($rootSlug);
+
         $requests['courseIntroduction'] = $this->getClaireApi('courses')->getIntroduction($rootSlug, $titleSlug, $titleType);
-
-        $results = $this->getApiService()->getResult($requests);
-
+        $results = $this->getClaireApi()->getResults($requests);
         $course['introduction'] = $results['courseIntroduction']->getContent();
 
         // Breadcrumb
@@ -198,7 +199,7 @@ class CourseController extends BaseController
                 'toc' => $toc,
                 'tags' => $results['courseTags']->getContent(),
                 'contentHtml' => (isset($requests['courseContent'])) ? $results['courseContent']->getContent() : '',
-                'timeline' => $results['courseTimeline']->getContent(),
+                'timeline' => $timeline->getContent(),
                 'rootSlug' => $rootSlug,
                 'category' => $category->getContent(),
                 'difficulty' => $this->getOneMetadata('difficulty', $results['courseMetadatas']->getContent()),
