@@ -108,7 +108,7 @@ class CourseController extends BaseController
         $tmpCat = $category->getContent();
         if($baseCourse['category']['id'] != $tmpCat['id'])
         {
-            throw new HttpNotFoundException('Unable to find this course in this category');
+            throw $this->createNotFoundException('Unable to find this course in this category');
         }
 
         $toc = $results['courseToc']->getContent();
