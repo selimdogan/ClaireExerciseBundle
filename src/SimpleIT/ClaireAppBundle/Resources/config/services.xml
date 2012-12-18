@@ -8,6 +8,7 @@
     <parameters>
         <parameter key="simple_it.claire_api.class">SimpleIT\ClaireAppBundle\Api\ClaireApi</parameter>
         <parameter key="simple_it.claire_courses_api.class">SimpleIT\ClaireAppBundle\Api\CourseRouteService</parameter>
+        <parameter key="simple_it.claire_parts_api.class">SimpleIT\ClaireAppBundle\Api\PartRouteService</parameter>
         <parameter key="simple_it.claire_categories_api.class">SimpleIT\ClaireAppBundle\Api\CategoryRouteService</parameter>
         <parameter key="simple_it.claire.http.token.transport.listener.class">Buzz\Listener\BasicAuthListener</parameter>
         <parameter key="simple_it.claire.http.transport.class">SimpleIT\AppBundle\Services\HttpTransport</parameter>
@@ -61,10 +62,10 @@
         </service>
 
         <service id="claire_courses_api" class="%simple_it.claire_courses_api.class%" />
+        <service id="claire_parts_api" class="%simple_it.claire_parts_api.class%" />
         <service id="claire_categories_api" class="%simple_it.claire_categories_api.class%" />
 
         <service id="simpleit.claire.course" class="%simple_it.claire.course.class%" />
-
     </services>
 
 </container>
