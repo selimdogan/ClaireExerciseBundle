@@ -73,23 +73,26 @@ class PartController extends BaseController
         // @TODO
         $tags = $results['partTags']->getContent();
         $metadatas = $results['partMetadatas']->getContent();
-//        $tags = $this->getTags($results['partTags']->getContent(), $results['courseTags']->getContent());
+//        $tags = if $this->getTags($results['partTags']->getContent(), $results['courseTags']->getContent());
 //        $metadatas = $this->getMetadatas($results['partMetadatas']->getContent(), $results['courseMetadatas']->getContent());
 
         $date = new \DateTime();
-        $course['updatedAt'] = $date->setTimestamp(strtotime($course['updatedAt']));
+        $part['updatedAt'] = $date->setTimestamp(strtotime($part['updatedAt']));
 
         // Alterate
-        $course = $this->get('simpleit.claire.course')->setPagination(
+        $pagination = $this->get('simpleit.claire.course')->setPagination(
             $part,
             $toc,
             ($course['displayLevel'] == 1) ? array('title-2', 'title-3') : array('title-1')
         );
 
+        /* Get timeline*/
+        $timeline = $this->prepareTimeline($toc, $course['displayLevel']);
+
         // Breadcrumb
         $this->makeBreadcrumb(
-                $course,
                 $category,
+                $course,
                 $part,
                 $toc);
 
@@ -99,6 +102,18 @@ class PartController extends BaseController
                 $toc,
                 (is_null($titleType) && $course['displayLevel'] == 1)  ? 'course' : $titleType);
 
+        /* If part doesn't have any tags, use the course's tags */
+        if (empty($tags)) {
+            $tags = $results['courseTags']->getContent();
+        }
+        /* If part doesn't have any difficulty, use the course's difficulty */
+        $difficulty =  $this->getOneMetadata('difficulty', $metadatas);
+        if ($difficulty == '') {
+            $difficulty = $this->getOneMetadata('difficulty', $results['courseMetadatas']->getContent());
+        }
+        //FIXME
+        $content = preg_replace('/<h1(.*)h1>/', '', $content);
+
         return $this->render($this->getView($part['displayLevel'], $titleType),
             array(
                 'course' => $course,
@@ -107,16 +122,18 @@ class PartController extends BaseController
                 'toc' => $toc,
                 'tags' => $tags,
                 'contentHtml' => $content,
-                'timeline' => $toc,
+                'timeline' => $timeline,
                 'rootSlug' => $courseSlug,
                 'category' => $category,
-                'difficulty' => $this->getOneMetadata('difficulty', $metadatas),
+                'difficulty' => $difficulty,
                 'duration' => $this->getOneMetadata('duration', $metadatas),
                 'licence' => $this->getOneMetadata('license', $metadatas),
                 'description' => $this->getOneMetadata('description ', $metadatas),
                 'rate' => $this->getOneMetadata('aggregateRating', $metadatas),
                 'icon' => $this->getOneMetadata('image', $metadatas),
-                'titleType' => $titleType
+                'updatedAt'=> $part['updatedAt'],
+                'titleType' => $titleType,
+                'pagination' => $pagination
             )
         );
     }
@@ -139,6 +156,23 @@ class PartController extends BaseController
         return $view;
     }
 
+        private function prepareTimeline($toc, $displayLevel){
+         if ($displayLevel == 0 || $displayLevel == 1)
+        {
+            $timeline = array();
+            $i = 0;
+            foreach ($toc as $part)
+            {
+                if ($part['type'] == 'title-1')
+                {
+                    $timeline[$i] = $part;
+                    $i++;
+                }
+            }
+        }
+        return $timeline;
+    }
+
     /**
      * Make Breadcrumb
      *
@@ -147,7 +181,7 @@ class PartController extends BaseController
      * @param array $course     Course
      * @param array $toc        TOC
      */
-    private function makeBreadcrumb($baseCourse, $category, $course, $toc)
+    private function makeBreadcrumb($category,$course, $part, $toc)
     {
        $points = array(
             'course' => 0,
@@ -160,42 +194,39 @@ class PartController extends BaseController
         $breadcrumb = $this->get('apy_breadcrumb_trail');
         $breadcrumb->add($category['title'], 'SimpleIT_Claire_categories_view', array('slug' => $category['slug']));
 
-        if ($baseCourse['slug'] != $course['slug'])
-        {
-            $breadcrumb->add($baseCourse['title'], 'course_view',
-                    array(
-                        'categorySlug' => $category['slug'],
-                        'rootSlug'     => $baseCourse['slug'],
-                        ));
-        }
+        $breadcrumb->add($course['title'], 'course_view',array('categorySlug' => $category['slug'],
+            'courseSlug'=> $course['slug']));
 
-        if (!empty($toc))
-        {
-            foreach($toc as $key => $element)
-            {
-                if ($element['slug'] == $course['slug'])
-                {
-                    $types = array('title-1', $element['type']);
-                    for($i = $key - 1; $i >= 0; $i--)
-                    {
-                        if (!in_array($toc[$i]['type'], $types) && $points[$toc[$i]['type']] < $points[$element['type']])
-                        {
-                            $types[] = $toc[$i]['type'];
-                            $breadcrumb->add($toc[$i]['title'],
-                                    'course_view',
-                                    array(
-                                        'categorySlug' => $category['slug'],
-                                        'rootSlug'     => $baseCourse['slug'],
-                                        'titleSlug'    => $toc[$i]['slug']
-                                        )
-                                    );
-                        }
-                    }
-                    break;
-                }
-            }
+        if ($course['displayLevel'] == 2 && !empty($toc)){
+            //TODO
         }
-        $breadcrumb->add($course['title']);
+//        if (!empty($toc))
+//        {
+//            foreach($toc as $key => $element)
+//            {
+//                if ($element['slug'] == $course['slug'])
+//                {
+//                    $types = array('title-1', $element['type']);
+//                    for($i = $key - 1; $i >= 0; $i--)
+//                    {
+//                        if (!in_array($toc[$i]['type'], $types) && $points[$toc[$i]['type']] < $points[$element['type']])
+//                        {
+//                            $types[] = $toc[$i]['type'];
+//                            $breadcrumb->add($toc[$i]['title'],
+//                                    'course_view',
+//                                    array(
+//                                        'categorySlug' => $category['slug'],
+//                                        'rootSlug'     => $baseCourse['slug'],
+//                                        'titleSlug'    => $toc[$i]['slug']
+//                                        )
+//                                    );
+//                        }
+//                    }
+//                    break;
+//                }
+//            }
+//        }
+        $breadcrumb->add($part['title']);
     }
 
     /**
