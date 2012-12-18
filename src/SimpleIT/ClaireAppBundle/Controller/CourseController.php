@@ -108,7 +108,7 @@ class CourseController extends BaseController
      *
      * @return Response
      */
-    public function readAction(Request $request, $categorySlug, $courseSlug, $titleSlug = null)
+    public function readAction(Request $request, $categorySlug, $courseSlug)
     {
         // Category API
         $categoryRequest = $this->getClaireApi('categories')->getCategory($categorySlug);

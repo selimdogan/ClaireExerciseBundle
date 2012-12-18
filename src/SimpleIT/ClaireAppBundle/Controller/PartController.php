@@ -127,11 +127,11 @@ class PartController extends BaseController
         {
             $view = 'TutorialBundle:Tutorial:view1b.html.twig';
         }
-        elseif($displayLevel == 2 && $type == 'title-1')
+        elseif($displayLevel == 2 && $type == 'title-2')
         {
             $view = 'TutorialBundle:Tutorial:view2b.html.twig';
         }
-        elseif($displayLevel == 2 && $type == 'title-2')
+        elseif($displayLevel == 2 && $type == 'title-3')
         {
             $view = 'TutorialBundle:Tutorial:view2c.html.twig';
         }
