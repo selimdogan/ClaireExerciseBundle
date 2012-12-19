@@ -151,10 +151,13 @@ class CourseController extends BaseController
         $date = new \DateTime();
         $course['updatedAt'] = $date->setTimestamp(strtotime($course['updatedAt']));
 
+        $durationDate = new \DateTime();
+        $duration = $durationDate->setTimestamp(strtotime($this->getOneMetadata('duration', $metadatas)));
+
         $displayLevel = $course['displayLevel'];
         /* Prepare the display toc */
         $displayToc = $this->prepareToc($toc, $displayLevel);
-        $timeline = $this->prepareTimeline($toc, $displayLevel);
+        $timeline = $this->prepareTimeline($toc, $displayLevel, null);
 
         // Breadcrumb
         $this->makeBreadcrumb(
@@ -163,6 +166,8 @@ class CourseController extends BaseController
                 $course,
                 $toc);
 
+        //FIXME
+        $duration = '';
         return $this->render($this->getView($displayLevel),
             array(
                 'course' => $course,
@@ -174,7 +179,7 @@ class CourseController extends BaseController
                 'rootSlug' => $courseSlug,
                 'category' => $category,
                 'difficulty' => $this->getOneMetadata('difficulty', $metadatas),
-                'duration' => $this->getOneMetadata('duration', $metadatas),
+                'duration' => $duration,
                 'licence' => $this->getOneMetadata('license', $metadatas),
                 'description' => $this->getOneMetadata('description ', $metadatas),
                 'aggregateRating' => $this->getOneMetadata('aggregateRating', $metadatas),
@@ -224,21 +229,44 @@ class CourseController extends BaseController
         return $displayToc;
     }
 
-    private function prepareTimeline($toc, $displayLevel){
-         if ($displayLevel == 0 || $displayLevel == 1)
+    /**
+     *
+     * @param type $toc
+     * @param type $displayLevel
+     * @param type $currentPartTitle
+     * @return type
+     */
+    private function prepareTimeline($toc, $displayLevel, $currentPartTitle)
+    {
+        $neededTypes = array();
+        if ($displayLevel == 0 || $displayLevel == 1)
         {
-            $timeline = array();
-            $i = 0;
-            foreach ($toc as $part)
+            $neededTypes = array('title-1');
+        }
+        else
+        {
+            $neededTypes = array('title-1', 'title-2', 'title-3');
+        }
+        $timeline = array();
+        $i = 0;
+        $isOver = false;
+        if (is_null($currentPartTitle)){
+            $isOver = true;
+        }
+        foreach ($toc as $part)
+        {
+            if ($part['type'] == 'title-1')
             {
-                if ($part['type'] == 'title-1')
+                $part['isOver'] = $isOver;
+                $timeline[$i] = $part;
+                if ($part['title'] == $currentPartTitle)
                 {
-                    $timeline[$i] = $part;
-                    $i++;
+                    $isOver = true;
                 }
+                $i++;
             }
         }
-        return $timeline;
+    return $timeline;
     }
 
 
