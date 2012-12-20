@@ -25,79 +25,133 @@ class PartController extends BaseController
             '1' => array(null, 'title-1'),
             '2' => array(null, 'title-2', 'title-3')
         );
-
-        // Category API
+        /* Get the Category */
         $categoryRequest = $this->getClaireApi('categories')->getCategory($categorySlug);
         $category = $this->getClaireApi()->getResult($categoryRequest);
         $this->checkObjectFound($category);
 
-        // Course API
+        /* Get the Course */
         $courseRequest = $this->getClaireApi('courses')->getCourse($courseSlug);
         $course = $this->getClaireApi()->getResult($courseRequest);
         $this->checkObjectFound($course);
 
-        // Check category
+        /* Check if the course is in the category */
         $category = $category->getContent();
         $course = $course->getContent();
         if($course['category']['id'] != $category['id'])
         {
-            throw $this->createNotFoundException('Unable to find this course in this category');
+            throw $this->createNotFoundException('The course is not in this category');
         }
 
-        // Course API
+        /* Get the Part */
         $partRequest = $this->getClaireApi('parts')->getPart($courseSlug, $partSlug);
         $part = $this->getClaireApi()->getResult($partRequest);
         $this->checkObjectFound($part);
         $part = $part->getContent();
 
-        $titleType = $part['type'];
-
-        // Requesting
-        $options = new ApiRequestOptions();
-        $options->setFormat(ApiRequest::FORMAT_HTML);
-        $requests['content'] = $this->getClaireApi('parts')->getPart($courseSlug, $partSlug, $options);
+        /* Get the Part content (only for 1b or 2c */
+        //TODO Constantes
+        if ($course['displayLevel'] == 1 || $part['type'] != 'title-1')
+        {
+            $options = new ApiRequestOptions();
+            $options->setFormat(ApiRequest::FORMAT_HTML);
+            $requests['content'] = $this->getClaireApi('parts')->getPart($courseSlug, $partSlug, $options);
+        }
+        /*
+         * Prepare request
+         */
+        /* Get the TOC */
         $requests['courseToc'] = $this->getClaireApi('courses')->getCourseToc($courseSlug);
+        /* Get the Introduction */
         $requests['partIntroduction'] = $this->getClaireApi('parts')->getIntroduction($courseSlug, $partSlug);
+        /* Get the tags */
         $requests['partTags'] = $this->getClaireApi('parts')->getPartTags($courseSlug, $partSlug);
-        $requests['partMetadatas'] = $this->getClaireApi('parts')->getPartMetadatas($courseSlug, $partSlug);
         $requests['courseTags'] = $this->getClaireApi('courses')->getCourseTags($courseSlug);
+        /* Get the metadatas */
+        $requests['partMetadatas'] = $this->getClaireApi('parts')->getPartMetadatas($courseSlug, $partSlug);
         $requests['courseMetadatas'] = $this->getClaireApi('courses')->getCourseMetadatas($courseSlug);
 
+        /* Get the responses */
         $results = $this->getClaireApi()->getResults($requests);
 
+        /*
+         * Retrieve
+         */
+
+        /* Retrieve the toc */
         $toc = $results['courseToc']->getContent();
-        $content = $results['content']->getContent();
+        $content = null;
+        if (!is_null($results['content'])){
+            $content = $results['content']->getContent();
+        }
         $introduction = $results['partIntroduction']->getContent();
+        $titleType = $part['type'];
 
-        // Check metadatas
-        // @TODO
-        $tags = $results['partTags']->getContent();
-        $metadatas = $results['partMetadatas']->getContent();
-//        $tags = $this->getTags($results['partTags']->getContent(), $results['courseTags']->getContent());
-//        $metadatas = $this->getMetadatas($results['partMetadatas']->getContent(), $results['courseMetadatas']->getContent());
+        /* Retrieve the tags */
+        $partTags = $results['partTags']->getContent();
+        $courseTags = $results['courseTags']->getContent();
 
+        /* Retrieve the metadatas */
+        $partMetadatas = $results['partMetadatas']->getContent();
+        $courseMetadatas = $results['courseMetadatas']->getContent();
+
+        /* Set the tags */
+        $tags = $partTags;
+        if (is_null($tags)) {
+            $tags = $courseTags();
+        }
+
+        /* Set the icon */
+        $icon = $this->getOneMetadata('image', $partMetadatas);
+        if (is_null($icon))
+        {
+            $icon = $this->getOneMetadata('image', $courseMetadatas);
+
+        }
+        /* Set the difficulty */
+        $difficulty = $this->getOneMetadata('difficulty', $partMetadatas);
+        if (is_null($difficulty))
+        {
+            $difficulty = $this->getOneMetadata('difficulty', $courseMetadatas);
+
+        }
+
+        //TODO
         $date = new \DateTime();
-        $course['updatedAt'] = $date->setTimestamp(strtotime($course['updatedAt']));
+        $part['updatedAt'] = $date->setTimestamp(strtotime($part['updatedAt']));
 
+        //TODO
         // Alterate
-        $course = $this->get('simpleit.claire.course')->setPagination(
+        $pagination = $this->get('simpleit.claire.course')->setPagination(
             $part,
             $toc,
             ($course['displayLevel'] == 1) ? array('title-2', 'title-3') : array('title-1')
         );
 
+        /* Get timeline*/
+        $timeline = $this->prepareTimeline($toc, $course['displayLevel'], $part['title']);
+
         // Breadcrumb
         $this->makeBreadcrumb(
-                $course,
                 $category,
+                $course,
                 $part,
                 $toc);
 
-        // Restrict TOC
-        $toc = $this->get('simpleit.claire.course')->restrictTocForTitle(
-                $part,
-                $toc,
-                (is_null($titleType) && $course['displayLevel'] == 1)  ? 'course' : $titleType);
+//        // Restrict TOC
+//        $toc = $this->get('simpleit.claire.course')->restrictTocForTitle(
+//                $part,
+//                $toc,
+//                (is_null($titleType) && $course['displayLevel'] == 1)  ? 'course' : $titleType);
+
+        /* If part doesn't have any tags, use the course's tags */
+        if (empty($tags)) {
+            $tags = $results['courseTags']->getContent();
+        }
+        //FIXME
+        if (!is_null($content)) {
+            $content = preg_replace('/<h1(.*)h1>/', '', $content);
+        }
 
         return $this->render($this->getView($part['displayLevel'], $titleType),
             array(
@@ -107,16 +161,19 @@ class PartController extends BaseController
                 'toc' => $toc,
                 'tags' => $tags,
                 'contentHtml' => $content,
-                'timeline' => $toc,
+                'timeline' => $timeline,
                 'rootSlug' => $courseSlug,
                 'category' => $category,
-                'difficulty' => $this->getOneMetadata('difficulty', $metadatas),
-                'duration' => $this->getOneMetadata('duration', $metadatas),
-                'licence' => $this->getOneMetadata('license', $metadatas),
-                'description' => $this->getOneMetadata('description ', $metadatas),
-                'rate' => $this->getOneMetadata('aggregateRating', $metadatas),
-                'icon' => $this->getOneMetadata('image', $metadatas),
-                'titleType' => $titleType
+                'difficulty' => $difficulty,
+//                'duration' => $this->getOneMetadata('duration', $partMetadatas),
+                'duration' => '',
+                'licence' => $this->getOneMetadata('license', $courseMetadatas),
+                'description' => $this->getOneMetadata('description ', $partMetadatas),
+                'rate' => $this->getOneMetadata('aggregateRating', $partMetadatas),
+                'icon' => $icon,
+                'updatedAt'=> $part['updatedAt'],
+                'titleType' => $titleType,
+                'pagination' => $pagination
             )
         );
     }
@@ -140,6 +197,46 @@ class PartController extends BaseController
     }
 
     /**
+     *
+     * @param type $toc
+     * @param type $displayLevel
+     * @param type $currentPartTitle
+     * @return type
+     */
+    private function prepareTimeline($toc, $displayLevel, $currentPartTitle)
+    {
+        $neededTypes = array();
+        if ($displayLevel == 0 || $displayLevel == 1)
+        {
+            $neededTypes = array('title-1');
+        }
+        else
+        {
+            $neededTypes = array('title-1', 'title-2', 'title-3');
+        }
+        $timeline = array();
+        $i = 0;
+        $isOver = false;
+        if (!is_null($toc))
+        {
+            foreach ($toc as $part)
+            {
+                if ($part['type'] == 'title-1')
+                {
+                    $part['isOver'] = $isOver;
+                    $timeline[$i] = $part;
+                    if ($part['title'] == $currentPartTitle)
+                    {
+                        $isOver = true;
+                    }
+                    $i++;
+                }
+            }
+        }
+    return $timeline;
+    }
+
+    /**
      * Make Breadcrumb
      *
      * @param array $baseCourse Base Course
@@ -147,7 +244,7 @@ class PartController extends BaseController
      * @param array $course     Course
      * @param array $toc        TOC
      */
-    private function makeBreadcrumb($baseCourse, $category, $course, $toc)
+    private function makeBreadcrumb($category,$course, $part, $toc)
     {
        $points = array(
             'course' => 0,
@@ -160,42 +257,39 @@ class PartController extends BaseController
         $breadcrumb = $this->get('apy_breadcrumb_trail');
         $breadcrumb->add($category['title'], 'SimpleIT_Claire_categories_view', array('slug' => $category['slug']));
 
-        if ($baseCourse['slug'] != $course['slug'])
-        {
-            $breadcrumb->add($baseCourse['title'], 'course_view',
-                    array(
-                        'categorySlug' => $category['slug'],
-                        'rootSlug'     => $baseCourse['slug'],
-                        ));
-        }
+        $breadcrumb->add($course['title'], 'course_view',array('categorySlug' => $category['slug'],
+            'courseSlug'=> $course['slug']));
 
-        if (!empty($toc))
-        {
-            foreach($toc as $key => $element)
-            {
-                if ($element['slug'] == $course['slug'])
-                {
-                    $types = array('title-1', $element['type']);
-                    for($i = $key - 1; $i >= 0; $i--)
-                    {
-                        if (!in_array($toc[$i]['type'], $types) && $points[$toc[$i]['type']] < $points[$element['type']])
-                        {
-                            $types[] = $toc[$i]['type'];
-                            $breadcrumb->add($toc[$i]['title'],
-                                    'course_view',
-                                    array(
-                                        'categorySlug' => $category['slug'],
-                                        'rootSlug'     => $baseCourse['slug'],
-                                        'titleSlug'    => $toc[$i]['slug']
-                                        )
-                                    );
-                        }
-                    }
-                    break;
-                }
-            }
+        if ($course['displayLevel'] == 2 && !empty($toc)){
+            //TODO
         }
-        $breadcrumb->add($course['title']);
+//        if (!empty($toc))
+//        {
+//            foreach($toc as $key => $element)
+//            {
+//                if ($element['slug'] == $course['slug'])
+//                {
+//                    $types = array('title-1', $element['type']);
+//                    for($i = $key - 1; $i >= 0; $i--)
+//                    {
+//                        if (!in_array($toc[$i]['type'], $types) && $points[$toc[$i]['type']] < $points[$element['type']])
+//                        {
+//                            $types[] = $toc[$i]['type'];
+//                            $breadcrumb->add($toc[$i]['title'],
+//                                    'course_view',
+//                                    array(
+//                                        'categorySlug' => $category['slug'],
+//                                        'rootSlug'     => $baseCourse['slug'],
+//                                        'titleSlug'    => $toc[$i]['slug']
+//                                        )
+//                                    );
+//                        }
+//                    }
+//                    break;
+//                }
+//            }
+//        }
+        $breadcrumb->add($part['title']);
     }
 
     /**

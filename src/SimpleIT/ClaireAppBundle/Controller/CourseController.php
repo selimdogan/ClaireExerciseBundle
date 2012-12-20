@@ -38,14 +38,14 @@ class CourseController extends BaseController
 
         $requests['tags'] = $this->getClaireApi('categories')->getTags($optionsTags);
 
-        $responses = $this->getClaireApi()->getResults($requests);
+        $results = $this->getClaireApi()->getResults($requests);
 
 
         $this->view = 'SimpleITClaireAppBundle:Course:list.html.twig';
         $this->viewParameters = array(
-            'courses' => $responses['courses']->getContent(),
-            'categories' => $responses['categories']->getContent(),
-            'tags' => $responses['tags']->getContent()
+            'courses' => $results['courses']->getContent(),
+            'categories' => $results['categories']->getContent(),
+            'tags' => $results['tags']->getContent()
         );
         return $this->generateView($this->view, $this->viewParameters);
     }
@@ -151,6 +151,14 @@ class CourseController extends BaseController
         $date = new \DateTime();
         $course['updatedAt'] = $date->setTimestamp(strtotime($course['updatedAt']));
 
+        $durationDate = new \DateTime();
+        $duration = $durationDate->setTimestamp(strtotime($this->getOneMetadata('duration', $metadatas)));
+
+        $displayLevel = $course['displayLevel'];
+        /* Prepare the display toc */
+        $displayToc = $this->prepareToc($toc, $displayLevel);
+        $timeline = $this->prepareTimeline($toc, $displayLevel, null);
+
         // Breadcrumb
         $this->makeBreadcrumb(
                 $course,
@@ -158,21 +166,25 @@ class CourseController extends BaseController
                 $course,
                 $toc);
 
-        return $this->render($this->getView($course['displayLevel']),
+        //FIXME
+        $duration = '';
+        return $this->render($this->getView($displayLevel),
             array(
                 'course' => $course,
-                'toc' => $toc,
+                'title' =>$course['title'],
+                'toc' => $displayToc,
                 'introduction' => $introduction,
                 'tags' => $tags,
-                'timeline' => $toc,
+                'timeline' => $timeline,
                 'rootSlug' => $courseSlug,
                 'category' => $category,
                 'difficulty' => $this->getOneMetadata('difficulty', $metadatas),
-                'duration' => $this->getOneMetadata('duration', $metadatas),
+                'duration' => $duration,
                 'licence' => $this->getOneMetadata('license', $metadatas),
                 'description' => $this->getOneMetadata('description ', $metadatas),
-                'rate' => $this->getOneMetadata('aggregateRating', $metadatas),
-                'icon' => $this->getOneMetadata('image', $metadatas)
+                'aggregateRating' => $this->getOneMetadata('aggregateRating', $metadatas),
+                'icon' => $this->getOneMetadata('image', $metadatas),
+                'updatedAt'=> $course['updatedAt']
             )
         );
     }
@@ -194,6 +206,69 @@ class CourseController extends BaseController
 
         return $view;
     }
+
+    private function prepareToc($toc, $displayLevel)
+    {
+        if ($displayLevel == 0 || $displayLevel == 1)
+        {
+            $displayToc = array();
+            $i = 0;
+            foreach ($toc as $part)
+            {
+                if ($part['type'] == 'title-1')
+                {
+                    $displayToc[$i] = $part;
+                    $i++;
+                }
+            }
+        }
+        else
+        {
+            $displayToc = $toc;
+        }
+        return $displayToc;
+    }
+
+    /**
+     *
+     * @param type $toc
+     * @param type $displayLevel
+     * @param type $currentPartTitle
+     * @return type
+     */
+    private function prepareTimeline($toc, $displayLevel, $currentPartTitle)
+    {
+        $neededTypes = array();
+        if ($displayLevel == 0 || $displayLevel == 1)
+        {
+            $neededTypes = array('title-1');
+        }
+        else
+        {
+            $neededTypes = array('title-1', 'title-2', 'title-3');
+        }
+        $timeline = array();
+        $i = 0;
+        $isOver = false;
+        if (is_null($currentPartTitle)){
+            $isOver = true;
+        }
+        foreach ($toc as $part)
+        {
+            if ($part['type'] == 'title-1')
+            {
+                $part['isOver'] = $isOver;
+                $timeline[$i] = $part;
+                if ($part['title'] == $currentPartTitle)
+                {
+                    $isOver = true;
+                }
+                $i++;
+            }
+        }
+    return $timeline;
+    }
+
 
     /**
      * Make Breadcrumb
