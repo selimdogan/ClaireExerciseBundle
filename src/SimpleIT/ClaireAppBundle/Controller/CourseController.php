@@ -1,5 +1,6 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Controller;
+
 use Symfony\Component\HttpFoundation\Request;
 use SimpleIT\ClaireAppBundle\Controller\BaseController;
 use SimpleIT\ClaireAppBundle\Form\Type\CourseType;
@@ -13,8 +14,7 @@ class CourseController extends BaseController
 
     /**
      * Courses homepage
-     * 
-     * @param Res
+     *
      * @return Response
      */
     public function indexAction(Request $request)
@@ -25,29 +25,27 @@ class CourseController extends BaseController
         $options->setPageNumber(1);
         $options->addFilter('sort', 'updatedAt desc');
 
-        $requests['courses'] = $this->getClaireApi('courses')
-            ->getCourses($options);
+        $requests['courses'] = $this->getClaireApi('courses')->getCourses($options);
 
         $optionsCategories = new ApiRequestOptions();
         $optionsCategories->setItemsPerPage(3);
         $optionsCategories->setPageNumber(1);
 
-        $requests['categories'] = $this->getClaireApi('categories')
-            ->getCategories($optionsCategories);
+        $requests['categories'] = $this->getClaireApi('categories')->getCategories($optionsCategories);
 
         $optionsTags = new ApiRequestOptions();
         $optionsTags->setPageNumber(1);
 
-        $requests['tags'] = $this->getClaireApi('categories')
-            ->getTags($optionsTags);
+        $requests['tags'] = $this->getClaireApi('categories')->getTags($optionsTags);
 
         $results = $this->getClaireApi()->getResults($requests);
 
+
         $this->view = 'SimpleITClaireAppBundle:Course:list.html.twig';
         $this->viewParameters = array(
-        'courses' => $results['courses']->getContent(),
-        'categories' => $results['categories']->getContent(),
-        'tags' => $results['tags']->getContent()
+            'courses' => $results['courses']->getContent(),
+            'categories' => $results['categories']->getContent(),
+            'tags' => $results['tags']->getContent()
         );
         return $this->generateView($this->view, $this->viewParameters);
     }
@@ -63,25 +61,21 @@ class CourseController extends BaseController
     {
         $form = $this->createForm(new CourseType());
 
-        if ($request->isMethod('post')) {
+        if($request->isMethod('post'))
+        {
             $form->bind($request);
 
-            if ($form->isValid()) {
+            if($form->isValid())
+            {
                 $course = $form->getData();
                 $course = $this->getCoursesApi()->createCourse($course);
 
                 $slug = $course['reference']['slug'];
-                return $this
-                    ->redirect(
-                        $this
-                            ->generateUrl('course_view',
-                                array('slug' => $slug)));
+                return $this->redirect($this->generateUrl('course_view', array('slug' => $slug)));
             }
         }
 
-        return $this
-            ->render('SimpleITClaireAppBundle:Course:create.html.twig',
-                array('form' => $form->createView()));
+        return $this->render('SimpleITClaireAppBundle:Course:create.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -97,25 +91,21 @@ class CourseController extends BaseController
 
         $form = $this->createForm(new CourseType(), $course);
 
-        if ($request->isMethod('post')) {
+        if($request->isMethod('post'))
+        {
             $form->bind($request);
 
-            if ($form->isValid()) {
+            if($form->isValid())
+            {
                 $course = $form->getData();
                 $course = $this->getCoursesApi()->updateCourse($course);
 
                 $slug = $course['reference']['slug'];
-                return $this
-                    ->redirect(
-                        $this
-                            ->generateUrl('course_edit',
-                                array('slug' => $slug)));
+                return $this->redirect($this->generateUrl('course_edit', array('slug' => $slug)));
             }
         }
 
-        return $this
-            ->render('SimpleITClaireAppBundle:Course:edit.html.twig',
-                array('form' => $form->createView(), 'course' => $course));
+        return $this->render('SimpleITClaireAppBundle:Course:edit.html.twig', array('form' => $form->createView(), 'course' => $course));
     }
 
     /**
@@ -128,8 +118,7 @@ class CourseController extends BaseController
     public function readAction(Request $request, $categorySlug, $courseSlug)
     {
         // Category API
-        $categoryRequest = $this->getClaireApi('categories')
-            ->getCategory($categorySlug);
+        $categoryRequest = $this->getClaireApi('categories')->getCategory($categorySlug);
         $category = $this->getClaireApi()->getResult($categoryRequest);
         $this->checkObjectFound($category);
 
@@ -141,21 +130,16 @@ class CourseController extends BaseController
         // Check category
         $category = $category->getContent();
         $course = $course->getContent();
-        if ($course['category']['id'] != $category['id']) {
-            throw $this
-                ->createNotFoundException(
-                    'Unable to find this course in this category');
+        if($course['category']['id'] != $category['id'])
+        {
+            throw $this->createNotFoundException('Unable to find this course in this category');
         }
 
         // Requesting
-        $requests['courseToc'] = $this->getClaireApi('courses')
-            ->getCourseToc($courseSlug);
-        $requests['courseIntroduction'] = $this->getClaireApi('courses')
-            ->getIntroduction($courseSlug);
-        $requests['courseTags'] = $this->getClaireApi('courses')
-            ->getCourseTags($courseSlug);
-        $requests['courseMetadatas'] = $this->getClaireApi('courses')
-            ->getCourseMetadatas($courseSlug);
+        $requests['courseToc'] = $this->getClaireApi('courses')->getCourseToc($courseSlug);
+        $requests['courseIntroduction'] = $this->getClaireApi('courses')->getIntroduction($courseSlug);
+        $requests['courseTags'] = $this->getClaireApi('courses')->getCourseTags($courseSlug);
+        $requests['courseMetadatas'] = $this->getClaireApi('courses')->getCourseMetadatas($courseSlug);
 
         $results = $this->getClaireApi()->getResults($requests);
         $tags = $results['courseTags']->getContent();
@@ -165,15 +149,10 @@ class CourseController extends BaseController
         $metadatas = $results['courseMetadatas']->getContent();
 
         $date = new \DateTime();
-        $course['updatedAt'] = $date
-            ->setTimestamp(strtotime($course['updatedAt']));
+        $course['updatedAt'] = $date->setTimestamp(strtotime($course['updatedAt']));
 
         $durationDate = new \DateTime();
-        $duration = $durationDate
-            ->setTimestamp(
-                strtotime(
-                    $this
-                        ->getOneMetadata('duration', $metadatas)));
+        $duration = $durationDate->setTimestamp(strtotime($this->getOneMetadata('duration', $metadatas)));
 
         $displayLevel = $course['displayLevel'];
         /* Prepare the display toc */
@@ -181,38 +160,47 @@ class CourseController extends BaseController
         $timeline = $this->prepareTimeline($toc, $displayLevel, null);
 
         // Breadcrumb
-        $this->makeBreadcrumb($course, $category, $course, $toc);
+        $this->makeBreadcrumb(
+                $course,
+                $category,
+                $course,
+                $toc);
 
         //FIXME
         $duration = '';
-        return $this
-            ->render($this->getView($displayLevel),
-                array('course' => $course, 'title' => $course['title'],
-                'toc' => $displayToc, 'introduction' => $introduction,
-                'tags' => $tags, 'timeline' => $timeline,
-                'rootSlug' => $courseSlug, 'category' => $category,
-                'difficulty' => $this
-                    ->getOneMetadata('difficulty', $metadatas),
+        return $this->render($this->getView($displayLevel),
+            array(
+                'course' => $course,
+                'title' =>$course['title'],
+                'toc' => $displayToc,
+                'introduction' => $introduction,
+                'tags' => $tags,
+                'timeline' => $timeline,
+                'rootSlug' => $courseSlug,
+                'category' => $category,
+                'difficulty' => $this->getOneMetadata('difficulty', $metadatas),
                 'duration' => $duration,
-                'licence' => $this
-                    ->getOneMetadata('license', $metadatas),
-                'description' => $this
-                    ->getOneMetadata('description ', $metadatas),
-                'aggregateRating' => $this
-                    ->getOneMetadata('aggregateRating', $metadatas),
-                'icon' => $this
-                    ->getOneMetadata('image', $metadatas),
-                'updatedAt' => $course['updatedAt']
-                ));
+                'licence' => $this->getOneMetadata('license', $metadatas),
+                'description' => $this->getOneMetadata('description ', $metadatas),
+                'aggregateRating' => $this->getOneMetadata('aggregateRating', $metadatas),
+                'icon' => $this->getOneMetadata('image', $metadatas),
+                'updatedAt'=> $course['updatedAt']
+            )
+        );
     }
 
     private function getView($displayLevel)
     {
-        if ($displayLevel == 0) {
+        if($displayLevel == 0)
+        {
             $view = 'TutorialBundle:Tutorial:view00.html.twig';
-        } elseif ($displayLevel == 1) {
+        }
+        elseif($displayLevel == 1)
+        {
             $view = 'TutorialBundle:Tutorial:view1a.html.twig';
-        } elseif ($displayLevel == 2) {
+        }
+        elseif($displayLevel == 2)
+        {
             $view = 'TutorialBundle:Tutorial:view2a.html.twig';
         }
 
@@ -221,25 +209,22 @@ class CourseController extends BaseController
 
     private function prepareToc($toc, $displayLevel)
     {
-        $displayToc = array();
-        $i = 0;
-
-        if ($displayLevel == 0 || $displayLevel == 1) {
-            foreach ($toc as $part) {
-                if ($part['type'] == 'title-1') {
+        if ($displayLevel == 0 || $displayLevel == 1)
+        {
+            $displayToc = array();
+            $i = 0;
+            foreach ($toc as $part)
+            {
+                if ($part['type'] == 'title-1')
+                {
                     $displayToc[$i] = $part;
                     $i++;
                 }
             }
-        } else {
-            $displayTocLevel = array('title-1' => 0, 'title-2' => 1,
-            'title-3' => 2, 'title-4' => 3, 'title-5' => 4
-            );
-            foreach ($toc as $part) {
-                $part['level'] = $displayTocLevel[$part['type']];
-                $displayToc[$i] = $part;
-                $i++;
-            }
+        }
+        else
+        {
+            $displayToc = $toc;
         }
         return $displayToc;
     }
@@ -254,29 +239,36 @@ class CourseController extends BaseController
     private function prepareTimeline($toc, $displayLevel, $currentPartTitle)
     {
         $neededTypes = array();
-        if ($displayLevel == 0 || $displayLevel == 1) {
+        if ($displayLevel == 0 || $displayLevel == 1)
+        {
             $neededTypes = array('title-1');
-        } else {
+        }
+        else
+        {
             $neededTypes = array('title-1', 'title-2', 'title-3');
         }
         $timeline = array();
         $i = 0;
         $isOver = false;
-        if (is_null($currentPartTitle)) {
+        if (is_null($currentPartTitle)){
             $isOver = true;
         }
-        foreach ($toc as $part) {
-            if ($part['type'] == 'title-1') {
+        foreach ($toc as $part)
+        {
+            if ($part['type'] == 'title-1')
+            {
                 $part['isOver'] = $isOver;
                 $timeline[$i] = $part;
-                if ($part['title'] == $currentPartTitle) {
+                if ($part['title'] == $currentPartTitle)
+                {
                     $isOver = true;
                 }
                 $i++;
             }
         }
-        return $timeline;
+    return $timeline;
     }
+
 
     /**
      * Make Breadcrumb
@@ -288,39 +280,46 @@ class CourseController extends BaseController
      */
     private function makeBreadcrumb($baseCourse, $category, $course, $toc)
     {
-        $points = array('course' => 0, 'title-1' => 1, 'title-2' => 2,
-        'title-3' => 3,
+       $points = array(
+            'course' => 0,
+            'title-1' => 1,
+            'title-2' => 2,
+            'title-3' => 3,
         );
 
         // BreadCrumb
         $breadcrumb = $this->get('apy_breadcrumb_trail');
-        $breadcrumb
-            ->add($category['title'], 'SimpleIT_Claire_categories_view',
-                array('slug' => $category['slug']));
+        $breadcrumb->add($category['title'], 'SimpleIT_Claire_categories_view', array('slug' => $category['slug']));
 
-        if ($baseCourse['slug'] != $course['slug']) {
-            $breadcrumb
-                ->add($baseCourse['title'], 'course_view',
-                    array('categorySlug' => $category['slug'],
-                    'rootSlug' => $baseCourse['slug'],
-                    ));
+        if ($baseCourse['slug'] != $course['slug'])
+        {
+            $breadcrumb->add($baseCourse['title'], 'course_view',
+                    array(
+                        'categorySlug' => $category['slug'],
+                        'rootSlug'     => $baseCourse['slug'],
+                        ));
         }
 
-        if (!empty($toc)) {
-            foreach ($toc as $key => $element) {
-                if ($element['slug'] == $course['slug']) {
+        if (!empty($toc))
+        {
+            foreach($toc as $key => $element)
+            {
+                if ($element['slug'] == $course['slug'])
+                {
                     $types = array('title-1', $element['type']);
-                    for ($i = $key - 1; $i >= 0; $i--) {
-                        if (!in_array($toc[$i]['type'], $types)
-                            && $points[$toc[$i]['type']]
-                                < $points[$element['type']]) {
+                    for($i = $key - 1; $i >= 0; $i--)
+                    {
+                        if (!in_array($toc[$i]['type'], $types) && $points[$toc[$i]['type']] < $points[$element['type']])
+                        {
                             $types[] = $toc[$i]['type'];
-                            $breadcrumb
-                                ->add($toc[$i]['title'], 'course_view',
-                                    array('categorySlug' => $category['slug'],
-                                    'rootSlug' => $baseCourse['slug'],
-                                    'titleSlug' => $toc[$i]['slug']
-                                    ));
+                            $breadcrumb->add($toc[$i]['title'],
+                                    'course_view',
+                                    array(
+                                        'categorySlug' => $category['slug'],
+                                        'rootSlug'     => $baseCourse['slug'],
+                                        'titleSlug'    => $toc[$i]['slug']
+                                        )
+                                    );
                         }
                     }
                     break;
@@ -328,6 +327,33 @@ class CourseController extends BaseController
             }
         }
         $breadcrumb->add($course['title']);
+    }
+
+    /**
+     * Get One metadata
+     *
+     * @param string $key  Key to search
+     * @param array  $list Array list of metadata
+     *
+     * @return string | null
+     */
+    private function getOneMetadata($key, $metadatas)
+    {
+        $value = '';
+
+        if (is_array($metadatas))
+        {
+            foreach($metadatas as $metadata)
+            {
+                if ($metadata['key'] == $key)
+                {
+                    $value = $metadata['value'];
+                    break;
+                }
+            }
+        }
+
+        return $value;
     }
 
     /**
@@ -348,8 +374,9 @@ class CourseController extends BaseController
         $courses = $this->getClaireApi()->getResult($coursesRequest);
 
         $this->view = 'SimpleITClaireAppBundle:Course:list.html.twig';
-        $this->viewParameters = array('courses' => $courses->getContent(),
-        'appPager' => $courses->getPager()
+        $this->viewParameters = array(
+            'courses' => $courses->getContent(),
+            'appPager' => $courses->getPager()
         );
         return $this->generateView($this->view, $this->viewParameters);
     }
