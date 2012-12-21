@@ -27,6 +27,8 @@ class BaseController extends Controller
         return $service;
     }
 
+
+
     public function getService($serviceName)
     {
         return $this->get('claire_'.$serviceName.'_api');

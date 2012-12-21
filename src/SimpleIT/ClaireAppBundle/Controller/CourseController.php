@@ -8,13 +8,14 @@ use SimpleIT\AppBundle\Model\ApiRequestOptions;
 /**
  * Course controller
  */
-class CourseController extends BaseController
+class CourseController extends CourseBaseController
 {
 
     /**
      * Courses homepage
-     * 
-     * @param Res
+     *
+     * @param Request $request Request
+     *
      * @return Response
      */
     public function indexAction(Request $request)
@@ -74,8 +75,7 @@ class CourseController extends BaseController
                 return $this
                     ->redirect(
                         $this
-                            ->generateUrl('course_view',
-                                array('slug' => $slug)));
+                            ->generateUrl('course_view', array('slug' => $slug)));
             }
         }
 
@@ -108,8 +108,7 @@ class CourseController extends BaseController
                 return $this
                     ->redirect(
                         $this
-                            ->generateUrl('course_edit',
-                                array('slug' => $slug)));
+                            ->generateUrl('course_edit', array('slug' => $slug)));
             }
         }
 
@@ -121,7 +120,9 @@ class CourseController extends BaseController
     /**
      * View a course
      *
-     * @param Request $request Request
+     * @param Request $request      Request
+     * @param string  $categorySlug The slug for the category
+     * @param string  $courseSlug   The slug for the course
      *
      * @return Response
      */
@@ -164,21 +165,19 @@ class CourseController extends BaseController
 
         $metadatas = $results['courseMetadatas']->getContent();
 
+        //FIXME phpUtils
         $date = new \DateTime();
         $course['updatedAt'] = $date
             ->setTimestamp(strtotime($course['updatedAt']));
 
+        //FIXME phpUtils
         $durationDate = new \DateTime();
         $duration = $durationDate
             ->setTimestamp(
                 strtotime(
-                    $this
-                        ->getOneMetadata('duration', $metadatas)));
+                    $this->getOneMetadata('duration', $metadatas)));
 
         $displayLevel = $course['displayLevel'];
-        /* Prepare the display toc */
-        $displayToc = $this->prepareToc($toc, $displayLevel);
-        $timeline = $this->prepareTimeline($toc, $displayLevel, null);
 
         // Breadcrumb
         $this->makeBreadcrumb($course, $category, $course, $toc);
@@ -187,31 +186,38 @@ class CourseController extends BaseController
         $duration = '';
         return $this
             ->render($this->getView($displayLevel),
-                array('course' => $course, 'title' => $course['title'],
-                'toc' => $displayToc, 'introduction' => $introduction,
-                'tags' => $tags, 'timeline' => $timeline,
-                'rootSlug' => $courseSlug, 'category' => $category,
-                'difficulty' => $this
-                    ->getOneMetadata('difficulty', $metadatas),
-                'duration' => $duration,
-                'licence' => $this
-                    ->getOneMetadata('license', $metadatas),
-                'description' => $this
-                    ->getOneMetadata('description ', $metadatas),
-                'aggregateRating' => $this
-                    ->getOneMetadata('aggregateRating', $metadatas),
-                'icon' => $this
-                    ->getOneMetadata('image', $metadatas),
-                'updatedAt' => $course['updatedAt']
+                array('title' => $course['title'],
+                        'course' => $course,
+                        'category' => $category,
+                        'aggregateRating' => $this->getOneMetadata('aggregateRating', $metadatas),
+                        'icon' => $this->getOneMetadata('image', $metadatas),
+                        'updatedAt' => $course['updatedAt'],
+                        'difficulty' => $this->getOneMetadata('difficulty', $metadatas),
+                        'duration' => $duration,
+                        'description' => $this->getOneMetadata('description ', $metadatas),
+                        'tags' => $tags,
+                        'licence' => $this->getOneMetadata('license', $metadatas),
+                        'introduction' => $introduction,
+                        'timeline' => $this->getTimeline($toc, $displayLevel),
+                        'toc' => $this->getDisplayToc($toc, $displayLevel)
                 ));
     }
 
+    /**
+     * Get the associated view
+     *
+     * @param int $displayLevel The display level of the course
+     *
+     * @return string The view template
+     */
     private function getView($displayLevel)
     {
+        $this->checkCourseDisplayLevelValidity($displayLevel);
+
         if ($displayLevel == 0) {
             $view = 'TutorialBundle:Tutorial:view00.html.twig';
         } elseif ($displayLevel == 1) {
-            $view = 'TutorialBundle:Tutorial:view1a.html.twig';
+            $view = 'TutorialBundle:Tutorial:view1a2b.html.twig';
         } elseif ($displayLevel == 2) {
             $view = 'TutorialBundle:Tutorial:view2a.html.twig';
         }
@@ -219,64 +225,62 @@ class CourseController extends BaseController
         return $view;
     }
 
-    private function prepareToc($toc, $displayLevel)
-    {
-        $displayToc = array();
-        $i = 0;
+//     private function prepareToc($toc, $displayLevel)
+//     {
+//         $displayToc = array();
+//         $i = 0;
 
-        if ($displayLevel == 0 || $displayLevel == 1) {
-            foreach ($toc as $part) {
-                if ($part['type'] == 'title-1') {
-                    $displayToc[$i] = $part;
-                    $i++;
-                }
-            }
-        } else {
-            $displayTocLevel = array('title-1' => 0, 'title-2' => 1,
-            'title-3' => 2, 'title-4' => 3, 'title-5' => 4
-            );
-            foreach ($toc as $part) {
-                $part['level'] = $displayTocLevel[$part['type']];
-                $displayToc[$i] = $part;
-                $i++;
-            }
-        }
-        return $displayToc;
-    }
+//         if ($displayLevel == 0 || $displayLevel == 1) {
+//             foreach ($toc as $part) {
+//                 if ($part['type'] == 'title-1') {
+//                     $displayToc[$i] = $part;
+//                     $i++;
+//                 }
+//             }
+//         } else {
+//             $displayTocLevel = array('title-1' => 0, 'title-2' => 1,
+//             'title-3' => 2, 'title-4' => 3, 'title-5' => 4
+//             );
+//             foreach ($toc as $part) {
+//                 $part['level'] = $displayTocLevel[$part['type']];
+//                 $displayToc[$i] = $part;
+//                 $i++;
+//             }
+//         }
+//         return $displayToc;
+//     }
 
-    /**
-     *
-     * @param type $toc
-     * @param type $displayLevel
-     * @param type $currentPartTitle
-     * @return type
-     */
-    private function prepareTimeline($toc, $displayLevel, $currentPartTitle)
-    {
-        $neededTypes = array();
-        if ($displayLevel == 0 || $displayLevel == 1) {
-            $neededTypes = array('title-1');
-        } else {
-            $neededTypes = array('title-1', 'title-2', 'title-3');
-        }
-        $timeline = array();
-        $i = 0;
-        $isOver = false;
-        if (is_null($currentPartTitle)) {
-            $isOver = true;
-        }
-        foreach ($toc as $part) {
-            if ($part['type'] == 'title-1') {
-                $part['isOver'] = $isOver;
-                $timeline[$i] = $part;
-                if ($part['title'] == $currentPartTitle) {
-                    $isOver = true;
-                }
-                $i++;
-            }
-        }
-        return $timeline;
-    }
+//     /**
+//      *
+//      * @param type $toc
+//      * @param type $displayLevel
+//      * @param type $currentPartTitle
+//      * @return type
+//      */
+//     private function getDisplayToc($toc, $displayLevel, $currentPartTitle = null)
+//     {
+//         $neededTypes = array();
+//         if ($displayLevel == 0 || $displayLevel == 1) {
+//             $neededTypes = $this->neededTypesLevel01;
+//         } else {
+//             $neededTypes = $this->neededTypesLevel2;
+//         }
+//         $displayToc = array();
+//         $i = 0;
+//         $isOver = false;
+
+//         foreach ($toc as $part) {
+//             if ($part['type'] == 'title-1') {
+//                 $part['isOver'] = $isOver;
+//                 $timeline[$i] = $part;
+//                 if ($part['title'] == $currentPartTitle) {
+//                     $isOver = true;
+//                 }
+//                 $i++;
+//             }
+//         }
+//         return $timeline;
+//     }
 
     /**
      * Make Breadcrumb
@@ -332,6 +336,8 @@ class CourseController extends BaseController
 
     /**
      * List courses
+     *
+     * @param Request $request Request
      *
      * @return Response
      */

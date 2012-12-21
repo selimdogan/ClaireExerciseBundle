@@ -8,13 +8,13 @@ use SimpleIT\AppBundle\Model\ApiRequest;
 
 /**
  * Part controller
- * 
- * The part controller is used to handle all the actions for 
+ *
+ * The part controller is used to handle all the actions for
  * the parts of a course
- * 
+ *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class PartController extends BaseController
+class PartController extends CourseBaseController
 {
     /**
      * Show a part
@@ -35,7 +35,7 @@ class PartController extends BaseController
         /* Get the Category */
         //FIXME ApiResult
         $categoryRequest = $this->getClaireApi('categories')
-                        ->getCategory($categorySlug);
+            ->getCategory($categorySlug);
         $category = $this->getClaireApi()->getResult($categoryRequest);
         $this->checkObjectFound($category);
 
@@ -51,14 +51,13 @@ class PartController extends BaseController
         if ($course['category']['id'] != $category['id']) {
             //FIXME Message
             throw $this
-                            ->createNotFoundException(
-                                            'The course is not in this category');
+                ->createNotFoundException('The course is not in this category');
         }
 
         /* Get the Part */
         //FIXME ApiResult
         $partRequest = $this->getClaireApi('parts')
-                        ->getPart($courseSlug, $partSlug);
+            ->getPart($courseSlug, $partSlug);
         $part = $this->getClaireApi()->getResult($partRequest);
         $this->checkObjectFound($part);
         $part = $part->getContent();
@@ -70,27 +69,27 @@ class PartController extends BaseController
             $options = new ApiRequestOptions();
             $options->setFormat(ApiRequest::FORMAT_HTML);
             $requests['content'] = $this->getClaireApi('parts')
-                            ->getPart($courseSlug, $partSlug, $options);
+                ->getPart($courseSlug, $partSlug, $options);
         }
         /*
          * Prepare request
          */
         /* Get the TOC */
         $requests['courseToc'] = $this->getClaireApi('courses')
-                        ->getCourseToc($courseSlug);
+            ->getCourseToc($courseSlug);
         /* Get the Introduction */
         $requests['partIntroduction'] = $this->getClaireApi('parts')
-                        ->getIntroduction($courseSlug, $partSlug);
+            ->getIntroduction($courseSlug, $partSlug);
         /* Get the tags */
         $requests['partTags'] = $this->getClaireApi('parts')
-                        ->getPartTags($courseSlug, $partSlug);
+            ->getPartTags($courseSlug, $partSlug);
         $requests['courseTags'] = $this->getClaireApi('courses')
-                        ->getCourseTags($courseSlug);
+            ->getCourseTags($courseSlug);
         /* Get the metadatas */
         $requests['partMetadatas'] = $this->getClaireApi('parts')
-                        ->getPartMetadatas($courseSlug, $partSlug);
+            ->getPartMetadatas($courseSlug, $partSlug);
         $requests['courseMetadatas'] = $this->getClaireApi('courses')
-                        ->getCourseMetadatas($courseSlug);
+            ->getCourseMetadatas($courseSlug);
 
         /* Get the responses */
         $results = $this->getClaireApi()->getResults($requests);
@@ -101,12 +100,13 @@ class PartController extends BaseController
 
         /* Retrieve the toc */
         $toc = $results['courseToc']->getContent();
+
+        /* Retrieve the content */
         $content = null;
-        if (!is_null($results['content'])) {
+        if (isset($results['content'])) {
             $content = $results['content']->getContent();
         }
         $introduction = $results['partIntroduction']->getContent();
-        $titleType = $part['type'];
 
         /* Retrieve the tags */
         $partTags = $results['partTags']->getContent();
@@ -142,15 +142,9 @@ class PartController extends BaseController
         //TODO
         // Alterate
         $pagination = $this->get('simpleit.claire.course')
-                        ->setPagination($part, $toc,
-                                        ($course['displayLevel'] == 1) ? array(
-                                                        'title-2', 'title-3'
-                                                        ) : array('title-1'));
-
-        /* Get timeline*/
-        $timeline = $this
-                        ->prepareTimeline($toc, $course['displayLevel'],
-                                        $part['title']);
+            ->setPagination($part, $toc,
+                ($course['displayLevel'] == 1) ? array('title-2', 'title-3')
+                                : array('title-1'));
 
         // Breadcrumb
         $this->makeBreadcrumb($category, $course, $part, $toc);
@@ -169,102 +163,86 @@ class PartController extends BaseController
         if (!is_null($content)) {
             $content = preg_replace('/<h1(.*)h1>/', '', $content);
         }
+        $displayLevel = $course['displayLevel'];
 
         return $this
-                        ->render(
-                                        $this
-                                                        ->getView(
-                                                                        $part['displayLevel'],
-                                                                        $titleType),
-                                        array('course' => $course,
-                                        'part' => $part,
-                                        'title' => $part['title'],
-                                        'introduction' => $introduction,
-                                        'toc' => $toc, 'tags' => $tags,
-                                        'contentHtml' => $content,
-                                        'timeline' => $timeline,
-                                        'rootSlug' => $courseSlug,
-                                        'category' => $category,
-                                        'difficulty' => $difficulty,
-                                        //                'duration' => $this->getOneMetadata('duration', $partMetadatas),
-                                        'duration' => '',
-                                        'licence' => $this
-                                                        ->getOneMetadata(
-                                                                        'license',
-                                                                        $courseMetadatas),
-                                        'description' => $this
-                                                        ->getOneMetadata(
-                                                                        'description ',
-                                                                        $partMetadatas),
-                                        'rate' => $this
-                                                        ->getOneMetadata(
-                                                                        'aggregateRating',
-                                                                        $partMetadatas),
-                                        'icon' => $icon,
-                                        'updatedAt' => $part['updatedAt'],
-                                        'titleType' => $titleType,
-                                        'pagination' => $pagination
-                                        ));
+            ->render($this->getView($part['displayLevel'], $part['type']),
+                    array('title' => $part['title'],
+                            'course' => $course,
+                            'part' => $part,
+                            'icon' => $icon,
+                            'category' => $category,
+                            'tags' => $tags,
+                            'difficulty' => $difficulty,
+                            'rate' => $this->getOneMetadata('aggregateRating', $partMetadatas),
+                            'duration' => '',
+                            'description' => $this->getOneMetadata('description ', $partMetadatas),
+                            'updatedAt' => $part['updatedAt'],
+                            'licence' => $this->getOneMetadata('license', $courseMetadatas),
+                            'pagination' => $pagination,
+                            'introduction' => $introduction,
+                            'timeline' => $this->getTimeline($toc, $displayLevel),
+                            'toc' => $this->getDisplayToc($toc, $displayLevel, $part['title']),
+                            'contentHtml' => $content
+                            ));
     }
 
     /**
      * Get the associated view for a specific context
-     * 
-     * @param int    $displayLevel The level display for the course
-     *                             Should be 1 or 2
-     * @param string $type         The type of the part
-     * 
+     *
+     * @param integer $displayLevel The level display for the course
+     *                              Should be 1 or 2
+     * @param string  $type         The type of the part
+     *
      * @return string The associated view
      */
-    private function getView(int $displayLevel, string $type)
+    private function getView($displayLevel, $type)
     {
-        if (0 == $displayLevel || 3 > $displayLevel) {
-            //FIXME Message
-            throw new InvalidArgumentException();
-        }
+        $this->checkPartDisplayLevelValidity($displayLevel);
+
         //FIXME constants
         if ($displayLevel == 1 && $type == 'title-1') {
-            $view = 'TutorialBundle:Tutorial:view1b.html.twig';
+            $view = 'TutorialBundle:Tutorial:view1a2b.html.twig';
         } elseif ($displayLevel == 2 && $type == 'title-2') {
-            $view = 'TutorialBundle:Tutorial:view2b.html.twig';
+            $view = 'TutorialBundle:Tutorial:view1a2b.html.twig';
         } elseif ($displayLevel == 2 && $type == 'title-3') {
-            $view = 'TutorialBundle:Tutorial:view2c.html.twig';
+            $view = 'TutorialBundle:Tutorial:view1b2c.html.twig';
         }
         return $view;
     }
 
-    /**
-     *
-     * @param type $toc
-     * @param type $displayLevel
-     * @param type $currentPartTitle
-     * @return type
-     */
-    private function prepareTimeline($toc, $displayLevel, $currentPartTitle)
-    {
-        $neededTypes = array();
-        if ($displayLevel == 0 || $displayLevel == 1) {
-            $neededTypes = array('title-1');
-        } else {
-            $neededTypes = array('title-1', 'title-2', 'title-3');
-        }
-        $timeline = array();
-        $i = 0;
-        $isOver = false;
-        if (!is_null($toc)) {
-            foreach ($toc as $part) {
-                if ($part['type'] == 'title-1') {
-                    $part['isOver'] = $isOver;
-                    $timeline[$i] = $part;
-                    if ($part['title'] == $currentPartTitle) {
-                        $isOver = true;
-                    }
-                    $i++;
-                }
-            }
-        }
-        return $timeline;
-    }
+//     /**
+//      *
+//      * @param type $toc
+//      * @param type $displayLevel
+//      * @param type $currentPartTitle
+//      * @return type
+//      */
+//     private function prepareTimeline($toc, $displayLevel, $currentPartTitle)
+//     {
+//         $neededTypes = array();
+//         if ($displayLevel == 0 || $displayLevel == 1) {
+//             $neededTypes = array('title-1');
+//         } else {
+//             $neededTypes = array('title-1', 'title-2', 'title-3');
+//         }
+//         $timeline = array();
+//         $i = 0;
+//         $isOver = false;
+//         if (!is_null($toc)) {
+//             foreach ($toc as $part) {
+//                 if ($part['type'] == 'title-1') {
+//                     $part['isOver'] = $isOver;
+//                     $timeline[$i] = $part;
+//                     if ($part['title'] == $currentPartTitle) {
+//                         $isOver = true;
+//                     }
+//                     $i++;
+//                 }
+//             }
+//         }
+//         return $timeline;
+//     }
 
     /**
      * Make Breadcrumb
@@ -283,16 +261,14 @@ class PartController extends BaseController
         // BreadCrumb
         $breadcrumb = $this->get('apy_breadcrumb_trail');
         $breadcrumb
-                        ->add($category['title'],
-                                        'SimpleIT_Claire_categories_view',
-                                        array('slug' => $category['slug']));
+            ->add($category['title'], 'SimpleIT_Claire_categories_view',
+                array('slug' => $category['slug']));
 
         $breadcrumb
-                        ->add($course['title'], 'course_view',
-                                        array(
-                                        'categorySlug' => $category['slug'],
-                                        'courseSlug' => $course['slug']
-                                        ));
+            ->add($course['title'], 'course_view',
+                array('categorySlug' => $category['slug'],
+                'courseSlug' => $course['slug']
+                ));
 
         if ($course['displayLevel'] == 2 && !empty($toc)) {
             //TODO
