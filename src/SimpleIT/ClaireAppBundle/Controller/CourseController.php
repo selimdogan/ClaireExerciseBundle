@@ -1,5 +1,13 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Controller;
+use SimpleIT\ClaireAppBundle\Model\CourseFactory;
+
+use SimpleIT\ClaireAppBundle\Services\CourseService;
+
+use SimpleIT\Utils\ArrayUtils;
+
+use SimpleIT\AppBundle\Services\ApiService;
+
 use Symfony\Component\HttpFoundation\Request;
 use SimpleIT\ClaireAppBundle\Controller\BaseController;
 use SimpleIT\ClaireAppBundle\Form\Type\CourseType;
@@ -8,9 +16,102 @@ use SimpleIT\AppBundle\Model\ApiRequestOptions;
 /**
  * Course controller
  */
-class CourseController extends CourseBaseController
+class CourseController extends BaseController
 {
+    /** @var Service The course service*/
+    private $courseService;
 
+    /**
+     * View a course
+     *
+     * @param Request $request      Request
+     * @param string  $categorySlug The slug for the category
+     * @param string  $courseSlug   The slug for the course
+     *
+     * @return Response
+     */
+    public function readAction(Request $request, $categorySlug, $courseSlug)
+    {
+        $this->courseService = $this->get('simpleit.claire.course');
+
+        $course = $this->courseService->getCourseBySlugByCategory($courseSlug, $categorySlug);
+        die();
+        //TODO Check if faster if category and course are in the same request
+        /* Get the category */
+        $categoryRequest = $this->getClaireApi('categories')
+        ->getCategory($categorySlug);
+        $category = $this->getClaireApi()->getResult($categoryRequest);
+        ApiService::checkResponseSuccessful($category);
+
+        /* Get the course */
+        $this->courseService->getCourse($courseSlug);
+
+        $courseRequest = $this->getClaireApi('courses')->getCourse($courseSlug);
+        $course = CourseFactory::create($this->getClaireApi()->getResult($courseRequest)->getContent());
+        //ApiService::checkResponseSuccessful($course);
+
+        /* Get the course service */
+        $this->courseService = $this->get('simpleit.claire.course');
+
+        /* Check if the course is in the requested category */
+        $this->courseService->checkCourseInCategory($course, $category);
+
+        /* ********************** *
+         * ***** Requesting ***** *
+         * ********************** */
+
+        $requests['courseToc'] = $this->getClaireApi('courses')
+        ->getCourseToc($courseSlug);
+        $requests['courseIntroduction'] = $this->getClaireApi('courses')
+        ->getIntroduction($courseSlug);
+        $requests['courseTags'] = $this->getClaireApi('courses')
+        ->getCourseTags($courseSlug);
+        $requests['courseMetadatas'] = $this->getClaireApi('courses')
+        ->getCourseMetadatas($courseSlug);
+
+        /* Flush the requests */
+        $results = $this->getClaireApi()->getResults($requests);
+
+        /* ********************* *
+         * ***** Resulting ***** *
+         * ********************* */
+
+        /* Get tags */
+        $tags = $results['courseTags'];
+        /* Get the toc */
+        $toc = $results['courseToc'];
+        var_dump($toc);
+        /* Get the introduction */
+        $introduction = $results['courseIntroduction'];
+        /* Get the metadata */
+        $courseMetadatas = $results['courseMetadatas']->getContent();
+
+        /* Format the metadatas */
+        $formatedMetadatas = $this->courseService->getFormatedCourseMetadatas($courseMetadatas);
+
+        $displayLevel = $course['displayLevel'];
+
+        return $this
+        ->render($this->getView($displayLevel),
+            array('title' => $course['title'],
+                'course' => $course,
+                'category' => $category,
+                'icon' => ArrayUtils::getValue($formatedMetadatas, CourseService::COURSE_METADATA_ICON),
+                'aggregateRating' => ArrayUtils::getValue($formatedMetadatas, CourseService::COURSE_METADATA_AGGREGATE_RATING),
+                'difficulty' => ArrayUtils::getValue($formatedMetadatas, CourseService::COURSE_METADATA_DIFFICULTY),
+                //FIXME DateInterval
+                'duration' => ArrayUtils::getValue($formatedMetadatas, CourseService::COURSE_METADATA_DURATION),
+                'timeline' => $this->courseService->formatTimeline($toc, $displayLevel),
+                'tags' => $tags,
+                'updatedAt' => new \DateTime($course['updatedAt']),
+                'introduction' => $introduction->getContent(),
+                'toc' => $this->courseService->getDisplayToc($toc, $displayLevel),
+                'license' => ArrayUtils::getValue((array) $formatedMetadatas, CourseService::COURSE_METADATA_LICENSE),
+                'description' => ArrayUtils::getValue((array) $formatedMetadatas, CourseService::COURSE_METADATA_DESCRIPTION)
+        ));
+    }
+
+    //FIXME To put on home page of SdZ v4
     /**
      * Courses homepage
      *
@@ -117,91 +218,7 @@ class CourseController extends CourseBaseController
                 array('form' => $form->createView(), 'course' => $course));
     }
 
-    /**
-     * View a course
-     *
-     * @param Request $request      Request
-     * @param string  $categorySlug The slug for the category
-     * @param string  $courseSlug   The slug for the course
-     *
-     * @return Response
-     */
-    public function readAction(Request $request, $categorySlug, $courseSlug)
-    {
-        // Category API
-        $categoryRequest = $this->getClaireApi('categories')
-            ->getCategory($categorySlug);
-        $category = $this->getClaireApi()->getResult($categoryRequest);
-        $this->checkObjectFound($category);
 
-        // Course API
-        $courseRequest = $this->getClaireApi('courses')->getCourse($courseSlug);
-        $course = $this->getClaireApi()->getResult($courseRequest);
-        $this->checkObjectFound($course);
-
-        // Check category
-        $category = $category->getContent();
-        $course = $course->getContent();
-        if ($course['category']['id'] != $category['id']) {
-            throw $this
-                ->createNotFoundException(
-                    'Unable to find this course in this category');
-        }
-
-        // Requesting
-        $requests['courseToc'] = $this->getClaireApi('courses')
-            ->getCourseToc($courseSlug);
-        $requests['courseIntroduction'] = $this->getClaireApi('courses')
-            ->getIntroduction($courseSlug);
-        $requests['courseTags'] = $this->getClaireApi('courses')
-            ->getCourseTags($courseSlug);
-        $requests['courseMetadatas'] = $this->getClaireApi('courses')
-            ->getCourseMetadatas($courseSlug);
-
-        $results = $this->getClaireApi()->getResults($requests);
-        $tags = $results['courseTags']->getContent();
-        $toc = $results['courseToc']->getContent();
-        $introduction = $results['courseIntroduction']->getContent();
-
-        $metadatas = $results['courseMetadatas']->getContent();
-
-        //FIXME phpUtils
-        $date = new \DateTime();
-        $course['updatedAt'] = $date
-            ->setTimestamp(strtotime($course['updatedAt']));
-
-        //FIXME phpUtils
-        $durationDate = new \DateTime();
-        $duration = $durationDate
-            ->setTimestamp(
-                strtotime(
-                    $this->getOneMetadata('duration', $metadatas)));
-
-        $displayLevel = $course['displayLevel'];
-
-        // Breadcrumb
-        $this->makeBreadcrumb($course, $category, $course, $toc);
-
-        //FIXME
-        $duration = '';
-        return $this
-            ->render($this->getView($displayLevel),
-                array('title' => $course['title'],
-                        'course' => $course,
-                        'category' => $category,
-                        'aggregateRating' => $this->getOneMetadata('aggregateRating', $metadatas),
-                        'icon' => $this->getOneMetadata('image', $metadatas),
-                        'updatedAt' => $course['updatedAt'],
-                        'difficulty' => $this->getOneMetadata('difficulty', $metadatas),
-                        'duration' => $duration,
-                        'description' => $this->getOneMetadata('description ', $metadatas),
-                        'tags' => $tags,
-                        'licence' => $this->getOneMetadata('license', $metadatas),
-                        'introduction' => $introduction,
-                        'timeline' => $this->getTimeline($toc, $displayLevel),
-                        'toc' => $this->getDisplayToc($toc, $displayLevel)
-                ));
-    }
 
     /**
      * Get the associated view
@@ -212,7 +229,7 @@ class CourseController extends CourseBaseController
      */
     private function getView($displayLevel)
     {
-        $this->checkCourseDisplayLevelValidity($displayLevel);
+        $this->courseService->checkCourseDisplayLevelValidity($displayLevel);
 
         if ($displayLevel == 0) {
             $view = 'TutorialBundle:Tutorial:view00.html.twig';
@@ -225,114 +242,57 @@ class CourseController extends CourseBaseController
         return $view;
     }
 
-//     private function prepareToc($toc, $displayLevel)
-//     {
-//         $displayToc = array();
-//         $i = 0;
-
-//         if ($displayLevel == 0 || $displayLevel == 1) {
-//             foreach ($toc as $part) {
-//                 if ($part['type'] == 'title-1') {
-//                     $displayToc[$i] = $part;
-//                     $i++;
-//                 }
-//             }
-//         } else {
-//             $displayTocLevel = array('title-1' => 0, 'title-2' => 1,
-//             'title-3' => 2, 'title-4' => 3, 'title-5' => 4
-//             );
-//             foreach ($toc as $part) {
-//                 $part['level'] = $displayTocLevel[$part['type']];
-//                 $displayToc[$i] = $part;
-//                 $i++;
-//             }
-//         }
-//         return $displayToc;
-//     }
-
 //     /**
+//      * Make Breadcrumb
 //      *
-//      * @param type $toc
-//      * @param type $displayLevel
-//      * @param type $currentPartTitle
-//      * @return type
+//      * @param array $baseCourse Base Course
+//      * @param array $category   Category
+//      * @param array $course     Course
+//      * @param array $toc        TOC
 //      */
-//     private function getDisplayToc($toc, $displayLevel, $currentPartTitle = null)
+//     private function makeBreadcrumb($baseCourse, $category, $course, $toc)
 //     {
-//         $neededTypes = array();
-//         if ($displayLevel == 0 || $displayLevel == 1) {
-//             $neededTypes = $this->neededTypesLevel01;
-//         } else {
-//             $neededTypes = $this->neededTypesLevel2;
-//         }
-//         $displayToc = array();
-//         $i = 0;
-//         $isOver = false;
+//         $points = array('course' => 0, 'title-1' => 1, 'title-2' => 2,
+//         'title-3' => 3,
+//         );
 
-//         foreach ($toc as $part) {
-//             if ($part['type'] == 'title-1') {
-//                 $part['isOver'] = $isOver;
-//                 $timeline[$i] = $part;
-//                 if ($part['title'] == $currentPartTitle) {
-//                     $isOver = true;
+//         // BreadCrumb
+//         $breadcrumb = $this->get('apy_breadcrumb_trail');
+
+//         $breadcrumb->add($category['title'], 'SimpleIT_Claire_categories_view',
+//                 array('slug' => $category['slug']));
+
+//         if ($baseCourse['slug'] != $course['slug']) {
+//             $breadcrumb
+//                 ->add($baseCourse['title'], 'course_view',
+//                     array('categorySlug' => $category['slug'],
+//                     'rootSlug' => $baseCourse['slug'],
+//                     ));
+//         }
+
+//         if (!empty($toc)) {
+//             foreach ($toc as $key => $element) {
+//                 if ($element['slug'] == $course['slug']) {
+//                     $types = array('title-1', $element['type']);
+//                     for ($i = $key - 1; $i >= 0; $i--) {
+//                         if (!in_array($toc[$i]['type'], $types)
+//                             && $points[$toc[$i]['type']]
+//                                 < $points[$element['type']]) {
+//                             $types[] = $toc[$i]['type'];
+//                             $breadcrumb
+//                                 ->add($toc[$i]['title'], 'course_view',
+//                                     array('categorySlug' => $category['slug'],
+//                                     'rootSlug' => $baseCourse['slug'],
+//                                     'titleSlug' => $toc[$i]['slug']
+//                                     ));
+//                         }
+//                     }
+//                     break;
 //                 }
-//                 $i++;
 //             }
 //         }
-//         return $timeline;
+//         $breadcrumb->add($course['title']);
 //     }
-
-    /**
-     * Make Breadcrumb
-     *
-     * @param array $baseCourse Base Course
-     * @param array $category   Category
-     * @param array $course     Course
-     * @param array $toc        TOC
-     */
-    private function makeBreadcrumb($baseCourse, $category, $course, $toc)
-    {
-        $points = array('course' => 0, 'title-1' => 1, 'title-2' => 2,
-        'title-3' => 3,
-        );
-
-        // BreadCrumb
-        $breadcrumb = $this->get('apy_breadcrumb_trail');
-        $breadcrumb
-            ->add($category['title'], 'SimpleIT_Claire_categories_view',
-                array('slug' => $category['slug']));
-
-        if ($baseCourse['slug'] != $course['slug']) {
-            $breadcrumb
-                ->add($baseCourse['title'], 'course_view',
-                    array('categorySlug' => $category['slug'],
-                    'rootSlug' => $baseCourse['slug'],
-                    ));
-        }
-
-        if (!empty($toc)) {
-            foreach ($toc as $key => $element) {
-                if ($element['slug'] == $course['slug']) {
-                    $types = array('title-1', $element['type']);
-                    for ($i = $key - 1; $i >= 0; $i--) {
-                        if (!in_array($toc[$i]['type'], $types)
-                            && $points[$toc[$i]['type']]
-                                < $points[$element['type']]) {
-                            $types[] = $toc[$i]['type'];
-                            $breadcrumb
-                                ->add($toc[$i]['title'], 'course_view',
-                                    array('categorySlug' => $category['slug'],
-                                    'rootSlug' => $baseCourse['slug'],
-                                    'titleSlug' => $toc[$i]['slug']
-                                    ));
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-        $breadcrumb->add($course['title']);
-    }
 
     /**
      * List courses
