@@ -2,6 +2,8 @@
 namespace SimpleIT\ClaireAppBundle\Services;
 
 
+use SimpleIT\ClaireAppBundle\Model\TagFactory;
+
 use SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository;
 
 use SimpleIT\ClaireAppBundle\Model\CourseFactory;
@@ -141,7 +143,43 @@ class CourseService extends ClaireApi implements CourseServiceInterface
         }
 
         return $course;
+    }
 
+    /**
+     * <p>
+     *     Returns the course with the course complementaries
+     *     <ul>
+     *         <li>metadatas</li>
+     *         <li>tags</li>
+     *         <li>introduction</li>
+     *         <li>toc</li>
+     *     </ul>
+     * </p>
+     *
+     * @param Course $course The course
+     *
+     * @return Course
+     */
+    public function getCourseComplementaries(Course $course)
+    {
+
+        $courseComplementaries = $this->courseRepository->findCourseComplementaries($course);
+
+        //var_dump($courseComplementaries['metadatas']);
+        $course->setMetadatas($this->getFormatedCourseMetadatas($courseComplementaries['metadatas']));
+        $tagResources = $courseComplementaries['tags'];
+        $tags = array();
+        foreach ($tagResources as $tagResource) {
+            $tag = TagFactory::create($tagResource);
+            $tags[] = $tag;
+        }
+        $course->setTags($tags);
+        $course->setIntroduction($courseComplementaries['introduction']);
+        //$course->setToc($courseComplementaries['toc']);
+
+        return $course;
+        var_dump($course);
+        die();
     }
 
     /**
@@ -222,6 +260,7 @@ class CourseService extends ClaireApi implements CourseServiceInterface
     {
         /* Copy the key value of the course metadatas */
         foreach ($courseMetadatas as $metadata) {
+
             $key = $metadata['key'];
             $value = $metadata['value'];
             if (CourseService::COURSE_METADATA_DURATION === $key) {
@@ -397,17 +436,15 @@ class CourseService extends ClaireApi implements CourseServiceInterface
     /**
      * Prepare the table of contents for the timeline
      *
-     * @param array   $toc          The original TOC
-     * @param integer $displayLevel The display level of the course
-     * @param course  $course       The course
-     * @param part    $currentPart  The current part
+     * @param Course $course      The course
+     * @param part   $currentPart The current part
      *
      * @return array The TOC to display
      */
-    public function formatTimeline($toc, $displayLevel, $course,
-                    $currentPart = null)
+    public function formatTimeline(Course $course, $currentPart = null)
     {
-        $this->checkCourseDisplayLevelValidity($displayLevel);
+        //FIXME in course
+        $this->checkCourseDisplayLevelValidity($course->getDisplayLevel());
 
         $neededTypes = array();
 
@@ -418,7 +455,7 @@ class CourseService extends ClaireApi implements CourseServiceInterface
             $neededTypes = $this->neededTypesLevel1;
         }
 
-        return $this->processToc($toc, $neededTypes, $course, $currentPart);
+        return $this->processToc($course, $neededTypes, $currentPart);
     }
 
     /**
@@ -427,15 +464,13 @@ class CourseService extends ClaireApi implements CourseServiceInterface
      * - puts only the needed parts
      * - checks if the part has been seen
      *
-     * @param array  $toc          The original TOC
+     * @param Course $course       The course
      * @param array  $allowedTypes The allowed types
-     * @param course $course       The course
      * @param part   $currentPart  The current part
      *
      * @return array The TOC to display
      */
-    private function processToc($toc, array $allowedTypes, $course,
-                    $currentPart = null)
+    private function processToc(Course $course, array $allowedTypes, $currentPart = null)
     {
         /* Initiate the toc to display */
         $formatedToc = array();
@@ -455,7 +490,7 @@ class CourseService extends ClaireApi implements CourseServiceInterface
         $partLevel2 = null;
 
         /* Iterate on the TOC */
-        foreach ($toc as $part) {
+        foreach ($course->getToc() as $part) {
             if (array_search($part['type'], $allowedTypes) !== false) {
                 $part['isOver'] = $isOver;
 
@@ -466,8 +501,7 @@ class CourseService extends ClaireApi implements CourseServiceInterface
                     case 0:
                         $partLevel0 = $part;
                         $part['metadatas'] = $this
-                            ->getFormatedPartMetadatas($course['metadatas'],
-                                $part['metadatas']);
+                            ->getFormatedPartMetadatas($course,$part['metadatas']);
                         break;
                     case 1:
                         $partLevel1 = $part;
