@@ -21,6 +21,7 @@
         
         <!-- REPOSITORIES CLASS -->
         <parameter key="simple_it.claire.repository.course.class">SimpleIT\ClaireAppBundle\Repository\Course\CourseRepository</parameter>
+        <parameter key="simple_it.claire.repository.part.class">SimpleIT\ClaireAppBundle\Repository\Course\PartRepository</parameter>
         <parameter key="simple_it.claire.repository.category.class">SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository</parameter>
     </parameters>
 
@@ -77,6 +78,9 @@
             <call method="setCourseRepository">
                 <argument type="service" id="simple_it.claire.repository.course" />
             </call>
+            <call method="setPartRepository">
+                <argument type="service" id="simple_it.claire.repository.part" />
+            </call>
             <call method="setCategoryRepository">
                 <argument type="service" id="simple_it.claire.repository.category" />
             </call>
@@ -84,6 +88,11 @@
         
         <!-- REPOSITORIES -->
         <service id="simple_it.claire.repository.course" class="%simple_it.claire.repository.course.class%" >
+            <call method="setClaireApi">
+                <argument type="service" id="claire_api_service" />
+            </call>
+        </service>
+        <service id="simple_it.claire.repository.part" class="%simple_it.claire.repository.part.class%" >
             <call method="setClaireApi">
                 <argument type="service" id="claire_api_service" />
             </call>

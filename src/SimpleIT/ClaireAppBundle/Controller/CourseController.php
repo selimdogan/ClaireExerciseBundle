@@ -1,5 +1,7 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Controller;
+use SimpleIT\ClaireAppBundle\Model\Metadata;
+
 use SimpleIT\ClaireAppBundle\Model\CourseFactory;
 
 use SimpleIT\ClaireAppBundle\Services\CourseService;
@@ -34,125 +36,33 @@ class CourseController extends BaseController
     {
         $this->courseService = $this->get('simpleit.claire.course');
 
-        $course = $this->courseService->getCourseBySlugByCategory($courseSlug, $categorySlug);
-        $course = $this->courseService->getCourseComplementaries($course);
+        $course = $this->courseService->getCourseByCategory($courseSlug, $categorySlug);
+        $course = $this->courseService->getCourseComplementaries($courseSlug, $course);
+        $timeline = $this->courseService->getTimeline($course);
 
         $displayLevel = $course->getDisplayLevel();
-        //$formatedMetadatas = $this->courseService->getFormatedCourseMetadatas($course->getMetadatas());
 
         $metadatas = $course->getMetadatas();
+
         return $this
         ->render($this->getView($displayLevel),
             array('title' => $course->getTitle(),
                 'course' => $course,
                 'category' => $course->getCategory(),
-                'icon' => ArrayUtils::getValue($metadatas, CourseService::COURSE_METADATA_ICON),
-                'aggregateRating' => ArrayUtils::getValue($metadatas, CourseService::COURSE_METADATA_AGGREGATE_RATING),
-                'difficulty' => ArrayUtils::getValue($metadatas, CourseService::COURSE_METADATA_DIFFICULTY),
+                'icon' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_IMAGE),
+                'aggregateRating' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_AGGREGATE_RATING),
+                'difficulty' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DIFFICULTY),
                 //FIXME DateInterval
-                'duration' => ArrayUtils::getValue($metadatas, CourseService::COURSE_METADATA_DURATION),
-                //'timeline' => $this->courseService->formatTimeline($course->getToc(), $displayLevel, $course),
-                'timeline' => '',
+                'duration' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DURATION),
+                'timeline' => $this->courseService->getTimeline($course),
                 'tags' => $course->getTags(),
                 'updatedAt' => $course->getUpdatedAt(),
                 'introduction' => $course->getIntroduction(),
-                //'toc' => $this->courseService->getDisplayToc($course->getToc(), $displayLevel),
-                'toc' =>'',
-                'license' => ArrayUtils::getValue((array) $metadatas, CourseService::COURSE_METADATA_LICENSE),
-                'description' => ArrayUtils::getValue((array) $metadatas, CourseService::COURSE_METADATA_DESCRIPTION)
+                'toc' => $this->courseService->getDisplayToc($course, $displayLevel),
+                'license' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_LICENSE),
+                'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION)
         ));
     }
-
-//     /**
-//      * View a course
-//      *
-//      * @param Request $request      Request
-//      * @param string  $categorySlug The slug for the category
-//      * @param string  $courseSlug   The slug for the course
-//      *
-//      * @return Response
-//      */
-//     public function readAction(Request $request, $categorySlug, $courseSlug)
-//     {
-//         $this->courseService = $this->get('simpleit.claire.course');
-
-//         $course = $this->courseService->getCourseBySlugByCategory($courseSlug, $categorySlug);
-//         $course = $this->courseService->getCourseComplementaries($course->getId());
-
-//         //         //TODO Check if faster if category and course are in the same request
-//         //         /* Get the category */
-//         //         $categoryRequest = $this->getClaireApi('categories')
-//         //         ->getCategory($categorySlug);
-//         //         $category = $this->getClaireApi()->getResult($categoryRequest);
-//         //         ApiService::checkResponseSuccessful($category);
-
-//         //         /* Get the course */
-//         //         $this->courseService->getCourse($courseSlug);
-
-//         //         $courseRequest = $this->getClaireApi('courses')->getCourse($courseSlug);
-//         //         $course = CourseFactory::create($this->getClaireApi()->getResult($courseRequest)->getContent());
-//         //         //ApiService::checkResponseSuccessful($course);
-
-//         //         /* Get the course service */
-//         //         $this->courseService = $this->get('simpleit.claire.course');
-
-//         //         /* Check if the course is in the requested category */
-//         //         $this->courseService->checkCourseInCategory($course, $category);
-
-//         /* ********************** *
-//          * ***** Requesting ***** *
-//         * ********************** */
-
-//         $requests['courseToc'] = $this->getClaireApi('courses')
-//         ->getCourseToc($courseSlug);
-//         $requests['courseIntroduction'] = $this->getClaireApi('courses')
-//         ->getIntroduction($courseSlug);
-//         $requests['courseTags'] = $this->getClaireApi('courses')
-//         ->getCourseTags($courseSlug);
-//         $requests['courseMetadatas'] = $this->getClaireApi('courses')
-//         ->getCourseMetadatas($courseSlug);
-
-//         /* Flush the requests */
-//         $results = $this->getClaireApi()->getResults($requests);
-
-//         /* ********************* *
-//          * ***** Resulting ***** *
-//         * ********************* */
-
-//         /* Get tags */
-//         $tags = $results['courseTags'];
-//         /* Get the toc */
-//         $toc = $results['courseToc'];
-//         var_dump($toc);
-//         /* Get the introduction */
-//         $introduction = $results['courseIntroduction'];
-//         /* Get the metadata */
-//         $courseMetadatas = $results['courseMetadatas']->getContent();
-
-//         /* Format the metadatas */
-//         $formatedMetadatas = $this->courseService->getFormatedCourseMetadatas($courseMetadatas);
-
-//         $displayLevel = $course['displayLevel'];
-
-//         return $this
-//         ->render($this->getView($displayLevel),
-//                 array('title' => $course['title'],
-//                         'course' => $course,
-//                         'category' => $category,
-//                         'icon' => ArrayUtils::getValue($formatedMetadatas, CourseService::COURSE_METADATA_ICON),
-//                         'aggregateRating' => ArrayUtils::getValue($formatedMetadatas, CourseService::COURSE_METADATA_AGGREGATE_RATING),
-//                         'difficulty' => ArrayUtils::getValue($formatedMetadatas, CourseService::COURSE_METADATA_DIFFICULTY),
-//                         //FIXME DateInterval
-//                         'duration' => ArrayUtils::getValue($formatedMetadatas, CourseService::COURSE_METADATA_DURATION),
-//                         'timeline' => $this->courseService->formatTimeline($toc, $displayLevel),
-//                         'tags' => $tags,
-//                         'updatedAt' => new \DateTime($course['updatedAt']),
-//                         'introduction' => $introduction->getContent(),
-//                         'toc' => $this->courseService->getDisplayToc($toc, $displayLevel),
-//                         'license' => ArrayUtils::getValue((array) $formatedMetadatas, CourseService::COURSE_METADATA_LICENSE),
-//                         'description' => ArrayUtils::getValue((array) $formatedMetadatas, CourseService::COURSE_METADATA_DESCRIPTION)
-//                 ));
-//     }
 
     //FIXME To put on home page of SdZ v4
     /**
