@@ -90,6 +90,28 @@ class CourseController extends BaseController
     }
 
     /**
+     * Get the associated view
+     *
+     * @param int $displayLevel The display level of the course
+     *
+     * @return string The view template
+     */
+    private function getCourseView($displayLevel)
+    {
+        $this->courseService->checkCourseDisplayLevelValidity($displayLevel);
+
+        if ($displayLevel == 0) {
+            $view = 'TutorialBundle:Tutorial:view00.html.twig';
+        } elseif ($displayLevel == 1) {
+            $view = 'TutorialBundle:Tutorial:view1a2b.html.twig';
+        } elseif ($displayLevel == 2) {
+            $view = 'TutorialBundle:Tutorial:view2a.html.twig';
+        }
+
+        return $view;
+    }
+
+    /**
      * Shows a part
      *
      * @param Request $request      The request
@@ -170,6 +192,30 @@ class CourseController extends BaseController
                 'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION)
                 );
         return $data;
+    }
+
+    /**
+     * Get the associated view for a specific context
+     *
+     * @param integer $displayLevel The level display for the course
+     *                              Should be 1 or 2
+     * @param Part    $part         The part
+     *
+     * @return string The associated view
+     */
+    private function getPartView($displayLevel, Part $part)
+    {
+        $this->courseService->checkPartDisplayLevelValidity($displayLevel);
+
+        $type = $part->getType();
+        if ($displayLevel == 1 && $type == Part::TYPE_TITLE_1) {
+            $view = 'TutorialBundle:Tutorial:view1b2c.html.twig';
+        } elseif ($displayLevel == 2 && $type == Part::TYPE_TITLE_2) {
+            $view = 'TutorialBundle:Tutorial:view1a2b.html.twig';
+        } elseif ($displayLevel == 2 && $type == Part::TYPE_TITLE_3) {
+            $view = 'TutorialBundle:Tutorial:view1b2c.html.twig';
+        }
+        return $view;
     }
 
 
@@ -280,53 +326,6 @@ class CourseController extends BaseController
                 array('form' => $form->createView(), 'course' => $course));
     }
 
-
-
-    /**
-     * Get the associated view
-     *
-     * @param int $displayLevel The display level of the course
-     *
-     * @return string The view template
-     */
-    private function getCourseView($displayLevel)
-    {
-        $this->courseService->checkCourseDisplayLevelValidity($displayLevel);
-
-        if ($displayLevel == 0) {
-            $view = 'TutorialBundle:Tutorial:view00.html.twig';
-        } elseif ($displayLevel == 1) {
-            $view = 'TutorialBundle:Tutorial:view1a2b.html.twig';
-        } elseif ($displayLevel == 2) {
-            $view = 'TutorialBundle:Tutorial:view2a.html.twig';
-        }
-
-        return $view;
-    }
-
-    /**
-     * Get the associated view for a specific context
-     *
-     * @param integer $displayLevel The level display for the course
-     *                              Should be 1 or 2
-     * @param Part    $part         The part
-     *
-     * @return string The associated view
-     */
-    private function getPartView($displayLevel, Part $part)
-    {
-        $this->courseService->checkPartDisplayLevelValidity($displayLevel);
-
-        $type = $part->getType();
-        if ($displayLevel == 1 && $type == Part::TYPE_TITLE_1) {
-            $view = 'TutorialBundle:Tutorial:view1b2c.html.twig';
-        } elseif ($displayLevel == 2 && $type == Part::TYPE_TITLE_2) {
-            $view = 'TutorialBundle:Tutorial:view1a2b.html.twig';
-        } elseif ($displayLevel == 2 && $type == Part::TYPE_TITLE_3) {
-            $view = 'TutorialBundle:Tutorial:view1b2c.html.twig';
-        }
-        return $view;
-    }
 
     /**
      * List courses
