@@ -41,7 +41,7 @@ use SimpleIT\AppBundle\Model\ApiResult;
  */
 class CourseService extends ClaireApi implements CourseServiceInterface
 {
-    /** regex for html part title (<h1>*</h1> */
+    /** regex for html part title = <h1>*</h1> */
     const PATTERN_HTML_PART_TITLE = '/<h1(.*)h1>/';
 
     /** @var ClaireApi */
@@ -121,6 +121,7 @@ class CourseService extends ClaireApi implements CourseServiceInterface
      * @param mixed $categoryIdentifier The category id | slug
      *
      * @return Course
+     * @deprecated
      */
     public function getCourseByCategory($courseIdentifier, $categoryIdentifier)
     {
@@ -137,7 +138,7 @@ class CourseService extends ClaireApi implements CourseServiceInterface
 
     /**
      * <p>
-     *     Returns the course with the course complementaries
+     *     Returns the course complementaries
      *     <ul>
      *         <li>metadatas</li>
      *         <li>tags</li>
@@ -150,6 +151,7 @@ class CourseService extends ClaireApi implements CourseServiceInterface
      * @param Course $course           The course
      *
      * @return Course
+     * @deprecated
      */
     public function getCourseComplementaries($courseIdentifier, Course $course)
     {
@@ -175,6 +177,7 @@ class CourseService extends ClaireApi implements CourseServiceInterface
      * <p>
      *     Returns the course with the course complementaries
      *     <ul>
+     *         <li>category</li>
      *         <li>metadatas</li>
      *         <li>tags</li>
      *         <li>introduction</li>
@@ -182,13 +185,14 @@ class CourseService extends ClaireApi implements CourseServiceInterface
      *     </ul>
      * </p>
      *
-     * @param mixed $courseIdentifier The course id | slug
+     * @param mixed $courseIdentifier   The course id | slug
+     * @param mixed $categoryIdentifier The category id | slug
      *
      * @return Course
      */
-    public function getCourseWithComplementaries($courseIdentifier)
+    public function getCourseWithComplementaries($courseIdentifier, $categoryIdentifier)
     {
-        return $this->courseRepository->findCourseWithComplementaries($courseIdentifier);
+        return $this->courseRepository->findCourseWithComplementaries($courseIdentifier, $categoryIdentifier);
     }
 
     /* **************************** *
@@ -204,6 +208,7 @@ class CourseService extends ClaireApi implements CourseServiceInterface
      * @param mixed $partIdentifier   The part id | slug
      *
      * @return Part
+     * @deprecated
      */
     public function getPart($courseIdentifier, $partIdentifier)
     {
@@ -227,6 +232,7 @@ class CourseService extends ClaireApi implements CourseServiceInterface
      * @param Part  $part             The part
      *
      * @return Part
+     * @deprecated
      */
     public function getPartComplementaries($courseIdentifier, $partIdentifier, Part $part)
     {
@@ -251,22 +257,36 @@ class CourseService extends ClaireApi implements CourseServiceInterface
 
     /**
      * <p>
-     *     Returns the part with the part complementaries
+     *     Returns
      *     <ul>
-     *         <li>metadatas</li>
-     *         <li>tags</li>
-     *         <li>introduction</li>
+     *         <li>the course with complementaries</li>
+     *         <ul>
+     *             <li>category</li>
+     *             <li>metadatas</li>
+     *             <li>tags</li>
+     *             <li>toc</li>
+     *         </ul>
+     *         <li>the part with the part complementaries</li>
+     *         <ul>
+     *             <li>metadatas</li>
+     *             <li>tags</li>
+     *             <li>introduction</li>
+     *         </ul>
      *     </ul>
      * </p>
      *
-     * @param mixed $courseIdentifier The course id | slug
-     * @param mixed $partIdentifier   The part id | slug
+     * @param mixed $categoryIdentifier The category id | slug
+     * @param mixed $courseIdentifier   The course id | slug
+     * @param mixed $partIdentifier     The part id | slug
      *
-     * @return Part
+     * @return array : <ul>
+     *                     <li>course</li>
+     *                     <li>part</li>
+     *                 </ul>
      */
-    public function getPartWithComplementaries($courseIdentifier, $partIdentifier)
+    public function getPartWithComplementaries($categoryIdentifier, $courseIdentifier, $partIdentifier)
     {
-        $this->partRepository->findPartWithComplementaries($courseIdentifier, $partIdentifier);
+        return $this->partRepository->findPartWithComplementaries($categoryIdentifier, $courseIdentifier, $partIdentifier);
     }
 
     /**
@@ -391,7 +411,6 @@ class CourseService extends ClaireApi implements CourseServiceInterface
                 $metadatas[Metadata::COURSE_METADATA_DIFFICULTY] = $difficulty;
             }
         }
-
         return $metadatas;
     }
 
@@ -703,7 +722,7 @@ class CourseService extends ClaireApi implements CourseServiceInterface
      */
     private function getNeededTypesLevel1()
     {
-        return $array(Part::TYPE_TITLE_1);;
+        return array(Part::TYPE_TITLE_1);
     }
 
     /**

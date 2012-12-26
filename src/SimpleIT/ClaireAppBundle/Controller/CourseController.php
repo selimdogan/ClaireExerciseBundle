@@ -1,5 +1,7 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Controller;
+use SimpleIT\ClaireAppBundle\Model\Course\Part;
+
 use SimpleIT\ClaireAppBundle\Model\Metadata;
 
 use SimpleIT\ClaireAppBundle\Model\CourseFactory;
@@ -17,6 +19,11 @@ use SimpleIT\AppBundle\Model\ApiRequestOptions;
 
 /**
  * Course controller
+ *
+ * The course controller is used to handle all the actions for courses and
+ * the parts of a course
+ *
+ * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
 class CourseController extends BaseController
 {
@@ -24,7 +31,7 @@ class CourseController extends BaseController
     private $courseService;
 
     /**
-     * View a course
+     * Shows a course
      *
      * @param Request $request      Request
      * @param string  $categorySlug The slug for the category
@@ -32,37 +39,139 @@ class CourseController extends BaseController
      *
      * @return Response
      */
-    public function readAction(Request $request, $categorySlug, $courseSlug)
+    public function courseAction(Request $request, $categorySlug, $courseSlug)
+    {
+        $data = $this->processCourseAction($request, $categorySlug, $courseSlug);
+        return $this->render($data['view'], $data['parameters']);
+    }
+
+    /**
+     * Shows a course
+     *
+     * @param Request $request      Request
+     * @param string  $categorySlug The slug for the category
+     * @param string  $courseSlug   The slug for the course
+     *
+     * @return array <ul>
+     *                   <li>view</li>
+     *                   <li>parameters</li>
+     *               </ul>
+     */
+    public function processCourseAction(Request $request, $categorySlug, $courseSlug)
     {
         $this->courseService = $this->get('simpleit.claire.course');
+        $course = $this->courseService->getCourseWithComplementaries($courseSlug, $categorySlug);
 
-        $course = $this->courseService->getCourseByCategory($courseSlug, $categorySlug);
-        $course = $this->courseService->getCourseComplementaries($courseSlug, $course);
         $timeline = $this->courseService->getTimeline($course);
 
         $displayLevel = $course->getDisplayLevel();
 
         $metadatas = $course->getMetadatas();
 
-        return $this
-        ->render($this->getView($displayLevel),
+        $data['view'] = $this->getCourseView($displayLevel);
+        $data['parameters'] =
             array('title' => $course->getTitle(),
-                'course' => $course,
+                        'course' => $course,
+                        'category' => $course->getCategory(),
+                        'icon' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_IMAGE),
+                        'aggregateRating' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_AGGREGATE_RATING),
+                        'difficulty' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DIFFICULTY),
+                        //FIXME DateInterval
+                        'duration' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DURATION),
+                        'timeline' => $this->courseService->getTimeline($course),
+                        'tags' => $course->getTags(),
+                        'updatedAt' => $course->getUpdatedAt(),
+                        'introduction' => $course->getIntroduction(),
+                        'toc' => $this->courseService->getDisplayToc($course, $displayLevel),
+                        'license' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_LICENSE),
+                        'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION)
+                );
+        return $data;
+    }
+
+    /**
+     * Shows a part
+     *
+     * @param Request $request      The request
+     * @param string  $categorySlug The slug of the category
+     * @param string  $courseSlug   The slug of the course
+     * @param string  $partSlug     The slug of the part
+     *
+     * @return Response
+     */
+    public function partAction(Request $request, $categorySlug, $courseSlug, $partSlug)
+    {
+        $data = $this->processPartAction($request, $categorySlug, $courseSlug, $partSlug);
+        return $this->render($data['view'], $data['parameters']);
+    }
+
+    /**
+     * Shows a part
+     *
+     * @param Request $request      The request
+     * @param string  $categorySlug The slug of the category
+     * @param string  $courseSlug   The slug of the course
+     * @param string  $partSlug     The slug of the part
+     *
+     * @return array <ul>
+     *                   <li>view</li>
+     *                   <li>parameters</li>
+     *               </ul>
+     */
+    public function processPartAction(Request $request, $categorySlug, $courseSlug, $partSlug)
+    {
+        $this->courseService = $this->get('simpleit.claire.course');
+
+        $data = $this->courseService->getPartWithComplementaries($categorySlug, $courseSlug, $partSlug);
+        $course = $data['course'];
+        $part = $data['part'];
+        $timeline = $this->courseService->getTimeline($course);
+
+        $displayLevel = $course->getDisplayLevel();
+        /* Get the Part content (only for 1b or 2c) */
+        $formatedContent = null;
+        if ($displayLevel === 1 || Part::TYPE_TITLE_3 === $part->getType()) {
+            $content = $this->courseService->getPartContent($courseSlug, $partSlug);
+            if (null != $content) {
+                $formatedContent = $this->courseService->getFormatedContent($content);
+            }
+        }
+        //TODO Api Route
+        $parentPart = null;
+        if ($displayLevel === 2 && Part::TYPE_TITLE_3 === $part->getType()) {
+            //$parentPart = $this->courseService->getParentPart($part);
+        }
+
+        /* Format the tags */
+        $tags = $this->courseService->getPartTags($course, $part, $parentPart);
+
+        /* Format the metadatas */
+        $metadatas = $this->courseService->getPartMetadatas($course, $part, $parentPart);
+
+        /* Get the pagination */
+        $pagination = $this->courseService->getPagination($course, $part, $displayLevel);
+
+        $data['view'] = $this->getPartView($displayLevel, $part);
+        $data['parameters'] = array(
+                'title' => $part->getTitle(),
+                'course' => $course, 'part' => $part,
                 'category' => $course->getCategory(),
                 'icon' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_IMAGE),
                 'aggregateRating' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_AGGREGATE_RATING),
                 'difficulty' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DIFFICULTY),
                 //FIXME DateInterval
                 'duration' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DURATION),
-                'timeline' => $this->courseService->getTimeline($course),
-                'tags' => $course->getTags(),
-                'updatedAt' => $course->getUpdatedAt(),
-                'introduction' => $course->getIntroduction(),
-                'toc' => $this->courseService->getDisplayToc($course, $displayLevel),
+                'timeline' => $this->courseService->getTimeline($course), 'tags' => $tags,
+                'updatedAt' => $part->getUpdatedAt(), 'pagination' => $pagination,
+                'introduction' => $part->getIntroduction(),
+                'toc' => $this->courseService->getDisplayToc($course, $displayLevel, $part),
+                'contentHtml' => $formatedContent,
                 'license' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_LICENSE),
                 'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION)
-        ));
+                );
+        return $data;
     }
+
 
     //FIXME To put on home page of SdZ v4
     /**
@@ -180,7 +289,7 @@ class CourseController extends BaseController
      *
      * @return string The view template
      */
-    private function getView($displayLevel)
+    private function getCourseView($displayLevel)
     {
         $this->courseService->checkCourseDisplayLevelValidity($displayLevel);
 
@@ -195,57 +304,29 @@ class CourseController extends BaseController
         return $view;
     }
 
-//     /**
-//      * Make Breadcrumb
-//      *
-//      * @param array $baseCourse Base Course
-//      * @param array $category   Category
-//      * @param array $course     Course
-//      * @param array $toc        TOC
-//      */
-//     private function makeBreadcrumb($baseCourse, $category, $course, $toc)
-//     {
-//         $points = array('course' => 0, 'title-1' => 1, 'title-2' => 2,
-//         'title-3' => 3,
-//         );
+    /**
+     * Get the associated view for a specific context
+     *
+     * @param integer $displayLevel The level display for the course
+     *                              Should be 1 or 2
+     * @param Part    $part         The part
+     *
+     * @return string The associated view
+     */
+    private function getPartView($displayLevel, Part $part)
+    {
+        $this->courseService->checkPartDisplayLevelValidity($displayLevel);
 
-//         // BreadCrumb
-//         $breadcrumb = $this->get('apy_breadcrumb_trail');
-
-//         $breadcrumb->add($category['title'], 'SimpleIT_Claire_categories_view',
-//                 array('slug' => $category['slug']));
-
-//         if ($baseCourse['slug'] != $course['slug']) {
-//             $breadcrumb
-//                 ->add($baseCourse['title'], 'course_view',
-//                     array('categorySlug' => $category['slug'],
-//                     'rootSlug' => $baseCourse['slug'],
-//                     ));
-//         }
-
-//         if (!empty($toc)) {
-//             foreach ($toc as $key => $element) {
-//                 if ($element['slug'] == $course['slug']) {
-//                     $types = array('title-1', $element['type']);
-//                     for ($i = $key - 1; $i >= 0; $i--) {
-//                         if (!in_array($toc[$i]['type'], $types)
-//                             && $points[$toc[$i]['type']]
-//                                 < $points[$element['type']]) {
-//                             $types[] = $toc[$i]['type'];
-//                             $breadcrumb
-//                                 ->add($toc[$i]['title'], 'course_view',
-//                                     array('categorySlug' => $category['slug'],
-//                                     'rootSlug' => $baseCourse['slug'],
-//                                     'titleSlug' => $toc[$i]['slug']
-//                                     ));
-//                         }
-//                     }
-//                     break;
-//                 }
-//             }
-//         }
-//         $breadcrumb->add($course['title']);
-//     }
+        $type = $part->getType();
+        if ($displayLevel == 1 && $type == Part::TYPE_TITLE_1) {
+            $view = 'TutorialBundle:Tutorial:view1b2c.html.twig';
+        } elseif ($displayLevel == 2 && $type == Part::TYPE_TITLE_2) {
+            $view = 'TutorialBundle:Tutorial:view1a2b.html.twig';
+        } elseif ($displayLevel == 2 && $type == Part::TYPE_TITLE_3) {
+            $view = 'TutorialBundle:Tutorial:view1b2c.html.twig';
+        }
+        return $view;
+    }
 
     /**
      * List courses

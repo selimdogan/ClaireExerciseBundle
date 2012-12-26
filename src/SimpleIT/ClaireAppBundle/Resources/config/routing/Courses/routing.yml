@@ -1,6 +1,6 @@
 SimpleIT_Claire_course_view:
     pattern:  /{course}
-    defaults: { _controller: SimpleITClaireAppBundle:Course:view }
+    defaults: { _controller: SimpleITClaireAppBundle:Course:show }
     requirements:
         _method: get
 
