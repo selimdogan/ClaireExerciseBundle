@@ -1,6 +1,19 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Controller;
 
+use SimpleIT\ClaireAppBundle\Model\Course\Part;
+
+use SimpleIT\ClaireAppBundle\Model\Metadata;
+
+use SimpleIT\ClaireAppBundle\Model\CourseFactory;
+
+use SimpleIT\ClaireAppBundle\Services\CourseService;
+
+use SimpleIT\Utils\ArrayUtils;
+
+use SimpleIT\AppBundle\Services\ApiService;
+
+
 use Symfony\Component\HttpFoundation\Request;
 use SimpleIT\ClaireAppBundle\Controller\BaseController;
 use SimpleIT\ClaireAppBundle\Form\Type\CourseType;
@@ -8,12 +21,211 @@ use SimpleIT\AppBundle\Model\ApiRequestOptions;
 
 /**
  * Course controller
+ *
+ * The course controller is used to handle all the actions for courses and
+ * the parts of a course
+ *
+ * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
 class CourseController extends BaseController
 {
+    /** @var Service The course service*/
+    private $courseService;
 
     /**
+     * Shows a course
+     *
+     * @param Request $request      Request
+     * @param string  $categorySlug The slug for the category
+     * @param string  $courseSlug   The slug for the course
+     *
+     * @return Response
+     */
+    public function courseAction(Request $request, $categorySlug, $courseSlug)
+    {
+        $data = $this->processCourseAction($request, $categorySlug, $courseSlug);
+        return $this->render($data['view'], $data['parameters']);
+    }
+
+    /**
+     * Shows a course
+     *
+     * @param Request $request      Request
+     * @param string  $categorySlug The slug for the category
+     * @param string  $courseSlug   The slug for the course
+     *
+     * @return array <ul>
+     *                   <li>view</li>
+     *                   <li>parameters</li>
+     *               </ul>
+     */
+    public function processCourseAction(Request $request, $categorySlug, $courseSlug)
+    {
+        $this->courseService = $this->get('simpleit.claire.course');
+        $course = $this->courseService->getCourseWithComplementaries($courseSlug, $categorySlug);
+
+        $timeline = $this->courseService->getTimeline($course);
+
+        $displayLevel = $course->getDisplayLevel();
+
+        $metadatas = $course->getMetadatas();
+
+        $data['view'] = $this->getCourseView($displayLevel);
+        $data['parameters'] =
+            array('title' => $course->getTitle(),
+                        'course' => $course,
+                        'category' => $course->getCategory(),
+                        'icon' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_IMAGE),
+                        'aggregateRating' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_AGGREGATE_RATING),
+                        'difficulty' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DIFFICULTY),
+                        //FIXME DateInterval
+                        'duration' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DURATION),
+                        'timeline' => $this->courseService->getTimeline($course),
+                        'tags' => $course->getTags(),
+                        'updatedAt' => $course->getUpdatedAt(),
+                        'introduction' => $course->getIntroduction(),
+                        'toc' => $this->courseService->getDisplayToc($course, $displayLevel),
+                        'license' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_LICENSE),
+                        'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION)
+                );
+        return $data;
+    }
+
+    /**
+     * Get the associated view
+     *
+     * @param int $displayLevel The display level of the course
+     *
+     * @return string The view template
+     */
+    private function getCourseView($displayLevel)
+    {
+        $this->courseService->checkCourseDisplayLevelValidity($displayLevel);
+
+        if ($displayLevel == 0) {
+            $view = 'TutorialBundle:Tutorial:view00.html.twig';
+        } elseif ($displayLevel == 1) {
+            $view = 'TutorialBundle:Tutorial:view1a2b.html.twig';
+        } elseif ($displayLevel == 2) {
+            $view = 'TutorialBundle:Tutorial:view2a.html.twig';
+        }
+
+        return $view;
+    }
+
+    /**
+     * Shows a part
+     *
+     * @param Request $request      The request
+     * @param string  $categorySlug The slug of the category
+     * @param string  $courseSlug   The slug of the course
+     * @param string  $partSlug     The slug of the part
+     *
+     * @return Response
+     */
+    public function partAction(Request $request, $categorySlug, $courseSlug, $partSlug)
+    {
+        $data = $this->processPartAction($request, $categorySlug, $courseSlug, $partSlug);
+        return $this->render($data['view'], $data['parameters']);
+    }
+
+    /**
+     * Shows a part
+     *
+     * @param Request $request      The request
+     * @param string  $categorySlug The slug of the category
+     * @param string  $courseSlug   The slug of the course
+     * @param string  $partSlug     The slug of the part
+     *
+     * @return array <ul>
+     *                   <li>view</li>
+     *                   <li>parameters</li>
+     *               </ul>
+     */
+    public function processPartAction(Request $request, $categorySlug, $courseSlug, $partSlug)
+    {
+        $this->courseService = $this->get('simpleit.claire.course');
+
+        $data = $this->courseService->getPartWithComplementaries($categorySlug, $courseSlug, $partSlug);
+        $course = $data['course'];
+        $part = $data['part'];
+        $timeline = $this->courseService->getTimeline($course);
+
+        $displayLevel = $course->getDisplayLevel();
+        /* Get the Part content (only for 1b or 2c) */
+        $formatedContent = null;
+        if ($displayLevel === 1 || Part::TYPE_TITLE_3 === $part->getType()) {
+            $content = $this->courseService->getPartContent($courseSlug, $partSlug);
+            if (null != $content) {
+                $formatedContent = $this->courseService->getFormatedContent($content);
+            }
+        }
+        //TODO Api Route
+        $parentPart = null;
+        if ($displayLevel === 2 && Part::TYPE_TITLE_3 === $part->getType()) {
+            //$parentPart = $this->courseService->getParentPart($part);
+        }
+
+        /* Format the tags */
+        $tags = $this->courseService->getPartTags($course, $part, $parentPart);
+
+        /* Format the metadatas */
+        $metadatas = $this->courseService->getPartMetadatas($course, $part, $parentPart);
+
+        /* Get the pagination */
+        $pagination = $this->courseService->getPagination($course, $part, $displayLevel);
+
+        $data['view'] = $this->getPartView($displayLevel, $part);
+        $data['parameters'] = array(
+                'title' => $part->getTitle(),
+                'course' => $course, 'part' => $part,
+                'category' => $course->getCategory(),
+                'icon' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_IMAGE),
+                'aggregateRating' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_AGGREGATE_RATING),
+                'difficulty' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DIFFICULTY),
+                //FIXME DateInterval
+                'duration' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DURATION),
+                'timeline' => $this->courseService->getTimeline($course), 'tags' => $tags,
+                'updatedAt' => $part->getUpdatedAt(), 'pagination' => $pagination,
+                'introduction' => $part->getIntroduction(),
+                'toc' => $this->courseService->getDisplayToc($course, $displayLevel, $part),
+                'contentHtml' => $formatedContent,
+                'license' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_LICENSE),
+                'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION)
+                );
+        return $data;
+    }
+
+    /**
+     * Get the associated view for a specific context
+     *
+     * @param integer $displayLevel The level display for the course
+     *                              Should be 1 or 2
+     * @param Part    $part         The part
+     *
+     * @return string The associated view
+     */
+    private function getPartView($displayLevel, Part $part)
+    {
+        $this->courseService->checkPartDisplayLevelValidity($displayLevel);
+
+        $type = $part->getType();
+        if ($displayLevel == 1 && $type == Part::TYPE_TITLE_1) {
+            $view = 'TutorialBundle:Tutorial:view1b2c.html.twig';
+        } elseif ($displayLevel == 2 && $type == Part::TYPE_TITLE_2) {
+            $view = 'TutorialBundle:Tutorial:view1a2b.html.twig';
+        } elseif ($displayLevel == 2 && $type == Part::TYPE_TITLE_3) {
+            $view = 'TutorialBundle:Tutorial:view1b2c.html.twig';
+        }
+        return $view;
+    }
+
+
+    //FIXME To put on home page of SdZ v4
+    /**
      * Courses homepage
+     *
+     * @param Request $request Request
      *
      * @return Response
      */
@@ -71,7 +283,11 @@ class CourseController extends BaseController
                 $course = $this->getCoursesApi()->createCourse($course);
 
                 $slug = $course['reference']['slug'];
-                return $this->redirect($this->generateUrl('course_view', array('slug' => $slug)));
+
+                return $this
+                    ->redirect(
+                        $this
+                            ->generateUrl('course_view', array('slug' => $slug)));
             }
         }
 
@@ -101,232 +317,15 @@ class CourseController extends BaseController
                 $course = $this->getCoursesApi()->updateCourse($course);
 
                 $slug = $course['reference']['slug'];
-                return $this->redirect($this->generateUrl('course_edit', array('slug' => $slug)));
+
+                return $this
+                    ->redirect(
+                        $this
+                            ->generateUrl('course_edit', array('slug' => $slug)));
             }
         }
 
         return $this->render('SimpleITClaireAppBundle:Course:edit.html.twig', array('form' => $form->createView(), 'course' => $course));
-    }
-
-    /**
-     * View a course
-     *
-     * @param Request $request Request
-     *
-     * @return Response
-     */
-    public function readAction(Request $request, $categorySlug, $courseSlug)
-    {
-        // Category API
-        $categoryRequest = $this->getClaireApi('categories')->getCategory($categorySlug);
-        $category = $this->getClaireApi()->getResult($categoryRequest);
-        $this->checkObjectFound($category);
-
-        // Course API
-        $courseRequest = $this->getClaireApi('courses')->getCourse($courseSlug);
-        $course = $this->getClaireApi()->getResult($courseRequest);
-        $this->checkObjectFound($course);
-
-        // Check category
-        $category = $category->getContent();
-        $course = $course->getContent();
-        if($course['category']['id'] != $category['id'])
-        {
-            throw $this->createNotFoundException('Unable to find this course in this category');
-        }
-
-        // Requesting
-        $requests['courseToc'] = $this->getClaireApi('courses')->getCourseToc($courseSlug);
-        $requests['courseIntroduction'] = $this->getClaireApi('courses')->getIntroduction($courseSlug);
-        $requests['courseTags'] = $this->getClaireApi('courses')->getCourseTags($courseSlug);
-        $requests['courseMetadatas'] = $this->getClaireApi('courses')->getCourseMetadatas($courseSlug);
-
-        $results = $this->getClaireApi()->getResults($requests);
-        $tags = $results['courseTags']->getContent();
-        $toc = $results['courseToc']->getContent();
-        $introduction = $results['courseIntroduction']->getContent();
-
-        $metadatas = $results['courseMetadatas']->getContent();
-
-        $date = new \DateTime();
-        $course['updatedAt'] = $date->setTimestamp(strtotime($course['updatedAt']));
-
-        $durationDate = new \DateTime();
-        $duration = $durationDate->setTimestamp(strtotime($this->getOneMetadata('duration', $metadatas)));
-
-        $displayLevel = $course['displayLevel'];
-        /* Prepare the display toc */
-        $displayToc = $this->prepareToc($toc, $displayLevel);
-        $timeline = $this->prepareTimeline($toc, $displayLevel, null);
-
-        // Breadcrumb
-        $this->makeBreadcrumb(
-                $course,
-                $category,
-                $course,
-                $toc);
-
-        //FIXME
-        $duration = '';
-        return $this->render($this->getView($displayLevel),
-            array(
-                'course' => $course,
-                'title' =>$course['title'],
-                'toc' => $displayToc,
-                'introduction' => $introduction,
-                'tags' => $tags,
-                'timeline' => $timeline,
-                'rootSlug' => $courseSlug,
-                'category' => $category,
-                'difficulty' => $this->getOneMetadata('difficulty', $metadatas),
-                'duration' => $duration,
-                'licence' => $this->getOneMetadata('license', $metadatas),
-                'description' => $this->getOneMetadata('description ', $metadatas),
-                'aggregateRating' => $this->getOneMetadata('aggregateRating', $metadatas),
-                'icon' => $this->getOneMetadata('image', $metadatas),
-                'updatedAt'=> $course['updatedAt']
-            )
-        );
-    }
-
-    private function getView($displayLevel)
-    {
-        if($displayLevel == 0)
-        {
-            $view = 'TutorialBundle:Tutorial:view00.html.twig';
-        }
-        elseif($displayLevel == 1)
-        {
-            $view = 'TutorialBundle:Tutorial:view1a.html.twig';
-        }
-        elseif($displayLevel == 2)
-        {
-            $view = 'TutorialBundle:Tutorial:view2a.html.twig';
-        }
-
-        return $view;
-    }
-
-    private function prepareToc($toc, $displayLevel)
-    {
-        if ($displayLevel == 0 || $displayLevel == 1)
-        {
-            $displayToc = array();
-            $i = 0;
-            foreach ($toc as $part)
-            {
-                if ($part['type'] == 'title-1')
-                {
-                    $displayToc[$i] = $part;
-                    $i++;
-                }
-            }
-        }
-        else
-        {
-            $displayToc = $toc;
-        }
-        return $displayToc;
-    }
-
-    /**
-     *
-     * @param type $toc
-     * @param type $displayLevel
-     * @param type $currentPartTitle
-     * @return type
-     */
-    private function prepareTimeline($toc, $displayLevel, $currentPartTitle)
-    {
-        $neededTypes = array();
-        if ($displayLevel == 0 || $displayLevel == 1)
-        {
-            $neededTypes = array('title-1');
-        }
-        else
-        {
-            $neededTypes = array('title-1', 'title-2', 'title-3');
-        }
-        $timeline = array();
-        $i = 0;
-        $isOver = false;
-        if (is_null($currentPartTitle)){
-            $isOver = true;
-        }
-        foreach ($toc as $part)
-        {
-            if ($part['type'] == 'title-1')
-            {
-                $part['isOver'] = $isOver;
-                $timeline[$i] = $part;
-                if ($part['title'] == $currentPartTitle)
-                {
-                    $isOver = true;
-                }
-                $i++;
-            }
-        }
-    return $timeline;
-    }
-
-
-    /**
-     * Make Breadcrumb
-     *
-     * @param array $baseCourse Base Course
-     * @param array $category   Category
-     * @param array $course     Course
-     * @param array $toc        TOC
-     */
-    private function makeBreadcrumb($baseCourse, $category, $course, $toc)
-    {
-       $points = array(
-            'course' => 0,
-            'title-1' => 1,
-            'title-2' => 2,
-            'title-3' => 3,
-        );
-
-        // BreadCrumb
-        $breadcrumb = $this->get('apy_breadcrumb_trail');
-        $breadcrumb->add($category['title'], 'SimpleIT_Claire_categories_view', array('slug' => $category['slug']));
-
-        if ($baseCourse['slug'] != $course['slug'])
-        {
-            $breadcrumb->add($baseCourse['title'], 'course_view',
-                    array(
-                        'categorySlug' => $category['slug'],
-                        'rootSlug'     => $baseCourse['slug'],
-                        ));
-        }
-
-        if (!empty($toc))
-        {
-            foreach($toc as $key => $element)
-            {
-                if ($element['slug'] == $course['slug'])
-                {
-                    $types = array('title-1', $element['type']);
-                    for($i = $key - 1; $i >= 0; $i--)
-                    {
-                        if (!in_array($toc[$i]['type'], $types) && $points[$toc[$i]['type']] < $points[$element['type']])
-                        {
-                            $types[] = $toc[$i]['type'];
-                            $breadcrumb->add($toc[$i]['title'],
-                                    'course_view',
-                                    array(
-                                        'categorySlug' => $category['slug'],
-                                        'rootSlug'     => $baseCourse['slug'],
-                                        'titleSlug'    => $toc[$i]['slug']
-                                        )
-                                    );
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-        $breadcrumb->add($course['title']);
     }
 
     /**
@@ -358,6 +357,8 @@ class CourseController extends BaseController
 
     /**
      * List courses
+     *
+     * @param Request $request Request
      *
      * @return Response
      */
