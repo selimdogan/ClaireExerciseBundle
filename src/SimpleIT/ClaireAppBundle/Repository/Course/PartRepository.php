@@ -2,6 +2,8 @@
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 use SimpleIT\ClaireAppBundle\Model\CategoryFactory;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
 use SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository;
 
 use SimpleIT\ClaireAppBundle\Model\Course\Part;
@@ -203,10 +205,10 @@ class PartRepository extends ApiRouteService
         $course = $results['course']->getContent();
         $category = $results['category']->getContent();
 
-        if (is_null($course)) {
+        if (empty($course)) {
             throw new HttpException(404, 'Course '.$courseIdentifier.' does not exist');
         }
-        if (is_null($category)) {
+        if (empty($category)) {
             throw new HttpException(404, 'Category '.$categoryIdentifier.' does not exist');
         }
         $course = CourseFactory::create($course);

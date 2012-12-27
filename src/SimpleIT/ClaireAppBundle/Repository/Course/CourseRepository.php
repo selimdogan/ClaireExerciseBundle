@@ -150,16 +150,20 @@ class CourseRepository extends ApiRouteService
         $requests['toc'] = $this->findCourseTocRequest($courseIdentifier);
 
         $results = $this->claireApi->getResults($requests);
-
-        $courseResult = $results['course']->getContent();
         $category = $results['category']->getContent();
-
-        if (is_null($courseResult)) {
+        $courseResult = $results['course']->getContent();
+        
+        if (empty($courseResult )) {
             throw new HttpException(404, 'Course '.$courseIdentifier.' does not exist');
         }
-        if (is_null($category)) {
+
+        if (empty($category)) {
             throw new HttpException(404, 'Category '.$categoryIdentifier.' does not exist');
         }
+
+
+
+
 
         $course = CourseFactory::create($courseResult);
         $category = CategoryFactory::create($category);
