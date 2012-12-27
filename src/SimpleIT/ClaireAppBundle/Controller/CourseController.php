@@ -1,5 +1,6 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Controller;
+
 use SimpleIT\ClaireAppBundle\Model\Course\Part;
 
 use SimpleIT\ClaireAppBundle\Model\Metadata;
@@ -11,6 +12,7 @@ use SimpleIT\ClaireAppBundle\Services\CourseService;
 use SimpleIT\Utils\ArrayUtils;
 
 use SimpleIT\AppBundle\Services\ApiService;
+
 
 use Symfony\Component\HttpFoundation\Request;
 use SimpleIT\ClaireAppBundle\Controller\BaseController;
@@ -235,29 +237,27 @@ class CourseController extends BaseController
         $options->setPageNumber(1);
         $options->addFilter('sort', 'updatedAt desc');
 
-        $requests['courses'] = $this->getClaireApi('courses')
-            ->getCourses($options);
+        $requests['courses'] = $this->getClaireApi('courses')->getCourses($options);
 
         $optionsCategories = new ApiRequestOptions();
         $optionsCategories->setItemsPerPage(3);
         $optionsCategories->setPageNumber(1);
 
-        $requests['categories'] = $this->getClaireApi('categories')
-            ->getCategories($optionsCategories);
+        $requests['categories'] = $this->getClaireApi('categories')->getCategories($optionsCategories);
 
         $optionsTags = new ApiRequestOptions();
         $optionsTags->setPageNumber(1);
 
-        $requests['tags'] = $this->getClaireApi('categories')
-            ->getTags($optionsTags);
+        $requests['tags'] = $this->getClaireApi('categories')->getTags($optionsTags);
 
         $results = $this->getClaireApi()->getResults($requests);
 
+
         $this->view = 'SimpleITClaireAppBundle:Course:list.html.twig';
         $this->viewParameters = array(
-        'courses' => $results['courses']->getContent(),
-        'categories' => $results['categories']->getContent(),
-        'tags' => $results['tags']->getContent()
+            'courses' => $results['courses']->getContent(),
+            'categories' => $results['categories']->getContent(),
+            'tags' => $results['tags']->getContent()
         );
         return $this->generateView($this->view, $this->viewParameters);
     }
@@ -273,14 +273,17 @@ class CourseController extends BaseController
     {
         $form = $this->createForm(new CourseType());
 
-        if ($request->isMethod('post')) {
+        if($request->isMethod('post'))
+        {
             $form->bind($request);
 
-            if ($form->isValid()) {
+            if($form->isValid())
+            {
                 $course = $form->getData();
                 $course = $this->getCoursesApi()->createCourse($course);
 
                 $slug = $course['reference']['slug'];
+
                 return $this
                     ->redirect(
                         $this
@@ -288,9 +291,7 @@ class CourseController extends BaseController
             }
         }
 
-        return $this
-            ->render('SimpleITClaireAppBundle:Course:create.html.twig',
-                array('form' => $form->createView()));
+        return $this->render('SimpleITClaireAppBundle:Course:create.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -306,14 +307,17 @@ class CourseController extends BaseController
 
         $form = $this->createForm(new CourseType(), $course);
 
-        if ($request->isMethod('post')) {
+        if($request->isMethod('post'))
+        {
             $form->bind($request);
 
-            if ($form->isValid()) {
+            if($form->isValid())
+            {
                 $course = $form->getData();
                 $course = $this->getCoursesApi()->updateCourse($course);
 
                 $slug = $course['reference']['slug'];
+
                 return $this
                     ->redirect(
                         $this
@@ -321,11 +325,35 @@ class CourseController extends BaseController
             }
         }
 
-        return $this
-            ->render('SimpleITClaireAppBundle:Course:edit.html.twig',
-                array('form' => $form->createView(), 'course' => $course));
+        return $this->render('SimpleITClaireAppBundle:Course:edit.html.twig', array('form' => $form->createView(), 'course' => $course));
     }
 
+    /**
+     * Get One metadata
+     *
+     * @param string $key  Key to search
+     * @param array  $list Array list of metadata
+     *
+     * @return string | null
+     */
+    private function getOneMetadata($key, $metadatas)
+    {
+        $value = '';
+
+        if (is_array($metadatas))
+        {
+            foreach($metadatas as $metadata)
+            {
+                if ($metadata['key'] == $key)
+                {
+                    $value = $metadata['value'];
+                    break;
+                }
+            }
+        }
+
+        return $value;
+    }
 
     /**
      * List courses
@@ -347,8 +375,9 @@ class CourseController extends BaseController
         $courses = $this->getClaireApi()->getResult($coursesRequest);
 
         $this->view = 'SimpleITClaireAppBundle:Course:list.html.twig';
-        $this->viewParameters = array('courses' => $courses->getContent(),
-        'appPager' => $courses->getPager()
+        $this->viewParameters = array(
+            'courses' => $courses->getContent(),
+            'appPager' => $courses->getPager()
         );
         return $this->generateView($this->view, $this->viewParameters);
     }
