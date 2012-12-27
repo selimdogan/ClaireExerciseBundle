@@ -559,7 +559,7 @@ class CourseService extends ClaireApi implements CourseServiceInterface
      *
      * @return array The TOC to display
      */
-    private function processToc(array $toc, array $allowedTypes, Course $course,
+    private function processToc(array $toc = array(), array $allowedTypes, Course $course,
                     Part $currentPart = null)
     {
         /* Initiate the toc to display */

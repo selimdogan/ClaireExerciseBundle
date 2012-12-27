@@ -229,8 +229,9 @@ class PartRepository extends ApiRouteService
             $tags = TagFactory::createCollection($results['courseTags']->getContent());
             $course->setTags($tags);
         }
-        if (!is_null($results['toc']->getContent())) {
-            $toc = TocFactory::create($results['toc']->getContent());
+        $toc = $results['toc']->getContent();
+        if (!empty($toc)) {
+            $toc = TocFactory::create($toc);
             $course->setToc($toc);
         }
 
@@ -250,8 +251,9 @@ class PartRepository extends ApiRouteService
                 $results['partMetadatas']->getContent());
             $part->setMetadatas($metadatas);
         }
-        if (!is_null($results['partTags']->getContent())) {
-            $tags = TagFactory::createCollection($results['partTags']->getContent());
+        $partTags = $results['partTags']->getContent();
+        if (!empty($partTags)) {
+            $tags = TagFactory::createCollection($partTags);
             $partComplementaries['partTags'] = $tags;
         }
         $part->setIntroduction($results['introduction']->getContent());
