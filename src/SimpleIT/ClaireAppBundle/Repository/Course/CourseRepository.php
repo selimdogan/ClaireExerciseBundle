@@ -1,5 +1,7 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
+use SimpleIT\AppBundle\Services\ApiService;
+
 use SimpleIT\ClaireAppBundle\Model\CategoryFactory;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -99,6 +101,8 @@ class CourseRepository extends ApiRouteService
      * @param mixed $courseIdentifier The course id | slug
      *
      * @return array Course complementaries
+     *
+     * @deprecated
      */
     public function findCourseComplementaries($courseIdentifier)
     {
@@ -155,20 +159,12 @@ class CourseRepository extends ApiRouteService
         $requests['authors'] = self::findCourseAuthorsRequest($courseIdentifier);
 
         $results = $this->claireApi->getResults($requests);
+
+        ApiService::checkResponseSuccessful($results['category']);
+        ApiService::checkResponseSuccessful($results['course']);
+
         $category = $results['category']->getContent();
         $courseResult = $results['course']->getContent();
-
-        if (empty($courseResult )) {
-            throw new HttpException(404, 'Course '.$courseIdentifier.' does not exist');
-        }
-
-        if (empty($category)) {
-            throw new HttpException(404, 'Category '.$categoryIdentifier.' does not exist');
-        }
-
-
-
-
 
         $course = CourseFactory::create($courseResult);
         $category = CategoryFactory::create($category);

@@ -62,12 +62,22 @@ class MetadataFactory
     {
         $metadatas = array();
         foreach ($metadataResources as $metadataResource) {
+
             if (isset($metadataResource['key'])) {
+
                 $value = $metadataResource['value'];
+
                 if (Metadata::COURSE_METADATA_DURATION === $metadataResource['key']) {
-                    $value = new \DateInterval($value);
+
+                    try {
+                        $value = new \DateInterval($value);
+                        $metadatas[$metadataResource['key']] = $value;
+                    } catch (\Exception $e) {
+                        //Do nothing
+                    }
+                } else {
+                    $metadatas[$metadataResource['key']] = $value;
                 }
-                $metadatas[$metadataResource['key']] = $value;
             }
         }
         return $metadatas;

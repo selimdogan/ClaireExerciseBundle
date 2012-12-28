@@ -1,5 +1,7 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
+use SimpleIT\AppBundle\Services\ApiService;
+
 use SimpleIT\ClaireAppBundle\Model\CategoryFactory;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -37,6 +39,7 @@ use SimpleIT\AppBundle\Services\ApiRouteService;
  */
 class PartRepository extends ApiRouteService
 {
+
     /** @var ClaireApi The Claire Api */
     private $claireApi;
 
@@ -119,6 +122,7 @@ class PartRepository extends ApiRouteService
      * @param mixed $partIdentifier   The part id | slug
      *
      * @return array Part complementaries
+     * @deprecated
      */
     public function findPartComplementaries($courseIdentifier, $partIdentifier)
     {
@@ -205,15 +209,13 @@ class PartRepository extends ApiRouteService
          * ****************** */
 
         /* Check course and category */
+        ApiService::checkResponseSuccessful($results['category']);
+        ApiService::checkResponseSuccessful($results['course']);
+        ApiService::checkResponseSuccessful($results['part']);
+
         $course = $results['course']->getContent();
         $category = $results['category']->getContent();
 
-        if (empty($course)) {
-            throw new HttpException(404, 'Course '.$courseIdentifier.' does not exist');
-        }
-        if (empty($category)) {
-            throw new HttpException(404, 'Category '.$categoryIdentifier.' does not exist');
-        }
         $course = CourseFactory::create($course);
         $category = CategoryFactory::create($category);
 
@@ -249,9 +251,7 @@ class PartRepository extends ApiRouteService
 
         /* Get part */
         $partResult = $results['part']->getContent();
-        if (is_null($partResult)) {
-            throw new HttpException(404, 'Part '.$partIdentifier.' does not exist');
-        }
+
         $part = PartFactory::create($partResult);
         /* Get part complementaries */
         if (!is_null($results['partMetadatas']->getContent())) {
