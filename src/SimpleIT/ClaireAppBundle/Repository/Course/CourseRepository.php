@@ -6,6 +6,10 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository;
 
+use SimpleIT\ClaireAppBundle\Repository\User\AuthorRepository;
+
+use SimpleIT\ClaireAppBundle\Model\AuthorFactory;
+
 use SimpleIT\ClaireAppBundle\Model\TocFactory;
 
 use SimpleIT\ClaireAppBundle\Model\TagFactory;
@@ -148,11 +152,12 @@ class CourseRepository extends ApiRouteService
         $requests['tags'] = $this->findCourseTagsRequest($courseIdentifier);
         $requests['introduction'] = $this->findCourseIntroductionRequest($courseIdentifier);
         $requests['toc'] = $this->findCourseTocRequest($courseIdentifier);
+        $requests['authors'] = self::findCourseAuthorsRequest($courseIdentifier);
 
         $results = $this->claireApi->getResults($requests);
         $category = $results['category']->getContent();
         $courseResult = $results['course']->getContent();
-        
+
         if (empty($courseResult )) {
             throw new HttpException(404, 'Course '.$courseIdentifier.' does not exist');
         }
@@ -186,6 +191,11 @@ class CourseRepository extends ApiRouteService
         if (!is_null($results['toc']->getContent())) {
             $toc = TocFactory::create($results['toc']->getContent());
             $course->setToc($toc);
+        }
+
+        if (!is_null($results['authors']->getContent())) {
+            $authors = AuthorFactory::createCollection($results['authors']->getContent());
+            $course->setAuthors($authors);
         }
 
         return $course;
@@ -275,6 +285,22 @@ class CourseRepository extends ApiRouteService
     {
         $apiRequest = new ApiRequest();
         $apiRequest->setBaseUrl(self::URL_COURSES.$courseIdentifier.self::URL_COURSES_TOC);
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        return $apiRequest;
+    }
+
+    /**
+     * Returns a course authors (ApiRequest)
+     *
+     * @param mixed $courseIdentifier The course id | slug
+     *
+     * @return ApiRequest
+     */
+    public static function findCourseAuthorsRequest($courseIdentifier)
+    {
+        $apiRequest = new ApiRequest();
+        $apiRequest->setBaseUrl(self::URL_COURSES.$courseIdentifier.AuthorRepository::URL_AUTHORS);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
 
         return $apiRequest;

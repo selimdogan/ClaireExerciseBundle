@@ -8,6 +8,8 @@ use SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository;
 
 use SimpleIT\ClaireAppBundle\Model\Course\Part;
 
+use SimpleIT\ClaireAppBundle\Model\AuthorFactory;
+
 use SimpleIT\ClaireAppBundle\Model\PartFactory;
 
 use SimpleIT\ClaireAppBundle\Model\TocFactory;
@@ -185,6 +187,7 @@ class PartRepository extends ApiRouteService
         $requests['courseMetadatas'] = CourseRepository::findCourseMetadatasRequest(
             $courseIdentifier);
         $requests['courseTags'] = CourseRepository::findCourseTagsRequest($courseIdentifier);
+        $requests['courseAuthors'] = CourseRepository::findCourseAuthorsRequest($courseIdentifier);
         $requests['toc'] = CourseRepository::findCourseTocRequest($courseIdentifier);
         /* Get part */
         $requests['part'] = self::findRequest($courseIdentifier, $partIdentifier);
@@ -233,6 +236,11 @@ class PartRepository extends ApiRouteService
         if (!empty($toc)) {
             $toc = TocFactory::create($toc);
             $course->setToc($toc);
+        }
+        if (!is_null($results['courseAuthors']->getContent())) {
+            $authors = AuthorFactory::createCollection(
+                $results['courseAuthors']->getContent());
+            $course->setAuthors($authors);
         }
 
         /* **************** *

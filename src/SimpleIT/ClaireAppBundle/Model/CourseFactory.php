@@ -13,36 +13,36 @@ class CourseFactory
     /**
      * Create a course
      *
-     * @param array $courseRessource
+     * @param array $courseResource
      *
      * @return Course
      */
-    public static function create(array $courseRessource)
+    public static function create(array $courseResource)
     {
         $course = new Course();
-        if (isset($courseRessource['id'])) {
-            $course->setId($courseRessource['id']);
+        if (isset($courseResource['id'])) {
+            $course->setId($courseResource['id']);
         }
-        if (isset($courseRessource['title'])) {
-            $course->setTitle($courseRessource['title']);
+        if (isset($courseResource['title'])) {
+            $course->setTitle($courseResource['title']);
         }
-        if (isset($courseRessource['slug'])) {
-            $course->setSlug($courseRessource['slug']);
+        if (isset($courseResource['slug'])) {
+            $course->setSlug($courseResource['slug']);
         }
-        if (isset($courseRessource['status'])) {
-            $course->setStatus($courseRessource['status']);
+        if (isset($courseResource['status'])) {
+            $course->setStatus($courseResource['status']);
         }
-        if (isset($courseRessource['displayLevel'])) {
-            $course->setDisplayLevel($courseRessource['displayLevel']);
+        if (isset($courseResource['displayLevel'])) {
+            $course->setDisplayLevel($courseResource['displayLevel']);
         }
-        if (isset($courseRessource['createdAt'])) {
-            $course->setCreatedAt(new \DateTime($courseRessource['createdAt']));
+        if (isset($courseResource['createdAt'])) {
+            $course->setCreatedAt(new \DateTime($courseResource['createdAt']));
         }
-        if (isset($courseRessource['updatedAt'])) {
-            $course->setUpdatedAt(new \DateTime($courseRessource['updatedAt']));
+        if (isset($courseResource['updatedAt'])) {
+            $course->setUpdatedAt(new \DateTime($courseResource['updatedAt']));
         }
-        if (isset($courseRessource['category'])) {
-            $category = CategoryFactory::create($courseRessource['category']);
+        if (isset($courseResource['category'])) {
+            $category = CategoryFactory::create($courseResource['category']);
             $course->setCategory($category);
         }
         return $course;

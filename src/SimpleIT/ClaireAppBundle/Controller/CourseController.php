@@ -86,7 +86,8 @@ class CourseController extends BaseController
                         'introduction' => $course->getIntroduction(),
                         'toc' => $this->courseService->getDisplayToc($course, $displayLevel),
                         'license' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_LICENSE),
-                        'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION)
+                        'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION),
+                        'authors' => $course->getAuthors()
                 );
         return $data;
     }
@@ -191,7 +192,8 @@ class CourseController extends BaseController
                 'toc' => $this->courseService->getDisplayToc($course, $displayLevel, $part),
                 'contentHtml' => $formatedContent,
                 'license' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_LICENSE),
-                'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION)
+                'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION),
+                'authors' => $course->getAuthors()
                 );
         return $data;
     }

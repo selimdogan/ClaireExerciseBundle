@@ -14,15 +14,16 @@
         <parameter key="simple_it.claire.http.transport.class">SimpleIT\AppBundle\Services\HttpTransport</parameter>
         <parameter key="simple_it.claire.api.token.class">SimpleIT\AppBundle\Api\OAuth2Service</parameter>
         <parameter key="simple_it.claire.course.class">SimpleIT\ClaireAppBundle\Services\CourseService</parameter>
-        
+
 
         <parameter key="simple_it.claire.buzz.client.class">Buzz\Client\MultiCurl</parameter>
         <parameter key="buzz.browser.class">Buzz\Browser</parameter>
-        
+
         <!-- REPOSITORIES CLASS -->
         <parameter key="simple_it.claire.repository.course.class">SimpleIT\ClaireAppBundle\Repository\Course\CourseRepository</parameter>
         <parameter key="simple_it.claire.repository.part.class">SimpleIT\ClaireAppBundle\Repository\Course\PartRepository</parameter>
         <parameter key="simple_it.claire.repository.category.class">SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository</parameter>
+        <parameter key="simple_it.claire.repository.author.class">SimpleIT\ClaireAppBundle\Repository\User\AuthorRepository</parameter>
     </parameters>
 
     <services>
@@ -85,7 +86,7 @@
                 <argument type="service" id="simple_it.claire.repository.category" />
             </call>
         </service>
-        
+
         <!-- REPOSITORIES -->
         <service id="simple_it.claire.repository.course" class="%simple_it.claire.repository.course.class%" >
             <call method="setClaireApi">
@@ -98,6 +99,11 @@
             </call>
         </service>
         <service id="simple_it.claire.repository.category" class="%simple_it.claire.repository.category.class%" >
+            <call method="setClaireApi">
+                <argument type="service" id="claire_api_service" />
+            </call>
+        </service>
+        <service id="simple_it.claire.repository.author" class="%simple_it.claire.repository.author.class%" >
             <call method="setClaireApi">
                 <argument type="service" id="claire_api_service" />
             </call>
