@@ -195,7 +195,7 @@ class CourseRepository extends ApiRouteService
             $course->setToc($toc);
         }
 
-        if (!is_null($results['authors']->getContent())) {
+        if (ApiService::isResponseSuccessful($results['authors'])) {
             $authors = AuthorFactory::createCollection($results['authors']->getContent());
             $course->setAuthors($authors);
         }

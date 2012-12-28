@@ -244,7 +244,7 @@ class PartRepository extends ApiRouteService
             $toc = TocFactory::create($results['toc']->getContent());
             $course->setToc($toc);
         }
-        if (!is_null($results['courseAuthors']->getContent())) {
+        if (ApiService::isResponseSuccessful($results['courseAuthors'])) {
             $authors = AuthorFactory::createCollection(
                 $results['courseAuthors']->getContent());
             $course->setAuthors($authors);
