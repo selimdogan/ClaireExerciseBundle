@@ -176,6 +176,7 @@ class CourseController extends BaseController
         $pagination = $this->courseService->getPagination($course, $part, $displayLevel);
 
         $data['view'] = $this->getPartView($displayLevel, $part);
+
         $data['parameters'] = array(
                 'title' => $part->getTitle(),
                 'course' => $course, 'part' => $part,
@@ -326,33 +327,6 @@ class CourseController extends BaseController
         }
 
         return $this->render('SimpleITClaireAppBundle:Course:edit.html.twig', array('form' => $form->createView(), 'course' => $course));
-    }
-
-    /**
-     * Get One metadata
-     *
-     * @param string $key  Key to search
-     * @param array  $list Array list of metadata
-     *
-     * @return string | null
-     */
-    private function getOneMetadata($key, $metadatas)
-    {
-        $value = '';
-
-        if (is_array($metadatas))
-        {
-            foreach($metadatas as $metadata)
-            {
-                if ($metadata['key'] == $key)
-                {
-                    $value = $metadata['value'];
-                    break;
-                }
-            }
-        }
-
-        return $value;
     }
 
     /**

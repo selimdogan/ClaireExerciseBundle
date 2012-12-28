@@ -500,8 +500,11 @@ class CourseService extends ClaireApi implements CourseServiceInterface
             $i++;
         }
         $find = false;
-        while (!$find && $i < (count($toc) - 1)) {
+
+        while (!$find && $i < (count($toc))) {
+
             $part = $toc[$i];
+
             if (false !== array_search($part->getType(), $allowedTypes)) {
                 $pagination['next'] = $part;
                 $find = true;
@@ -543,6 +546,7 @@ class CourseService extends ClaireApi implements CourseServiceInterface
             $neededTypes = $this->getNeededTypesLevel1();
         }
         /* Process treatment on the toc */
+
         return $this->processToc($toc, $neededTypes, $course, $currentPart);
     }
 
@@ -618,6 +622,7 @@ class CourseService extends ClaireApi implements CourseServiceInterface
                 $i++;
             }
         }
+
         return $formatedToc;
     }
 
@@ -648,16 +653,18 @@ class CourseService extends ClaireApi implements CourseServiceInterface
             $part = $toc[$i];
             /* If the part is the one asked */
             if ($this->getParentPartTypeToc2b() === $part->getType()) {
+
                 if ($part->getId() === $currentPart->getId()) {
                     $isFind = true;
-
-                } else {
+                }
+                elseif($isFind) {
                     $isOver = true;
                 }
 
                 /* if the part is a child of the container part */
             } elseif ($isFind === true
                 && false !== array_search($part->getType(), $this->getNeededTypesLevel2b())) {
+
                 $filteredToc[$j] = $part;
                 $j++;
             }
