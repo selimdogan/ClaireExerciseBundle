@@ -1,5 +1,7 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
+use SimpleIT\AppBundle\Services\ApiService;
+
 use SimpleIT\ClaireAppBundle\Model\CategoryFactory;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -7,6 +9,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository;
 
 use SimpleIT\ClaireAppBundle\Model\Course\Part;
+
+use SimpleIT\ClaireAppBundle\Model\AuthorFactory;
 
 use SimpleIT\ClaireAppBundle\Model\PartFactory;
 
@@ -35,6 +39,7 @@ use SimpleIT\AppBundle\Services\ApiRouteService;
  */
 class PartRepository extends ApiRouteService
 {
+
     /** @var ClaireApi The Claire Api */
     private $claireApi;
 
@@ -68,24 +73,24 @@ class PartRepository extends ApiRouteService
      * ********** METHODS ********* *
      *                              *
      * **************************** */
+//FIXME Delete Above
+//     /**
+//      * Returns a part
+//      *
+//      * @param mixed $courseIdentifier The course id | slug
+//      * @param mixed $partIdentifier   The part id | slug
+//      *
+//      * @return Part The part
+//      */
+//     public function find($courseIdentifier, $partIdentifier)
+//     {
+//         $partRequest = self::findRequest($courseIdentifier, $partIdentifier);
 
-    /**
-     * Returns a part
-     *
-     * @param mixed $courseIdentifier The course id | slug
-     * @param mixed $partIdentifier   The part id | slug
-     *
-     * @return Part The part
-     */
-    public function find($courseIdentifier, $partIdentifier)
-    {
-        $partRequest = self::findRequest($courseIdentifier, $partIdentifier);
+//         $partResult = $this->claireApi->getResult($partRequest);
+//         $part = PartFactory::create($partResult->getContent());
 
-        $partResult = $this->claireApi->getResult($partRequest);
-        $part = PartFactory::create($partResult->getContent());
-
-        return $part;
-    }
+//         return $part;
+//     }
 
     /**
      * Returns a part
@@ -100,48 +105,52 @@ class PartRepository extends ApiRouteService
     {
         $partRequest = self::findRequest($courseIdentifier, $partIdentifier, $format);
 
-        return $this->claireApi->getResult($partRequest)->getContent();
+        $partResult = $this->claireApi->getResult($partRequest);
+        ApiService::checkResponseSuccessful($partResult);
+
+        return $partResult->getContent();
     }
 
-    /**
-     * <p>
-     *     Returns the part complementaries
-     *     <ul>
-     *         <li>metadatas</li>
-     *         <li>tags</li>
-     *         <li>introduction</li>
-     *     </ul>
-     * </p>
-     *
-     * @param mixed $courseIdentifier The course id | slug
-     * @param mixed $partIdentifier   The part id | slug
-     *
-     * @return array Part complementaries
-     */
-    public function findPartComplementaries($courseIdentifier, $partIdentifier)
-    {
-        $requests['metadatas'] = $this
-            ->findPartMetadatasRequest($courseIdentifier, $partIdentifier);
-        $requests['tags'] = self::findPartTagsRequest($courseIdentifier, $partIdentifier);
-        $requests['introduction'] = $this
-            ->findPartIntroductionRequest($courseIdentifier, $partIdentifier);
+//     /**
+//      * <p>
+//      *     Returns the part complementaries
+//      *     <ul>
+//      *         <li>metadatas</li>
+//      *         <li>tags</li>
+//      *         <li>introduction</li>
+//      *     </ul>
+//      * </p>
+//      *
+//      * @param mixed $courseIdentifier The course id | slug
+//      * @param mixed $partIdentifier   The part id | slug
+//      *
+//      * @return array Part complementaries
+//      * @deprecated
+//      */
+//     public function findPartComplementaries($courseIdentifier, $partIdentifier)
+//     {
+//         $requests['metadatas'] = $this
+//             ->findPartMetadatasRequest($courseIdentifier, $partIdentifier);
+//         $requests['tags'] = self::findPartTagsRequest($courseIdentifier, $partIdentifier);
+//         $requests['introduction'] = $this
+//             ->findPartIntroductionRequest($courseIdentifier, $partIdentifier);
 
-        $results = $this->claireApi->getResults($requests);
+//         $results = $this->claireApi->getResults($requests);
 
-        if (!is_null($results['metadatas']->getContent())) {
-            $metadatas = MetadataFactory::createCourseMetadataCollection(
-                $results['metadatas']->getContent());
-            $partComplementaries['metadatas'] = $metadatas;
+//         if (!is_null($results['metadatas']->getContent())) {
+//             $metadatas = MetadataFactory::createCourseMetadataCollection(
+//                 $results['metadatas']->getContent());
+//             $partComplementaries['metadatas'] = $metadatas;
 
-        }
-        if (!is_null($results['tags']->getContent())) {
-            $tags = TagFactory::createCollection($results['tags']->getContent());
-            $partComplementaries['tags'] = $tags;
-        }
-        $partComplementaries['introduction'] = $results['introduction']->getContent();
+//         }
+//         if (!is_null($results['tags']->getContent())) {
+//             $tags = TagFactory::createCollection($results['tags']->getContent());
+//             $partComplementaries['tags'] = $tags;
+//         }
+//         $partComplementaries['introduction'] = $results['introduction']->getContent();
 
-        return $partComplementaries;
-    }
+//         return $partComplementaries;
+//     }
 
     /**
      * <p>
@@ -185,6 +194,7 @@ class PartRepository extends ApiRouteService
         $requests['courseMetadatas'] = CourseRepository::findCourseMetadatasRequest(
             $courseIdentifier);
         $requests['courseTags'] = CourseRepository::findCourseTagsRequest($courseIdentifier);
+        $requests['courseAuthors'] = CourseRepository::findCourseAuthorsRequest($courseIdentifier);
         $requests['toc'] = CourseRepository::findCourseTocRequest($courseIdentifier);
         /* Get part */
         $requests['part'] = self::findRequest($courseIdentifier, $partIdentifier);
@@ -202,15 +212,13 @@ class PartRepository extends ApiRouteService
          * ****************** */
 
         /* Check course and category */
+        ApiService::checkResponseSuccessful($results['category']);
+        ApiService::checkResponseSuccessful($results['course']);
+        ApiService::checkResponseSuccessful($results['part']);
+
         $course = $results['course']->getContent();
         $category = $results['category']->getContent();
 
-        if (empty($course)) {
-            throw new HttpException(404, 'Course '.$courseIdentifier.' does not exist');
-        }
-        if (empty($category)) {
-            throw new HttpException(404, 'Category '.$categoryIdentifier.' does not exist');
-        }
         $course = CourseFactory::create($course);
         $category = CategoryFactory::create($category);
 
@@ -218,21 +226,28 @@ class PartRepository extends ApiRouteService
             throw new HttpException(404,
                 'Course: '.$courseIdentifier.' is not in category "'.$categoryIdentifier.'"');
         }
+
         $course->setCategory($category);
+
         /* Get course complementaries */
-        if (!is_null($results['courseMetadatas']->getContent())) {
+        if (ApiService::isResponseSuccessful($results['courseMetadatas'])) {
             $metadatas = MetadataFactory::createCourseMetadataCollection(
                 $results['courseMetadatas']->getContent());
             $course->setMetadatas($metadatas);
         }
-        if (!is_null($results['courseTags']->getContent())) {
+        if (ApiService::isResponseSuccessful($results['courseTags'])) {
             $tags = TagFactory::createCollection($results['courseTags']->getContent());
             $course->setTags($tags);
         }
-        $toc = $results['toc']->getContent();
-        if (!empty($toc)) {
-            $toc = TocFactory::create($toc);
+
+        if (ApiService::isResponseSuccessful($results['toc'])) {
+            $toc = TocFactory::create($results['toc']->getContent());
             $course->setToc($toc);
+        }
+        if (!is_null($results['courseAuthors']->getContent())) {
+            $authors = AuthorFactory::createCollection(
+                $results['courseAuthors']->getContent());
+            $course->setAuthors($authors);
         }
 
         /* **************** *
@@ -240,23 +255,21 @@ class PartRepository extends ApiRouteService
          * **************** */
 
         /* Get part */
-        $partResult = $results['part']->getContent();
-        if (is_null($partResult)) {
-            throw new HttpException(404, 'Part '.$partIdentifier.' does not exist');
-        }
-        $part = PartFactory::create($partResult);
+        $part = PartFactory::create($results['part']->getContent());
+
         /* Get part complementaries */
-        if (!is_null($results['partMetadatas']->getContent())) {
+        if (ApiService::isResponseSuccessful($results['partMetadatas'])) {
             $metadatas = MetadataFactory::createCourseMetadataCollection(
                 $results['partMetadatas']->getContent());
             $part->setMetadatas($metadatas);
         }
-        $partTags = $results['partTags']->getContent();
-        if (!empty($partTags)) {
-            $tags = TagFactory::createCollection($partTags);
-            $partComplementaries['partTags'] = $tags;
+        if (ApiService::isResponseSuccessful($results['partTags'])) {
+            $tags = TagFactory::createCollection($results['partTags']->getContent());
+            $part->setTags($tags);
         }
-        $part->setIntroduction($results['introduction']->getContent());
+        if (ApiService::isResponseSuccessful($results['introduction'])) {
+            $part->setIntroduction($results['introduction']->getContent());
+        }
 
         return array('course'=> $course, 'part'=> $part);
     }
