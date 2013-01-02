@@ -70,28 +70,26 @@ class CourseRepository extends ApiRouteService
      * ********** METHODS ********* *
      *                              *
      * **************************** */
-    // FIXME Delete above
-//     /**
-//      * Returns a course
-//      *
-//      * @param mixed $courseIdentifier The course id | slug
-//      *
-//      * @return Course The course
-//      *
-//      * @deprecated
-//      */
-//     public function find($courseIdentifier)
-//     {
-//         $courseRequest = $this->findRequest($courseIdentifier);
+     /**
+      * Returns a course
+      *
+      * @param mixed $courseIdentifier The course id | slug
+      *
+      * @return Course The course
+      */
+     public function find($courseIdentifier)
+     {
+         $courseRequest = $this->findRequest($courseIdentifier);
 
-//         $courseResult = $this->claireApi->getResult($courseRequest);
+         $courseResult = $this->claireApi->getResult($courseRequest);
 
-//         ApiService::checkResponseSuccessful($courseResult);
-//         $course = CourseFactory::create($courseResult->getContent());
+         ApiService::checkResponseSuccessful($courseResult);
+         $course = CourseFactory::create($courseResult->getContent());
 
-//         return $course;
-//     }
+         return $course;
+     }
 
+// FIXME Delete above
 //     /**
 //      * <p>
 //      *     Returns the course complementaries
