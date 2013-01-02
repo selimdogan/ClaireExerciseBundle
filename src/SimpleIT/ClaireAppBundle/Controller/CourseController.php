@@ -85,6 +85,7 @@ class CourseController extends BaseController
                         'updatedAt' => $course->getUpdatedAt(),
                         'introduction' => $course->getIntroduction(),
                         'toc' => $this->courseService->getDisplayToc($course, $displayLevel),
+                        //FIXME license
                         'license' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_LICENSE),
                         'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION),
                         'authors' => $course->getAuthors()
@@ -177,7 +178,6 @@ class CourseController extends BaseController
         $pagination = $this->courseService->getPagination($course, $part, $displayLevel);
 
         $data['view'] = $this->getPartView($displayLevel, $part);
-
         $data['parameters'] = array(
                 'title' => $part->getTitle(),
                 'course' => $course, 'part' => $part,
@@ -185,13 +185,13 @@ class CourseController extends BaseController
                 'icon' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_IMAGE),
                 'aggregateRating' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_AGGREGATE_RATING),
                 'difficulty' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DIFFICULTY),
-                //FIXME DateInterval
                 'duration' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DURATION),
                 'timeline' => $this->courseService->getTimeline($course), 'tags' => $tags,
                 'updatedAt' => $part->getUpdatedAt(), 'pagination' => $pagination,
                 'introduction' => $part->getIntroduction(),
                 'toc' => $this->courseService->getDisplayToc($course, $displayLevel, $part),
                 'contentHtml' => $formatedContent,
+                // FIXME license
                 'license' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_LICENSE),
                 'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION),
                 'authors' => $course->getAuthors()

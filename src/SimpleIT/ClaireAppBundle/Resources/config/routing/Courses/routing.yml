@@ -21,4 +21,3 @@ SimpleIT_Claire_course_edit:
     defaults: { _controller: SimpleITClaireAppBundle:Course:edit }
     requirements:
         _method: get|post
-
