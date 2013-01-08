@@ -73,24 +73,23 @@ class PartRepository extends ApiRouteService
      * ********** METHODS ********* *
      *                              *
      * **************************** */
-//FIXME Delete Above
-//     /**
-//      * Returns a part
-//      *
-//      * @param mixed $courseIdentifier The course id | slug
-//      * @param mixed $partIdentifier   The part id | slug
-//      *
-//      * @return Part The part
-//      */
-//     public function find($courseIdentifier, $partIdentifier)
-//     {
-//         $partRequest = self::findRequest($courseIdentifier, $partIdentifier);
+     /**
+      * Returns a part
+      *
+      * @param mixed $courseIdentifier The course id | slug
+      * @param mixed $partIdentifier   The part id | slug
+      *
+      * @return Part The part
+      */
+     public function findPart($courseIdentifier, $partIdentifier)
+     {
+         $partRequest = self::findRequest($courseIdentifier, $partIdentifier);
 
-//         $partResult = $this->claireApi->getResult($partRequest);
-//         $part = PartFactory::create($partResult->getContent());
+         $partResult = $this->claireApi->getResult($partRequest);
+         $part = PartFactory::create($partResult->getContent());
 
-//         return $part;
-//     }
+         return $part;
+     }
 
     /**
      * Returns a part

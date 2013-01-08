@@ -208,11 +208,10 @@ class CourseService extends ClaireApi implements CourseServiceInterface
      * @param mixed $partIdentifier   The part id | slug
      *
      * @return Part
-     * @deprecated
      */
     public function getPart($courseIdentifier, $partIdentifier)
     {
-        $part = $this->partRepository->find($courseIdentifier, $partIdentifier);
+        $part = $this->partRepository->findPart($courseIdentifier, $partIdentifier);
 
         return $part;
     }
