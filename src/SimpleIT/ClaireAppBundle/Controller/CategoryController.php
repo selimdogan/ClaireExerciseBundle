@@ -42,6 +42,13 @@ class CategoryController extends BaseController
      */
     public function viewAction(Request $request)
     {
+        $this->processView($request);
+
+        return $this->generateView($this->view, $this->viewParameters);
+    }
+
+    protected function processView(Request $request)
+    {
         $categorySlug = $request->get('slug');
         $parameters = $request->query->all();
 
@@ -86,8 +93,6 @@ class CategoryController extends BaseController
             'appPager' => $results['courses']->getPager(),
             'totalItems' =>  $totalItems
         );
-
-        return $this->generateView($this->view, $this->viewParameters);
     }
 
 
@@ -99,6 +104,13 @@ class CategoryController extends BaseController
      * @return Symfony\Component\HttpFoundation\Response
      */
     public function viewTagAction(Request $request)
+    {
+        $this->processViewTag($request);
+
+        return $this->generateView($this->view, $this->viewParameters);
+    }
+
+    protected function processViewTag(Request $request)
     {
         $categorySlug = $request->get('categorySlug');
         $tagSlug = $request->get('slug');
@@ -144,8 +156,6 @@ class CategoryController extends BaseController
             'appPager' => $results['courses']->getPager(),
             'totalItems' =>  $totalItems
         );
-
-        return $this->generateView($this->view, $this->viewParameters);
     }
 
     /**
