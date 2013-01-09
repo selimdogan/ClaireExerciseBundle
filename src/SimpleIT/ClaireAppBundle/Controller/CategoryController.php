@@ -75,8 +75,14 @@ class CategoryController extends BaseController
 
         $results = $this->getClaireApi()->getResults($requests);
 
-        ApiService::checkResponseSuccessful($results['courses']);
-        ApiService::checkResponseSuccessful($results['tags']);
+        if(is_null($results['courses']) || $results['courses'] === false)
+        {
+            throw new \Symfony\Component\HttpKernel\Exception\HttpException(500, 'Oups, la liste des tutoriels n\'a pas pu être générée');
+        }
+        if(is_null($results['tags']) || $results['tags'] === false)
+        {
+            throw new \Symfony\Component\HttpKernel\Exception\HttpException(500, 'Oups, la liste des tutoriels n\'a pas pu être générée');
+        }
 
         if(is_null($results['courses']->getPager()))
         {
@@ -140,9 +146,18 @@ class CategoryController extends BaseController
         );
         $results = $this->getClaireApi()->getResults($requests);
 
-        ApiService::checkResponseSuccessful($results['courses']);
-        ApiService::checkResponseSuccessful($results['category']);
-        ApiService::checkResponseSuccessful($results['associated-tags']);
+        if(is_null($results['courses']) || $results['courses'] === false)
+        {
+            throw new \Symfony\Component\HttpKernel\Exception\HttpException(500, 'Oups, la liste des tutoriels n\'a pas pu être générée');
+        }
+        if(is_null($results['category']) || $results['category'] === false)
+        {
+            throw new \Symfony\Component\HttpKernel\Exception\HttpException(500, 'Oups, la liste des tutoriels n\'a pas pu être générée');
+        }
+        if(is_null($results['associated-tags']) || $results['associated-tags'] === false)
+        {
+            throw new \Symfony\Component\HttpKernel\Exception\HttpException(500, 'Oups, la liste des tutoriels n\'a pas pu être générée');
+        }
 
         if(is_null($results['courses']->getPager()))
         {
