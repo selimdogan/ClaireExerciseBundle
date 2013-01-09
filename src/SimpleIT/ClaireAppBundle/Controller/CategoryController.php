@@ -6,7 +6,7 @@ use SimpleIT\ClaireAppBundle\Controller\BaseController;
 use SimpleIT\ClaireAppBundle\Form\Type\CourseType;
 use SimpleIT\AppBundle\Model\ApiRequestOptions;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
+use SimpleIT\AppBundle\Services\ApiService;
 
 /**
  * Category controller
@@ -68,6 +68,9 @@ class CategoryController extends BaseController
 
         $results = $this->getClaireApi()->getResults($requests);
 
+        ApiService::checkResponseSuccessful($results['courses']);
+        ApiService::checkResponseSuccessful($results['tags']);
+
         if(is_null($results['courses']->getPager()))
         {
             $totalItems = count($results['courses']->getContent());
@@ -124,6 +127,10 @@ class CategoryController extends BaseController
             $tagSlug
         );
         $results = $this->getClaireApi()->getResults($requests);
+
+        ApiService::checkResponseSuccessful($results['courses']);
+        ApiService::checkResponseSuccessful($results['category']);
+        ApiService::checkResponseSuccessful($results['associated-tags']);
 
         if(is_null($results['courses']->getPager()))
         {
