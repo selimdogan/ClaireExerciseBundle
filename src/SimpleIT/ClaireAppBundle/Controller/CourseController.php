@@ -156,11 +156,14 @@ class CourseController extends BaseController
         $displayLevel = $course->getDisplayLevel();
         /* Get the Part content (only for 1b or 2c) */
         $formatedContent = null;
+        $introduction = null;
         if ($displayLevel === 1 || Part::TYPE_TITLE_3 === $part->getType()) {
             $content = $this->courseService->getPartContent($courseSlug, $partSlug);
             if (null != $content) {
                 $formatedContent = $this->courseService->getFormatedContent($content);
             }
+        } else {
+           $introduction = $this->courseService->getPartIntroduction($courseSlug, $partSlug);
         }
         //TODO Api Route
         $parentPart = null;
@@ -188,10 +191,9 @@ class CourseController extends BaseController
                 'duration' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DURATION),
                 'timeline' => $this->courseService->getTimeline($course), 'tags' => $tags,
                 'updatedAt' => $part->getUpdatedAt(), 'pagination' => $pagination,
-                'introduction' => $part->getIntroduction(),
+                'introduction' => $introduction,
                 'toc' => $this->courseService->getDisplayToc($course, $displayLevel, $part),
                 'contentHtml' => $formatedContent,
-                // FIXME license
                 'license' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_LICENSE),
                 'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION),
                 'authors' => $course->getAuthors()

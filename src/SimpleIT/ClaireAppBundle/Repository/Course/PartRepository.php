@@ -91,14 +91,34 @@ class PartRepository extends ApiRouteService
          return $part;
      }
 
+     /**
+      * Returns a part introduction
+      *
+      * @param mixed  $courseIdentifier The course id | slug
+      * @param mixed  $partIdentifier   The part id | slug
+      * @param string $format           The requested format
+      *
+      * @return string The part introduction
+      */
+     public function findIntroduction($courseIdentifier, $partIdentifier)
+     {
+         $partRequest = self::findPartIntroductionRequest($courseIdentifier, $partIdentifier);
+
+         $partResult = $this->claireApi->getResult($partRequest);
+         ApiService::checkResponseSuccessful($partResult);
+
+         return $partResult->getContent();
+     }
+
+
     /**
-     * Returns a part
+     * Returns a part content
      *
      * @param mixed  $courseIdentifier The course id | slug
      * @param mixed  $partIdentifier   The part id | slug
      * @param string $format           The requested format
      *
-     * @return Part The part
+     * @return Part The part content
      */
     public function findContent($courseIdentifier, $partIdentifier, $format = null)
     {
@@ -200,9 +220,9 @@ class PartRepository extends ApiRouteService
         /* Get part complementaries */
         $requests['partMetadatas'] = self::findPartMetadatasRequest($courseIdentifier,
             $partIdentifier);
-        $requests['partTags'] = self::findPartTagsRequest($courseIdentifier, $partIdentifier);
-        $requests['introduction'] = self::findPartIntroductionRequest($courseIdentifier,
-            $partIdentifier);
+         $requests['partTags'] = self::findPartTagsRequest($courseIdentifier, $partIdentifier);
+//         $requests['introduction'] = self::findPartIntroductionRequest($courseIdentifier,
+//             $partIdentifier);
 
         $results = $this->claireApi->getResults($requests);
 
@@ -266,9 +286,9 @@ class PartRepository extends ApiRouteService
             $tags = TagFactory::createCollection($results['partTags']->getContent());
             $part->setTags($tags);
         }
-        if (ApiService::isResponseSuccessful($results['introduction'])) {
-            $part->setIntroduction($results['introduction']->getContent());
-        }
+//         if (ApiService::isResponseSuccessful($results['introduction'])) {
+//             $part->setIntroduction($results['introduction']->getContent());
+//         }
 
         return array('course'=> $course, 'part'=> $part);
     }
@@ -356,7 +376,7 @@ class PartRepository extends ApiRouteService
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
 
         $apiRequestOptions = new ApiRequestOptions();
-        $apiRequestOptions->setFormat('text/html');
+        $apiRequestOptions->setFormat(ApiRequest::FORMAT_HTML);
         $apiRequest->setOptions($apiRequestOptions);
 
         return $apiRequest;

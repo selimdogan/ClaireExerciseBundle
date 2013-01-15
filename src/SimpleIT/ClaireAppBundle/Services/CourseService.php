@@ -289,6 +289,19 @@ class CourseService extends ClaireApi implements CourseServiceInterface
     }
 
     /**
+     * Returns the html part introduction
+     *
+     * @param mixed $courseIdentifier The course id | slug
+     * @param mixed $partIdentifier   The part id | slug
+     *
+     * @return string
+     */
+    public function getPartIntroduction($courseIdentifier, $partIdentifier)
+    {
+        return $this->partRepository->findIntroduction($courseIdentifier, $partIdentifier);
+    }
+
+    /**
      * Returns the html part content
      *
      * @param mixed $courseIdentifier The course id | slug
