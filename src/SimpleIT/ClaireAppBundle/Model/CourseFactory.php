@@ -47,4 +47,21 @@ class CourseFactory
         }
         return $course;
     }
+
+    /**
+     * Create a collection of courses
+     *
+     * @param mixed $courseResources The resources [Array | Paginator]
+     *
+     * @return array The courses
+     */
+    public static function createCollection($courseResources)
+    {
+        $courses = array();
+        foreach ($courseResources as $courseResource) {
+            $course = self::create($courseResource);
+            $courses[] = $course;
+        }
+        return $courses;
+    }
 }

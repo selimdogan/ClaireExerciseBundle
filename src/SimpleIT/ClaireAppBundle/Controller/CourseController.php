@@ -2,17 +2,11 @@
 namespace SimpleIT\ClaireAppBundle\Controller;
 
 use SimpleIT\ClaireAppBundle\Model\Course\Part;
-
 use SimpleIT\ClaireAppBundle\Model\Metadata;
-
 use SimpleIT\ClaireAppBundle\Model\CourseFactory;
-
 use SimpleIT\ClaireAppBundle\Services\CourseService;
-
 use SimpleIT\Utils\ArrayUtils;
-
 use SimpleIT\AppBundle\Services\ApiService;
-
 
 use Symfony\Component\HttpFoundation\Request;
 use SimpleIT\ClaireAppBundle\Controller\BaseController;
@@ -90,6 +84,7 @@ class CourseController extends BaseController
                         'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION),
                         'authors' => $course->getAuthors()
                 );
+
         return $data;
     }
 
@@ -128,6 +123,7 @@ class CourseController extends BaseController
     public function partAction(Request $request, $categorySlug, $courseSlug, $partSlug)
     {
         $data = $this->processPartAction($request, $categorySlug, $courseSlug, $partSlug);
+        
         return $this->render($data['view'], $data['parameters']);
     }
 
@@ -196,6 +192,7 @@ class CourseController extends BaseController
                 'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION),
                 'authors' => $course->getAuthors()
                 );
+
         return $data;
     }
 
@@ -223,8 +220,6 @@ class CourseController extends BaseController
         return $view;
     }
 
-
-    //FIXME To put on home page of SdZ v4
     /**
      * Courses homepage
      *
@@ -234,35 +229,30 @@ class CourseController extends BaseController
      */
     public function indexAction(Request $request)
     {
-
         $options = new ApiRequestOptions();
         $options->setItemsPerPage(9);
         $options->setPageNumber(1);
         $options->addFilter('sort', 'updatedAt desc');
 
         $requests['courses'] = $this->getClaireApi('courses')->getCourses($options);
-
-        $optionsCategories = new ApiRequestOptions();
-        $optionsCategories->setItemsPerPage(3);
-        $optionsCategories->setPageNumber(1);
-
-        $requests['categories'] = $this->getClaireApi('categories')->getCategories($optionsCategories);
-
-        $optionsTags = new ApiRequestOptions();
-        $optionsTags->setPageNumber(1);
-
-        $requests['tags'] = $this->getClaireApi('categories')->getTags($optionsTags);
-
         $results = $this->getClaireApi()->getResults($requests);
 
+        $courses = $results['courses'];
+        if(is_null($courses) || $courses === false)
+        {
+            throw new \Symfony\Component\HttpKernel\Exception\HttpException(500, 'Oups, la liste des tutoriels n\'a pas pu être générée');
+        }
 
-        $this->view = 'SimpleITClaireAppBundle:Course:list.html.twig';
-        $this->viewParameters = array(
-            'courses' => $results['courses']->getContent(),
-            'categories' => $results['categories']->getContent(),
-            'tags' => $results['tags']->getContent()
+
+        $data['view'] = 'SimpleITClaireAppBundle:Course:index.html.twig';
+        $data['viewParameters'] = array(
+            'courses' => $courses->getContent(),
+            'categories' => $categories->getContent(),
+            'tags' => $tags->getContent()
         );
-        return $this->generateView($this->view, $this->viewParameters);
+
+
+        return $this->render($data['view'], $data['parameters']);
     }
 
     /**

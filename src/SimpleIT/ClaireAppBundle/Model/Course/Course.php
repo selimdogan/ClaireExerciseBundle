@@ -243,7 +243,7 @@ class Course
      */
     public function addMetadata(Metadata $metadata)
     {
-        $this->metadatas[] = $metadatas;
+        $this->metadatas[] = $metadata;
     }
 
     /**
