@@ -220,7 +220,7 @@ class PartRepository extends ApiRouteService
         /* Get part complementaries */
         $requests['partMetadatas'] = self::findPartMetadatasRequest($courseIdentifier,
             $partIdentifier);
-         $requests['partTags'] = self::findPartTagsRequest($courseIdentifier, $partIdentifier);
+//      $requests['partTags'] = self::findPartTagsRequest($courseIdentifier, $partIdentifier);
 //         $requests['introduction'] = self::findPartIntroductionRequest($courseIdentifier,
 //             $partIdentifier);
 
@@ -282,10 +282,10 @@ class PartRepository extends ApiRouteService
                 $results['partMetadatas']->getContent());
             $part->setMetadatas($metadatas);
         }
-        if (ApiService::isResponseSuccessful($results['partTags'])) {
-            $tags = TagFactory::createCollection($results['partTags']->getContent());
-            $part->setTags($tags);
-        }
+//        if (ApiService::isResponseSuccessful($results['partTags'])) {
+//            $tags = TagFactory::createCollection($results['partTags']->getContent());
+//            $part->setTags($tags);
+//        }
 //         if (ApiService::isResponseSuccessful($results['introduction'])) {
 //             $part->setIntroduction($results['introduction']->getContent());
 //         }
