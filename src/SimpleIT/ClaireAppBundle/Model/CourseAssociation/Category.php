@@ -43,6 +43,11 @@ class Category
     private $tags = array();
 
     /**
+     * @var array Courses
+     */
+    private $courses = array();
+
+    /**
      * Getter for $id
      *
      * @return function the $id
@@ -180,5 +185,25 @@ class Category
     public function setTags(array $tags)
     {
         $this->tags = $tags;
+    }
+
+    /**
+     * Getter for $courses
+     *
+     * @return function the $courses
+     */
+    public function getCourses()
+    {
+        return $this->courses;
+    }
+
+    /**
+     * Setter for $courses
+     *
+     * @param array $courses
+     */
+    public function setCourses(array $courses)
+    {
+        $this->courses = $courses;
     }
 }

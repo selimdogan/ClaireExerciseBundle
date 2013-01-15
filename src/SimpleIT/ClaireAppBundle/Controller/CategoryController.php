@@ -58,18 +58,6 @@ class CategoryController extends BaseController
         $categorySlug = $request->get('slug');
         $parameters = $request->query->all();
 
-        /* Get the category */
-        $categoryRequest = $this->getClaireApi('categories')->getCategory($categorySlug);
-        $category = $this->getClaireApi()->getResult($categoryRequest);
-
-        /* Throw 404 if object not found */
-        $this->checkObjectFound($category);
-
-        /* get related Tags and courses */
-        $requests['tags'] = $this->getClaireApi('categories')->getTagsByCategory($categorySlug);
-        // @FIXME USE THIS REQUEST
-        //$requests['courses'] = $this->getClaireApi('courses')->getCoursesByCategory($options);
-
         $options = new ApiRequestOptions(array('sort'));
         $options->setItemsPerPage(18);
         $options->setPageNumber($request->get('page', 1));
@@ -77,35 +65,19 @@ class CategoryController extends BaseController
         $options->addFilters($parameters, array('sort'));
         $options->addFilter('category', $categorySlug);
 
-        $requests['courses'] = $this->getClaireApi('courses')->getCourses($options);
+        /* Get the category */
+        $this->categoryService = $this->get('simpleit.claire.category');
 
-        $results = $this->getClaireApi()->getResults($requests);
+        $category = $this->categoryService->getCategoryWithCourses($categorySlug, $options);
 
-        if(is_null($results['courses']) || $results['courses'] === false)
-        {
-            throw new \Symfony\Component\HttpKernel\Exception\HttpException(500, 'Oups, la liste des tutoriels n\'a pas pu être générée');
-        }
-        if(is_null($results['tags']) || $results['tags'] === false)
-        {
-            throw new \Symfony\Component\HttpKernel\Exception\HttpException(500, 'Oups, la liste des tutoriels n\'a pas pu être générée');
-        }
-
-        if(is_null($results['courses']->getPager()))
-        {
-            $totalItems = count($results['courses']->getContent());
-        }
-        else
-        {
-            $totalItems = $results['courses']->getPager()->getTotalItems();
-        }
+        $totalItems = count($category->getCourses());
 
         /* Prepare view and parameters */
         $this->view = 'SimpleITClaireAppBundle:Category:view.html.twig';
         $this->viewParameters = array(
-            'category' => $category->getContent(),
-            'tags' => $results['tags']->getContent(),
-            'courses' => $results['courses']->getContent(),
-            'appPager' => $results['courses']->getPager(),
+            'category' => $category,
+            'tags' => $category->getTags(),
+            'courses' => $category->getCourses(),
             'totalItems' =>  $totalItems
         );
     }

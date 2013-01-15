@@ -1,6 +1,9 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Services;
 
+use SimpleIT\ClaireAppBundle\Api\ClaireApi;
+use SimpleIT\AppBundle\Model\ApiRequestOptions;
+
 /**
  * Class CategoryService
  *
@@ -8,8 +11,21 @@ namespace SimpleIT\ClaireAppBundle\Services;
  */
 class CategoryService
 {
+    /** @var ClaireApi */
+    private $claireApi;
+
     /** @var CategoryRepository */
     private $categoryRepository;
+
+    /**
+     * Setter for $claireApi
+     *
+     * @param ClaireApi $claireApi
+     */
+    public function setClaireApi(ClaireApi $claireApi)
+    {
+        $this->claireApi = $claireApi;
+    }
 
     /**
      * Setter for $categoryRepository
@@ -24,12 +40,28 @@ class CategoryService
     /**
      * Returns a category by the slug
      *
-     * @param string $categorySlug The category's slug
+     * @param string $categoryIdentifier The category's identifier id | slug
      *
      * @return Category
      */
-    public function getCategoryBySlug($categorySlug)
+    public function getCategory($categoryIdentifier)
     {
-        $category = $this->categoryRepository->findBySlug($categorySlug);
+        $category = $this->categoryRepository->find($categoryIdentifier);
+
+        return $category;
+    }
+
+    /**
+     * Returns a complete category by the slug
+     *
+     * @param string $categoryIdentifier The category's identifier id | slug
+     *
+     * @return Category
+     */
+    public function getCategoryWithCourses($categoryIdentifier, ApiRequestOptions $options)
+    {
+        $category = $this->categoryRepository->findWithCourses($categoryIdentifier, $options);
+
+        return $category;
     }
 }
