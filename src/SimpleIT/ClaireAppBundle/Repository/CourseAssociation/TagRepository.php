@@ -93,9 +93,10 @@ class TagRepository extends ApiRouteService
         $tag->setCategory($category);
 
         if (ApiService::isResponseSuccessful($results['courses'])) {
-            //$courses = CourseFactory::createCollection(
-            //    $results['courses']->getContent());
-            $tag->setCourses($results['courses']->getContent());
+            $courses = CourseFactory::createCollection(
+                $results['courses']->getContent());
+            
+            $tag->setCourses($courses);
         }
 
         if (ApiService::isResponseSuccessful($results['associatedTags'])) {

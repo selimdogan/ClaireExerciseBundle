@@ -3,6 +3,7 @@ namespace SimpleIT\ClaireAppBundle\Repository\CourseAssociation;
 
 use SimpleIT\AppBundle\Services\ApiService;
 use SimpleIT\ClaireAppBundle\Model\CategoryFactory;
+use SimpleIT\ClaireAppBundle\Model\CourseFactory;
 use SimpleIT\ClaireAppBundle\Model\TagFactory;
 use SimpleIT\ClaireAppBundle\Api\ClaireApi;
 use SimpleIT\AppBundle\Model\ApiRequest;
@@ -57,16 +58,19 @@ class CategoryRepository extends ApiRouteService
 
         $category = CategoryFactory::create($results['category']->getContent());
 
-        if (ApiService::isResponseSuccessful($results['tags'])) {
-           /* $tags = TagFactory::createCollection(
+        if (ApiService::isResponseSuccessful($results['tags']))
+        {
+            $tags = TagFactory::createCollection(
                 $results['tags']->getContent());
-            $category->setTags($tags);*/
-
-            $category->setTags($results['tags']->getContent());
+            $category->setTags($tags);
         }
 
-        if (ApiService::isResponseSuccessful($results['courses'])) {
-            $category->setCourses($results['courses']->getContent());
+        if (ApiService::isResponseSuccessful($results['courses']))
+        {
+            $courses = CourseFactory::createCollection(
+                $results['courses']->getContent());
+
+            $category->setCourses($courses);
         }
 
         return $category;

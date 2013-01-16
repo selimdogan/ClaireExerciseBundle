@@ -2,6 +2,7 @@
 namespace SimpleIT\ClaireAppBundle\Model;
 
 use SimpleIT\ClaireAppBundle\Model\Course\Course;
+use SimpleIT\AppBundle\Model\Paginator;
 
 /**
  * Class CourseFactory
@@ -45,6 +46,9 @@ class CourseFactory
             $category = CategoryFactory::create($courseResource['category']);
             $course->setCategory($category);
         }
+        if (isset($courseResource['metadatas'])) {
+            $course->setMetadatas($courseResource['metadatas']);
+        }
         return $course;
     }
 
@@ -58,10 +62,17 @@ class CourseFactory
     public static function createCollection($courseResources)
     {
         $courses = array();
+
         foreach ($courseResources as $courseResource) {
             $course = self::create($courseResource);
             $courses[] = $course;
         }
+        if($courseResources instanceof Paginator)
+        {
+            $courseResources->setData($courses);
+            $courses = $courseResources;
+        }
+
         return $courses;
     }
 }

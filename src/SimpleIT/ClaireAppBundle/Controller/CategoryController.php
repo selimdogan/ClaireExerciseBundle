@@ -14,32 +14,6 @@ use SimpleIT\AppBundle\Services\ApiService;
 class CategoryController extends BaseController
 {
     /**
-     * View the Categories list
-     *
-     * @return Symfony\Component\HttpFoundation\Response
-     */
-    public function listAction()
-    {
-        $this->prepareListAction();
-
-        return $this->render($this->view, $this->viewParameters);
-    }
-
-    private function prepareListAction()
-    {
-        /* Get the categories */
-        $categoryRequest = $this->getCategoryRouteService()->getCategory();
-        $categories = $this->getApiService()->getResult($categoryRequest);
-
-        /* Prepare view and parameters */
-        $this->view = 'SimpleITClaireAppBundle:Category:list.html.twig';
-        $this->viewParameters = array(
-            'categories' => $categories->getContent()
-        );
-    }
-
-
-    /**
      * View a single category
      *
      * @param Request $request The request

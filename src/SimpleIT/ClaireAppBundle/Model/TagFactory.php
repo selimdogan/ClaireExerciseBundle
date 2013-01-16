@@ -36,6 +36,10 @@ class TagFactory
         if (isset($tagResource['description'])) {
             $tag->setDescription($tagResource['description']);
         }
+        if (isset($tagResource['category'])) {
+            $category = CategoryFactory::create($tagResource['category']);
+            $tag->setCategory($category);
+        }
         return $tag;
     }
 
