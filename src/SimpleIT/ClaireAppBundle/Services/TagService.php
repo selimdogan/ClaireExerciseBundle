@@ -2,6 +2,7 @@
 namespace SimpleIT\ClaireAppBundle\Services;
 
 use SimpleIT\ClaireAppBundle\Api\ClaireApi;
+use SimpleIT\AppBundle\Model\ApiRequestOptions;
 
 /**
  * Class CategoryService
@@ -62,6 +63,21 @@ class TagService
         $tag = $this->tagRepository->find($categoryIdentifier, $tagIdentifier);
 
         return $tag;
+    }
+
+    /**
+     * Get all tags
+     *
+     * @param mixed $categoryIdentifier   The category id | slug*
+     * @param mixed $tagIdentifier The tag id | slug
+     *
+     * @return Tag
+     */
+    public function getTags(ApiRequestOptions $options)
+    {
+        $tags = $this->tagRepository->getAll($options);
+
+        return $tags;
     }
 
     /**

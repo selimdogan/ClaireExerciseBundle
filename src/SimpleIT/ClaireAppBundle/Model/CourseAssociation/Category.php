@@ -33,6 +33,11 @@ class Category
     private $description;
 
     /**
+     * @var boolean state
+     */
+    private $state;
+
+    /**
      * @var integer position
      */
     private $position;
@@ -145,6 +150,26 @@ class Category
     public function setDescription($description)
     {
         $this->description = $description;
+    }
+
+    /**
+     * Getter for $state
+     *
+     * @return function the $state
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Setter for $state
+     *
+     * @param string $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
     }
 
     /**

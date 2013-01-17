@@ -35,6 +35,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\Constraints\All;
 
 use SimpleIT\AppBundle\Model\ApiResult;
+use SimpleIT\AppBundle\Model\ApiRequestOptions;
 
 /**
  * CourseService
@@ -194,6 +195,19 @@ class CourseService extends ClaireApi implements CourseServiceInterface
     {
         return $this->courseRepository->findCourseWithComplementaries($courseIdentifier, $categoryIdentifier);
     }
+
+    /**
+     * Get courses
+     *
+     * @param ApiRequestOptions $options List option
+     *
+     * @return Collection
+     */
+    public function getCourses(ApiRequestOptions $options)
+    {
+        return $this->courseRepository->getAll($options);
+    }
+
 
     /* **************************** *
      *                              *

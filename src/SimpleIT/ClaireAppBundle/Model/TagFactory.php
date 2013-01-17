@@ -50,7 +50,7 @@ class TagFactory
      *
      * @return array The tags
      */
-    public static function createCollection(array $tagResources)
+    public static function createCollection($tagResources)
     {
         $tags = array();
         foreach ($tagResources as $tagResource) {

@@ -35,10 +35,30 @@ class CategoryFactory
         if (isset($categoryRessource['description'])) {
             $category->setDescription($categoryRessource['description']);
         }
+        if (isset($categoryRessource['state'])) {
+            $category->setState($categoryRessource['state']);
+        }
         if (isset($categoryRessource['position'])) {
             $category->setPosition($categoryRessource['position']);
         }
 
         return $category;
+    }
+
+    /**
+     * Create a collection of categories
+     *
+     * @param array $categoryResources The resources
+     *
+     * @return array The categories
+     */
+    public static function createCollection($categoryResources)
+    {
+        $categories = array();
+        foreach ($categoryResources as $categoryResource) {
+            $category = self::create($categoryResource);
+            $categories[] = $category;
+        }
+        return $categories;
     }
 }

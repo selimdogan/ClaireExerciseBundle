@@ -52,6 +52,20 @@ class CategoryService
     }
 
     /**
+     * Returns all categories
+     *
+     * @param ApiRequestOptions $options The list options
+     *
+     * @return Collection
+     */
+    public function getCategories(ApiRequestOptions $options)
+    {
+        $categories = $this->categoryRepository->getAll($options);
+
+        return $categories;
+    }
+
+    /**
      * Returns a complete category by the slug
      *
      * @param string $categoryIdentifier The category's identifier id | slug

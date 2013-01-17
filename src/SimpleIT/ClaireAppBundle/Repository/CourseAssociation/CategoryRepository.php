@@ -77,6 +77,27 @@ class CategoryRepository extends ApiRouteService
     }
 
     /**
+     * Returns all categories
+     *
+     * @param ApiRequestOptions $apiRequestOptions Api request options
+     *
+     * @return Collection Categories
+     */
+    public function getAll(ApiRequestOptions $apiRequestOptions)
+    {
+        $requests['categories'] = self::findAll($apiRequestOptions);
+
+        $results = $this->claireApi->getResults($requests);
+
+        ApiService::checkResponseSuccessful($results['categories']);
+
+        $categories = CategoryFactory::createCollection(
+            $results['categories']->getContent());
+
+        return $categories;
+    }
+
+    /**
      * Returns a category
      *
      * @param mixed $categoryIdentifier The category identifier
@@ -113,6 +134,27 @@ class CategoryRepository extends ApiRouteService
     }
 
     /**
+     * Returns all categories (ApiRequest)
+     *
+     * @param ApiRequestOptions $apiRequestOptions Api request options
+     *
+     * @return ApiRequest
+     */
+    public static function findAll(ApiRequestOptions $apiRequestOptions)
+    {
+        $apiRequest = new ApiRequest();
+        $apiRequest->setBaseUrl(self::URL_CATEGORIES);
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        if(!is_null($apiRequestOptions))
+        {
+            $apiRequest->setOptions($apiRequestOptions);
+        }
+
+        return $apiRequest;
+    }
+
+    /**
      * Returns the category (ApiRequest)
      *
      * @param mixed $categoryIdentifier The category identifier
@@ -131,7 +173,8 @@ class CategoryRepository extends ApiRouteService
     /**
      * Returns the category courses
      *
-     * @param mixed $categoryIdentifier The category identifier
+     * @param mixed             $categoryIdentifier The category identifier
+     * @param ApiRequestOptions $apiRequestOptions  Api request options
      *
      * @return ApiRequest
      */

@@ -71,8 +71,30 @@ class TagRepository extends ApiRouteService
     /**
      * Get single tag from category and tag slug
      *
-     * @param string $categoryIdentifier The requested category slug | id
-     * @param string $tagIdentifier      The requested tag slug | id
+     * @param ApiRequestOptions $apiRequestOptions
+     *
+     * @return Tag
+     */
+    public function getAll(ApiRequestOptions $apiRequestOptions)
+    {
+        $requests['tags'] = self::findAll($apiRequestOptions);
+
+        $results = $this->claireApi->getResults($requests);
+
+        ApiService::checkResponseSuccessful($results['tags']);
+
+        $tags = TagFactory::createCollection(
+            $results['tags']->getContent());
+
+        return $tags;
+    }
+
+    /**
+     * Get single tag from category and tag slug
+     *
+     * @param string            $categoryIdentifier The requested category slug | id
+     * @param string            $tagIdentifier      The requested tag slug | id
+     * @param ApiRequestOptions $apiRequestOptions  The list options
      *
      * @return Tag
      */
@@ -95,7 +117,7 @@ class TagRepository extends ApiRouteService
         if (ApiService::isResponseSuccessful($results['courses'])) {
             $courses = CourseFactory::createCollection(
                 $results['courses']->getContent());
-            
+
             $tag->setCourses($courses);
         }
 
@@ -121,6 +143,27 @@ class TagRepository extends ApiRouteService
         $apiRequest = new ApiRequest();
         $apiRequest->setBaseUrl(self::URL_CATEGORIES.$categoryIdentifier.self::URL_TAGS.$tagIdentifier);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        return $apiRequest;
+    }
+
+    /**
+     * Return all tags (ApiRequest)
+     *
+     * @param ApiRequestOptions $apiRequestOptions
+     *
+     * @return ApiRequest
+     */
+    public static function findAll(ApiRequestOptions $apiRequestOptions)
+    {
+        $apiRequest = new ApiRequest();
+        $apiRequest->setBaseUrl(self::URL_TAGS);
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        if(!is_null($apiRequestOptions))
+        {
+            $apiRequest->setOptions($apiRequestOptions);
+        }
 
         return $apiRequest;
     }

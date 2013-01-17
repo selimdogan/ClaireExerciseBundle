@@ -201,6 +201,27 @@ class CourseRepository extends ApiRouteService
         return $course;
     }
 
+    /**
+     * Get all courses
+     *
+     * @param ApiRequestOptions $options The collection options
+     *
+     * @return Collection
+     */
+    public function getAll(ApiRequestOptions $options)
+    {
+        $requests['courses'] = $this->findAll($options);
+
+        $results = $this->claireApi->getResults($requests);
+
+        ApiService::checkResponseSuccessful($results['courses']);
+
+        $courses = CourseFactory::createCollection(
+            $results['courses']->getContent());
+
+        return $courses;
+    }
+
     /* **************************** *
      *                              *
      * ********* REQUESTS ********* *
@@ -218,6 +239,27 @@ class CourseRepository extends ApiRouteService
         $apiRequest = new ApiRequest();
         $apiRequest->setBaseUrl(self::URL_COURSES.$courseIdentifier);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        return $apiRequest;
+    }
+
+    /**
+     * Returns all the courses (ApiRequest)
+     *
+     * @param ApiRequestOptions $apiRequestOptions List options
+     *
+     * @return ApiRequest
+     */
+    public static function findAll(ApiRequestOptions $apiRequestOptions)
+    {
+        $apiRequest = new ApiRequest();
+        $apiRequest->setBaseUrl(self::URL_COURSES);
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        if(!is_null($apiRequestOptions))
+        {
+            $apiRequest->setOptions($apiRequestOptions);
+        }
 
         return $apiRequest;
     }
