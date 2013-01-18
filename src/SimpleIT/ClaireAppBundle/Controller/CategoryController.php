@@ -33,7 +33,7 @@ class CategoryController extends BaseController
         $parameters = $request->query->all();
 
         $options = new ApiRequestOptions(array('sort'));
-        $options->setItemsPerPage(18);
+        $options->setItemsPerPage(4);
         $options->setPageNumber($request->get('page', 1));
         $options->addFilter('sort', 'title asc');
         $options->addFilters($parameters, array('sort'));
@@ -44,7 +44,15 @@ class CategoryController extends BaseController
 
         $category = $this->categoryService->getCategoryWithCourses($categorySlug, $options);
 
-        $totalItems = count($category->getCourses());
+        if(!is_array($category->getCourses()))
+        {
+            $totalItems = $category->getCourses()->getTotalItems();
+        }
+        else
+        {
+            $totalItems = count($category->getCourses());
+        }
+
 
         /* Prepare view and parameters */
         $this->view = 'SimpleITClaireAppBundle:Category:view.html.twig';

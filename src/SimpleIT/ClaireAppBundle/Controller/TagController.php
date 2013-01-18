@@ -44,7 +44,14 @@ class TagController extends BaseController
 
         $tag = $this->tagService->getTagWithCourses($categorySlug, $tagSlug, $options);
 
-        $totalItems = count($tag->getCourses());
+        if(!is_array($tag->getCourses()))
+        {
+            $totalItems = $tag->getCourses()->getTotalItems();
+        }
+        else
+        {
+            $totalItems = count($tag->getCourses());
+        }
 
         /* Prepare view and parameters */
         $this->view = 'TutorialBundle:Category:viewTag.html.twig';
