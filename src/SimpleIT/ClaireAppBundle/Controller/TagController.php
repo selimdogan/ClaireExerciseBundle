@@ -44,7 +44,7 @@ class TagController extends BaseController
 
         $tag = $this->tagService->getTagWithCourses($categorySlug, $tagSlug, $options);
 
-        if(!is_array($tag->getCourses()))
+        if(is_object($tag->getCourses()))
         {
             $totalItems = $tag->getCourses()->getTotalItems();
         }

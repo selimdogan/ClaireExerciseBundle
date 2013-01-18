@@ -49,6 +49,9 @@ class CourseFactory
         if (isset($courseResource['metadatas'])) {
             $course->setMetadatas($courseResource['metadatas']);
         }
+        if (isset($courseResource['tags'])) {
+            $course->setTags($courseResource['tags']);
+        }
         return $course;
     }
 
