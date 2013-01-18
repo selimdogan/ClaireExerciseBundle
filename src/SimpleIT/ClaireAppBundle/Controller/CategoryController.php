@@ -33,7 +33,7 @@ class CategoryController extends BaseController
         $parameters = $request->query->all();
 
         $options = new ApiRequestOptions(array('sort'));
-        $options->setItemsPerPage(4);
+        $options->setItemsPerPage(18);
         $options->setPageNumber($request->get('page', 1));
         $options->addFilter('sort', 'title asc');
         $options->addFilters($parameters, array('sort'));
