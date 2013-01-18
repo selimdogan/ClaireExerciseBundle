@@ -532,8 +532,12 @@ class CourseService extends ClaireApi implements CourseServiceInterface
             $part = $toc[$i];
 
             if (false !== array_search($part->getType(), $allowedTypes)) {
-                $pagination['next'] = $part;
-                $find = true;
+                if ($currentPart->getId() !== $part->getId())
+                {
+                    $pagination['next'] = $part;
+                    $find = true;
+                }
+
             }
             $i++;
         }
