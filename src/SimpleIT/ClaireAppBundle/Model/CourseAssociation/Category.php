@@ -227,7 +227,7 @@ class Category
      *
      * @param array $courses
      */
-    public function setCourses(array $courses)
+    public function setCourses($courses)
     {
         $this->courses = $courses;
     }
