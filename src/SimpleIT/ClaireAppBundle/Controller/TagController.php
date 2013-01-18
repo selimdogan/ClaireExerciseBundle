@@ -9,12 +9,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use SimpleIT\AppBundle\Services\ApiService;
 
 /**
- * Category controller
+ * Tag controller
  */
-class CategoryController extends BaseController
+class TagController extends BaseController
 {
     /**
-     * View a single category
+     * View single Tag
      *
      * @param Request $request The request
      *
@@ -22,36 +22,37 @@ class CategoryController extends BaseController
      */
     public function viewAction(Request $request)
     {
-        $this->processView($request);
+        $this->processViewTag($request);
 
         return $this->render($this->view, $this->viewParameters);
     }
 
     protected function processView(Request $request)
     {
-        $categorySlug = $request->get('slug');
+        $categorySlug = $request->get('categorySlug');
+        $tagSlug = $request->get('slug');
         $parameters = $request->query->all();
 
-        $options = new ApiRequestOptions(array('sort'));
+        $options = new ApiRequestOptions();
         $options->setItemsPerPage(18);
         $options->setPageNumber($request->get('page', 1));
         $options->addFilter('sort', 'title asc');
         $options->addFilters($parameters, array('sort'));
-        $options->addFilter('category', $categorySlug);
 
-        /* Get the category */
-        $this->categoryService = $this->get('simpleit.claire.category');
+        /* get Tag and associated tags */
+        $this->tagService = $this->get('simpleit.claire.tag');
 
-        $category = $this->categoryService->getCategoryWithCourses($categorySlug, $options);
+        $tag = $this->tagService->getTagWithCourses($categorySlug, $tagSlug, $options);
 
-        $totalItems = count($category->getCourses());
+        $totalItems = count($tag->getCourses());
 
         /* Prepare view and parameters */
-        $this->view = 'SimpleITClaireAppBundle:Category:view.html.twig';
+        $this->view = 'TutorialBundle:Category:viewTag.html.twig';
         $this->viewParameters = array(
-            'category' => $category,
-            'tags' => $category->getTags(),
-            'courses' => $category->getCourses(),
+            'tag' => $tag,
+            'category' =>  $tag->getCategory(),
+            'associatedTags' => $tag->getAssociatedTags(),
+            'courses' => $tag->getCourses(),
             'totalItems' =>  $totalItems
         );
     }

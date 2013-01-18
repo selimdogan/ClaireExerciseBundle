@@ -33,6 +33,11 @@ class Category
     private $description;
 
     /**
+     * @var boolean state
+     */
+    private $state;
+
+    /**
      * @var integer position
      */
     private $position;
@@ -41,6 +46,11 @@ class Category
      * @var array Tags
      */
     private $tags = array();
+
+    /**
+     * @var array Courses
+     */
+    private $courses = array();
 
     /**
      * Getter for $id
@@ -143,6 +153,26 @@ class Category
     }
 
     /**
+     * Getter for $state
+     *
+     * @return function the $state
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Setter for $state
+     *
+     * @param string $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+
+    /**
      * Getter for $position
      *
      * @return function the $position
@@ -180,5 +210,25 @@ class Category
     public function setTags(array $tags)
     {
         $this->tags = $tags;
+    }
+
+    /**
+     * Getter for $courses
+     *
+     * @return function the $courses
+     */
+    public function getCourses()
+    {
+        return $this->courses;
+    }
+
+    /**
+     * Setter for $courses
+     *
+     * @param array $courses
+     */
+    public function setCourses(array $courses)
+    {
+        $this->courses = $courses;
     }
 }

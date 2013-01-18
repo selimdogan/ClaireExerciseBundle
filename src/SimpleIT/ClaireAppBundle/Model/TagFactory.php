@@ -36,6 +36,10 @@ class TagFactory
         if (isset($tagResource['description'])) {
             $tag->setDescription($tagResource['description']);
         }
+        if (isset($tagResource['category'])) {
+            $category = CategoryFactory::create($tagResource['category']);
+            $tag->setCategory($category);
+        }
         return $tag;
     }
 
@@ -46,7 +50,7 @@ class TagFactory
      *
      * @return array The tags
      */
-    public static function createCollection(array $tagResources)
+    public static function createCollection($tagResources)
     {
         $tags = array();
         foreach ($tagResources as $tagResource) {

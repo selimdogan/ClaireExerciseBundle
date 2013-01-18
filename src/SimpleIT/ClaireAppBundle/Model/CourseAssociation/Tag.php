@@ -33,6 +33,21 @@ class Tag
     private $description;
 
     /**
+     * @var Category $category
+     */
+    private $category;
+
+    /**
+     * @var Collection $courses
+     */
+    private $courses;
+
+    /**
+     * @var Collection $associatedTags
+     */
+    private $associatedTags;
+
+    /**
      * Getter for $id
      *
      * @return integer the $id
@@ -130,5 +145,86 @@ class Tag
     public function setDescription($description)
     {
         $this->description = $description;
+    }
+
+
+    /**
+     * Getter for $category
+     *
+     * @return function the $category
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * Setter for $category
+     *
+     * @param Category $category
+     */
+    public function setCategory(Category $category)
+    {
+        $this->category = $category;
+    }
+
+    /**
+     * Getter for $courses
+     *
+     * @return function the $courses
+     */
+    public function getCourses()
+    {
+        return $this->courses;
+    }
+
+    /**
+     * Setter for $courses
+     *
+     * @param array $courses
+     */
+    public function setCourses($courses)
+    {
+        $this->courses = $courses;
+    }
+
+    /**
+     * add a course
+     *
+     * @param Course $course
+     */
+    public function addCourse(Course $course)
+    {
+        $this->courses[] = $course;
+    }
+
+    /**
+     * Getter for $associatedTags
+     *
+     * @return function the $associatedTags
+     */
+    public function getAssociatedTags()
+    {
+        return $this->associatedTags;
+    }
+
+    /**
+     * Setter for $associatedTags
+     *
+     * @param array $associatedTags
+     */
+    public function setAssociatedTags($associatedTags)
+    {
+        $this->associatedTags = $associatedTags;
+    }
+
+    /**
+     * add an associated Tag
+     *
+     * @param Course $course
+     */
+    public function addAssociatedTag(Tag $associatedTag)
+    {
+        $this->associatedTags[] = $associatedTag;
     }
 }
