@@ -40,6 +40,9 @@ class TagFactory
             $category = CategoryFactory::create($tagResource['category']);
             $tag->setCategory($category);
         }
+        if (isset($tagResource['totalTutorial'])) {
+            $tag->setTotalTutorial($tagResource['totalTutorial']);
+        }
         return $tag;
     }
 

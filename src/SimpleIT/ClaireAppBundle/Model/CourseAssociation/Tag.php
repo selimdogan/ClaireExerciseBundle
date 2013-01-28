@@ -48,6 +48,11 @@ class Tag
     private $associatedTags;
 
     /**
+     * @var integer total tutorial
+     */
+    private $totalTutorial = 0;
+
+    /**
      * Getter for $id
      *
      * @return integer the $id
@@ -226,5 +231,15 @@ class Tag
     public function addAssociatedTag(Tag $associatedTag)
     {
         $this->associatedTags[] = $associatedTag;
+    }
+
+    public function getTotalTutorial()
+    {
+        return $this->totalTutorial;
+    }
+
+    public function setTotalTutorial($totalTutorial)
+    {
+        $this->totalTutorial = $totalTutorial;
     }
 }
