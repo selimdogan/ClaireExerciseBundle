@@ -123,7 +123,7 @@ class CourseController extends BaseController
     public function partAction(Request $request, $categorySlug, $courseSlug, $partSlug)
     {
         $data = $this->processPartAction($request, $categorySlug, $courseSlug, $partSlug);
-        
+
         return $this->render($data['view'], $data['parameters']);
     }
 
@@ -337,15 +337,17 @@ class CourseController extends BaseController
         $options = new ApiRequestOptions();
         $options->setItemsPerPage(18);
         $options->setPageNumber($request->get('page', 1));
+        $options->addFilter('sort', 'updatedAt desc');
         $options->addFilters($parameters, array('sort'));
 
-        $coursesRequest = $this->getClaireApi('courses')->getCourses($options);
-        $courses = $this->getClaireApi()->getResult($coursesRequest);
+        /* Get the courses */
+        $this->courseService = $this->get('simpleit.claire.course');
+
+        $courses = $this->courseService->getCourses($options);
 
         $this->view = 'SimpleITClaireAppBundle:Course:list.html.twig';
         $this->viewParameters = array(
-            'courses' => $courses->getContent(),
-            'appPager' => $courses->getPager()
+            'courses' => $courses
         );
         return $this->generateView($this->view, $this->viewParameters);
     }

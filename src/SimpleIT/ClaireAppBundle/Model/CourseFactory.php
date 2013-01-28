@@ -52,6 +52,9 @@ class CourseFactory
         if (isset($courseResource['tags'])) {
             $course->setTags($courseResource['tags']);
         }
+        if (isset($courseResource['authors'])) {
+            $course->setAuthors($courseResource['authors']);
+        }
         return $course;
     }
 
