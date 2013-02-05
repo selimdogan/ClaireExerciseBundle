@@ -216,6 +216,22 @@ class CourseService extends ClaireApi implements CourseServiceInterface
      * **************************** */
 
     /**
+     * Update a content of part
+     *
+     * @param mixed  $courseIdentifier The course id | slug
+     * @param mixed  $partIdentifier   The part id | slug
+     * @parma string $content          Content to save
+     *
+     * @return Part
+     */
+    public function updatePartContent($courseIdentifier, $partIdentifier, $content)
+    {
+        $part = $this->partRepository->updatePartContent($courseIdentifier, $partIdentifier, $content);
+
+        return $part;
+    }
+
+    /**
      * Get a part
      *
      * @param mixed $courseIdentifier The course id | slug
