@@ -16,8 +16,7 @@
         <parameter key="simple_it.claire.category.class">SimpleIT\ClaireAppBundle\Services\CategoryService</parameter>
         <parameter key="simple_it.claire.tag.class">SimpleIT\ClaireAppBundle\Services\TagService</parameter>
 
-
-        <parameter key="simple_it.claire.buzz.client.class">Buzz\Client\MultiCurl</parameter>
+        <parameter key="simple_it.claire.buzz.client.class">SimpleIT\AppBundle\Buzz\Client\MultiCurl</parameter>
         <parameter key="buzz.browser.class">Buzz\Browser</parameter>
 
         <!-- REPOSITORIES CLASS -->
