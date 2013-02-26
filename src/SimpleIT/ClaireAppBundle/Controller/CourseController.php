@@ -53,7 +53,7 @@ class CourseController extends BaseController
      *                   <li>parameters</li>
      *               </ul>
      */
-    public function processCourseAction(Request $request, $categorySlug, $courseSlug)
+    public function processCourseAction($categorySlug, $courseSlug)
     {
         $this->courseService = $this->get('simpleit.claire.course');
         $course = $this->courseService->getCourseWithComplementaries($courseSlug, $categorySlug);
@@ -67,23 +67,23 @@ class CourseController extends BaseController
         $data['view'] = $this->getCourseView($displayLevel);
         $data['parameters'] =
             array('title' => $course->getTitle(),
-                        'course' => $course,
-                        'category' => $course->getCategory(),
-                        'icon' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_IMAGE),
-                        'aggregateRating' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_AGGREGATE_RATING),
-                        'difficulty' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DIFFICULTY),
-                        //FIXME DateInterval
-                        'duration' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DURATION),
-                        'timeline' => $this->courseService->getTimeline($course),
-                        'tags' => $course->getTags(),
-                        'updatedAt' => $course->getUpdatedAt(),
-                        'introduction' => $course->getIntroduction(),
-                        'toc' => $this->courseService->getDisplayToc($course, $displayLevel),
-                        //FIXME license
-                        'license' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_LICENSE),
-                        'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION),
-                        'authors' => $course->getAuthors()
-                );
+                  'course' => $course,
+                  'category' => $course->getCategory(),
+                  'icon' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_IMAGE),
+                  'aggregateRating' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_AGGREGATE_RATING),
+                  'difficulty' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DIFFICULTY),
+                  //FIXME DateInterval
+                  'duration' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DURATION),
+                  'timeline' => $this->courseService->getTimeline($course),
+                  'tags' => $course->getTags(),
+                  'updatedAt' => $course->getUpdatedAt(),
+                  'introduction' => $course->getIntroduction(),
+                  'toc' => $this->courseService->getDisplayToc($course, $displayLevel),
+                  //FIXME license
+                  'license' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_LICENSE),
+                  'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION),
+                  'authors' => $course->getAuthors()
+            );
 
         return $data;
     }

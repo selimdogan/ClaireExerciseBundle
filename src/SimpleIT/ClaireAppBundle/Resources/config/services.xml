@@ -15,6 +15,7 @@
         <parameter key="simple_it.claire.course.class">SimpleIT\ClaireAppBundle\Services\CourseService</parameter>
         <parameter key="simple_it.claire.category.class">SimpleIT\ClaireAppBundle\Services\CategoryService</parameter>
         <parameter key="simple_it.claire.tag.class">SimpleIT\ClaireAppBundle\Services\TagService</parameter>
+        <parameter key="simple_it.claire.associated_course.class">SimpleIT\ClaireAppBundle\Services\CourseAssociation\AssociatedCourseService</parameter>
 
         <parameter key="simple_it.claire.buzz.client.class">SimpleIT\AppBundle\Buzz\Client\MultiCurl</parameter>
         <parameter key="buzz.browser.class">Buzz\Browser</parameter>
@@ -25,6 +26,7 @@
         <parameter key="simple_it.claire.repository.category.class">SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository</parameter>
         <parameter key="simple_it.claire.repository.tag.class">SimpleIT\ClaireAppBundle\Repository\CourseAssociation\TagRepository</parameter>
         <parameter key="simple_it.claire.repository.author.class">SimpleIT\ClaireAppBundle\Repository\User\AuthorRepository</parameter>
+        <parameter key="simple_it.claire.repository.associated_course.class">SimpleIT\ClaireAppBundle\Repository\CourseAssociation\AssociatedCourseRepository</parameter>
     </parameters>
 
     <services>
@@ -34,8 +36,8 @@
         <service id="simple_it.claire.buzz.client" class="%simple_it.claire.buzz.client.class%" public="false" />
 
         <service id="simple_it.claire.buzz" class="%buzz.browser.class%">
-          <argument type="service" id="simple_it.claire.buzz.client" />
-          <argument type="service" id="buzz.message_factory" />
+            <argument type="service" id="simple_it.claire.buzz.client" />
+            <argument type="service" id="buzz.message_factory" />
         </service>
 
         <service id="simple_it.claire.http.transport"
@@ -86,6 +88,16 @@
             </call>
         </service>
 
+        <!-- AssociatedCourseService -->
+        <service id="simpleit.claire.associated_course" class="%simple_it.claire.associated_course.class%" >
+            <call method="setClaireApi">
+                <argument type="service" id="claire_api_service" />
+            </call>
+            <call method="setAssociatedCourseRepository">
+                <argument type="service" id="simple_it.claire.repository.associated_course" />
+            </call>
+        </service>
+
         <service id="simpleit.claire.category" class="%simple_it.claire.category.class%" >
             <call method="setClaireApi">
                 <argument type="service" id="claire_api_service" />
@@ -129,6 +141,12 @@
             </call>
         </service>
         <service id="simple_it.claire.repository.author" class="%simple_it.claire.repository.author.class%" >
+            <call method="setClaireApi">
+                <argument type="service" id="claire_api_service" />
+            </call>
+        </service>
+        <!-- AssociatedCourseService -->
+        <service id="simple_it.claire.repository.associated_course" class="%simple_it.claire.repository.associated_course.class%" >
             <call method="setClaireApi">
                 <argument type="service" id="claire_api_service" />
             </call>
