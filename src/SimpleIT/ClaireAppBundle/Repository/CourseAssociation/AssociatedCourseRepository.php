@@ -1,14 +1,9 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Repository\CourseAssociation;
 
-use SimpleIT\AppBundle\Services\ApiService;
-use SimpleIT\ClaireAppBundle\Model\CategoryFactory;
-use SimpleIT\ClaireAppBundle\Model\CourseFactory;
-use SimpleIT\ClaireAppBundle\Model\TagFactory;
 use SimpleIT\ClaireAppBundle\Api\ClaireApi;
 use SimpleIT\AppBundle\Model\ApiRequest;
 use SimpleIT\AppBundle\Services\ApiRouteService;
-use SimpleIT\AppBundle\Model\ApiRequestOptions;
 use SimpleIT\ClaireAppBundle\Repository\Course\CourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartRepository;
 
@@ -53,17 +48,13 @@ class AssociatedCourseRepository extends ApiRouteService
      */
     public function findAssociatedCourse($courseIdentifier, $partIdentifier = null)
     {
-        $associatedCourses = array();
-        if ($partIdentifier != null) {
-            $requests['associatedCourses'] = $this->findAssociatedCoursesRequest($courseIdentifier, $partIdentifier);
-            $apiPartResults = $this->claireApi->getResults($requests);
-            $associatedCourses = $apiPartResults['associatedCourses']->getContent();
-        }
+        $requests['associatedCourses'] = $this->findAssociatedCoursesRequest($courseIdentifier, $partIdentifier);
+        $apiPartResults = $this->claireApi->getResults($requests);
+        $associatedCourses = $apiPartResults['associatedCourses']->getContent();
 
-        if (count($associatedCourses) < 3) {
-            $requests['associatedCourses'] = $this->findAssociatedCoursesRequest($courseIdentifier);
-            $apiCourseResults = $this->claireApi->getResults($requests);
-            $associatedCourses = array_merge($associatedCourses, $apiCourseResults['associatedCourses']->getContent());
+        if (!is_array($associatedCourses))
+        {
+            $associatedCourses = array();
         }
 
         return $associatedCourses;

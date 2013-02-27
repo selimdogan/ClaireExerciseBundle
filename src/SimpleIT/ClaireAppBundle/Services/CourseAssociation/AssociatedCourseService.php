@@ -14,8 +14,8 @@ class AssociatedCourseService extends ClaireApi implements AssociatedCourseServi
     /** @var ClaireApi */
     private $claireApi;
 
-    /** @var AssociatedCourseRepository */
-    private $associatedCourseRepository;
+    /** @var AssociatedCourseRepo */
+    private $associatedCourseRepo;
 
     /**
      * Setter for $claireApi
@@ -32,9 +32,11 @@ class AssociatedCourseService extends ClaireApi implements AssociatedCourseServi
      *
      * @param AssociatedCourseRepository $associatedCourseRepository
      */
-    public function setAssociatedCourseRepository(AssociatedCourseRepository $associatedCourseRepository)
+    public function setAssociatedCourseRepository(
+        AssociatedCourseRepository $associatedCourseRepo
+    )
     {
-        $this->associatedCourseRepository = $associatedCourseRepository;
+        $this->associatedCourseRepo = $associatedCourseRepo;
     }
 
     /**
@@ -52,14 +54,33 @@ class AssociatedCourseService extends ClaireApi implements AssociatedCourseServi
      *      </ul>
      * @param integer $max Nbr of requested associated courses
      *
-     * @return array
+     * @return array | null
      */
-    public function getAssociatedCourse($CourseIdentifier, $partIdentifier, $max)
+    public function getAssociatedCourse($courseIdentifier, $partIdentifier, $max)
     {
-        $associatedCourses = $this->associatedCourseRepository->findAssociatedCourse($CourseIdentifier, $partIdentifier);
-        $randomKeys = array_rand($associatedCourses, $max);
-        foreach ($randomKeys as $key) {
-            $selectedCourses[] = $associatedCourses[$key];
+        if (is_null($partIdentifier)) {
+            /* Retrieve associatedCourses for a course */
+            $allAssociations = $this->associatedCourseRepo->findAssociatedCourse($courseIdentifier);
+        } else {
+            /* Retrieve associatedCourses for a part */
+            $partAssociations = $this->associatedCourseRepo->findAssociatedCourse($courseIdentifier, $partIdentifier);
+            if (count($partAssociations) > $max) {
+                $allAssociations = $partAssociations;
+            } else {
+                /* Try to add Course's associatedCourses if part doesn't have enougth associations */
+                $courseAssociations = $this->associatedCourseRepo->findAssociatedCourse($courseIdentifier);
+                $allAssociations = array_merge($partAssociations, $courseAssociations);
+            }
+        }
+
+        /* Return associatedCourses maximum requested */
+        $selectedCourses = null;
+        if (count($allAssociations) > $max) {
+            for ($i = 0; $i < $max; $i++) {
+                $selectedCourses[] = $allAssociations[$i];
+            }
+        } else {
+            $selectedCourses = $allAssociations;
         }
 
         return $selectedCourses;
