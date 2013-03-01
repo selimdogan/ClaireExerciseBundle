@@ -1,4 +1,13 @@
 <?php
+
+/**
+ * This file is part of the Claire App Package
+ *
+ * PHP version 5
+ *
+ * @author Vincent DELVINQUIERE <vincent.delvinquiere@simple-it.fr>
+ */
+
 namespace SimpleIT\ClaireAppBundle\Repository\CourseAssociation;
 
 use SimpleIT\ClaireAppBundle\Api\ClaireApi;
@@ -23,7 +32,9 @@ class AssociatedCourseRepository extends ApiRouteService
     /**
      * Setter for $claireApi
      *
-     * @param ClaireApi $claireApi
+     * @param ClaireApi $claireApi The CLAIRE Api
+     *
+     * @return ClaireApi
      */
     public function setClaireApi (ClaireApi $claireApi)
     {
@@ -33,12 +44,12 @@ class AssociatedCourseRepository extends ApiRouteService
     /**
      * Find associated courses for course or part identifier
      *
-     * @param string|integer $courseIdentifier
+     * @param string|integer $courseIdentifier The Course identifier
      *      <ul>
      *          <li>id : the course id (integer)</li>
      *          <li>slug : the course slug (string)</li>
      *      </ul>
-     * @param string|integer $partIdentifier optional
+     * @param string|integer $partIdentifier   The Part identifier
      *      <ul>
      *          <li>id : the part id (integer)</li>
      *          <li>slug : the part slug (string)</li>
@@ -48,12 +59,14 @@ class AssociatedCourseRepository extends ApiRouteService
      */
     public function findAssociatedCourse($courseIdentifier, $partIdentifier = null)
     {
-        $requests['associatedCourses'] = $this->findAssociatedCoursesRequest($courseIdentifier, $partIdentifier);
+        $requests['associatedCourses'] = $this->findAssociatedCoursesRequest(
+            $courseIdentifier,
+            $partIdentifier
+        );
         $apiPartResults = $this->claireApi->getResults($requests);
         $associatedCourses = $apiPartResults['associatedCourses']->getContent();
 
-        if (!is_array($associatedCourses))
-        {
+        if (!is_array($associatedCourses)) {
             $associatedCourses = array();
         }
 
@@ -63,21 +76,27 @@ class AssociatedCourseRepository extends ApiRouteService
     /**
      * Returns associated courses for a given part or course (ApiRequest)
      *
-     * @param string|integer $courseIdentifier
+     * @param string|integer $courseIdentifier The Course identifier
      *      <ul>
      *          <li>id : the course id (integer)</li>
      *          <li>slug : the course slug (string)</li>
      *      </ul>
+     * @param string|integer $partIdentifier   The Part identifier
+     *      <ul>
+     *          <li>id : the part id (integer)</li>
+     *          <li>slug : the part slug (string)</li>
+     *      </ul>
      *
      * @return ApiRequest
      */
-    public static function findAssociatedCoursesRequest($courseIdentifier, $partIdentifier = null)
-    {
+    public static function findAssociatedCoursesRequest(
+        $courseIdentifier,
+        $partIdentifier = null
+    ) {
         $apiRequest = new ApiRequest();
 
         $baseUrl = CourseRepository::URL_COURSES.$courseIdentifier;
-        if (!\is_null($partIdentifier))
-        {
+        if (!\is_null($partIdentifier)) {
             $baseUrl .= PartRepository::URL_PART.$partIdentifier;
         }
         $baseUrl .= self::URL_COURSES_ASSOCIATED;
