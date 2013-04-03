@@ -85,6 +85,13 @@ class CourseController extends BaseController
                   'authors' => $course->getAuthors()
             );
 
+        if ($displayLevel == 0) {
+            $data['parameters']['contentHtml'] = $this->courseService->getCourseContent($courseSlug);
+            if (null != $data['parameters']['contentHtml']) {
+                $data['parameters']['contentHtml'] = $this->courseService->getFormatedContent($data['parameters']['contentHtml']);
+            }
+        }
+
         return $data;
     }
 

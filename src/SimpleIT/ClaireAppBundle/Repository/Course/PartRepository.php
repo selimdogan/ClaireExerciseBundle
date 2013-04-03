@@ -340,11 +340,8 @@ class PartRepository extends ApiRouteService
         $apiRequest = new ApiRequest();
         $apiRequest->setBaseUrl(self::URL_COURSES.$courseIdentifier.self::URL_PART.$partIdentifier);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
+        $apiRequest->setFormat($format);
 
-        $apiRequestOptions = new ApiRequestOptions();
-        $apiRequestOptions->setFormat($format);
-
-        $apiRequest->setOptions($apiRequestOptions);
         return $apiRequest;
     }
 

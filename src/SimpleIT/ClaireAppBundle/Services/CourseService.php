@@ -332,6 +332,19 @@ class CourseService extends ClaireApi implements CourseServiceInterface
     }
 
     /**
+     * Returns the html course content
+     *
+     * @param mixed $courseIdentifier The course id | slug
+     *
+     * @return Part
+     */
+    public function getCourseContent($courseIdentifier)
+    {
+        return $this->courseRepository
+            ->findContent($courseIdentifier, ApiRequest::FORMAT_HTML);
+    }
+
+    /**
      * Returns the html part content
      *
      * @param mixed $courseIdentifier The course id | slug
