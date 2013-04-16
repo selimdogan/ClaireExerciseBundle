@@ -29,8 +29,14 @@ class TagRepository extends ApiRouteService
     /** The base url for courses = '/courses/' */
     const URL_COURSES = '/courses';
 
-    /* URL for associated tags ressources */
+    /** URL for associated tags ressources */
     const URL_ASSOCIATED_TAGS = '/associated-tags/';
+
+    /**
+     * @const URL for recommended courses = '/recommended-courses/'
+     */
+    const URL_RECOMMENDED_COURSES= '/recommended-courses/';
+
 
     /**
      * Setter for $claireApi
@@ -207,6 +213,44 @@ class TagRepository extends ApiRouteService
         $apiRequest = new ApiRequest();
         $apiRequest->setBaseUrl(
             self::URL_CATEGORIES.$categoryIdentifier.self::URL_TAGS.$tagIdentifier.self::URL_ASSOCIATED_TAGS
+        );
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        return $apiRequest;
+    }
+
+    /**
+     * Get the recommended courses for the tag
+     *
+     * @param mixed $tagIdentifier Tag identifier (id | slug)
+     *
+     * @return array
+     */
+    public function findRecommendedCourses($tagIdentifier)
+    {
+        $request = self::findRecommendedCoursesRequest($tagIdentifier);
+        $result = $this->claireApi->getResult($request);
+
+        $recommendedCourses = array();
+        if (ApiService::isResponseSuccessful($result)) {
+            $recommendedCourses = CourseFactory::createCollection($result->getContent());
+        }
+
+        return $recommendedCourses;
+    }
+
+    /**
+     * Request to find Recommended Courses
+     *
+     * @param mixed $tagIdentifier Tag identifier (id | slug)
+     *
+     * @return \SimpleIT\AppBundle\Model\ApiRequest
+     */
+    public static function findRecommendedCoursesRequest($tagIdentifier)
+    {
+        $apiRequest = new ApiRequest();
+        $apiRequest->setBaseUrl(
+            self::URL_TAGS . $tagIdentifier . self::URL_RECOMMENDED_COURSES
         );
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
 

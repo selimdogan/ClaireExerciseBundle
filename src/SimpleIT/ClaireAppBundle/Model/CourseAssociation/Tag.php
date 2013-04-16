@@ -43,6 +43,11 @@ class Tag
     private $courses;
 
     /**
+     * @var array
+     */
+    private $recommendedCourses;
+
+    /**
      * @var Collection $associatedTags
      */
     private $associatedTags;
@@ -242,4 +247,26 @@ class Tag
     {
         $this->totalTutorial = $totalTutorial;
     }
+
+    /**
+     * Set recommendedCourses
+     *
+     * @param array $recommendedCourses
+     */
+    public function setRecommendedCourses($recommendedCourses)
+    {
+        $this->recommendedCourses = $recommendedCourses;
+    }
+
+    /**
+     * Get recommendedCourses
+     *
+     * @return array
+     */
+    public function getRecommendedCourses()
+    {
+        return $this->recommendedCourses;
+    }
+
+
 }
