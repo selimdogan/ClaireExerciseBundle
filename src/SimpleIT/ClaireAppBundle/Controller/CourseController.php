@@ -62,6 +62,8 @@ class CourseController extends BaseController
 
         $displayLevel = $course->getDisplayLevel();
 
+        $pagination = $this->courseService->getPagination($course, null, $displayLevel);
+
         $metadatas = $course->getMetadatas();
 
         $data['view'] = $this->getCourseView($displayLevel);
@@ -79,6 +81,7 @@ class CourseController extends BaseController
                   'updatedAt' => $course->getUpdatedAt(),
                   'introduction' => $course->getIntroduction(),
                   'toc' => $this->courseService->getDisplayToc($course, $displayLevel),
+                  'pagination' => $pagination,
                   //FIXME license
                   'license' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_LICENSE),
                   'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION),
