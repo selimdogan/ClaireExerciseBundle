@@ -111,4 +111,11 @@ class TagService
 
         return $recommendedCourses;
     }
+
+    public function getTagsWithHeadlineCourse($categoryIdentifier)
+    {
+        $tags = $this->tagRepository->findTagsWithHeadlineCourse($categoryIdentifier);
+
+        return $tags;
+    }
 }

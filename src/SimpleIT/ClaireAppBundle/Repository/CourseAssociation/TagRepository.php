@@ -154,6 +154,22 @@ class TagRepository extends ApiRouteService
     }
 
     /**
+     * Returns tags for the given category (ApiRequest)
+     *
+     * @param mixed $categoryIdentifier The category identifier
+     *
+     * @return ApiRequest
+     */
+    public static function findAllForCategoryRequest($categoryIdentifier)
+    {
+        $apiRequest = new ApiRequest();
+        $apiRequest->setBaseUrl(self::URL_CATEGORIES.$categoryIdentifier.self::URL_TAGS);
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        return $apiRequest;
+    }
+
+    /**
      * Return all tags (ApiRequest)
      *
      * @param ApiRequestOptions $apiRequestOptions
@@ -217,6 +233,29 @@ class TagRepository extends ApiRouteService
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
 
         return $apiRequest;
+    }
+
+    /**
+     * Get the associated highlighted courses for this tag
+     *
+     * @param $categoryIdentifier
+     * @param $tagIdentifier
+     *
+     * @return array
+     */
+    public function findTagsWithHeadlineCourse($categoryIdentifier)
+    {
+        $request = self::findAllForCategoryRequest($categoryIdentifier);
+        $options  = new ApiRequestOptions();
+        $options->addFilter('headlineCourse', 'true');
+        $request->setOptions($options);
+
+        $result = $this->claireApi->getResult($request);
+
+        ApiService::checkResponseSuccessful($result);
+
+        $tags = TagFactory::createCollection($result->getContent());
+        return $tags;
     }
 
     /**

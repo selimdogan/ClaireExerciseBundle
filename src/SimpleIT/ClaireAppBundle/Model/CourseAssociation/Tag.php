@@ -1,5 +1,8 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Model\CourseAssociation;
+
+use SimpleIT\ClaireAppBundle\Model\Course\Course;
+
 /**
  * Class Tag
  *
@@ -46,6 +49,11 @@ class Tag
      * @var array
      */
     private $recommendedCourses;
+
+    /**
+     * @var Course
+     */
+    private $headlineCourse;
 
     /**
      * @var Collection $associatedTags
@@ -268,5 +276,23 @@ class Tag
         return $this->recommendedCourses;
     }
 
+    /**
+     * Set headline course
+     *
+     * @param \SimpleIT\ClaireAppBundle\Model\Course\Course $headlineCourse
+     */
+    public function setHeadlineCourse($headlineCourse)
+    {
+        $this->headlineCourse = $headlineCourse;
+    }
 
+    /**
+     * Get headline course
+     *
+     * @return \SimpleIT\ClaireAppBundle\Model\Course\Course
+     */
+    public function getHeadlineCourse()
+    {
+        return $this->headlineCourse;
+    }
 }
