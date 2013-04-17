@@ -77,6 +77,11 @@ class Course
     private $toc;
 
     /**
+     * @var array $associatedCourses
+     */
+    private $associatedCourses;
+
+    /**
      * Getter for $id
      *
      * @return function the $id
@@ -346,4 +351,23 @@ class Course
         $this->toc = $toc;
     }
 
+    /**
+     * Setter for $associatedCourses
+     *
+     * @param array $associatedCourses
+     */
+    public function setAssociatedCourses(array $associatedCourses)
+    {
+        $this->associatedCourses = $associatedCourses;
+    }
+
+    /**
+     * Getter for $associatedCourses
+     *
+     * @return array The associated Courses array
+     */
+    public function getAssociatedCourses()
+    {
+        return $this->associatedCourses;
+    }
 }

@@ -216,6 +216,22 @@ class CourseService extends ClaireApi implements CourseServiceInterface
      * **************************** */
 
     /**
+     * Update a content of part
+     *
+     * @param mixed  $courseIdentifier The course id | slug
+     * @param mixed  $partIdentifier   The part id | slug
+     * @parma string $content          Content to save
+     *
+     * @return Part
+     */
+    public function updatePartContent($courseIdentifier, $partIdentifier, $content)
+    {
+        $part = $this->partRepository->updatePartContent($courseIdentifier, $partIdentifier, $content);
+
+        return $part;
+    }
+
+    /**
      * Get a part
      *
      * @param mixed $courseIdentifier The course id | slug
@@ -313,6 +329,19 @@ class CourseService extends ClaireApi implements CourseServiceInterface
     public function getPartIntroduction($courseIdentifier, $partIdentifier)
     {
         return $this->partRepository->findIntroduction($courseIdentifier, $partIdentifier);
+    }
+
+    /**
+     * Returns the html course content
+     *
+     * @param mixed $courseIdentifier The course id | slug
+     *
+     * @return Part
+     */
+    public function getCourseContent($courseIdentifier)
+    {
+        return $this->courseRepository
+            ->findContent($courseIdentifier, ApiRequest::FORMAT_HTML);
     }
 
     /**
@@ -499,12 +528,12 @@ class CourseService extends ClaireApi implements CourseServiceInterface
      *     </ul>
      * <p>
      * @param Course  $course       The course
-     * @param Part    $currentPart  The current part
+     * @param mixed   $currentPart  The current part
      * @param integer $displayLevel The display level
      *
      * @return array The pagination
      */
-    public function getPagination(Course $course, Part $currentPart, $displayLevel)
+    public function getPagination(Course $course, $currentPart, $displayLevel)
     {
         /* Get the allowed types */
         $allowedTypes = $this->getAllowedTypesForPagination($displayLevel);
@@ -514,16 +543,18 @@ class CourseService extends ClaireApi implements CourseServiceInterface
         $i = 0;
         $toc = $course->getToc();
 
-        while (!$find && $i < (count($toc) - 1)) {
-            $part = $toc[$i];
-            if (false !== array_search($part->getType(), $allowedTypes)) {
-                if ($currentPart->getId() !== $part->getId()) {
-                    $pagination['previous'] = $part;
-                } else {
-                    $find = true;
+        if (!is_null($currentPart)) {
+            while (!$find && $i < (count($toc) - 1)) {
+                $part = $toc[$i];
+                if (false !== array_search($part->getType(), $allowedTypes)) {
+                    if ($currentPart && $currentPart->getId() !== $part->getId()) {
+                        $pagination['previous'] = $part;
+                    } else {
+                        $find = true;
+                    }
                 }
+                $i++;
             }
-            $i++;
         }
         $find = false;
 
@@ -532,7 +563,7 @@ class CourseService extends ClaireApi implements CourseServiceInterface
             $part = $toc[$i];
 
             if (false !== array_search($part->getType(), $allowedTypes)) {
-                if ($currentPart->getId() !== $part->getId())
+                if (is_null($currentPart) || $currentPart->getId() !== $part->getId())
                 {
                     $pagination['next'] = $part;
                     $find = true;

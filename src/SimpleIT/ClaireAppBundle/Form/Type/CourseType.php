@@ -12,7 +12,7 @@ class CourseType extends AbstractType
     {
         $builder->add('content', 'textarea', array(
             'attr' => array(
-                'class' => 'tinymce',
+                'class' => 'tinymce editor',
                 'data-theme' => 'advanced' // simple, advanced, bbcode
             )
         ));

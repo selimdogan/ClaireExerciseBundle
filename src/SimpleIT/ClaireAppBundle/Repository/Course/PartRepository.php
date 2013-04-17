@@ -47,7 +47,7 @@ class PartRepository extends ApiRouteService
     const URL_COURSES = '/courses/';
 
     /** The base url for parts = '/parts/' */
-    const URL_PART = '/part/';
+    const URL_PART = '/parts/';
 
     /** The url for metadatas  = '/metadatas' */
     const URL_PART_METADATAS = '/metadatas/';
@@ -73,6 +73,18 @@ class PartRepository extends ApiRouteService
      * ********** METHODS ********* *
      *                              *
      * **************************** */
+
+     public function updatePartContent($courseIdentifier, $partIdentifier, $content)
+     {
+         $partRequest = self::updateRequest($courseIdentifier, $partIdentifier, $content, ApiRequest::FORMAT_HTML);
+         $partResult = $this->claireApi->getResult($partRequest);
+         $partRequest = self::findRequest($courseIdentifier, $partIdentifier);
+         $partResult = $this->claireApi->getResult($partRequest);
+
+         $part = PartFactory::create($partResult->getContent());
+         return $part;
+     }
+
      /**
       * Returns a part
       *
@@ -298,6 +310,22 @@ class PartRepository extends ApiRouteService
      * ********* REQUESTS ********* *
      *                              *
      * **************************** */
+
+    public static function updateRequest($courseIdentifier, $partIdentifier, $content, $format = null)
+    {
+        $apiRequest = new ApiRequest();
+        $apiRequest->setBaseUrl(self::URL_COURSES.$courseIdentifier.self::URL_PART.$partIdentifier);
+        $apiRequest->addFilter('isSubPart', 'true');
+        $apiRequest->setMethod(ApiRequest::METHOD_PUT);
+        $apiRequest->setParameters(array('content' => $content));
+
+        $apiRequestOptions = new ApiRequestOptions();
+        $apiRequestOptions->setFormat($format);
+
+        $apiRequest->setOptions($apiRequestOptions);
+        return $apiRequest;
+    }
+
     /**
      * Returns the part (ApiRequest)
      *
@@ -312,11 +340,8 @@ class PartRepository extends ApiRouteService
         $apiRequest = new ApiRequest();
         $apiRequest->setBaseUrl(self::URL_COURSES.$courseIdentifier.self::URL_PART.$partIdentifier);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
+        $apiRequest->setFormat($format);
 
-        $apiRequestOptions = new ApiRequestOptions();
-        $apiRequestOptions->setFormat($format);
-
-        $apiRequest->setOptions($apiRequestOptions);
         return $apiRequest;
     }
 

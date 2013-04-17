@@ -222,6 +222,24 @@ class CourseRepository extends ApiRouteService
         return $courses;
     }
 
+    /**
+     * Returns a part content
+     *
+     * @param mixed  $courseIdentifier The course id | slug
+     * @param string $format           The requested format
+     *
+     * @return Part The part content
+     */
+    public function findContent($courseIdentifier, $format = null)
+    {
+        $request = self::findRequest($courseIdentifier, $format);
+        $request->setFormat($format);
+        $result = $this->claireApi->getResult($request);
+        ApiService::checkResponseSuccessful($result);
+
+        return $result->getContent();
+    }
+
     /* **************************** *
      *                              *
      * ********* REQUESTS ********* *
