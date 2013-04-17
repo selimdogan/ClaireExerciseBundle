@@ -29,8 +29,14 @@ class TagRepository extends ApiRouteService
     /** The base url for courses = '/courses/' */
     const URL_COURSES = '/courses';
 
-    /* URL for associated tags ressources */
+    /** URL for associated tags ressources */
     const URL_ASSOCIATED_TAGS = '/associated-tags/';
+
+    /**
+     * @const URL for recommended courses = '/recommended-courses/'
+     */
+    const URL_RECOMMENDED_COURSES= '/recommended-courses/';
+
 
     /**
      * Setter for $claireApi
@@ -148,6 +154,22 @@ class TagRepository extends ApiRouteService
     }
 
     /**
+     * Returns tags for the given category (ApiRequest)
+     *
+     * @param mixed $categoryIdentifier The category identifier
+     *
+     * @return ApiRequest
+     */
+    public static function findAllForCategoryRequest($categoryIdentifier)
+    {
+        $apiRequest = new ApiRequest();
+        $apiRequest->setBaseUrl(self::URL_CATEGORIES.$categoryIdentifier.self::URL_TAGS);
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        return $apiRequest;
+    }
+
+    /**
      * Return all tags (ApiRequest)
      *
      * @param ApiRequestOptions $apiRequestOptions
@@ -207,6 +229,67 @@ class TagRepository extends ApiRouteService
         $apiRequest = new ApiRequest();
         $apiRequest->setBaseUrl(
             self::URL_CATEGORIES.$categoryIdentifier.self::URL_TAGS.$tagIdentifier.self::URL_ASSOCIATED_TAGS
+        );
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        return $apiRequest;
+    }
+
+    /**
+     * Get the associated highlighted courses for this tag
+     *
+     * @param $categoryIdentifier
+     * @param $tagIdentifier
+     *
+     * @return array
+     */
+    public function findTagsWithHeadlineCourse($categoryIdentifier)
+    {
+        $request = self::findAllForCategoryRequest($categoryIdentifier);
+        $options  = new ApiRequestOptions();
+        $options->addFilter('headline-course', 'true');
+        $request->setOptions($options);
+
+        $result = $this->claireApi->getResult($request);
+
+        ApiService::checkResponseSuccessful($result);
+
+        $tags = TagFactory::createCollection($result->getContent());
+        return $tags;
+    }
+
+    /**
+     * Get the recommended courses for the tag
+     *
+     * @param mixed $tagIdentifier Tag identifier (id | slug)
+     *
+     * @return array
+     */
+    public function findRecommendedCourses($tagIdentifier)
+    {
+        $request = self::findRecommendedCoursesRequest($tagIdentifier);
+        $result = $this->claireApi->getResult($request);
+
+        $recommendedCourses = array();
+        if (ApiService::isResponseSuccessful($result)) {
+            $recommendedCourses = CourseFactory::createCollection($result->getContent());
+        }
+
+        return $recommendedCourses;
+    }
+
+    /**
+     * Request to find Recommended Courses
+     *
+     * @param mixed $tagIdentifier Tag identifier (id | slug)
+     *
+     * @return \SimpleIT\AppBundle\Model\ApiRequest
+     */
+    public static function findRecommendedCoursesRequest($tagIdentifier)
+    {
+        $apiRequest = new ApiRequest();
+        $apiRequest->setBaseUrl(
+            self::URL_TAGS . $tagIdentifier . self::URL_RECOMMENDED_COURSES
         );
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
 

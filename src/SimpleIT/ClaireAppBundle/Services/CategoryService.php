@@ -3,6 +3,8 @@ namespace SimpleIT\ClaireAppBundle\Services;
 
 use SimpleIT\ClaireAppBundle\Api\ClaireApi;
 use SimpleIT\AppBundle\Model\ApiRequestOptions;
+use SimpleIT\ClaireAppBundle\Model\CourseAssociation\Category;
+use SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository;
 
 /**
  * Class CategoryService

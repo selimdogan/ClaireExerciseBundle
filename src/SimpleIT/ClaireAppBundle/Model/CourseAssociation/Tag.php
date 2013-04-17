@@ -1,5 +1,8 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Model\CourseAssociation;
+
+use SimpleIT\ClaireAppBundle\Model\Course\Course;
+
 /**
  * Class Tag
  *
@@ -41,6 +44,16 @@ class Tag
      * @var Collection $courses
      */
     private $courses;
+
+    /**
+     * @var array
+     */
+    private $recommendedCourses;
+
+    /**
+     * @var Course
+     */
+    private $headlineCourse;
 
     /**
      * @var Collection $associatedTags
@@ -241,5 +254,45 @@ class Tag
     public function setTotalTutorial($totalTutorial)
     {
         $this->totalTutorial = $totalTutorial;
+    }
+
+    /**
+     * Set recommendedCourses
+     *
+     * @param array $recommendedCourses
+     */
+    public function setRecommendedCourses($recommendedCourses)
+    {
+        $this->recommendedCourses = $recommendedCourses;
+    }
+
+    /**
+     * Get recommendedCourses
+     *
+     * @return array
+     */
+    public function getRecommendedCourses()
+    {
+        return $this->recommendedCourses;
+    }
+
+    /**
+     * Set headline course
+     *
+     * @param \SimpleIT\ClaireAppBundle\Model\Course\Course $headlineCourse
+     */
+    public function setHeadlineCourse($headlineCourse)
+    {
+        $this->headlineCourse = $headlineCourse;
+    }
+
+    /**
+     * Get headline course
+     *
+     * @return \SimpleIT\ClaireAppBundle\Model\Course\Course
+     */
+    public function getHeadlineCourse()
+    {
+        return $this->headlineCourse;
     }
 }
