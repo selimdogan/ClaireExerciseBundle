@@ -247,7 +247,7 @@ class TagRepository extends ApiRouteService
     {
         $request = self::findAllForCategoryRequest($categoryIdentifier);
         $options  = new ApiRequestOptions();
-        $options->addFilter('headlineCourse', 'true');
+        $options->addFilter('headline-course', 'true');
         $request->setOptions($options);
 
         $result = $this->claireApi->getResult($request);

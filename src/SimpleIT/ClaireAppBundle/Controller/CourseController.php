@@ -24,7 +24,7 @@ use SimpleIT\AppBundle\Model\ApiRequestOptions;
 class CourseController extends BaseController
 {
     /** @var Service The course service*/
-    private $courseService;
+    protected $courseService;
 
     /**
      * Shows a course
