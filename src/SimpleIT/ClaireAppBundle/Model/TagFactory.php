@@ -45,7 +45,8 @@ class TagFactory
         }
 
         if (isset($tagResource['headlineCourse'])) {
-            $tag->setHeadlineCourse($tagResource['headlineCourse']);
+            $headlineCourse = CourseFactory::create($tagResource['headlineCourse']);
+            $tag->setHeadlineCourse($headlineCourse);
         }
         return $tag;
     }
