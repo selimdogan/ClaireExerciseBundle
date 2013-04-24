@@ -28,6 +28,7 @@ use SimpleIT\ClaireAppBundle\Repository\Course\PartRepository;
 
 use SimpleIT\Utils\ArrayUtils;
 
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -342,6 +343,39 @@ class CourseService extends ClaireApi implements CourseServiceInterface
     {
         return $this->courseRepository
             ->findContent($courseIdentifier, ApiRequest::FORMAT_HTML);
+    }
+
+    /**
+     * Returns the epub export course
+     *
+     * @param mixed $courseIdentifier
+     */
+    public function getCourseEpub($courseIdentifier)
+    {
+        return $this->courseRepository
+            ->findContent($courseIdentifier, ApiRequest::FORMAT_EPUB);
+    }
+
+    /**
+     * Returns the latex export course
+     *
+     * @param mixed $courseIdentifier
+     */
+    public function getCourseLatex($courseIdentifier)
+    {
+        return $this->courseRepository
+            ->findContent($courseIdentifier, ApiRequest::FORMAT_LATEX);
+    }
+
+    /**
+     * Returns the pdf export course
+     *
+     * @param mixed $courseIdentifier
+     */
+    public function getCoursePdf($courseIdentifier)
+    {
+        return $this->courseRepository
+            ->findContent($courseIdentifier, ApiRequest::FORMAT_PDF);
     }
 
     /**
