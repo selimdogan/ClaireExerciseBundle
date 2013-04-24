@@ -26,11 +26,6 @@ class SimpleITClaireAppExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-        $listener = $container->getDefinition('simple_it.claire.http.token.transport.listener');
-
-        $listener->addArgument($config['client_id']);
-        $listener->addArgument($config['client_secret']);
-
         $container->setParameter('simple_it_claire_app.host', $config['host']);
     }
 }

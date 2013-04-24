@@ -9,7 +9,6 @@
         <parameter key="simple_it.claire_api.class">SimpleIT\ClaireAppBundle\Api\ClaireApi</parameter>
 
         <parameter key="simple_it.claire_categories_api.class">SimpleIT\ClaireAppBundle\Api\CategoryRouteService</parameter>
-        <parameter key="simple_it.claire.http.token.transport.listener.class">Buzz\Listener\BasicAuthListener</parameter>
         <parameter key="simple_it.claire.http.transport.class">SimpleIT\AppBundle\Services\HttpTransport</parameter>
         <parameter key="simple_it.claire.course.class">SimpleIT\ClaireAppBundle\Services\CourseService</parameter>
         <parameter key="simple_it.claire.category.class">SimpleIT\ClaireAppBundle\Services\CategoryService</parameter>
