@@ -3,6 +3,8 @@ namespace SimpleIT\ClaireAppBundle\Services;
 
 use SimpleIT\ClaireAppBundle\Api\ClaireApi;
 use SimpleIT\AppBundle\Model\ApiRequestOptions;
+use SimpleIT\ClaireAppBundle\Model\CourseAssociation\Tag;
+use SimpleIT\ClaireAppBundle\Repository\CourseAssociation\TagRepository;
 
 /**
  * Class CategoryService
@@ -91,7 +93,29 @@ class TagService
     public function getTagWithCourses($categoryIdentifier, $tagIdentifier, $options)
     {
         $tag = $this->tagRepository->findWithCourses($categoryIdentifier, $tagIdentifier, $options);
+        $tag->setRecommendedCourses($this->tagRepository->findRecommendedCourses($tagIdentifier));
 
         return $tag;
+    }
+
+    /**
+     * Get the recommended courses for the tag
+     *
+     * @param mixed $tagIdentifier Tag identifier (id | slug)
+     *
+     * @return array
+     */
+    public function getRecommendedCourses($tagIdentifier)
+    {
+        $recommendedCourses = $this->tagRepository->findRecommendedCourses($tagIdentifier);
+
+        return $recommendedCourses;
+    }
+
+    public function getTagsWithHeadlineCourse($categoryIdentifier)
+    {
+        $tags = $this->tagRepository->findTagsWithHeadlineCourse($categoryIdentifier);
+
+        return $tags;
     }
 }

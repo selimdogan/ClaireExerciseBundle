@@ -1,6 +1,7 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Controller;
 
+use SimpleIT\ClaireAppBundle\Model\CourseAssociation\Tag;
 use Symfony\Component\HttpFoundation\Request;
 use SimpleIT\ClaireAppBundle\Controller\BaseController;
 use SimpleIT\ClaireAppBundle\Form\Type\CourseType;
@@ -60,6 +61,7 @@ class TagController extends BaseController
             'category' =>  $tag->getCategory(),
             'associatedTags' => $tag->getAssociatedTags(),
             'courses' => $tag->getCourses(),
+            'recommendedCourses' => $tag->getRecommendedCourses(),
             'totalItems' =>  $totalItems
         );
     }

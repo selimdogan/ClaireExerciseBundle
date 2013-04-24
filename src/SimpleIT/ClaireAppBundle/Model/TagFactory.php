@@ -43,6 +43,11 @@ class TagFactory
         if (isset($tagResource['totalTutorial'])) {
             $tag->setTotalTutorial($tagResource['totalTutorial']);
         }
+
+        if (isset($tagResource['headlineCourse'])) {
+            $headlineCourse = CourseFactory::create($tagResource['headlineCourse']);
+            $tag->setHeadlineCourse($headlineCourse);
+        }
         return $tag;
     }
 
