@@ -12,3 +12,4 @@ nbproject/*
 # Configuration files
 app/config/parameters.ini
 /nbproject/private/
+.idea
