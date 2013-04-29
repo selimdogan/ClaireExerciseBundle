@@ -19,7 +19,7 @@
     "require": {
         "php": ">=5.3.3",
         "simpleit/php-utils": "dev-master@dev",
-        "simpleit/app-bundle": "dev-security_v2@dev"
+        "simpleit/app-bundle": "dev-master@dev"
     },
     "autoload": {
         "psr-0": {
