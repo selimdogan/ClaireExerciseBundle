@@ -15,6 +15,7 @@
         <parameter key="simple_it.claire.tag.class">SimpleIT\ClaireAppBundle\Services\TagService</parameter>
         <parameter key="simple_it.claire.author.class">SimpleIT\ClaireAppBundle\Services\Profile\AuthorService</parameter>
         <parameter key="simple_it.claire.associated_course.class">SimpleIT\ClaireAppBundle\Services\CourseAssociation\AssociatedCourseService</parameter>
+        <parameter key="simple_it.claire.twig.metadata.class">SimpleIT\ClaireAppBundle\Twig\MetadataExtension</parameter>
 
         <parameter key="simple_it.claire.buzz.client.class">SimpleIT\AppBundle\Buzz\Client\MultiCurl</parameter>
         <parameter key="buzz.browser.class">Buzz\Browser</parameter>
@@ -106,6 +107,10 @@
             <call method="setAuthorRepository">
                 <argument type="service" id="simple_it.claire.repository.author" />
             </call>
+        </service>
+
+        <service id="simple_it.claire.twig.metadata" class="%simple_it.claire.twig.metadata.class%" >
+            <tag name="twig.extension" />
         </service>
 
         <!-- REPOSITORIES -->

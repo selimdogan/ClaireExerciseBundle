@@ -23,7 +23,7 @@ class AuthorRepository extends ApiRouteService
     const URL_AUTHORS = '/authors/';
 
     /** URL for courses collection in an author ressource */
-    const URL_AUTHORS_COURSES = '/courses/';
+    const URL_COURSES = '/courses/';
 
     /**
      * Setter for $claireApi
@@ -72,7 +72,7 @@ class AuthorRepository extends ApiRouteService
     /**
      * Returns all courses written by the given author
      *
-     * @param integer|string $authorIdentifier
+     * @param integer|string $authorIdentifier The author identifier
      * @return array The courses
      */
     public function findCourses($authorIdentifier)
@@ -83,6 +83,25 @@ class AuthorRepository extends ApiRouteService
         ApiService::checkResponseSuccessful($coursesResult);
 
         $courses = CourseFactory::createCollection($coursesResult->getContent());
+
+        return $courses;
+    }
+
+    /**
+     * Returns all course authors
+     *
+     * @param mixed $courseIdentifier The course identifier
+     *
+     * @return array The authors
+     */
+    public function findByCourse($courseIdentifier)
+    {
+        $coursesRequest = self::findByCourseRequest($courseIdentifier);
+
+        $coursesResult = $this->claireApi->getResult($coursesRequest);
+        ApiService::checkResponseSuccessful($coursesResult);
+
+        $courses = AuthorFactory::createCollection($coursesResult->getContent());
 
         return $courses;
     }
@@ -103,10 +122,33 @@ class AuthorRepository extends ApiRouteService
         return $apiRequest;
     }
 
+    /**
+     * Returns the author courses (ApiRequest)
+     *
+     * @param mixed $authorIdentifier The author identifier
+     *
+     * @return ApiRequest
+     */
     public static function findCoursesRequest($authorIdentifier)
     {
         $apiRequest = new ApiRequest();
-        $apiRequest->setBaseUrl(self::URL_AUTHORS.$authorIdentifier.self::URL_AUTHORS_COURSES);
+        $apiRequest->setBaseUrl(self::URL_AUTHORS.$authorIdentifier.self::URL_COURSES);
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        return $apiRequest;
+    }
+
+    /**
+     * Returns a course authors (ApiRequest)
+     *
+     * @param mixed $courseIdentifier The course id | slug
+     *
+     * @return ApiRequest
+     */
+    public static function findByCourseRequest($courseIdentifier)
+    {
+        $apiRequest = new ApiRequest();
+        $apiRequest->setBaseUrl(self::URL_COURSES.$courseIdentifier.AuthorRepository::URL_AUTHORS);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
 
         return $apiRequest;

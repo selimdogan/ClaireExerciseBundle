@@ -53,4 +53,14 @@ class AuthorService
     {
         return $this->authorRepository->findCourses($authorIdentifier);
     }
+
+    /**
+     * @param integer|string $courseIdentifier Course identifier
+     *
+     * @return array
+     */
+    public function getAuthorsByCourse($courseIdentifier)
+    {
+        return $this->authorRepository->findByCourse($courseIdentifier);
+    }
 }
