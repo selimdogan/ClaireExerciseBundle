@@ -7,6 +7,7 @@ use SimpleIT\ClaireAppBundle\Api\ClaireApi;
 use SimpleIT\AppBundle\Services\ApiRouteService;
 use SimpleIT\AppBundle\Model\ApiRequest;
 use SimpleIT\AppBundle\Services\ApiService;
+use SimpleIT\ClaireAppBundle\Model\CourseFactory;
 
 /**
  * Description of AuthorRepository
@@ -20,6 +21,9 @@ class AuthorRepository extends ApiRouteService
 
     /** URL for authors ressources */
     const URL_AUTHORS = '/authors/';
+
+    /** URL for courses collection in an author ressource */
+    const URL_AUTHORS_COURSES = '/courses/';
 
     /**
      * Setter for $claireApi
@@ -66,6 +70,24 @@ class AuthorRepository extends ApiRouteService
     }
 
     /**
+     * Returns all courses written by the given author
+     *
+     * @param integer|string $authorIdentifier
+     * @return array The courses
+     */
+    public function findCourses($authorIdentifier)
+    {
+        $coursesRequest = self::findCoursesRequest($authorIdentifier);
+
+        $coursesResult = $this->claireApi->getResult($coursesRequest);
+        ApiService::checkResponseSuccessful($coursesResult);
+
+        $courses = CourseFactory::createCollection($coursesResult->getContent());
+
+        return $courses;
+    }
+
+    /**
      * Returns the author (ApiRequest)
      *
      * @param mixed $authorIdentifier The author identifier
@@ -76,6 +98,15 @@ class AuthorRepository extends ApiRouteService
     {
         $apiRequest = new ApiRequest();
         $apiRequest->setBaseUrl(self::URL_AUTHORS.$authorIdentifier);
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        return $apiRequest;
+    }
+
+    public static function findCoursesRequest($authorIdentifier)
+    {
+        $apiRequest = new ApiRequest();
+        $apiRequest->setBaseUrl(self::URL_AUTHORS.$authorIdentifier.self::URL_AUTHORS_COURSES);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
 
         return $apiRequest;
