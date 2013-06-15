@@ -1,0 +1,31 @@
+<form id="claire_part_content_form" action="{{ path('simple_it_claire_module_part_content_edit', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post">
+    <textarea id="contentEditor" data-theme="claire" class="tinymce editor" rows="40" cols="70" name="partContent">{{ partContent }}</textarea>
+    <input id="Comment_writingType" class="writingType" type="hidden" name="Comment[writingType]" value="editor">
+    <input type="submit"/>
+</form>
+
+{% javascripts '@SimpleITClaireAppBundle/Resources/public/js/jquery.js' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+<script>
+    $(document).ready(function () {
+        $("#claire_part_content_form").submit(function () {
+            $.ajax({
+                type: "POST",
+                url: "{{ path('simple_it_claire_module_part_content_edit', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}",
+                dataType: "html",
+                data: $('textarea[name="partContent"]'),
+                cache: false,
+                success: function (data) {
+                    $('textarea[name="partContent"]').val(data);
+                },
+                error: function () {
+                    alert('oups');
+                }
+            });
+            return false;
+        });
+    });
+</script>
+{{ tinymce_init() }}
+{% endjavascripts %}
+

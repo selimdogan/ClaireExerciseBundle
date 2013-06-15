@@ -1,0 +1,10 @@
+simple_it_claire_module_part_edit_show:
+    pattern: /{partIdentifier}
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Module/Part:editShow }
+    requirements:
+            _method: GET
+simple_it_claire_module_part_content_edit_show:
+    pattern: /{partIdentifier}/content
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Module/PartContent:editShow }
+    requirements:
+            _method: GET

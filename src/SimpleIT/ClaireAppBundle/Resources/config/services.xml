@@ -11,6 +11,7 @@
         <parameter key="simple_it.claire_categories_api.class">SimpleIT\ClaireAppBundle\Api\CategoryRouteService</parameter>
         <parameter key="simple_it.claire.http.transport.class">SimpleIT\AppBundle\Services\HttpTransport</parameter>
         <parameter key="simple_it.claire.course.class">SimpleIT\ClaireAppBundle\Services\CourseService</parameter>
+        <parameter key="simple_it.claire.course.part.class">SimpleIT\ClaireAppBundle\Services\Course\PartService</parameter>
         <parameter key="simple_it.claire.category.class">SimpleIT\ClaireAppBundle\Services\CategoryService</parameter>
         <parameter key="simple_it.claire.tag.class">SimpleIT\ClaireAppBundle\Services\TagService</parameter>
         <parameter key="simple_it.claire.author.class">SimpleIT\ClaireAppBundle\Services\Profile\AuthorService</parameter>
@@ -23,6 +24,7 @@
         <!-- REPOSITORIES CLASS -->
         <parameter key="simple_it.claire.repository.course.class">SimpleIT\ClaireAppBundle\Repository\Course\CourseRepository</parameter>
         <parameter key="simple_it.claire.repository.part.class">SimpleIT\ClaireAppBundle\Repository\Course\PartRepository</parameter>
+        <parameter key="simple_it.claire.course.repository.part_content.class">SimpleIT\ClaireAppBundle\Repository\Course\PartContentRepository</parameter>
         <parameter key="simple_it.claire.repository.category.class">SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository</parameter>
         <parameter key="simple_it.claire.repository.tag.class">SimpleIT\ClaireAppBundle\Repository\CourseAssociation\TagRepository</parameter>
         <parameter key="simple_it.claire.repository.author.class">SimpleIT\ClaireAppBundle\Repository\User\AuthorRepository</parameter>
@@ -66,6 +68,12 @@
             </call>
             <call method="setCategoryRepository">
                 <argument type="service" id="simple_it.claire.repository.category" />
+            </call>
+        </service>
+
+        <service id="simpleit.claire.course.part" class="%simple_it.claire.course.part.class%" >
+            <call method="setPartContentRepository">
+                <argument type="service" id="simple_it.claire.course.repository.part_content" />
             </call>
         </service>
 
@@ -120,6 +128,11 @@
             </call>
         </service>
         <service id="simple_it.claire.repository.part" class="%simple_it.claire.repository.part.class%" >
+            <call method="setClaireApi">
+                <argument type="service" id="claire_api_service" />
+            </call>
+        </service>
+        <service id="simple_it.claire.course.repository.part_content" class="%simple_it.claire.course.repository.part_content.class%" >
             <call method="setClaireApi">
                 <argument type="service" id="claire_api_service" />
             </call>

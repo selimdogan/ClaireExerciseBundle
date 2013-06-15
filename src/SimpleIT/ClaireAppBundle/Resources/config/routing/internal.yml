@@ -1,0 +1,3 @@
+simple_it_claire_internal_course:
+    resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/internal/course.yml"
+    prefix:   /courses

@@ -1,0 +1,10 @@
+simple_it_claire_module_part_content_edit:
+    pattern: /{partIdentifier}/content
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Module/PartContent:edit }
+    requirements:
+            _method: POST
+simple_it_claire_module_part_edit:
+    pattern: /{partIdentifier}/content
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Module/Part:edit }
+    requirements:
+            _method: POST
