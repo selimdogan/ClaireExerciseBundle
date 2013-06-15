@@ -42,9 +42,9 @@ class PartController extends AppController
         //$part = $this->get('simple_it.claire.course.part')->get($courseIdentifier, $partIdentifier);
         $part = 'test';
 
-        $part = new PartResource();
-        $form = $this->createFormBuilder($part);
-        $form->add()
+//        $part = new PartResource();
+//        $form = $this->createFormBuilder($part);
+//        $form->add()
         return $this->render(
             'SimpleITClaireAppBundle:Course/Part/Module:edit.html.twig',
             array(
