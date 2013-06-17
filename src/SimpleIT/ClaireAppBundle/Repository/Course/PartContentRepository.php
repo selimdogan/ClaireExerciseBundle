@@ -29,7 +29,7 @@ use SimpleIT\ClaireAppBundle\Api\ClaireApi;
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class PartContentRepository extends AppRepository
+class PartContentRepository
 {
     /** The base url for courses = '/courses/' */
     const URL_COURSES = '/courses/';

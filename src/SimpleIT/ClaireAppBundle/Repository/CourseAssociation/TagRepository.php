@@ -18,7 +18,7 @@ use SimpleIT\AppBundle\Model\ApiRequestOptions;
 class TagRepository extends ApiRouteService
 {
     /** @var ClaireApi The Claire Api */
-    private $claireApi;
+    protected $claireApi;
 
     /** URL for categories ressources */
     const URL_CATEGORIES = '/categories/';

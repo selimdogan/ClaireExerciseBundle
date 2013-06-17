@@ -17,7 +17,7 @@ use SimpleIT\ClaireAppBundle\Model\CourseFactory;
 class AuthorRepository extends ApiRouteService
 {
     /** @var ClaireApi The Claire Api */
-    private $claireApi;
+    protected $claireApi;
 
     /** URL for authors ressources */
     const URL_AUTHORS = '/authors/';

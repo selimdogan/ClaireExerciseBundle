@@ -27,7 +27,7 @@ class AssociatedCourseRepository extends ApiRouteService
     const URL_COURSES_ASSOCIATED = '/associatedCourses';
 
     /** @var ClaireApi The Claire Api */
-    private $claireApi;
+    protected $claireApi;
 
     /**
      * Setter for $claireApi
