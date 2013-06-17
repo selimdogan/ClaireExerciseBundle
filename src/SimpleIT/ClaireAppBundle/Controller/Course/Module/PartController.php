@@ -20,6 +20,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Module;
 
+use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Controller\AppController;
 
 /**
@@ -43,15 +44,18 @@ class PartController extends AppController
         $part = 'test';
 
 //        $part = new PartResource();
-//        $form = $this->createFormBuilder($part);
-//        $form->add()
+//        $form = $this->createFormBuilder($part)
+//            ->add('title')
+//            ->getForm();
+
         return $this->render(
             'SimpleITClaireAppBundle:Course/Part/Module:edit.html.twig',
             array(
                 'courseIdentifier' => $courseIdentifier,
                 'partIdentifier' => $partIdentifier,
-                'part' => $part
+//                'form' => $form->createView()
             )
         );
     }
 }
+
