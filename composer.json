@@ -18,8 +18,9 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "simpleit/php-utils": "dev-master@dev",
-        "simpleit/app-bundle": "1.0.x-dev"
+        "simpleit/php-utils": "dev-master",
+        "simpleit/app-bundle": "~1.0.0@dev",
+        "simpleit/api-resources-bundle": "~1.0.0@dev"
     },
     "autoload": {
         "psr-0": {

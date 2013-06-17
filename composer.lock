@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "dd5a1aae70fadb80072e6cf223811e83",
+    "hash": "64e635a52ff94ba51934decdbb068c30",
     "packages": [
         {
             "name": "doctrine/common",
@@ -164,6 +164,42 @@
                 "http client"
             ],
             "time": "2012-05-28 07:08:44"
+        },
+        {
+            "name": "simpleit/api-resources-bundle",
+            "version": "1.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://simpleit-zbot-readonly:nWCWJe04ASZ9ZriSrzfp@github.com/simpleit/ApiResourcesBundle.git",
+                "reference": "a20c9386265a58a849c9d1f861035d75fbe97570"
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "symfony/framework-bundle": ">=2.1,<2.3-dev",
+                "symfony/validator": "2.2.*"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "SimpleIT": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Simple IT",
+                    "email": "technique@simple-it.fr"
+                }
+            ],
+            "description": "Simple IT PoC Api Resources declarations to use with JMSSerializeBundle deserializer",
+            "homepage": "https://github.com/simpleit/ApiResourcesBundle",
+            "keywords": [
+                "api",
+                "resources"
+            ],
+            "time": "2013-03-22 10:15:47"
         },
         {
             "name": "simpleit/app-bundle",
@@ -724,6 +760,67 @@
             "description": "Symfony Translation Component",
             "homepage": "http://symfony.com",
             "time": "2013-04-20 08:25:59"
+        },
+        {
+            "name": "symfony/validator",
+            "version": "v2.2.2",
+            "target-dir": "Symfony/Component/Validator",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Validator.git",
+                "reference": "v2.2.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Validator/zipball/v2.2.2",
+                "reference": "v2.2.2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "symfony/translation": ">=2.0,<3.0"
+            },
+            "require-dev": {
+                "symfony/config": ">=2.2,<2.3-dev",
+                "symfony/http-foundation": ">=2.1,<3.0",
+                "symfony/locale": ">=2.0,<3.0",
+                "symfony/yaml": ">=2.0,<3.0"
+            },
+            "suggest": {
+                "doctrine/common": "~2.2",
+                "symfony/config": "2.2.*",
+                "symfony/http-foundation": "2.2.*",
+                "symfony/locale": "2.2.*",
+                "symfony/yaml": "2.2.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Validator\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Validator Component",
+            "homepage": "http://symfony.com",
+            "time": "2013-06-02 12:05:41"
         }
     ],
     "packages-dev": [
@@ -735,7 +832,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "simpleit/php-utils": 20,
-        "simpleit/app-bundle": 20
+        "simpleit/app-bundle": 20,
+        "simpleit/api-resources-bundle": 20
     },
     "platform": {
         "php": ">=5.3.3"
