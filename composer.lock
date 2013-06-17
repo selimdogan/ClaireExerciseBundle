@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "64e635a52ff94ba51934decdbb068c30",
+    "hash": "88468cbd65ee3f9ae03a1b14593c0a2c",
     "packages": [
         {
             "name": "doctrine/common",
@@ -167,16 +167,16 @@
         },
         {
             "name": "simpleit/api-resources-bundle",
-            "version": "1.0.x-dev",
+            "version": "1.0.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://simpleit-zbot-readonly:nWCWJe04ASZ9ZriSrzfp@github.com/simpleit/ApiResourcesBundle.git",
-                "reference": "a20c9386265a58a849c9d1f861035d75fbe97570"
+                "reference": "4be3f3d68feb0cdb50b9b111763d013f5e9d4927"
             },
             "require": {
                 "php": ">=5.3.3",
-                "symfony/framework-bundle": ">=2.1,<2.3-dev",
-                "symfony/validator": "2.2.*"
+                "symfony/framework-bundle": "~2.1",
+                "symfony/validator": "~2.1"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -185,7 +185,7 @@
                 }
             },
             "license": [
-                "MIT"
+                "GPL v3"
             ],
             "authors": [
                 {
@@ -193,13 +193,13 @@
                     "email": "technique@simple-it.fr"
                 }
             ],
-            "description": "Simple IT PoC Api Resources declarations to use with JMSSerializeBundle deserializer",
+            "description": "Simple IT Api Resources declarations to use with JMSSerializeBundle deserializer",
             "homepage": "https://github.com/simpleit/ApiResourcesBundle",
             "keywords": [
                 "api",
                 "resources"
             ],
-            "time": "2013-03-22 10:15:47"
+            "time": "2013-06-17 15:27:33"
         },
         {
             "name": "simpleit/app-bundle",
@@ -763,17 +763,17 @@
         },
         {
             "name": "symfony/validator",
-            "version": "v2.2.2",
+            "version": "v2.3.1",
             "target-dir": "Symfony/Component/Validator",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Validator.git",
-                "reference": "v2.2.2"
+                "reference": "v2.3.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Validator/zipball/v2.2.2",
-                "reference": "v2.2.2",
+                "url": "https://api.github.com/repos/symfony/Validator/zipball/v2.3.1",
+                "reference": "v2.3.1",
                 "shasum": ""
             },
             "require": {
@@ -781,22 +781,22 @@
                 "symfony/translation": ">=2.0,<3.0"
             },
             "require-dev": {
-                "symfony/config": ">=2.2,<2.3-dev",
+                "symfony/config": ">=2.2,<3.0",
                 "symfony/http-foundation": ">=2.1,<3.0",
-                "symfony/locale": ">=2.0,<3.0",
+                "symfony/intl": ">=2.3,<3.0",
                 "symfony/yaml": ">=2.0,<3.0"
             },
             "suggest": {
-                "doctrine/common": "~2.2",
-                "symfony/config": "2.2.*",
-                "symfony/http-foundation": "2.2.*",
-                "symfony/locale": "2.2.*",
-                "symfony/yaml": "2.2.*"
+                "doctrine/common": "",
+                "symfony/config": "",
+                "symfony/http-foundation": "",
+                "symfony/intl": "",
+                "symfony/yaml": ""
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev"
+                    "dev-master": "2.3-dev"
                 }
             },
             "autoload": {
@@ -820,7 +820,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "http://symfony.com",
-            "time": "2013-06-02 12:05:41"
+            "time": "2013-06-10 16:23:25"
         }
     ],
     "packages-dev": [
