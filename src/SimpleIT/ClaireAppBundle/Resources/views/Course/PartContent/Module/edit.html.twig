@@ -1,3 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+
+    <body>
+        <div style="width:600px">
+            <form id="claire_part_content_form" action="{{ path('simple_it_claire_module_part_content_edit', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post">
+                <textarea id="contentEditor" data-theme="claire" class="tinymce editor" rows="40" cols="70" name="partContent">{{ partContent }}</textarea>
+                <input id="Comment_writingType" class="writingType" type="hidden" name="Comment[writingType]" value="editor">
+                <input type="submit"/>
+            </form>
+        </div>
+
+        <!-- main -->
+        <script src="/bundles/common/js/SdZ/lib/lodash.compat.js"></script>
+        <script src="/bundles/common/js/SdZ/lib/jquery.js"></script>
+        <script src="/bundles/common/js/SdZ/lib/jquery-ui.js"></script>
+
+        <!-- <script src="/bundles/common/js/SdZ/lib/tinymce/tinymce.min.js"></script>
+
+        <!-- widgets -->
+        <script src="/bundles/common/js/SdZ/app/core.js"></script>
+        <script src="/bundles/common/js/SdZ/widgets/wysiwygEditor/wysiwygEditor.js"></script>
+        <script src="/bundles/common/js/SdZ/widgets/wysiwygEditor/wysiwygEditorTinyMCE.js"></script>
+
+        <!-- page -->
+        <script src="/bundles/common/js/SdZ/lib/tinymce/jquery.tinymce.min.js"></script>
+        <script src="/bundles/common/js/SdZ/app/tutorials/editor.js"></script>
+
+    </body>
+</html>
+
+
+{#
 <form id="claire_part_content_form" action="{{ path('simple_it_claire_module_part_content_edit', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post">
     <textarea id="contentEditor" data-theme="claire" class="tinymce editor" rows="40" cols="70" name="partContent">{{ partContent }}</textarea>
     <input id="Comment_writingType" class="writingType" type="hidden" name="Comment[writingType]" value="editor">
@@ -9,14 +43,17 @@
 <script>
     $(document).ready(function () {
         $("#claire_part_content_form").submit(function () {
+            console.log($('textarea[name="partContent"]').val());
             $.ajax({
                 type: "POST",
                 url: "{{ path('simple_it_claire_module_part_content_edit', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}",
+                //url: "http://claire.siteduzero.lan/app_dev.php/courses/creez-des-applications-pour-blackberry/parts/lire-une-video/content",
                 dataType: "html",
-                data: $('textarea[name="partContent"]'),
+                data: $('textarea[name="partContent"]').val(),
                 cache: false,
                 success: function (data) {
-                    $('textarea[name="partContent"]').val(data);
+                    // $('textarea[name="partContent"]').val(data);
+                    console.log('request ok');
                 },
                 error: function () {
                     alert('oups');
@@ -28,4 +65,7 @@
 </script>
 {{ tinymce_init() }}
 {% endjavascripts %}
+#}
+
+
 
