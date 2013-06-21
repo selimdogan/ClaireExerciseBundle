@@ -31,6 +31,8 @@ use SimpleIT\ClaireAppBundle\Api\ClaireApi;
  */
 class PartContentRepository
 {
+
+
     /** The base url for courses = '/courses/' */
     const URL_COURSES = '/courses/';
 

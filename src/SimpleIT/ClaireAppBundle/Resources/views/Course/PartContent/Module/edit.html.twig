@@ -1,6 +1,6 @@
 <form id="claire_part_content_form" action="{{ path('simple_it_claire_module_part_content_edit', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post">
     <textarea id="contentEditor" data-theme="claire" class="tinymce editor" rows="40" cols="70" name="partContent">{{ partContent }}</textarea>
-    <input id="Comment_writingType" class="writingType" type="hidden" name="Comment[writingType]" value="editor">
+    {#<input id="Comment_writingType" class="writingType" type="hidden" name="Comment[writingType]" value="editor">#}
     <input type="submit"/>
 </form>
 
@@ -26,6 +26,6 @@
         });
     });
 </script>
-{{ tinymce_init() }}
+{#{{ tinymce_init() }}#}
 {% endjavascripts %}
 

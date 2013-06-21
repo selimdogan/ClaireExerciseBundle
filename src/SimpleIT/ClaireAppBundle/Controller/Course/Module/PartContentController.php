@@ -22,6 +22,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Module;
 
 use SimpleIT\AppBundle\Controller\AppController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -74,14 +75,15 @@ class PartContentController extends AppController
             $partIdentifier,
             $partContent
         );
+        return new Response($partContent);
 
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/PartContent/Module:edit.html.twig',
-            array(
-                'courseIdentifier' => $courseIdentifier,
-                'partIdentifier' => $partIdentifier,
-                'partContent' => $partContent
-            )
-        );
+//        return $this->render(
+//            'SimpleITClaireAppBundle:Course/PartContent/Module:edit.html.twig',
+//            array(
+//                'courseIdentifier' => $courseIdentifier,
+//                'partIdentifier' => $partIdentifier,
+//                'partContent' => $partContent
+//            )
+//        );
     }
 }
