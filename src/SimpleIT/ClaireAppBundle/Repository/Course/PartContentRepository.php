@@ -22,88 +22,137 @@ namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
 use SimpleIT\AppBundle\Model\ApiRequest;
 use SimpleIT\AppBundle\Repository\AppRepository;
-use SimpleIT\ClaireAppBundle\Api\ClaireApi;
+use SimpleIT\Utils\FormatUtils;
 
 /**
  * Class PartContentRepository
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class PartContentRepository
+class PartContentRepository extends AppRepository
 {
-    /** The base url for courses = '/courses/' */
-    const URL_COURSES = '/courses/';
-
-    /** The base url for parts = '/parts/' */
-    const URL_PART = '/parts/';
-
-    protected $url = '';
 
     /**
-     * @var  ClaireApi
+     * @var string
      */
-    protected $claireApi;
+    protected $path = 'courses/{courseIdentifier}/parts/{partIdentifier}/content';
 
     /**
-     * Set claireApi
-     *
-     * @param \SimpleIT\ClaireAppBundle\Api\ClaireApi $claireApi
+     * @var  string
      */
-    public function setClaireApi($claireApi)
-    {
-        $this->claireApi = $claireApi;
-    }
-
-    public function update($courseIdentifier, $partIdentifier, $content, $format = 'text/html')
-    {
-        $request = new ApiRequest();
-        $request->setBaseUrl(self::URL_COURSES . $courseIdentifier . self::URL_PART . $partIdentifier . '/content');
-        $request->setMethod('PUT');
-        $request->setRawData($content);
-        $request->setFormat('text/html');
-//        $request = $this->put($url);
-//        $request->setFormat($format);
-        $response = $this->claireApi->getResult($request);
-        $content = $response->getContent();
-//
-        return $content;
-    }
+    protected $resourceClass = '';
 
     /**
-     * @param        $courseIdentifier
-     * @param        $partIdentifier
-     * @param string $format
+     * Get a part content
      *
-     * @return \SimpleIT\AppBundle\Model\ApiResult
+     * @param string $courseIdentifier Course id | slug
+     * @param string $partIdentifier   Part id | slug
+     * @param array  $parameters       Parameters
+     *
+     * @return string
      */
-    public function find($courseIdentifier, $partIdentifier, $format = 'text/html')
+    public function find($courseIdentifier, $partIdentifier, $parameters = array())
     {
-        $request = $this->findRequest($courseIdentifier, $partIdentifier, $format);
-        $response = $this->claireApi->getResult($request);
-
-        $content = $response->getContent();
-        return $content;
-
-    }
-
-    /**
-     * Returns the part (ApiRequest)
-     *
-     * @param mixed  $courseIdentifier  The course id | slug
-     * @param mixed  $partIdentifier    The part id | slug
-     * @param string $format            The requested format
-     *
-     * @return ApiRequest
-     */
-    public static function findRequest($courseIdentifier, $partIdentifier, $format = null)
-    {
-        $apiRequest = new ApiRequest();
-        $apiRequest->setBaseUrl(
-            self::URL_COURSES . $courseIdentifier . self::URL_PART . $partIdentifier . '/content'
+        return parent::get(
+            array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier),
+            $parameters,
+            FormatUtils::HTML
         );
-        $apiRequest->setMethod(ApiRequest::METHOD_GET);
-        $apiRequest->setFormat($format);
-
-        return $apiRequest;
     }
+
+    /**
+     * Update a part content
+     *
+     * @param string $courseIdentifier Course id | slug
+     * @param string $partIdentifier   Part id | slug
+     * @param string $partContent      Part content (html)
+     * @param array  $parameters       Parameters
+     *
+     * @return string
+     */
+    public function update($courseIdentifier, $partIdentifier, $partContent, $parameters = array())
+    {
+        return parent::put(
+            $partContent,
+            array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier),
+            $parameters,
+            FormatUtils::HTML
+        );
+    }
+//
+//    /** The base url for courses = '/courses/' */
+//    const URL_COURSES = '/courses/';
+//
+//    /** The base url for parts = '/parts/' */
+//    const URL_PART = '/parts/';
+//
+//    protected $url = '';
+//
+//    /**
+//     * @var  ClaireApi
+//     */
+//    protected $claireApi;
+//
+//    /**
+//     * Set claireApi
+//     *
+//     * @param \SimpleIT\ClaireAppBundle\Api\ClaireApi $claireApi
+//     */
+//    public function setClaireApi($claireApi)
+//    {
+//        $this->claireApi = $claireApi;
+//    }
+//
+//    public function update($courseIdentifier, $partIdentifier, $content, $format = 'text/html')
+//    {
+//        $request = new ApiRequest();
+//        $request->setBaseUrl(self::URL_COURSES . $courseIdentifier . self::URL_PART . $partIdentifier . '/content');
+//        $request->setMethod('PUT');
+//        $request->setRawData($content);
+//        $request->setFormat('text/html');
+////        $request = $this->put($url);
+////        $request->setFormat($format);
+//        $response = $this->claireApi->getResult($request);
+//        $content = $response->getContent();
+////
+//        return $content;
+//    }
+//
+//    /**
+//     * @param        $courseIdentifier
+//     * @param        $partIdentifier
+//     * @param string $format
+//     *
+//     * @return \SimpleIT\AppBundle\Model\ApiResult
+//     */
+//    public function find($courseIdentifier, $partIdentifier, $format = 'text/html')
+//    {
+//        $request = $this->findRequest($courseIdentifier, $partIdentifier, $format);
+//        $response = $this->claireApi->getResult($request);
+//
+//        $content = $response->getContent();
+//        return $content;
+//
+//    }
+//
+//    /**
+//     * Returns the part (ApiRequest)
+//     *
+//     * @param mixed  $courseIdentifier  The course id | slug
+//     * @param mixed  $partIdentifier    The part id | slug
+//     * @param string $format            The requested format
+//     *
+//     * @return ApiRequest
+//     */
+//    public static function findRequest($courseIdentifier, $partIdentifier, $format = null)
+//    {
+//        $apiRequest = new ApiRequest();
+//        $apiRequest->setBaseUrl(
+//            self::URL_COURSES . $courseIdentifier . self::URL_PART . $partIdentifier . '/content'
+//        );
+//        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+//        $apiRequest->setFormat($format);
+//
+//        return $apiRequest;
+//    }
 }

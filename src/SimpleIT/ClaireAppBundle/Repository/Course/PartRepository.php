@@ -1,5 +1,8 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
+
+use SimpleIT\ApiResourcesBundle\Course\PartResource;
+use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\AppBundle\Services\ApiService;
 
 use SimpleIT\ClaireAppBundle\Model\CategoryFactory;
@@ -37,10 +40,60 @@ use SimpleIT\AppBundle\Services\ApiRouteService;
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class PartRepository extends ApiRouteService
+class PartRepository extends AppRepository
 {
 
-    /** @var ClaireApi The Claire Api */
+    /**
+     * @var string
+     */
+    protected $path = 'courses/{courseIdentifier}/parts/{partIdentifier}';
+
+    /**
+     * @var  string
+     */
+    protected $resourceClass = 'SimpleIT\ApiResourcesBundle\Course\PartResource';
+
+    /**
+     * Find a part
+     *
+     * @param string $courseIdentifier Course id | slug
+     * @param string $partIdentifier   Part id | slug
+     *
+     * @timeout
+     * @cache
+     *
+     * @return PartResource
+     */
+    public function find($courseIdentifier, $partIdentifier)
+    {
+        return $this->get(
+            array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier)
+        );
+    }
+
+    /**
+     * Update a part
+     *
+     * @param PartResource $part             Part
+     * @param string       $courseIdentifier Course id | slug
+     * @param string       $partIdentifier   Part id | slug
+     *
+     * @return PartResource
+     */
+    public function update(PartResource $part, $courseIdentifier, $partIdentifier)
+    {
+        return $this->put(
+            $part,
+            array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier)
+        );
+    }
+
+    /* **********************
+     *
+     * ***** OLD SHIT ***** *
+     *
+     * **********************/
+   /** @var ClaireApi The Claire Api */
     protected $claireApi;
 
     /** The base url for courses = '/courses/' */
