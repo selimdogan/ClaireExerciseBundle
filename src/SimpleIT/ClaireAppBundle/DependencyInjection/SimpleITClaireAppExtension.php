@@ -26,6 +26,8 @@ class SimpleITClaireAppExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
+        $container->setParameter('simple_it_claire_app', $config);
+        // FIXME remove when rmove buzz
         $container->setParameter('simple_it_claire_app.host', $config['host']);
     }
 }

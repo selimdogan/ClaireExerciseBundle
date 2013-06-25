@@ -40,8 +40,7 @@ class PartController extends AppController
      */
     public function editAction($courseIdentifier, $partIdentifier)
     {
-        //$part = $this->get('simple_it.claire.course.part')->get($courseIdentifier, $partIdentifier);
-        $part = 'test';
+        $part = $this->get('simple_it.claire.course.part')->get($courseIdentifier, $partIdentifier);
 
 //        $part = new PartResource();
 //        $form = $this->createFormBuilder($part)
@@ -53,6 +52,7 @@ class PartController extends AppController
             array(
                 'courseIdentifier' => $courseIdentifier,
                 'partIdentifier' => $partIdentifier,
+                'part'=>$part
 //                'form' => $form->createView()
             )
         );

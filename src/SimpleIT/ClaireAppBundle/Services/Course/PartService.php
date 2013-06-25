@@ -21,6 +21,7 @@
 namespace SimpleIT\ClaireAppBundle\Services\Course;
 
 use SimpleIT\ClaireAppBundle\Repository\Course\PartContentRepository;
+use SimpleIT\ClaireAppBundle\Repository\Course\PartRepository;
 
 /**
  * Class PartService
@@ -31,9 +32,24 @@ class PartService
 {
 
     /**
+     * @var  PartRepository
+     */
+    private $partRepository;
+
+    /**
      * @var  PartContentRepository
      */
     private $partContentRepository;
+
+    /**
+     * Set partRepository
+     *
+     * @param \SimpleIT\ClaireAppBundle\Repository\Course\PartRepository $partRepository
+     */
+    public function setPartRepository($partRepository)
+    {
+        $this->partRepository = $partRepository;
+    }
 
     /**
      * Set partContentRepository
@@ -43,6 +59,19 @@ class PartService
     public function setPartContentRepository($partContentRepository)
     {
         $this->partContentRepository = $partContentRepository;
+    }
+
+    /**
+     * Get a part
+     *
+     * @param string | integer $courseIdentifier Course id | slug
+     * @param string | integer $partIdentifier   Part id | slug
+     *
+     * @return \SimpleIT\ClaireAppBundle\Model\Course\Part
+     */
+    public function get($courseIdentifier, $partIdentifier)
+    {
+        return $this->partRepository->find($courseIdentifier, $partIdentifier);
     }
 
     /**

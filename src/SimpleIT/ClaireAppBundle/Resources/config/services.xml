@@ -24,6 +24,7 @@
         <!-- REPOSITORIES CLASS -->
         <parameter key="simple_it.claire.repository.course.class">SimpleIT\ClaireAppBundle\Repository\Course\CourseRepository</parameter>
         <parameter key="simple_it.claire.repository.part.class">SimpleIT\ClaireAppBundle\Repository\Course\PartRepository</parameter>
+        <parameter key="simple_it.claire.course.repository.part.class">SimpleIT\ClaireAppBundle\Repository\Course\PartRepository</parameter>
         <parameter key="simple_it.claire.course.repository.part_content.class">SimpleIT\ClaireAppBundle\Repository\Course\PartContentRepository</parameter>
         <parameter key="simple_it.claire.repository.category.class">SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository</parameter>
         <parameter key="simple_it.claire.repository.tag.class">SimpleIT\ClaireAppBundle\Repository\CourseAssociation\TagRepository</parameter>
@@ -32,6 +33,43 @@
     </parameters>
 
     <services>
+        <service id="simple_it.claire.http_client"
+                 class="%simple_it.app_bundle.http_client.class%"
+                 factory-service="simple_it.app_bundle.client_factory"
+                 factory-method="get">
+            <argument>%simple_it_claire_app%</argument>
+        </service>
+
+        <service id="simple_it.claire.course.repository.part_content" class="%simple_it.claire.course.repository.part_content.class%" >
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client" />
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="serializer" />
+            </call>
+        </service>
+
+        <service id="simple_it.claire.course.repository.part" class="%simple_it.claire.course.repository.part.class%" >
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client" />
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="serializer" />
+            </call>
+        </service>
+
+        <service id="simpleit.claire.course.part" class="%simple_it.claire.course.part.class%" >
+            <call method="setPartContentRepository">
+                <argument type="service" id="simple_it.claire.course.repository.part_content" />
+            </call>
+            <call method="setPartRepository">
+                <argument type="service" id="simple_it.claire.course.repository.part" />
+            </call>
+        </service>
+
+
+        <!--OLD SHIT-->
+
         <service id="simple_it.claire.buzz.client" class="%simple_it.claire.buzz.client.class%" public="false" />
 
         <service id="simple_it.claire.buzz" class="%buzz.browser.class%">
@@ -71,11 +109,7 @@
             </call>
         </service>
 
-        <service id="simpleit.claire.course.part" class="%simple_it.claire.course.part.class%" >
-            <call method="setPartContentRepository">
-                <argument type="service" id="simple_it.claire.course.repository.part_content" />
-            </call>
-        </service>
+
 
         <!-- AssociatedCourseService -->
         <service id="simpleit.claire.associated_course" class="%simple_it.claire.associated_course.class%" >
@@ -132,11 +166,7 @@
                 <argument type="service" id="claire_api_service" />
             </call>
         </service>
-        <service id="simple_it.claire.course.repository.part_content" class="%simple_it.claire.course.repository.part_content.class%" >
-            <call method="setClaireApi">
-                <argument type="service" id="claire_api_service" />
-            </call>
-        </service>
+
         <service id="simple_it.claire.repository.category" class="%simple_it.claire.repository.category.class%" >
             <call method="setClaireApi">
                 <argument type="service" id="claire_api_service" />
