@@ -38,7 +38,7 @@ use SimpleIT\AppBundle\Services\ApiRouteService;
 class CourseRepository extends ApiRouteService
 {
     /** @var ClaireApi The Claire Api */
-    private $claireApi;
+    protected $claireApi;
 
     /** The base url for courses = '/courses/' */
     const URL_COURSES = '/courses/';

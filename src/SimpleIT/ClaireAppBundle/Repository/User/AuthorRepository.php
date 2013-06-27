@@ -17,11 +17,11 @@ use SimpleIT\ClaireAppBundle\Model\CourseFactory;
 class AuthorRepository extends ApiRouteService
 {
     /** @var ClaireApi The Claire Api */
-    private $claireApi;
+    protected $claireApi;
 
     /** URL for authors ressources */
     const URL_AUTHORS = '/authors/';
-
+    
     /** URL for courses collection in an author ressource */
     const URL_COURSES = '/courses/';
 
