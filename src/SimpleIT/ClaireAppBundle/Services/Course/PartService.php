@@ -20,6 +20,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Services\Course;
 
+use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartContentRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartRepository;
 
@@ -72,6 +73,20 @@ class PartService
     public function get($courseIdentifier, $partIdentifier)
     {
         return $this->partRepository->find($courseIdentifier, $partIdentifier);
+    }
+
+    /**
+     * Update a part
+     *
+     * @param string       $courseIdentifier Course id | slug
+     * @param string       $partIdentifier   Part id | slug
+     * @param PartResource $part             Part
+     *
+     * @return PartResource
+     */
+    public function save($courseIdentifier, $partIdentifier, $part)
+    {
+        return $this->partRepository->update($courseIdentifier, $partIdentifier, $part);
     }
 
     /**

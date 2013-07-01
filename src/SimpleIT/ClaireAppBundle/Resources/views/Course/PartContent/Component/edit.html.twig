@@ -7,7 +7,7 @@
 
 
         <div style="width:600px">
-            <form id="claire_part_content_form" action="{{ path('simple_it_claire_module_part_content_edit', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post">
+            <form id="claire_part_content_form" action="{{ path('simple_it_claire_component_part_content_edit', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post">
             <!-- <form id="claire_part_content_form" action="/test.php" method="post"> -->
                 <textarea
                     class="tinymce editor" rows="40" cols="70"
@@ -79,7 +79,7 @@
         // });
     });
 </script>
-{#{{ tinymce_init() }}#}
+{#{{ tinymce_init() }}
 {% endjavascripts %}
 #}
     </body>

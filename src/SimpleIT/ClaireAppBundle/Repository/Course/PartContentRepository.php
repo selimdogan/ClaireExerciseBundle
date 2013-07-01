@@ -53,7 +53,7 @@ class PartContentRepository extends AppRepository
      */
     public function find($courseIdentifier, $partIdentifier, $parameters = array())
     {
-        return parent::get(
+        return parent::findResource(
             array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier),
             $parameters,
             FormatUtils::HTML
@@ -72,7 +72,7 @@ class PartContentRepository extends AppRepository
      */
     public function update($courseIdentifier, $partIdentifier, $partContent, $parameters = array())
     {
-        return parent::put(
+        return parent::updateResource(
             $partContent,
             array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier),
             $parameters,

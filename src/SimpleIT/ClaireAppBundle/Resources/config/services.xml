@@ -6,12 +6,19 @@
 
 
     <parameters>
+        <parameter key="simple_it.claire.course.repository.part.class">SimpleIT\ClaireAppBundle\Repository\Course\PartRepository</parameter>
+        <parameter key="simple_it.claire.course.repository.part_content.class">SimpleIT\ClaireAppBundle\Repository\Course\PartContentRepository</parameter>
+        <parameter key="simple_it.claire.course.repository.metadata_by_part.class">SimpleIT\ClaireAppBundle\Repository\Course\MetadataByPartRepository</parameter>
+
+        <parameter key="simple_it.claire.course.class">SimpleIT\ClaireAppBundle\Services\CourseService</parameter>
+        <parameter key="simple_it.claire.course.part.class">SimpleIT\ClaireAppBundle\Services\Course\PartService</parameter>
+        <parameter key="simple_it.claire.course.metadata.class">SimpleIT\ClaireAppBundle\Services\Course\MetadataService</parameter>
+
+
         <parameter key="simple_it.claire_api.class">SimpleIT\ClaireAppBundle\Api\ClaireApi</parameter>
 
         <parameter key="simple_it.claire_categories_api.class">SimpleIT\ClaireAppBundle\Api\CategoryRouteService</parameter>
         <parameter key="simple_it.claire.http.transport.class">SimpleIT\AppBundle\Services\HttpTransport</parameter>
-        <parameter key="simple_it.claire.course.class">SimpleIT\ClaireAppBundle\Services\CourseService</parameter>
-        <parameter key="simple_it.claire.course.part.class">SimpleIT\ClaireAppBundle\Services\Course\PartService</parameter>
         <parameter key="simple_it.claire.category.class">SimpleIT\ClaireAppBundle\Services\CategoryService</parameter>
         <parameter key="simple_it.claire.tag.class">SimpleIT\ClaireAppBundle\Services\TagService</parameter>
         <parameter key="simple_it.claire.author.class">SimpleIT\ClaireAppBundle\Services\Profile\AuthorService</parameter>
@@ -24,8 +31,6 @@
         <!-- REPOSITORIES CLASS -->
         <parameter key="simple_it.claire.repository.course.class">SimpleIT\ClaireAppBundle\Repository\Course\CourseRepository</parameter>
         <parameter key="simple_it.claire.repository.part.class">SimpleIT\ClaireAppBundle\Repository\Course\PartRepository</parameter>
-        <parameter key="simple_it.claire.course.repository.part.class">SimpleIT\ClaireAppBundle\Repository\Course\PartRepository</parameter>
-        <parameter key="simple_it.claire.course.repository.part_content.class">SimpleIT\ClaireAppBundle\Repository\Course\PartContentRepository</parameter>
         <parameter key="simple_it.claire.repository.category.class">SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository</parameter>
         <parameter key="simple_it.claire.repository.tag.class">SimpleIT\ClaireAppBundle\Repository\CourseAssociation\TagRepository</parameter>
         <parameter key="simple_it.claire.repository.author.class">SimpleIT\ClaireAppBundle\Repository\User\AuthorRepository</parameter>
@@ -33,6 +38,7 @@
     </parameters>
 
     <services>
+
         <service id="simple_it.claire.http_client"
                  class="%simple_it.app_bundle.http_client.class%"
                  factory-service="simple_it.app_bundle.client_factory"
@@ -40,6 +46,7 @@
             <argument>%simple_it_claire_app%</argument>
         </service>
 
+        <!--COURSE-->
         <service id="simple_it.claire.course.repository.part_content" class="%simple_it.claire.course.repository.part_content.class%" >
             <call method="setClient">
                 <argument type="service" id="simple_it.claire.http_client" />
@@ -58,12 +65,27 @@
             </call>
         </service>
 
+        <service id="simple_it.claire.course.repository.metadata_by_part" class="%simple_it.claire.course.repository.metadata_by_part.class%" >
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client" />
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="serializer" />
+            </call>
+        </service>
+
         <service id="simpleit.claire.course.part" class="%simple_it.claire.course.part.class%" >
             <call method="setPartContentRepository">
                 <argument type="service" id="simple_it.claire.course.repository.part_content" />
             </call>
             <call method="setPartRepository">
                 <argument type="service" id="simple_it.claire.course.repository.part" />
+            </call>
+        </service>
+
+        <service id="simpleit.claire.course.metadata" class="%simple_it.claire.course.metadata.class%" >
+            <call method="setMetadataByPartRepository">
+                <argument type="service" id="simple_it.claire.course.repository.metadata_by_part" />
             </call>
         </service>
 

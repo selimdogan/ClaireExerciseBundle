@@ -1,0 +1,29 @@
+simple_it_claire_component_part_metadata_show_rating:
+    pattern: /
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/MetadataByPartContent:showRating }
+    requirements:
+            _method: GET
+
+simple_it_claire_component_part_metadata_edit_description:
+    pattern: /
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/MetadataByPartContent:editDescription }
+    requirements:
+            _method: GET|POST
+
+simple_it_claire_component_part_metadata_edit_image:
+    pattern: /
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/MetadataByPartContent:editImage }
+    requirements:
+            _method: GET|POST
+
+simple_it_claire_component_part_metadata_edit_difficulty:
+    pattern: /
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/MetadataByPartContent:editDifficulty }
+    requirements:
+            _method: GET|POST
+
+simple_it_claire_component_part_metadata_edit_duration:
+    pattern: /
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/MetadataByPartContent:editDuration }
+    requirements:
+            _method: GET|POST
