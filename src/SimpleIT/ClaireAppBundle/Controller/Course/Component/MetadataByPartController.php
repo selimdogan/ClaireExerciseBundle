@@ -2,7 +2,6 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
-use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -11,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class MetadataByPartController extends AppController
+class MetadataByPartController extends AbstractMetadataController
 {
     /**
      * Show part rate
@@ -51,12 +50,17 @@ class MetadataByPartController extends AppController
      */
     public function editDescriptionAction(Request $request, $courseIdentifier, $partIdentifier)
     {
-        // TODO
-        $metadata = array();
+        $metadataName = 'description';
+        $metadatas = $this->get('simple_it.claire.course.metadata')->get(
+            $courseIdentifier,
+            $partIdentifier
+        );
 
-        $form = $this->createFormBuilder($metadata)
-            ->add('key')
+        $form = $this->createFormBuilder($metadatas)
+            ->add($metadataName)
             ->getForm();
+
+        $form = $this->processEdit($request, $form, $metadataName);
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/MetadataByPart/Component:editDescription.html.twig',
@@ -79,29 +83,17 @@ class MetadataByPartController extends AppController
      */
     public function editImageAction(Request $request, $courseIdentifier, $partIdentifier)
     {
-        $metadatas = array();
-        if (RequestUtils::METHOD_GET == $request->getMethod()) {
-            $metadatas = $this->get('simple_it.claire.course.metadata')->get(
-                $courseIdentifier,
-                $partIdentifier
-            );
-        }
+        $metadataName = 'image';
+        $metadatas = $this->get('simple_it.claire.course.metadata')->get(
+            $courseIdentifier,
+            $partIdentifier
+        );
 
         $form = $this->createFormBuilder($metadatas)
-            ->add('image')
+            ->add($metadataName, 'url')
             ->getForm();
 
-        if (RequestUtils::METHOD_POST == $request->getMethod()) {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $metadatas = $form->getData();
-                $metadatas = $this->get('simple_it.claire.course.metadata')->save(
-                    $courseIdentifier,
-                    $partIdentifier,
-                    array('image' => $metadatas['image'])
-                );
-            }
-        }
+        $form = $this->processEdit($request, $form, $metadataName);
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/MetadataByPart/Component:editImage.html.twig',
@@ -124,12 +116,29 @@ class MetadataByPartController extends AppController
      */
     public function editDifficultyAction(Request $request, $courseIdentifier, $partIdentifier)
     {
-        // TODO
-        $metadata = array();
+        $metadataName = 'difficulty';
+        $metadatas = $this->get('simple_it.claire.course.metadata')->get(
+            $courseIdentifier,
+            $partIdentifier
+        );
 
-        $form = $this->createFormBuilder($metadata)
-            ->add('key')
+        $form = $this->createFormBuilder($metadatas)
+            ->add(
+                $metadataName,
+                'choice',
+                array(
+                    'choices'     => array(
+                        'easy'   => 'facile',
+                        'middle' => 'moyen',
+                        'hard'   => 'difficile'
+                    ),
+                    'empty_value' => '',
+                    'required'    => true
+                )
+            )
             ->getForm();
+
+        $form = $this->processEdit($request, $form, $metadataName);
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/MetadataByPart/Component:editDifficulty.html.twig',
@@ -152,12 +161,17 @@ class MetadataByPartController extends AppController
      */
     public function editDurationAction(Request $request, $courseIdentifier, $partIdentifier)
     {
-        // TODO
-        $metadata = array();
+        $metadataName = 'duration';
+        $metadatas = $this->get('simple_it.claire.course.metadata')->get(
+            $courseIdentifier,
+            $partIdentifier
+        );
 
-        $form = $this->createFormBuilder($metadata)
-            ->add('key')
+        $form = $this->createFormBuilder($metadatas)
+            ->add($metadataName, 'date', array('input' => 'datetime', 'widget' => 'text'))
             ->getForm();
+
+        $form = $this->processEdit($request, $form, $metadataName);
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/MetadataByPart/Component:editDuration.html.twig',

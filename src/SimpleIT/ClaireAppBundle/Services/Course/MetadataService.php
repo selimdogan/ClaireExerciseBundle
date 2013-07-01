@@ -72,8 +72,8 @@ class MetadataService
             $courseIdentifier,
             $partIdentifier
         );
-        foreach ($metadatasToUpdate as $key => $value) {
-            if (in_array($key, $metadatas)) {
+        foreach ($metadatas as $key => $value) {
+            if (array_key_exists($key, $metadatasToUpdate)) {
                 $metadatasToUpdate = $this->metadataByPartRepository->update(
                     $courseIdentifier,
                     $partIdentifier,
