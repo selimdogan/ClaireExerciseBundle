@@ -1,0 +1,9 @@
+<form id="claire_part_form" action="{{ path('simple_it_claire_component_part_edit', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post" {{ form_enctype(form) }}>
+    {{ form_errors(form) }}
+    {{ form_errors(form.title) }}
+    {{ form_widget(form.title) }}
+    {{ form_rest(form) }}
+    <input type="submit">
+    {#Remove submit#}
+</form>
+

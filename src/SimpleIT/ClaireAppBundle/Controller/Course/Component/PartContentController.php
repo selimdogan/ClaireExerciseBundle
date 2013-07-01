@@ -18,11 +18,11 @@
  * along with CLAIRE. If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace SimpleIT\ClaireAppBundle\Controller\Course\Module;
+namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\AppBundle\Controller\AppController;
+use SimpleIT\AppBundle\Util\RequestUtils;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class PartContentController
@@ -32,32 +32,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class PartContentController extends AppController
 {
     /**
-     * Edit content
-     *
-     * @param integer $courseIdentifier Course id | slug
-     * @param integer $partIdentifier   Part id | slug
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function editShowAction($courseIdentifier, $partIdentifier)
-    {
-        $partContent = $this->get('simple_it.claire.course.part')->getContent(
-            $courseIdentifier,
-            $partIdentifier
-        );
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/PartContent/Module:edit.html.twig',
-            array(
-                'courseIdentifier' => $courseIdentifier,
-                'partIdentifier' => $partIdentifier,
-                'partContent' => $partContent
-            )
-        );
-    }
-
-    /**
-     * Edit content
+     * Edit part content
      *
      * @param Request $request          Request
      * @param integer $courseIdentifier Course id | slug
@@ -67,20 +42,27 @@ class PartContentController extends AppController
      */
     public function editAction(Request $request, $courseIdentifier, $partIdentifier)
     {
-
-        $partContent = $request->get('partContent');
-        $partContent = $this->get('simple_it.claire.course.part')->saveContent(
-            $courseIdentifier,
-            $partIdentifier,
-            $partContent
-        );
+        $partContent = null;
+        if (RequestUtils::METHOD_GET == $request->getMethod()) {
+            $partContent = $this->get('simple_it.claire.course.part')->getContent(
+                $courseIdentifier,
+                $partIdentifier
+            );
+        } elseif (RequestUtils::METHOD_POST == $request->getMethod()) {
+            $partContent = $request->get('partContent');
+            $partContent = $this->get('simple_it.claire.course.part')->saveContent(
+                $courseIdentifier,
+                $partIdentifier,
+                $partContent
+            );
+        }
 
         return $this->render(
-            'SimpleITClaireAppBundle:Course/PartContent/Module:edit.html.twig',
+            'SimpleITClaireAppBundle:Course/PartContent/Component:edit.html.twig',
             array(
                 'courseIdentifier' => $courseIdentifier,
-                'partIdentifier' => $partIdentifier,
-                'partContent' => $partContent
+                'partIdentifier'   => $partIdentifier,
+                'partContent'      => $partContent
             )
         );
     }

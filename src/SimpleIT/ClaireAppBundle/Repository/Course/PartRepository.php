@@ -2,38 +2,21 @@
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
+use SimpleIT\AppBundle\Model\ApiRequest;
+use SimpleIT\AppBundle\Model\ApiRequestOptions;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\AppBundle\Services\ApiService;
-
-use SimpleIT\ClaireAppBundle\Model\CategoryFactory;
-
-use Symfony\Component\HttpKernel\Exception\HttpException;
-
-use SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository;
-
-use SimpleIT\ClaireAppBundle\Model\Course\Part;
-
-use SimpleIT\ClaireAppBundle\Model\AuthorFactory;
-
-use SimpleIT\ClaireAppBundle\Model\PartFactory;
-
-use SimpleIT\ClaireAppBundle\Model\TocFactory;
-
-use SimpleIT\ClaireAppBundle\Model\TagFactory;
-
-use SimpleIT\ClaireAppBundle\Model\MetadataFactory;
-
-use SimpleIT\AppBundle\Model\ApiRequestOptions;
-
-use SimpleIT\ClaireAppBundle\Model\Course\Course;
-
-use SimpleIT\ClaireAppBundle\Model\CourseFactory;
-
 use SimpleIT\ClaireAppBundle\Api\ClaireApi;
-
-use SimpleIT\AppBundle\Model\ApiRequest;
-
-use SimpleIT\AppBundle\Services\ApiRouteService;
+use SimpleIT\ClaireAppBundle\Model\AuthorFactory;
+use SimpleIT\ClaireAppBundle\Model\CategoryFactory;
+use SimpleIT\ClaireAppBundle\Model\Course\Part;
+use SimpleIT\ClaireAppBundle\Model\CourseFactory;
+use SimpleIT\ClaireAppBundle\Model\MetadataFactory;
+use SimpleIT\ClaireAppBundle\Model\PartFactory;
+use SimpleIT\ClaireAppBundle\Model\TagFactory;
+use SimpleIT\ClaireAppBundle\Model\TocFactory;
+use SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class PartRepository
@@ -59,14 +42,11 @@ class PartRepository extends AppRepository
      * @param string $courseIdentifier Course id | slug
      * @param string $partIdentifier   Part id | slug
      *
-     * @timeout
-     * @cache
-     *
      * @return PartResource
      */
     public function find($courseIdentifier, $partIdentifier)
     {
-        return $this->get(
+        return $this->findResource(
             array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier)
         );
     }
@@ -74,15 +54,15 @@ class PartRepository extends AppRepository
     /**
      * Update a part
      *
-     * @param PartResource $part             Part
      * @param string       $courseIdentifier Course id | slug
      * @param string       $partIdentifier   Part id | slug
+     * @param PartResource $part             Part
      *
      * @return PartResource
      */
-    public function update(PartResource $part, $courseIdentifier, $partIdentifier)
+    public function update($courseIdentifier, $partIdentifier, PartResource $part)
     {
-        return $this->put(
+        return $this->updateResource(
             $part,
             array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier)
         );

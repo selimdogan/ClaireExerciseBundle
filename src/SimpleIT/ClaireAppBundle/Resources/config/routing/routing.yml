@@ -6,10 +6,10 @@ SimpleIT_Claire_Categories:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/Categories/routing.yml"
     prefix: /categories
 
-_internal:
-    resource: "@SimpleITClaireAppBundle/Resources/config/routing/internal.yml"
-    prefix:   /_internal
-
 simple_it_claire_course:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/course.yml"
     prefix:   /courses
+
+simple_it_claire_component_course:
+    resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/component_course.yml"
+    prefix:   components/courses
