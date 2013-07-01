@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "d9889b9ed65bbd1587cd8f7985b77db6",
+    "hash": "88e189f1061026f302660087e8a395f7",
     "packages": [
         {
             "name": "doctrine/common",
@@ -798,11 +798,11 @@
         },
         {
             "name": "simpleit/app-bundle",
-            "version": "v1.0.1",
+            "version": "1.0.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://simpleit-zbot-readonly:nWCWJe04ASZ9ZriSrzfp@github.com/simpleit/AppBundle.git",
-                "reference": "v1.0.1"
+                "reference": "7f5324e8f2d7dc5953bcc62ff9a8b10443db2c53"
             },
             "require": {
                 "guzzle/guzzle": "~3.7",
@@ -833,7 +833,7 @@
             "keywords": [
                 "app"
             ],
-            "time": "2013-06-25 13:22:31"
+            "time": "2013-07-01 07:30:37"
         },
         {
             "name": "simpleit/php-utils",
@@ -1084,6 +1084,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "simpleit/app-bundle": 20,
         "sensio/buzz-bundle": 20
     },
     "platform": {
