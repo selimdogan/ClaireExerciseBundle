@@ -14,26 +14,28 @@ use Symfony\Component\HttpFoundation\Request;
 class MetadataByPartController extends AppController
 {
     /**
-     * Edit a part description
+     * Show part rate
      *
-     * @param Request          $request          Request
      * @param integer | string $courseIdentifier Course id | slug
      * @param integer | string $partIdentifier   Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showRatingAction(Request $request, $courseIdentifier, $partIdentifier)
+    public function showRatingAction($courseIdentifier, $partIdentifier)
     {
-//        $metadatas = $this->get('simpleit.claire.course.metadata')->get(
-//            $courseIdentifier,
-//            $partIdentifier
-//        );
-        //FIXME
-        $metadatas['aggregate-rating'] = 3.7;
+        $metadatas = $this->get('simple_it.claire.course.metadata')->get(
+            $courseIdentifier,
+            $partIdentifier
+        );
+        $rate = null;
+        if (isset($metadatas['aggregate-rating'])) {
+            $rate = $metadatas['aggregate-rating'];
+        }
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/MetadataByPart/Component:viewRating.html.twig',
-            array('rate' => $metadatas['aggregate-rating']
+            array(
+                'rate' => $rate
             )
         );
     }
@@ -77,12 +79,29 @@ class MetadataByPartController extends AppController
      */
     public function editImageAction(Request $request, $courseIdentifier, $partIdentifier)
     {
-        // TODO
-        $metadata = array();
+        $metadatas = array();
+        if (RequestUtils::METHOD_GET == $request->getMethod()) {
+            $metadatas = $this->get('simple_it.claire.course.metadata')->get(
+                $courseIdentifier,
+                $partIdentifier
+            );
+        }
 
-        $form = $this->createFormBuilder($metadata)
-            ->add('key')
+        $form = $this->createFormBuilder($metadatas)
+            ->add('image')
             ->getForm();
+
+        if (RequestUtils::METHOD_POST == $request->getMethod()) {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $metadatas = $form->getData();
+                $metadatas = $this->get('simple_it.claire.course.metadata')->save(
+                    $courseIdentifier,
+                    $partIdentifier,
+                    array('image' => $metadatas['image'])
+                );
+            }
+        }
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/MetadataByPart/Component:editImage.html.twig',

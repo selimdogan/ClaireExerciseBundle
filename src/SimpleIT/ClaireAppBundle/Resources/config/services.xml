@@ -74,7 +74,7 @@
             </call>
         </service>
 
-        <service id="simpleit.claire.course.part" class="%simple_it.claire.course.part.class%" >
+        <service id="simple_it.claire.course.part" class="%simple_it.claire.course.part.class%" >
             <call method="setPartContentRepository">
                 <argument type="service" id="simple_it.claire.course.repository.part_content" />
             </call>
@@ -83,7 +83,7 @@
             </call>
         </service>
 
-        <service id="simpleit.claire.course.metadata" class="%simple_it.claire.course.metadata.class%" >
+        <service id="simple_it.claire.course.metadata" class="%simple_it.claire.course.metadata.class%" >
             <call method="setMetadataByPartRepository">
                 <argument type="service" id="simple_it.claire.course.repository.metadata_by_part" />
             </call>

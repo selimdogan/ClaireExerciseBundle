@@ -1,29 +1,29 @@
 simple_it_claire_component_part_metadata_show_rating:
-    pattern: /
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/MetadataByPartContent:showRating }
+    pattern: /rating
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/MetadataByPart:showRating }
     requirements:
             _method: GET
 
 simple_it_claire_component_part_metadata_edit_description:
-    pattern: /
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/MetadataByPartContent:editDescription }
+    pattern: /description/edit
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/MetadataByPart:editDescription }
     requirements:
             _method: GET|POST
 
 simple_it_claire_component_part_metadata_edit_image:
-    pattern: /
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/MetadataByPartContent:editImage }
+    pattern: /image/edit
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/MetadataByPart:editImage }
     requirements:
             _method: GET|POST
 
 simple_it_claire_component_part_metadata_edit_difficulty:
-    pattern: /
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/MetadataByPartContent:editDifficulty }
+    pattern: /difficulty/edit
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/MetadataByPart:editDifficulty }
     requirements:
             _method: GET|POST
 
 simple_it_claire_component_part_metadata_edit_duration:
-    pattern: /
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/MetadataByPartContent:editDuration }
+    pattern: /duration/edit
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/MetadataByPart:editDuration }
     requirements:
             _method: GET|POST

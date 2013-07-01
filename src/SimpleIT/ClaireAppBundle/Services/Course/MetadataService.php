@@ -1,6 +1,5 @@
 <?php
 
-
 namespace SimpleIT\ClaireAppBundle\Services\Course;
 
 use SimpleIT\ClaireAppBundle\Repository\Course\MetadataByPartRepository;
@@ -56,5 +55,39 @@ class MetadataService
             $partIdentifier,
             $metadatas
         );
+    }
+
+    /**
+     * Save metadatas
+     *
+     * @param string $courseIdentifier Course id | slug
+     * @param string $partIdentifier   Part id | slug
+     * @param array  $metadatas        Metadatas (key => value)
+     *
+     * @return string
+     */
+    public function save($courseIdentifier, $partIdentifier, $metadatas)
+    {
+        $metadatasToUpdate = $this->metadataByPartRepository->find(
+            $courseIdentifier,
+            $partIdentifier
+        );
+        foreach ($metadatasToUpdate as $key => $value) {
+            if (in_array($key, $metadatas)) {
+                $metadatasToUpdate = $this->metadataByPartRepository->update(
+                    $courseIdentifier,
+                    $partIdentifier,
+                    array($key => $value)
+                );
+            } else {
+                $metadatasToUpdate = $this->metadataByPartRepository->insert(
+                    $courseIdentifier,
+                    $partIdentifier,
+                    array($key => $value)
+                );
+            }
+        }
+
+        return $metadatasToUpdate;
     }
 }
