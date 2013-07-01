@@ -90,7 +90,7 @@ class MetadataByPartController extends AbstractMetadataController
         );
 
         $form = $this->createFormBuilder($metadatas)
-            ->add($metadataName)
+            ->add($metadataName, 'url')
             ->getForm();
 
         $form = $this->processEdit($request, $form, $metadataName);
@@ -168,7 +168,7 @@ class MetadataByPartController extends AbstractMetadataController
         );
 
         $form = $this->createFormBuilder($metadatas)
-            ->add($metadataName)
+            ->add($metadataName, 'date', array('input' => 'datetime', 'widget' => 'text'))
             ->getForm();
 
         $form = $this->processEdit($request, $form, $metadataName);
