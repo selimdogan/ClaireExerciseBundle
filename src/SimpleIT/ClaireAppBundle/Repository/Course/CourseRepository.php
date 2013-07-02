@@ -154,20 +154,23 @@ class CourseRepository extends ApiRouteService
         return $course;
     }
 
-    private function lineariesToc($toc)
+    public static function lineariesToc($toc)
     {
         $lineare = array();
-        $linearies = function ($toc) use (&$linearies, $lineare) {
+        $linearies = function ($toc) use (&$linearies, &$lineare) {
             $lineare[] = $toc;
-
-            foreach ($toc['children'] as $child) {
-                $lineare[] = $child;
-                $linearies($child);
+            if (isset($toc['children'])) {
+                foreach ($toc['children'] as $child) {
+                    $linearies($child);
+                }
             }
         };
 
+        $linearies($toc);
+
         return $lineare;
     }
+
 
     /**
      * Get all courses

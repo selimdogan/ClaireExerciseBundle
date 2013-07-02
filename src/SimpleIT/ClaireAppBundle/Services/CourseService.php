@@ -411,7 +411,7 @@ class CourseService extends ClaireApi implements CourseServiceInterface
         $neededTypes = array();
 
         /* If the display level is 2 */
-        if (2 === $course->getDisplayLevel()) {
+        if (2 == $course->getDisplayLevel()) {
             $neededTypes = $this->getNeededTypesLevel2();
         } else {
             $neededTypes = $this->getNeededTypesLevel1();
@@ -623,11 +623,11 @@ class CourseService extends ClaireApi implements CourseServiceInterface
         $neededTypes = array();
 
         /* If it's a course and display level = 2 */
-        if (2 === $displayLevel && is_null($currentPart)) {
+        if (2 == $displayLevel && is_null($currentPart)) {
             $neededTypes = $this->getNeededTypesLevel2();
 
             /* If it's a part and display level = 2 */
-        } else if (2 === $displayLevel && !is_null($currentPart)) {
+        } else if (2 == $displayLevel && !is_null($currentPart)) {
             $neededTypes = $this->getNeededTypesLevel2b();
             /*
              * The toc needs to be filter (get only the
@@ -670,8 +670,6 @@ class CourseService extends ClaireApi implements CourseServiceInterface
             $over = true;
         }
 
-        $i = 0;
-
         $partLevel1 = null;
         $partLevel2 = null;
         $partLevel3 = null;
@@ -706,13 +704,12 @@ class CourseService extends ClaireApi implements CourseServiceInterface
                         break;
                 }
 
-                $formatedToc[$i] = $part;
+                $formatedToc[] = $part;
 
                 /* If the part has already been seen */
                 if (null !== $currentPart && $part->getId() == $currentPart->getId()) {
                     $over = true;
                 }
-                $i++;
             }
         }
 
@@ -778,9 +775,9 @@ class CourseService extends ClaireApi implements CourseServiceInterface
     {
         $allowedTypes = array();
 
-        if (2 === $displayLevel) {
+        if (2 == $displayLevel) {
             $allowedTypes = $this->getPaginationTypesLevel2();
-        } elseif (1 === $displayLevel ) {
+        } elseif (1 == $displayLevel ) {
             $allowedTypes = $this->getPaginationTypesLevel1();
         }
 
@@ -801,11 +798,11 @@ class CourseService extends ClaireApi implements CourseServiceInterface
         $allowedTypes = array();
 
         /* If it's a course and display level = 2 */
-        if (2 === $displayLevel && $isCourse) {
+        if (2 == $displayLevel && $isCourse) {
             $allowedTypes = $this->getNeededTypesLevel2();
 
             /* If it's a part and display level = 2 */
-        } elseif (2 === $displayLevel && !$isCourse) {
+        } elseif (2 == $displayLevel && !$isCourse) {
             $allowedTypes = $this->getNeededTypesLevel2b();
         } else {
             $allowedTypes = $this->getNeededTypesLevel1();

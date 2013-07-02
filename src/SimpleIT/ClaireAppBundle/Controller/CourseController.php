@@ -156,7 +156,6 @@ class CourseController extends BaseController
         $data = $this->courseService->getPartWithComplementaries($categorySlug, $courseSlug, $partSlug);
         $course = $data['course'];
         $part = $data['part'];
-        $timeline = $this->courseService->getTimeline($course);
 
         $displayLevel = $course->getDisplayLevel();
         /* Get the Part content (only for 1b or 2c) */

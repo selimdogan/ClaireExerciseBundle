@@ -305,7 +305,7 @@ class PartRepository extends AppRepository
         }
 
         if (ApiService::isResponseSuccessful($results['toc'])) {
-            $data = $this->lineariesToc($results['toc']->getContent());
+            $data = CourseRepository::lineariesToc($results['toc']->getContent());
             $toc = TocFactory::create($data);
             $course->setToc($toc);
         }
@@ -337,21 +337,6 @@ class PartRepository extends AppRepository
 //         }
 
         return array('course'=> $course, 'part'=> $part);
-    }
-
-    private function lineariesToc($toc)
-    {
-        $lineare = array();
-        $linearies = function ($toc) use (&$linearies, $lineare) {
-            $lineare[] = $toc;
-
-            foreach ($toc['children'] as $child) {
-                $lineare[] = $child;
-                $linearies($child);
-            }
-        };
-
-        return $lineare;
     }
 
     /* **************************** *
