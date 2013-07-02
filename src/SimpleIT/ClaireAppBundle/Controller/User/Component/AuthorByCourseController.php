@@ -17,7 +17,7 @@ class AuthorByCourseController extends AppController
     /**
      * Edit authors
      *
-     * @param Request         $request Request
+     * @param Request $request Request
      * @param integer |string $courseIdentifier
      *
      * @return \Symfony\Component\HttpFoundation\Response
@@ -27,12 +27,19 @@ class AuthorByCourseController extends AppController
         $authors = array();
 
         if (RequestUtils::METHOD_GET == $request->getMethod()) {
-            $authors = $this->get('simple_it.claire.user.author')->getAllByCourse($courseIdentifier);
+            $authors = $this->get('simple_it.claire.user.author')->getAllByCourse(
+                $courseIdentifier
+            );
         }
+        $authorsString = '';
+        foreach ($authors as $author) {
+            $authorsString .= $author->getUsername();
+        }
+        $authorsString = substr($authorsString, 0, -1);
 
-        $form = $this->createFormBuilder($authors)
-//            ->add('authors')
-            ->getForm();
+//        $form = $this->createFormBuilder($authors)
+//            ->add('')
+//            ->getForm();
 
 //        if (RequestUtils::METHOD_POST == $request->getMethod()) {
 //            $form->bind($request);
@@ -48,8 +55,7 @@ class AuthorByCourseController extends AppController
             'SimpleITClaireAppBundle:User/Author/Component:editByCourse.html.twig',
             array(
                 'courseIdentifier' => $courseIdentifier,
-                'authors'          => $authors,
-                'form'             => $form->createView()
+                'authors'          => $authorsString
             )
         );
     }
