@@ -10,6 +10,9 @@
         <parameter key="simple_it.claire.course.repository.part_content.class">SimpleIT\ClaireAppBundle\Repository\Course\PartContentRepository</parameter>
         <parameter key="simple_it.claire.course.repository.metadata_by_part.class">SimpleIT\ClaireAppBundle\Repository\Course\MetadataByPartRepository</parameter>
 
+        <parameter key="simple_it.claire.course.repository.author_by_course.class">SimpleIT\ClaireAppBundle\Repository\Course\AuthorByCourseRepository</parameter>
+        <parameter key="simple_it.claire.course.repository.author_by_part.class">SimpleIT\ClaireAppBundle\Repository\Course\AuthorByPartRepository</parameter>
+
         <parameter key="simple_it.claire.course.class">SimpleIT\ClaireAppBundle\Services\CourseService</parameter>
         <parameter key="simple_it.claire.course.part.class">SimpleIT\ClaireAppBundle\Services\Course\PartService</parameter>
         <parameter key="simple_it.claire.course.metadata.class">SimpleIT\ClaireAppBundle\Services\Course\MetadataService</parameter>
@@ -89,6 +92,23 @@
             </call>
         </service>
 
+        <service id="simple_it.claire.course.repository.author_by_course" class="%simple_it.claire.course.repository.author_by_course.class%" >
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client" />
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="serializer" />
+            </call>
+        </service>
+
+        <service id="simple_it.claire.course.repository.author_by_part" class="%simple_it.claire.course.repository.author_by_part.class%" >
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client" />
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="serializer" />
+            </call>
+        </service>
 
         <!--OLD SHIT-->
 
