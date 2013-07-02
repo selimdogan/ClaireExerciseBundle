@@ -5,6 +5,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -16,6 +17,7 @@ abstract class AbstractMetadataController extends AppController
 {
     /**
      * @param Request          $request          Request
+     * @param Form             $form             Form
      * @param integer | string $courseIdentifier Course id | slug
      * @param integer | string $partIdentifier   Part id | slug
      * @param string           $metadataName     Metadata name
@@ -24,7 +26,9 @@ abstract class AbstractMetadataController extends AppController
      */
     protected function processEdit(
         Request $request,
-        $form,
+        Form $form,
+        $courseIdentifier,
+        $partIdentifier,
         $metadataName
     )
     {
@@ -33,13 +37,13 @@ abstract class AbstractMetadataController extends AppController
             $form->bind($request);
             if ($form->isValid()) {
                 if (isset($metadatas[$metadataName])) {
-                    $description = $metadatas[$metadataName];
+                    $metadata = $metadatas[$metadataName];
                 } else {
-                    $description = null;
+                    $metadata = null;
                 }
 
                 $metadatas = $form->getData();
-                if ($description != $metadatas[$metadataName]) {
+                if ($metadata != $metadatas[$metadataName]) {
                     $metadatas = $this->get('simple_it.claire.course.metadata')->save(
                         $courseIdentifier,
                         $partIdentifier,

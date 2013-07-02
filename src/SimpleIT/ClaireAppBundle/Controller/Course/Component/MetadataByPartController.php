@@ -3,6 +3,7 @@
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\AppBundle\Util\RequestUtils;
+use SimpleIT\Utils\DateUtils;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -60,7 +61,13 @@ class MetadataByPartController extends AbstractMetadataController
             ->add($metadataName)
             ->getForm();
 
-        $form = $this->processEdit($request, $form, $metadataName);
+        $form = $this->processEdit(
+            $request,
+            $form,
+            $courseIdentifier,
+            $partIdentifier,
+            $metadataName
+        );
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/MetadataByPart/Component:editDescription.html.twig',
@@ -93,7 +100,13 @@ class MetadataByPartController extends AbstractMetadataController
             ->add($metadataName, 'url')
             ->getForm();
 
-        $form = $this->processEdit($request, $form, $metadataName);
+        $form = $this->processEdit(
+            $request,
+            $form,
+            $courseIdentifier,
+            $partIdentifier,
+            $metadataName
+        );
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/MetadataByPart/Component:editImage.html.twig',
@@ -138,7 +151,13 @@ class MetadataByPartController extends AbstractMetadataController
             )
             ->getForm();
 
-        $form = $this->processEdit($request, $form, $metadataName);
+        $form = $this->processEdit(
+            $request,
+            $form,
+            $courseIdentifier,
+            $partIdentifier,
+            $metadataName
+        );
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/MetadataByPart/Component:editDifficulty.html.twig',
@@ -167,11 +186,41 @@ class MetadataByPartController extends AbstractMetadataController
             $partIdentifier
         );
 
-        $form = $this->createFormBuilder($metadatas)
-            ->add($metadataName, 'date', array('input' => 'datetime', 'widget' => 'text'))
+        if (isset($metadatas[$metadataName])) {
+            $currentDuration = new \DateInterval($metadatas[$metadataName]);
+            $durationUnits = array('days'    => $currentDuration->d,
+                                   'hours'   => $currentDuration->h,
+                                   'minutes' => $currentDuration->i
+            );
+        } else {
+            $currentDuration = new \DateInterval('P0D');
+            $durationUnits = array();
+        }
+
+        $form = $this->createFormBuilder($durationUnits)
+            ->add('days', null, array('required' => false))
+            ->add('hours', null, array('required' => false))
+            ->add('minutes', null, array('required' => false))
             ->getForm();
 
-        $form = $this->processEdit($request, $form, $metadataName);
+        if (RequestUtils::METHOD_POST == $request->getMethod()) {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $durationUnits = $form->getData();
+                $duration = new \DateInterval('P0D');
+                $duration->d = $durationUnits['days'];
+                $duration->m = $durationUnits['hours'];
+                $duration->i = $durationUnits['minutes'];
+
+                if ($duration != $currentDuration) {
+                    $this->get('simple_it.claire.course.metadata')->save(
+                        $courseIdentifier,
+                        $partIdentifier,
+                        array($metadataName => DateUtils::DateIntervalToString($duration))
+                    );
+                }
+            }
+        }
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/MetadataByPart/Component:editDuration.html.twig',
