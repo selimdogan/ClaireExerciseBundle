@@ -190,17 +190,17 @@ class CourseController extends BaseController
                 'title' => $part->getTitle(),
                 'course' => $course, 'part' => $part,
                 'category' => $course->getCategory(),
-                'icon' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_IMAGE),
-                'aggregateRating' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_AGGREGATE_RATING),
-                'difficulty' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DIFFICULTY),
-                'duration' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DURATION),
+                'icon' => (isset($metadatas[Metadata::COURSE_METADATA_IMAGE]) ? $metadatas[Metadata::COURSE_METADATA_IMAGE] : null),
+                'aggregateRating' => (isset($metadatas[Metadata::COURSE_METADATA_AGGREGATE_RATING]) ? $metadatas[Metadata::COURSE_METADATA_AGGREGATE_RATING] : null),
+                'difficulty' => (isset($metadatas[Metadata::COURSE_METADATA_DIFFICULTY]) ? $metadatas[Metadata::COURSE_METADATA_DIFFICULTY] : null),
+                'duration' => (isset($metadatas[Metadata::COURSE_METADATA_DURATION]) ? $metadatas[Metadata::COURSE_METADATA_DURATION] : null),
                 'timeline' => $this->courseService->getTimeline($course), 'tags' => $tags,
                 'updatedAt' => $part->getUpdatedAt(), 'pagination' => $pagination,
                 'introduction' => $introduction,
                 'toc' => $this->courseService->getDisplayToc($course, $displayLevel, $part),
                 'contentHtml' => $formatedContent,
-                'license' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_LICENSE),
-                'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION),
+                'license' => (isset($metadatas[Metadata::COURSE_METADATA_LICENSE]) ? $metadatas[Metadata::COURSE_METADATA_LICENSE] : null),
+                'description' => (isset($metadatas[Metadata::COURSE_METADATA_DESCRIPTION]) ? $metadatas[Metadata::COURSE_METADATA_DESCRIPTION] : null),
                 'authors' => $course->getAuthors()
                 );
 

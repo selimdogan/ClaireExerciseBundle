@@ -150,7 +150,12 @@ class PartRepository extends AppRepository
          $partRequest = self::findPartIntroductionRequest($courseIdentifier, $partIdentifier);
 
          $partResult = $this->claireApi->getResult($partRequest);
-         ApiService::checkResponseSuccessful($partResult);
+
+         try {
+            ApiService::checkResponseSuccessful($partResult);
+         } catch (HttpException $e) {
+            return null;
+         }
 
          return $partResult->getContent();
      }
@@ -167,7 +172,7 @@ class PartRepository extends AppRepository
      */
     public function findContent($courseIdentifier, $partIdentifier, $format = null)
     {
-        $partRequest = self::findRequest($courseIdentifier, $partIdentifier, $format);
+        $partRequest = self::findContentRequest($courseIdentifier, $partIdentifier, $format);
 
         $partResult = $this->claireApi->getResult($partRequest);
         ApiService::checkResponseSuccessful($partResult);
@@ -286,11 +291,6 @@ class PartRepository extends AppRepository
         $course = CourseFactory::create($course);
         $category = CategoryFactory::create($category);
 
-        if ($course->getCategory()->getId() != $category->getId()) {
-            throw new HttpException(404,
-                'Course: '.$courseIdentifier.' is not in category "'.$categoryIdentifier.'"');
-        }
-
         $course->setCategory($category);
 
         /* Get course complementaries */
@@ -305,7 +305,8 @@ class PartRepository extends AppRepository
         }
 
         if (ApiService::isResponseSuccessful($results['toc'])) {
-            $toc = TocFactory::create($results['toc']->getContent());
+            $data = $this->lineariesToc($results['toc']->getContent());
+            $toc = TocFactory::create($data);
             $course->setToc($toc);
         }
         if (ApiService::isResponseSuccessful($results['courseAuthors'])) {
@@ -336,6 +337,21 @@ class PartRepository extends AppRepository
 //         }
 
         return array('course'=> $course, 'part'=> $part);
+    }
+
+    private function lineariesToc($toc)
+    {
+        $lineare = array();
+        $linearies = function ($toc) use (&$linearies, $lineare) {
+            $lineare[] = $toc;
+
+            foreach ($toc['children'] as $child) {
+                $lineare[] = $child;
+                $linearies($child);
+            }
+        };
+
+        return $lineare;
     }
 
     /* **************************** *
@@ -372,6 +388,25 @@ class PartRepository extends AppRepository
     {
         $apiRequest = new ApiRequest();
         $apiRequest->setBaseUrl(self::URL_COURSES.$courseIdentifier.self::URL_PART.$partIdentifier);
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+        $apiRequest->setFormat($format);
+
+        return $apiRequest;
+    }
+
+    /**
+     * Returns the part (ApiRequest)
+     *
+     * @param mixed  $courseIdentifier The course id | slug
+     * @param mixed  $partIdentifier   The part id | slug
+     * @param string $format           The requested format
+     *
+     * @return ApiRequest
+     */
+    public static function findContentRequest($courseIdentifier, $partIdentifier, $format = null)
+    {
+        $apiRequest = new ApiRequest();
+        $apiRequest->setBaseUrl(self::URL_COURSES.$courseIdentifier.self::URL_PART.$partIdentifier.'/content');
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
         $apiRequest->setFormat($format);
 

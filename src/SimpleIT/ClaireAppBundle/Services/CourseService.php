@@ -474,12 +474,12 @@ class CourseService extends ClaireApi implements CourseServiceInterface
         }
 
         /* Get the image */
-        if (!array_key_exists(Metadata::COURSE_METADATA_IMAGE, $metadatas)) {
+        if (!isset($metadatas[Metadata::COURSE_METADATA_IMAGE])) {
             $image = null;
             if (isset($parentMetadatas[Metadata::COURSE_METADATA_IMAGE])) {
-                $image = ArrayUtils::getValue($parentMetadatas, Metadata::COURSE_METADATA_IMAGE);
+                $image = $parentMetadatas[Metadata::COURSE_METADATA_IMAGE];
             } elseif (isset($courseMetadatas[Metadata::COURSE_METADATA_IMAGE])) {
-                $image = ArrayUtils::getValue($courseMetadatas, Metadata::COURSE_METADATA_IMAGE);
+                $image = $courseMetadatas[Metadata::COURSE_METADATA_IMAGE];
             }
             if (!is_null($image)) {
                 $metadatas[Metadata::COURSE_METADATA_IMAGE] = $image;
@@ -487,14 +487,12 @@ class CourseService extends ClaireApi implements CourseServiceInterface
         }
 
         /* Get the difficulty */
-        if (!array_key_exists(Metadata::COURSE_METADATA_DIFFICULTY, $metadatas)) {
+        if (!isset($metadatas[Metadata::COURSE_METADATA_DIFFICULTY])) {
             $difficulty = null;
             if (isset($parentMetadatas[Metadata::COURSE_METADATA_DIFFICULTY])) {
-                $difficulty = ArrayUtils::getValue($parentMetadatas,
-                    Metadata::COURSE_METADATA_DIFFICULTY);
+                $difficulty = $parentMetadatas[Metadata::COURSE_METADATA_DIFFICULTY];
             } elseif (isset($courseMetadatas[Metadata::COURSE_METADATA_DIFFICULTY])) {
-                $difficulty = ArrayUtils::getValue($courseMetadatas,
-                    Metadata::COURSE_METADATA_DIFFICULTY);
+                $difficulty = $courseMetadatas[Metadata::COURSE_METADATA_DIFFICULTY];
             }
             if (!is_null($difficulty)) {
                 $metadatas[Metadata::COURSE_METADATA_DIFFICULTY] = $difficulty;

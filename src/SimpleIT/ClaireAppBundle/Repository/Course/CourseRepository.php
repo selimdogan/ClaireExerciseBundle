@@ -43,6 +43,8 @@ class CourseRepository extends ApiRouteService
     /** The base url for courses = '/courses/' */
     const URL_COURSES = '/courses/';
 
+    const URL_COURSES_CONTENT = '/content';
+
     /** The url for metadatas  = '/metadatas' */
     const URL_METADATAS = '/metadatas/';
 
@@ -108,6 +110,7 @@ class CourseRepository extends ApiRouteService
     public function findCourseWithComplementaries($courseIdentifier, $categoryIdentifier)
     {
         $requests['course'] = $this->findRequest($courseIdentifier);
+        $requests['content'] = $this->findContentRequest($courseIdentifier);
         $requests['category'] = CategoryRepository::findRequest($categoryIdentifier);
         $requests['metadatas'] = $this->findCourseMetadatasRequest($courseIdentifier);
         $requests['tags'] = $this->findCourseTagsRequest($courseIdentifier);
@@ -222,6 +225,19 @@ class CourseRepository extends ApiRouteService
         $apiRequest = new ApiRequest();
         $apiRequest->setBaseUrl(self::URL_COURSES.$courseIdentifier);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        return $apiRequest;
+    }
+
+    public function findContentRequest($courseIdentifier)
+    {
+        $apiRequest = new ApiRequest();
+        $apiRequest->setBaseUrl(self::URL_COURSES.$courseIdentifier.self::URL_COURSES_CONTENT);
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        $apiRequestOptions = new ApiRequestOptions();
+        $apiRequestOptions->setFormat(ApiRequest::FORMAT_HTML);
+        $apiRequest->setOptions($apiRequestOptions);
 
         return $apiRequest;
     }
