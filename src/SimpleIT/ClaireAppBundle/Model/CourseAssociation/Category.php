@@ -15,7 +15,7 @@ class Category
     /**
      * @var string category title
      */
-    private $title;
+    private $name;
 
     /**
      * @var string category slug
@@ -73,23 +73,23 @@ class Category
     }
 
     /**
-     * Getter for $title
+     * Getter for $name
      *
-     * @return function the $title
+     * @return function the $name
      */
-    public function getTitle()
+    public function getName()
     {
-        return $this->title;
+        return $this->name;
     }
 
     /**
-     * Setter for $title
+     * Setter for $name
      *
-     * @param string $title
+     * @param string $name
      */
-    public function setTitle($title)
+    public function setName($name)
     {
-        $this->title = $title;
+        $this->name = $name;
     }
 
     /**

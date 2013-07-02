@@ -61,23 +61,16 @@ class MetadataFactory
     public static function createCourseMetadataCollection(array $metadataResources)
     {
         $metadatas = array();
-        foreach ($metadataResources as $metadataResource) {
-
-            if (isset($metadataResource['key'])) {
-
-                $value = $metadataResource['value'];
-
-                if (Metadata::COURSE_METADATA_DURATION === $metadataResource['key']) {
-
-                    try {
-                        $value = new \DateInterval($value);
-                        $metadatas[$metadataResource['key']] = $value;
-                    } catch (\Exception $e) {
-                        //Do nothing
-                    }
-                } else {
-                    $metadatas[$metadataResource['key']] = $value;
+        foreach ($metadataResources as $key => $value) {
+            if (Metadata::COURSE_METADATA_DURATION === $key) {
+                try {
+                    $value = new \DateInterval($value);
+                    $metadatas[$key] = $value;
+                } catch (\Exception $e) {
+                    //Do nothing
                 }
+            } else {
+                $metadatas[$key] = $value;
             }
         }
         return $metadatas;

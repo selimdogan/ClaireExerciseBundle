@@ -28,8 +28,8 @@ class PartFactory
         if (isset($partRessource['slug'])) {
             $part->setSlug($partRessource['slug']);
         }
-        if (isset($partRessource['type'])) {
-            $part->setType($partRessource['type']);
+        if (isset($partRessource['subtype'])) {
+            $part->setType($partRessource['subtype']);
         }
         if (isset($partRessource['createdAt'])) {
             $part->setCreatedAt(new \DateTime($partRessource['createdAt']));
