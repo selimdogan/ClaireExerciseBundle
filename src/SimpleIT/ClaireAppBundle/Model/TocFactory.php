@@ -19,6 +19,7 @@ class TocFactory
     {
         $toc = array();
         foreach ($tocResource as $partResource) {
+            var_dump($tocResource);
             $part = PartFactory::create($partResource);
             if (isset($partResource['tags'])) {
                 $tags = TagFactory::createCollection($partResource['tags']);

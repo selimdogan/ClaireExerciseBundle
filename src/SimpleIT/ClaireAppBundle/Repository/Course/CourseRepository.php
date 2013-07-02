@@ -89,52 +89,6 @@ class CourseRepository extends ApiRouteService
          return $course;
      }
 
-// FIXME Delete above
-//     /**
-//      * <p>
-//      *     Returns the course complementaries
-//      *     <ul>
-//      *         <li>metadatas</li>
-//      *         <li>tags</li>
-//      *         <li>introduction</li>
-//      *         <li>toc</li>
-//      *     </ul>
-//      * </p>
-//      *
-//      * @param mixed $courseIdentifier The course id | slug
-//      *
-//      * @return array Course complementaries
-//      *
-//      * @deprecated
-//      */
-//     public function findCourseComplementaries($courseIdentifier)
-//     {
-//         $requests['metadatas'] = $this->findCourseMetadatasRequest($courseIdentifier);
-//         $requests['tags'] = $this->findCourseTagsRequest($courseIdentifier);
-//         $requests['introduction'] = $this->findCourseIntroductionRequest($courseIdentifier);
-//         $requests['toc'] = $this->findCourseTocRequest($courseIdentifier);
-
-//         $results = $this->claireApi->getResults($requests);
-
-//         if (!is_null($results['metadatas']->getContent())) {
-//             $metadatas = MetadataFactory::createCourseMetadataCollection(
-//                 $results['metadatas']->getContent());
-//             $courseComplementaries['metadatas'] = $metadatas;
-//         }
-//         if (!is_null($results['tags']->getContent())) {
-//             $tags = TagFactory::createCollection($results['tags']->getContent());
-//             $courseComplementaries['tags'] = $tags;
-//         }
-//         $courseComplementaries['introduction'] = $results['introduction']->getContent();
-
-//         if (!is_null($results['toc']->getContent())) {
-//             $toc = TocFactory::create($results['toc']->getContent());
-//             $courseComplementaries['toc'] = $toc;
-//         }
-
-//         return $courseComplementaries;
-//     }
-
     /**
      * <p>
      *     Returns the course with complementaries
@@ -165,13 +119,8 @@ class CourseRepository extends ApiRouteService
 
         ApiService::checkResponseSuccessful($results['category']);
         ApiService::checkResponseSuccessful($results['course']);
-
         $course = CourseFactory::create($results['course']->getContent());
         $category = CategoryFactory::create($results['category']->getContent());
-
-        if ($course->getCategory()->getId() != $category->getId()) {
-            throw new HttpException(404, 'Course: '.$courseIdentifier.' is not in category "'.$categoryIdentifier.'"');
-        }
 
         $course->setCategory($category);
 
@@ -189,7 +138,8 @@ class CourseRepository extends ApiRouteService
         }
 
         if (ApiService::isResponseSuccessful($results['toc'])) {
-            $toc = TocFactory::create($results['toc']->getContent());
+            $data = $this->lineariesToc($results['toc']->getContent());
+            $toc = TocFactory::create($data);
             $course->setToc($toc);
         }
 
@@ -199,6 +149,21 @@ class CourseRepository extends ApiRouteService
         }
 
         return $course;
+    }
+
+    private function lineariesToc($toc)
+    {
+        $lineare = array();
+        $linearies = function ($toc) use (&$linearies, $lineare) {
+            $lineare[] = $toc;
+
+            foreach ($toc['children'] as $child) {
+                $lineare[] = $child;
+                $linearies($child);
+            }
+        };
+
+        return $lineare;
     }
 
     /**
