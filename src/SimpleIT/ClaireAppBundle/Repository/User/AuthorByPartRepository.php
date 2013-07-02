@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireAppBundle\Repository\Course;
+namespace SimpleIT\ClaireAppBundle\Repository\User;
 
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\ApiResourcesBundle\User\AuthorResource;
