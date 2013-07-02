@@ -1,0 +1,8 @@
+<form id="claire-course-author" action="{{ path('simple_it_claire_component_part_metadata_edit_description', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post" {{ form_enctype(form) }}>
+    {{ form_errors(form) }}
+    {{ form_errors(form.authors) }}
+    {{ form_widget(form.autors) }}
+    {{ form_rest(form) }}
+    <input type="submit">
+    {#Remove submit#}
+</form>

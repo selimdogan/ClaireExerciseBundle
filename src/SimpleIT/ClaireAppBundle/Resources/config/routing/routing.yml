@@ -13,3 +13,7 @@ simple_it_claire_course:
 simple_it_claire_component_course:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/component_course.yml"
     prefix:   components/courses
+
+simple_it_claire_component_course_author:
+    resource: "@SimpleITClaireAppBundle/Resources/config/routing/user/component_course_author.yml"
+    prefix:   components/courses/{courseIdentifier}/authors/
