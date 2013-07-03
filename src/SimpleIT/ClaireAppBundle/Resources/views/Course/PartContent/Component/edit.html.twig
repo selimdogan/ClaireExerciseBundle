@@ -1,40 +1,19 @@
-<!DOCTYPE html>
-<html>
-    <head></head>
-
-    <body>
 
 
+<div style="width:600px">
 
-        <div style="width:600px">
-            <form id="claire_part_content_form" action="{{ path('simple_it_claire_component_part_content_edit', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post">
-            <!-- <form id="claire_part_content_form" action="/test.php" method="post"> -->
-                <textarea
-                    class="tinymce editor" rows="40" cols="70"
-                    id="contentEditor"
-                    name="partContent"
-                    data-theme="claire"
-                >{{ partContent }}</textarea>
-                <!-- <input id="Comment_writingType" class="writingType" type="hidden" name="Comment[writingType]" value="editor"> -->
-                <input type="submit" value="Sauvegarder" />
-            </form>
-        </div>
-
-        <!-- main -->
-        <script src="/bundles/common/js/claire/lib/lodash.compat.js"></script>
-        <script src="/bundles/common/js/claire/lib/jquery.js"></script>
-        <script src="/bundles/common/js/claire/lib/jquery-ui.js"></script>
-
-        <!-- <script src="/bundles/common/js/claire/lib/tinymce/tinymce.min.js"></script>
-
-        <!-- widgets -->
-        <script src="/bundles/common/js/claire/app/core.js"></script>
-        <script src="/bundles/common/js/claire/widgets/wysiwygEditor/wysiwygEditor.js"></script>
-        <script src="/bundles/common/js/claire/lib/tinymce/jquery.tinymce.min.js"></script>
-        <script src="/bundles/common/js/claire/widgets/wysiwygEditor/wysiwygEditorTinyMCE.js"></script>
-
-        <!-- page -->
-        <script src="/bundles/common/js/claire/app/tutorials/editor.js"></script>
+    <form id="claire_part_content_form" action="{{ path('simple_it_claire_component_part_content_edit', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post">
+        <div id="editor-toolbar"></div>
+        <textarea
+            class="tinymce editor" rows="40" cols="70"
+            id="contentEditor"
+            name="partContent"
+            data-theme="claire"
+        >{{ partContent }}</textarea>
+        <!-- <input id="Comment_writingType" class="writingType" type="hidden" name="Comment[writingType]" value="editor"> -->
+        <input type="submit" value="Sauvegarder" />
+    </form>
+</div>
 
 {#
         {% javascripts output='js/main.js'
@@ -82,7 +61,4 @@
 {#{{ tinymce_init() }}
 {% endjavascripts %}
 #}
-    </body>
-</html>
-
 
