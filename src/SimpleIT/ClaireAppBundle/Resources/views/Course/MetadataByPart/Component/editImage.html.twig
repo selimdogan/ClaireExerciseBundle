@@ -1,8 +1,12 @@
-<form id="claire_part_form" action="{{ path('simple_it_claire_component_part_metadata_edit_image', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post" {{ form_enctype(form) }}>
+<div class="claire-part-image-edit">
+    <div>Ajouter <br />une icone<span></span>
+    </div>
+</div>
+<!--<form id="claire_part_form" action="{{ path('simple_it_claire_component_part_metadata_edit_image', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post" {{ form_enctype(form) }}>
     {{ form_errors(form) }}
     {{ form_errors(form.image) }}
     {{ form_widget(form.image) }}
     {{ form_rest(form) }}
     <input type="submit">
     {#Remove submit#}
-</form>
+</form>-->
