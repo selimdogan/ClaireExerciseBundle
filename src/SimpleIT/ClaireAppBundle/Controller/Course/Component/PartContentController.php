@@ -23,6 +23,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class PartContentController
@@ -48,13 +49,14 @@ class PartContentController extends AppController
                 $courseIdentifier,
                 $partIdentifier
             );
-        } elseif (RequestUtils::METHOD_POST == $request->getMethod()) {
+        } elseif (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()) {
             $partContent = $request->get('partContent');
             $partContent = $this->get('simple_it.claire.course.part')->saveContent(
                 $courseIdentifier,
                 $partIdentifier,
                 $partContent
             );
+            return new Response($partContent);
         }
 
         return $this->render(
