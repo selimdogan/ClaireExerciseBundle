@@ -1,6 +1,6 @@
-<form class="claire-part-description" action="{{ path('simple_it_claire_component_part_metadata_edit_description', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post" {{ form_enctype(form) }}>
+<form class="claire-part-description js-simple-ajax-input" action="{{ path('simple_it_claire_component_part_metadata_edit_description', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post" {{ form_enctype(form) }}>
     <label>Informations du tutoriel <br />Description de cette page</label>
-    
+
     {{ form_errors(form) }}
     {{ form_errors(form.description) }}
     {{ form_widget(form.description) }}
