@@ -2,7 +2,7 @@
     <span class="icon"></span>
     <div>
         <strong>Durée</strong>
-        <form action="{{ path('simple_it_claire_component_part_metadata_edit_duration', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post" {{ form_enctype(form) }}>
+        <form class="js-simple-ajax-input" action="{{ path('simple_it_claire_component_part_metadata_edit_duration', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post" {{ form_enctype(form) }}>
             {{ form_errors(form) }}
             {{ form_errors(form.days) }}
             {{ form_widget(form.days) }}
