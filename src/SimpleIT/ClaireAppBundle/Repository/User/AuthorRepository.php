@@ -22,6 +22,9 @@ class AuthorRepository extends ApiRouteService
     /** URL for authors ressources */
     const URL_AUTHORS = '/authors/';
 
+    /** URL for courses of an author **/
+    const URL_COURSES_AUTHOR = '/courses';
+
     /** URL for courses collection in an author ressource */
     const URL_COURSES = '/courses/';
 
@@ -132,7 +135,7 @@ class AuthorRepository extends ApiRouteService
     public static function findCoursesRequest($authorIdentifier)
     {
         $apiRequest = new ApiRequest();
-        $apiRequest->setBaseUrl(self::URL_AUTHORS.$authorIdentifier);
+        $apiRequest->setBaseUrl(self::URL_AUTHORS.$authorIdentifier.self::URL_COURSES_AUTHOR);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
 
         return $apiRequest;
