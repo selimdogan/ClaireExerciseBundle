@@ -58,7 +58,7 @@ class MetadataByPartController extends AbstractMetadataController
         );
 
         $form = $this->createFormBuilder($metadatas)
-            ->add($metadataName)
+            ->add($metadataName, 'textarea')
             ->getForm();
 
         $form = $this->processEdit(
