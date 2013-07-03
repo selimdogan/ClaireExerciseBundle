@@ -1,7 +1,4 @@
-
-
-<div style="width:600px">
-
+<div class="editor-container">
     <form id="claire_part_content_form" action="{{ path('simple_it_claire_component_part_content_edit', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post">
         <div id="editor-toolbar"></div>
         <textarea
@@ -11,7 +8,7 @@
             data-theme="claire"
         >{{ partContent }}</textarea>
         <!-- <input id="Comment_writingType" class="writingType" type="hidden" name="Comment[writingType]" value="editor"> -->
-        <input type="submit" value="Sauvegarder" />
+        <input class="valid-button save-button" type="submit" value="Enregistrer">
     </form>
 </div>
 
