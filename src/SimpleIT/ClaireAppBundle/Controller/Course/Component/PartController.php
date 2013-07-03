@@ -23,7 +23,6 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

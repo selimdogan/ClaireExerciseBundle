@@ -61,13 +61,25 @@ class MetadataByPartController extends AbstractMetadataController
             ->add($metadataName, 'textarea')
             ->getForm();
 
-        $form = $this->processEdit(
-            $request,
-            $form,
-            $courseIdentifier,
-            $partIdentifier,
-            $metadataName
-        );
+        if (RequestUtils::METHOD_POST == $request->getMethod()) {
+            $form->bind($request);
+            if ($form->isValid()) {
+                if (isset($metadatas[$metadataName])) {
+                    $metadata = $metadatas[$metadataName];
+                } else {
+                    $metadata = null;
+                }
+
+                $metadatas = $form->getData();
+                if ($metadata != $metadatas[$metadataName]) {
+                    $metadatas = $this->get('simple_it.claire.course.metadata')->save(
+                        $courseIdentifier,
+                        $partIdentifier,
+                        array($metadataName => $metadatas[$metadataName])
+                    );
+                }
+            }
+        }
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/MetadataByPart/Component:editDescription.html.twig',
