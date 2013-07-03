@@ -43,6 +43,8 @@ class CourseRepository extends ApiRouteService
     /** The base url for courses = '/courses/' */
     const URL_COURSES = '/courses/';
 
+    const URL_COURSES_CONTENT = '/content';
+
     /** The url for metadatas  = '/metadatas' */
     const URL_METADATAS = '/metadatas/';
 
@@ -89,52 +91,6 @@ class CourseRepository extends ApiRouteService
          return $course;
      }
 
-// FIXME Delete above
-//     /**
-//      * <p>
-//      *     Returns the course complementaries
-//      *     <ul>
-//      *         <li>metadatas</li>
-//      *         <li>tags</li>
-//      *         <li>introduction</li>
-//      *         <li>toc</li>
-//      *     </ul>
-//      * </p>
-//      *
-//      * @param mixed $courseIdentifier The course id | slug
-//      *
-//      * @return array Course complementaries
-//      *
-//      * @deprecated
-//      */
-//     public function findCourseComplementaries($courseIdentifier)
-//     {
-//         $requests['metadatas'] = $this->findCourseMetadatasRequest($courseIdentifier);
-//         $requests['tags'] = $this->findCourseTagsRequest($courseIdentifier);
-//         $requests['introduction'] = $this->findCourseIntroductionRequest($courseIdentifier);
-//         $requests['toc'] = $this->findCourseTocRequest($courseIdentifier);
-
-//         $results = $this->claireApi->getResults($requests);
-
-//         if (!is_null($results['metadatas']->getContent())) {
-//             $metadatas = MetadataFactory::createCourseMetadataCollection(
-//                 $results['metadatas']->getContent());
-//             $courseComplementaries['metadatas'] = $metadatas;
-//         }
-//         if (!is_null($results['tags']->getContent())) {
-//             $tags = TagFactory::createCollection($results['tags']->getContent());
-//             $courseComplementaries['tags'] = $tags;
-//         }
-//         $courseComplementaries['introduction'] = $results['introduction']->getContent();
-
-//         if (!is_null($results['toc']->getContent())) {
-//             $toc = TocFactory::create($results['toc']->getContent());
-//             $courseComplementaries['toc'] = $toc;
-//         }
-
-//         return $courseComplementaries;
-//     }
-
     /**
      * <p>
      *     Returns the course with complementaries
@@ -154,6 +110,7 @@ class CourseRepository extends ApiRouteService
     public function findCourseWithComplementaries($courseIdentifier, $categoryIdentifier)
     {
         $requests['course'] = $this->findRequest($courseIdentifier);
+        $requests['content'] = $this->findContentRequest($courseIdentifier);
         $requests['category'] = CategoryRepository::findRequest($categoryIdentifier);
         $requests['metadatas'] = $this->findCourseMetadatasRequest($courseIdentifier);
         $requests['tags'] = $this->findCourseTagsRequest($courseIdentifier);
@@ -165,13 +122,8 @@ class CourseRepository extends ApiRouteService
 
         ApiService::checkResponseSuccessful($results['category']);
         ApiService::checkResponseSuccessful($results['course']);
-
         $course = CourseFactory::create($results['course']->getContent());
         $category = CategoryFactory::create($results['category']->getContent());
-
-        if ($course->getCategory()->getId() != $category->getId()) {
-            throw new HttpException(404, 'Course: '.$courseIdentifier.' is not in category "'.$categoryIdentifier.'"');
-        }
 
         $course->setCategory($category);
 
@@ -189,7 +141,8 @@ class CourseRepository extends ApiRouteService
         }
 
         if (ApiService::isResponseSuccessful($results['toc'])) {
-            $toc = TocFactory::create($results['toc']->getContent());
+            $data = $this->lineariesToc($results['toc']->getContent());
+            $toc = TocFactory::create($data);
             $course->setToc($toc);
         }
 
@@ -200,6 +153,24 @@ class CourseRepository extends ApiRouteService
 
         return $course;
     }
+
+    public static function lineariesToc($toc)
+    {
+        $lineare = array();
+        $linearies = function ($toc) use (&$linearies, &$lineare) {
+            $lineare[] = $toc;
+            if (isset($toc['children'])) {
+                foreach ($toc['children'] as $child) {
+                    $linearies($child);
+                }
+            }
+        };
+
+        $linearies($toc);
+
+        return $lineare;
+    }
+
 
     /**
      * Get all courses
@@ -257,6 +228,19 @@ class CourseRepository extends ApiRouteService
         $apiRequest = new ApiRequest();
         $apiRequest->setBaseUrl(self::URL_COURSES.$courseIdentifier);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        return $apiRequest;
+    }
+
+    public function findContentRequest($courseIdentifier)
+    {
+        $apiRequest = new ApiRequest();
+        $apiRequest->setBaseUrl(self::URL_COURSES.$courseIdentifier.self::URL_COURSES_CONTENT);
+        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+
+        $apiRequestOptions = new ApiRequestOptions();
+        $apiRequestOptions->setFormat(ApiRequest::FORMAT_HTML);
+        $apiRequest->setOptions($apiRequestOptions);
 
         return $apiRequest;
     }

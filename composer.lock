@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "88e189f1061026f302660087e8a395f7",
+    "hash": "b0f2db96b5ff2994ed04269fb1e3d28d",
     "packages": [
         {
             "name": "doctrine/common",
@@ -762,11 +762,11 @@
         },
         {
             "name": "simpleit/api-resources-bundle",
-            "version": "v1.0.2",
+            "version": "1.0.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://simpleit-zbot-readonly:nWCWJe04ASZ9ZriSrzfp@github.com/simpleit/ApiResourcesBundle.git",
-                "reference": "v1.0.2"
+                "reference": "cf628c9b47543c619c15513831a2594143687074"
             },
             "require": {
                 "php": ">=5.3.3",
@@ -794,7 +794,7 @@
                 "api",
                 "resources"
             ],
-            "time": "2013-06-18 11:47:27"
+            "time": "2013-07-02 14:28:50"
         },
         {
             "name": "simpleit/app-bundle",
@@ -802,7 +802,7 @@
             "source": {
                 "type": "git",
                 "url": "https://simpleit-zbot-readonly:nWCWJe04ASZ9ZriSrzfp@github.com/simpleit/AppBundle.git",
-                "reference": "7f5324e8f2d7dc5953bcc62ff9a8b10443db2c53"
+                "reference": "cbecba066a8ce02c5f445eb426a0e4e39f03d784"
             },
             "require": {
                 "guzzle/guzzle": "~3.7",
@@ -833,15 +833,15 @@
             "keywords": [
                 "app"
             ],
-            "time": "2013-07-01 07:30:37"
+            "time": "2013-07-01 12:34:55"
         },
         {
             "name": "simpleit/php-utils",
-            "version": "v1.0.4",
+            "version": "1.0.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://simpleit-zbot-readonly:nWCWJe04ASZ9ZriSrzfp@github.com/simpleit/php-utils.git",
-                "reference": "v1.0.4"
+                "reference": "bdb69cc8acacc3f25531fbff143bb6aedd4a3cbc"
             },
             "require": {
                 "doctrine/common": ">=2.2.3,<2.4-dev",
@@ -868,7 +868,7 @@
                 "php",
                 "utils"
             ],
-            "time": "2013-06-21 21:25:31"
+            "time": "2013-07-02 09:40:39"
         },
         {
             "name": "symfony/icu",
@@ -1085,6 +1085,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "simpleit/app-bundle": 20,
+        "simpleit/php-utils": 20,
+        "simpleit/api-resources-bundle": 20,
         "sensio/buzz-bundle": 20
     },
     "platform": {

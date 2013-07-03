@@ -23,8 +23,8 @@ class CategoryFactory
         if (isset($categoryRessource['id'])) {
             $category->setId($categoryRessource['id']);
         }
-        if (isset($categoryRessource['title'])) {
-            $category->setTitle($categoryRessource['title']);
+        if (isset($categoryRessource['name'])) {
+            $category->setName($categoryRessource['name']);
         }
         if (isset($categoryRessource['slug'])) {
             $category->setSlug($categoryRessource['slug']);

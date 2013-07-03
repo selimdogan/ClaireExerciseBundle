@@ -132,7 +132,7 @@ class AuthorRepository extends ApiRouteService
     public static function findCoursesRequest($authorIdentifier)
     {
         $apiRequest = new ApiRequest();
-        $apiRequest->setBaseUrl(self::URL_AUTHORS.$authorIdentifier.self::URL_COURSES);
+        $apiRequest->setBaseUrl(self::URL_AUTHORS.$authorIdentifier);
         $apiRequest->setMethod(ApiRequest::METHOD_GET);
 
         return $apiRequest;

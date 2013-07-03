@@ -6,16 +6,27 @@
 
 
     <parameters>
+        <!--PART-->
         <parameter key="simple_it.claire.course.repository.part.class">SimpleIT\ClaireAppBundle\Repository\Course\PartRepository</parameter>
         <parameter key="simple_it.claire.course.repository.part_content.class">SimpleIT\ClaireAppBundle\Repository\Course\PartContentRepository</parameter>
         <parameter key="simple_it.claire.course.repository.metadata_by_part.class">SimpleIT\ClaireAppBundle\Repository\Course\MetadataByPartRepository</parameter>
-
-        <parameter key="simple_it.claire.course.repository.author_by_course.class">SimpleIT\ClaireAppBundle\Repository\Course\AuthorByCourseRepository</parameter>
-        <parameter key="simple_it.claire.course.repository.author_by_part.class">SimpleIT\ClaireAppBundle\Repository\Course\AuthorByPartRepository</parameter>
-
         <parameter key="simple_it.claire.course.class">SimpleIT\ClaireAppBundle\Services\CourseService</parameter>
         <parameter key="simple_it.claire.course.part.class">SimpleIT\ClaireAppBundle\Services\Course\PartService</parameter>
         <parameter key="simple_it.claire.course.metadata.class">SimpleIT\ClaireAppBundle\Services\Course\MetadataService</parameter>
+
+
+        <!--AUTHOR-->
+        <parameter key="simple_it.claire.user.repository.author_by_course.class">SimpleIT\ClaireAppBundle\Repository\User\AuthorByCourseRepository</parameter>
+        <parameter key="simple_it.claire.user.repository.author_by_part.class">SimpleIT\ClaireAppBundle\Repository\User\AuthorByPartRepository</parameter>
+        <parameter key="simple_it.claire.user.author.class">SimpleIT\ClaireAppBundle\Services\User\AuthorService</parameter>
+
+        <!--TAGS-->
+        <parameter key="simple_it.claire.associated_content.repository.tag_by_part.class">SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByPartRepository</parameter>
+        <parameter key="simple_it.claire.associated_content.tag.class">SimpleIT\ClaireAppBundle\Services\AssociatedContent\TagService</parameter>
+
+
+
+
 
 
         <parameter key="simple_it.claire_api.class">SimpleIT\ClaireAppBundle\Api\ClaireApi</parameter>
@@ -92,7 +103,8 @@
             </call>
         </service>
 
-        <service id="simple_it.claire.course.repository.author_by_course" class="%simple_it.claire.course.repository.author_by_course.class%" >
+        <!--USER-->
+        <service id="simple_it.claire.user.repository.author_by_course" class="%simple_it.claire.user.repository.author_by_course.class%" >
             <call method="setClient">
                 <argument type="service" id="simple_it.claire.http_client" />
             </call>
@@ -101,12 +113,34 @@
             </call>
         </service>
 
-        <service id="simple_it.claire.course.repository.author_by_part" class="%simple_it.claire.course.repository.author_by_part.class%" >
+        <service id="simple_it.claire.user.repository.author_by_part" class="%simple_it.claire.user.repository.author_by_part.class%" >
             <call method="setClient">
                 <argument type="service" id="simple_it.claire.http_client" />
             </call>
             <call method="setSerializer">
                 <argument type="service" id="serializer" />
+            </call>
+        </service>
+
+        <service id="simple_it.claire.user.author" class="%simple_it.claire.user.author.class%" >
+            <call method="setAuthorByCourseRepository">
+                <argument type="service" id="simple_it.claire.user.repository.author_by_course" />
+            </call>
+        </service>
+
+        <!--ASSOCIATED CONTENT-->
+        <service id="simple_it.claire.associated_content.repository.tag_by_part" class="%simple_it.claire.associated_content.repository.tag_by_part.class%" >
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client" />
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="serializer" />
+            </call>
+        </service>
+
+        <service id="simple_it.claire.associated_content.tag" class="%simple_it.claire.associated_content.tag.class%" >
+            <call method="setTagByPartRepository">
+                <argument type="service" id="simple_it.claire.associated_content.repository.tag_by_part" />
             </call>
         </service>
 

@@ -38,6 +38,7 @@ class CourseController extends BaseController
     public function courseAction(Request $request, $categorySlug, $courseSlug)
     {
         $data = $this->processCourseAction($request, $categorySlug, $courseSlug);
+
         return $this->render($data['view'], $data['parameters']);
     }
 
@@ -58,8 +59,6 @@ class CourseController extends BaseController
         $this->courseService = $this->get('simpleit.claire.course');
         $course = $this->courseService->getCourseWithComplementaries($courseSlug, $categorySlug);
 
-        $timeline = $this->courseService->getTimeline($course);
-
         $displayLevel = $course->getDisplayLevel();
 
         $pagination = $this->courseService->getPagination($course, null, $displayLevel);
@@ -71,11 +70,11 @@ class CourseController extends BaseController
             array('title' => $course->getTitle(),
                   'course' => $course,
                   'category' => $course->getCategory(),
-                  'icon' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_IMAGE),
-                  'aggregateRating' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_AGGREGATE_RATING),
-                  'difficulty' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DIFFICULTY),
+                  'icon' => (isset($metadatas[ Metadata::COURSE_METADATA_IMAGE]) ? $metadatas[ Metadata::COURSE_METADATA_IMAGE] : null),
+                  'aggregateRating' => (isset($metadatas[Metadata::COURSE_METADATA_AGGREGATE_RATING]) ? $metadatas[Metadata::COURSE_METADATA_AGGREGATE_RATING] : null),
+                  'difficulty' => (isset($metadatas[Metadata::COURSE_METADATA_DIFFICULTY]) ? $metadatas[Metadata::COURSE_METADATA_DIFFICULTY] : null),
                   //FIXME DateInterval
-                  'duration' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DURATION),
+                  'duration' =>(isset($metadatas[Metadata::COURSE_METADATA_DURATION]) ? $metadatas[Metadata::COURSE_METADATA_DURATION] : null),
                   'timeline' => $this->courseService->getTimeline($course),
                   'tags' => $course->getTags(),
                   'updatedAt' => $course->getUpdatedAt(),
@@ -83,8 +82,8 @@ class CourseController extends BaseController
                   'toc' => $this->courseService->getDisplayToc($course, $displayLevel),
                   'pagination' => $pagination,
                   //FIXME license
-                  'license' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_LICENSE),
-                  'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION),
+                  'license' => (isset($metadatas[Metadata::COURSE_METADATA_LICENSE]) ? $metadatas[Metadata::COURSE_METADATA_LICENSE] : null),
+                  'description' => (isset($metadatas[Metadata::COURSE_METADATA_DESCRIPTION]) ? $metadatas[Metadata::COURSE_METADATA_DESCRIPTION] : null),
                   'authors' => $course->getAuthors()
             );
 
@@ -157,7 +156,6 @@ class CourseController extends BaseController
         $data = $this->courseService->getPartWithComplementaries($categorySlug, $courseSlug, $partSlug);
         $course = $data['course'];
         $part = $data['part'];
-        $timeline = $this->courseService->getTimeline($course);
 
         $displayLevel = $course->getDisplayLevel();
         /* Get the Part content (only for 1b or 2c) */
@@ -191,17 +189,17 @@ class CourseController extends BaseController
                 'title' => $part->getTitle(),
                 'course' => $course, 'part' => $part,
                 'category' => $course->getCategory(),
-                'icon' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_IMAGE),
-                'aggregateRating' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_AGGREGATE_RATING),
-                'difficulty' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DIFFICULTY),
-                'duration' => ArrayUtils::getValue($metadatas, Metadata::COURSE_METADATA_DURATION),
+                'icon' => (isset($metadatas[Metadata::COURSE_METADATA_IMAGE]) ? $metadatas[Metadata::COURSE_METADATA_IMAGE] : null),
+                'aggregateRating' => (isset($metadatas[Metadata::COURSE_METADATA_AGGREGATE_RATING]) ? $metadatas[Metadata::COURSE_METADATA_AGGREGATE_RATING] : null),
+                'difficulty' => (isset($metadatas[Metadata::COURSE_METADATA_DIFFICULTY]) ? $metadatas[Metadata::COURSE_METADATA_DIFFICULTY] : null),
+                'duration' => (isset($metadatas[Metadata::COURSE_METADATA_DURATION]) ? $metadatas[Metadata::COURSE_METADATA_DURATION] : null),
                 'timeline' => $this->courseService->getTimeline($course), 'tags' => $tags,
                 'updatedAt' => $part->getUpdatedAt(), 'pagination' => $pagination,
                 'introduction' => $introduction,
                 'toc' => $this->courseService->getDisplayToc($course, $displayLevel, $part),
                 'contentHtml' => $formatedContent,
-                'license' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_LICENSE),
-                'description' => ArrayUtils::getValue((array) $metadatas, Metadata::COURSE_METADATA_DESCRIPTION),
+                'license' => (isset($metadatas[Metadata::COURSE_METADATA_LICENSE]) ? $metadatas[Metadata::COURSE_METADATA_LICENSE] : null),
+                'description' => (isset($metadatas[Metadata::COURSE_METADATA_DESCRIPTION]) ? $metadatas[Metadata::COURSE_METADATA_DESCRIPTION] : null),
                 'authors' => $course->getAuthors()
                 );
 
@@ -254,7 +252,6 @@ class CourseController extends BaseController
         {
             throw new \Symfony\Component\HttpKernel\Exception\HttpException(500, 'Oups, la liste des tutoriels n\'a pas pu être générée');
         }
-
 
         $data['view'] = 'SimpleITClaireAppBundle:Course:index.html.twig';
         $data['viewParameters'] = array(

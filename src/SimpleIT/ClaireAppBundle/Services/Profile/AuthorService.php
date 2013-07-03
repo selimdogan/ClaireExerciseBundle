@@ -11,6 +11,7 @@ use SimpleIT\ClaireAppBundle\Repository\User\AuthorRepository;
 /**
  * Class AuthorService
  * @package SimpleIT\ClaireAppBundle\Services\Profile
+ * @deprecated
  */
 class AuthorService
 {
