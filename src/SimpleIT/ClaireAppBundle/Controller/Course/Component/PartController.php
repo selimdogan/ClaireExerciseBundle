@@ -23,7 +23,9 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class PartController
@@ -56,7 +58,7 @@ class PartController extends AppController
             ->add('title')
             ->getForm();
 
-        if (RequestUtils::METHOD_POST == $request->getMethod()) {
+        if (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()) {
             $form->bind($request);
             if ($form->isValid()) {
                 $part = $this->get('simple_it.claire.course.part')->save(
@@ -65,6 +67,7 @@ class PartController extends AppController
                     $part
                 );
             }
+            return new Response(json_encode($part));
         }
 
         return $this->render(
