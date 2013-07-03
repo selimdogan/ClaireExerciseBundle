@@ -67,7 +67,7 @@ class PartController extends AppController
                     $part
                 );
             }
-            return new Response(json_encode($part));
+            return new Response(json_encode($part), 200, array('Content-type'=>'application/json'));
         }
 
         return $this->render(
