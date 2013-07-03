@@ -68,7 +68,6 @@ class CourseFactory
     public static function createCollection($courseResources)
     {
         $courses = array();
-
         foreach ($courseResources as $courseResource) {
             $course = self::create($courseResource);
             $courses[] = $course;
