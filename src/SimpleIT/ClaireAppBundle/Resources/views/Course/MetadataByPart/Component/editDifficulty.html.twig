@@ -2,7 +2,7 @@
     <span class="icon"></span>
     <div>
         <strong>Difficulté</strong>
-        <form action="{{ path('simple_it_claire_component_part_metadata_edit_difficulty', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post" {{ form_enctype(form) }}>
+        <form class="js-course-difficulty" action="{{ path('simple_it_claire_component_part_metadata_edit_difficulty', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post" {{ form_enctype(form) }}>
             {{ form_errors(form) }}
             {{ form_errors(form.difficulty) }}
             {{ form_widget(form.difficulty) }}
