@@ -2,6 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
+use SimpleIT\AppBundle\Model\AppResponse;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\Utils\DateUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,7 +62,7 @@ class MetadataByPartController extends AbstractMetadataController
             ->add($metadataName, 'textarea')
             ->getForm();
 
-        if (RequestUtils::METHOD_POST == $request->getMethod()) {
+        if (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()) {
             $form->bind($request);
             if ($form->isValid()) {
                 if (isset($metadatas[$metadataName])) {
@@ -77,6 +78,7 @@ class MetadataByPartController extends AbstractMetadataController
                         $partIdentifier,
                         array($metadataName => $metadatas[$metadataName])
                     );
+                    return new AppResponse($metadatas[$metadataName]);
                 }
             }
         }
@@ -200,9 +202,10 @@ class MetadataByPartController extends AbstractMetadataController
 
         if (isset($metadatas[$metadataName])) {
             $currentDuration = new \DateInterval($metadatas[$metadataName]);
-            $durationUnits = array('days'    => $currentDuration->d,
-                                   'hours'   => $currentDuration->h,
-                                   'minutes' => $currentDuration->i
+            $durationUnits = array(
+                'days'    => $currentDuration->d,
+                'hours'   => $currentDuration->h,
+                'minutes' => $currentDuration->i
             );
         } else {
             $currentDuration = new \DateInterval('P0D');

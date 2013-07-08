@@ -22,7 +22,9 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Controller\AppController;
+use SimpleIT\AppBundle\Model\AppResponse;
 use SimpleIT\AppBundle\Util\RequestUtils;
+use SimpleIT\Utils\ArrayUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -33,6 +35,40 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PartController extends AppController
 {
+    /**
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier   Part id | slug
+     *
+     * @return Response
+     */
+    public function viewAction($courseIdentifier, $partIdentifier)
+    {
+        $course = $this->get('simpleit.claire.course')->get($courseIdentifier);
+        $part = $this->get('simple_it.claire.course.part')->get($courseIdentifier, $partIdentifier);
+        $metadatas = $this->get('simple_it.claire.course.metadata')->get(
+            $courseIdentifier,
+            $partIdentifier
+        );
+        $part = $this->get('simple_it.claire.course.part')->getToc(
+            $courseIdentifier,
+            $partIdentifier
+        );
+        $tags = $this->get('simple_it.claire.course.part')->get($courseIdentifier, $partIdentifier);
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Part/Component:view.html.twig',
+            array(
+                'courseIdentifier' => $courseIdentifier,
+                'partIdentifier'   => $partIdentifier,
+                'image'            => ArrayUtils::getValue($metadatas, 'image'),
+                'difficulty'       => ArrayUtils::getValue($metadatas, 'difficulty'),
+                'aggregate-rating' => ArrayUtils::getValue($metadatas, 'aggregate-rating'),
+                'duration'         => ArrayUtils::getValue($metadatas, 'duration'),
+
+            )
+        );
+    }
+
     /**
      * Edit a part
      *
@@ -66,7 +102,9 @@ class PartController extends AppController
                     $part
                 );
             }
-            return new Response(json_encode($part), 200, array('Content-type'=>'application/json'));
+
+            return new AppResponse($part);
+
         }
 
         return $this->render(
@@ -79,5 +117,6 @@ class PartController extends AppController
             )
         );
     }
+
 }
 

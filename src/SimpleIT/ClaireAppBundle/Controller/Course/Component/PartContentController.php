@@ -22,6 +22,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
+use SimpleIT\Utils\FormatUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,6 +33,33 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PartContentController extends AppController
 {
+    /**
+     * View Part content
+     *
+     * @param integer $courseIdentifier Course id | slug
+     * @param integer $partIdentifier   Part id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewAction($courseIdentifier, $partIdentifier)
+    {
+        $partContent = $this->get('simple_it.claire.course.part')->get(
+            $courseIdentifier,
+            $partIdentifier,
+            FormatUtils::HTML
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/PartContent/Component:view.html.twig',
+            array(
+                'courseIdentifier' => $courseIdentifier,
+                'partIdentifier'   => $partIdentifier,
+                'partContent'      => $partContent
+            )
+        );
+
+    }
+
     /**
      * Edit part content
      *
@@ -49,13 +77,15 @@ class PartContentController extends AppController
                 $courseIdentifier,
                 $partIdentifier
             );
-        } elseif (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()) {
+        } elseif (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()
+        ) {
             $partContent = $request->get('partContent');
             $partContent = $this->get('simple_it.claire.course.part')->saveContent(
                 $courseIdentifier,
                 $partIdentifier,
                 $partContent
             );
+
             return new Response($partContent);
         }
 
@@ -68,4 +98,5 @@ class PartContentController extends AppController
             )
         );
     }
+
 }
