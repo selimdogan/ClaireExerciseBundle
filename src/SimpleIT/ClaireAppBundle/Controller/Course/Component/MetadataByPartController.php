@@ -2,8 +2,10 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
+use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\AppBundle\Model\AppResponse;
 use SimpleIT\AppBundle\Util\RequestUtils;
+use SimpleIT\Utils\ArrayUtils;
 use SimpleIT\Utils\DateUtils;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -30,7 +32,7 @@ class MetadataByPartController extends AbstractMetadataController
         );
         $rate = null;
         if (isset($metadatas['aggregate-rating'])) {
-            $rate = $metadatas['aggregate-rating'];
+            $rate = $metadatas['aggregateating'];
         }
 
         return $this->render(
@@ -52,7 +54,7 @@ class MetadataByPartController extends AbstractMetadataController
      */
     public function editDescriptionAction(Request $request, $courseIdentifier, $partIdentifier)
     {
-        $metadataName = 'description';
+        $metadataName = MetadataResource::COURSE_METADATA_DESCRIPTION;
         $metadatas = $this->get('simple_it.claire.course.metadata')->get(
             $courseIdentifier,
             $partIdentifier
@@ -65,20 +67,18 @@ class MetadataByPartController extends AbstractMetadataController
         if (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()) {
             $form->bind($request);
             if ($form->isValid()) {
-                if (isset($metadatas[$metadataName])) {
-                    $metadata = $metadatas[$metadataName];
-                } else {
-                    $metadata = null;
-                }
+                $actualMetadata = ArrayUtils::getValue($metadatas, $metadataName);
 
                 $metadatas = $form->getData();
-                if ($metadata != $metadatas[$metadataName]) {
+                $metadata = ArrayUtils::getValue($metadatas, $metadataName);
+                if ($actualMetadata != $metadata) {
                     $metadatas = $this->get('simple_it.claire.course.metadata')->save(
                         $courseIdentifier,
                         $partIdentifier,
-                        array($metadataName => $metadatas[$metadataName])
+                        array($metadataName => $metadata)
                     );
-                    return new AppResponse($metadatas[$metadataName]);
+
+                    return new AppResponse(array($metadataName => $metadata));
                 }
             }
         }

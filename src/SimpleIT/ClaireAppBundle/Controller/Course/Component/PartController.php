@@ -80,13 +80,12 @@ class PartController extends AppController
      */
     public function editAction(Request $request, $courseIdentifier, $partIdentifier)
     {
+        $part = new PartResource();
         if (RequestUtils::METHOD_GET == $request->getMethod()) {
             $part = $this->get('simple_it.claire.course.part')->get(
                 $courseIdentifier,
                 $partIdentifier
             );
-        } else {
-            $part = new PartResource();
         }
 
         $form = $this->createFormBuilder($part)
@@ -102,9 +101,7 @@ class PartController extends AppController
                     $part
                 );
             }
-
             return new AppResponse($part);
-
         }
 
         return $this->render(

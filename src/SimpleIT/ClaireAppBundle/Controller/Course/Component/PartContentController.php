@@ -21,6 +21,7 @@
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\AppBundle\Controller\AppController;
+use SimpleIT\AppBundle\Model\AppResponse;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\Utils\FormatUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -86,7 +87,7 @@ class PartContentController extends AppController
                 $partContent
             );
 
-            return new Response($partContent);
+            return new AppResponse($partContent);
         }
 
         return $this->render(
