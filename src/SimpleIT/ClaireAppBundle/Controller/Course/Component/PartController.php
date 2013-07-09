@@ -60,11 +60,13 @@ class PartController extends AppController
             array(
                 'courseIdentifier' => $courseIdentifier,
                 'partIdentifier'   => $partIdentifier,
+                'course'           => $course,
+                'part'             => $part,
+                'tags'             => $tags,
                 'image'            => ArrayUtils::getValue($metadatas, 'image'),
                 'difficulty'       => ArrayUtils::getValue($metadatas, 'difficulty'),
                 'aggregate-rating' => ArrayUtils::getValue($metadatas, 'aggregate-rating'),
                 'duration'         => ArrayUtils::getValue($metadatas, 'duration'),
-
             )
         );
     }
@@ -101,6 +103,7 @@ class PartController extends AppController
                     $part
                 );
             }
+
             return new AppResponse($part);
         }
 
@@ -114,6 +117,4 @@ class PartController extends AppController
             )
         );
     }
-
 }
-

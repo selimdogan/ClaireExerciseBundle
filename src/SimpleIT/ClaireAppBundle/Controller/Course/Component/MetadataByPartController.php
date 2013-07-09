@@ -3,7 +3,6 @@
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
-use SimpleIT\AppBundle\Model\AppResponse;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\Utils\ArrayUtils;
 use SimpleIT\Utils\DateUtils;
@@ -26,19 +25,19 @@ class MetadataByPartController extends AbstractMetadataController
      */
     public function showRatingAction($courseIdentifier, $partIdentifier)
     {
-        $metadatas = $this->get('simple_it.claire.course.metadata')->get(
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromPart(
             $courseIdentifier,
             $partIdentifier
         );
-        $rate = null;
-        if (isset($metadatas['aggregate-rating'])) {
-            $rate = $metadatas['aggregateating'];
-        }
+        $rate = ArrayUtils::getValue(
+            $metadatas,
+            MetadataResource::COURSE_METADATA_AGGREGATE_RATING
+        );
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/MetadataByPart/Component:viewRating.html.twig',
             array(
-                'rate' => $rate
+                MetadataResource::COURSE_METADATA_AGGREGATE_RATING => $rate
             )
         );
     }
@@ -55,7 +54,7 @@ class MetadataByPartController extends AbstractMetadataController
     public function editDescriptionAction(Request $request, $courseIdentifier, $partIdentifier)
     {
         $metadataName = MetadataResource::COURSE_METADATA_DESCRIPTION;
-        $metadatas = $this->get('simple_it.claire.course.metadata')->get(
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromPart(
             $courseIdentifier,
             $partIdentifier
         );
@@ -64,24 +63,14 @@ class MetadataByPartController extends AbstractMetadataController
             ->add($metadataName, 'textarea')
             ->getForm();
 
-        if (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()) {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $actualMetadata = ArrayUtils::getValue($metadatas, $metadataName);
-
-                $metadatas = $form->getData();
-                $metadata = ArrayUtils::getValue($metadatas, $metadataName);
-                if ($actualMetadata != $metadata) {
-                    $metadatas = $this->get('simple_it.claire.course.metadata')->save(
-                        $courseIdentifier,
-                        $partIdentifier,
-                        array($metadataName => $metadata)
-                    );
-
-                    return new AppResponse(array($metadataName => $metadata));
-                }
-            }
-        }
+        $form = $this->processPartEdit(
+            $request,
+            $form,
+            $courseIdentifier,
+            $partIdentifier,
+            $metadatas,
+            $metadataName
+        );
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/MetadataByPart/Component:editDescription.html.twig',
@@ -104,8 +93,8 @@ class MetadataByPartController extends AbstractMetadataController
      */
     public function editImageAction(Request $request, $courseIdentifier, $partIdentifier)
     {
-        $metadataName = 'image';
-        $metadatas = $this->get('simple_it.claire.course.metadata')->get(
+        $metadataName = MetadataResource::COURSE_METADATA_IMAGE;
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromPart(
             $courseIdentifier,
             $partIdentifier
         );
@@ -114,11 +103,12 @@ class MetadataByPartController extends AbstractMetadataController
             ->add($metadataName, 'url')
             ->getForm();
 
-        $form = $this->processEdit(
+        $form = $this->processPartEdit(
             $request,
             $form,
             $courseIdentifier,
             $partIdentifier,
+            $metadatas,
             $metadataName
         );
 
@@ -143,12 +133,12 @@ class MetadataByPartController extends AbstractMetadataController
      */
     public function editDifficultyAction(Request $request, $courseIdentifier, $partIdentifier)
     {
-        $metadataName = 'difficulty';
-        $metadatas = $this->get('simple_it.claire.course.metadata')->get(
+        $metadataName = MetadataResource::COURSE_METADATA_DIFFICULTY;
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromPart(
             $courseIdentifier,
             $partIdentifier
         );
-
+        //FIXME trans
         $form = $this->createFormBuilder($metadatas)
             ->add(
                 $metadataName,
@@ -165,11 +155,12 @@ class MetadataByPartController extends AbstractMetadataController
             )
             ->getForm();
 
-        $form = $this->processEdit(
+        $form = $this->processPartEdit(
             $request,
             $form,
             $courseIdentifier,
             $partIdentifier,
+            $metadatas,
             $metadataName
         );
 
@@ -194,8 +185,8 @@ class MetadataByPartController extends AbstractMetadataController
      */
     public function editDurationAction(Request $request, $courseIdentifier, $partIdentifier)
     {
-        $metadataName = 'duration';
-        $metadatas = $this->get('simple_it.claire.course.metadata')->get(
+        $metadataName = MetadataResource::COURSE_METADATA_TIME_REQUIRED;
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromPart(
             $courseIdentifier,
             $partIdentifier
         );
@@ -228,7 +219,7 @@ class MetadataByPartController extends AbstractMetadataController
                 $duration->i = $durationUnits['minutes'];
 
                 if ($duration != $currentDuration) {
-                    $this->get('simple_it.claire.course.metadata')->save(
+                    $this->get('simple_it.claire.course.metadata')->saveFromPart(
                         $courseIdentifier,
                         $partIdentifier,
                         array($metadataName => DateUtils::DateIntervalToString($duration))

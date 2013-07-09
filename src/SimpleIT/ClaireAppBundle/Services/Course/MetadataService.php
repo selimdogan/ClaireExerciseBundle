@@ -2,6 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Services\Course;
 
+use SimpleIT\ClaireAppBundle\Repository\Course\MetadataByCourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\MetadataByPartRepository;
 
 /**
@@ -17,9 +18,14 @@ class MetadataService
     private $metadataByPartRepository;
 
     /**
+     * @var  MetadataByCourseRepository
+     */
+    private $metadataByCourseRepository;
+
+    /**
      * Set metadataByPartRepository
      *
-     * @param \SimpleIT\ClaireAppBundle\Repository\Course\MetadataByPartRepository $metadataByPartRepository
+     * @param MetadataByPartRepository $metadataByPartRepository
      */
     public function setMetadataByPartRepository($metadataByPartRepository)
     {
@@ -27,20 +33,58 @@ class MetadataService
     }
 
     /**
-     * Get metadatas
+     * Set metadataByCourseRepository
+     *
+     * @param \SimpleIT\ClaireAppBundle\Repository\Course\MetadataByCourseRepository $metadataByCourseRepository
+     */
+    public function setMetadataByCourseRepository($metadataByCourseRepository)
+    {
+        $this->metadataByCourseRepository = $metadataByCourseRepository;
+    }
+
+    /**
+     * Get metadatas from a course
+     *
+     * @param string $courseIdentifier Course id | slug
+     *
+     * @return string
+     */
+    public function getAllFromCourse($courseIdentifier)
+    {
+        return $this->metadataByCourseRepository->find($courseIdentifier);
+    }
+
+    /**
+     * Get metadatas from a part
      *
      * @param string $courseIdentifier Course id | slug
      * @param string $partIdentifier   Part id | slug
      *
      * @return string
      */
-    public function get($courseIdentifier, $partIdentifier)
+    public function getAllFromPart($courseIdentifier, $partIdentifier)
     {
         return $this->metadataByPartRepository->find($courseIdentifier, $partIdentifier);
     }
 
     /**
-     * Add metadatas
+     * Add metadatas to a course
+     *
+     * @param string $courseIdentifier Course id | slug
+     * @param array  $metadatas        Metadatas (key => value)
+     *
+     * @return string
+     */
+    public function addToCourse($courseIdentifier, $metadatas)
+    {
+        return $this->metadataByCourseRepository->insert(
+            $courseIdentifier,
+            $metadatas
+        );
+    }
+
+    /**
+     * Add metadatas to a part
      *
      * @param string $courseIdentifier Course id | slug
      * @param string $partIdentifier   Part id | slug
@@ -48,7 +92,7 @@ class MetadataService
      *
      * @return string
      */
-    public function add($courseIdentifier, $partIdentifier, $metadatas)
+    public function addToPart($courseIdentifier, $partIdentifier, $metadatas)
     {
         return $this->metadataByPartRepository->insert(
             $courseIdentifier,
@@ -58,7 +102,35 @@ class MetadataService
     }
 
     /**
-     * Save metadatas
+     * Save metadatas from a course
+     *
+     * @param string $courseIdentifier Course id | slug
+     * @param array  $metadatas        Metadatas (key => value)
+     *
+     * @return string
+     */
+    public function saveFromCourse($courseIdentifier, $metadatas)
+    {
+        $metadatasToUpdate = $this->metadataByCourseRepository->find($courseIdentifier);
+        foreach ($metadatas as $key => $value) {
+            if (array_key_exists($key, $metadatasToUpdate)) {
+                $metadatasToUpdate = $this->metadataByCourseRepository->update(
+                    $courseIdentifier,
+                    array($key => $value)
+                );
+            } else {
+                $metadatasToUpdate = $this->metadataByCourseRepository->insert(
+                    $courseIdentifier,
+                    array($key => $value)
+                );
+            }
+        }
+
+        return $metadatasToUpdate;
+    }
+
+    /**
+     * Save metadatas from a part
      *
      * @param string $courseIdentifier Course id | slug
      * @param string $partIdentifier   Part id | slug
@@ -66,7 +138,7 @@ class MetadataService
      *
      * @return string
      */
-    public function save($courseIdentifier, $partIdentifier, $metadatas)
+    public function saveFromPart($courseIdentifier, $partIdentifier, $metadatas)
     {
         $metadatasToUpdate = $this->metadataByPartRepository->find(
             $courseIdentifier,
