@@ -25,7 +25,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class PartRepository extends AppRepository
 {
-
     /**
      * @var string
      */
@@ -73,7 +72,8 @@ class PartRepository extends AppRepository
      * ***** OLD SHIT ***** *
      *
      * **********************/
-   /** @var ClaireApi The Claire Api */
+    
+    /** @var ClaireApi The Claire Api */
     protected $claireApi;
 
     /** The base url for courses = '/courses/' */

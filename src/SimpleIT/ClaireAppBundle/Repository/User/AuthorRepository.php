@@ -21,7 +21,7 @@ class AuthorRepository extends ApiRouteService
 
     /** URL for authors ressources */
     const URL_AUTHORS = '/authors/';
-
+    
     /** URL for courses collection in an author ressource */
     const URL_COURSES = '/courses/';
 
