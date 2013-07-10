@@ -43,7 +43,7 @@ class PartController extends AppController
      */
     public function viewAction($courseIdentifier, $partIdentifier)
     {
-        $course = $this->get('simpleit.claire.course')->get($courseIdentifier);
+        $course = $this->get('simple_it.claire.course.course')->get($courseIdentifier);
         $part = $this->get('simple_it.claire.course.part')->get($courseIdentifier, $partIdentifier);
         $metadatas = $this->get('simple_it.claire.course.metadata')->get(
             $courseIdentifier,

@@ -8,6 +8,9 @@ use SimpleIT\ClaireAppBundle\Services\CourseService;
 use SimpleIT\Utils\ArrayUtils;
 use SimpleIT\AppBundle\Services\ApiService;
 
+use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\Utils\Collection\Page;
+use SimpleIT\Utils\Collection\Sort;
 use Symfony\Component\HttpFoundation\Request;
 use SimpleIT\ClaireAppBundle\Controller\BaseController;
 use SimpleIT\ClaireAppBundle\Form\Type\CourseType;
@@ -56,7 +59,8 @@ class CourseController extends BaseController
      */
     public function processCourseAction($categorySlug, $courseSlug)
     {
-        $this->courseService = $this->get('simpleit.claire.course');
+        $this->courseService = $this->get('simple_it.claire.course.course');
+
         $course = $this->courseService->getCourseWithComplementaries($courseSlug, $categorySlug);
 
         $displayLevel = $course->getDisplayLevel();
@@ -151,9 +155,7 @@ class CourseController extends BaseController
      */
     public function processPartAction(Request $request, $categorySlug, $courseSlug, $partSlug)
     {
-        $this->courseService = $this->get('simpleit.claire.course');
-
-        $data = $this->courseService->getPartWithComplementaries($categorySlug, $courseSlug, $partSlug);
+        $data = $this->get('simple_it.claire.course.course')->getPartWithComplementaries($categorySlug, $courseSlug, $partSlug);
         $course = $data['course'];
         $part = $data['part'];
 
@@ -340,17 +342,10 @@ class CourseController extends BaseController
     public function listAction(Request $request)
     {
         $parameters = $request->query->all();
-
-        $options = new ApiRequestOptions();
-        $options->setItemsPerPage(18);
-        $options->setPageNumber($request->get('page', 1));
-        $options->addFilter('sort', 'updatedAt desc');
-        $options->addFilters($parameters, array('sort'));
-
-        /* Get the courses */
-        $this->courseService = $this->get('simpleit.claire.course');
-
-        $courses = $this->courseService->getCourses($options);
+        $page = new Page(18);
+        $sort = new Sort('updatedAt', Sort::DESC);
+        $collectionInformation = new CollectionInformation($page, array($sort), $parameters);
+        $courses = $this->get('simple_it.claire.course.course')->get($collectionInformation);
 
         $this->view = 'SimpleITClaireAppBundle:Course:list.html.twig';
         $this->viewParameters = array(

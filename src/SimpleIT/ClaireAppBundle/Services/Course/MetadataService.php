@@ -51,7 +51,7 @@ class MetadataService
      */
     public function getAllFromCourse($courseIdentifier)
     {
-        return $this->metadataByCourseRepository->find($courseIdentifier);
+        return $this->metadataByCourseRepository->findAll($courseIdentifier);
     }
 
     /**
@@ -64,7 +64,7 @@ class MetadataService
      */
     public function getAllFromPart($courseIdentifier, $partIdentifier)
     {
-        return $this->metadataByPartRepository->find($courseIdentifier, $partIdentifier);
+        return $this->metadataByPartRepository->findAll($courseIdentifier, $partIdentifier);
     }
 
     /**
@@ -111,7 +111,7 @@ class MetadataService
      */
     public function saveFromCourse($courseIdentifier, $metadatas)
     {
-        $metadatasToUpdate = $this->metadataByCourseRepository->find($courseIdentifier);
+        $metadatasToUpdate = $this->metadataByCourseRepository->findAll($courseIdentifier);
         foreach ($metadatas as $key => $value) {
             if (array_key_exists($key, $metadatasToUpdate)) {
                 $metadatasToUpdate = $this->metadataByCourseRepository->update(
@@ -140,7 +140,7 @@ class MetadataService
      */
     public function saveFromPart($courseIdentifier, $partIdentifier, $metadatas)
     {
-        $metadatasToUpdate = $this->metadataByPartRepository->find(
+        $metadatasToUpdate = $this->metadataByPartRepository->findAll(
             $courseIdentifier,
             $partIdentifier
         );

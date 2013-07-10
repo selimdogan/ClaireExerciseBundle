@@ -25,7 +25,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class PartRepository extends AppRepository
 {
-
     /**
      * @var string
      */
@@ -41,13 +40,19 @@ class PartRepository extends AppRepository
      *
      * @param string $courseIdentifier Course id | slug
      * @param string $partIdentifier   Part id | slug
+     * @param array  $parameters       Parameters
      *
      * @return PartResource
      */
-    public function find($courseIdentifier, $partIdentifier)
+    public function find(
+        $courseIdentifier,
+        $partIdentifier,
+        Array $parameters = array()
+    )
     {
         return $this->findResource(
-            array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier)
+            array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier),
+            $parameters
         );
     }
 
@@ -57,14 +62,21 @@ class PartRepository extends AppRepository
      * @param string       $courseIdentifier Course id | slug
      * @param string       $partIdentifier   Part id | slug
      * @param PartResource $part             Part
+     * @param array        $parameters       Parameters
      *
      * @return PartResource
      */
-    public function update($courseIdentifier, $partIdentifier, PartResource $part)
+    public function update(
+        $courseIdentifier,
+        $partIdentifier,
+        PartResource $part,
+        Array $parameters = array()
+    )
     {
         return $this->updateResource(
             $part,
-            array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier)
+            array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier),
+            $parameters
         );
     }
 

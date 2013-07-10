@@ -4,6 +4,7 @@
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
 use SimpleIT\AppBundle\Repository\AppRepository;
+use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\FormatUtils;
 
 /**
@@ -26,17 +27,21 @@ class MetadataByPartRepository extends AppRepository
     /**
      * Find metadatas
      *
-     * @param string $courseIdentifier Course id | slug
-     * @param string $partIdentifier   Part id | slug
-     * @param array  $parameters       Parameters
+     * @param string                $courseIdentifier      Course id | slug
+     * @param string                $partIdentifier        Part id | slug
+     * @param CollectionInformation $collectionInformation Collection information
      *
      * @return array
      */
-    public function find($courseIdentifier, $partIdentifier, $parameters = array())
+    public function findAll(
+        $courseIdentifier,
+        $partIdentifier,
+        CollectionInformation $collectionInformation = null
+    )
     {
-        return parent::findResource(
+        return parent::findAllResources(
             array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier),
-            $parameters
+            $collectionInformation
         );
     }
 

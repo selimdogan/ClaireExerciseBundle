@@ -1,42 +1,88 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
-use SimpleIT\AppBundle\Services\ApiService;
 
-use SimpleIT\ClaireAppBundle\Model\CategoryFactory;
-
-use Symfony\Component\HttpKernel\Exception\HttpException;
-
-use SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository;
-
-use SimpleIT\ClaireAppBundle\Repository\User\AuthorRepository;
-
-use SimpleIT\ClaireAppBundle\Model\AuthorFactory;
-
-use SimpleIT\ClaireAppBundle\Model\TocFactory;
-
-use SimpleIT\ClaireAppBundle\Model\TagFactory;
-
-use SimpleIT\ClaireAppBundle\Model\MetadataFactory;
-
-use SimpleIT\AppBundle\Model\ApiRequestOptions;
-
-use SimpleIT\ClaireAppBundle\Model\Course\Course;
-
-use SimpleIT\ClaireAppBundle\Model\CourseFactory;
-
-use SimpleIT\ClaireAppBundle\Api\ClaireApi;
-
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Model\ApiRequest;
-
-use SimpleIT\AppBundle\Services\ApiRouteService;
+use SimpleIT\AppBundle\Model\ApiRequestOptions;
+use SimpleIT\AppBundle\Repository\AppRepository;
+use SimpleIT\AppBundle\Services\ApiService;
+use SimpleIT\ClaireAppBundle\Api\ClaireApi;
+use SimpleIT\ClaireAppBundle\Model\AuthorFactory;
+use SimpleIT\ClaireAppBundle\Model\CategoryFactory;
+use SimpleIT\ClaireAppBundle\Model\CourseFactory;
+use SimpleIT\ClaireAppBundle\Model\MetadataFactory;
+use SimpleIT\ClaireAppBundle\Model\TagFactory;
+use SimpleIT\ClaireAppBundle\Model\TocFactory;
+use SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository;
+use SimpleIT\ClaireAppBundle\Repository\User\AuthorRepository;
+use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\Utils\Collection\PaginatedCollection;
 
 /**
  * Class CourseRepository
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class CourseRepository extends ApiRouteService
+class CourseRepository extends AppRepository
 {
+    /**
+     * @var string
+     */
+    protected $path = 'courses/{courseIdentifier}';
+
+    /**
+     * @var  string
+     */
+    protected $resourceClass = 'SimpleIT\ApiResourcesBundle\Course\CourseResource';
+
+    /**
+     * Find a list of courses
+     *
+     * @param CollectionInformation $collectionInformation
+     *
+     * @return PaginatedCollection
+     */
+    public function findAll(CollectionInformation $collectionInformation)
+    {
+        return $this->findAllResources(array(), $collectionInformation);
+    }
+
+    /**
+     * Find a course
+     *
+     * @param string $courseIdentifier Course id | slug
+     * @param array  $parameters       Parameters
+     *
+     * @return CourseResource
+     */
+    public function find($courseIdentifier, array $parameters = array())
+    {
+        return $this->findResource(
+            array('courseIdentifier' => $courseIdentifier),
+            $parameters
+        );
+    }
+
+    /**
+     * Update a course
+     *
+     * @param string         $courseIdentifier Course id | slug
+     * @param CourseResource $course           Course
+     * @param array          $parameters       Parameters
+     *
+     * @return CourseResource
+     */
+    public function update($courseIdentifier, CourseResource $course, array $parameters = array())
+    {
+        return $this->updateResource(
+            $course,
+            array('courseIdentifier' => $courseIdentifier,),
+            $parameters
+        );
+    }
+
+
+
     /** @var ClaireApi The Claire Api */
     protected $claireApi;
 
@@ -72,24 +118,24 @@ class CourseRepository extends ApiRouteService
      * ********** METHODS ********* *
      *                              *
      * **************************** */
-     /**
-      * Returns a course
-      *
-      * @param mixed $courseIdentifier The course id | slug
-      *
-      * @return Course The course
-      */
-     public function find($courseIdentifier)
-     {
-         $courseRequest = $this->findRequest($courseIdentifier);
-
-         $courseResult = $this->claireApi->getResult($courseRequest);
-
-         ApiService::checkResponseSuccessful($courseResult);
-         $course = CourseFactory::create($courseResult->getContent());
-
-         return $course;
-     }
+//     /**
+//      * Returns a course
+//      *
+//      * @param mixed $courseIdentifier The course id | slug
+//      *
+//      * @return Course The course
+//      */
+//     public function find($courseIdentifier)
+//     {
+//         $courseRequest = $this->findRequest($courseIdentifier);
+//
+//         $courseResult = $this->claireApi->getResult($courseRequest);
+//
+//         ApiService::checkResponseSuccessful($courseResult);
+//         $course = CourseFactory::create($courseResult->getContent());
+//
+//         return $course;
+//     }
 
     /**
      * <p>
@@ -245,26 +291,26 @@ class CourseRepository extends ApiRouteService
         return $apiRequest;
     }
 
-    /**
-     * Returns all the courses (ApiRequest)
-     *
-     * @param ApiRequestOptions $apiRequestOptions List options
-     *
-     * @return ApiRequest
-     */
-    public static function findAll(ApiRequestOptions $apiRequestOptions)
-    {
-        $apiRequest = new ApiRequest();
-        $apiRequest->setBaseUrl(self::URL_COURSES);
-        $apiRequest->setMethod(ApiRequest::METHOD_GET);
-
-        if(!is_null($apiRequestOptions))
-        {
-            $apiRequest->setOptions($apiRequestOptions);
-        }
-
-        return $apiRequest;
-    }
+//    /**
+//     * Returns all the courses (ApiRequest)
+//     *
+//     * @param ApiRequestOptions $apiRequestOptions List options
+//     *
+//     * @return ApiRequest
+//     */
+//    public static function findAll(ApiRequestOptions $apiRequestOptions)
+//    {
+//        $apiRequest = new ApiRequest();
+//        $apiRequest->setBaseUrl(self::URL_COURSES);
+//        $apiRequest->setMethod(ApiRequest::METHOD_GET);
+//
+//        if(!is_null($apiRequestOptions))
+//        {
+//            $apiRequest->setOptions($apiRequestOptions);
+//        }
+//
+//        return $apiRequest;
+//    }
 
     /**
      * Returns metadatas for a course (ApiRequest)

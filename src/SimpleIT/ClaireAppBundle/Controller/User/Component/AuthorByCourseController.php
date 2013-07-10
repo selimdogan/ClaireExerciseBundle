@@ -5,6 +5,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\User\Component;
 
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
+use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

@@ -8,7 +8,7 @@ use SimpleIT\Utils\Collection\CollectionInformation;
 
 /**
  * Class CourseAuthorRepository
- * 
+ *
  * @author Kévin Letord <kevin.letord@simple-it.fr>
  */
 class AuthorByPartRepository extends AppRepository
@@ -24,71 +24,78 @@ class AuthorByPartRepository extends AppRepository
     protected $resourceClass = 'SimpleIT\ApiResourcesBundle\User\AuthorResource';
 
     /**
-     * Find an author
-     *
-     * @param $courseIdentifier
-     * @param $partIdentifier
-     * @param $authorId
-     *
-     * @return AuthorResource
-     */
-    public function find($courseIdentifier, $partIdentifier, $authorId)
-    {
-        return parent::findResource(array(
-                'courseIdentifier' => $courseIdentifier,
-                'partIdentifier' => $partIdentifier,
-                'authorId' => $authorId
-            ));
-    }
-
-    /**
      * Find a list of authors
      *
-     * @param                       $courseIdentifier
-     * @param                       $partIdentifier
+     * @param int | string          $courseIdentifier Course id | slug
+     * @param int | string          $partIdentifier   Part id | slug
      * @param CollectionInformation $collectionInformation
      *
      * @return mixed
      */
-    public function findAll($courseIdentifier, $partIdentifier, CollectionInformation $collectionInformation)
+    public function findAll(
+        $courseIdentifier,
+        $partIdentifier,
+        CollectionInformation $collectionInformation
+    )
     {
-        return parent::findAllResource(array(
+        return parent::findAllResources(
+            array(
                 'courseIdentifier' => $courseIdentifier,
-                'partIdentifier' => $partIdentifier,
-                $collectionInformation
-            ));
+                'partIdentifier'   => $partIdentifier
+            ),
+            $collectionInformation
+        );
     }
 
     /**
      * Associate an author to a course
      *
-     * @param                $courseIdentifier
-     * @param                $partIdentifier
-     * @param AuthorResource $author
+     * @param int | string   $courseIdentifier Course id | slug
+     * @param int | string   $partIdentifier   Part id | slug
+     * @param AuthorResource $author           Author resource
+     * @param array          $parameters       Parameters
      *
      * @return AuthorResource
      */
-    public function insert($courseIdentifier, $partIdentifier, AuthorResource $author)
+    public function insert(
+        $courseIdentifier,
+        $partIdentifier,
+        AuthorResource $author,
+        array $parameters = array()
+    )
     {
-        return parent::insertResource($author, array(
+        return parent::insertResource(
+            $author,
+            array(
                 'courseIdentifier' => $courseIdentifier,
-                'partIdentifier' => $partIdentifier,
-            ));
+                'partIdentifier'   => $partIdentifier,
+            ),
+            $parameters
+        );
     }
 
     /**
      * Disassociate an author from a course
      *
-     * @param $courseIdentifier Course identifier
-     * @param $partIdentifier   Part identifier
-     * @param $authorId         Id of author to unlink
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier   Part id | slug
+     * @param int          $authorId         Author id
+     * @param array        $parameters       Parameters
      */
-    public function delete($courseIdentifier, $partIdentifier, $authorId)
+    public function delete(
+        $courseIdentifier,
+        $partIdentifier,
+        $authorId,
+        array $parameters = array()
+    )
     {
-        parent::deleteResource(array(
+        parent::deleteResource(
+            array(
                 'courseIdentifier' => $courseIdentifier,
-                'partIdentifier' => $partIdentifier,
-                'authorId' => $authorId
-            ));
+                'partIdentifier'   => $partIdentifier,
+                'authorId'         => $authorId
+            ),
+            $parameters
+        );
     }
 }
