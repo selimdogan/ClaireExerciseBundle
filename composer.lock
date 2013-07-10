@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "b0f2db96b5ff2994ed04269fb1e3d28d",
+    "hash": "c605a9abd87c63e7d33f24c116e934e4",
     "packages": [
         {
             "name": "doctrine/common",
@@ -76,16 +76,16 @@
         },
         {
             "name": "guzzle/guzzle",
-            "version": "v3.7.0",
+            "version": "v3.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "v3.7.0"
+                "reference": "v3.7.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/v3.7.0",
-                "reference": "v3.7.0",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/v3.7.1",
+                "reference": "v3.7.1",
                 "shasum": ""
             },
             "require": {
@@ -164,7 +164,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2013-06-11 00:24:07"
+            "time": "2013-07-05 20:17:54"
         },
         {
             "name": "jms/aop-bundle",
@@ -766,7 +766,7 @@
             "source": {
                 "type": "git",
                 "url": "https://simpleit-zbot-readonly:nWCWJe04ASZ9ZriSrzfp@github.com/simpleit/ApiResourcesBundle.git",
-                "reference": "cf628c9b47543c619c15513831a2594143687074"
+                "reference": "bbc15ecec1a415c1a7e9754580956a49662ec122"
             },
             "require": {
                 "php": ">=5.3.3",
@@ -794,22 +794,22 @@
                 "api",
                 "resources"
             ],
-            "time": "2013-07-02 14:28:50"
+            "time": "2013-07-08 14:38:18"
         },
         {
             "name": "simpleit/app-bundle",
-            "version": "1.0.x-dev",
+            "version": "1.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://simpleit-zbot-readonly:nWCWJe04ASZ9ZriSrzfp@github.com/simpleit/AppBundle.git",
-                "reference": "cbecba066a8ce02c5f445eb426a0e4e39f03d784"
+                "reference": "92f584eb432850a15fa984ca51bdbf72a3ded018"
             },
             "require": {
                 "guzzle/guzzle": "~3.7",
                 "jms/serializer-bundle": "~0.11",
                 "php": ">=5.3.3",
                 "sensio/buzz-bundle": "dev-master",
-                "simpleit/php-utils": "1.0.*",
+                "simpleit/php-utils": "1.1.x-dev",
                 "symfony/http-foundation": "~2.1",
                 "symfony/validator": "~2.1"
             },
@@ -833,15 +833,15 @@
             "keywords": [
                 "app"
             ],
-            "time": "2013-07-01 12:34:55"
+            "time": "2013-07-10 13:25:16"
         },
         {
             "name": "simpleit/php-utils",
-            "version": "1.0.x-dev",
+            "version": "1.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://simpleit-zbot-readonly:nWCWJe04ASZ9ZriSrzfp@github.com/simpleit/php-utils.git",
-                "reference": "bdb69cc8acacc3f25531fbff143bb6aedd4a3cbc"
+                "reference": "901530a5a11102674ae51082278409178dd1c5aa"
             },
             "require": {
                 "doctrine/common": ">=2.2.3,<2.4-dev",
@@ -868,7 +868,7 @@
                 "php",
                 "utils"
             ],
-            "time": "2013-07-02 09:40:39"
+            "time": "2013-07-09 18:03:28"
         },
         {
             "name": "symfony/icu",
