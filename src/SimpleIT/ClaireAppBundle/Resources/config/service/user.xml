@@ -44,7 +44,10 @@
             <call method="setAuthorByCourseRepository">
                 <argument type="service" id="simple_it.claire.user.repository.author_by_course"/>
             </call>
-            <call method="setAuthorByPArtRepository">
+            <call method="setAuthorByPartRepository">
+                <argument type="service" id="simple_it.claire.user.repository.author_by_part"/>
+            </call>
+            <call method="setCourseByAuthorRepository">
                 <argument type="service" id="simple_it.claire.user.repository.author_by_part"/>
             </call>
         </service>

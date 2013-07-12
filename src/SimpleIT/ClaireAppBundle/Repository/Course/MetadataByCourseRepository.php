@@ -33,7 +33,7 @@ class MetadataByCourseRepository extends AppRepository
      */
     public function findAll($courseIdentifier, CollectionInformation $collectionInformation = null)
     {
-        return parent::findResource(
+        return parent::findAllResources(
             array('courseIdentifier' => $courseIdentifier),
             $collectionInformation
         );

@@ -16,7 +16,7 @@ class CourseTocRepository extends AppRepository
     /**
      * @var string
      */
-    protected $path = 'courses/{courseIdentifier}/introduction';
+    protected $path = 'courses/{courseIdentifier}/toc';
 
     /**
      * @var  string

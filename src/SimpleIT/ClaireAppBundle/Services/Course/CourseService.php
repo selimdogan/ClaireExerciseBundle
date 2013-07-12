@@ -1,6 +1,5 @@
 <?php
 
-
 namespace SimpleIT\ClaireAppBundle\Services\Course;
 
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
@@ -34,7 +33,7 @@ class CourseService
     /**
      * Set courseIntroductionRepository
      *
-     * @param \SimpleIT\ClaireAppBundle\Repository\Course\CourseIntroductionRepository $courseIntroductionRepository
+     * @param CourseIntroductionRepository $courseIntroductionRepository
      */
     public function setCourseIntroductionRepository($courseIntroductionRepository)
     {
@@ -44,7 +43,7 @@ class CourseService
     /**
      * Set courseRepository
      *
-     * @param \SimpleIT\ClaireAppBundle\Repository\Course\CourseRepository $courseRepository
+     * @param CourseRepository $courseRepository
      */
     public function setCourseRepository($courseRepository)
     {
@@ -54,7 +53,7 @@ class CourseService
     /**
      * Set courseTocRepository
      *
-     * @param \SimpleIT\ClaireAppBundle\Repository\Course\CourseTocRepository $courseTocRepository
+     * @param CourseTocRepository $courseTocRepository
      */
     public function setCourseTocRepository($courseTocRepository)
     {
@@ -78,7 +77,7 @@ class CourseService
      *
      * @param int | string $courseIdentifier Course id | slug
      *
-     * @return CourseResource
+     * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
      */
     public function get($courseIdentifier)
     {
@@ -96,5 +95,29 @@ class CourseService
     public function save($courseIdentifier, CourseResource $course)
     {
         return $this->courseRepository->update($courseIdentifier, $course);
+    }
+
+    /**
+     * Get a course table of content
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     *
+     * @return mixed
+     */
+    public function getToc($courseIdentifier)
+    {
+        return $this->courseTocRepository->find($courseIdentifier);
+    }
+
+    /**
+     * Get a course introduction
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     *
+     * @return mixed
+     */
+    public function getIntroduction($courseIdentifier)
+    {
+        return $this->courseIntroductionRepository->find($courseIdentifier);
     }
 }

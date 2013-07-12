@@ -1,10 +1,12 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Controller;
 
+use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\ClaireAppBundle\Model\Course\Part;
 use SimpleIT\ClaireAppBundle\Model\Metadata;
 use SimpleIT\ClaireAppBundle\Model\CourseFactory;
 use SimpleIT\ClaireAppBundle\Services\CourseService;
+use SimpleIT\ClaireAppBundle\Services\CourseServiceInterface;
 use SimpleIT\Utils\ArrayUtils;
 use SimpleIT\AppBundle\Services\ApiService;
 
@@ -26,7 +28,7 @@ use SimpleIT\AppBundle\Model\ApiRequestOptions;
  */
 class CourseController extends BaseController
 {
-    /** @var Service The course service*/
+    /** @var CourseServiceInterface The course service*/
     protected $courseService;
 
     /**
@@ -46,11 +48,10 @@ class CourseController extends BaseController
     }
 
     /**
-     * Shows a course
+     * Show a course
      *
-     * @param Request $request      Request
-     * @param string  $categorySlug The slug for the category
-     * @param string  $courseSlug   The slug for the course
+     * @param string $categorySlug The slug for the category
+     * @param string $courseSlug   The slug for the course
      *
      * @return array <ul>
      *                   <li>view</li>
@@ -59,36 +60,43 @@ class CourseController extends BaseController
      */
     public function processCourseAction($categorySlug, $courseSlug)
     {
-        $this->courseService = $this->get('simple_it.claire.course.course');
+        $category = $this->get('simple_it.claire.associated_content.category')->get($categorySlug);
+        $course = $this->get('simple_it.claire.course.course')->get($courseSlug);
+        $introduction = $this->get('simple_it.claire.course.course')->getIntroduction($courseSlug);
+        $toc = $this->get('simple_it.claire.course.course')->getToc($courseSlug);
+        $courseMetadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse($courseSlug);
+        $authors = $this->get('simple_it.claire.user.author')->getAllByCourse($courseSlug);
+        $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourse($courseSlug);
 
-        $course = $this->courseService->getCourseWithComplementaries($courseSlug, $categorySlug);
+
+        //$course = $this->courseService->getCourseWithComplementaries($courseSlug, $categorySlug);
 
         $displayLevel = $course->getDisplayLevel();
 
-        $pagination = $this->courseService->getPagination($course, null, $displayLevel);
+//        $pagination = $this->courseService->getPagination($course, null, $displayLevel);
 
-        $metadatas = $course->getMetadatas();
+//        $metadatas = $course->getMetadatas();
 
         $data['view'] = $this->getCourseView($displayLevel);
         $data['parameters'] =
             array('title' => $course->getTitle(),
                   'course' => $course,
-                  'category' => $course->getCategory(),
-                  'icon' => (isset($metadatas[ Metadata::COURSE_METADATA_IMAGE]) ? $metadatas[ Metadata::COURSE_METADATA_IMAGE] : null),
-                  'aggregateRating' => (isset($metadatas[Metadata::COURSE_METADATA_AGGREGATE_RATING]) ? $metadatas[Metadata::COURSE_METADATA_AGGREGATE_RATING] : null),
-                  'difficulty' => (isset($metadatas[Metadata::COURSE_METADATA_DIFFICULTY]) ? $metadatas[Metadata::COURSE_METADATA_DIFFICULTY] : null),
+                  'category' => $category->getName(),
+                  'icon' => ArrayUtils::getValue($courseMetadatas, MetadataResource::COURSE_METADATA_IMAGE),
+                  'aggregateRating' => ArrayUtils::getValue($courseMetadatas, MetadataResource::COURSE_METADATA_AGGREGATE_RATING),
+                  'difficulty' => ArrayUtils::getValue($courseMetadatas, MetadataResource::COURSE_METADATA_DIFFICULTY),
                   //FIXME DateInterval
-                  'duration' =>(isset($metadatas[Metadata::COURSE_METADATA_DURATION]) ? $metadatas[Metadata::COURSE_METADATA_DURATION] : null),
-                  'timeline' => $this->courseService->getTimeline($course),
-                  'tags' => $course->getTags(),
+                  'duration' => ArrayUtils::getValue($courseMetadatas, MetadataResource::COURSE_METADATA_TIME_REQUIRED),
+//                  'timeline' => $this->courseService->getTimeline($course),
+                  'tags' => $tags,
                   'updatedAt' => $course->getUpdatedAt(),
-                  'introduction' => $course->getIntroduction(),
-                  'toc' => $this->courseService->getDisplayToc($course, $displayLevel),
-                  'pagination' => $pagination,
+                  'introduction' => $introduction,
+//                  'toc' => $this->courseService->getDisplayToc($course, $displayLevel),
+                  //'pagination' => $pagination,
                   //FIXME license
-                  'license' => (isset($metadatas[Metadata::COURSE_METADATA_LICENSE]) ? $metadatas[Metadata::COURSE_METADATA_LICENSE] : null),
-                  'description' => (isset($metadatas[Metadata::COURSE_METADATA_DESCRIPTION]) ? $metadatas[Metadata::COURSE_METADATA_DESCRIPTION] : null),
-                  'authors' => $course->getAuthors()
+                  'license' => ArrayUtils::getValue($courseMetadatas, MetadataResource::COURSE_METADATA_LICENSE),
+                  'description' => ArrayUtils::getValue($courseMetadatas, MetadataResource::COURSE_METADATA_DESCRIPTION),
+                  'authors' => $authors
             );
 
         if ($displayLevel == 0) {
@@ -110,7 +118,7 @@ class CourseController extends BaseController
      */
     private function getCourseView($displayLevel)
     {
-        $this->courseService->checkCourseDisplayLevelValidity($displayLevel);
+        //$this->courseService->checkCourseDisplayLevelValidity($displayLevel);
 
         if ($displayLevel == 0) {
             $view = 'TutorialBundle:Tutorial:view00.html.twig';

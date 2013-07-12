@@ -3,7 +3,9 @@
 
 namespace SimpleIT\ClaireAppBundle\Repository\AssociatedContent;
 
+use Doctrine\Common\Collections\Collection;
 use SimpleIT\AppBundle\Repository\AppRepository;
+use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
 
 /**
@@ -11,12 +13,12 @@ use SimpleIT\Utils\Collection\PaginatedCollection;
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class TagByPartRepository extends AppRepository
+class TagRepository extends AppRepository
 {
     /**
      * @var string
      */
-    protected $path = 'courses/{courseIdentifier}/parts/{partIdentifier}/tags/';
+    protected $path = '/tags/{tagIdentifier}';
 
     /**
      * @var  string
@@ -24,20 +26,17 @@ class TagByPartRepository extends AppRepository
     protected $resourceClass = 'SimpleIT\ApiResourcesBundle\AssociatedContent\TagResource';
 
     /**
-     * Find all tags of a part
+     * Find a list of tags
      *
-     * @param int | string $courseIdentifier Course id | slug
-     * @param int | string $partIdentifier   Part id | slug
+     * @param CollectionInformation $collectionInformation Collection information
      *
      * @return PaginatedCollection
      */
-    public function findAll($courseIdentifier, $partIdentifier)
+    public function findAll(CollectionInformation $collectionInformation = null)
     {
         return parent::findAllResources(
-            array(
-                'courseIdentifier' => $courseIdentifier,
-                'partIdentifier'   => $partIdentifier
-            )
+            array(),
+            $collectionInformation
         );
     }
 }

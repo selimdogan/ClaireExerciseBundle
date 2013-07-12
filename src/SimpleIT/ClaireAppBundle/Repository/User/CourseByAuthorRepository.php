@@ -18,7 +18,7 @@ class CourseByAuthorRepository extends AppRepository
     /**
      * @var string
      */
-    protected $path = 'authors/{authorId}/courses/';
+    protected $path = 'authors/{authorIdentifier}/courses/';
 
     /**
      * @var  string
@@ -35,6 +35,6 @@ class CourseByAuthorRepository extends AppRepository
      */
     public function findAll($authorId, CollectionInformation $collectionInformation = null)
     {
-        return parent::findAllResources(array('authorId' => $authorId), $collectionInformation);
+        return parent::findAllResources(array('authorIdentifier' => $authorId), $collectionInformation);
     }
 }
