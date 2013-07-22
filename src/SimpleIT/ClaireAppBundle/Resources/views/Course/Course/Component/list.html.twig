@@ -1,0 +1,14 @@
+{{ courses.totalItemsNumber }}
+<form action="">
+    <input type="search">
+    <input>
+</form>
+<ul>
+    {% for course in courses %}
+        <li>{{ course.title }}</li>
+    {% endfor %}
+</ul>
+{{ courses.previousPageNumber }}
+{{ courses.pageNumber }}
+{{ courses.nextPageNumber }}
+{{ courses.totalPageNumber }}

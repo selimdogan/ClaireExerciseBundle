@@ -15,7 +15,7 @@
                 <argument type="service" id="simple_it.claire.http_client"/>
             </call>
             <call method="setSerializer">
-                <argument type="service" id="serializer"/>
+                <argument type="service" id="simple_it.claire.serializer"/>
             </call>
         </service>
 
@@ -24,7 +24,7 @@
                 <argument type="service" id="simple_it.claire.http_client"/>
             </call>
             <call method="setSerializer">
-                <argument type="service" id="serializer"/>
+                <argument type="service" id="simple_it.claire.serializer"/>
             </call>
         </service>
 
@@ -33,7 +33,7 @@
                 <argument type="service" id="simple_it.claire.http_client"/>
             </call>
             <call method="setSerializer">
-                <argument type="service" id="serializer"/>
+                <argument type="service" id="simple_it.claire.serializer"/>
             </call>
         </service>
 

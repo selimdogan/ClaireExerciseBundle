@@ -8,16 +8,16 @@ use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
 
 /**
- * Class TagByPartRepository
- *
+ * Class TagByCategoryRepository
+ * 
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class TagByPartRepository extends AppRepository
+class TagByCategoryRepository extends AppRepository
 {
     /**
      * @var string
      */
-    protected $path = 'courses/{courseIdentifier}/parts/{partIdentifier}/tags/';
+    protected $path = 'categories/{categoryIdentifier}/tags/{tagIdentifier}';
 
     /**
      * @var  string
@@ -25,25 +25,17 @@ class TagByPartRepository extends AppRepository
     protected $resourceClass = 'SimpleIT\ApiResourcesBundle\AssociatedContent\TagResource';
 
     /**
-     * Find all tags of a part
+     * Find all categories
      *
-     * @param int | string          $courseIdentifier      Course id | slug
-     * @param int | string          $partIdentifier        Part id | slug
+     * @param int |string           $categoryIdentifier    Category id | slug
      * @param CollectionInformation $collectionInformation Collection information
      *
      * @return PaginatedCollection
      */
-    public function findAll(
-        $courseIdentifier,
-        $partIdentifier,
-        CollectionInformation $collectionInformation = null
-    )
+    public function findAll($categoryIdentifier, CollectionInformation $collectionInformation = null)
     {
         return parent::findAllResources(
-            array(
-                'courseIdentifier' => $courseIdentifier,
-                'partIdentifier'   => $partIdentifier
-            ),
+            array('categoryIdentifier' => $categoryIdentifier),
             $collectionInformation
         );
     }

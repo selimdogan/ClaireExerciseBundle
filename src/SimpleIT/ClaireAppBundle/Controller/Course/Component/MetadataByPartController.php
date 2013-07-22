@@ -23,7 +23,7 @@ class MetadataByPartController extends AbstractMetadataController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showRatingAction($courseIdentifier, $partIdentifier)
+    public function viewRatingAction($courseIdentifier, $partIdentifier)
     {
         $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromPart(
             $courseIdentifier,

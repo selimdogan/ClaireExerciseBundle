@@ -57,7 +57,7 @@ class MetadataByPartRepository extends AppRepository
      */
     public function insert($courseIdentifier, $partIdentifier, $metadatas, $parameters = array())
     {
-        $metadatasInserted = parent::insertResource(
+        $metadatasInserted[] = parent::insertResource(
             $metadatas,
             array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier),
             $parameters

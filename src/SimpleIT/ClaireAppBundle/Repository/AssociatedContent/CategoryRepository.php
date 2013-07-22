@@ -1,10 +1,10 @@
 <?php
 
-
 namespace SimpleIT\ClaireAppBundle\Repository\AssociatedContent;
 
-use SimpleIT\ApiResourcesBundle\ContentAssociation\CategoryResource;
+use SimpleIT\ApiResourcesBundle\AssociatedContent\CategoryResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
+use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
 
 /**
@@ -27,11 +27,13 @@ class CategoryRepository extends AppRepository
     /**
      * Find all categories
      *
+     * @param CollectionInformation $collectionInformation Collection information
+     *
      * @return PaginatedCollection
      */
-    public function findAll()
+    public function findAll(CollectionInformation $collectionInformation = null)
     {
-        return parent::findAllResources();
+        return parent::findAllResources(array(), $collectionInformation);
     }
 
     /**

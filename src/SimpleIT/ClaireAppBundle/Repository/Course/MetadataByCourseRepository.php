@@ -26,7 +26,7 @@ class MetadataByCourseRepository extends AppRepository
     /**
      * Find metadatas
      *
-     * @param string                $courseIdentifier      Course id | slug
+     * @param int | string          $courseIdentifier      Course id | slug
      * @param CollectionInformation $collectionInformation Collection information
      *
      * @return array
@@ -50,13 +50,12 @@ class MetadataByCourseRepository extends AppRepository
      */
     public function insert($courseIdentifier, $metadatas, $parameters = array())
     {
-        $metadatasInserted = parent::insertResource(
+        return $metadatasInserted = parent::insertResource(
             $metadatas,
             array('courseIdentifier' => $courseIdentifier),
             $parameters
         );
 
-        return $metadatasInserted;
     }
 
     /**
@@ -72,7 +71,7 @@ class MetadataByCourseRepository extends AppRepository
     {
         $metadatasUpdated = array();
         foreach ($metadatas as $key => $value) {
-            $metadatasUpdated = parent::updateResource(
+            $metadatasUpdated[] = parent::updateResource(
                 $metadatas,
                 array('courseIdentifier' => $courseIdentifier, 'metadataIdentifier' => $key),
                 $parameters

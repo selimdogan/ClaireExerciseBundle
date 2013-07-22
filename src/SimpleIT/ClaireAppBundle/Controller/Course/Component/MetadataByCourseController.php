@@ -249,7 +249,7 @@ class MetadataByCourseController extends AbstractMetadataController
         );
         $timeRequired = ArrayUtils::getValue(
             $metadatas,
-            MetadataResource::COURSE_METADATA_TIME_REQUIRED
+            MetadataResource::COURSE_METADATA_DURATION
         );
 
         return $this->render(

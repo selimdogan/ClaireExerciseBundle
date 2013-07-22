@@ -1,0 +1,9 @@
+{% macro processPart(part) %}
+    {{ part.title }}
+    {% set children = part.children %}
+    {% for child in children %}
+        {{ _self.processPart(child) }}
+    {% endfor %}
+{% endmacro %}
+
+{{ _self.processPart(toc) }}

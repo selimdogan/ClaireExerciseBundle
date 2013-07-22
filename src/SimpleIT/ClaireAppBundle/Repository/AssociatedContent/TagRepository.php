@@ -3,7 +3,6 @@
 
 namespace SimpleIT\ClaireAppBundle\Repository\AssociatedContent;
 
-use Doctrine\Common\Collections\Collection;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;

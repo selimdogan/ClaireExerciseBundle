@@ -38,11 +38,11 @@ class CourseRepository extends AppRepository
     /**
      * Find a list of courses
      *
-     * @param CollectionInformation $collectionInformation
+     * @param CollectionInformation $collectionInformation Collection information
      *
      * @return PaginatedCollection
      */
-    public function findAll(CollectionInformation $collectionInformation)
+    public function findAll(CollectionInformation $collectionInformation = null)
     {
         return $this->findAllResources(array(), $collectionInformation);
     }

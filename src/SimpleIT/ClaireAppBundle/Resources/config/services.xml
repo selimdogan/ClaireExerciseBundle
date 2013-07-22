@@ -31,17 +31,15 @@
     <services>
 
         <service id="simple_it.claire.http_client"
-                 class="%simple_it.app_bundle.http_client.class%"
-                 factory-service="simple_it.app_bundle.client_factory"
+                 class="%simple_it.app.http_client.class%"
+                 factory-service="simple_it.app.client_factory"
                  factory-method="get">
-            <argument>%simple_it_claire_app%</argument>
+            <argument>%simple_it_app.client_api.claire_api%</argument>
         </service>
-
-        <!--USER-->
-
-
-        <!--ASSOCIATED CONTENT-->
-
+        <service id="simple_it.claire.serializer" class="%simple_it.app.serializer.class%">
+            <argument type="service" id="serializer"/>
+            <argument>%simple_it_app.client_api.claire_api.default_format%</argument>
+        </service>
 
         <!--OLD SHIT-->
 

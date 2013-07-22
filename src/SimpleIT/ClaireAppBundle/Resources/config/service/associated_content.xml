@@ -5,8 +5,11 @@
     <parameters>
         <parameter key="simple_it.claire.associated_content.category.class">SimpleIT\ClaireAppBundle\Services\AssociatedContent\CategoryService</parameter>
         <parameter key="simple_it.claire.associated_content.repository.category.class">SimpleIT\ClaireAppBundle\Repository\AssociatedContent\CategoryRepository</parameter>
+        <parameter key="simple_it.claire.associated_content.repository.course_by_category.class">SimpleIT\ClaireAppBundle\Repository\AssociatedContent\CourseByCategoryRepository</parameter>
+        <parameter key="simple_it.claire.associated_content.repository.tag_by_category.class">SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCategoryRepository</parameter>
         <parameter key="simple_it.claire.associated_content.tag.class">SimpleIT\ClaireAppBundle\Services\AssociatedContent\TagService</parameter>
         <parameter key="simple_it.claire.associated_content.repository.tag.class">SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagRepository</parameter>
+        <parameter key="simple_it.claire.associated_content.repository.tag_by_category.class">SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCategoryRepository</parameter>
         <parameter key="simple_it.claire.associated_content.repository.tag_by_course.class">SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCourseRepository</parameter>
         <parameter key="simple_it.claire.associated_content.repository.tag_by_part.class">SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByPartRepository</parameter>
     </parameters>
@@ -17,12 +20,34 @@
                 <argument type="service" id="simple_it.claire.http_client"/>
             </call>
             <call method="setSerializer">
-                <argument type="service" id="serializer"/>
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
+        <service id="simple_it.claire.associated_content.repository.course_by_category" class="%simple_it.claire.associated_content.repository.course_by_category.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
+        <service id="simple_it.claire.associated_content.repository.tag_by_category" class="%simple_it.claire.associated_content.repository.tag_by_category.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
             </call>
         </service>
         <service id="simple_it.claire.associated_content.category" class="%simple_it.claire.associated_content.category.class%">
             <call method="setCategoryRepository">
                 <argument type="service" id="simple_it.claire.associated_content.repository.category"/>
+            </call>
+            <call method="setCourseByCategoryRepository">
+                <argument type="service" id="simple_it.claire.associated_content.repository.course_by_category"/>
+            </call>
+            <call method="setTagByCategoryRepository">
+                <argument type="service" id="simple_it.claire.associated_content.repository.tag_by_category"/>
             </call>
         </service>
 
@@ -32,7 +57,15 @@
                 <argument type="service" id="simple_it.claire.http_client"/>
             </call>
             <call method="setSerializer">
-                <argument type="service" id="serializer"/>
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
+        <service id="simple_it.claire.associated_content.repository.tag_by_category" class="%simple_it.claire.associated_content.repository.tag_by_category.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
             </call>
         </service>
         <service id="simple_it.claire.associated_content.repository.tag_by_course" class="%simple_it.claire.associated_content.repository.tag_by_course.class%">
@@ -40,7 +73,7 @@
                 <argument type="service" id="simple_it.claire.http_client"/>
             </call>
             <call method="setSerializer">
-                <argument type="service" id="serializer"/>
+                <argument type="service" id="simple_it.claire.serializer"/>
             </call>
         </service>
         <service id="simple_it.claire.associated_content.repository.tag_by_part" class="%simple_it.claire.associated_content.repository.tag_by_part.class%">
@@ -48,13 +81,16 @@
                 <argument type="service" id="simple_it.claire.http_client"/>
             </call>
             <call method="setSerializer">
-                <argument type="service" id="serializer"/>
+                <argument type="service" id="simple_it.claire.serializer"/>
             </call>
         </service>
 
         <service id="simple_it.claire.associated_content.tag" class="%simple_it.claire.associated_content.tag.class%">
             <call method="setTagRepository">
                 <argument type="service" id="simple_it.claire.associated_content.repository.tag"/>
+            </call>
+            <call method="setTagByCategoryRepository">
+                <argument type="service" id="simple_it.claire.associated_content.repository.tag_by_category"/>
             </call>
             <call method="setTagByCourseRepository">
                 <argument type="service" id="simple_it.claire.associated_content.repository.tag_by_course"/>

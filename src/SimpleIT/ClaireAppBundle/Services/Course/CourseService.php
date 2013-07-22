@@ -30,6 +30,7 @@ class CourseService
      */
     private $courseIntroductionRepository;
 
+    private $courseContentRepository;
     /**
      * Set courseIntroductionRepository
      *
@@ -119,5 +120,17 @@ class CourseService
     public function getIntroduction($courseIdentifier)
     {
         return $this->courseIntroductionRepository->find($courseIdentifier);
+    }
+
+    /**
+     * Get a course introduction
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     *
+     * @return mixed
+     */
+    public function getContent($courseIdentifier)
+    {
+        return $this->courseContentRepository->find($courseIdentifier);
     }
 }

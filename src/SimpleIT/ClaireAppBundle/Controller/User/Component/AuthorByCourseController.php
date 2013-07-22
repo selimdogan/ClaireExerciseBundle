@@ -16,10 +16,24 @@ use Symfony\Component\HttpFoundation\Request;
 class AuthorByCourseController extends AppController
 {
     /**
+     * View a list of author of a course
+     *
+     * @param int |string $courseIdentifier Course id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listAction($courseIdentifier)
+    {
+        $authors = $this->get('simple_it.claire.user.author')->getAllByCourse($courseIdentifier);
+
+        return $this->render('SimpleITClaireAppBundle:User/Author/Component:viewAuthorsByCourse.html.twig', array('authors' => $authors));
+    }
+
+    /**
      * Edit authors
      *
-     * @param Request         $request Request
-     * @param integer |string $courseIdentifier
+     * @param Request         $request          Request
+     * @param integer |string $courseIdentifier Course id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */

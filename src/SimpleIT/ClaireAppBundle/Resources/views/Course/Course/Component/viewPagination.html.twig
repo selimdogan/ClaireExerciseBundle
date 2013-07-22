@@ -1,0 +1,27 @@
+{% macro processPagination(part, identifier, previous) %}
+    {% if part.id == identifier or part.slug == identifier %}
+        {% if previous is not empty %}
+            {#previous#}
+            {{ previous.title }}
+        {% endif %}
+        {% set find = true %}
+    {% endif %}
+
+    {% if find == true %}
+        {#next#}
+        {% set next = part %}
+    {% else %}
+        {% set previous = part %}
+        {% set children = part.children %}
+        {% for child in children %}
+            {{ _self.processPagination(child, identifier, previous) }}
+        {% endfor %}
+    {% endif %}
+    {% if next is not empty %}
+        {{ next.title }}
+    {% endif %}
+{% endmacro %}
+
+{% set previous = null %}
+{% set next = null %}
+{{ _self.processPagination(toc, identifier, previous, next) }}
