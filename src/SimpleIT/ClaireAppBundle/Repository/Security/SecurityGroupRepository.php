@@ -56,7 +56,7 @@ class SecurityGroupRepository extends AppRepository
      *
      * @param GroupResource $group
      *
-     * @return mixed
+     * @return GroupResource
      */
     public function insert(GroupResource $group)
     {
@@ -69,7 +69,7 @@ class SecurityGroupRepository extends AppRepository
      * @param int           $groupId group id
      * @param GroupResource $group   Group
      *
-     * @return PartResource
+     * @return GroupResource
      */
     public function update($groupId, GroupResource $group)
     {

@@ -1,5 +1,7 @@
 <?php
+
 namespace SimpleIT\ClaireAppBundle\Services;
+
 use SimpleIT\AppBundle\Model\ApiRequest;
 
 use SimpleIT\ClaireAppBundle\Model\Course\Part;
