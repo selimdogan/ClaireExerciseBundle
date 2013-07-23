@@ -16,6 +16,7 @@ use SimpleIT\ClaireAppBundle\Model\PartFactory;
 use SimpleIT\ClaireAppBundle\Model\TagFactory;
 use SimpleIT\ClaireAppBundle\Model\TocFactory;
 use SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository;
+use SimpleIT\Utils\FormatUtils;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
