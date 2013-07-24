@@ -1,0 +1,24 @@
+{% macro pagination(paginatedCollection, path) %}
+    {#<a href={{ path }}'?page=1'>1</a>#}
+    {% if paginatedCollection.previousPageNumber is not null %}
+        {% if paginatedCollection.previousPageNumber > 1 %}
+            <a href={{ path }}'?page=1'>1</a>
+        {% endif %}
+        {% if paginatedCollection.previousPageNumber > 2 %}
+            ...
+        {% endif %}
+        <a href={{ path }}'?page={{ paginatedCollection.previousPageNumber }}'>{{ paginatedCollection.previousPageNumber }}</a>
+    {% endif %}
+
+    {{ paginatedCollection.pageNumber }}
+
+    {% if  paginatedCollection.nextPageNumber is not null %}
+        {% if  paginatedCollection.nextPageNumber < paginatedCollection.totalPageNumber %}
+            <a>{{ paginatedCollection.nextPageNumber }}</a>
+            {% if  (paginatedCollection.nextPageNumber + 1)< paginatedCollection.totalPageNumber %}
+                ...
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    <a>{{ paginatedCollection.totalPageNumber }}</a>
+{% endmacro %}
