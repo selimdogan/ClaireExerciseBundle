@@ -319,4 +319,29 @@ class MetadataByCourseController extends AbstractMetadataController
             )
         );
     }
+
+    /**
+     * View a course licence
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewLicenseAction($courseIdentifier)
+    {
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
+            $courseIdentifier
+        );
+        $license = ArrayUtils::getValue(
+            $metadatas,
+            MetadataResource::COURSE_METADATA_LICENSE
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Metadata/Component:viewLicense.html.twig',
+            array(
+                MetadataResource::COURSE_METADATA_LICENSE => $license
+            )
+        );
+    }
 }
