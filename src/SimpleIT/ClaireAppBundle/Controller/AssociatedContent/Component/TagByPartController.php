@@ -14,6 +14,27 @@ use Symfony\Component\HttpFoundation\Request;
 class TagByPartController extends AppController
 {
     /**
+     * Get a list of tags of a course
+     *
+     * @param int |string $courseIdentifier Course id | slug
+     * @param int |string $partIdentifier   Part id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listAction($courseIdentifier, $partIdentifier)
+    {
+        $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByPart(
+            $courseIdentifier,
+            $partIdentifier
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:AssociatedContent/Tag/Component:viewByCourse.html.twig',
+            array('tags' => $tags)
+        );
+    }
+
+    /**
      * Edit tags
      *
      * @param Request         $request          Request
