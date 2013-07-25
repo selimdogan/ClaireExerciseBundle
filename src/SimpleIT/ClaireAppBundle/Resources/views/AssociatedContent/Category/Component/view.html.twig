@@ -1,1 +1,13 @@
-{{ category.image }}{{ category.name }} {{ category.description }}
+<section class="category-header">
+    <div class="category-description">
+        <img class="category-image" alt="{{ category.name }}" src="{{ category.image }}">
+        <div class="category-definition">
+            <h1>{{ category.name }}</h1>
+            <p>
+                {% autoescape false %}
+                    {{ category.description }}
+                {% endautoescape %}
+            </p>
+        </div>
+    </div>
+</section>
