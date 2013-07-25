@@ -1,4 +1,6 @@
 <ul>{% for tag in tags %}
+        {{ set letter = {tag|first} }}
+
         <li>{{ tag.name }}
             {% if tag.headlineCourse is not null %}
                 {{ tag.headlineCourse.title }}
@@ -6,6 +8,5 @@
             {% endif %}
             {{ tag.coursesNumber }}
         </li>
-
     {% endfor %}
 </ul>
