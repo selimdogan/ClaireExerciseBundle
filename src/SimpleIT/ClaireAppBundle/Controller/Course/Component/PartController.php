@@ -43,40 +43,20 @@ class PartController extends AppController
      */
     public function viewAction($courseIdentifier, $partIdentifier)
     {
-        $course = $this->get('simple_it.claire.course.course')->get($courseIdentifier);
         $part = $this->get('simple_it.claire.course.part')->get($courseIdentifier, $partIdentifier);
-        $metadatas = $this->get('simple_it.claire.course.metadata')->get(
-            $courseIdentifier,
-            $partIdentifier
-        );
-        $part = $this->get('simple_it.claire.course.part')->getToc(
-            $courseIdentifier,
-            $partIdentifier
-        );
-        $tags = $this->get('simple_it.claire.course.part')->get($courseIdentifier, $partIdentifier);
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/Part/Component:view.html.twig',
-            array(
-                'courseIdentifier' => $courseIdentifier,
-                'partIdentifier'   => $partIdentifier,
-                'course'           => $course,
-                'part'             => $part,
-                'tags'             => $tags,
-                'image'            => ArrayUtils::getValue($metadatas, 'image'),
-                'difficulty'       => ArrayUtils::getValue($metadatas, 'difficulty'),
-                'aggregate-rating' => ArrayUtils::getValue($metadatas, 'aggregate-rating'),
-                'duration'         => ArrayUtils::getValue($metadatas, 'duration'),
-            )
+            array('part' => $part)
         );
     }
 
     /**
      * Edit a part
      *
-     * @param Request          $request                   Request
-     * @param integer | string $courseIdentifier          Course id | slug
-     * @param integer | string $partIdentifier            Part id | slug
+     * @param Request      $request          Request
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier   Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -115,6 +95,89 @@ class PartController extends AppController
                 'part'             => $part,
                 'form'             => $form->createView()
             )
+        );
+    }
+
+    /**
+     * View Part content
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier   Part id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewContentAction($courseIdentifier, $partIdentifier)
+    {
+        $partContent = $this->get('simple_it.claire.course.part')->getContent(
+            $courseIdentifier,
+            $partIdentifier
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Part/Component:viewContent.html.twig',
+            array(
+                'courseIdentifier' => $courseIdentifier,
+                'partIdentifier'   => $partIdentifier,
+                'partContent'      => $partContent
+            )
+        );
+    }
+
+    /**
+     * Edit part content
+     *
+     * @param Request      $request          Request
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier   Part id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editContentAction(Request $request, $courseIdentifier, $partIdentifier)
+    {
+        $partContent = null;
+        if (RequestUtils::METHOD_GET == $request->getMethod()) {
+            $partContent = $this->get('simple_it.claire.course.part')->getContent(
+                $courseIdentifier,
+                $partIdentifier
+            );
+        } elseif (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()
+        ) {
+            $partContent = $request->get('partContent');
+            $partContent = $this->get('simple_it.claire.course.part')->saveContent(
+                $courseIdentifier,
+                $partIdentifier,
+                $partContent
+            );
+
+            return new AppResponse($partContent);
+        }
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/PartContent/Component:edit.html.twig',
+            array(
+                'courseIdentifier' => $courseIdentifier,
+                'partIdentifier'   => $partIdentifier,
+                'partContent'      => $partContent
+            )
+        );
+    }
+
+    /**
+     * View pagination
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier   Part id | slug
+     * @param int          $displayLevel     Display level
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewPaginationAction($courseIdentifier, $partIdentifier, $displayLevel)
+    {
+        $toc = $this->get('simple_it.claire.course.course')->getToc($courseIdentifier);
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:viewPagination.html.twig',
+            array('toc' => $toc, 'displayLevel' => $displayLevel, 'identifier' => $partIdentifier)
         );
     }
 }

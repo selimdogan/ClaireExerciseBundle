@@ -43,6 +43,33 @@ class MetadataByPartController extends AbstractMetadataController
     }
 
     /**
+     * View a course description
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier   Part id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewDescriptionAction($courseIdentifier, $partIdentifier)
+    {
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromPart(
+            $courseIdentifier,
+            $partIdentifier
+        );
+        $description = ArrayUtils::getValue(
+            $metadatas,
+            MetadataResource::COURSE_METADATA_DESCRIPTION
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Metadata/Component:viewDescription.html.twig',
+            array(
+                MetadataResource::COURSE_METADATA_DESCRIPTION => $description
+            )
+        );
+    }
+
+    /**
      * Edit a part description
      *
      * @param Request          $request          Request
@@ -83,6 +110,33 @@ class MetadataByPartController extends AbstractMetadataController
     }
 
     /**
+     * View a part image
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier   Part id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewImageAction($courseIdentifier, $partIdentifier)
+    {
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromPart(
+            $courseIdentifier,
+            $partIdentifier
+        );
+        $image = ArrayUtils::getValue(
+            $metadatas,
+            MetadataResource::COURSE_METADATA_IMAGE
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Metadata/Component:viewImage.html.twig',
+            array(
+                MetadataResource::COURSE_METADATA_IMAGE => $image
+            )
+        );
+    }
+
+    /**
      * Edit a part image
      *
      * @param Request          $request          Request
@@ -118,6 +172,33 @@ class MetadataByPartController extends AbstractMetadataController
                 'courseIdentifier' => $courseIdentifier,
                 'partIdentifier'   => $partIdentifier,
                 'form'             => $form->createView()
+            )
+        );
+    }
+
+    /**
+     * View a course difficulty
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier   Part id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewDifficultyAction($courseIdentifier, $partIdentifier)
+    {
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromPart(
+            $courseIdentifier,
+            $partIdentifier
+        );
+        $difficulty = ArrayUtils::getValue(
+            $metadatas,
+            MetadataResource::COURSE_METADATA_DIFFICULTY
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Metadata/Component:viewDifficulty.html.twig',
+            array(
+                MetadataResource::COURSE_METADATA_DIFFICULTY => $difficulty
             )
         );
     }
@@ -234,6 +315,33 @@ class MetadataByPartController extends AbstractMetadataController
                 'courseIdentifier' => $courseIdentifier,
                 'partIdentifier'   => $partIdentifier,
                 'form'             => $form->createView()
+            )
+        );
+    }
+
+    /**
+     * View a course duration
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier   Part id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewTimeRequiredAction($courseIdentifier, $partIdentifier)
+    {
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromPart(
+            $courseIdentifier,
+            $partIdentifier
+        );
+        $timeRequired = ArrayUtils::getValue(
+            $metadatas,
+            MetadataResource::COURSE_METADATA_DURATION
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Metadata/Component:viewTimeRequired.html.twig',
+            array(
+                MetadataResource::COURSE_METADATA_TIME_REQUIRED => $timeRequired
             )
         );
     }
