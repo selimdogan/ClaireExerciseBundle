@@ -1,11 +1,40 @@
-<ul>{% for tag in tags %}
-        <li>{{ tag.name }}
-            {% if tag.headlineCourse is not null %}
-                {{ tag.headlineCourse.title }}
-                {{ tag.headlineCourse.slug }}
-            {% endif %}
-            {{ tag.coursesNumber }}
-        </li>
+<section class="tags">
+    <div class="tags-content">
+        <h3>Thématiques</h3>
+        <ul class="tag-column">
+            {% for tag in tags %}
+                <li class="tag-content">
+                {#{% if tag.headlineCourse is not null %}
+                    {{ tag.headlineCourse.title }}
+                    {{ tag.headlineCourse.slug }}
+                {% endif %}
+                {{ tag.coursesNumber }}#}
+                    <a class="tag-name" href="#">{{ tag.name }}</a>
+                    <a class="tag-number" href="#">(10)</a>
+                    {% if tag.headlineCourse is not null %}
+                        <a class="tag-flag" href="#" title="
+                            <div class='tag-tooltip' onmouseover='clearTimeout(timeoutObj);$(this).mouseleave(function() {$(this).parent().parent().hide();});'>
+                                    <div>
+                                        <span class='top'>Commencez par le tutoriel suivant:</span>
+                                        <span class='flag-white'></span>
+                                        <div class='clear'></div>
+                                    </div>
 
-    {% endfor %}
-</ul>
+                                    <a href='#' class='tag-bottom'>
+                                        <span class='image'>
+                                            {{ tag.headlineCourse|metaImageSimpleQuote }}
+                                        </span>
+                                        <span class='tag-tuto'>
+                                            <span class='courseTitle'>{{ tag.headlineCourse.title }}</span>
+                                                <span class='tags'></span>
+                                        </span>
+                                    </a>
+                                </div>">
+                            <span class="tag-flag-img"></span>
+                        </a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
