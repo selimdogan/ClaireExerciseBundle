@@ -4,13 +4,10 @@
         <ul class="tag-column">
             {% for tag in tags %}
                 <li class="tag-content">
-                {#{% if tag.headlineCourse is not null %}
-                    {{ tag.headlineCourse.title }}
-                    {{ tag.headlineCourse.slug }}
-                {% endif %}
-                {{ tag.coursesNumber }}#}
+                
+                
                     <a class="tag-name" href="#">{{ tag.name }}</a>
-                    <a class="tag-number" href="#">(10)</a>
+                    <a class="tag-number" href="#">({{ tag.coursesNumber }})</a>
                     {% if tag.headlineCourse is not null %}
                         <a class="tag-flag" href="#" title="
                             <div class='tag-tooltip' onmouseover='clearTimeout(timeoutObj);$(this).mouseleave(function() {$(this).parent().parent().hide();});'>
