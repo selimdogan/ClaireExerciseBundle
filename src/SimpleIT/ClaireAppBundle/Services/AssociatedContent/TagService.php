@@ -3,6 +3,7 @@
 namespace SimpleIT\ClaireAppBundle\Services\AssociatedContent;
 
 use SimpleIT\ApiResourcesBundle\AssociatedContent\TagResource;
+use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\RecommendedCourseByTagRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCategoryRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByPartRepository;
@@ -30,6 +31,11 @@ class TagService
      * @var  TagByCourseRepository
      */
     private $tagByCourseRepository;
+
+    /**
+     * @var RecommendedCourseByTagRepository
+     */
+    private $recommendedCourseByTagRepository;
 
     /**
      * @var  TagByPartRepository
@@ -64,6 +70,16 @@ class TagService
     public function setTagByCourseRepository($tagByCourseRepository)
     {
         $this->tagByCourseRepository = $tagByCourseRepository;
+    }
+
+    /**
+     * Set recommendedCourseByTagRepository
+     *
+     * @param RecommendedCourseByTagRepository $recommendedCourseByTagRepository
+     */
+    public function setRecommendedCourseByTagRepository($recommendedCourseByTagRepository)
+    {
+        $this->recommendedCourseByTagRepository = $recommendedCourseByTagRepository;
     }
 
     /**
@@ -125,5 +141,17 @@ class TagService
     public function get($tagIdentifier)
     {
         return $this->tagRepository->find($tagIdentifier);
+    }
+
+    /**
+     * Return recommended courses
+     *
+     * @param int | string $tagIdentifier Tag id | slug
+     *
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
+     */
+    public function getRecommendedCourses($tagIdentifier)
+    {
+        return $this->recommendedCourseByTagRepository->findAll($tagIdentifier);
     }
 }

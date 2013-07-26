@@ -31,4 +31,23 @@ class TagController extends AppController
             array('tag' => $tag)
         );
     }
+
+    /**
+     * List recommended courses
+     *
+     * @param int | string $tagIdentifier Tag id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listRecommendedCoursesAction($tagIdentifier)
+    {
+        $courses = $this->get('simple_it.claire.associated_content.tag')->getRecommendedCourses(
+            $tagIdentifier
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:AssociatedContent/Tag/Component:listRecommendedCourses.html.twig',
+            array('courses' => $courses)
+        );
+    }
 }
