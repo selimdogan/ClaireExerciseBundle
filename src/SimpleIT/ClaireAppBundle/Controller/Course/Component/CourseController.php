@@ -3,6 +3,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
 
 /**
@@ -61,8 +62,14 @@ class CourseController extends AppController
     {
         $toc = $this->get('simple_it.claire.course.course')->getToc($courseIdentifier);
 
+        if ($displayLevel == CourseResource::DISPLAY_LEVEL_MEDIUM) {
+            $template = 'SimpleITClaireAppBundle:Course/Course/Component:viewTocMedium.html.twig';
+        } else {
+            $template = 'SimpleITClaireAppBundle:Course/Course/Component:viewTocBig.html.twig';
+        }
+
         return $this->render(
-            'SimpleITClaireAppBundle:Course/Course/Component:viewToc.html.twig',
+            $template,
             array('toc' => $toc, 'displayLevel' => $displayLevel)
         );
     }

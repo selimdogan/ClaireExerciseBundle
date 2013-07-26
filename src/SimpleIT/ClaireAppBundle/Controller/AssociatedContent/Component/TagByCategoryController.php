@@ -30,7 +30,7 @@ class TagByCategoryController extends AppController
 
         return $this->render(
             'SimpleITClaireAppBundle:AssociatedContent/Tag/Component:list.html.twig',
-            array('tags' => $tags)
+            array('categoryIdentifier' => $categoryIdentifier, 'tags' => $tags)
         );
     }
 }

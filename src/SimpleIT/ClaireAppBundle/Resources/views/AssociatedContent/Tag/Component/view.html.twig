@@ -1,0 +1,13 @@
+<section class="tag-header">
+    <div class="tag-description">
+        <img class="tag-image" alt="{{ tag.name }}" src="{{ tag.image }}">
+        <div class="tag-definition">
+            <h1>{{ tag.name }}</h1>
+            <p>
+                {% autoescape false %}
+                {{ tag.description }}
+                {% endautoescape %}
+            </p>
+        </div>
+    </div>
+</section>

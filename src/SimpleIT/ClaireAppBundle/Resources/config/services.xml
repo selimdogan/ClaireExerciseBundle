@@ -11,7 +11,7 @@
     </imports>
 
     <parameters>
-
+        <parameter key="simple_it.claire.twig.extension.class">SimpleIT\ClaireAppBundle\Twig\ClaireAppExtension</parameter>
 
         <parameter key="simple_it.claire_api.class">SimpleIT\ClaireAppBundle\Api\ClaireApi</parameter>
 
@@ -29,6 +29,10 @@
     </parameters>
 
     <services>
+
+        <service id="simple_it.claire.twig.extension" class="%simple_it.claire.twig.extension.class%">
+            <tag name="twig.extension"/>
+        </service>
 
         <service id="simple_it.claire.http_client"
                  class="%simple_it.app.http_client.class%"

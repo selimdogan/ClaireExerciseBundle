@@ -1,15 +1,30 @@
 <section class="tags">
     <div class="tags-content">
         <h3>Thématiques</h3>
+        {% set letter = '' %}
         <ul class="tag-column">
             {% for tag in tags %}
+                {% set currentLetter = tag.name|firstForList %}
+                {% if letter != currentLetter %}
+                    {% set letter = currentLetter %}
+
+                    {{ letter }}
+
+                {% endif %}
                 <li class="tag-content">
                 
                 
-                    <a class="tag-name" href="#">{{ tag.name }}</a>
+                  {#  <a class="tag-name" href="#">{{ tag.name }}</a>
                     <a class="tag-number" href="#">({{ tag.coursesNumber }})</a>
+              {% if tag.headlineCourse is not null %}
+                    {{ tag.headlineCourse.title }}
+                    {{ tag.headlineCourse.slug }}
+                {% endif %}
+                {{ tag.coursesNumber }}#}
+                    <a class="tag-name" href="{{ path('simple_it_claire_tag_view', {'categoryIdentifier' : categoryIdentifier, 'tagIdentifier' : tag.slug }) }}">{{ tag.name }}</a>
+                    <a class="tag-number" href="{{ path('simple_it_claire_tag_view', {'categoryIdentifier' : categoryIdentifier, 'tagIdentifier' : tag.slug }) }}">({{ tag.coursesNumber }})</a>
                     {% if tag.headlineCourse is not null %}
-                        <a class="tag-flag" href="#" title="
+                        <a class="tag-flag" href="{{ path('simple_it_claire_course_view', { 'categoryIdentifier' : categoryIdentifier, 'courseIdentifier': tag.headlineCourse.slug}) }}" title="
                             <div class='tag-tooltip' onmouseover='clearTimeout(timeoutObj);$(this).mouseleave(function() {$(this).parent().parent().hide();});'>
                                     <div>
                                         <span class='top'>Commencez par le tutoriel suivant:</span>

@@ -2,6 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Services\AssociatedContent;
 
+use SimpleIT\ApiResourcesBundle\AssociatedContent\TagResource;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCategoryRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByPartRepository;
@@ -112,5 +113,17 @@ class TagService
     public function getAllByPart($courseIdentifier, $partIdentifier)
     {
         return $this->tagByPartRepository->findAll($courseIdentifier, $partIdentifier);
+    }
+
+    /**
+     * Get a tag
+     *
+     * @param int | string $tagIdentifier Tag id | slug
+     *
+     * @return TagResource
+     */
+    public function get($tagIdentifier)
+    {
+        return $this->tagRepository->find($tagIdentifier);
     }
 }

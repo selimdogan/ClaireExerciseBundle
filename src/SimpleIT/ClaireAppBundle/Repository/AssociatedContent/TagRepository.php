@@ -3,6 +3,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Repository\AssociatedContent;
 
+use SimpleIT\ApiResourcesBundle\AssociatedContent\TagResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
@@ -37,5 +38,17 @@ class TagRepository extends AppRepository
             array(),
             $collectionInformation
         );
+    }
+
+    /**
+     * Find a tag
+     *
+     * @param int | string $tagIdentifier Tag id | slug
+     *
+     * @return TagResource
+     */
+    public function find($tagIdentifier)
+    {
+        return parent::findResource(array('tagIdentifier' => $tagIdentifier));
     }
 }
