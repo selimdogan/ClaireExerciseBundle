@@ -3,6 +3,7 @@
 namespace SimpleIT\ClaireAppBundle\Services\Course;
 
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
+use SimpleIT\ClaireAppBundle\Repository\Course\CourseContentRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\CourseIntroductionRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\CourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\CourseTocRepository;
@@ -30,7 +31,11 @@ class CourseService
      */
     private $courseIntroductionRepository;
 
+    /**
+     * @var  CourseContentRepository
+     */
     private $courseContentRepository;
+
     /**
      * Set courseIntroductionRepository
      *

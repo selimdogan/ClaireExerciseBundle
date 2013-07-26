@@ -1,0 +1,3 @@
+{% for course in courses %}
+<a href="{{ path('simple_it_claire_course_course_view', { 'categoryIdentifier' : course.category.slug, 'courseIdentifier': course.slug}) }}">{{ course.title}}</a>
+{% endfor %}
