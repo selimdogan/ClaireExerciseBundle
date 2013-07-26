@@ -180,4 +180,25 @@ class PartController extends AppController
             array('toc' => $toc, 'displayLevel' => $displayLevel, 'identifier' => $partIdentifier)
         );
     }
+
+    /**
+     * View introduction
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier   Part id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewIntroductionAction($courseIdentifier, $partIdentifier)
+    {
+        $introduction = $this->get('simple_it.claire.course.part')->getIntroduction(
+            $courseIdentifier,
+            $partIdentifier
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
+            array('content' => $introduction)
+        );
+    }
 }

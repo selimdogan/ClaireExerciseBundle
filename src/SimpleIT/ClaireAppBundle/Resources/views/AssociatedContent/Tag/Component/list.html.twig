@@ -12,15 +12,10 @@
 
                 {% endif %}
                 <li class="tag-content">
-                {#{% if tag.headlineCourse is not null %}
-                    {{ tag.headlineCourse.title }}
-                    {{ tag.headlineCourse.slug }}
-                {% endif %}
-                {{ tag.coursesNumber }}#}
-                    <a class="tag-name" href="{{ path('simple_it_claire_tag_view', {'categoryIdentifier' : categoryIdentifier, 'tagIdentifier' : tag.slug }) }}">{{ tag.name }}</a>
-                    <a class="tag-number" href="{{ path('simple_it_claire_tag_view', {'categoryIdentifier' : categoryIdentifier, 'tagIdentifier' : tag.slug }) }}">({{ tag.coursesNumber }})</a>
+                    <a class="tag-name" href="{{ path('simple_it_claire_associated_content_tag_view', {'categoryIdentifier' : categoryIdentifier, 'tagIdentifier' : tag.slug }) }}">{{ tag.name }}</a>
+                    <a class="tag-number" href="{{ path('simple_it_claire_associated_content_tag_view', {'categoryIdentifier' : categoryIdentifier, 'tagIdentifier' : tag.slug }) }}">({{ tag.coursesNumber }})</a>
                     {% if tag.headlineCourse is not null %}
-                        <a class="tag-flag" href="{{ path('simple_it_claire_course_view', { 'categoryIdentifier' : categoryIdentifier, 'courseIdentifier': tag.headlineCourse.slug}) }}" title="
+                        <a class="tag-flag" href="{{ path('simple_it_claire_course_course_view', { 'categoryIdentifier' : categoryIdentifier, 'courseIdentifier': tag.headlineCourse.slug}) }}" title="
                             <div class='tag-tooltip' onmouseover='clearTimeout(timeoutObj);$(this).mouseleave(function() {$(this).parent().parent().hide();});'>
                                     <div>
                                         <span class='top'>Commencez par le tutoriel suivant:</span>

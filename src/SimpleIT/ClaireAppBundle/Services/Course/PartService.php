@@ -22,6 +22,7 @@ namespace SimpleIT\ClaireAppBundle\Services\Course;
 
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartContentRepository;
+use SimpleIT\ClaireAppBundle\Repository\Course\PartIntroductionRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartRepository;
 
 /**
@@ -38,6 +39,11 @@ class PartService
     private $partRepository;
 
     /**
+     * @var  PartIntroductionRepository
+     */
+    private $partIntroductionRepository;
+
+    /**
      * @var  PartContentRepository
      */
     private $partContentRepository;
@@ -50,6 +56,16 @@ class PartService
     public function setPartRepository($partRepository)
     {
         $this->partRepository = $partRepository;
+    }
+
+    /**
+     * Set partIntroductionRepository
+     *
+     * @param \SimpleIT\ClaireAppBundle\Repository\Course\PartIntroductionRepository $partIntroductionRepository
+     */
+    public function setPartIntroductionRepository($partIntroductionRepository)
+    {
+        $this->partIntroductionRepository = $partIntroductionRepository;
     }
 
     /**
@@ -101,6 +117,19 @@ class PartService
     public function saveContent($courseId, $partId, $content)
     {
         return $this->partContentRepository->update($courseId, $partId, $content);
+    }
+
+    /**
+     * Get a course introduction
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param integer      $partIdentifier   Part id | slug
+     *
+     * @return mixed
+     */
+    public function getIntroduction($courseIdentifier, $partIdentifier)
+    {
+        return $this->partIntroductionRepository->find($courseIdentifier, $partIdentifier);
     }
 
     /**
