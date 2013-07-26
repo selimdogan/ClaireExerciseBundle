@@ -1,10 +1,18 @@
+{% set letter = '' %}
 <ul>{% for tag in tags %}
-        {{ set letter = {tag|first} }}
 
-        <li>{{ tag.name }}
+        {% set currentLetter = tag.name|firstForList %}
+        {% if letter != currentLetter %}
+            {% set letter = currentLetter %}
+
+            {{ letter }}
+
+        {% endif %}
+
+        <li>
+            <a href="{{ path('simple_it_claire_tag_view', {'categoryIdentifier' : categoryIdentifier, 'tagIdentifier' : tag.slug }) }}">{{ tag.name }}</a>
             {% if tag.headlineCourse is not null %}
-                {{ tag.headlineCourse.title }}
-                {{ tag.headlineCourse.slug }}
+                <a href="{{ path('simple_it_claire_course_view', { 'categoryIdentifier' : categoryIdentifier, 'courseIdentifier': tag.headlineCourse.slug}) }}">{{ tag.headlineCourse.title }}</a>
             {% endif %}
             {{ tag.coursesNumber }}
         </li>
