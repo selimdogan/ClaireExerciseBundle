@@ -1,1 +1,10 @@
-{{ aggregateRating }}
+<li class="grade">
+    <span class="icon"></span>
+    <div>
+        <strong>Note</strong>
+        <p itemprop="aggregateRating" class="star">
+            {% if aggregateRating is not defined %}{% set aggregateRating = 0 %}{% endif %}
+            {% include "CommonBundle:Common/partial:classmentStar.html.twig" with { 'note' : aggregateRating } %}
+        </p>
+    </div>
+</li>

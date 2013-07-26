@@ -1,3 +1,11 @@
-{% for tag in tags %}
-    {{ tag.name }}
-{% endfor %}
+<div class="thematic-tags">
+    <span></span>
+    <div>
+        <p>Thématiques</p>
+        <p itemprop="keywords">
+            {% for tag in tags %}
+                <a href="#">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+    </div>
+</div>
