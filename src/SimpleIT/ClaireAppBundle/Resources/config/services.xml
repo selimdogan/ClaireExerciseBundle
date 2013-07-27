@@ -1,8 +1,6 @@
 <?xml version="1.0" ?>
 
-<container xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <imports>
         <import resource="service/associated_content.xml"/>
@@ -34,10 +32,7 @@
             <tag name="twig.extension"/>
         </service>
 
-        <service id="simple_it.claire.http_client"
-                 class="%simple_it.app.http_client.class%"
-                 factory-service="simple_it.app.client_factory"
-                 factory-method="get">
+        <service id="simple_it.claire.http_client" class="%simple_it.app.http_client.class%" factory-service="simple_it.app.client_factory" factory-method="get">
             <argument>%simple_it_app.client_api.claire_api%</argument>
         </service>
         <service id="simple_it.claire.serializer" class="%simple_it.app.serializer.class%">
@@ -47,55 +42,27 @@
 
         <!--OLD SHIT-->
 
-        <service id="simple_it.claire.buzz.client" class="%simple_it.claire.buzz.client.class%" public="false" />
+        <service id="simple_it.claire.buzz.client" class="%simple_it.claire.buzz.client.class%" public="false"/>
 
         <service id="simple_it.claire.buzz" class="%buzz.browser.class%">
-            <argument type="service" id="simple_it.claire.buzz.client" />
-            <argument type="service" id="buzz.message_factory" />
+            <argument type="service" id="simple_it.claire.buzz.client"/>
+            <argument type="service" id="buzz.message_factory"/>
         </service>
 
-        <service id="simple_it.claire.http.transport"
-                 parent="simple_it.claire.buzz"
-                 class="%simple_it.claire.http.transport.class%">
+        <service id="simple_it.claire.http.transport" parent="simple_it.claire.buzz" class="%simple_it.claire.http.transport.class%">
             <call method="setHost">
                 <argument>%simple_it_claire_app.host%</argument>
             </call>
         </service>
 
-
         <service id="claire_api_service" class="%simple_it.claire_api.class%" parent="api">
             <call method="setTransportService">
-                <argument type="service" id="simple_it.claire.http.transport" />
+                <argument type="service" id="simple_it.claire.http.transport"/>
             </call>
         </service>
 
-        <service id="claire_categories_api" class="%simple_it.claire_categories_api.class%" />
+        <service id="claire_categories_api" class="%simple_it.claire_categories_api.class%"/>
 
-        <!-- AssociatedCourseService -->
-        <service id="simpleit.claire.associated_course" class="%simple_it.claire.associated_course.class%" >
-            <call method="setClaireApi">
-                <argument type="service" id="claire_api_service" />
-            </call>
-            <call method="setAssociatedCourseRepository">
-                <argument type="service" id="simple_it.claire.repository.associated_course" />
-            </call>
-        </service>
-
-
-
-
-
-        <service id="simple_it.claire.twig.metadata" class="%simple_it.claire.twig.metadata.class%" >
-            <tag name="twig.extension" />
-        </service>
-
-
-        <!-- AssociatedCourseService -->
-        <service id="simple_it.claire.repository.associated_course" class="%simple_it.claire.repository.associated_course.class%" >
-            <call method="setClaireApi">
-                <argument type="service" id="claire_api_service" />
-            </call>
-        </service>
     </services>
 
 </container>

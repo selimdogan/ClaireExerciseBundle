@@ -42,7 +42,10 @@ class CategoryController extends AppController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listCoursesAction(CollectionInformation $collectionInformation, $categoryIdentifier)
+    public function listCoursesAction(
+        CollectionInformation $collectionInformation,
+        $categoryIdentifier
+    )
     {
         $courses = $this->get('simple_it.claire.associated_content.category')->getAllCourses(
             $categoryIdentifier,
@@ -50,8 +53,10 @@ class CategoryController extends AppController
         );
 
         return $this->render(
-            'SimpleITClaireAppBundle:Course/Course/Component:list.html.twig',
-            array('courses' => $courses)
+            'SimpleITClaireAppBundle:Course/Course/Component:searchList.html.twig',
+            array(
+                'courses' => $courses
+            )
         );
     }
 
