@@ -5,10 +5,11 @@ namespace SimpleIT\ClaireAppBundle\Repository\Security;
 use SimpleIT\ApiResourcesBundle\Security\UserResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\Utils\Collection\PaginatedCollection;
 
 /**
  * Class SecurityUserRepository
- * 
+ *
  * @author Kévin Letord <kevin.letord@simple-it.fr>
  */
 class SecurityUserRepository extends AppRepository
@@ -40,15 +41,13 @@ class SecurityUserRepository extends AppRepository
     /**
      * Find a list of security user
      *
-     * @param CollectionInformation $collectionInformation
+     * @param CollectionInformation $collectionInformation Collection Information
      *
-     * @return mixed
+     * @return PaginatedCollection
      */
-    public function findAll(CollectionInformation $collectionInformation)
+    public function findAll(CollectionInformation $collectionInformation = null)
     {
-        return parent::findAllResource(array(
-                $collectionInformation
-            ));
+        return parent::findAllResources(array($collectionInformation));
     }
 
     /**
@@ -86,8 +85,10 @@ class SecurityUserRepository extends AppRepository
      */
     public function delete($userId)
     {
-        parent::deleteResource(array(
+        parent::deleteResource(
+            array(
                 'userId' => $userId,
-            ));
+            )
+        );
     }
 }

@@ -17,7 +17,7 @@ class TagByCategoryController extends AppController
      * Get a list of categories
      *
      * @param CollectionInformation $collectionInformation Collection information
-     * @param int | string          $categoryIdentifier    Category id | slug
+     * @param mixed                 $categoryIdentifier    Category id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */

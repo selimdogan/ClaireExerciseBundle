@@ -73,7 +73,7 @@ class CourseService
      *
      * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
-    public function getAll(CollectionInformation $collectionInformation)
+    public function getAll(CollectionInformation $collectionInformation = null)
     {
         return $this->courseRepository->findAll($collectionInformation);
     }

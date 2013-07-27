@@ -5,10 +5,11 @@ namespace SimpleIT\ClaireAppBundle\Repository\Security;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\ApiResourcesBundle\Security\GroupResource;
+use SimpleIT\Utils\Collection\PaginatedCollection;
 
 /**
  * Class SecurityGroupBySecurityUserRepository
- * 
+ *
  * @author Kévin Letord <kevin.letord@simple-it.fr>
  */
 class SecurityGroupBySecurityUserRepository extends AppRepository
@@ -26,17 +27,19 @@ class SecurityGroupBySecurityUserRepository extends AppRepository
     /**
      * Find a list of security group
      *
-     * @param int                   $userId
-     * @param CollectionInformation $collectionInformation
+     * @param int                   $userId                User id
+     * @param CollectionInformation $collectionInformation Collection Information
      *
-     * @return mixed
+     * @return PaginatedCollection
      */
-    public function findAll($userId, CollectionInformation $collectionInformation)
+    public function findAll($userId, CollectionInformation $collectionInformation = null)
     {
-        return parent::findAllResource(array(
+        return parent::findAllResources(
+            array(
                 'userId' => $userId,
                 $collectionInformation
-            ));
+            )
+        );
     }
 
     /**
@@ -49,9 +52,12 @@ class SecurityGroupBySecurityUserRepository extends AppRepository
      */
     public function insert($userId, GroupResource $group)
     {
-        return parent::insertResource($group, array(
+        return parent::insertResource(
+            $group,
+            array(
                 'userId' => $userId,
-            ));
+            )
+        );
     }
 
     /**
@@ -62,10 +68,12 @@ class SecurityGroupBySecurityUserRepository extends AppRepository
      */
     public function delete($userId, $groupId)
     {
-        parent::deleteResource(array(
-                'userId' => $userId,
+        parent::deleteResource(
+            array(
+                'userId'  => $userId,
                 'groupId' => $groupId,
-            ));
+            )
+        );
     }
 
     /**
@@ -75,8 +83,10 @@ class SecurityGroupBySecurityUserRepository extends AppRepository
      */
     public function deleteAll($userId)
     {
-        parent::deleteResource(array(
+        parent::deleteResource(
+            array(
                 'userId' => $userId,
-            ));
+            )
+        );
     }
 }

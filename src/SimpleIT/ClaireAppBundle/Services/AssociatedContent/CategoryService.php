@@ -68,7 +68,7 @@ class CategoryService
      *
      * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
-    public function getAll(CollectionInformation $collectionInformation)
+    public function getAll(CollectionInformation $collectionInformation = null)
     {
         return $this->categoryRepository->findAll($collectionInformation);
     }
@@ -93,7 +93,7 @@ class CategoryService
      *
      * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
-    public function getAllTags(CollectionInformation $collectionInformation)
+    public function getAllTags(CollectionInformation $collectionInformation = null)
     {
         return $this->tagByCategoryRepository->findAll($collectionInformation);
     }

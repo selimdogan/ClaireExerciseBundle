@@ -4,6 +4,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\AssociatedContent\Component;
 
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
+use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -16,14 +17,16 @@ class TagByCourseController extends AppController
     /**
      * Get a list of tags of a course
      *
-     * @param int |string $courseIdentifier Course id | slug
+     * @param CollectionInformation $collectionInformation Collection information
+     * @param mixed                 $courseIdentifier      Course id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listAction($courseIdentifier)
+    public function listAction(CollectionInformation $collectionInformation, $courseIdentifier)
     {
         $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourse(
-            $courseIdentifier
+            $courseIdentifier,
+            $collectionInformation
         );
 
         return $this->render(

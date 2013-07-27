@@ -109,26 +109,58 @@ class TagService
     /**
      * Get all the tags of a course
      *
-     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string          $courseIdentifier      Course id | slug
+     * @param CollectionInformation $collectionInformation Collection information
      *
      * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
-    public function getAllByCourse($courseIdentifier)
+    public function getAllByCourse(
+        $courseIdentifier,
+        CollectionInformation $collectionInformation = null
+    )
     {
-        return $this->tagByCourseRepository->findAll($courseIdentifier);
+        return $this->tagByCourseRepository->findAll($courseIdentifier, $collectionInformation);
     }
 
     /**
      * Get all the tags of a part
      *
-     * @param int | string $courseIdentifier Course id | slug
-     * @param int | string $partIdentifier   Part id | slug
+     * @param int | string          $courseIdentifier      Course id | slug
+     * @param int | string          $partIdentifier        Part id | slug
+     * @param CollectionInformation $collectionInformation Collection information
      *
      * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
-    public function getAllByPart($courseIdentifier, $partIdentifier)
+    public function getAllByPart(
+        $courseIdentifier,
+        $partIdentifier,
+        CollectionInformation $collectionInformation = null
+    )
     {
-        return $this->tagByPartRepository->findAll($courseIdentifier, $partIdentifier);
+        return $this->tagByPartRepository->findAll(
+            $courseIdentifier,
+            $partIdentifier,
+            $collectionInformation
+        );
+    }
+
+    /**
+     * Return recommended courses
+     *
+     * @param int | string          $tagIdentifier         Tag id | slug
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
+     */
+    public function getRecommendedCourses(
+        $tagIdentifier,
+        CollectionInformation $collectionInformation = null
+    )
+    {
+        return $this->recommendedCourseByTagRepository->findAll(
+            $tagIdentifier,
+            $collectionInformation
+        );
     }
 
     /**
@@ -141,17 +173,5 @@ class TagService
     public function get($tagIdentifier)
     {
         return $this->tagRepository->find($tagIdentifier);
-    }
-
-    /**
-     * Return recommended courses
-     *
-     * @param int | string $tagIdentifier Tag id | slug
-     *
-     * @return \SimpleIT\Utils\Collection\PaginatedCollection
-     */
-    public function getRecommendedCourses($tagIdentifier)
-    {
-        return $this->recommendedCourseByTagRepository->findAll($tagIdentifier);
     }
 }

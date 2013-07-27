@@ -10,6 +10,7 @@ use SimpleIT\ClaireAppBundle\Repository\CourseAssociation\TagRepository;
  * Class CategoryService
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
+ * @deprecated
  */
 class TagService
 {

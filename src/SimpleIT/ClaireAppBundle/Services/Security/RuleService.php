@@ -10,7 +10,7 @@ use SimpleIT\Utils\Collection\CollectionInformation;
 
 /**
  * Class RuleService
- * 
+ *
  * @author Kévin Letord <kevin.letord@simple-it.fr>
  */
 class RuleService
@@ -23,9 +23,9 @@ class RuleService
     /**
      * Get a rule
      *
-     * @param $ruleId
+     * @param int $ruleId Rule id
      *
-     * @return \SimpleIT\ClaireAppBundle\Repository\Security\RuleResource
+     * @return \SimpleIT\ApiResourcesBundle\Security\RuleResource
      */
     public function get($ruleId)
     {
@@ -35,11 +35,11 @@ class RuleService
     /**
      * Get all rules
      *
-     * @param CollectionInformation $collectionInformation
+     * @param CollectionInformation $collectionInformation Collection information
      *
-     * @return mixed
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
-    public function getAll(CollectionInformation $collectionInformation)
+    public function getAll(CollectionInformation $collectionInformation = null)
     {
         return $this->ruleResource->findAll($collectionInformation);
     }

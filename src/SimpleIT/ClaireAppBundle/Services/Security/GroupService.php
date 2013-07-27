@@ -9,10 +9,11 @@ use SimpleIT\ClaireAppBundle\Repository\Security\SecurityRuleBySecurityGroupRepo
 use SimpleIT\ClaireAppBundle\Repository\Security\SecurityGroupRepository;
 
 use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\Utils\Collection\PaginatedCollection;
 
 /**
  * Class GroupService
- * 
+ *
  * @author Kévin Letord <kevin.letord@simple-it.fr>
  */
 class GroupService
@@ -42,11 +43,11 @@ class GroupService
     /**
      * Get all groups that matching collection information
      *
-     * @param CollectionInformation $collectionInformation
+     * @param CollectionInformation $collectionInformation Collection information
      *
-     * @return Collection
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
-    public function getAll(CollectionInformation $collectionInformation)
+    public function getAll(CollectionInformation $collectionInformation = null)
     {
         return $this->groupRepository->findAll($collectionInformation);
     }
@@ -54,12 +55,12 @@ class GroupService
     /**
      * Get all rules associates with a group
      *
-     * @param int                   $groupId
-     * @param CollectionInformation $collectionInformation
+     * @param int                   $groupId               Group id
+     * @param CollectionInformation $collectionInformation Collection information
      *
-     * @return Collection
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
-    public function getRules($groupId, CollectionInformation $collectionInformation)
+    public function getRules($groupId, CollectionInformation $collectionInformation = null)
     {
         return $this->ruleByGroupRepository->findAll($groupId, $collectionInformation);
     }
@@ -79,8 +80,8 @@ class GroupService
     /**
      * Link a security rule to a security group
      *
-     * @param int          $groupId
-     * @param RuleResource $rule
+     * @param int          $groupId Group id
+     * @param RuleResource $rule    Rule
      */
     public function addRule($groupId, RuleResource $rule)
     {
@@ -90,8 +91,8 @@ class GroupService
     /**
      * Save a group
      *
-     * @param int           $groupId
-     * @param GroupResource $group
+     * @param int           $groupId Group id
+     * @param GroupResource $group   Group
      *
      * @return GroupResource
      */
@@ -103,7 +104,7 @@ class GroupService
     /**
      * Remove a group
      *
-     * @param int $groupId
+     * @param int $groupId Group id
      */
     public function remove($groupId)
     {
@@ -113,8 +114,8 @@ class GroupService
     /**
      * Unlink a security rule from a security group
      *
-     * @param int $groupId
-     * @param int $ruleId
+     * @param int $groupId Group id
+     * @param int $ruleId  Rule id
      */
     public function removeRule($groupId, $ruleId)
     {
@@ -130,7 +131,9 @@ class GroupService
      *
      * @param SecurityRuleBySecurityGroupRepository $ruleByGroupRepository
      */
-    public function setRuleByGroupRepository(SecurityRuleBySecurityGroupRepository $ruleByGroupRepository)
+    public function setRuleByGroupRepository(
+        SecurityRuleBySecurityGroupRepository $ruleByGroupRepository
+    )
     {
         $this->ruleByGroupRepository = $ruleByGroupRepository;
     }

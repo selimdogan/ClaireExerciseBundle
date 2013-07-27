@@ -14,7 +14,7 @@ use SimpleIT\Utils\Collection\CollectionInformation;
 
 /**
  * Class UserService
- * 
+ *
  * @author Kévin Letord <kevin.letord@simple-it.fr>
  */
 class UserService
@@ -49,22 +49,22 @@ class UserService
     /**
      * Get all users matching collection information
      *
-     * @param CollectionInformation $collectionInformation
+     * @param CollectionInformation $collectionInformation Collection information
      *
-     * @return Collection
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
-    public function getAll(CollectionInformation $collectionInformation)
+    public function getAll(CollectionInformation $collectionInformation = null)
     {
         return $this->userRepository->findAll($collectionInformation);
     }
 
     /**
-     * get user's security groups
+     * Get user's security groups
      *
-     * @param int                   $userId
-     * @param CollectionInformation $collectionInformation
+     * @param int                   $userId                User id
+     * @param CollectionInformation $collectionInformation Collection Information
      *
-     * @return Collection
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
     public function getGroups($userId, CollectionInformation $collectionInformation = null)
     {
@@ -74,10 +74,10 @@ class UserService
     /**
      * Get user's security rules
      *
-     * @param int                   $userId
-     * @param CollectionInformation $collectionInformation
+     * @param int                   $userId                User id
+     * @param CollectionInformation $collectionInformation Collection Information
      *
-     * @return mixed
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
     public function getRules($userId, CollectionInformation $collectionInformation = null)
     {
@@ -99,8 +99,8 @@ class UserService
     /**
      * Save a user
      *
-     * @param int          $userId
-     * @param UserResource $user
+     * @param int          $userId User id
+     * @param UserResource $user   User
      *
      * @return UserResource
      */
@@ -112,8 +112,8 @@ class UserService
     /**
      * Add a security group to an user
      *
-     * @param int           $userId
-     * @param GroupResource $group
+     * @param int           $userId User id
+     * @param GroupResource $group  Group
      *
      * @return GroupResource
      */
@@ -125,8 +125,8 @@ class UserService
     /**
      * Add a security rule to an user
      *
-     * @param int          $userId
-     * @param RuleResource $rule
+     * @param int          $userId User id
+     * @param RuleResource $rule   Rule
      *
      * @return RuleResource
      */
@@ -138,7 +138,7 @@ class UserService
     /**
      * Remove a user
      *
-     * @param int $userId
+     * @param int $userId User id
      */
     public function remove($userId)
     {
@@ -148,8 +148,8 @@ class UserService
     /**
      * Remove a user's security group
      *
-     * @param int $userId
-     * @param int $groupId
+     * @param int $userId  User id
+     * @param int $groupId Group id
      */
     public function removeGroup($userId, $groupId)
     {
@@ -196,7 +196,9 @@ class UserService
      *
      * @param SecurityGroupBySecurityUserRepository $groupByUserRepository
      */
-    public function setGroupByUserRepository(SecurityGroupBySecurityUserRepository $groupByUserRepository)
+    public function setGroupByUserRepository(
+        SecurityGroupBySecurityUserRepository $groupByUserRepository
+    )
     {
         $this->groupByUserRepository = $groupByUserRepository;
     }
@@ -206,7 +208,9 @@ class UserService
      *
      * @param SecurityRuleBySecurityUserRepository $ruleByUserRepository
      */
-    public function setRuleByUserRepository(SecurityRuleBySecurityUserRepository $ruleByUserRepository)
+    public function setRuleByUserRepository(
+        SecurityRuleBySecurityUserRepository $ruleByUserRepository
+    )
     {
         $this->ruleByUserRepository = $ruleByUserRepository;
     }

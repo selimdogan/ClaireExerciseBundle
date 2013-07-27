@@ -42,6 +42,7 @@ use SimpleIT\AppBundle\Model\ApiRequestOptions;
 
 /**
  * CourseService
+ * @deprecated
  */
 class CourseService extends ClaireApi implements CourseServiceInterface
 {

@@ -10,6 +10,7 @@ use SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository;
  * Class CategoryService
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
+ * @deprecated
  */
 class CategoryService
 {

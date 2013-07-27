@@ -8,7 +8,7 @@ use SimpleIT\ApiResourcesBundle\Security\GroupResource;
 
 /**
  * Class SecurityGroupRepository
- * 
+ *
  * @author Kévin Letord <kevin.letord@simple-it.fr>
  */
 class SecurityGroupRepository extends AppRepository
@@ -40,21 +40,23 @@ class SecurityGroupRepository extends AppRepository
     /**
      * Find a list of security group
      *
-     * @param CollectionInformation $collectionInformation
+     * @param CollectionInformation $collectionInformation Collection information
      *
-     * @return mixed
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
-    public function findAll(CollectionInformation $collectionInformation)
+    public function findAll(CollectionInformation $collectionInformation = null)
     {
-        return parent::findAllResource(array(
+        return parent::findAllResources(
+            array(
                 $collectionInformation
-            ));
+            )
+        );
     }
 
     /**
      * Insert a new group
      *
-     * @param GroupResource $group
+     * @param GroupResource $group Group
      *
      * @return GroupResource
      */
@@ -86,8 +88,10 @@ class SecurityGroupRepository extends AppRepository
      */
     public function delete($groupId)
     {
-        parent::deleteResource(array(
+        parent::deleteResource(
+            array(
                 'groupId' => $groupId,
-            ));
+            )
+        );
     }
 }

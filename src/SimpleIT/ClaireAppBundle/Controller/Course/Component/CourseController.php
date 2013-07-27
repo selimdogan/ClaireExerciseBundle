@@ -5,6 +5,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
+use SimpleIT\Utils\Collection\CollectionInformation;
 
 /**
  * Class CourseController
@@ -13,6 +14,24 @@ use SimpleIT\AppBundle\Controller\AppController;
  */
 class CourseController extends AppController
 {
+
+    /**
+     * List courses
+     *
+     * @param CollectionInformation $collectionInformation
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listAction(CollectionInformation $collectionInformation)
+    {
+        $courses = $this->get('simple_it.claire.course.course')->getAll($collectionInformation);
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:list.html.twig',
+            array('courses' => $courses)
+        );
+    }
+
     /**
      * View introduction
      *
