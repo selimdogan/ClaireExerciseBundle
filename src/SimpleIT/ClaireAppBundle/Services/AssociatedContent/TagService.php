@@ -3,6 +3,7 @@
 namespace SimpleIT\ClaireAppBundle\Services\AssociatedContent;
 
 use SimpleIT\ApiResourcesBundle\AssociatedContent\TagResource;
+use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\CourseByTagRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\RecommendedCourseByTagRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCategoryRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCourseRepository;
@@ -33,6 +34,11 @@ class TagService
     private $tagByCourseRepository;
 
     /**
+     * @var CourseByTagRepository
+     */
+    private $courseByTagRepository;
+
+    /**
      * @var RecommendedCourseByTagRepository
      */
     private $recommendedCourseByTagRepository;
@@ -41,56 +47,6 @@ class TagService
      * @var  TagByPartRepository
      */
     private $tagByPartRepository;
-
-    /**
-     * Set tagRepository
-     *
-     * @param TagRepository $tagRepository
-     */
-    public function setTagRepository($tagRepository)
-    {
-        $this->tagRepository = $tagRepository;
-    }
-
-    /**
-     * Set tagByCategoryRepository
-     *
-     * @param TagByCategoryRepository $tagByCategoryRepository
-     */
-    public function setTagByCategoryRepository($tagByCategoryRepository)
-    {
-        $this->tagByCategoryRepository = $tagByCategoryRepository;
-    }
-
-    /**
-     * Set tagByCourseRepository
-     *
-     * @param TagByCourseRepository $tagByCourseRepository
-     */
-    public function setTagByCourseRepository($tagByCourseRepository)
-    {
-        $this->tagByCourseRepository = $tagByCourseRepository;
-    }
-
-    /**
-     * Set recommendedCourseByTagRepository
-     *
-     * @param RecommendedCourseByTagRepository $recommendedCourseByTagRepository
-     */
-    public function setRecommendedCourseByTagRepository($recommendedCourseByTagRepository)
-    {
-        $this->recommendedCourseByTagRepository = $recommendedCourseByTagRepository;
-    }
-
-    /**
-     * Set tagByPartRepository
-     *
-     * @param TagByPartRepository $tagByPartRepository
-     */
-    public function setTagByPartRepository($tagByPartRepository)
-    {
-        $this->tagByPartRepository = $tagByPartRepository;
-    }
 
     /**
      * @param int | string          $categoryIdentifier    Category id | slug
@@ -164,6 +120,25 @@ class TagService
     }
 
     /**
+     * Get courses of a tag
+     *
+     * @param int | string          $tagIdentifier         Tag id | slug
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
+     */
+    public function getAllCourses(
+        $tagIdentifier,
+        CollectionInformation $collectionInformation = null
+    )
+    {
+        return $this->courseByTagRepository->findAll(
+            $tagIdentifier,
+            $collectionInformation
+        );
+    }
+
+    /**
      * Get a tag
      *
      * @param int | string $tagIdentifier Tag id | slug
@@ -173,5 +148,65 @@ class TagService
     public function get($tagIdentifier)
     {
         return $this->tagRepository->find($tagIdentifier);
+    }
+
+    /**
+     * Set tagRepository
+     *
+     * @param TagRepository $tagRepository
+     */
+    public function setTagRepository($tagRepository)
+    {
+        $this->tagRepository = $tagRepository;
+    }
+
+    /**
+     * Set tagByCategoryRepository
+     *
+     * @param TagByCategoryRepository $tagByCategoryRepository
+     */
+    public function setTagByCategoryRepository($tagByCategoryRepository)
+    {
+        $this->tagByCategoryRepository = $tagByCategoryRepository;
+    }
+
+    /**
+     * Set tagByCourseRepository
+     *
+     * @param TagByCourseRepository $tagByCourseRepository
+     */
+    public function setTagByCourseRepository($tagByCourseRepository)
+    {
+        $this->tagByCourseRepository = $tagByCourseRepository;
+    }
+
+    /**
+     * Set recommendedCourseByTagRepository
+     *
+     * @param RecommendedCourseByTagRepository $recommendedCourseByTagRepository
+     */
+    public function setRecommendedCourseByTagRepository($recommendedCourseByTagRepository)
+    {
+        $this->recommendedCourseByTagRepository = $recommendedCourseByTagRepository;
+    }
+
+    /**
+     * Set courseByTagRepository
+     *
+     * @param \SimpleIT\ClaireAppBundle\Repository\AssociatedContent\CourseByTagRepository $courseByTagRepository
+     */
+    public function setCourseByTagRepository($courseByTagRepository)
+    {
+        $this->courseByTagRepository = $courseByTagRepository;
+    }
+
+    /**
+     * Set tagByPartRepository
+     *
+     * @param TagByPartRepository $tagByPartRepository
+     */
+    public function setTagByPartRepository($tagByPartRepository)
+    {
+        $this->tagByPartRepository = $tagByPartRepository;
     }
 }

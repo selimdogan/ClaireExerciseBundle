@@ -1,8 +1,9 @@
+{% trans_default_domain "course" %}
 {% if difficulty is not empty %}
     <li class="difficulty">
         <span class="icon"></span>
         <div>
-            <strong>Difficulté</strong>
+            <strong>{{ 'course.difficulty' | trans }}</strong>
             <p itemprop="difficulty">{{ difficulty }}</p>
         </div>
     </li>

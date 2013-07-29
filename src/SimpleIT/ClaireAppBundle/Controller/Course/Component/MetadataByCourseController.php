@@ -251,6 +251,7 @@ class MetadataByCourseController extends AbstractMetadataController
             $metadatas,
             MetadataResource::COURSE_METADATA_DURATION
         );
+        $timeRequired = new \DateInterval($timeRequired);
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/Metadata/Component:viewTimeRequired.html.twig',

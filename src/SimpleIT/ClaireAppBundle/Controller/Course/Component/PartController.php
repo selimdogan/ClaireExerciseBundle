@@ -20,6 +20,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Model\AppResponse;
@@ -162,21 +163,31 @@ class PartController extends AppController
     }
 
     /**
-     * View pagination
+     * View table of content
      *
      * @param int | string $courseIdentifier Course id | slug
-     * @param int | string $partIdentifier   Part id | slug
      * @param int          $displayLevel     Display level
+     * @param int | string $partIdentifier   Current part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewPaginationAction($courseIdentifier, $partIdentifier, $displayLevel)
+    public function viewTocAction($courseIdentifier, $displayLevel, $partIdentifier = null)
     {
         $toc = $this->get('simple_it.claire.course.course')->getToc($courseIdentifier);
 
+        if ($displayLevel == CourseResource::DISPLAY_LEVEL_MEDIUM) {
+            $template = 'SimpleITClaireAppBundle:Course/Course/Component:viewTocMedium.html.twig';
+        } else {
+            $template = 'SimpleITClaireAppBundle:Course/Course/Component:viewTocBig.html.twig';
+        }
+
         return $this->render(
-            'SimpleITClaireAppBundle:Course/Course/Component:viewPagination.html.twig',
-            array('toc' => $toc, 'displayLevel' => $displayLevel, 'identifier' => $partIdentifier)
+            $template,
+            array(
+                'toc'            => $toc,
+                'displayLevel'   => $displayLevel,
+                'partIdentifier' => $partIdentifier
+            )
         );
     }
 

@@ -60,16 +60,20 @@ class CourseController extends AppController
      *
      * @param int | string $courseIdentifier Course id | slug
      * @param int          $displayLevel     Display level
+     * @param int | string $partIdentifier   Current part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewTimelineAction($courseIdentifier, $displayLevel)
+    public function viewTimelineAction($courseIdentifier, $displayLevel, $partIdentifier = null)
     {
         $toc = $this->get('simple_it.claire.course.course')->getToc($courseIdentifier);
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:viewTimeline.html.twig',
-            array('toc' => $toc, 'displayLevel' => $displayLevel)
+            array('toc'            => $toc,
+                  'displayLevel'   => $displayLevel,
+                  'partIdentifier' => $partIdentifier
+            )
         );
     }
 
@@ -93,25 +97,41 @@ class CourseController extends AppController
 
         return $this->render(
             $template,
-            array('toc' => $toc, 'displayLevel' => $displayLevel)
+            array(
+                'toc'            => $toc,
+                'displayLevel'   => $displayLevel
+            )
         );
     }
 
     /**
      * View pagination
      *
-     * @param int | string $courseIdentifier Course id | slug
-     * @param int          $displayLevel     Display level
+     * @param int | string $courseIdentifier   Course id | slug
+     * @param int | string $categoryIdentifier Category id | slug
+     * @param int | string $partIdentifier     Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewPaginationAction($courseIdentifier, $displayLevel)
+    public function viewPaginationAction(
+        $courseIdentifier,
+        $categoryIdentifier,
+        $partIdentifier = null
+    )
     {
-        $toc = $this->get('simple_it.claire.course.course')->getToc($courseIdentifier);
+        $pagination = $this->get('simple_it.claire.course.course')->getPagination(
+            $courseIdentifier,
+            $partIdentifier
+        );
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:viewPagination.html.twig',
-            array('toc' => $toc, 'displayLevel' => $displayLevel, 'identifier' => $courseIdentifier)
+            array(
+                'courseIdentifier'   => $courseIdentifier,
+                'categoryIdentifier' => $categoryIdentifier,
+                'previous'           => $pagination['previous'],
+                'next'               => $pagination['next']
+            )
         );
     }
 

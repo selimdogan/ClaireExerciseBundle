@@ -3,6 +3,8 @@
 
 namespace SimpleIT\ClaireAppBundle\Twig;
 
+use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
+use SimpleIT\Utils\ArrayUtils;
 use SimpleIT\Utils\StringUtils;
 
 /**
@@ -18,7 +20,8 @@ class ClaireAppExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'firstForList' => new \Twig_Filter_Method($this, 'firstLetterFilter')
+            'firstForList' => new \Twig_Filter_Method($this, 'firstLetterFilter'),
+            'courseImage'  => new \Twig_Filter_Method($this, 'courseImageFilter')
         );
     }
 
@@ -34,12 +37,32 @@ class ClaireAppExtension extends \Twig_Extension
         $string = strtoupper($string);
         $char = substr($string, 0, 1);
 
-
         if (!ctype_alpha($char)) {
             $char = '#';
         }
 
         return $char;
+    }
+
+    /**
+     * Handle course image
+     *
+     * @param array $metadatas Metadatas
+     *
+     * @return string
+     */
+    public function courseImageFilter($metadatas = array())
+    {
+        $url = null;
+        if (!is_null($metadatas)) {
+            $url = ArrayUtils::getValue($metadatas, MetadataResource::COURSE_METADATA_IMAGE);
+        }
+        if (is_null($url)) {
+            // FIXME put a url
+            $url = '';
+        }
+
+        return $url;
     }
 
     /**

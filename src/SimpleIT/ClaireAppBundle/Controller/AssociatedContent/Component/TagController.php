@@ -4,6 +4,7 @@
 namespace SimpleIT\ClaireAppBundle\Controller\AssociatedContent\Component;
 
 use SimpleIT\AppBundle\Controller\AppController;
+use SimpleIT\Utils\Collection\CollectionInformation;
 
 /**
  * Class TagController
@@ -35,14 +36,19 @@ class TagController extends AppController
     /**
      * List recommended courses
      *
-     * @param int | string $tagIdentifier Tag id | slug
+     * @param CollectionInformation $collectionInformation Collection information
+     * @param mixed                 $tagIdentifier         Tag id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listRecommendedCoursesAction($tagIdentifier)
+    public function listRecommendedCoursesAction(
+        CollectionInformation $collectionInformation,
+        $tagIdentifier
+    )
     {
         $courses = $this->get('simple_it.claire.associated_content.tag')->getRecommendedCourses(
-            $tagIdentifier
+            $tagIdentifier,
+            $collectionInformation
         );
 
         return $this->render(
@@ -50,4 +56,31 @@ class TagController extends AppController
             array('courses' => $courses)
         );
     }
+
+    /**
+     * Get a list of courses of a category
+     *
+     * @param CollectionInformation $collectionInformation Collection information
+     * @param mixed                 $tagIdentifier         Tag id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listCoursesAction(
+        CollectionInformation $collectionInformation,
+        $tagIdentifier
+    )
+    {
+        $courses = $this->get('simple_it.claire.associated_content.tag')->getAllCourses(
+            $tagIdentifier,
+            $collectionInformation
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:searchList.html.twig',
+            array(
+                'courses' => $courses
+            )
+        );
+    }
+
 }

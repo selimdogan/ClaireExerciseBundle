@@ -1,0 +1,15 @@
+<div class="starClassment">
+    {% if maxStar is not defined %}
+        {% set maxStar = 5 %}
+    {% endif %}
+
+    {% for i in 1..maxStar %}
+        {% if note >= i %}
+            <span class="oneStar"></span>
+        {% elseif note - i >= - 0.5 %}
+            <span class="halfStar"></span>
+        {% else %}
+            <span class="noStar"></span>
+        {% endif %}
+    {% endfor %}
+</div>

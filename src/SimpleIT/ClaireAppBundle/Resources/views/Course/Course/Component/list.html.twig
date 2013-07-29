@@ -2,7 +2,7 @@
 <ul>
     {% for course in courses %}
         <li>
-            <a href="{{ path('simple_it_claire_course_course_view', {'categoryIdentifier': course.category.slug,'courseIdentifier':course.slug}) }}">{{ course.title }}
+            <a href="{{ path('simple_it_claire_course_course_view', {'categoryIdentifier': course.category.slug,'courseIdentifier':course.slug}) }}">{{ course.metadatas | courseImage }}{{ course.title }}
                 {% if course.tags > 0 %}
                     <ul>
                         {% for tag in course.tags %}

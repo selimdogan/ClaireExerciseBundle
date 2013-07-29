@@ -1,12 +1,9 @@
+{% trans_default_domain "user" %}
 <section class="authors">
     <div class="author-description">
         {% if authors is defined and authors|length > 0 %}
             <h2>
-                {% if authors|length == 1 %}
-                    L'auteur
-                {% else %}
-                    Les auteurs
-                {% endif %}
+                {{ 'author.choice' | transchoice(authors|length) }}
             </h2>
         {% endif %}
 

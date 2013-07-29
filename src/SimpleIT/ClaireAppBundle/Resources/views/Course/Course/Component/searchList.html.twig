@@ -1,4 +1,5 @@
-{{ courses.totalItemsNumber }}
+{% trans_default_domain "course" %}
+{{ 'course.choice' | transchoice(courses.totalItemsNumber) }}
 <form action="" method="GET">
     <input type="search" name="title">
     <input type="submit">

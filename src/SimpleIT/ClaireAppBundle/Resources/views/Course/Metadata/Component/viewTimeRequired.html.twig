@@ -1,7 +1,12 @@
-<li class="duration">
-    <span class="icon"></span>
-    <div>
-        <strong>Durée</strong>
-        <p itemprop="duration"> {{ timeRequired }}</p>
-    </div>
-</li>
+{% trans_default_domain "course" %}
+{% if timeRequired is not null %}
+    <li class="duration">
+        <span class="icon"></span>
+
+        <div>
+            <strong>{{ 'course.duration' | trans }}</strong>
+
+            <p itemprop="duration"> {{ timeRequired | dateInterval }}</p>
+        </div>
+    </li>
+{% endif %}

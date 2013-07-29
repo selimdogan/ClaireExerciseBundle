@@ -1,29 +1,12 @@
-{#{% macro processPagination(part, identifier, previous) %}#}
-    {#{% if part.id == identifier or part.slug == identifier %}#}
-        {#{% if previous is not empty %}#}
-            {#&#123;&#35;previous&#35;&#125;#}
-            {#{{ previous.title }}#}
-        {#{% endif %}#}
-        {#{% set find = true %}#}
-    {#{% else %}#}
-        {#{% set find = false %}#}
-    {#{% endif %}#}
+{% if previous is not null %}
+    {% if previous.subtype == 'course' %}
+        <a href="{{ path('simple_it_claire_course_course_view', {'categoryIdentifier':categoryIdentifier,'courseIdentifier':courseIdentifier}) }}">
+            {{ previous.title }}</a>
+    {% else %}
+        <a href="{{ path('simple_it_claire_course_part_view', {'categoryIdentifier':categoryIdentifier,'courseIdentifier':courseIdentifier,'partIdentifier':previous.slug}) }}">{{ previous.title }}</a>
+    {% endif %}
+{% endif %}
+{% if next is not null %}
+    <a href="{{ path('simple_it_claire_course_part_view', {'categoryIdentifier':categoryIdentifier,'courseIdentifier':courseIdentifier,'partIdentifier':next.slug}) }}">{{ next.title }}</a>
+{% endif %}
 
-    {#{% if find == true %}#}
-        {#&#123;&#35;next&#35;&#125;#}
-        {#{% set next = part %}#}
-    {#{% else %}#}
-        {#{% set previous = part %}#}
-        {#{% set children = part.children %}#}
-        {#{% for child in children %}#}
-            {#{{ _self.processPagination(child, identifier, previous) }}#}
-        {#{% endfor %}#}
-    {#{% endif %}#}
-    {#{% if next is not empty %}#}
-        {#{{ next.title }}#}
-    {#{% endif %}#}
-{#{% endmacro %}#}
-
-{#{% set previous = null %}#}
-{#{% set next = null %}#}
-{#{{ _self.processPagination(toc, identifier, previous, next) }}#}
