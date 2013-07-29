@@ -1,9 +1,4 @@
-{% macro processPart(part) %}
-    {{ part.title }}
-    {% set children = part.children %}
-    {% for child in children %}
-        {{ _self.processPart(child) }}
-    {% endfor %}
-{% endmacro %}
-
-{{ _self.processPart(toc) }}
+{% import "SimpleITClaireAppBundle:Course:macro.html.twig" as macro %}
+<nav class="course-timeline">
+    {{ macro.processToc(toc, toc.slug, 0) }}
+</nav>
