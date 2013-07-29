@@ -1,0 +1,102 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="simple_it.claire.security.repository.user.class">SimpleIT\ClaireAppBundle\Repository\Security\SecurityUserRepository</parameter>
+        <parameter key="simple_it.claire.security.repository.group.class">SimpleIT\ClaireAppBundle\Repository\Security\SecurityGroupRepository</parameter>
+        <parameter key="simple_it.claire.security.repository.rule.class">SimpleIT\ClaireAppBundle\Repository\Security\SecurityRuleRepository</parameter>
+        <parameter key="simple_it.claire.security.repository.rule_by_user.class">SimpleIT\ClaireAppBundle\Repository\Security\SecurityRuleBySecurityUserRepository</parameter>
+        <parameter key="simple_it.claire.security.repository.rule_by_group.class">SimpleIT\ClaireAppBundle\Repository\Security\SecurityRuleBySecurityGroupRepository</parameter>
+        <parameter key="simple_it.claire.security.repository.group_by_user.class">SimpleIT\ClaireAppBundle\Repository\Security\SecurityGroupBySecurityUserRepository</parameter>
+
+        <parameter key="simple_it.claire.security.user.class">SimpleIT\ClaireAppBundle\Services\Security\UserService</parameter>
+        <parameter key="simple_it.claire.security.group.class">SimpleIT\ClaireAppBundle\Services\Security\GroupService</parameter>
+        <parameter key="simple_it.claire.security.rule.class">SimpleIT\ClaireAppBundle\Services\Security\RuleService</parameter>
+    </parameters>
+
+    <services>
+        <service id="simple_it.claire.security.repository.user" class="%simple_it.claire.security.repository.user.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
+
+        <service id="simple_it.claire.security.repository.group" class="%simple_it.claire.security.repository.group.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
+
+        <service id="simple_it.claire.security.repository.rule" class="%simple_it.claire.security.repository.rule.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
+
+        <service id="simple_it.claire.security.repository.rule_by_user" class="%simple_it.claire.security.repository.rule_by_user.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
+
+        <service id="simple_it.claire.security.repository.rule_by_group" class="%simple_it.claire.security.repository.rule_by_user.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
+
+        <service id="simple_it.claire.security.repository.group_by_user" class="%simple_it.claire.security.repository.group_by_user.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
+
+        <!-- Services -->
+
+        <service id="simple_it.claire.security.user" class="%simple_it.claire.security.user.class%">
+            <call method="setUserRepository">
+                <argument type="service" id="simple_it.claire.security.repository.user"/>
+            </call>
+            <call method="setRuleByUserRepository">
+                <argument type="service" id="simple_it.claire.security.repository.rule_by_user"/>
+            </call>
+            <call method="setGroupByUserRepository">
+                <argument type="service" id="simple_it.claire.security.repository.group_by_user"/>
+            </call>
+        </service>
+
+        <service id="simple_it.claire.security.group" class="%simple_it.claire.security.group.class%">
+            <call method="setGroupRepository">
+                <argument type="service" id="simple_it.claire.security.repository.group"/>
+            </call>
+            <call method="setRuleByGroupRepository">
+                <argument type="service" id="simple_it.claire.security.repository.rule_by_group"/>
+            </call>
+        </service>
+
+        <service id="simple_it.claire.security.rule" class="%simple_it.claire.security.rule.class%">
+            <call method="setRuleResource">
+                <argument type="service" id="simple_it.claire.security.repository.rule"/>
+            </call>
+        </service>
+    </services>
+</container>

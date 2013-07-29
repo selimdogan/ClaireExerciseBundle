@@ -5,6 +5,7 @@
     <imports>
         <import resource="service/associated_content.xml"/>
         <import resource="service/course.xml"/>
+        <import resource="service/security.xml"/>
         <import resource="service/user.xml"/>
     </imports>
 
