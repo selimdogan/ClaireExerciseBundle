@@ -21,7 +21,8 @@ class ClaireAppExtension extends \Twig_Extension
     {
         return array(
             'firstForList' => new \Twig_Filter_Method($this, 'firstLetterFilter'),
-            'courseImage'  => new \Twig_Filter_Method($this, 'courseImageFilter')
+            'courseImage'  => new \Twig_Filter_Method($this, 'courseImageFilter'),
+            'license'      => new \Twig_Filter_Method($this, 'licenseFilter'),
         );
     }
 
@@ -63,6 +64,41 @@ class ClaireAppExtension extends \Twig_Extension
         }
 
         return $url;
+    }
+
+    /**
+     * Filter for license
+     *
+     * @param string $license License string representation
+     *
+     * @return null|string
+     */
+    public function licenseFilter($license = null)
+    {
+        $content = null;
+        if (!is_null($license)) {
+            $content = '<span class="license-cc" title="CC"></span>';
+            $licenseArray = explode('-', $license);
+            foreach ($licenseArray as $partLicense) {
+                switch ($partLicense) {
+                    case MetadataResource::LICENSE_CC_BY:
+                        $content .= '<span class="license-cc-by" title="BY"></span>';
+                        break;
+                    case MetadataResource::LICENSE_CC_NC:
+                        $content .= '<span class="license-cc-nc" title="NC"></span>';
+                        break;
+                    case MetadataResource::LICENSE_CC_SA:
+                        $content .= '<span class="license-cc-sa" title="SA"></span>';
+                        break;
+                    default:
+                        break;
+
+                }
+
+            }
+        }
+
+        return $content;
     }
 
     /**

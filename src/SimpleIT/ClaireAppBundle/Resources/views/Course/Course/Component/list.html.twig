@@ -1,18 +1,23 @@
 {% import 'SimpleITClaireAppBundle:Common:macros.html.twig' as macro %}
-<ul>
+<ul class="grid-blocs-list grid-blocs-2">
     {% for course in courses %}
-        <li>
-            <a href="{{ path('simple_it_claire_course_course_view', {'categoryIdentifier': course.category.slug,'courseIdentifier':course.slug}) }}">{{ course.metadatas | courseImage }}{{ course.title }}
-                {% if course.tags > 0 %}
-                    <ul>
-                        {% for tag in course.tags %}
-                            <li>{{ tag.name }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
+        <li class="grid-bloc">
+            <a class="grid-bloc-link" href="{{ path('simple_it_claire_course_course_view', {'categoryIdentifier': course.category.slug,'courseIdentifier':course.slug}) }}">
+                <span class="grid-bloc-image">
+                    <img src="{{ course.metadatas | courseImage }}"/>
+                </span>
+                <span class="grid-bloc-title">
+                    <span class="course-title" title="{{ course.title }}">{{ course.title }}</span>
+                    {% if course.tags > 0 %}
+                        <span class="course-tags">
+                            {% for tag in course.tags %}
+                                {{ tag.name }}
+                            {% endfor %}
+                        </span>
+                    {% endif %}
+                </span>
             </a>
         </li>
-
     {% endfor %}
 </ul>
 {{ macro.pagination(courses, '') }}

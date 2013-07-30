@@ -26,6 +26,10 @@
                 <source>course.duration</source>
                 <target>Durée</target>
             </trans-unit>
+            <trans-unit id="7">
+                <source>course.license</source>
+                <target>Licence</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
