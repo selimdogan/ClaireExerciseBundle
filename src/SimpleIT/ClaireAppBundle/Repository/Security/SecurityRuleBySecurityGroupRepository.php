@@ -31,9 +31,9 @@ class SecurityRuleBySecurityGroupRepository extends AppRepository
      *
      * @return mixed
      */
-    public function findAll($groupId, CollectionInformation $collectionInformation)
+    public function findAll($groupId, CollectionInformation $collectionInformation = null)
     {
-        return parent::findAllResource(array(
+        return parent::findAllResources(array(
                 'groupId' => $groupId,
                 $collectionInformation
             ));
