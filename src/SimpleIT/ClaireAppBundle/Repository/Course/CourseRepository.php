@@ -17,6 +17,7 @@ use SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository;
 use SimpleIT\ClaireAppBundle\Repository\User\AuthorRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class CourseRepository
@@ -54,6 +55,7 @@ class CourseRepository extends AppRepository
      * @param array  $parameters       Parameters
      *
      * @return CourseResource
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function find($courseIdentifier, array $parameters = array())
     {

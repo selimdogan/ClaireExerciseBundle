@@ -6,6 +6,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\AssociatedContent\Component;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class CategoryController
@@ -66,6 +67,7 @@ class CategoryController extends AppController
      * @param int | string $categoryIdentifier Category id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @cache
      */
     public function viewAction($categoryIdentifier)
     {

@@ -6,6 +6,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class CourseController
@@ -112,6 +113,7 @@ class CourseController extends AppController
      * @param int | string $partIdentifier     Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Cache
      */
     public function viewPaginationAction(
         $courseIdentifier,
