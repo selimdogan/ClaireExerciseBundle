@@ -49,6 +49,22 @@ class TagService
     private $tagByPartRepository;
 
     /**
+     * Get a list of tags
+     *
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
+     */
+    public function getAll(
+        CollectionInformation $collectionInformation = null
+    )
+    {
+        return $this->tagRepository->findAll($collectionInformation);
+    }
+
+    /**
+     * Get a list of tag of a category
+     *
      * @param int | string          $categoryIdentifier    Category id | slug
      * @param CollectionInformation $collectionInformation Collection information
      *

@@ -15,6 +15,25 @@ class TagController extends AppController
 {
 
     /**
+     * Get a list of tags
+     *
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listAction(CollectionInformation $collectionInformation)
+    {
+        $tags = $this->get('simple_it.claire.associated_content.tag')->getAll(
+            $collectionInformation
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:AssociatedContent/Tag/Component:list.html.twig',
+            array('tags' => $tags)
+        );
+    }
+
+    /**
      * View a tag
      *
      * @param int | string $tagIdentifier Tag id | slug
