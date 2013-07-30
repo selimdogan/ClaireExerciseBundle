@@ -1,3 +1,20 @@
 {% for course in courses %}
-<a href="{{ path('simple_it_claire_course_course_view', { 'categoryIdentifier' : course.category.slug, 'courseIdentifier': course.slug}) }}">{{ course.title}}</a>
+<h3>
+    <span class="icons star-icon"></span>
+    Recommandation de l'équipe
+</h3>
+
+    <ul class="grid-blocs-list grid-blocs-2">
+        <li class="grid-bloc">
+            <a class="grid-bloc-link" href="{{ path('simple_it_claire_course_course_view', { 'categoryIdentifier' : course.category.slug, 'courseIdentifier': course.slug}) }}">
+                <span class="grid-bloc-image">
+                    <img src="{{ course.metadatas | courseImage }}"/>
+                    <span class="star"></span>
+                </span>
+                <span class="grid-bloc-title">
+                    <span class="course-title" title="{{ course.title }}">{{ course.title }}</span>
+                </span>
+            </a>
+        </li>
+    </ul>
 {% endfor %}
