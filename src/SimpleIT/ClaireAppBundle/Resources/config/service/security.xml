@@ -52,7 +52,7 @@
             </call>
         </service>
 
-        <service id="simple_it.claire.security.repository.rule_by_group" class="%simple_it.claire.security.repository.rule_by_user.class%">
+        <service id="simple_it.claire.security.repository.rule_by_group" class="%simple_it.claire.security.repository.rule_by_group.class%">
             <call method="setClient">
                 <argument type="service" id="simple_it.claire.http_client"/>
             </call>
