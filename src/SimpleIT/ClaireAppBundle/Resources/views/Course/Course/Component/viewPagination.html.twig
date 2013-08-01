@@ -1,12 +1,23 @@
-{% if previous is not null %}
-    {% if previous.subtype == 'course' %}
-        <a href="{{ path('simple_it_claire_course_course_view', {'categoryIdentifier':categoryIdentifier,'courseIdentifier':courseIdentifier}) }}">
-            {{ previous.title }}</a>
-    {% else %}
-        <a href="{{ path('simple_it_claire_course_part_view', {'categoryIdentifier':categoryIdentifier,'courseIdentifier':courseIdentifier,'partIdentifier':previous.slug}) }}">{{ previous.title }}</a>
+<div class="course-paginate">
+    {% if previous is not null %}
+        {% if previous.subtype == 'course' %}
+            <a class="before" href="{{ path('simple_it_claire_course_course_view', {'categoryIdentifier':categoryIdentifier,'courseIdentifier':courseIdentifier}) }}">
+                <span class="arrow"></span>
+                <span class="next">{{ previous.title }}</span>
+            </a>
+        {% else %}
+            <a class="before" href="{{ path('simple_it_claire_course_part_view', {'categoryIdentifier':categoryIdentifier,'courseIdentifier':courseIdentifier,'partIdentifier':previous.slug}) }}">
+                <span class="arrow"></span>
+                <span class="next">{{ previous.title }}</span>
+            </a>
+        {% endif %}
     {% endif %}
-{% endif %}
-{% if next is not null %}
-    <a href="{{ path('simple_it_claire_course_part_view', {'categoryIdentifier':categoryIdentifier,'courseIdentifier':courseIdentifier,'partIdentifier':next.slug}) }}">{{ next.title }}</a>
-{% endif %}
+    {% if next is not null %}
+        <a class="after" href="{{ path('simple_it_claire_course_part_view', {'categoryIdentifier':categoryIdentifier,'courseIdentifier':courseIdentifier,'partIdentifier':next.slug}) }}">
+            <span class="next">{{ next.title }}</span>
+            <span class="arrow"></span>
+        </a>
+    {% endif %}
+</div>
+
 
