@@ -7,6 +7,7 @@ use SimpleIT\ApiResourcesBundle\AssociatedContent\TagResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class TagByPartRepository
@@ -31,6 +32,7 @@ class TagRepository extends AppRepository
      * @param CollectionInformation $collectionInformation Collection information
      *
      * @return PaginatedCollection
+     * @cache
      */
     public function findAll(CollectionInformation $collectionInformation = null)
     {
@@ -46,6 +48,7 @@ class TagRepository extends AppRepository
      * @param int | string $tagIdentifier Tag id | slug
      *
      * @return TagResource
+     * @cache
      */
     public function find($tagIdentifier)
     {

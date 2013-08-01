@@ -18,6 +18,7 @@ use SimpleIT\ClaireAppBundle\Model\TocFactory;
 use SimpleIT\ClaireAppBundle\Repository\CourseAssociation\CategoryRepository;
 use SimpleIT\Utils\FormatUtils;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class PartRepository
@@ -44,6 +45,7 @@ class PartRepository extends AppRepository
      * @param array  $parameters       Parameters
      *
      * @return PartResource
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function find(
         $courseIdentifier,
