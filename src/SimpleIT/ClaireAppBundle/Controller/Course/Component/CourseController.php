@@ -113,7 +113,7 @@ class CourseController extends AppController
      * @param int | string $partIdentifier     Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache
+     * @cache
      */
     public function viewPaginationAction(
         $courseIdentifier,
