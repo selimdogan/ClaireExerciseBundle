@@ -84,7 +84,7 @@ class PartService
      * @param string | integer $courseIdentifier Course id | slug
      * @param string | integer $partIdentifier   Part id | slug
      *
-     * @return \SimpleIT\ClaireAppBundle\Model\Course\Part
+     * @return PartResource
      */
     public function get($courseIdentifier, $partIdentifier)
     {
