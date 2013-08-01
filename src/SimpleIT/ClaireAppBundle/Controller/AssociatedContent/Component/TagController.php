@@ -5,6 +5,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\AssociatedContent\Component;
 
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class TagController
@@ -20,6 +21,7 @@ class TagController extends AppController
      * @param CollectionInformation $collectionInformation Collection information
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @cache
      */
     public function listAction(CollectionInformation $collectionInformation)
     {
@@ -59,6 +61,7 @@ class TagController extends AppController
      * @param mixed                 $tagIdentifier         Tag id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @cache
      */
     public function listRecommendedCoursesAction(
         CollectionInformation $collectionInformation,
@@ -83,6 +86,7 @@ class TagController extends AppController
      * @param mixed                 $tagIdentifier         Tag id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @cache
      */
     public function listCoursesAction(
         CollectionInformation $collectionInformation,
@@ -101,5 +105,4 @@ class TagController extends AppController
             )
         );
     }
-
 }

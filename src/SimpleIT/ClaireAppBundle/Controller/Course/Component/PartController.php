@@ -27,6 +27,7 @@ use SimpleIT\AppBundle\Model\AppResponse;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class PartController
@@ -40,6 +41,7 @@ class PartController extends AppController
      * @param int | string $partIdentifier   Part id | slug
      *
      * @return Response
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function viewAction($courseIdentifier, $partIdentifier)
     {
@@ -105,6 +107,7 @@ class PartController extends AppController
      * @param int | string $partIdentifier   Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function viewContentAction($courseIdentifier, $partIdentifier)
     {
@@ -170,6 +173,7 @@ class PartController extends AppController
      * @param int | string $partIdentifier   Current part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function viewTocAction($courseIdentifier, $displayLevel, $partIdentifier = null)
     {
@@ -198,6 +202,7 @@ class PartController extends AppController
      * @param int | string $partIdentifier   Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function viewIntroductionAction($courseIdentifier, $partIdentifier)
     {

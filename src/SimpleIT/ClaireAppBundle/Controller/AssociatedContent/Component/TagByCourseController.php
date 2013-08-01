@@ -6,6 +6,7 @@ use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class TagByCourseController
@@ -21,6 +22,7 @@ class TagByCourseController extends AppController
      * @param mixed                 $courseIdentifier      Course id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @cache
      */
     public function listAction(CollectionInformation $collectionInformation, $courseIdentifier)
     {

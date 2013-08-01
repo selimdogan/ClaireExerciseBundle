@@ -22,6 +22,7 @@ class CategoryController extends AppController
      * @param CollectionInformation $collectionInformation Collection information
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @cache
      */
     public function listAction(CollectionInformation $collectionInformation)
     {
@@ -42,6 +43,7 @@ class CategoryController extends AppController
      * @param mixed                 $categoryIdentifier    Category id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @cache
      */
     public function listCoursesAction(
         CollectionInformation $collectionInformation,

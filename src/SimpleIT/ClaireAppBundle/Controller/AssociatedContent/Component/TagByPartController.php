@@ -5,6 +5,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\AssociatedContent\Component;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use Symfony\Component\HttpFoundation\Request;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class TagByPartController
@@ -20,6 +21,7 @@ class TagByPartController extends AppController
      * @param int |string $partIdentifier   Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @cache
      */
     public function listAction($courseIdentifier, $partIdentifier)
     {

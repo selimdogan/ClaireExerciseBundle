@@ -5,6 +5,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\AssociatedContent\Component;
 
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class TagByCategoryController
@@ -20,6 +21,7 @@ class TagByCategoryController extends AppController
      * @param mixed                 $categoryIdentifier    Category id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @cache
      */
     public function listAction(CollectionInformation $collectionInformation, $categoryIdentifier)
     {
