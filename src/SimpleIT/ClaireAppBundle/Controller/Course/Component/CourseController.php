@@ -61,22 +61,30 @@ class CourseController extends AppController
     /**
      * View timeline
      *
-     * @param int | string $courseIdentifier Course id | slug
-     * @param int          $displayLevel     Display level
-     * @param int | string $partIdentifier   Current part id | slug
+     * @param int | string $courseIdentifier   Course id | slug
+     * @param int          $displayLevel       Display level
+     * @param int | string $categoryIdentifier Category id | slug
+     * @param int | string $partIdentifier     Current part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
-    public function viewTimelineAction($courseIdentifier, $displayLevel, $partIdentifier = null)
+    public function viewTimelineAction(
+        $courseIdentifier,
+        $displayLevel,
+        $categoryIdentifier,
+        $partIdentifier = null
+    )
     {
         $toc = $this->get('simple_it.claire.course.course')->getToc($courseIdentifier);
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:viewTimeline.html.twig',
-            array('toc'            => $toc,
-                  'displayLevel'   => $displayLevel,
-                  'partIdentifier' => $partIdentifier
+            array(
+                'toc'                => $toc,
+                'displayLevel'       => $displayLevel,
+                'partIdentifier'     => $partIdentifier,
+                'categoryIdentifier' => $categoryIdentifier
             )
         );
     }
@@ -103,8 +111,8 @@ class CourseController extends AppController
         return $this->render(
             $template,
             array(
-                'toc'            => $toc,
-                'displayLevel'   => $displayLevel
+                'toc'          => $toc,
+                'displayLevel' => $displayLevel
             )
         );
     }
