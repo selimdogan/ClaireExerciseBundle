@@ -42,8 +42,8 @@ class SecurityRuleRepository extends AppRepository
      *
      * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
-    public function findAll(CollectionInformation $collectionInformation)
+    public function findAll(CollectionInformation $collectionInformation = null)
     {
-        return parent::findAllResources(array($collectionInformation));
+        return parent::findAllResources(array(),$collectionInformation);
     }
 }
