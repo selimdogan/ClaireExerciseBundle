@@ -6,6 +6,7 @@ namespace SimpleIT\ClaireAppBundle\Repository\AssociatedContent;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class TagByPartRepository
@@ -31,6 +32,7 @@ class TagByCourseRepository extends AppRepository
      * @param CollectionInformation $collectionInformation Collection information
      *
      * @return PaginatedCollection
+     * @cache
      */
     public function findAll($courseIdentifier, CollectionInformation $collectionInformation = null)
     {

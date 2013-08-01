@@ -5,6 +5,7 @@ namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\FormatUtils;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class CourseIntroductionRepository
@@ -31,6 +32,7 @@ class CourseIntroductionRepository extends AppRepository
      * @param string $format           Format
      *
      * @return mixed
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function find(
         $courseIdentifier,

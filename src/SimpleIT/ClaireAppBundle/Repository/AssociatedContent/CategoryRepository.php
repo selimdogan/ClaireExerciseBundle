@@ -6,6 +6,7 @@ use SimpleIT\ApiResourcesBundle\AssociatedContent\CategoryResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class CategoryRepository
@@ -30,6 +31,7 @@ class CategoryRepository extends AppRepository
      * @param CollectionInformation $collectionInformation Collection information
      *
      * @return PaginatedCollection
+     * @cache
      */
     public function findAll(CollectionInformation $collectionInformation = null)
     {
@@ -42,6 +44,7 @@ class CategoryRepository extends AppRepository
      * @param int | string $categoryIdentifier Category id | slug
      *
      * @return CategoryResource
+     * @cache
      */
     public function find($categoryIdentifier)
     {
