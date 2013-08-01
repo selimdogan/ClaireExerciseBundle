@@ -24,6 +24,7 @@ use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartContentRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartIntroductionRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartRepository;
+use SimpleIT\ClaireAppBundle\Repository\Course\PartTocRepository;
 
 /**
  * Class PartService
@@ -47,6 +48,11 @@ class PartService
      * @var  PartContentRepository
      */
     private $partContentRepository;
+
+    /**
+     * @var  PartTocRepository
+     */
+    private $partTocRepository;
 
     /**
      * Set partRepository
@@ -76,6 +82,16 @@ class PartService
     public function setPartContentRepository($partContentRepository)
     {
         $this->partContentRepository = $partContentRepository;
+    }
+
+    /**
+     * Set partTocRepository
+     *
+     * @param \SimpleIT\ClaireAppBundle\Repository\Course\PartTocRepository $partTocRepository
+     */
+    public function setPartTocRepository($partTocRepository)
+    {
+        $this->partTocRepository = $partTocRepository;
     }
 
     /**
@@ -143,5 +159,18 @@ class PartService
     public function getContent($courseIdentifier, $partIdentifier)
     {
         return $this->partContentRepository->find($courseIdentifier, $partIdentifier);
+    }
+
+    /**
+     * Get a part toc
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier Part id | slug
+     *
+     * @return mixed
+     */
+    public function getToc($courseIdentifier, $partIdentifier)
+    {
+        return $this->partTocRepository->find($courseIdentifier, $partIdentifier);
     }
 }

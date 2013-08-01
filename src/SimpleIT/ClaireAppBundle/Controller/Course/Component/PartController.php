@@ -166,32 +166,48 @@ class PartController extends AppController
     }
 
     /**
-     * View table of content
+     * View table of content Medium
      *
      * @param int | string $courseIdentifier Course id | slug
-     * @param int          $displayLevel     Display level
      * @param int | string $partIdentifier   Current part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
-    public function viewTocAction($courseIdentifier, $displayLevel, $partIdentifier = null)
+    public function viewTocMediumAction($courseIdentifier, $partIdentifier)
     {
-        $toc = $this->get('simple_it.claire.course.course')->getToc($courseIdentifier);
-
-        if ($displayLevel == CourseResource::DISPLAY_LEVEL_MEDIUM) {
-            $template = 'SimpleITClaireAppBundle:Course/Course/Component:viewTocMedium.html.twig';
-        } else {
-            $template = 'SimpleITClaireAppBundle:Course/Course/Component:viewTocBig.html.twig';
-        }
+        $toc = $this->get('simple_it.claire.course.part')->getToc(
+            $courseIdentifier,
+            $partIdentifier
+        );
 
         return $this->render(
-            $template,
+            'SimpleITClaireAppBundle:Course/Course/Component:viewTocMedium.html.twig',
             array(
-                'toc'            => $toc,
-                'displayLevel'   => $displayLevel,
-                'partIdentifier' => $partIdentifier
+                'toc' => $toc
             )
+        );
+    }
+
+    /**
+     * View table of content BIG
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier   Current part id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     */
+    public function viewTocBigAction($courseIdentifier, $partIdentifier)
+    {
+        $toc = $this->get('simple_it.claire.course.part')->getToc(
+            $courseIdentifier,
+            $partIdentifier
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:viewTocBig.html.twig',
+            array('toc' => $toc)
         );
     }
 

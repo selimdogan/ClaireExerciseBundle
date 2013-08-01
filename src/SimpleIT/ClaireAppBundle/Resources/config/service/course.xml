@@ -14,6 +14,7 @@
         <parameter key="simple_it.claire.course.repository.part.class">SimpleIT\ClaireAppBundle\Repository\Course\PartRepository</parameter>
         <parameter key="simple_it.claire.course.repository.part_content.class">SimpleIT\ClaireAppBundle\Repository\Course\PartContentRepository</parameter>
         <parameter key="simple_it.claire.course.repository.part_introduction.class">SimpleIT\ClaireAppBundle\Repository\Course\PartIntroductionRepository</parameter>
+        <parameter key="simple_it.claire.course.repository.part_toc.class">SimpleIT\ClaireAppBundle\Repository\Course\PartTocRepository</parameter>
 
         <!--METADATA-->
         <parameter key="simple_it.claire.course.metadata.class">SimpleIT\ClaireAppBundle\Services\Course\MetadataService</parameter>
@@ -91,6 +92,15 @@
             </call>
         </service>
 
+        <service id="simple_it.claire.course.repository.part_toc" class="%simple_it.claire.course.repository.part_toc.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
+
         <service id="simple_it.claire.course.part" class="%simple_it.claire.course.part.class%">
             <call method="setPartContentRepository">
                 <argument type="service" id="simple_it.claire.course.repository.part_content"/>
@@ -100,6 +110,9 @@
             </call>
             <call method="setPartRepository">
                 <argument type="service" id="simple_it.claire.course.repository.part"/>
+            </call>
+            <call method="setPartTocRepository">
+                <argument type="service" id="simple_it.claire.course.repository.part_toc"/>
             </call>
         </service>
 
