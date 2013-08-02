@@ -1,5 +1,5 @@
 {% import 'SimpleITClaireAppBundle:Common:macros.html.twig' as macro %}
-<ul class="grid-blocs-list grid-blocs-2">
+<ul class="grid-blocs-list {% if app.request.get('grid3') %} grid-blocs-3 {% else %} grid-blocs-2 {% endif %}">
     {% for course in courses %}
         <li class="grid-bloc">
             <a class="grid-bloc-link" href="{{ path('simple_it_claire_course_course_view', {'categoryIdentifier': course.category.slug,'courseIdentifier':course.slug}) }}">
