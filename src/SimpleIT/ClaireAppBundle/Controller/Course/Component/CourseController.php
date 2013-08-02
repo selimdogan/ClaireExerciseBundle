@@ -84,6 +84,7 @@ class CourseController extends AppController
                 'toc'                => $toc,
                 'displayLevel'       => $displayLevel,
                 'partIdentifier'     => $partIdentifier,
+                'courseIdentifier'   => $courseIdentifier,
                 'categoryIdentifier' => $categoryIdentifier
             )
         );
@@ -92,13 +93,14 @@ class CourseController extends AppController
     /**
      * View table of content
      *
-     * @param int | string $courseIdentifier Course id | slug
-     * @param int          $displayLevel     Display level
+     * @param int | string $courseIdentifier   Course id | slug
+     * @param int          $displayLevel       Display level
+     * @param int | string $categoryIdentifier Category id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
-    public function viewTocAction($courseIdentifier, $displayLevel)
+    public function viewTocAction($courseIdentifier, $displayLevel, $categoryIdentifier)
     {
         $toc = $this->get('simple_it.claire.course.course')->getToc($courseIdentifier);
 
@@ -111,8 +113,10 @@ class CourseController extends AppController
         return $this->render(
             $template,
             array(
-                'toc'          => $toc,
-                'displayLevel' => $displayLevel
+                'toc'                => $toc,
+                'displayLevel'       => $displayLevel,
+                'courseIdentifier'   => $courseIdentifier,
+                'categoryIdentifier' => $categoryIdentifier
             )
         );
     }

@@ -2,8 +2,10 @@
 
 namespace SimpleIT\ClaireAppBundle\Services\Course;
 
+use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\ClaireAppBundle\Repository\Course\MetadataByCourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\MetadataByPartRepository;
+use SimpleIT\Utils\ArrayUtils;
 
 /**
  * Class MetadataService
@@ -55,6 +57,39 @@ class MetadataService
     }
 
     /**
+     * Get informations from a course
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     *
+     * @return array
+     */
+    public function getInformationsFromCourse($courseIdentifier)
+    {
+        $metadatas = $this->getAllFromCourse($courseIdentifier);
+        $informations = array();
+        $difficulty = ArrayUtils::getValue(
+            $metadatas,
+            MetadataResource::COURSE_METADATA_DIFFICULTY
+        );
+        $informations[MetadataResource::COURSE_METADATA_DIFFICULTY] = $difficulty;
+        $aggregateRating = ArrayUtils::getValue(
+            $metadatas,
+            MetadataResource::COURSE_METADATA_AGGREGATE_RATING
+        );
+        $informations[MetadataResource::COURSE_METADATA_AGGREGATE_RATING] = $aggregateRating;
+        $timeRequired = ArrayUtils::getValue(
+            $metadatas,
+            MetadataResource::COURSE_METADATA_DURATION
+        );
+        if (!is_null($timeRequired)) {
+            $timeRequired = new \DateInterval($timeRequired);
+        }
+        $informations[MetadataResource::COURSE_METADATA_TIME_REQUIRED] = $timeRequired;
+
+        return $informations;
+    }
+
+    /**
      * Get metadatas from a part
      *
      * @param string $courseIdentifier Course id | slug
@@ -65,6 +100,69 @@ class MetadataService
     public function getAllFromPart($courseIdentifier, $partIdentifier)
     {
         return $this->metadataByPartRepository->findAll($courseIdentifier, $partIdentifier);
+    }
+
+    /**
+     * Get informations from a course
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier   Part id | slug
+     *
+     * @return array
+     */
+    public function getInformationsFromPart($courseIdentifier, $partIdentifier)
+    {
+        $metadatas = $this->getAllFromPart($courseIdentifier, $partIdentifier);
+        $courseMetadatas = null;
+        $informations = array();
+
+        /*
+         * Difficulty
+         */
+        $difficulty = ArrayUtils::getValue(
+            $metadatas,
+            MetadataResource::COURSE_METADATA_DIFFICULTY
+        );
+        if (is_null($difficulty)) {
+            $courseMetadatas = $this->getAllFromCourse($courseIdentifier);
+            $difficulty = ArrayUtils::getValue(
+                $courseMetadatas,
+                MetadataResource::COURSE_METADATA_DIFFICULTY
+            );
+        }
+        $informations[MetadataResource::COURSE_METADATA_DIFFICULTY] = $difficulty;
+
+        /*
+         * Aggregate Rating
+         */
+        $aggregateRating = ArrayUtils::getValue(
+            $metadatas,
+            MetadataResource::COURSE_METADATA_AGGREGATE_RATING
+        );
+        if (is_null($aggregateRating)) {
+            if (is_null($courseMetadatas)) {
+                $courseMetadatas = $this->getAllFromCourse($courseIdentifier);
+            }
+            $aggregateRating = ArrayUtils::getValue(
+                $courseMetadatas,
+                MetadataResource::COURSE_METADATA_AGGREGATE_RATING
+            );
+        }
+        $informations[MetadataResource::COURSE_METADATA_AGGREGATE_RATING] = $aggregateRating;
+
+        /*
+         * Time required
+         */
+        $timeRequired = ArrayUtils::getValue(
+            $metadatas,
+            MetadataResource::COURSE_METADATA_DURATION
+        );
+        if (!is_null($timeRequired)) {
+            $timeRequired = new \DateInterval($timeRequired);
+        }
+        $informations[MetadataResource::COURSE_METADATA_TIME_REQUIRED] = $timeRequired;
+
+        return $informations;
     }
 
     /**
@@ -161,5 +259,11 @@ class MetadataService
         }
 
         return $metadatasToUpdate;
+    }
+
+    private function getAllFromCourseSingleton($courseIdentifier)
+    {
+
+        $courseMetadatas = $this->getAllFromCourse($courseIdentifier);
     }
 }

@@ -16,6 +16,25 @@ use Symfony\Component\HttpFoundation\Request;
 class MetadataByCourseController extends AbstractMetadataController
 {
     /**
+     * View a collection of informations
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewInformationsAction($courseIdentifier)
+    {
+        $informations = $this->get('simple_it.claire.course.metadata')->getInformationsFromCourse(
+            $courseIdentifier
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Metadata/Component:viewInformations.html.twig',
+            array('informations' => $informations)
+        );
+    }
+
+    /**
      * View a course description
      *
      * @param int | string $courseIdentifier Course id | slug
