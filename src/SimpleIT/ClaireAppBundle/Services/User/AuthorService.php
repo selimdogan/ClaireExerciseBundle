@@ -43,7 +43,7 @@ class AuthorService
      *
      * @param AuthorByCourseRepository $authorByCourseRepository
      */
-    public function setAuthorByCourseRepository($authorByCourseRepository)
+    public function setAuthorByCourseRepository(AuthorByCourseRepository $authorByCourseRepository)
     {
         $this->authorByCourseRepository = $authorByCourseRepository;
     }
@@ -53,7 +53,7 @@ class AuthorService
      *
      * @param AuthorByPartRepository $authorByPartRepository
      */
-    public function setAuthorByPartRepository($authorByPartRepository)
+    public function setAuthorByPartRepository(AuthorByPartRepository $authorByPartRepository)
     {
         $this->authorByPartRepository = $authorByPartRepository;
     }
@@ -63,7 +63,7 @@ class AuthorService
      *
      * @param AuthorRepository $authorRepository
      */
-    public function setAuthorRepository($authorRepository)
+    public function setAuthorRepository(AuthorRepository $authorRepository)
     {
         $this->authorRepository = $authorRepository;
     }
@@ -71,9 +71,9 @@ class AuthorService
     /**
      * Set courseByAuthorRepository
      *
-     * @param \SimpleIT\ClaireAppBundle\Repository\User\CourseByAuthorRepository $courseByAuthorRepository
+     * @param CourseByAuthorRepository $courseByAuthorRepository
      */
-    public function setCourseByAuthorRepository($courseByAuthorRepository)
+    public function setCourseByAuthorRepository(CourseByAuthorRepository $courseByAuthorRepository)
     {
         $this->courseByAuthorRepository = $courseByAuthorRepository;
     }
