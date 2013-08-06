@@ -1,2 +1,4 @@
 {% import "SimpleITClaireAppBundle:Course:macro.html.twig" as macro %}
-{{ macro.processToc(toc, toc.slug, 0, categoryIdentifier, courseIdentifier) }}
+<ul class="toc-medium level-0">
+    {{ macro.processToc(toc, toc.slug, 0, categoryIdentifier, courseIdentifier) }}
+</ul>
