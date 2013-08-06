@@ -6,6 +6,7 @@
         <parameter key="simple_it.claire.user.repository.author.class">SimpleIT\ClaireAppBundle\Repository\User\AuthorRepository</parameter>
         <parameter key="simple_it.claire.user.repository.author_by_course.class">SimpleIT\ClaireAppBundle\Repository\User\AuthorByCourseRepository</parameter>
         <parameter key="simple_it.claire.user.repository.author_by_part.class">SimpleIT\ClaireAppBundle\Repository\User\AuthorByPartRepository</parameter>
+        <parameter key="simple_it.claire.user.repository.course_by_author.class">SimpleIT\ClaireAppBundle\Repository\User\CourseByAuthorRepository</parameter>
         <parameter key="simple_it.claire.user.author.class">SimpleIT\ClaireAppBundle\Services\User\AuthorService</parameter>
     </parameters>
 
@@ -37,6 +38,15 @@
             </call>
         </service>
 
+        <service id="simple_it.claire.user.repository.course_by_author" class="%simple_it.claire.user.repository.course_by_author.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
+
         <service id="simple_it.claire.user.author" class="%simple_it.claire.user.author.class%">
             <call method="setAuthorRepository">
                 <argument type="service" id="simple_it.claire.user.repository.author"/>
@@ -48,7 +58,7 @@
                 <argument type="service" id="simple_it.claire.user.repository.author_by_part"/>
             </call>
             <call method="setCourseByAuthorRepository">
-                <argument type="service" id="simple_it.claire.user.repository.author_by_part"/>
+                <argument type="service" id="simple_it.claire.user.repository.course_by_author"/>
             </call>
         </service>
     </services>
