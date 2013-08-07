@@ -171,11 +171,12 @@ class PartController extends AppController
      * @param int | string $courseIdentifier   Course id | slug
      * @param int | string $partIdentifier     Current part id | slug
      * @param int | string $categoryIdentifier Category id | slug
+     * @param int          $displayLevel       Course display level
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
-    public function viewTocMediumAction($courseIdentifier, $partIdentifier, $categoryIdentifier)
+    public function viewTocMediumAction($courseIdentifier, $partIdentifier, $categoryIdentifier, $displayLevel)
     {
         $toc = $this->get('simple_it.claire.course.part')->getToc(
             $courseIdentifier,
@@ -187,7 +188,8 @@ class PartController extends AppController
             array(
                 'toc'                => $toc,
                 'courseIdentifier'   => $courseIdentifier,
-                'categoryIdentifier' => $categoryIdentifier
+                'categoryIdentifier' => $categoryIdentifier,
+                'displayLevel'       => $displayLevel
             )
         );
     }
