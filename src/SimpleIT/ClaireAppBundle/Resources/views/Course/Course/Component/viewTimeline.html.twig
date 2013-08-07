@@ -1,6 +1,3 @@
 {% import "SimpleITClaireAppBundle:Course:macro.html.twig" as macro %}
-<nav class="course-timeline">
-    <ul class="level-0">
-        {{ macro.processToc(toc, toc.slug, 0, categoryIdentifier, courseIdentifier) }}
-    </ul>
-</nav>
+
+{{ macro.processToc("course-timeline", toc, toc.slug, 0, categoryIdentifier, courseIdentifier) }}

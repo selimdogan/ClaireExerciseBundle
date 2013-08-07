@@ -1,27 +1,42 @@
-{% macro processToc(part, baseSlug, level, categoryIdentifier, courseIdentifier) %}
-        <li>
-            <a class="course-title course-title-{{ level }}" data-claire-course-slug="{{ part.slug }}" href="{{ path ('simple_it_claire_course_part_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier, 'partIdentifier': part.slug})}}">
-                {% if part.metadatas.image is defined %}
-                    <img class="course-icon" src="{{ part.metadatas.image }}" />
+{% macro processToc(mainClass, part, baseSlug, level, categoryIdentifier, courseIdentifier) %}
+    {% if level == 0 %}
+        <div class="{{ mainClass }}" style="padding:8px">
+            <nav>
+                <ul class="level-0">
+    {% endif %}
+
+            <li>
+                <a class="course-title course-title-{{ level }}" data-claire-course-slug="{{ part.slug }}" href="{{ path ('simple_it_claire_course_part_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier, 'partIdentifier': part.slug})}}">
+                    {% if part.metadatas.image is defined %}
+                        <img class="course-icon" src="{{ part.metadatas.image }}" />
+                    {% endif %}
+                    <span>{{- part.title -}}</span>
+                </a>
+
+                {% if part.children|length > 0 %}
+
+                    {% if level == 1 %}
+                        <section>
+                    {% endif %}
+
+                        <ul class="level-{{ level + 1 }}">
+                            {% for child in part.children %}
+                                    {{ _self.processToc(mainClass, child, baseSlug, level + 1, categoryIdentifier, courseIdentifier) }}
+                            {% endfor %}
+                        </ul>
+
+                    {% if level == 1 %}
+                        </section>
+                    {% endif %}
+
                 {% endif %}
-                <span>{{- part.title -}}</span>
-            </a>
-            {% if part.children|length > 0 %}
 
-                {% if level == 1 %}
-                    <section>
-                {% endif %}
-                <ul class="level-{{ level + 1 }}">
-                    {% for child in part.children %}
+            </li>
 
-                            {{ _self.processToc(child, baseSlug, level + 1, categoryIdentifier, courseIdentifier) }}
-
-                    {% endfor %}
+    {% if level == 0 %}
                 </ul>
-                {% if level == 1 %}
-                    </section>
-                {% endif %}
+            </nav>
+        </div>
+    {% endif %}
 
-            {% endif %}
-        </li>
 {% endmacro %}
