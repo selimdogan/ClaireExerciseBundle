@@ -1,4 +1,5 @@
-{% macro processToc(mainClass, part, baseSlug, level, categoryIdentifier, courseIdentifier) %}
+{% macro processToc(mainClass, part, level, categoryIdentifier, courseIdentifier, displayLevel) %}
+    {# set displayLevel = 1 #}
     {% if level == 0 %}
         <div class="{{ mainClass }}" style="padding:8px">
             <nav>
@@ -13,7 +14,7 @@
                     <span>{{- part.title -}}</span>
                 </a>
 
-                {% if part.children|length > 0 %}
+                {% if part.children|length > 0 and (level < 1 or (displayLevel > 1 and mainClass != 'toc-medium')) %}
 
                     {% if level == 1 %}
                         <section>
@@ -21,7 +22,7 @@
 
                         <ul class="level-{{ level + 1 }}">
                             {% for child in part.children %}
-                                    {{ _self.processToc(mainClass, child, baseSlug, level + 1, categoryIdentifier, courseIdentifier) }}
+                                {{ _self.processToc(mainClass, child, level + 1, categoryIdentifier, courseIdentifier, displayLevel) }}
                             {% endfor %}
                         </ul>
 
