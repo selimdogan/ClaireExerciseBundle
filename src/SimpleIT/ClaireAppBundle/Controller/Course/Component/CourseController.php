@@ -91,6 +91,39 @@ class CourseController extends AppController
     }
 
     /**
+     * TODO: to be double checked by a backend guy
+     * View TocAside
+     *
+     * @param int | string $courseIdentifier   Course id | slug
+     * @param int          $displayLevel       Display level
+     * @param int | string $categoryIdentifier Category id | slug
+     * @param int | string $partIdentifier     Current part id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     */
+    public function viewTocAsideAction(
+        $courseIdentifier,
+        $displayLevel,
+        $categoryIdentifier,
+        $partIdentifier = null
+    )
+    {
+        $toc = $this->get('simple_it.claire.course.course')->getToc($courseIdentifier);
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:viewTocAside.html.twig',
+            array(
+                'toc'                => $toc,
+                'displayLevel'       => $displayLevel,
+                'partIdentifier'     => $partIdentifier,
+                'courseIdentifier'   => $courseIdentifier,
+                'categoryIdentifier' => $categoryIdentifier
+            )
+        );
+    }
+
+    /**
      * View table of content
      *
      * @param int | string $courseIdentifier   Course id | slug
