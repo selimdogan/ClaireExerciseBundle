@@ -23,7 +23,7 @@ class CourseByAuthorRepository extends AppRepository
     /**
      * @var  string
      */
-    protected $resourceClass = 'SimpleIT\ApiResourcesBundle\User\AuthorResource';
+    protected $resourceClass = 'SimpleIT\ApiResourcesBundle\Course\CourseResource';
 
     /**
      * Find a list of courses of an author
