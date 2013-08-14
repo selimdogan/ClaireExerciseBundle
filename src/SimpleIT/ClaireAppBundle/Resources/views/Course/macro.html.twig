@@ -6,7 +6,11 @@
     {% endif %}
 
             <li>
-                <a class="course-title course-title-{{ level }}" data-claire-course-slug="{{ part.slug }}" href="{{ path ('simple_it_claire_course_part_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier, 'partIdentifier': part.slug})}}">
+                {% if level == 0 %}
+                    <a class="course-title course-title-{{ level }}" data-claire-course-slug="{{ part.slug }}" href="{{ path ('simple_it_claire_course_course_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier})}}">
+                {% else %}
+                    <a class="course-title course-title-{{ level }}" data-claire-course-slug="{{ part.slug }}" href="{{ path ('simple_it_claire_course_part_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier, 'partIdentifier': part.slug})}}">
+                {% endif %}
                     {% if part.metadatas.image is defined %}
                         <img class="course-icon" src="{{ part.metadatas.image }}" />
                     {% endif %}
