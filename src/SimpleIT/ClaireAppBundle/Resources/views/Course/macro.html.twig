@@ -1,46 +1,65 @@
 {% macro processToc(mainClass, part, level, categoryIdentifier, courseIdentifier, displayLevel) %}
     {% if level == 0 %}
-        <div class="{{ mainClass }}">
-            <nav>
-                <ul class="level-0">
+<div class="{{ mainClass }}">
+    <nav>
+        <ul class="level-0">
+
+        {% if mainClass == 'course-timeline'  %}
+            <a class="course-title course-title-0" data-claire-course-slug="{{ part.slug }}" href="{{ path ('simple_it_claire_course_course_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier})}}">
+                {% if part.metadatas.image is defined %}
+                    <img class="course-icon" src="{{ part.metadatas.image }}" />
+                {% endif %}
+                <span>{{- part.title -}}</span>
+            </a>
+        {% endif %}
+        <li>
     {% endif %}
 
-            <li>
-                {% if level == 0 %}
-                    <a class="course-title course-title-{{ level }}" data-claire-course-slug="{{ part.slug }}" href="{{ path ('simple_it_claire_course_course_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier})}}">
-                {% else %}
-                    <a class="course-title course-title-{{ level }}" data-claire-course-slug="{{ part.slug }}" href="{{ path ('simple_it_claire_course_part_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier, 'partIdentifier': part.slug})}}">
-                {% endif %}
-                    {% if part.metadatas.image is defined %}
-                        <img class="course-icon" src="{{ part.metadatas.image }}" />
-                    {% endif %}
-                    <span>{{- part.title -}}</span>
-                </a>
+    {% if part.children|length > 0 and (level < 1 or (displayLevel > 1 and mainClass != 'toc-medium')) %}
+        <ul class="level-{{ level + 1 }}">
+            {% set position = 1 %}
 
-                {% if part.children|length > 0 and (level < 1 or (displayLevel > 1 and mainClass != 'toc-medium')) %}
+            {% for child in part.children %}
+                <li>
+                    <a class="course-title course-title-{{ level + 1 }}" data-claire-course-slug="{{ child.slug }}" href="{{ path ('simple_it_claire_course_part_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier, 'partIdentifier': child.slug})}}">
+                        {% if child.metadatas.image is defined %}
+                            <img class="course-icon" src="{{ child.metadatas.image }}" />
+                        {% endif %}
 
-                    {% if level == 1 %}
+                        {% if displayLevel == 2 and mainClass != 'course-toc-side' %}
+
+                                {% if (level + 1) == 1 %}
+                                    <span>Partie {{ position }} - {{- child.title -}}</span>
+                                {% elseif (level + 1) == 2 %}
+                                        <span>Chapitre {{ position }}</span>
+                                        <span>{{- child.title -}}</span>
+                                {% else %}
+                                    <span>{{- child.title -}}</span>
+                                {% endif %}
+                        {% else %}
+                            <span>{{- child.title -}}</span>
+                        {% endif %}
+                    </a>
+                    {% if level + 1 == 1  and displayLevel == 2 %}
                         <section>
                     {% endif %}
-
-                        <ul class="level-{{ level + 1 }}">
-                            {% for child in part.children %}
-                                {{ _self.processToc(mainClass, child, level + 1, categoryIdentifier, courseIdentifier, displayLevel) }}
-                            {% endfor %}
-                        </ul>
-
-                    {% if level == 1 %}
+                    {% if child.children|length > 0 %}
+                            {{ _self.processToc(mainClass, child, level + 1, categoryIdentifier, courseIdentifier, displayLevel) }}
+                    {% endif %}
+                    {% if level + 1 == 1  and displayLevel == 2 %}
                         </section>
                     {% endif %}
 
-                {% endif %}
-
-            </li>
-
-    {% if level == 0 %}
-                </ul>
-            </nav>
-        </div>
+                    {% set position = position + 1 %}
+                </li>
+            {% endfor %}
+        </ul>
     {% endif %}
 
+    {% if level == 0 %}
+                </li>
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
 {% endmacro %}
