@@ -159,65 +159,53 @@ class CourseService
         $toc = $this->getToc($courseIdentifier);
 
         if (is_null($identifier)) {
-            $pagination = $this->buildPagination(
-                $toc,
-                $courseIdentifier,
-                $course->getDisplayLevel(),
-                $toc
-            );
-            $pagination['previous'] = null;
+            $pagination = $this->buildPagination($toc, $courseIdentifier, $course->getDisplayLevel());
         } else {
             $pagination = $this->buildPagination($toc, $identifier, $course->getDisplayLevel());
         }
 
         return $pagination;
-
     }
 
     /**
      * @param PartResource $part         Part
      * @param int | string $identifier   Current element id | slug
      * @param int          $displayLevel Display level
-     * @param PartResource $previous     Previous part
-     * @param array        $pagination   Pagination
      *
      * @return array
      */
     private function buildPagination(
         PartResource $part,
         $identifier,
-        $displayLevel,
-        $previous = null,
-        $pagination = array('previous' => null, 'next' => null)
-
+        $displayLevel
     )
     {
-        if (!is_null($pagination['previous'])
-            && in_array($part->getSubtype(), self::$allowedTypes[$displayLevel])
-        ) {
-            $pagination['next'] = $part;
-        }
-        if ($identifier == $part->getId() || $identifier == $part->getSlug()) {
-            $pagination['previous'] = $previous;
-        } else {
-            if (in_array($part->getSubtype(), self::$allowedTypes[$displayLevel])) {
-                $previous = $part;
-            }
-        }
+        $stack = new \SplStack();
+        $pagination = array('previous' => null, 'next' => null);
+        $previous = null;
 
-        $children = $part->getChildren();
-        if (is_array($children)) {
+        $stack->push($part);
 
-            for ($i = 0; $i < sizeof($children) && is_null($pagination['next']); $i++) {
-                $pagination = $this->buildPagination(
-                    $children[$i],
-                    $identifier,
-                    $displayLevel,
-                    $previous,
-                    $pagination
-                );
+        do {
+            $current = $stack->pop();
+
+            if (is_array($current->getChildren())) {
+                foreach(array_reverse($current->getChildren()) as $child) {
+                    $stack->push($child);
+                }
             }
-        }
+
+            if ($identifier == $current->getId() || $identifier == $current->getSlug()) {
+                $pagination['previous'] = $previous;
+                $pagination['next'] = $stack->pop();
+                break;
+            }
+
+            if (in_array($current->getSubtype(), self::$allowedTypes[$displayLevel])) {
+                $previous = $current;
+            }
+
+        } while ( ! $stack->isEmpty());
 
         return $pagination;
     }
