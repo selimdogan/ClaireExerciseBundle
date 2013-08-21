@@ -21,7 +21,7 @@ class TagByPartController extends AppController
      * @param int |string $partIdentifier   Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @cache
+     * @Cache
      */
     public function listAction($courseIdentifier, $partIdentifier)
     {

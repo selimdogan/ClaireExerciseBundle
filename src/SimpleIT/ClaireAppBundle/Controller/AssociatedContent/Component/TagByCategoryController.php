@@ -21,7 +21,7 @@ class TagByCategoryController extends AppController
      * @param mixed                 $categoryIdentifier    Category id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @cache
+     * @Cache
      */
     public function listAction(CollectionInformation $collectionInformation, $categoryIdentifier)
     {

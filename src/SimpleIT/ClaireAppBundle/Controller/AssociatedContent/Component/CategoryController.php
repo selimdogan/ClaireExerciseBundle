@@ -22,7 +22,7 @@ class CategoryController extends AppController
      * @param CollectionInformation $collectionInformation Collection information
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @cache
+     * @Cache
      */
     public function listAction(CollectionInformation $collectionInformation)
     {
@@ -43,7 +43,7 @@ class CategoryController extends AppController
      * @param mixed                 $categoryIdentifier    Category id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @cache
+     * @Cache
      */
     public function listCoursesAction(
         CollectionInformation $collectionInformation,
@@ -69,7 +69,7 @@ class CategoryController extends AppController
      * @param int | string $categoryIdentifier Category id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @cache
+     * @Cache
      */
     public function viewAction($categoryIdentifier)
     {

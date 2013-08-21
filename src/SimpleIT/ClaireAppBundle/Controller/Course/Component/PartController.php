@@ -41,7 +41,7 @@ class PartController extends AppController
      * @param int | string $partIdentifier   Part id | slug
      *
      * @return Response
-     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function viewAction($courseIdentifier, $partIdentifier)
     {
@@ -107,7 +107,7 @@ class PartController extends AppController
      * @param int | string $partIdentifier   Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function viewContentAction($courseIdentifier, $partIdentifier)
     {
@@ -174,7 +174,7 @@ class PartController extends AppController
      * @param int          $displayLevel       Course display level
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function viewTocMediumAction($courseIdentifier, $partIdentifier, $categoryIdentifier, $displayLevel)
     {
@@ -202,7 +202,7 @@ class PartController extends AppController
      * @param int | string $categoryIdentifier Category id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function viewTocBigAction($courseIdentifier, $partIdentifier, $categoryIdentifier)
     {
@@ -228,7 +228,7 @@ class PartController extends AppController
      * @param int | string $partIdentifier   Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function viewIntroductionAction($courseIdentifier, $partIdentifier)
     {

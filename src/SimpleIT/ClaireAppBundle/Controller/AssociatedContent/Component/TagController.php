@@ -21,7 +21,7 @@ class TagController extends AppController
      * @param CollectionInformation $collectionInformation Collection information
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @cache
+     * @Cache
      */
     public function listAction(CollectionInformation $collectionInformation)
     {
@@ -41,6 +41,7 @@ class TagController extends AppController
      * @param int | string $tagIdentifier Tag id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @cache
      */
     public function viewAction($tagIdentifier)
     {
@@ -86,7 +87,7 @@ class TagController extends AppController
      * @param mixed                 $tagIdentifier         Tag id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @cache
+     * @Cache
      */
     public function listCoursesAction(
         CollectionInformation $collectionInformation,
