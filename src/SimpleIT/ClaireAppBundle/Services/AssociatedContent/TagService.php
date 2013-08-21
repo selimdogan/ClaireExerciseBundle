@@ -147,7 +147,7 @@ class TagService
         $courseToc = $this->courseTocRepository->find($courseIdentifier);
 
         $foundParent = $this->scanDeepPart($courseToc, $partIdentifier);
-echo $foundParent;
+
         $tags = $this->tagByPartRepository->findAll(
             $courseIdentifier,
             $foundParent,
