@@ -22,7 +22,7 @@ class TagByCourseController extends AppController
      * @param mixed                 $courseIdentifier      Course id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @cache
+     * @Cache
      */
     public function listAction(CollectionInformation $collectionInformation, $courseIdentifier)
     {

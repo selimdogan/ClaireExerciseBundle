@@ -22,6 +22,7 @@ class MetadataByPartController extends AbstractMetadataController
      * @param int | string $partIdentifier   Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function viewInformationsAction($courseIdentifier, $partIdentifier)
     {
@@ -43,6 +44,7 @@ class MetadataByPartController extends AbstractMetadataController
      * @param integer | string $partIdentifier   Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function viewRatingAction($courseIdentifier, $partIdentifier)
     {
@@ -70,6 +72,7 @@ class MetadataByPartController extends AbstractMetadataController
      * @param int | string $partIdentifier   Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function viewDescriptionAction($courseIdentifier, $partIdentifier)
     {
@@ -137,6 +140,7 @@ class MetadataByPartController extends AbstractMetadataController
      * @param int | string $partIdentifier   Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function viewImageAction($courseIdentifier, $partIdentifier)
     {
@@ -204,6 +208,7 @@ class MetadataByPartController extends AbstractMetadataController
      * @param int | string $partIdentifier   Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function viewDifficultyAction($courseIdentifier, $partIdentifier)
     {
@@ -347,6 +352,7 @@ class MetadataByPartController extends AbstractMetadataController
      * @param int | string $partIdentifier   Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function viewTimeRequiredAction($courseIdentifier, $partIdentifier)
     {
