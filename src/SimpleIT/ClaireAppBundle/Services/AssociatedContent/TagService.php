@@ -160,7 +160,7 @@ class TagService
     /**
      * Find parent identifier
      *
-     * @param Element      $parent         Parent element
+     * @param Part         $parent         Parent element
      * @param int | string $partIdentifier Part id | slug
      *
      * @return mixed
@@ -171,24 +171,26 @@ class TagService
             return true;
         }
 
-        foreach ($parent->getChildren() as $part) {
-            /* Limit deep level */
-            if (!in_array(
-                $part->getSubtype(),
-                array(Part::TYPE_TITLE_1,Part::TYPE_TITLE_2)
-            )) {
-                return false;
-            }
+        if ($parent->getChildren()) {
+            foreach ($parent->getChildren() as $part) {
+                /* Limit deep level */
+                if (!in_array(
+                    $part->getSubtype(),
+                    array(Part::TYPE_TITLE_1,Part::TYPE_TITLE_2,Part::TYPE_TITLE_3)
+                )) {
+                    return false;
+                }
 
-            /* recursive deep scan */
-            $found = $this->scanDeepPart($part, $partIdentifier);
+                /* recursive deep scan */
+                $found = $this->scanDeepPart($part, $partIdentifier);
 
-            if ($found === true && $part->getSubtype() == Part::TYPE_TITLE_1) {
-                /* send parent info up */
-                return $part->getId();
-            } elseif ($found !== false) {
-                /* pass parent info through */
-                return $found;
+                if ($found === true && $part->getSubtype() == Part::TYPE_TITLE_1) {
+                    /* send parent info up */
+                    return $part->getId();
+                } elseif ($found !== false) {
+                    /* pass parent info through */
+                    return $found;
+                }
             }
         }
 
@@ -198,7 +200,7 @@ class TagService
     /**
      * Match parts
      *
-     * @param Element      $parent         Parent element
+     * @param Part         $parent         Parent element
      * @param int | string $partIdentifier Part id | slug
      *
      * @return bool
