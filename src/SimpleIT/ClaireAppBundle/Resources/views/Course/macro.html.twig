@@ -26,7 +26,7 @@
                             <img class="course-icon" src="{{ child.metadatas.image }}" />
                         {% endif %}
 
-                        {% if displayLevel == 2 and mainClass != 'course-toc-side' %}
+                        {% if displayLevel == 2 and mainClass != 'course-toc-side' and mainClass != 'toc-medium' %}
 
                                 {% if (level + 1) == 1 %}
                                     <span>Partie {{ position }} - {{- child.title -}}</span>
