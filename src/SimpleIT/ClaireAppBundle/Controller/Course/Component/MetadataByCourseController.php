@@ -8,6 +8,8 @@ use SimpleIT\Utils\ArrayUtils;
 use SimpleIT\Utils\DateUtils;
 use Symfony\Component\HttpFoundation\Request;
 
+use SimpleIT\AppBundle\Annotation\Cache;
+
 /**
  * Class MetadataController
  *
