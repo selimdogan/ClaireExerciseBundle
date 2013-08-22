@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="simple_it.claire.exercise.exercise_model.class">SimpleIT\ClaireAppBundle\Services\Exercise\ExerciseModelService</parameter>
+        <parameter key="simple_it.claire.exercise.repository.exercise_model.class">SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModelRepository</parameter>
+    </parameters>
+
+    <services>
+        <service id="simple_it.claire.exercise.repository.exercise_model" class="%simple_it.claire.exercise.repository.exercise_model.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
+        <service id="simple_it.claire.exercise.exercise_model" class="%simple_it.claire.exercise.exercise_model.class%">
+            <call method="setExerciseModelRepository">
+                <argument type="service" id="simple_it.claire.exercise.repository.exercise_model"/>
+            </call>
+        </service>
+    </services>
+</container>
