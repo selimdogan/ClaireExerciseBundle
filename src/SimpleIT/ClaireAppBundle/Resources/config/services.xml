@@ -7,6 +7,7 @@
         <import resource="service/course.xml"/>
         <import resource="service/security.xml"/>
         <import resource="service/user.xml"/>
+        <import resource="service/exercise.xml"/>
     </imports>
 
     <parameters>

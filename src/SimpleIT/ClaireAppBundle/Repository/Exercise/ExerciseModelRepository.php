@@ -15,7 +15,7 @@ class ExerciseModelRepository extends AppRepository
     /**
      * @var string
      */
-    protected $path = 'exercise-model/{exerciseModelId}';
+    protected $path = 'exercise-models/{exerciseModelId}';
 
     /**
      * @var  string

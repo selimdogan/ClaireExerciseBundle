@@ -20,7 +20,7 @@ class ExerciseModelController extends AppController
     {
         $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->get($exerciseModelId);
 
-        $this->render(
+        return $this->render(
             'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:view.html.twig',
             array('exerciseModel' => $exerciseModel)
         );
