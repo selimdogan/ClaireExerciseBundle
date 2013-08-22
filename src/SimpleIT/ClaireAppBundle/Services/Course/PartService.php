@@ -21,10 +21,13 @@
 namespace SimpleIT\ClaireAppBundle\Services\Course;
 
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
+use SimpleIT\ClaireAppBundle\Model\Course\Part;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartContentRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartIntroductionRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartTocRepository;
+use SimpleIT\ClaireAppBundle\Repository\Course\CourseTocRepository;
+use SimpleIT\Utils\NumberUtils;
 
 /**
  * Class PartService
@@ -53,6 +56,11 @@ class PartService
      * @var  PartTocRepository
      */
     private $partTocRepository;
+
+    /**
+     * @var  CourseTocRepository
+     */
+    private $courseTocRepository;
 
     /**
      * Set partRepository
@@ -92,6 +100,16 @@ class PartService
     public function setPartTocRepository($partTocRepository)
     {
         $this->partTocRepository = $partTocRepository;
+    }
+
+    /**
+     * Set courseTocRepository
+     *
+     * @param \SimpleIT\ClaireAppBundle\Repository\Course\CourseTocRepository $courseTocRepository
+     */
+    public function setCourseTocRepository($courseTocRepository)
+    {
+        $this->courseTocRepository = $courseTocRepository;
     }
 
     /**
@@ -172,5 +190,77 @@ class PartService
     public function getToc($courseIdentifier, $partIdentifier)
     {
         return $this->partTocRepository->find($courseIdentifier, $partIdentifier);
+    }
+
+    /**
+     * Get parents part from a part (included itself)
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier Part id | slug
+     *
+     * @return array
+     */
+    public function getParents($courseIdentifier, $partIdentifier)
+    {
+        $courseToc = $this->courseTocRepository->find($courseIdentifier);
+        $partParents = array();
+
+        $this->scanToc($partParents, $courseToc, $partIdentifier);
+
+        return $partParents;
+    }
+
+    /**
+     * Scan complete toc and retrieve parents
+     *
+     * @param array        $partParents    Part parents
+     * @param Part         $parent         Parent element
+     * @param int | string $partIdentifier Part id | slug
+     *
+     * @return bool
+     */
+    private function scanToc(&$partParents, $parent, $partIdentifier)
+    {
+        if ($this->matchPart($parent, $partIdentifier)) {
+            return true;
+        }
+
+        if ($parent->getChildren()) {
+            foreach ($parent->getChildren() as $part) {
+                /* Limit deep level */
+                if (!in_array(
+                    $part->getSubtype(),
+                    array(Part::TYPE_TITLE_1,Part::TYPE_TITLE_2,Part::TYPE_TITLE_3)
+                )) {
+                    return false;
+                }
+
+                /* recursive deep scan */
+                $found = $this->scanToc($partParents, $part, $partIdentifier);
+
+                if ($found === true) {
+                    /* send parent info up */
+                    $partParents[] = $part->getId();
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Match parts
+     *
+     * @param Part         $parent         Parent element
+     * @param int | string $partIdentifier Part id | slug
+     *
+     * @return bool
+     */
+    private function matchPart($parent, $partIdentifier)
+    {
+        return NumberUtils::isInteger($partIdentifier) && $parent->getId() == $partIdentifier ||
+        !NumberUtils::isInteger($partIdentifier) && $parent->getSlug() == $partIdentifier;
     }
 }

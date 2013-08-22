@@ -124,8 +124,8 @@
             <call method="setTagByPartRepository">
                 <argument type="service" id="simple_it.claire.associated_content.repository.tag_by_part"/>
             </call>
-            <call method="setCourseTocRepository">
-                <argument type="service" id="simple_it.claire.course.repository.course_toc"/>
+            <call method="setPartService">
+                <argument type="service" id="simple_it.claire.course.part"/>
             </call>
         </service>
     </services>
