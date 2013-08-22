@@ -10,7 +10,7 @@ use SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModelRepository;
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class ExerciseModelService
+class ExerciseModelService implements ExerciseModelServiceInterface
 {
     /**
      * @var  ExerciseModelRepository
