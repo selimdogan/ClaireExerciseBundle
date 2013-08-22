@@ -157,6 +157,15 @@ class MetadataService
             $metadatas,
             MetadataResource::COURSE_METADATA_DURATION
         );
+        if (is_null($timeRequired)) {
+            if (is_null($courseMetadatas)) {
+                $courseMetadatas = $this->getAllFromCourse($courseIdentifier);
+            }
+            $timeRequired = ArrayUtils::getValue(
+                $courseMetadatas,
+                MetadataResource::COURSE_METADATA_DURATION
+            );
+        }
         if (!is_null($timeRequired)) {
             $timeRequired = new \DateInterval($timeRequired);
         }

@@ -127,6 +127,9 @@
             <call method="setPartTocRepository">
                 <argument type="service" id="simple_it.claire.course.repository.part_toc"/>
             </call>
+            <call method="setCourseTocRepository">
+                <argument type="service" id="simple_it.claire.course.repository.course_toc"/>
+            </call>
         </service>
 
         <!--METADATA-->
