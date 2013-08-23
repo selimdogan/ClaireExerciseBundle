@@ -12,7 +12,6 @@ use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagRepository;
 use SimpleIT\ClaireAppBundle\Services\Course\PartService;
 use SimpleIT\Utils\Collection\CollectionInformation;
 
-
 /**
  * Class TagService
  *
@@ -64,7 +63,8 @@ class TagService
      */
     public function getAll(
         CollectionInformation $collectionInformation = null
-    ) {
+    )
+    {
         return $this->tagRepository->findAll($collectionInformation);
     }
 
@@ -79,7 +79,8 @@ class TagService
     public function getAllByCategory(
         $categoryIdentifier,
         CollectionInformation $collectionInformation = null
-    ) {
+    )
+    {
         return $this->tagByCategoryRepository->findAll($categoryIdentifier, $collectionInformation);
     }
 
@@ -94,7 +95,8 @@ class TagService
     public function getAllByCourse(
         $courseIdentifier,
         CollectionInformation $collectionInformation = null
-    ) {
+    )
+    {
         return $this->tagByCourseRepository->findAll($courseIdentifier, $collectionInformation);
     }
 
@@ -111,6 +113,7 @@ class TagService
         $courseIdentifier,
         $partIdentifier,
         CollectionInformation $collectionInformation = null
+
     ) {
         $tags = $this->tagByPartRepository->findAll(
             $courseIdentifier,
@@ -132,7 +135,6 @@ class TagService
             }
         }
 
-
         /* finally get course tags */
         if (is_null($tags) == 0) {
             $tags = $this->getAllByCourse($courseIdentifier, $collectionInformation);
@@ -152,7 +154,8 @@ class TagService
     public function getRecommendedCourses(
         $tagIdentifier,
         CollectionInformation $collectionInformation = null
-    ) {
+    )
+    {
         return $this->recommendedCourseByTagRepository->findAll(
             $tagIdentifier,
             $collectionInformation
@@ -170,7 +173,8 @@ class TagService
     public function getAllCourses(
         $tagIdentifier,
         CollectionInformation $collectionInformation = null
-    ) {
+    )
+    {
         return $this->courseByTagRepository->findAll(
             $tagIdentifier,
             $collectionInformation

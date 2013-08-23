@@ -73,6 +73,16 @@ class CourseService
     }
 
     /**
+     * Set courseContentRepository
+     *
+     * @param \SimpleIT\ClaireAppBundle\Repository\Course\CourseContentRepository $courseContentRepository
+     */
+    public function setCourseContentRepository($courseContentRepository)
+    {
+        $this->courseContentRepository = $courseContentRepository;
+    }
+
+    /**
      * Get all courses
      *
      * @param CollectionInformation $collectionInformation Collection information
@@ -99,7 +109,7 @@ class CourseService
     /**
      * Save a course
      *
-     * @param int | string   $courseIdentifier               Course id | slug
+     * @param int | string $courseIdentifier                 Course id | slug
      * @param CourseResource $course                         Course
      *
      * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
@@ -159,7 +169,11 @@ class CourseService
         $toc = $this->getToc($courseIdentifier);
 
         if (is_null($identifier)) {
-            $pagination = $this->buildPagination($toc, $courseIdentifier, $course->getDisplayLevel());
+            $pagination = $this->buildPagination(
+                $toc,
+                $courseIdentifier,
+                $course->getDisplayLevel()
+            );
         } else {
             $pagination = $this->buildPagination($toc, $identifier, $course->getDisplayLevel());
         }
@@ -190,7 +204,7 @@ class CourseService
             $current = $stack->pop();
 
             if (is_array($current->getChildren())) {
-                foreach(array_reverse($current->getChildren()) as $child) {
+                foreach (array_reverse($current->getChildren()) as $child) {
                     $stack->push($child);
                 }
             }
@@ -205,7 +219,7 @@ class CourseService
                 $previous = $current;
             }
 
-        } while ( ! $stack->isEmpty());
+        } while (!$stack->isEmpty());
 
         return $pagination;
     }
