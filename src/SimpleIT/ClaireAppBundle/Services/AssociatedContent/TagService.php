@@ -9,6 +9,7 @@ use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCategoryRepositor
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByPartRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagRepository;
+use SimpleIT\ClaireAppBundle\Services\Course\PartService;
 use SimpleIT\Utils\Collection\CollectionInformation;
 
 
@@ -111,17 +112,26 @@ class TagService
         $partIdentifier,
         CollectionInformation $collectionInformation = null
     ) {
-        /* check parents */
-        $parents = $this->partService->getParents($courseIdentifier, $partIdentifier);
-        $tags = null;
-        while (count($parents) > 0 && is_null($tags)) {
-            $parentPartIdentifier = array_shift($parents);
-            $tags = $this->tagByPartRepository->findAll(
-                $courseIdentifier,
-                $parentPartIdentifier,
-                $collectionInformation
-            );
+        $tags = $this->tagByPartRepository->findAll(
+            $courseIdentifier,
+            $partIdentifier,
+            $collectionInformation
+        );
+
+        if (is_null($tags)) {
+            /* check parents */
+            $parents = $this->partService->getParents($courseIdentifier, $partIdentifier);
+
+            while (count($parents) > 0 && is_null($tags)) {
+                $parentPartIdentifier = array_shift($parents);
+                $tags = $this->tagByPartRepository->findAll(
+                    $courseIdentifier,
+                    $parentPartIdentifier,
+                    $collectionInformation
+                );
+            }
         }
+
 
         /* finally get course tags */
         if (is_null($tags) == 0) {
