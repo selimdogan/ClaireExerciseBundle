@@ -26,8 +26,6 @@ class TagByCourseController extends AppController
      */
     public function listAction(CollectionInformation $collectionInformation, $courseIdentifier)
     {
-        $course = $this->get('simple_it.claire.course.course')->get($courseIdentifier);
-
         $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourse(
             $courseIdentifier,
             $collectionInformation
@@ -35,7 +33,7 @@ class TagByCourseController extends AppController
 
         return $this->render(
             'SimpleITClaireAppBundle:AssociatedContent/Tag/Component:viewByCourse.html.twig',
-            array('tags' => $tags, 'categoryIdentifier' => $course->getCategory()->getSlug())
+            array('tags' => $tags)
         );
     }
 
