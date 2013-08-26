@@ -41,13 +41,15 @@ class CategoryController extends AppController
      *
      * @param CollectionInformation $collectionInformation Collection information
      * @param mixed                 $categoryIdentifier    Category id | slug
+     * @param string                $paginationUrl         Pagination url
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @Cache
      */
     public function listCoursesAction(
         CollectionInformation $collectionInformation,
-        $categoryIdentifier
+        $categoryIdentifier,
+        $paginationUrl
     )
     {
         $courses = $this->get('simple_it.claire.associated_content.category')->getAllCourses(
@@ -58,7 +60,9 @@ class CategoryController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:searchList.html.twig',
             array(
-                'courses' => $courses
+                'courses'               => $courses,
+                'collectionInformation' => $collectionInformation,
+                'paginationUrl'         => $paginationUrl
             )
         );
     }

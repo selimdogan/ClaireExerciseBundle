@@ -11,4 +11,4 @@
         <option value="updatedAt">Trier par date</option>
     </select>
 </form>
-{% include 'SimpleITClaireAppBundle:Course/Course/Component:list.html.twig' %}
+{% include 'SimpleITClaireAppBundle:Course/Course/Component:list.html.twig' with{'courses': courses, 'collectionInformation': collectionInformation, 'paginationUrl': paginationUrl} %}

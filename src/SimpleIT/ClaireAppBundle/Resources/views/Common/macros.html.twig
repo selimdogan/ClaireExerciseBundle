@@ -1,23 +1,52 @@
-{% macro pagination(paginatedCollection, path) %}
+{% macro pagination(paginatedCollection, collectionInformation, paginationUrl) %}
+    {% import _self as pagination %}
     {% if paginatedCollection.previousPageNumber is not null %}
         {% if paginatedCollection.previousPageNumber > 1 %}
-            <a href={{ path }}'?page=1'>1</a>
+            <a href={{ pagination.getUrlWithParameters(paginationUrl, collectionInformation) }}>1</a>
         {% endif %}
         {% if paginatedCollection.previousPageNumber > 2 %}
             ...
         {% endif %}
-        <a href={{ path }}'?page={{ paginatedCollection.previousPageNumber }}'>{{ paginatedCollection.previousPageNumber }}</a>
+        <a href="{{ pagination.getUrlWithParameters(paginationUrl, collectionInformation, paginatedCollection.previousPageNumber ) }}">{{ paginatedCollection.previousPageNumber }}</a>
     {% endif %}
 
     {{ paginatedCollection.pageNumber }}
 
     {% if paginatedCollection.nextPageNumber is not null %}
         {% if  paginatedCollection.nextPageNumber < paginatedCollection.totalPageNumber %}
-            <a href={{ path }}'?page={{ paginatedCollection.nextPageNumber }}'>{{ paginatedCollection.nextPageNumber }}</a>
+            <a href="{{ pagination.getUrlWithParameters(paginationUrl, collectionInformation, paginatedCollection.nextPageNumber) }}">{{ paginatedCollection.nextPageNumber }}</a>
             {% if (paginatedCollection.nextPageNumber + 1) < paginatedCollection.totalPageNumber %}
                 ...
             {% endif %}
         {% endif %}
     {% endif %}
-    <a href={{ path }}'?page={{ paginatedCollection.totalPageNumber }}'>{{ paginatedCollection.totalPageNumber }}</a>
+<a href={{ pagination.getUrlWithParameters(paginationUrl, collectionInformation, paginatedCollection.totalPageNumber ) }}'>{{ paginatedCollection.totalPageNumber }}</a>
+{% endmacro %}
+
+{% macro getUrlWithParameters(paginationUrl, collectionInformation, page) %}
+    {# Filters #}
+    {% set parameters = collectionInformation.filters %}
+
+    {# Sorts #}
+    {% set serializeSorts = '' %}
+    {% for sort in collectionInformation.sorts %}
+        {% if serializeSorts != '' and collectionInformation.sorts != collectionInformation.defaultSort %}
+            {% set serializeSorts = serializeSorts ~ ',' %}
+        {% endif %}
+        {% set serializeSorts = serializeSorts ~ sort.property ~ ' ' ~ sort.order %}
+    {% endfor %}
+
+    {% if serializeSorts != '' %}
+        {% set parameters = parameters | merge ({'sort' : serializeSorts}) %}
+    {% endif %}
+
+    {# Page #}
+    {% if page is not null %}
+        {% set parameters = parameters | merge ({'page':page}) %}
+    {% endif %}
+
+    {% if parameters is not empty %}
+        {% set paginationUrl =  paginationUrl ~ '?' ~ (parameters | url_encode) %}
+    {% endif %}
+    {{ paginationUrl }}
 {% endmacro %}
