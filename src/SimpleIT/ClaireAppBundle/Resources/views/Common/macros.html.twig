@@ -1,5 +1,7 @@
 {% macro pagination(paginatedCollection, collectionInformation, paginationUrl) %}
     {% import _self as pagination %}
+
+{% if paginatedCollection.totalPageNumber > 1 %}
     {% if paginatedCollection.previousPageNumber is not null %}
         {% if paginatedCollection.previousPageNumber > 1 %}
             <a href={{ pagination.getUrlWithParameters(paginationUrl, collectionInformation) }}>1</a>
@@ -20,7 +22,10 @@
             {% endif %}
         {% endif %}
     {% endif %}
-<a href={{ pagination.getUrlWithParameters(paginationUrl, collectionInformation, paginatedCollection.totalPageNumber ) }}'>{{ paginatedCollection.totalPageNumber }}</a>
+    {% if paginatedCollection.pageNumber <  paginatedCollection.totalPageNumber %}
+        <a href={{ pagination.getUrlWithParameters(paginationUrl, collectionInformation, paginatedCollection.totalPageNumber ) }}'>{{ paginatedCollection.totalPageNumber }}</a>
+    {% endif %}
+{% endif %}
 {% endmacro %}
 
 {% macro getUrlWithParameters(paginationUrl, collectionInformation, page) %}
@@ -29,12 +34,14 @@
 
     {# Sorts #}
     {% set serializeSorts = '' %}
-    {% for sort in collectionInformation.sorts %}
-        {% if serializeSorts != '' and collectionInformation.sorts != collectionInformation.defaultSort %}
-            {% set serializeSorts = serializeSorts ~ ',' %}
-        {% endif %}
-        {% set serializeSorts = serializeSorts ~ sort.property ~ ' ' ~ sort.order %}
-    {% endfor %}
+    {% if  collectionInformation.sorts != collectionInformation.defaultSort %}
+        {% for sort in collectionInformation.sorts %}
+            {% if serializeSorts != '' %}
+                {% set serializeSorts = serializeSorts ~ ',' %}
+            {% endif %}
+            {% set serializeSorts = serializeSorts ~ sort.property ~ ' ' ~ sort.order %}
+        {% endfor %}
+    {% endif %}
 
     {% if serializeSorts != '' %}
         {% set parameters = parameters | merge ({'sort' : serializeSorts}) %}
