@@ -21,7 +21,6 @@
 namespace SimpleIT\ClaireAppBundle\Services\Course;
 
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
-use SimpleIT\ClaireAppBundle\Model\Course\Part;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartContentRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartIntroductionRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartRepository;
@@ -183,7 +182,7 @@ class PartService
      * Get a part toc
      *
      * @param int | string $courseIdentifier Course id | slug
-     * @param int | string $partIdentifier Part id | slug
+     * @param int | string $partIdentifier   Part id | slug
      *
      * @return mixed
      */
@@ -196,7 +195,7 @@ class PartService
      * Get parents part from a part (included itself)
      *
      * @param int | string $courseIdentifier Course id | slug
-     * @param int | string $partIdentifier Part id | slug
+     * @param int | string $partIdentifier   Part id | slug
      *
      * @return array
      */
@@ -204,8 +203,7 @@ class PartService
     {
         $courseToc = $this->courseTocRepository->find($courseIdentifier);
         $partParents = array();
-
-        $this->scanToc($partParents, $courseToc, $partIdentifier);
+        $partParents = $this->getParentsFromToc($partParents, $courseToc, $partIdentifier);
 
         return $partParents;
     }
@@ -214,12 +212,12 @@ class PartService
      * Scan complete toc and retrieve parents
      *
      * @param array        $partParents    Part parents
-     * @param Part         $parent         Parent element
+     * @param PartResource $parent         Parent element
      * @param int | string $partIdentifier Part id | slug
      *
      * @return bool
      */
-    private function scanToc(&$partParents, $parent, $partIdentifier)
+    private function getParentsFromToc($partParents, PartResource $parent, $partIdentifier)
     {
         if ($this->matchPart($parent, $partIdentifier)) {
             return true;
@@ -228,37 +226,43 @@ class PartService
         if ($parent->getChildren()) {
             foreach ($parent->getChildren() as $part) {
                 /* Limit deep level */
-                if (!in_array(
+                if (in_array(
                     $part->getSubtype(),
-                    array(Part::TYPE_TITLE_1,Part::TYPE_TITLE_2,Part::TYPE_TITLE_3)
-                )) {
-                    return false;
-                }
+                    array(PartResource::TITLE_1, PartResource::TITLE_2, PartResource::TITLE_3)
+                )
+                ) {
+                    /* recursive deep scan */
+                    $found = $this->getParentsFromToc($partParents, $part, $partIdentifier);
 
-                /* recursive deep scan */
-                $found = $this->scanToc($partParents, $part, $partIdentifier);
+                    if ($found === true ||
+                        (is_array($found) && count($found) > count($partParents))
+                    ) {
+                        if (is_array($found)) {
+                            $partParents = $found;
+                        }
+                        /* send parent info up */
+                        $partParents[] = $part->getId();
 
-                if ($found === true) {
-                    /* send parent info up */
-                    $partParents[] = $part->getId();
-                    return true;
+                        return $partParents;
+                    } else {
+                        $partParents = $found;
+                    }
                 }
             }
         }
 
-        return false;
+        return $partParents;
     }
-
 
     /**
      * Match parts
      *
-     * @param Part         $parent         Parent element
+     * @param PartResource $parent         Parent element
      * @param int | string $partIdentifier Part id | slug
      *
      * @return bool
      */
-    private function matchPart($parent, $partIdentifier)
+    private function matchPart(PartResource $parent, $partIdentifier)
     {
         return NumberUtils::isInteger($partIdentifier) && $parent->getId() == $partIdentifier ||
         !NumberUtils::isInteger($partIdentifier) && $parent->getSlug() == $partIdentifier;
