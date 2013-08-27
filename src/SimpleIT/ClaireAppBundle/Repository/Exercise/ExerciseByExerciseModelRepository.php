@@ -2,6 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Repository\Exercise;
 
+use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
 
 /**
@@ -28,16 +29,23 @@ class ExerciseByExerciseModelRepository extends AppRepository
      * @param array $parameters
      * @param null  $format
      *
-     * @return mixed
+     * @return ExerciseResource
      */
     public function generate($exerciseModelId, $parameters = array(), $format = null)
     {
         $request = $this->client->post(
-            array($this->path, parent::formatIdentifiers($exerciseModelId)),
+            array($this->path, array('exerciseModelId' => $exerciseModelId)),
             null,
             null
         );
 
-        return $this->getSingleResource($request, $parameters, $format);
+        $request = $this->prepareRequest($request, $parameters, $format);
+
+//        throw new \Exception(print_r($request, true));
+        $response = $request->send();
+
+        $res =  $this->getResourceFromResponse($response);
+
+        return $res;
     }
 }

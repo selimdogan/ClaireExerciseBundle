@@ -3,13 +3,22 @@
 {% for type, exList in exerciseModels %}
 
     <h2>{{ type }}</h2>
+    <table>
 
-    {% for exercise in exList %}
+        {% for exerciseModel in exList %}
+            <tr>
+                <td>{{ exerciseModel.title }}</td>
+                <td>
+                    <a href="{{ path('simple_it_exercise_model_view',
+                    {'exerciseModelId': exerciseModel.id }) }}">Voir le modèle</a>
+                </td>
+                <td>
+                    <a href="{{ path
+                    ('simple_it_exercise_generate',
+                    {'exerciseModelId': exerciseModel.id }) }}">Créer une instance d'exercice</a>
+                </td>
 
-        <p><a href="{{ path('simple_it_exercise_model_view', {'exerciseModelId': exercise.id }) }}">
-                {{ exercise.title }}
-            </a></p>
-
-    {% endfor %}
-
+            </tr>
+        {% endfor %}
+    </table>
 {% endfor %}

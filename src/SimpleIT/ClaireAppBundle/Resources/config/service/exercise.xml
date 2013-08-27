@@ -11,6 +11,7 @@
 
         <parameter key="simple_it.claire.exercise.item.class">SimpleIT\ClaireAppBundle\Services\Exercise\ItemService</parameter>
         <parameter key="simple_it.claire.exercise.repository.item.class">SimpleIT\ClaireAppBundle\Repository\Exercise\ItemRepository</parameter>
+        <parameter key="simple_it.claire.exercise.repository.item_by_exercise.class">SimpleIT\ClaireAppBundle\Repository\Exercise\ItemByExerciseRepository</parameter>
     </parameters>
 
     <services>
@@ -39,8 +40,15 @@
                 <argument type="service" id="simple_it.claire.serializer"/>
             </call>
         </service>
-        <service id="simple_it.claire.exercise.repository.item"
-                 class="%simple_it.claire.exercise.repository.item.class%">
+        <service id="simple_it.claire.exercise.repository.item" class="%simple_it.claire.exercise.repository.item.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
+        <service id="simple_it.claire.exercise.repository.item_by_exercise" class="%simple_it.claire.exercise.repository.item_by_exercise.class%">
             <call method="setClient">
                 <argument type="service" id="simple_it.claire.http_client"/>
             </call>
@@ -63,10 +71,15 @@
                 <argument type="service" id="simple_it.claire.exercise.repository.exercise_by_exercise_model"/>
             </call>
         </service>
-        <service id="simple_it.claire.exercise.item" class="
-        %simple_it.claire.exercise.item.class%">
+        <service id="simple_it.claire.exercise.item" class="%simple_it.claire.exercise.item.class%">
             <call method="setItemRepository">
                 <argument type="service" id="simple_it.claire.exercise.repository.item"/>
+            </call>
+            <call method="setItemByExerciseRepository">
+                <argument type="service" id="simple_it.claire.exercise.repository.item_by_exercise"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="jms_serializer.serializer"/>
             </call>
         </service>
     </services>

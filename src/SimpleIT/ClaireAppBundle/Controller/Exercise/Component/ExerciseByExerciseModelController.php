@@ -11,10 +11,21 @@ use SimpleIT\AppBundle\Controller\AppController;
  */
 class ExerciseByExerciseModelController extends AppController
 {
+    /**
+     * Generate an exercise
+     *
+     * @param int $exerciseModelId
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function generateAction($exerciseModelId)
     {
-        $exercise = $this->get('simple_it.claire.exercise.exercise')->generate($exerciseModelId);
+        $exercise = $this->get('simple_it.claire.exercise.exercise')
+            ->generate($exerciseModelId);
 
-        return $this->redirect();
+        return $this->render(
+            '@SimpleITClaireApp/Exercise/ExerciseModel/Component/validateCreation.html.twig',
+            array('exerciseId' => $exercise->getId())
+        );
     }
 }

@@ -5,13 +5,14 @@ namespace SimpleIT\ClaireAppBundle\Controller\Exercise\Component;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseCreation\Common\CommonExercise;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\Services\Exercise\ExerciseService;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class ExerciseController
+ * Class ItemController
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseController extends AppController
+class ItemController extends AppController
 {
     /**
      * View an exercise item. The answer form is shown if the exercise has not yet been answered.
@@ -24,7 +25,6 @@ class ExerciseController extends AppController
      */
     public function viewAction($exerciseId, $itemNumber = 1)
     {
-throw new \Exception(print_r($exerciseId, true));
         $corrected = false;
 
         $item = $this->get('simple_it.claire.exercise.item')->getItemObjectFromExerciseAndItem(
@@ -66,6 +66,11 @@ throw new \Exception(print_r($exerciseId, true));
             'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:list.html.twig',
             array('exerciseModels' => $exerciseModels)
         );
+    }
+
+    public function answerAction(Request $request)
+    {
+        $this->get('simple_it.claire.exercise.answer');
     }
 
     /**
