@@ -1,0 +1,20 @@
+<section class="container">
+    <p><a href="{{ path('SimpleIT_Claire_exercise_index',
+        {'user': user }) }}"
+                >
+            Abandonner et retourner à l'index
+        </a></p>
+
+    <p>Bonjour {{ user }}</p>
+
+    <h1>Questionnaire à choix multiples</h1>
+
+    {% include "SimpleITClaireAppBundle:Exercise:pagination.html.twig" %}
+
+    <h2>Question {{ itemId }}</h2>
+
+    <p>{{ exercise.wording }}</p>
+
+    {% block question %}{% endblock %}
+
+</section>

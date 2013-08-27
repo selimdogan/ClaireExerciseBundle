@@ -1,0 +1,15 @@
+<h1>Liste des modèles d'exercices</h1>
+
+{% for type, exList in exerciseModels %}
+
+    <h2>{{ type }}</h2>
+
+    {% for exercise in exList %}
+
+        <p><a href="{{ path('simple_it_exercise_model_view', {'exerciseModelId': exercise.id }) }}">
+                {{ exercise.title }}
+            </a></p>
+
+    {% endfor %}
+
+{% endfor %}

@@ -1,0 +1,40 @@
+<?php
+
+namespace SimpleIT\ClaireAppBundle\Repository\Exercise;
+
+use SimpleIT\ApiResourcesBundle\Exercise\ItemResource;
+use SimpleIT\AppBundle\Repository\AppRepository;
+
+/**
+ * Class ItemRepository
+ *
+ * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
+ */
+class ItemRepository extends AppRepository
+{
+    /**
+     * @var string
+     */
+    protected $path = 'items/{itemId}';
+
+    /**
+     * @var  string
+     */
+    protected $resourceClass = 'SimpleIT\ApiResourcesBundle\Exercise\ItemResource';
+
+    /**
+     * Find an item
+     *
+     * @param int   $itemId     Item id
+     * @param array $parameters Parameters
+     *
+     * @return ItemResource
+     */
+    public function find($itemId, array $parameters = array())
+    {
+        return $this->findResource(
+            array('itemId' => $itemId),
+            $parameters
+        );
+    }
+}

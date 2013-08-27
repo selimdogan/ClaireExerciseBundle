@@ -1,0 +1,78 @@
+{% extends 'SimpleITClaireAppBundle:Exercise:PairItems/container.html.twig' %}
+
+{% block question %}
+
+<table cellpadding="10"><tbody>
+    {% for index, lp in item.leftParts %}
+
+            <tr>
+                {% if lp.source is defined %}
+                    <td><img src="{{ asset("bundles/simpleitclaireapp/img/exercise/") }}{{ lp.source }}"
+                         alt="{{ lp.source }}." align="center"/></td>
+                {% elseif lp.content is defined %}
+                    <td>{{ lp.content }}</td>
+                {% endif %}
+
+                    <td><--------------></td>
+
+                {% if item.rightParts[item.learnerAnswers[index]].source is defined %}
+                    <td><img src="{{ asset("bundles/simpleitclaireapp/img/exercise/") }}{{ item.rightParts[item.learnerAnswers[index]].source }}"
+                         alt="{{ item.rightParts[item.learnerAnswers[index]].source }}." align="center"/></td>
+                {% elseif item.rightParts[item.learnerAnswers[index]].content is defined %}
+                    <td>{{ item.rightParts[item.learnerAnswers[index]].content }}</td>
+                {% endif %}
+
+                <!-- Correction -->
+                {% if item.learnerAnswers[index] == item.solutions[index] %}
+                    <td><img src="{{ asset("bundles/simpleitclaireapp/img/exercise/right.png") }}"
+                 alt="Tout juste." align="center"></td>
+                    <td></td>
+                {% else %}
+                    <td><img src="{{ asset("bundles/simpleitclaireapp/img/exercise/wrong.png") }}"
+                 alt="Faux." align="center"></td>
+                    <td>
+                        {% if item.rightParts[item.solutions[index]].source is defined %}
+                            <img src="{{ asset("bundles/simpleitclaireapp/img/exercise/") }}{{ item.rightParts[item.solutions[index]].source }}"
+                                alt="{{ item.rightParts[item.solutions[index]].source }}." align="center"/>
+                        {% elseif item.rightParts[item.solutions[index]].content is defined %}
+                            {{ item.rightParts[item.solutions[index]].content }}
+                        {% endif %}
+                    </td>
+                {% endif %}
+            </tr>
+
+    {% endfor %}
+
+    </tbody></table>
+
+    {% if item.allRight  %}
+        <p style="color:green">
+            <img src="{{ asset("bundles/simpleitclaireapp/img/exercise/right.png") }}"
+                 alt="Tout juste." align="bottom">
+            {{ item.explanation }}
+        </p>
+    {% else  %}
+        <p style="color:red">
+            <img src="{{ asset("bundles/simpleitclaireapp/img/exercise/wrong.png") }}"
+                 alt="Faux." align="center">
+            {{ item.explanation }}
+        </p>
+    {% endif  %}
+
+
+    <p> {{ item.comment }} </p>
+
+    {% if (exercise.itemIds | length) > itemId %}
+        <p><a href="{{ path('SimpleIT_Claire_exercise_view',
+                {'exId': exercise.id,
+                 'itemId': itemId + 1 ,
+                 'user': user }) }}"
+                >
+                <input type="submit" value="Question suivante" class="submit-button submit-button2">
+            </a></p>
+
+
+    {% endif %}
+
+{% endblock %}
+

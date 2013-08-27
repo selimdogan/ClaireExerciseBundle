@@ -1,0 +1,53 @@
+{% extends 'SimpleITClaireAppBundle:Exercise:MultipleChoice/container.html.twig' %}
+
+{% block question %}
+
+
+{% set _cptAnswer = 1 %}
+
+<p>{{ item.wording }}</p>
+
+{% for proposition in item.propositions %}
+
+    <p>
+            {{ proposition.right }},
+            {{ proposition.ticked }},
+            {{ proposition.text }}
+    </p>
+
+    {% set _cptAnswer = _cptAnswer + 1 %}
+
+{% endfor %}
+
+    {% if item.allRight  %}
+        <p style="color:green">
+            <img src="{{ asset("bundles/simpleitclaireapp/img/exercise/right.png") }}"
+                 alt="Tout juste." align="bottom" />
+            {{ item.explanation }}
+        </p>
+    {% else  %}
+        <p style="color:red">
+            <img src="{{ asset("bundles/simpleitclaireapp/img/exercise/wrong.png") }}"
+                 alt="Faux." align="center" />
+            {{ item.explanation }}
+        </p>
+    {% endif  %}
+
+
+    <p> {{ item.comment }} </p>
+
+    {% if (exercise.itemIds | length) > itemId %}
+        <p><a href="{{ path('SimpleIT_Claire_exercise_view',
+                {'exId': exercise.id,
+                 'itemId': itemId + 1 ,
+                 'user': user }) }}"
+                >
+                <input type="submit" value="Question suivante" class="submit-button submit-button2">
+            </a></p>
+
+
+    {% endif %}
+
+    <script src="{{ asset("bundles/simpleitclaireapp/js/exercise/parse-mc.js") }}"></script>
+{% endblock %}
+

@@ -1,0 +1,90 @@
+{% extends 'SimpleITClaireAppBundle:Exercise:GroupItems/container.html.twig' %}
+
+{% block question %}
+
+    <table cellpadding="10"><tbody>
+        {% for index, group in item.groups %}
+                <tr>
+                    <td>{{ index }} -</td>
+
+                    <!-- Groups asked -->
+                    {% if item.displayGroupNames == 'ask' %}
+                        <td>{{ item.learnerAnswers['gr'][index] }}</td>
+                        {% if item.learnerAnswers['gr'][index] == group %}
+                            <td><img src="{{ asset("bundles/simpleitclaireapp/img/exercise/right.png") }}"
+                                alt="Tout juste." align="center"></td>
+                            <td></td>
+                        {% else %}
+                            <td><img src="{{ asset("bundles/simpleitclaireapp/img/exercise/wrong.png") }}"
+                                   alt="Faux." align="center"></td>
+                            <td>{{ group }}</td>
+                        {% endif %}
+
+                    <!-- Groups not asked -->
+                    {% elseif item.displayGroupNames == 'hide' %}
+                    {% else %}
+                        <td>{{ group }}</td>
+                    {% endif %}
+                </tr>
+        {% endfor %}
+    </tbody></table>
+
+    <table cellpadding="10"><tbody>
+        {% for index, obj in item.objects %}
+                <tr>
+                    {% if obj.source is defined %}
+                        <td><img src="{{ asset("bundles/simpleitclaireapp/img/exercise/") }}{{ obj.source }}"
+                            alt="{{ obj.source }}." align="center"/></td>
+                    {% elseif obj.content is defined %}
+                        <td>{{ obj.content }}</td>
+                    {% endif %}
+
+                    <td>{{ item.learnerAnswers['obj'][index] }}</td>
+
+                    <!-- Correction -->
+                    {% if item.learnerAnswers['obj'][index] == item.solutions[index] %}
+                        <td><img src="{{ asset("bundles/simpleitclaireapp/img/exercise/right.png") }}"
+                                alt="Tout juste." align="center"></td>
+                        <td></td>
+                    {% else %}
+                    <td><img src="{{ asset("bundles/simpleitclaireapp/img/exercise/wrong.png") }}"
+                           alt="Faux." align="center"></td>
+
+                    <td>{{ item.solutions[index] }}</td>
+                    {% endif %}
+                </tr>
+
+        {% endfor %}
+    </tbody></table>
+
+    {% if item.allRight  %}
+        <p style="color:green">
+            <img src="{{ asset("bundles/simpleitclaireapp/img/exercise/right.png") }}"
+                 alt="Tout juste." align="bottom">
+            {{ item.explanation }}
+        </p>
+    {% else  %}
+        <p style="color:red">
+            <img src="{{ asset("bundles/simpleitclaireapp/img/exercise/wrong.png") }}"
+                 alt="Faux." align="center">
+            {{ item.explanation }}
+        </p>
+    {% endif  %}
+
+
+    <p> {{ item.comment }} </p>
+
+    {% if (exercise.itemIds | length) > itemId %}
+        <p><a href="{{ path('SimpleIT_Claire_exercise_view',
+                {'exId': exercise.id,
+                 'itemId': itemId + 1 ,
+                 'user': user }) }}"
+                >
+                <input type="submit" value="Question suivante" class="submit-button submit-button2">
+            </a></p>
+
+
+    {% endif %}
+
+{% endblock %}
+

@@ -3,12 +3,13 @@
 
 namespace SimpleIT\ClaireAppBundle\Services\Exercise;
 
+use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModelRepository;
 
 /**
  * Class ExerciseModelService
  *
- * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
+ * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
 class ExerciseModelService implements ExerciseModelServiceInterface
 {
@@ -30,12 +31,29 @@ class ExerciseModelService implements ExerciseModelServiceInterface
     /**
      * Get an exercise model
      *
-     * @param int $exerciseModelId Exercise Model Id
+     * @param int $exerciseId Exercise Model Id
      *
      * @return \SimpleIT\ApiResourcesBundle\Exercise\ExerciseModelResource
      */
-    public function get($exerciseModelId)
+    public function get($exerciseId)
     {
-        return $this->exerciseModelRepository->find($exerciseModelId);
+        return $this->exerciseModelRepository->find($exerciseId);
+    }
+
+    /**
+     * Get an ordered list of the exercise models
+     *
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
+     */
+    public function getListByType()
+    {
+        $exModels = $this->exerciseModelRepository->findAllResources();
+        $modelList = array();
+
+        foreach ($exModels as $model)
+        {
+            $modelList[$model->getType()][] = $model;
+        }
+        return $modelList;
     }
 }

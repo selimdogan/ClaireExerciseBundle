@@ -1,0 +1,32 @@
+{% if exercise.itemIds | length > 1 %}
+
+    {% set _cptItem = 0 %}
+
+    <table class="question-table"><tbody>
+    <tr>
+
+    {% for itemIndex in exercise.itemIds %}
+
+        {% set _cptItem = _cptItem + 1 %}
+
+            {% if _cptItem == itemId %}
+
+                <td><b><span>{{ _cptItem }}</span></b></td>
+
+            {% else %}
+                <td><a href="{{ path('SimpleIT_Claire_exercise_view',
+                    {'exId': exercise.id,
+                    'itemId': _cptItem ,
+                    'user': user }) }}"
+                    >
+                    {{ _cptItem }}
+
+                </a></td>
+
+            {% endif %}
+    {% endfor %}
+
+    </tr>
+    </tbody></table>
+
+{% endif %}

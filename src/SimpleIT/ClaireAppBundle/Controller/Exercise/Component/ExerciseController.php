@@ -5,23 +5,23 @@ namespace SimpleIT\ClaireAppBundle\Controller\Exercise\Component;
 use SimpleIT\AppBundle\Controller\AppController;
 
 /**
- * Class ExerciseModelController
+ * Class ExerciseController
  *
- * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
+ * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseModelController extends AppController
+class ExerciseController extends AppController
 {
     /**
-     * View an exercise model
+     * View an exercise
      *
-     * @param $exerciseModelId
+     * @param $exerciseId
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewAction($exerciseModelId)
+    public function viewAction($exerciseId)
     {
-        $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->get(
-            $exerciseModelId
+        $exercise = $this->get('simple_it.claire.exercise.exercise')->get(
+            $exerciseId
         );
 
         return $this->render(
@@ -43,15 +43,5 @@ class ExerciseModelController extends AppController
             'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:list.html.twig',
             array('exerciseModels' => $exerciseModels)
         );
-    }
-
-    public function generateAction($exerciseModelId)
-    {
-        $exercise = $this->get('simple_it.claire.exercise.exercise_model')->generate
-            (
-                $exerciseModelId
-            );
-
-        return $this->redirect();
     }
 }

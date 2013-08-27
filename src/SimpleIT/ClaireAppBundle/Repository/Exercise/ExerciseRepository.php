@@ -10,30 +10,30 @@ use SimpleIT\AppBundle\Repository\AppRepository;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseModelRepository extends AppRepository
+class ExerciseRepository extends AppRepository
 {
     /**
      * @var string
      */
-    protected $path = 'exercise-models/{exerciseModelId}';
+    protected $path = 'exercises/{exerciseId}';
 
     /**
      * @var  string
      */
-    protected $resourceClass = 'SimpleIT\ApiResourcesBundle\Exercise\ExerciseModelResource';
+    protected $resourceClass = 'SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource';
 
     /**
-     * Find an exercise model
+     * Find an exercise
      *
-     * @param int   $exerciseModelId Exercise Model Id
-     * @param array $parameters      Parameters
+     * @param int   $exerciseId Exercise Id
+     * @param array $parameters Parameters
      *
      * @return ExerciseModelResource
      */
-    public function find($exerciseModelId, array $parameters = array())
+    public function find($exerciseId, array $parameters = array())
     {
         return $this->findResource(
-            array('exerciseModelId' => $exerciseModelId),
+            array('exerciseId' => $exerciseId),
             $parameters
         );
     }

@@ -1,0 +1,59 @@
+{% extends 'SimpleITClaireAppBundle:Exercise:PairItems/container.html.twig' %}
+
+
+{% block question %}
+
+<form action="{{ path('SimpleIT_Claire_exercise_correctItem', {
+                        'type': "pair-items",
+                        'itemId': itemId,
+                        'exId': exercise.id
+                    })
+                    }}"
+        method="post" >
+
+    {% set _cptPair = 0 %}
+    <table cellpadding="10"><tbody>
+    {% for index, lp in item.leftParts %}
+            <tr>
+                {% if lp.source is defined %}
+                    <td><img src="{{ asset("bundles/simpleitclaireapp/img/exercise/") }}{{ lp.source }}"
+                         alt="{{ lp.source }}." align="center"/></td>
+                {% elseif lp.content is defined %}
+                    <td>{{ lp.content }}</td>
+                {% endif %}
+                    <td><input id="answer{{ _cptPair }}"
+                                type="text"
+                                size="1"
+                                name="answers[{{ _cptPair }}]"
+                                /></td>
+                    <td></td><td></td><td></td>
+                    <td>{{ _cptPair }} -</td>
+                {% if item.rightParts[index].source is defined %}
+                    <td><img src="{{ asset("bundles/simpleitclaireapp/img/exercise/") }}{{ item.rightParts[index].source }}"
+                         alt="{{ item.rightParts[index].source }}." align="center"/></td>
+                {% elseif item.rightParts[index].content is defined %}
+                    <td>{{ item.rightParts[index].content }}</td>
+                {% endif %}
+            </tr>
+
+        {% set _cptPair = _cptPair + 1 %}
+    {% endfor %}
+
+    </tbody></table>
+
+    <input type="hidden"
+            name="options[nbpairs]"
+            value="{{ _cptPair }}">
+
+    <input type="hidden"
+            name="user"
+            value="{{ user }}">
+
+    <input type="hidden"
+            name="apiItemId"
+            value="{{ item.id }}">
+
+
+    <input type="submit" value="Envoyer"  class="submit-button" />
+</form>
+{% endblock %}

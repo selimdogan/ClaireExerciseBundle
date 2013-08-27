@@ -1,0 +1,49 @@
+{% extends 'SimpleITClaireAppBundle:Exercise:MultipleChoice/Component/container.html.twig' %}
+
+
+{% block question %}
+
+<form action="{{ path('SimpleIT_Claire_exercise_correctItem', {
+                        'type': "multiple-choice",
+                        'itemId': itemId,
+                        'exId': exercise.id
+                    })
+                    }}"
+        method="post" >
+
+    {% set _cptAnswer = 0 %}
+
+    <p>{{ item.wording }}</p>
+    <table><tbody>
+    {% for proposition in item.propositions %}
+            <tr>
+                    <td><input id="answer{{ _cptAnswer }}"
+                                type="checkbox"
+                                name="answers[{{ _cptAnswer }}]"
+                                /></td>
+                    <td><label for="answer{{ _cptAnswer }}">
+                            {{ proposition.text }}
+                        </label></td>
+            </tr>
+
+        {% set _cptAnswer = _cptAnswer + 1 %}
+    {% endfor %}
+
+    </tbody></table>
+
+    <input type="hidden"
+            name="options[nbpropositions]"
+            value="{{ _cptAnswer }}">
+
+    <input type="hidden"
+            name="user"
+            value="{{ user }}">
+
+    <input type="hidden"
+            name="apiItemId"
+            value="{{ item.id }}">
+
+
+    <input type="submit" value="Envoyer"  class="submit-button" />
+</form>
+{% endblock %}
