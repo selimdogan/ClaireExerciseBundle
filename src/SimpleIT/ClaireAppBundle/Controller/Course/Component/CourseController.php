@@ -20,21 +20,51 @@ class CourseController extends AppController
      * List courses
      *
      * @param CollectionInformation $collectionInformation Collection Information
-     * @param string                $routePath             The path of the action
+     * @param string                $paginationUrl         Pagination url
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @Cache
      */
     public function listAction(
-        CollectionInformation $collectionInformation = null,
-        $routePath = null
+        CollectionInformation $collectionInformation,
+        $paginationUrl
     )
     {
         $courses = $this->get('simple_it.claire.course.course')->getAll($collectionInformation);
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:searchList.html.twig',
-            array('courses' => $courses, 'routePath' => $routePath)
+            array(
+                'courses'               => $courses,
+                'collectionInformation' => $collectionInformation,
+                'paginationUrl'         => $paginationUrl
+            )
+        );
+    }
+
+    /**
+     * List courses
+     *
+     * @param CollectionInformation $collectionInformation Collection Information
+     * @param string                $paginationUrl         Pagination url
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Cache
+     */
+    public function searchListAction(
+        CollectionInformation $collectionInformation,
+        $paginationUrl
+    )
+    {
+        $courses = $this->get('simple_it.claire.course.course')->getAll($collectionInformation);
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:searchList.html.twig',
+            array(
+                'courses'               => $courses,
+                'collectionInformation' => $collectionInformation,
+                'paginationUrl'         => $paginationUrl
+            )
         );
     }
 

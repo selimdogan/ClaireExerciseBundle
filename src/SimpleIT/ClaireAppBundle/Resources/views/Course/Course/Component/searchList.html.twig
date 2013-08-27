@@ -3,12 +3,12 @@
     <span class="icons courses-icon"></span>
     {{ 'course.choice' | transchoice(courses.totalItemsNumber) }}
 </h3>
-<form action="" method="GET" class="search-list-form">
-    <input type="search" name="title">
+<form action="{{ paginationUrl }}" method="GET" class="search-list-form" >
+    <input type="search" name="title" value="{% if collectionInformation.filters.title is defined %}{{ collectionInformation.filters.title }}{% endif %}">
     <input type="submit" value="">
-    <select name="sort" class="light-grey_button course-filter">
+    <select name="sort" class="light-grey_button course-filter" onchange="this.form.submit()">
         <option value="title">Trier par nom</option>
-        <option value="updatedAt">Trier par date</option>
+        <option value="updatedAt desc" {% if collectionInformation.sorts.0.property == 'updatedAt' %} selected="selected" {% endif %}>Trier par date</option>
     </select>
 </form>
-{% include 'SimpleITClaireAppBundle:Course/Course/Component:list.html.twig' %}
+{% include 'SimpleITClaireAppBundle:Course/Course/Component:list.html.twig' with{'courses': courses, 'collectionInformation': collectionInformation, 'paginationUrl': paginationUrl} %}
