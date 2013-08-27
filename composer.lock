@@ -838,7 +838,7 @@
         },
         {
             "name": "sensio/framework-extra-bundle",
-            "version": "v2.3.3",
+            "version": "v2.3.4",
             "target-dir": "Sensio/Bundle/FrameworkExtraBundle",
             "source": {
                 "type": "git",
@@ -925,7 +925,7 @@
             "source": {
                 "type": "git",
                 "url": "https://simpleit-zbot-readonly:nWCWJe04ASZ9ZriSrzfp@github.com/simpleit/AppBundle.git",
-                "reference": "8c7b676c18a158bce1b9d27885627eb0af69256e"
+                "reference": "4f5991db8b18c85b623f05da4df845d617ffc61e"
             },
             "require": {
                 "guzzle/guzzle": "~3.7",
@@ -959,7 +959,7 @@
             "keywords": [
                 "app"
             ],
-            "time": "2013-08-26 13:24:10"
+            "time": "2013-08-27 08:34:46"
         },
         {
             "name": "simpleit/php-utils",
@@ -998,7 +998,7 @@
         },
         {
             "name": "symfony/config",
-            "version": "v2.3.3",
+            "version": "v2.3.4",
             "target-dir": "Symfony/Component/Config",
             "source": {
                 "type": "git",
@@ -1046,17 +1046,17 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v2.3.3",
+            "version": "v2.3.4",
             "target-dir": "Symfony/Component/Debug",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Debug.git",
-                "reference": "947e8d434bb461bec07b1ce7102d8823ed150f01"
+                "reference": "729f6d19cfc401c4942e43fcc1059103bd6df130"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Debug/zipball/947e8d434bb461bec07b1ce7102d8823ed150f01",
-                "reference": "947e8d434bb461bec07b1ce7102d8823ed150f01",
+                "url": "https://api.github.com/repos/symfony/Debug/zipball/729f6d19cfc401c4942e43fcc1059103bd6df130",
+                "reference": "729f6d19cfc401c4942e43fcc1059103bd6df130",
                 "shasum": ""
             },
             "require": {
@@ -1098,11 +1098,11 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "http://symfony.com",
-            "time": "2013-07-01 12:24:43"
+            "time": "2013-08-08 14:16:10"
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v2.3.3",
+            "version": "v2.3.4",
             "target-dir": "Symfony/Component/DependencyInjection",
             "source": {
                 "type": "git",
@@ -1158,7 +1158,7 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.3.3",
+            "version": "v2.3.4",
             "target-dir": "Symfony/Component/EventDispatcher",
             "source": {
                 "type": "git",
@@ -1259,17 +1259,17 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v2.3.3",
+            "version": "v2.3.4",
             "target-dir": "Symfony/Component/Finder",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Finder.git",
-                "reference": "b251476db261edb54bb1d7c6b8be6ae49ff9a371"
+                "reference": "4a0fee5b86f5bbd9dfdc11ec124eba2915737ce1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Finder/zipball/b251476db261edb54bb1d7c6b8be6ae49ff9a371",
-                "reference": "b251476db261edb54bb1d7c6b8be6ae49ff9a371",
+                "url": "https://api.github.com/repos/symfony/Finder/zipball/4a0fee5b86f5bbd9dfdc11ec124eba2915737ce1",
+                "reference": "4a0fee5b86f5bbd9dfdc11ec124eba2915737ce1",
                 "shasum": ""
             },
             "require": {
@@ -1302,7 +1302,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "http://symfony.com",
-            "time": "2013-07-21 12:12:18"
+            "time": "2013-08-13 20:18:00"
         },
         {
             "name": "symfony/framework-bundle",
@@ -1544,17 +1544,17 @@
         },
         {
             "name": "symfony/routing",
-            "version": "v2.3.3",
+            "version": "v2.3.4",
             "target-dir": "Symfony/Component/Routing",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Routing.git",
-                "reference": "25eb4f846382877a3547d70dae9ea35439d81305"
+                "reference": "69af3f07dbf3ae93dd513dbc373f561cb2e7f143"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Routing/zipball/25eb4f846382877a3547d70dae9ea35439d81305",
-                "reference": "25eb4f846382877a3547d70dae9ea35439d81305",
+                "url": "https://api.github.com/repos/symfony/Routing/zipball/69af3f07dbf3ae93dd513dbc373f561cb2e7f143",
+                "reference": "69af3f07dbf3ae93dd513dbc373f561cb2e7f143",
                 "shasum": ""
             },
             "require": {
@@ -1598,7 +1598,7 @@
             ],
             "description": "Symfony Routing Component",
             "homepage": "http://symfony.com",
-            "time": "2013-08-02 20:53:38"
+            "time": "2013-08-23 15:14:07"
         },
         {
             "name": "symfony/security",
@@ -1726,17 +1726,17 @@
         },
         {
             "name": "symfony/stopwatch",
-            "version": "v2.3.3",
+            "version": "v2.3.4",
             "target-dir": "Symfony/Component/Stopwatch",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Stopwatch.git",
-                "reference": "v2.3.3"
+                "reference": "23333342d7edd461f576b246c6fa7b30b4d9bebe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Stopwatch/zipball/v2.3.3",
-                "reference": "v2.3.3",
+                "url": "https://api.github.com/repos/symfony/Stopwatch/zipball/23333342d7edd461f576b246c6fa7b30b4d9bebe",
+                "reference": "23333342d7edd461f576b246c6fa7b30b4d9bebe",
                 "shasum": ""
             },
             "require": {
@@ -1773,17 +1773,17 @@
         },
         {
             "name": "symfony/templating",
-            "version": "v2.3.3",
+            "version": "v2.3.4",
             "target-dir": "Symfony/Component/Templating",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Templating.git",
-                "reference": "9bdb58e480c14ee222b398528692e34e98df96d2"
+                "reference": "67d151c268ebc98ac13239ac014407869f4908be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Templating/zipball/9bdb58e480c14ee222b398528692e34e98df96d2",
-                "reference": "9bdb58e480c14ee222b398528692e34e98df96d2",
+                "url": "https://api.github.com/repos/symfony/Templating/zipball/67d151c268ebc98ac13239ac014407869f4908be",
+                "reference": "67d151c268ebc98ac13239ac014407869f4908be",
                 "shasum": ""
             },
             "require": {
@@ -1816,7 +1816,7 @@
             ],
             "description": "Symfony Templating Component",
             "homepage": "http://symfony.com",
-            "time": "2013-07-21 12:12:18"
+            "time": "2013-08-13 20:18:00"
         },
         {
             "name": "symfony/translation",
