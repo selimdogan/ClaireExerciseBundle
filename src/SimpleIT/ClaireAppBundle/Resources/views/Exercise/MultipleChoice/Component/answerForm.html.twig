@@ -2,17 +2,19 @@
 
 {% block question %}
 
-<form action="{{ path('SimpleIT_Claire_exercise_correctItem', {
-                        'type': "multiple-choice",
-                        'itemId': itemId,
-                        'exId': exercise.id
-                    })
-                    }}"
+<form action="{{ path('simple_it_exercise_correct_item',
+                        {
+                            'type': "multiple-choice",
+                            'itemNumber': itemNumber,
+                            'exerciseId': exerciseId
+                        }
+                 )
+              }}"
         method="post" >
 
     {% set _cptAnswer = 0 %}
 
-    <p>{{ item.wording }}</p>
+    <p>{{ item.question }}</p>
     <table><tbody>
     {% for proposition in item.propositions %}
             <tr>
@@ -33,15 +35,6 @@
     <input type="hidden"
             name="options[nbpropositions]"
             value="{{ _cptAnswer }}">
-
-    <input type="hidden"
-            name="user"
-            value="{{ user }}">
-
-    <input type="hidden"
-            name="apiItemId"
-            value="{{ item.id }}">
-
 
     <input type="submit" value="Envoyer"  class="submit-button" />
 </form>

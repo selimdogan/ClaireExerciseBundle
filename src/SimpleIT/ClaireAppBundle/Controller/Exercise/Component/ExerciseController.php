@@ -24,7 +24,6 @@ class ExerciseController extends AppController
      */
     public function viewAction($exerciseId, $itemNumber = 1)
     {
-throw new \Exception(print_r($exerciseId, true));
         $corrected = false;
 
         $item = $this->get('simple_it.claire.exercise.item')->getItemObjectFromExerciseAndItem(
@@ -33,7 +32,7 @@ throw new \Exception(print_r($exerciseId, true));
             $corrected
         );
 
-        $exercise = $this->get('simple_it.claire.exercise.exercise')->getExerciseObjectFromExercise(
+$exercise = $this->get('simple_it.claire.exercise.exercise')->getExerciseObjectFromExercise(
             $exerciseId
         );
 
@@ -47,7 +46,9 @@ throw new \Exception(print_r($exerciseId, true));
             $view,
             array(
                 'exercise' => $exercise,
-                'item'     => $item
+                'item'     => $item,
+                'itemNumber' => $itemNumber,
+                'exerciseId' => $exerciseId
             )
         );
 

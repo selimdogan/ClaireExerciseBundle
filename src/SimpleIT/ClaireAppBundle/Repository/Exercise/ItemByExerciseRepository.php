@@ -14,7 +14,7 @@ class ItemByExerciseRepository extends AppRepository
     /**
      * @var string
      */
-    protected $path = 'exercise/{exerciseId}/items/{itemId}';
+    protected $path = 'exercises/{exerciseId}/items/{itemId}';
 
     /**
      * @var  string

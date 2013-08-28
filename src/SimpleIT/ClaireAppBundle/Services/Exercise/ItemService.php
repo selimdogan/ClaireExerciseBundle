@@ -126,7 +126,7 @@ class ItemService implements ItemServiceInterface
     {
         $items = $this->getAllFromExercise($exerciseId);
         $keys = $items->getKeys();
-        $itemId = $items->get($keys[$itemNumber - 1])->getId();
+        $itemId = $items->get($keys[$itemNumber - 1])->getItemId();
 
         return $this->get($itemId);
     }

@@ -70,6 +70,9 @@
             <call method="setExerciseByExerciseModelRepository">
                 <argument type="service" id="simple_it.claire.exercise.repository.exercise_by_exercise_model"/>
             </call>
+            <call method="setSerializer">
+                <argument type="service" id="jms_serializer.serializer"/>
+            </call>
         </service>
         <service id="simple_it.claire.exercise.item" class="%simple_it.claire.exercise.item.class%">
             <call method="setItemRepository">

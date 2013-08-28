@@ -108,7 +108,7 @@ class ExerciseService implements ExerciseServiceInterface
         $exerciseResource = $this->get($exerciseId);
         $class = $this->getClassFromType($exerciseResource->getExerciseModel()->getType());
 
-        return $this->serializer->deserialize($exerciseResource, $class, 'json');
+        return $this->serializer->deserialize($exerciseResource->getContent(), $class, 'json');
     }
 
     /**

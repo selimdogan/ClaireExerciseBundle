@@ -1,32 +1,27 @@
-{% if exercise.itemIds | length > 1 %}
+{% if exercise.itemCount > 1 %}
 
-    {% set _cptItem = 0 %}
+    <table class="question-table">
+        <tbody>
+        <tr>
 
-    <table class="question-table"><tbody>
-    <tr>
+            {% for _cptItem in 1..exercise.itemCount %}
+                {% if _cptItem == itemNumber %}
 
-    {% for itemIndex in exercise.itemIds %}
+                    <td><b><span>{{ _cptItem }}</span></b></td>
 
-        {% set _cptItem = _cptItem + 1 %}
+                {% else %}
+                    <td><a href="{{ path('simple_it_exercise_exercise_view',
+                        {'exerciseId': exerciseId,
+                        'itemNumber': _cptItem }) }}"
+                                >
+                            {{ _cptItem }}
 
-            {% if _cptItem == itemId %}
+                        </a></td>
 
-                <td><b><span>{{ _cptItem }}</span></b></td>
-
-            {% else %}
-                <td><a href="{{ path('SimpleIT_Claire_exercise_view',
-                    {'exId': exercise.id,
-                    'itemId': _cptItem ,
-                    'user': user }) }}"
-                    >
-                    {{ _cptItem }}
-
-                </a></td>
-
-            {% endif %}
-    {% endfor %}
-
-    </tr>
-    </tbody></table>
+                {% endif %}
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
 
 {% endif %}

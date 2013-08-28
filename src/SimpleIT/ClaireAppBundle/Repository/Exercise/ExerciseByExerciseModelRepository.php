@@ -39,13 +39,6 @@ class ExerciseByExerciseModelRepository extends AppRepository
             null
         );
 
-        $request = $this->prepareRequest($request, $parameters, $format);
-
-//        throw new \Exception(print_r($request, true));
-        $response = $request->send();
-
-        $res =  $this->getResourceFromResponse($response);
-
-        return $res;
+        return $this->getSingleResource($request, $parameters, $format);
     }
 }
