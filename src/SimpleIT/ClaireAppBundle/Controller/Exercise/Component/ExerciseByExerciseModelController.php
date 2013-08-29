@@ -22,10 +22,10 @@ class ExerciseByExerciseModelController extends AppController
     {
         $exercise = $this->get('simple_it.claire.exercise.exercise')
             ->generate($exerciseModelId);
-
-        return $this->render(
-            '@SimpleITClaireApp/Exercise/ExerciseModel/Component/validateCreation.html.twig',
-            array('exerciseId' => $exercise->getId())
+        return $this->redirect(
+            $this->generateUrl(
+            'simple_it_exercise_exercise_view',
+            array('exerciseId' => $exercise->getId()))
         );
     }
 }

@@ -1,0 +1,17 @@
+simple_it_exercise_model_view:
+    pattern: /{exerciseModelId}
+    defaults: {_controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:view }
+    requirements:
+      _method: GET
+
+simple_it_exercise_model_list:
+    pattern: /
+    defaults: {_controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:list}
+    requirements:
+      _method: GET
+
+simple_it_exercise_generate:
+    pattern: /{exerciseModelId}/new
+    defaults: {_controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseByExerciseModel:generate }
+    requirements:
+      _method: GET

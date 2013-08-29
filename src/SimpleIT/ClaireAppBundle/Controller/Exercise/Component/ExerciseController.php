@@ -31,8 +31,7 @@ class ExerciseController extends AppController
             $itemNumber,
             $corrected
         );
-
-$exercise = $this->get('simple_it.claire.exercise.exercise')->getExerciseObjectFromExercise(
+        $exercise = $this->get('simple_it.claire.exercise.exercise')->getExerciseObjectFromExercise(
             $exerciseId
         );
 
@@ -51,22 +50,14 @@ $exercise = $this->get('simple_it.claire.exercise.exercise')->getExerciseObjectF
                 'exerciseId' => $exerciseId
             )
         );
-
     }
 
-    /**
-     * List all the exercise models
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function listAction()
+    public function answerAction(Request $request)
     {
-        $exerciseModels = $this->get('simple_it.claire.exercise.exercise_model')->getListByType();
+        $exerciseId = $request->get('exerciseId');
+        $itemNumber = $request->get('itemNumber');
 
-        return $this->render(
-            'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:list.html.twig',
-            array('exerciseModels' => $exerciseModels)
-        );
+//        $this->get('simple_it.claire.exercise.answer');
     }
 
     /**
