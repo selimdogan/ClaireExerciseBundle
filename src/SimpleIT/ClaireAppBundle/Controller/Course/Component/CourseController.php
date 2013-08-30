@@ -4,9 +4,14 @@
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
+use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
+use SimpleIT\Utils\ArrayUtils;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\AppBundle\Annotation\Cache;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use SimpleIT\AppBundle\Model\AppResponse;
 
 /**
  * Class CourseController
@@ -52,11 +57,16 @@ class CourseController extends AppController
      * @Cache
      */
     public function searchListAction(
+        Request $request,
         CollectionInformation $collectionInformation,
         $paginationUrl
     )
     {
         $courses = $this->get('simple_it.claire.course.course')->getAll($collectionInformation);
+
+        if ($request->isXmlHttpRequest()) {
+            return new Response($this->searchListJson($courses));
+        }
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:searchList.html.twig',
@@ -66,6 +76,33 @@ class CourseController extends AppController
                 'paginationUrl'         => $paginationUrl
             )
         );
+    }
+
+    /**
+     * Prepare result course list in Json format
+     *
+     * @param $courses
+     *
+     * @return string
+     */
+    protected function searchListJson($courses)
+    {
+        $search = array();
+        foreach ($courses as $course) {
+            $search[] = array(
+                'title' => $course->getTitle(),
+                'image' => ArrayUtils::getValue(
+                    $course->getMetadatas(),
+                    MetadataResource::COURSE_METADATA_IMAGE
+                ),
+                'url' => $this->generateUrl('simple_it_claire_course_course_view', array(
+                        'categoryIdentifier' => $course->getCategory()->getSlug(),
+                        'courseIdentifier' => $course->getSlug()
+                    ))
+            );
+        }
+
+        return json_encode($search);
     }
 
     /**
