@@ -25,6 +25,27 @@ interface ItemServiceInterface
     public function get($itemId);
 
     /**
+     * Get an item object form the id of the exercise and the number of the item in the exercise
+     *
+     * @param int     $exerciseId
+     * @param int     $itemNumber
+     * @param boolean $corrected
+     *
+     * @return object The item object
+     */
+    public function getItemObjectFromExerciseAndItem($exerciseId, $itemNumber, &$corrected);
+
+    /**
+     * Get ItemResource from exercise
+     *
+     * @param int $exerciseId
+     * @param int $itemNumber
+     *
+     * @return ItemResource
+     */
+    public function getItemResourceFromExercise($exerciseId, $itemNumber);
+
+    /**
      * Get all the items of an exercise
      *
      * @param int $exerciseId

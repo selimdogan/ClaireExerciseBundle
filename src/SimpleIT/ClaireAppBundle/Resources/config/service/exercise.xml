@@ -12,6 +12,9 @@
         <parameter key="simple_it.claire.exercise.item.class">SimpleIT\ClaireAppBundle\Services\Exercise\ItemService</parameter>
         <parameter key="simple_it.claire.exercise.repository.item.class">SimpleIT\ClaireAppBundle\Repository\Exercise\ItemRepository</parameter>
         <parameter key="simple_it.claire.exercise.repository.item_by_exercise.class">SimpleIT\ClaireAppBundle\Repository\Exercise\ItemByExerciseRepository</parameter>
+
+        <parameter key="simple_it.claire.exercise.answer.class">SimpleIT\ClaireAppBundle\Services\Exercise\AnswerService</parameter>
+        <parameter key="simple_it.claire.exercise.repository.answer_by_item.class">SimpleIT\ClaireAppBundle\Repository\Exercise\AnswerByItemRepository</parameter>
     </parameters>
 
     <services>
@@ -56,6 +59,14 @@
                 <argument type="service" id="simple_it.claire.serializer"/>
             </call>
         </service>
+        <service id="simple_it.claire.exercise.repository.answer_by_item" class="%simple_it.claire.exercise.repository.answer_by_item.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
 
         <!-- Services -->
         <service id="simple_it.claire.exercise.exercise_model" class="%simple_it.claire.exercise.exercise_model.class%">
@@ -83,6 +94,14 @@
             </call>
             <call method="setSerializer">
                 <argument type="service" id="jms_serializer.serializer"/>
+            </call>
+        </service>
+        <service id="simple_it.claire.exercise.answer" class="%simple_it.claire.exercise.answer.class%">
+            <call method="setAnswerByItemRepository">
+                <argument type="service" id="simple_it.claire.exercise.repository.answer_by_item"/>
+            </call>
+            <call method="setItemService">
+                <argument type="service" id="simple_it.claire.exercise.item"/>
             </call>
         </service>
     </services>

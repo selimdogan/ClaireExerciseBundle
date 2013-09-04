@@ -5,6 +5,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\Exercise\Component;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseCreation\Common\CommonExercise;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\Services\Exercise\ExerciseService;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class ExerciseController
@@ -44,8 +45,8 @@ class ExerciseController extends AppController
         return $this->render(
             $view,
             array(
-                'exercise' => $exercise,
-                'item'     => $item,
+                'exercise'   => $exercise,
+                'item'       => $item,
                 'itemNumber' => $itemNumber,
                 'exerciseId' => $exerciseId
             )
@@ -56,8 +57,15 @@ class ExerciseController extends AppController
     {
         $exerciseId = $request->get('exerciseId');
         $itemNumber = $request->get('itemNumber');
+        $la = $request->get('answers');
+        $options = $request->get('options');
 
-//        $this->get('simple_it.claire.exercise.answer');
+        $la = $this->get('simple_it.claire.exercise.answer')->add(
+            $exerciseId,
+            $itemNumber,
+            $la,
+            $options
+        );
     }
 
     /**
@@ -68,7 +76,10 @@ class ExerciseController extends AppController
      * @return string
      * @throws \LogicException
      */
-    private function selectCorrectedView($exercise)
+    private
+    function selectCorrectedView(
+        $exercise
+    )
     {
         switch (get_class($exercise)) {
             case ExerciseService::MULTIPLE_CHOICE_CLASS:
@@ -98,7 +109,10 @@ class ExerciseController extends AppController
      * @return string
      * @throws \LogicException
      */
-    private function selectNotCorrectedView($exercise)
+    private
+    function selectNotCorrectedView(
+        $exercise
+    )
     {
         switch (get_class($exercise)) {
             case ExerciseService::MULTIPLE_CHOICE_CLASS:

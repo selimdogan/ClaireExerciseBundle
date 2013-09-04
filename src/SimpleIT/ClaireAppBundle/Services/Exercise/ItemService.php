@@ -100,8 +100,9 @@ class ItemService implements ItemServiceInterface
     /**
      * Get an item object form the id of the exercise and the number of the item in the exercise
      *
-     * @param int $exerciseId
-     * @param int $itemNumber
+     * @param int  $exerciseId
+     * @param int  $itemNumber
+     * @param bool $corrected
      *
      * @return object The item object
      */
