@@ -53,6 +53,13 @@ class ExerciseController extends AppController
         );
     }
 
+    /**
+     * Answer action. Post the learner's answer
+     *
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function answerAction(Request $request)
     {
         $exerciseId = $request->get('exerciseId');
@@ -65,6 +72,16 @@ class ExerciseController extends AppController
             $itemNumber,
             $la,
             $options
+        );
+
+        return $this->redirect(
+            $this->generateUrl(
+                'simple_it_exercise_exercise_view',
+                array(
+                    'exerciseId' => $exerciseId,
+                    'itemNumber' => $itemNumber
+                )
+            )
         );
     }
 

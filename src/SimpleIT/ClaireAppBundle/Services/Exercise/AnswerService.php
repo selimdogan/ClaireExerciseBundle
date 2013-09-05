@@ -57,7 +57,6 @@ class AnswerService implements AnswerServiceInterface
     public function add($exerciseId, $itemNumber, array $la, array $options)
     {
         $itemRes = $this->itemService->getItemResourceFromExercise($exerciseId, $itemNumber);
-
         $la = LearnerAnswerFactory::create($la, $options);
 
         $la = $this->answerByItemRepository->insertResource(
