@@ -5,6 +5,7 @@ namespace SimpleIT\ClaireAppBundle\Repository\Security;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\ApiResourcesBundle\Security\GroupResource;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class SecurityGroupRepository
@@ -27,6 +28,7 @@ class SecurityGroupRepository extends AppRepository
      * Find a security group
      *
      * @param int $groupId Group id
+     * @Cache
      *
      * @return GroupResource
      */
