@@ -5,6 +5,7 @@ namespace SimpleIT\ClaireAppBundle\Repository\Security;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\ApiResourcesBundle\Security\RuleResource;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class SecurityRuleBySecurityUserRepository
@@ -28,6 +29,8 @@ class SecurityRuleBySecurityUserRepository extends AppRepository
      *
      * @param int                   $userId
      * @param CollectionInformation $collectionInformation
+     *
+     * @Cache
      *
      * @return mixed
      */
