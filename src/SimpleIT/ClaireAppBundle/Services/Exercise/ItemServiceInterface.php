@@ -41,6 +41,7 @@ interface ItemServiceInterface
      * @param int $exerciseId
      * @param int $itemNumber
      *
+     * @throws \OutOfBoundsException
      * @return ItemResource
      */
     public function getItemResourceFromExercise($exerciseId, $itemNumber);
@@ -53,4 +54,13 @@ interface ItemServiceInterface
      * @return PaginatedCollection
      */
     public function getAllFromExercise($exerciseId);
+
+    /**
+     * Get an item object from a resource
+     *
+     * @param ItemResource $itemResource
+     *
+     * @return object The item object
+     */
+    public function getItemObjectFromResource(ItemResource $itemResource);
 }

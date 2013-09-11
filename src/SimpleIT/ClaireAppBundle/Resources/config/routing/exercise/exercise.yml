@@ -1,11 +1,11 @@
 simple_it_exercise_exercise_view:
     pattern: /{exerciseId}/{itemNumber}
-    defaults: {_controller: SimpleITClaireAppBundle:Exercise/Component/Exercise:view, itemNumber: 1}
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/Exercise:view, itemNumber: 1 }
     requirements:
       _method: GET
 
 simple_it_exercise_answer:
     pattern: /{exerciseId}/{itemNumber}
-    defaults: {_controller: SimpleITClaireAppBundle:Exercise/Component/Exercise:answer }
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/Exercise:answer }
     requirements:
       _method: POST

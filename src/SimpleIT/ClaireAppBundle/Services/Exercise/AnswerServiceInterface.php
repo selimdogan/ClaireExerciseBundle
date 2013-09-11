@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Services\Exercise;
 
-use SimpleIT\ApiResourcesBundle\Exercise\ExerciseCreation\Common\LearnerAnswer;
+use SimpleIT\ApiResourcesBundle\Exercise\AnswerResource;
 
 /**
  * Interface for class AnswerService
@@ -16,11 +16,10 @@ interface AnswerServiceInterface
      *
      * @param int   $exerciseId
      * @param int   $itemNumber
-     * @param array $la
-     * @param array $options
+     * @param array $answers
      *
      * @internal param int $itemId
-     * @return LearnerAnswer
+     * @return AnswerResource
      */
-    public function add($exerciseId, $itemNumber, array $la, array $options);
+    public function add($exerciseId, $itemNumber, array $answers);
 }

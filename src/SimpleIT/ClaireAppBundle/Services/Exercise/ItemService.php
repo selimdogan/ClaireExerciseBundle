@@ -4,7 +4,6 @@ namespace SimpleIT\ClaireAppBundle\Services\Exercise;
 
 use JMS\Serializer\SerializerInterface;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseCreation\Common\CommonExercise;
-use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ItemResource;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\ItemByExerciseRepository;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\ItemRepository;
@@ -86,15 +85,22 @@ class ItemService implements ItemServiceInterface
     }
 
     /**
-     * Get an item
+     * Get an item by its id
      *
-     * @param int $itemId Item Id
+     * @param int  $itemId Item Id
+     * @param bool $showCorrection
      *
      * @return ItemResource
      */
-    public function get($itemId)
+    public function get($itemId, $showCorrection = false)
     {
-        return $this->itemRepository->find($itemId);
+        if ($showCorrection === true) {
+            $parameters = array('showCorrection' => true);
+        } else {
+            $parameters = array();
+        }
+
+        return $this->itemRepository->find($itemId, $parameters);
     }
 
     /**
@@ -110,6 +116,19 @@ class ItemService implements ItemServiceInterface
     {
         $itemResource = $this->getItemResourceFromExercise($exerciseId, $itemNumber);
         $corrected = $itemResource->getCorrected();
+
+        return $this->getItemObjectFromResource($itemResource);
+    }
+
+    /**
+     * Get an item object from a resource
+     *
+     * @param ItemResource $itemResource
+     *
+     * @return object The item object
+     */
+    public function getItemObjectFromResource(ItemResource $itemResource)
+    {
         $class = $this->getClassFromType($itemResource->getType());
 
         return $this->serializer->deserialize($itemResource->getContent(), $class, 'json');
@@ -121,15 +140,22 @@ class ItemService implements ItemServiceInterface
      * @param int $exerciseId
      * @param int $itemNumber
      *
+     * @throws \OutOfBoundsException
      * @return ItemResource
      */
     public function getItemResourceFromExercise($exerciseId, $itemNumber)
     {
-        $items = $this->getAllFromExercise($exerciseId);
-        $keys = $items->getKeys();
-        $itemId = $items->get($keys[$itemNumber - 1])->getItemId();
+        try {
+            $items = $this->getAllFromExercise($exerciseId);
+            $keys = $items->getKeys();
+            $itemId = $items->get($keys[$itemNumber - 1])->getItemId();
 
-        return $this->get($itemId);
+            return $this->get($itemId, true);
+        } catch (\Exception $e) {
+            throw new \OutOfBoundsException("Item not existing: exercise " . $exerciseId .
+            " item " . $itemNumber);
+        }
+
     }
 
     /**

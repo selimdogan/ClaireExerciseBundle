@@ -19,5 +19,5 @@ class AnswerByItemRepository extends AppRepository
     /**
      * @var  string
      */
-    protected $resourceClass = 'SimpleIT\ApiResourcesBundle\Exercise\ExerciseCreation\MultipleChoice\LearnerAnswer';
+    protected $resourceClass = 'SimpleIT\ApiResourcesBundle\Exercise\AnswerResource';
 }

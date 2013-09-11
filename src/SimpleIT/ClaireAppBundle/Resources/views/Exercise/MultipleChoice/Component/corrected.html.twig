@@ -10,8 +10,16 @@
     {% for proposition in item.propositions %}
 
         <p>
-            {{ proposition.right }},
-            {{ proposition.ticked }},
+            {% if proposition.ticked %}
+                1
+            {% else %}
+                0
+            {% endif %},
+            {% if proposition.right %}
+                1
+            {% else %}
+                0
+            {% endif %},
             {{ proposition.text }}
         </p>
 
@@ -21,7 +29,9 @@
 
     <p>Votre score : {{ item.mark }} %</p>
 
-    {#<p> {{ item.comment }} </p>#}
+    {% if item.comment is defined %}
+        <p> {{ item.comment }} </p>
+    {% endif %}
 
     {% if exercise.itemCount > itemNumber %}
         <p><a href="{{ path('simple_it_exercise_exercise_view',

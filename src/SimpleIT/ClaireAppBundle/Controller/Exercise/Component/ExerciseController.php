@@ -32,6 +32,7 @@ class ExerciseController extends AppController
             $itemNumber,
             $corrected
         );
+
         $exercise = $this->get('simple_it.claire.exercise.exercise')->getExerciseObjectFromExercise(
             $exerciseId
         );
@@ -64,14 +65,14 @@ class ExerciseController extends AppController
     {
         $exerciseId = $request->get('exerciseId');
         $itemNumber = $request->get('itemNumber');
-        $la = $request->get('answers');
-        $options = $request->get('options');
+        $answers = $request->get('answers');
 
-        $la = $this->get('simple_it.claire.exercise.answer')->add(
+        // TODO récupérer l'item pour le passer à add
+
+        $this->get('simple_it.claire.exercise.answer')->add(
             $exerciseId,
             $itemNumber,
-            $la,
-            $options
+            $answers
         );
 
         return $this->redirect(
