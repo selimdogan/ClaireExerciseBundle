@@ -18,7 +18,8 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "simpleit/app-bundle": "1.1.x-dev",
+        "simpleit/app-bundle": "dev-1.1_cache_invalidation",
+        "jms/serializer-bundle": "0.13.x-dev",
         "simpleit/php-utils": "1.1.x-dev",
         "simpleit/api-resources-bundle": "1.0.x-dev",
         "jms/security-extra-bundle": "1.5.*"
