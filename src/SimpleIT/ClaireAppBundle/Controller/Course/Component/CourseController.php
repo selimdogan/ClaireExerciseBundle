@@ -111,6 +111,7 @@ class CourseController extends AppController
      * @param int | string $courseIdentifier Course id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function viewIntroductionAction($courseIdentifier)
     {
@@ -258,6 +259,7 @@ class CourseController extends AppController
      * @param int | string $courseIdentifier Course id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function viewContentAction($courseIdentifier)
     {

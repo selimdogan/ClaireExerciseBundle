@@ -51,6 +51,7 @@ class PartContentRepository extends AppRepository
      * @param string $format           Format
      *
      * @return mixed
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function find(
         $courseIdentifier,
