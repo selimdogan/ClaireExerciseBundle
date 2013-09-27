@@ -37,7 +37,7 @@
 
         <service id="simple_it.claire.course.repository.course_content" class="%simple_it.claire.course.repository.course_content.class%">
             <call method="setClient">
-                <argument type="service" id="simple_it.claire.http_client"/>
+                <argument type="service" id="simple_it.claire.http_client.authenticated"/>
             </call>
             <call method="setSerializer">
                 <argument type="service" id="simple_it.claire.serializer"/>
@@ -46,7 +46,7 @@
 
         <service id="simple_it.claire.course.repository.course_introduction" class="%simple_it.claire.course.repository.course_introduction.class%">
             <call method="setClient">
-                <argument type="service" id="simple_it.claire.http_client"/>
+                <argument type="service" id="simple_it.claire.http_client.authenticated"/>
             </call>
             <call method="setSerializer">
                 <argument type="service" id="simple_it.claire.serializer"/>
@@ -55,7 +55,7 @@
 
         <service id="simple_it.claire.course.repository.course_toc" class="%simple_it.claire.course.repository.course_toc.class%">
             <call method="setClient">
-                <argument type="service" id="simple_it.claire.http_client"/>
+                <argument type="service" id="simple_it.claire.http_client.authenticated"/>
             </call>
             <call method="setSerializer">
                 <argument type="service" id="simple_it.claire.serializer"/>
@@ -80,7 +80,7 @@
         <!--PART-->
         <service id="simple_it.claire.course.repository.part" class="%simple_it.claire.course.repository.part.class%">
             <call method="setClient">
-                <argument type="service" id="simple_it.claire.http_client"/>
+                <argument type="service" id="simple_it.claire.http_client.authenticated"/>
             </call>
             <call method="setSerializer">
                 <argument type="service" id="simple_it.claire.serializer"/>
@@ -89,7 +89,7 @@
 
         <service id="simple_it.claire.course.repository.part_introduction" class="%simple_it.claire.course.repository.part_introduction.class%">
             <call method="setClient">
-                <argument type="service" id="simple_it.claire.http_client"/>
+                <argument type="service" id="simple_it.claire.http_client.authenticated"/>
             </call>
             <call method="setSerializer">
                 <argument type="service" id="simple_it.claire.serializer"/>
@@ -98,7 +98,7 @@
 
         <service id="simple_it.claire.course.repository.part_content" class="%simple_it.claire.course.repository.part_content.class%">
             <call method="setClient">
-                <argument type="service" id="simple_it.claire.http_client"/>
+                <argument type="service" id="simple_it.claire.http_client.authenticated"/>
             </call>
             <call method="setSerializer">
                 <argument type="service" id="simple_it.claire.serializer"/>
@@ -107,7 +107,7 @@
 
         <service id="simple_it.claire.course.repository.part_toc" class="%simple_it.claire.course.repository.part_toc.class%">
             <call method="setClient">
-                <argument type="service" id="simple_it.claire.http_client"/>
+                <argument type="service" id="simple_it.claire.http_client.authenticated"/>
             </call>
             <call method="setSerializer">
                 <argument type="service" id="simple_it.claire.serializer"/>
