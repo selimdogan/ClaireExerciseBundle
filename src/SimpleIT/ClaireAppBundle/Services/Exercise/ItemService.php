@@ -3,7 +3,6 @@
 namespace SimpleIT\ClaireAppBundle\Services\Exercise;
 
 use JMS\Serializer\SerializerInterface;
-use SimpleIT\ApiResourcesBundle\Exercise\ExerciseCreation\Common\CommonExercise;
 use SimpleIT\ApiResourcesBundle\Exercise\ItemResource;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\ItemByExerciseRepository;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\ItemRepository;
@@ -16,14 +15,6 @@ use SimpleIT\Utils\Collection\PaginatedCollection;
  */
 class ItemService implements ItemServiceInterface
 {
-    const MULTIPLE_CHOICE_CLASS = 'SimpleIT\ApiResourcesBundle\Exercise\ExerciseCreation\MultipleChoice\Question';
-
-    const PAIR_ITEMS_CLASS = 'SimpleIT\ApiResourcesBundle\Exercise\ExerciseCreation\PairItems\Exercise';
-
-    const ORDER_ITEMS_CLASS = 'SimpleIT\ApiResourcesBundle\Exercise\ExerciseCreation\OrderItems\Exercise';
-
-    const GROUP_ITEMS_CLASS = 'SimpleIT\ApiResourcesBundle\Exercise\ExerciseCreation\GroupItems\Exercise';
-
     /**
      * @var  ItemRepository
      */
@@ -129,9 +120,7 @@ class ItemService implements ItemServiceInterface
      */
     public function getItemObjectFromResource(ItemResource $itemResource)
     {
-        $class = $this->getClassFromType($itemResource->getType());
-
-        return $this->serializer->deserialize($itemResource->getContent(), $class, 'json');
+        return $itemResource->getContent();
     }
 
     /**
@@ -172,35 +161,5 @@ class ItemService implements ItemServiceInterface
                 'exerciseId' => $exerciseId
             )
         );
-    }
-
-    /**
-     * Get the serialization class of the item from the type of the exercise
-     *
-     * @param string $type
-     *
-     * @return string
-     * @throws \LogicException
-     */
-    private function getClassFromType($type)
-    {
-        switch ($type) {
-            case CommonExercise::MULTIPLE_CHOICE:
-                $class = self::MULTIPLE_CHOICE_CLASS;
-                break;
-            case CommonExercise::GROUP_ITEMS:
-                $class = self::GROUP_ITEMS_CLASS;
-                break;
-            case CommonExercise::PAIR_ITEMS:
-                $class = self::PAIR_ITEMS_CLASS;
-                break;
-            case CommonExercise::ORDER_ITEMS:
-                $class = self::ORDER_ITEMS_CLASS;
-                break;
-            default:
-                throw new \LogicException('Unknown type of exercise: ' . $type);
-        }
-
-        return $class;
     }
 }

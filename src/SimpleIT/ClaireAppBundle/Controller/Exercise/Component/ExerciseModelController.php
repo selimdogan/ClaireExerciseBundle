@@ -26,7 +26,9 @@ class ExerciseModelController extends AppController
 
         return $this->render(
             'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:view.html.twig',
-            array('exerciseModel' => $exerciseModel)
+            array(
+                'exerciseModel' => $exerciseModel,
+            'content' => print_r($exerciseModel->getContent(), true))
         );
     }
 

@@ -3,9 +3,10 @@
 namespace SimpleIT\ClaireAppBundle\Services\Exercise;
 
 use SimpleIT\ApiResourcesBundle\Exercise\AnswerResource;
-use SimpleIT\ApiResourcesBundle\Exercise\ExerciseCreation\Common\CommonExercise;
-use
-    SimpleIT\ApiResourcesBundle\Exercise\ExerciseCreation\MultipleChoice\Question as MultipleChoiceItem;
+use SimpleIT\ApiResourcesBundle\Exercise\Exercise\GroupItems\Exercise as GroupItemsItem;
+use SimpleIT\ApiResourcesBundle\Exercise\Exercise\MultipleChoice\Question;
+use SimpleIT\ApiResourcesBundle\Exercise\Exercise\OrderItems\Exercise as OrderItemsItem;
+use SimpleIT\ApiResourcesBundle\Exercise\Exercise\PairItems\Exercise as PairItemsItem;
 use SimpleIT\ApiResourcesBundle\Exercise\ItemResource;
 use SimpleIT\ClaireAppBundle\Model\Exercise\AnswerResourceFactory;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\AnswerByItemRepository;
@@ -89,10 +90,22 @@ class AnswerService implements AnswerServiceInterface
     {
         $item = $this->itemService->getItemObjectFromResource($itemRes);
 
-        switch ($itemRes->getType()) {
-            case CommonExercise::MULTIPLE_CHOICE:
-                /** @var MultipleChoiceItem $item */
+        switch (get_class($item)) {
+            case ItemResource::MULTIPLE_CHOICE_CLASS:
+                /** @var Question $item */
                 $answerResource = $this->getResourceFromMultipleChoiceAnswer($item, $la);
+                break;
+            case ItemResource::GROUP_ITEMS_CLASS:
+                /** @var GroupItemsItem $item */
+                $answerResource = $this->getResourceFromGroupItemsAnswer($item, $la);
+                break;
+            case ItemResource::ORDER_ITEMS_CLASS:
+                /** @var OrderItemsItem $item */
+                $answerResource = $this->getResourceFromOrderItemsAnswer($item, $la);
+                break;
+            case ItemResource::PAIR_ITEMS_CLASS:
+                /** @var PairItemsItem $item */
+                $answerResource = $this->getResourceFromPairItemsAnswer($item, $la);
                 break;
             default:
                 throw new \LogicException('Unknown type of answer');
@@ -104,12 +117,12 @@ class AnswerService implements AnswerServiceInterface
     /**
      * Create an answerResource from an array an a MultipleChoice Question
      *
-     * @param MultipleChoiceItem $item
-     * @param array              $answers
+     * @param Question $item
+     * @param array    $answers
      *
      * @return AnswerResource
      */
-    private function getResourceFromMultipleChoiceAnswer(MultipleChoiceItem $item, array $answers)
+    private function getResourceFromMultipleChoiceAnswer(Question $item, array $answers)
     {
         $numberOfQuestions = count($item->getPropositions());
         $array = array();
@@ -119,6 +132,106 @@ class AnswerService implements AnswerServiceInterface
                 $array[$i] = 1;
             } else {
                 $array[$i] = 0;
+            }
+        }
+
+        $answerRes = AnswerResourceFactory::create($array);
+
+        return $answerRes;
+    }
+
+    /**
+     * Create an answerResource from an array a group Items AnswerResource
+     *
+     * @param GroupItemsItem $item
+     * @param array          $answers
+     *
+     * @return AnswerResource
+     */
+    private function getResourceFromGroupItemsAnswer(GroupItemsItem $item, array $answers)
+    {
+        $numberOfObjects = count($item->getObjects());
+        if ($item->getDisplayGroupNames() === GroupItemsItem::ASK) {
+            $numberOfGroupsToName = count($item->getGroups());
+        } else {
+            $numberOfGroupsToName = null;
+        }
+
+        $array = array();
+        $obj = array();
+
+        for ($i = 0; $i < $numberOfObjects; $i++) {
+            if (isset($answers['obj'][$i])) {
+                $obj[$i] = $answers['obj'][$i];
+            } else {
+                $obj[$i] = null;
+            }
+        }
+        $array['obj'] = $obj;
+
+        if (!is_null($numberOfGroupsToName)) {
+            $gr = array();
+            for ($i = 0; $i < $numberOfGroupsToName; $i++) {
+                if (isset($answers['gr'][$i])) {
+                    $gr[$i] = $answers['gr'][$i];
+                } else {
+                    $gr[$i] = null;
+                }
+            }
+            $array['gr'] = $gr;
+        }
+
+        $answerRes = AnswerResourceFactory::create($array);
+
+        return $answerRes;
+    }
+
+    /**
+     * Create an answerResource from an array an order Items AnswerResource
+     *
+     * @param OrderItemsItem $item
+     * @param array          $answers
+     *
+     * @return AnswerResource
+     */
+    private function getResourceFromOrderItemsAnswer(OrderItemsItem $item, array $answers)
+    {
+        $numberOfObjects = count($item->getObjects());
+
+        $array = array();
+
+        for ($i = 0; $i < $numberOfObjects; $i++) {
+            if (isset($answers[$i])) {
+                $array[$i] = $answers[$i];
+            } else {
+                $array[$i] = null;
+            }
+        }
+
+        $answerRes = AnswerResourceFactory::create($array);
+
+        return $answerRes;
+    }
+
+    /**
+     * Create an answerResource from an array an Pair Items AnswerResource
+     *
+     * @param PairItemsItem $item
+     * @param array         $answers
+     *
+     * @return AnswerResource
+     */
+    private function getResourceFromPairItemsAnswer(PairItemsItem $item, array $answers)
+    {
+        $numberOfObjects = count($item->getLeftParts());
+
+        $array = array();
+
+        for ($i = 0; $i < $numberOfObjects; $i++) {
+            if (isset($answers[$i])) {
+                $array[$i] = $answers[$i];
+            } else {
+                $array[$i] = null;
             }
         }
 

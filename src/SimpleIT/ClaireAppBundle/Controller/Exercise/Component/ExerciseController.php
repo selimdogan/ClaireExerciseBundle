@@ -2,9 +2,9 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Exercise\Component;
 
-use SimpleIT\ApiResourcesBundle\Exercise\ExerciseCreation\Common\CommonExercise;
+use SimpleIT\ApiResourcesBundle\Exercise\Exercise\Common\CommonExercise;
+use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource;
 use SimpleIT\AppBundle\Controller\AppController;
-use SimpleIT\ClaireAppBundle\Services\Exercise\ExerciseService;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -42,6 +42,7 @@ class ExerciseController extends AppController
         } else {
             $view = $this->selectNotCorrectedView($exercise);
         }
+
 
         return $this->render(
             $view,
@@ -100,16 +101,16 @@ class ExerciseController extends AppController
     )
     {
         switch (get_class($exercise)) {
-            case ExerciseService::MULTIPLE_CHOICE_CLASS:
+            case ExerciseResource::MULTIPLE_CHOICE_CLASS:
                 $view = 'SimpleITClaireAppBundle:Exercise/MultipleChoice/Component:corrected.html.twig';
                 break;
-            case ExerciseService::GROUP_ITEMS_CLASS:
+            case ExerciseResource::GROUP_ITEMS_CLASS:
                 $view = 'SimpleITClaireAppBundle:Exercise/GroupItems/Component:corrected.html.twig';
                 break;
-            case ExerciseService::ORDER_ITEMS_CLASS:
+            case ExerciseResource::ORDER_ITEMS_CLASS:
                 $view = 'SimpleITClaireAppBundle:Exercise/OrderItems/Component:corrected.html.twig';
                 break;
-            case ExerciseService::PAIR_ITEMS_CLASS:
+            case ExerciseResource::PAIR_ITEMS_CLASS:
                 $view = 'SimpleITClaireAppBundle:Exercise/PairItems/Component:corrected.html.twig';
                 break;
             default:
@@ -133,16 +134,16 @@ class ExerciseController extends AppController
     )
     {
         switch (get_class($exercise)) {
-            case ExerciseService::MULTIPLE_CHOICE_CLASS:
+            case ExerciseResource::MULTIPLE_CHOICE_CLASS:
                 $view = 'SimpleITClaireAppBundle:Exercise/MultipleChoice/Component:answerForm.html.twig';
                 break;
-            case ExerciseService::GROUP_ITEMS_CLASS:
+            case ExerciseResource::GROUP_ITEMS_CLASS:
                 $view = 'SimpleITClaireAppBundle:Exercise/GroupItems/Component:answerForm.html.twig';
                 break;
-            case ExerciseService::ORDER_ITEMS_CLASS:
+            case ExerciseResource::ORDER_ITEMS_CLASS:
                 $view = 'SimpleITClaireAppBundle:Exercise/OrderItems/Component:answerForm.html.twig';
                 break;
-            case ExerciseService::PAIR_ITEMS_CLASS:
+            case ExerciseResource::PAIR_ITEMS_CLASS:
                 $view = 'SimpleITClaireAppBundle:Exercise/PairItems/Component:answerForm.html.twig';
                 break;
             default:

@@ -2,36 +2,36 @@
 
 {% block question %}
 
-<form action="{{ path('simple_it_exercise_answer',
-                        {
-                            'type': "multiple-choice",
-                            'itemNumber': itemNumber,
-                            'exerciseId': exerciseId
-                        }
-                 )
-              }}"
-        method="post" >
+    <form action="{{ path('simple_it_exercise_answer',
+    {
+    'itemNumber': itemNumber,
+    'exerciseId': exerciseId
+    }
+    ) }}"
+          method="post">
 
-    {% set _cptAnswer = 0 %}
+        {% set _cptAnswer = 0 %}
 
-    <p>{{ item.question }}</p>
-    <table><tbody>
-    {% for proposition in item.propositions %}
-            <tr>
+        <p>{{ item.question }}</p>
+        <table>
+            <tbody>
+            {% for proposition in item.propositions %}
+                <tr>
                     <td><input id="answer{{ _cptAnswer }}"
-                                type="checkbox"
-                                name="answers[{{ _cptAnswer }}]"
+                               type="checkbox"
+                               name="answers[{{ _cptAnswer }}]"
                                 /></td>
                     <td><label for="answer{{ _cptAnswer }}">
                             {{ proposition.text }}
                         </label></td>
-            </tr>
+                </tr>
 
-        {% set _cptAnswer = _cptAnswer + 1 %}
-    {% endfor %}
+                {% set _cptAnswer = _cptAnswer + 1 %}
+            {% endfor %}
 
-    </tbody></table>
+            </tbody>
+        </table>
 
-    <input type="submit" value="Envoyer"  class="submit-button" />
-</form>
+        <input type="submit" value="Envoyer" class="submit-button"/>
+    </form>
 {% endblock %}
