@@ -6,6 +6,7 @@ use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\ApiResourcesBundle\Security\GroupResource;
 use SimpleIT\Utils\Collection\PaginatedCollection;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class SecurityGroupBySecurityUserRepository
@@ -29,6 +30,8 @@ class SecurityGroupBySecurityUserRepository extends AppRepository
      *
      * @param int                   $userId                User id
      * @param CollectionInformation $collectionInformation Collection Information
+     *
+     * @Cache
      *
      * @return PaginatedCollection
      */

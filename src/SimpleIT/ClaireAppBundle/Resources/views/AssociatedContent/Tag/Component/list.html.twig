@@ -23,7 +23,7 @@
                                         <div class='clear'></div>
                                     </div>
 
-                                    <a href='#' class='tag-bottom'>
+                                    <a href='{{ path('simple_it_claire_course_course_view', {'categoryIdentifier': tag.category.slug, 'courseIdentifier': tag.headlineCourse.slug}) }}' class='tag-bottom'>
                                         <span class='image'>
                                             {{ tag.headlineCourse|metaImageSimpleQuote }}
                                         </span>

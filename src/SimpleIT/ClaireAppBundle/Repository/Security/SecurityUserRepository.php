@@ -6,6 +6,7 @@ use SimpleIT\ApiResourcesBundle\Security\UserResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class SecurityUserRepository
@@ -28,6 +29,8 @@ class SecurityUserRepository extends AppRepository
      * Find a security user
      *
      * @param int $userId User id
+     *
+     * @Cache
      *
      * @return UserResource
      */

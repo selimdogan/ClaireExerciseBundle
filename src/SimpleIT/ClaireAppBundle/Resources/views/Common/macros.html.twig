@@ -1,23 +1,63 @@
-{% macro pagination(paginatedCollection, path) %}
+{% macro pagination(paginatedCollection, collectionInformation, paginationUrl) %}
+    {% import _self as pagination %}
+
+{% if paginatedCollection.totalPageNumber > 1 %}
+<div class="paginationContent">
+    <div class="pagination">
     {% if paginatedCollection.previousPageNumber is not null %}
         {% if paginatedCollection.previousPageNumber > 1 %}
-            <a href={{ path }}'?page=1'>1</a>
+            <a href="{{ pagination.getUrlWithParameters(paginationUrl, collectionInformation)|trim }}">1</a>
         {% endif %}
         {% if paginatedCollection.previousPageNumber > 2 %}
-            ...
+            <span>...</span>
         {% endif %}
-        <a href={{ path }}'?page={{ paginatedCollection.previousPageNumber }}'>{{ paginatedCollection.previousPageNumber }}</a>
+        <a href="{{ pagination.getUrlWithParameters(paginationUrl, collectionInformation, paginatedCollection.previousPageNumber )|trim }}">{{ paginatedCollection.previousPageNumber }}</a>
     {% endif %}
 
-    {{ paginatedCollection.pageNumber }}
+    <span>{{ paginatedCollection.pageNumber }}</span>
 
     {% if paginatedCollection.nextPageNumber is not null %}
         {% if  paginatedCollection.nextPageNumber < paginatedCollection.totalPageNumber %}
-            <a href={{ path }}'?page={{ paginatedCollection.nextPageNumber }}'>{{ paginatedCollection.nextPageNumber }}</a>
+            <a href="{{ pagination.getUrlWithParameters(paginationUrl, collectionInformation, paginatedCollection.nextPageNumber)|trim }}">{{ paginatedCollection.nextPageNumber }}</a>
             {% if (paginatedCollection.nextPageNumber + 1) < paginatedCollection.totalPageNumber %}
-                ...
+                <span>...</span>
             {% endif %}
         {% endif %}
     {% endif %}
-    <a href={{ path }}'?page={{ paginatedCollection.totalPageNumber }}'>{{ paginatedCollection.totalPageNumber }}</a>
+    {% if paginatedCollection.pageNumber <  paginatedCollection.totalPageNumber %}
+        <a href="{{ pagination.getUrlWithParameters(paginationUrl, collectionInformation, paginatedCollection.totalPageNumber )|trim }}">{{ paginatedCollection.totalPageNumber }}</a>
+    {% endif %}
+{% endif %}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro getUrlWithParameters(paginationUrl, collectionInformation, page) %}
+    {# Filters #}
+    {% set parameters = collectionInformation.filters %}
+
+    {# Sorts #}
+    {% set serializeSorts = '' %}
+    {% if  collectionInformation.sorts != collectionInformation.defaultSort %}
+        {% for sort in collectionInformation.sorts %}
+            {% if serializeSorts != '' %}
+                {% set serializeSorts = serializeSorts ~ ',' %}
+            {% endif %}
+            {% set serializeSorts = serializeSorts ~ sort.property ~ ' ' ~ sort.order %}
+        {% endfor %}
+    {% endif %}
+
+    {% if serializeSorts != '' %}
+        {% set parameters = parameters | merge ({'sort' : serializeSorts}) %}
+    {% endif %}
+
+    {# Page #}
+    {% if page is not null %}
+        {% set parameters = parameters | merge ({'page':page}) %}
+    {% endif %}
+
+    {% if parameters is not empty %}
+        {% set paginationUrl =  paginationUrl ~ '?' ~ (parameters | url_encode) %}
+    {% endif %}
+    {{ paginationUrl | raw }}
 {% endmacro %}

@@ -7,3 +7,9 @@ simple_it_claire_course_component_course_list:
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course:list }
     requirements:
         _method: GET
+
+simple_it_claire_course_component_course_search_list:
+    pattern: /search
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course:searchList, paginationUrl: null }
+    requirements:
+        _method: GET

@@ -3,15 +3,14 @@
 namespace SimpleIT\ClaireAppBundle\Services\AssociatedContent;
 
 use SimpleIT\ApiResourcesBundle\AssociatedContent\TagResource;
-use SimpleIT\ClaireAppBundle\Model\Course\Part;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\CourseByTagRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\RecommendedCourseByTagRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCategoryRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByPartRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagRepository;
+use SimpleIT\ClaireAppBundle\Services\Course\PartService;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\NumberUtils;
 
 /**
  * Class TagService
@@ -51,9 +50,9 @@ class TagService
     private $tagByPartRepository;
 
     /**
-     * @var  CourseTocRepository
+     * @var  PartService
      */
-    private $courseTocRepository;
+    private $partService;
 
     /**
      * Get a list of tags
@@ -114,101 +113,34 @@ class TagService
         $courseIdentifier,
         $partIdentifier,
         CollectionInformation $collectionInformation = null
-    )
-    {
+
+    ) {
         $tags = $this->tagByPartRepository->findAll(
             $courseIdentifier,
             $partIdentifier,
             $collectionInformation
         );
 
-        if (is_null($tags) == 0) {
-            $tags = $this->getParentTag($courseIdentifier, $partIdentifier, $collectionInformation);
+        if (is_null($tags)) {
+            /* check parents */
+            $parents = $this->partService->getParents($courseIdentifier, $partIdentifier);
+
+            while (count($parents) > 0 && is_null($tags)) {
+                $parentPartIdentifier = array_shift($parents);
+                $tags = $this->tagByPartRepository->findAll(
+                    $courseIdentifier,
+                    $parentPartIdentifier,
+                    $collectionInformation
+                );
+            }
         }
 
+        /* finally get course tags */
         if (is_null($tags) == 0) {
             $tags = $this->getAllByCourse($courseIdentifier, $collectionInformation);
         }
 
         return $tags;
-    }
-
-    /**
-     * Get tags from parent part
-     *
-     * @param int | string          $courseIdentifier      Course id | slug
-     * @param int | string          $partIdentifier        Part id | slug
-     * @param CollectionInformation $collectionInformation Collection information
-     *
-     * @return \SimpleIT\Utils\Collection\PaginatedCollection
-     */
-    public function getParentTag($courseIdentifier, $partIdentifier, CollectionInformation $collectionInformation = null)
-    {
-        $courseToc = $this->courseTocRepository->find($courseIdentifier);
-
-        $foundParent = $this->scanDeepPart($courseToc, $partIdentifier);
-
-        $tags = $this->tagByPartRepository->findAll(
-            $courseIdentifier,
-            $foundParent,
-            $collectionInformation
-        );
-
-        return $tags;
-    }
-
-    /**
-     * Find parent identifier
-     *
-     * @param Part         $parent         Parent element
-     * @param int | string $partIdentifier Part id | slug
-     *
-     * @return mixed
-     */
-    protected function scanDeepPart($parent, $partIdentifier)
-    {
-        if ($this->matchPart($parent, $partIdentifier)) {
-            return true;
-        }
-
-        if ($parent->getChildren()) {
-            foreach ($parent->getChildren() as $part) {
-                /* Limit deep level */
-                if (!in_array(
-                    $part->getSubtype(),
-                    array(Part::TYPE_TITLE_1,Part::TYPE_TITLE_2,Part::TYPE_TITLE_3)
-                )) {
-                    return false;
-                }
-
-                /* recursive deep scan */
-                $found = $this->scanDeepPart($part, $partIdentifier);
-
-                if ($found === true && $part->getSubtype() == Part::TYPE_TITLE_1) {
-                    /* send parent info up */
-                    return $part->getId();
-                } elseif ($found !== false) {
-                    /* pass parent info through */
-                    return $found;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Match parts
-     *
-     * @param Part         $parent         Parent element
-     * @param int | string $partIdentifier Part id | slug
-     *
-     * @return bool
-     */
-    protected function matchPart($parent, $partIdentifier)
-    {
-        return NumberUtils::isInteger($partIdentifier) && $parent->getId() == $partIdentifier ||
-            !NumberUtils::isInteger($partIdentifier) && $parent->getSlug() == $partIdentifier;
     }
 
     /**
@@ -322,12 +254,12 @@ class TagService
     }
 
     /**
-     * Set courseTocRepository
+     * Set partService
      *
-     * @param \SimpleIT\ClaireAppBundle\Repository\Course\CourseTocRepository $courseTocRepository
+     * @param PartService $partService
      */
-    public function setCourseTocRepository($courseTocRepository)
+    public function setPartService($partService)
     {
-        $this->courseTocRepository = $courseTocRepository;
+        $this->partService = $partService;
     }
 }
