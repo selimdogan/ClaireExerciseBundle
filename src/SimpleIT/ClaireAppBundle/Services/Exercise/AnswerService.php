@@ -3,10 +3,10 @@
 namespace SimpleIT\ClaireAppBundle\Services\Exercise;
 
 use SimpleIT\ApiResourcesBundle\Exercise\AnswerResource;
-use SimpleIT\ApiResourcesBundle\Exercise\Exercise\GroupItems\Exercise as GroupItemsItem;
+use SimpleIT\ApiResourcesBundle\Exercise\Exercise\GroupItems\Item as GroupItemsItem;
 use SimpleIT\ApiResourcesBundle\Exercise\Exercise\MultipleChoice\Question;
-use SimpleIT\ApiResourcesBundle\Exercise\Exercise\OrderItems\Exercise as OrderItemsItem;
-use SimpleIT\ApiResourcesBundle\Exercise\Exercise\PairItems\Exercise as PairItemsItem;
+use SimpleIT\ApiResourcesBundle\Exercise\Exercise\OrderItems\Item as OrderItemsItem;
+use SimpleIT\ApiResourcesBundle\Exercise\Exercise\PairItems\Item as PairItemsItem;
 use SimpleIT\ApiResourcesBundle\Exercise\ItemResource;
 use SimpleIT\ClaireAppBundle\Model\Exercise\AnswerResourceFactory;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\AnswerByItemRepository;

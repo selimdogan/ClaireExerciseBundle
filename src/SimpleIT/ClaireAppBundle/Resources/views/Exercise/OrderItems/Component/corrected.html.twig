@@ -1,4 +1,4 @@
-{% extends 'SimpleITClaireAppBundle:Exercise:OrderItems/container.html.twig' %}
+{% extends 'SimpleITClaireAppBundle:Exercise/OrderItems/Component:container.html.twig' %}
 
 {% block question %}
 
@@ -11,8 +11,8 @@
                 {% if obj.source is defined %}
                     <td><img src="{{ asset("bundles/simpleitclaireapp/img/exercise/") }}{{ obj.source }}"
                              alt="{{ obj.source }}." align="center"/></td>
-                {% elseif obj.content is defined %}
-                <td>{{ obj.content }}</td>
+                {% elseif obj.text is defined %}
+                <td>{{ obj.text }}</td>
                 {% endif %}
             </tr>
 
@@ -22,7 +22,7 @@
 
     <table cellpadding="10"><tbody>
         <tr>
-            {% for ans in item.learnerAnswers %}
+            {% for ans in item.answers %}
                 <td>{{ ans }}</td>
             {% endfor %}
             {% if item.allRight %}

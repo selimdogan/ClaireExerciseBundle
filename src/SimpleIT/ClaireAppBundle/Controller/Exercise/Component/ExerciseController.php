@@ -43,7 +43,6 @@ class ExerciseController extends AppController
             $view = $this->selectNotCorrectedView($exercise);
         }
 
-
         return $this->render(
             $view,
             array(

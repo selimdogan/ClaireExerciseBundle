@@ -28,7 +28,8 @@ class ExerciseModelController extends AppController
             'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:view.html.twig',
             array(
                 'exerciseModel' => $exerciseModel,
-            'content' => print_r($exerciseModel->getContent(), true))
+                'content'       => print_r($exerciseModel->getContent(), true)
+            )
         );
     }
 

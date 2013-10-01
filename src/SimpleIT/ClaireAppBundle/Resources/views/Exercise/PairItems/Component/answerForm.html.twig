@@ -17,10 +17,10 @@ plop
                 <tr>
                     {% if lp.source is defined %}
                         <td>
-                            <img src="http://dsi-liris-silex.univ-lyon1.fr/claire/picture/{{ lp.source }}"
+                            <img src="{{ asset("bundles/simpleitclaireapp/img/exercise/") }}{{ lp.source }}"
                                  alt="{{ lp.source }}." align="center"/></td>
-                    {% elseif lp.content is defined %}
-                        <td>{{ lp.content }}</td>
+                    {% elseif lp.text is defined %}
+                        <td>{{ lp.text }}</td>
                     {% endif %}
                     <td><input id="answer{{ _cptPair }}"
                                type="text"
@@ -33,10 +33,10 @@ plop
                     <td>{{ _cptPair }} -</td>
                     {% if item.rightParts[index].source is defined %}
                         <td>
-                            <img src="http://dsi-liris-silex.univ-lyon1.fr/claire/picture/{{ item.rightParts[index].source }}"
+                            <img src="{{ asset("bundles/simpleitclaireapp/img/exercise/") }}{{ item.rightParts[index].source }}"
                                  alt="{{ item.rightParts[index].source }}." align="center"/></td>
-                    {% elseif item.rightParts[index].content is defined %}
-                        <td>{{ item.rightParts[index].content }}</td>
+                    {% elseif item.rightParts[index].text is defined %}
+                        <td>{{ item.rightParts[index].text }}</td>
                     {% endif %}
                 </tr>
 

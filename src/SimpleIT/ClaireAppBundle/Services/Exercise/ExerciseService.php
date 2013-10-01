@@ -96,6 +96,8 @@ class ExerciseService implements ExerciseServiceInterface
      */
     public function getExerciseObjectFromExercise($exerciseId)
     {
-        return $this->get($exerciseId)->getContent();
+        $exerciseResource = $this->get($exerciseId);
+
+        return $exerciseResource->getContent();
     }
 }

@@ -1,13 +1,12 @@
-{% extends 'SimpleITClaireAppBundle:Exercise:OrderItems/container.html.twig' %}
-
+{% extends 'SimpleITClaireAppBundle:Exercise/OrderItems/Component:container.html.twig' %}
 
 {% block question %}
 
-    <form action="{{ path('SimpleIT_Claire_exercise_correctItem', {
-    'type': "order-items",
-    'itemId': itemId,
-    'exId': exercise.id
-    }) }}"
+    <form action="{{ path('simple_it_exercise_answer', {
+    'itemNumber': itemNumber,
+    'exerciseId': exerciseId
+    }
+    ) }}"
           method="post">
 
         {% set _cptObj = 0 %}
@@ -21,8 +20,8 @@
                         <td>
                             <img src="{{ asset("bundles/simpleitclaireapp/img/exercise/") }}{{ obj.source }}"
                                  alt="{{ obj.source }}." align="center"/></td>
-                    {% elseif obj.content is defined %}
-                        <td>{{ obj.content }}</td>
+                    {% elseif obj.text is defined %}
+                        <td>{{ obj.text }}</td>
                     {% endif %}
                 </tr>
 
