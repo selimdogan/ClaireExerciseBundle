@@ -1,7 +1,7 @@
-<div class="thematic-tags">
-    <span></span>
-    <div>
-        <p>Thématiques</p>
+<div class="img-text-align thematic-tags">
+    <span class="icon align-middle"></span>
+    <div class="align-middle">
+        <p class="text-top-dashboard">Thématiques</p>
         <p itemprop="keywords">
             {% for tag in tags %}
                 <a href="{{ path('simple_it_claire_associated_content_tag_view', {'categoryIdentifier': tag.category.slug, 'tagIdentifier': tag.slug }) }}">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}

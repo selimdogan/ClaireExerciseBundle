@@ -2,39 +2,44 @@
 <ul class="informations">
     {% if informations.difficulty is not empty %}
         <li class="difficulty">
-            <span class="icon"></span>
-
-            <div>
-                <strong>{{ 'course.difficulty' | trans }}</strong>
-
-                <p itemprop="difficulty">{{ informations.difficulty }}</p>
+            <div class="img-text-align">
+                <span class="icon align-middle"></span>
+                <div class="align-middle">
+                    <p class="text-top-dashboard">{{ 'course.difficulty' | trans }}</p>
+                    <p itemprop="difficulty">{{ informations.difficulty }}</p>
+                </div>
             </div>
         </li>
     {% endif %}
     <li class="grade">
-        <span class="icon"></span>
+        <div class="img-text-align">
+            <span class="icon align-middle"></span>
 
-        <div>
-            <strong>{{ 'course.rate' | trans }}</strong>
+            <div class="align-middle">
+                <p class="text-top-dashboard">{{ 'course.rate' | trans }}</p>
 
-            <p itemprop="aggregateRating" class="star">
-                {% if informations.aggregateRating is not defined %}
-                    {% set aggregateRating = 0 %}
-                {% else %}
-                    {% set aggregateRating = informations.aggregateRating %}
-                {% endif %}
-                {% include "SimpleITClaireAppBundle:Common:rating.html.twig" with { 'note' : aggregateRating } %}
-            </p>
+                <p itemprop="aggregateRating" class="star">
+                    {% if informations.aggregateRating is not defined %}
+                        {% set aggregateRating = 0 %}
+                    {% else %}
+                        {% set aggregateRating = informations.aggregateRating %}
+                    {% endif %}
+                    {% include "SimpleITClaireAppBundle:Common:rating.html.twig" with { 'note' : aggregateRating } %}
+                </p>
+            </div>
         </div>
     </li>
     {% if informations.timeRequired is not null %}
         <li class="duration">
-            <span class="icon"></span>
+            <div class="img-text-align">
 
-            <div>
-                <strong>{{ 'course.duration' | trans }}</strong>
+                <span class="icon align-middle"></span>
 
-                <p itemprop="duration"> {{ informations.timeRequired | dateInterval }}</p>
+                <div class="align-middle">
+                    <p class="text-top-dashboard">{{ 'course.duration' | trans }}</p>
+
+                    <p itemprop="duration"> {{ informations.timeRequired | dateInterval }}</p>
+                </div>
             </div>
         </li>
     {% endif %}
