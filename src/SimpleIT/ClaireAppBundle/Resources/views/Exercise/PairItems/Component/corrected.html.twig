@@ -4,7 +4,7 @@
 
     <table cellpadding="10">
         <tbody>
-        {% for index, lp in item.leftParts %}
+        {% for index, lp in item.fixParts %}
 
             <tr>
                 {% if lp.source is defined %}
@@ -17,14 +17,14 @@
 
                 <td><--------------></td>
 
-                {% if item.rightParts[item.answers[index]].source is defined %}
+                {% if item.mobileParts[item.answers[index]].source is defined %}
                     <td>
-                        <img src="{{ asset("bundles/simpleitclaireapp/img/exercise/") }}{{ item.rightParts[item.answers[index]].source }}"
-                             alt="{{ item.rightParts[item.answers[index]].source }}."
+                        <img src="{{ asset("bundles/simpleitclaireapp/img/exercise/") }}{{ item.mobileParts[item.answers[index]].source }}"
+                             alt="{{ item.mobileParts[item.answers[index]].source }}."
                              align="center"/>
                     </td>
-                {% elseif item.rightParts[item.answers[index]].text is defined %}
-                    <td>{{ item.rightParts[item.answers[index]].text }}</td>
+                {% elseif item.mobileParts[item.answers[index]].text is defined %}
+                    <td>{{ item.mobileParts[item.answers[index]].text }}</td>
                 {% endif %}
 
                 <!-- Correction -->
@@ -36,11 +36,11 @@
                     <td><img src="{{ asset("bundles/simpleitclaireapp/img/exercise/wrong.png") }}"
                              alt="Faux." align="center"></td>
                     <td>
-                        {% if item.rightParts[item.solutions[index]].source is defined %}
-                            <img src="{{ asset("bundles/simpleitclaireapp/img/exercise/") }}{{ item.rightParts[item.solutions[index]].source }}"
-                                 alt="{{ item.rightParts[item.solutions[index]].source }}." align="center"/>
-                        {% elseif item.rightParts[item.solutions[index]].text is defined %}
-                            {{ item.rightParts[item.solutions[index]].text }}
+                        {% if item.mobileParts[item.solutions[index]].source is defined %}
+                            <img src="{{ asset("bundles/simpleitclaireapp/img/exercise/") }}{{ item.mobileParts[item.solutions[index]].source }}"
+                                 alt="{{ item.mobileParts[item.solutions[index]].source }}." align="center"/>
+                        {% elseif item.mobileParts[item.solutions[index]].text is defined %}
+                            {{ item.mobileParts[item.solutions[index]].text }}
                         {% endif %}
                     </td>
                 {% endif %}

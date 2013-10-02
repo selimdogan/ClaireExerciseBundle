@@ -13,7 +13,7 @@ plop
         {% set _cptPair = 0 %}
         <table cellpadding="10">
             <tbody>
-            {% for index, lp in item.leftParts %}
+            {% for index, lp in item.fixParts %}
                 <tr>
                     {% if lp.source is defined %}
                         <td>
@@ -31,12 +31,12 @@ plop
                     <td></td>
                     <td></td>
                     <td>{{ _cptPair }} -</td>
-                    {% if item.rightParts[index].source is defined %}
+                    {% if item.mobileParts[index].source is defined %}
                         <td>
-                            <img src="{{ asset("bundles/simpleitclaireapp/img/exercise/") }}{{ item.rightParts[index].source }}"
-                                 alt="{{ item.rightParts[index].source }}." align="center"/></td>
-                    {% elseif item.rightParts[index].text is defined %}
-                        <td>{{ item.rightParts[index].text }}</td>
+                            <img src="{{ asset("bundles/simpleitclaireapp/img/exercise/") }}{{ item.mobileParts[index].source }}"
+                                 alt="{{ item.mobileParts[index].source }}." align="center"/></td>
+                    {% elseif item.mobileParts[index].text is defined %}
+                        <td>{{ item.mobileParts[index].text }}</td>
                     {% endif %}
                 </tr>
 

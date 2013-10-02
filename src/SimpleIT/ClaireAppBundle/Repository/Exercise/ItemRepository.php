@@ -4,6 +4,7 @@ namespace SimpleIT\ClaireAppBundle\Repository\Exercise;
 
 use SimpleIT\ApiResourcesBundle\Exercise\ItemResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Class ItemRepository
@@ -28,13 +29,20 @@ class ItemRepository extends AppRepository
      * @param int   $itemId     Item id
      * @param array $parameters Parameters
      *
+     * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException
      * @return ItemResource
      */
     public function find($itemId, array $parameters = array())
     {
-        return $this->findResource(
+        $item = $this->findResource(
             array('itemId' => $itemId),
             $parameters
         );
+
+        if ($item === null) {
+            throw new ResourceNotFoundException("Item not existing");
+        }
+
+        return $item;
     }
 }

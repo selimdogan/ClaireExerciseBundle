@@ -4,6 +4,7 @@ namespace SimpleIT\ClaireAppBundle\Repository\Exercise;
 
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModelResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Class ExerciseModelRepository
@@ -28,13 +29,20 @@ class ExerciseRepository extends AppRepository
      * @param int   $exerciseId Exercise Id
      * @param array $parameters Parameters
      *
+     * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException
      * @return ExerciseModelResource
      */
     public function find($exerciseId, array $parameters = array())
     {
-        return $this->findResource(
+        $exercise = $this->findResource(
             array('exerciseId' => $exerciseId),
             $parameters
         );
+
+        if ($exercise === null) {
+            throw new ResourceNotFoundException("Exercise not existing");
+        }
+
+        return $exercise;
     }
 }

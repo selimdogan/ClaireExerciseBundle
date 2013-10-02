@@ -146,17 +146,11 @@ class ItemService implements ItemServiceInterface
      */
     public function getItemResourceFromExercise($exerciseId, $itemNumber)
     {
-        try {
-            $items = $this->getAllFromExercise($exerciseId);
-            $keys = $items->getKeys();
-            $itemId = $items->get($keys[$itemNumber - 1])->getItemId();
+        $items = $this->getAllFromExercise($exerciseId);
+        $keys = $items->getKeys();
+        $itemId = $items->get($keys[$itemNumber - 1])->getItemId();
 
-            return $this->get($itemId, true);
-        } catch (\Exception $e) {
-            throw new \LogicException("Item not existing: exercise " . $exerciseId .
-            " item " . $itemNumber);
-        }
-
+        return $this->get($itemId, true);
     }
 
     /**
