@@ -128,6 +128,33 @@ class PartController extends AppController
         );
     }
 
+//    /**
+//     * View Part content
+//     *
+//     * @param Request      $request          Request
+//     * @param int | string $courseIdentifier Course id | slug
+//     * @param int | string $partIdentifier   Part id | slug
+//     *
+//     * @return \Symfony\Component\HttpFoundation\Response
+//     */
+//    public function viewContentToEditAction(Request $request, $courseIdentifier, $partIdentifier)
+//    {
+//        $partContent = $this->get('simple_it.claire.course.part')->getContent(
+//            $courseIdentifier,
+//            $partIdentifier,
+//            $this->getStatusToEdit($request)
+//        );
+//
+//        return $this->render(
+//            'SimpleITClaireAppBundle:Course/Part/Component:viewContent.html.twig',
+//            array(
+//                'courseIdentifier' => $courseIdentifier,
+//                'partIdentifier'   => $partIdentifier,
+//                'partContent'      => $partContent
+//            )
+//        );
+//    }
+
     /**
      * Edit part content
      *
@@ -144,7 +171,7 @@ class PartController extends AppController
             $partContent = $this->get('simple_it.claire.course.part')->getContent(
                 $courseIdentifier,
                 $partIdentifier,
-                $this->getStatus($request)
+                $this->getStatusToEdit($request)
             );
         } elseif (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()
         ) {
@@ -153,7 +180,7 @@ class PartController extends AppController
                 $courseIdentifier,
                 $partIdentifier,
                 $partContent,
-                $this->getStatus($request)
+                $this->getStatusToEdit($request)
             );
 
             return new AppResponse($partContent);
@@ -261,6 +288,26 @@ class PartController extends AppController
      */
     private function getStatus(Request $request)
     {
-        return CourseResource::STATUS_DRAFT;
+        if (is_null($status = $request->attributes->get('status'))) {
+            $status= CourseResource::STATUS_PUBLISHED;
+        }
+
+        return $status;
+    }
+
+    /**
+     * Get asked status
+     *
+     * @param Request $request Request
+     *
+     * @return string
+     */
+    private function getStatusToEdit(Request $request)
+    {
+        if (is_null($status = $request->attributes->get('status'))) {
+            $status= CourseResource::STATUS_DRAFT;
+        }
+
+        return $status;
     }
 }

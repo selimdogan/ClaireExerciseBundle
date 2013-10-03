@@ -1,5 +1,5 @@
 simple_it_claire_course_course_edit:
-    pattern: /{categoryIdentifier}/tutoriels/{courseIdentifier}/edit
+    pattern: /{categoryIdentifier}/course/{courseId}/edit
     defaults: { _controller: SimpleITClaireAppBundle:Course/Module/Course:edit }
     requirements:
         _method: GET|POST

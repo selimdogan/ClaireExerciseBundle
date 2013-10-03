@@ -9,6 +9,7 @@ use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\Utils\ArrayUtils;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
