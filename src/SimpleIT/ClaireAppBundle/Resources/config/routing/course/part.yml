@@ -1,6 +1,6 @@
-simple_it_claire_part_edit:
+simple_it_claire_course_part_edit:
     pattern: /{partIdentifier}/edit
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Module/Part:edit }
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Part:edit }
     requirements:
             _method: GET
 
