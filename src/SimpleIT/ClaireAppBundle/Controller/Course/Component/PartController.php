@@ -103,17 +103,19 @@ class PartController extends AppController
     /**
      * View Part content
      *
+     * @param Request      $request          Request
      * @param int | string $courseIdentifier Course id | slug
      * @param int | string $partIdentifier   Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
-    public function viewContentAction($courseIdentifier, $partIdentifier)
+    public function viewContentAction(Request $request, $courseIdentifier, $partIdentifier)
     {
         $partContent = $this->get('simple_it.claire.course.part')->getContent(
             $courseIdentifier,
-            $partIdentifier
+            $partIdentifier,
+            $this->getStatus($request)
         );
 
         return $this->render(
@@ -141,7 +143,8 @@ class PartController extends AppController
         if (RequestUtils::METHOD_GET == $request->getMethod()) {
             $partContent = $this->get('simple_it.claire.course.part')->getContent(
                 $courseIdentifier,
-                $partIdentifier
+                $partIdentifier,
+                $this->getStatus($request)
             );
         } elseif (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()
         ) {
@@ -149,7 +152,8 @@ class PartController extends AppController
             $partContent = $this->get('simple_it.claire.course.part')->saveContent(
                 $courseIdentifier,
                 $partIdentifier,
-                $partContent
+                $partContent,
+                $this->getStatus($request)
             );
 
             return new AppResponse($partContent);
@@ -176,7 +180,12 @@ class PartController extends AppController
      * @return \Symfony\Component\HttpFoundation\Response
      * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
-    public function viewTocMediumAction($courseIdentifier, $partIdentifier, $categoryIdentifier, $displayLevel)
+    public function viewTocMediumAction(
+        $courseIdentifier,
+        $partIdentifier,
+        $categoryIdentifier,
+        $displayLevel
+    )
     {
         $toc = $this->get('simple_it.claire.course.part')->getToc(
             $courseIdentifier,
@@ -241,5 +250,17 @@ class PartController extends AppController
             'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
             array('content' => $introduction)
         );
+    }
+
+    /**
+     * Get asked status
+     *
+     * @param Request $request Request
+     *
+     * @return string
+     */
+    private function getStatus(Request $request)
+    {
+        return CourseResource::STATUS_DRAFT;
     }
 }
