@@ -9,7 +9,7 @@ use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\Utils\ArrayUtils;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use SimpleIT\Utils\HTTP;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -51,6 +51,7 @@ class CourseController extends AppController
     /**
      * List courses
      *
+     * @param Request               $request               Request
      * @param CollectionInformation $collectionInformation Collection Information
      * @param string                $paginationUrl         Pagination url
      *
@@ -96,10 +97,13 @@ class CourseController extends AppController
                     $course->getMetadatas(),
                     MetadataResource::COURSE_METADATA_IMAGE
                 ),
-                'url' => $this->generateUrl('simple_it_claire_course_course_view', array(
+                'url'   => $this->generateUrl(
+                    'simple_it_claire_course_course_view',
+                    array(
                         'categoryIdentifier' => $course->getCategory()->getSlug(),
-                        'courseIdentifier' => $course->getSlug()
-                    ))
+                        'courseIdentifier'   => $course->getSlug()
+                    )
+                )
             );
         }
 
@@ -274,17 +278,16 @@ class CourseController extends AppController
     /**
      * Edit a course
      *
-     * @param Request $request  Request
-     * @param int     $courseId Course id
+     * @param int    $courseId Course id
+     * @param string $status   Status
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request, $courseId)
+    public function editAction($courseId, $status)
     {
-        $parameters = $request->attributes->all();
         $course = $this->get('simple_it.claire.course.course')->getCourseToEdit(
             $courseId,
-            $parameters
+            $status
         );
 
         return $this->render(
@@ -296,17 +299,16 @@ class CourseController extends AppController
     /**
      * Edit a course status to waiting for publication
      *
-     * @param Request $request  Request
-     * @param int     $courseId Course id
+     * @param int    $courseId      Course id
+     * @param string $initialStatus Initial status
      *
-     * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editStatusToWaitingForPublicationAction(Request $request, $courseId)
+    public function editStatusToWaitingForPublicationAction($courseId, $initialStatus)
     {
-        $initialStatus = $request->get(CourseResource::STATUS);
         if (is_null($initialStatus)) {
-            throw new HttpException(400);
+            throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST);
         }
         $this->get('simple_it.claire.course.course')->changeStatus(
             $courseId,
@@ -318,10 +320,10 @@ class CourseController extends AppController
     }
 
     /**
-     * Edit a course status
+     * Edit a course status to published
      *
-     * @param Request $request  Request
-     * @param int     $courseId Course id
+     * @param int    $courseId      Course id
+     * @param string $initialStatus Initial status
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
@@ -330,7 +332,7 @@ class CourseController extends AppController
     {
         $initialStatus = $request->get(CourseResource::STATUS);
         if (is_null($initialStatus)) {
-            throw new HttpException(400);
+            throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST);
         }
         $this->get('simple_it.claire.course.course')->changeStatus(
             $courseId,

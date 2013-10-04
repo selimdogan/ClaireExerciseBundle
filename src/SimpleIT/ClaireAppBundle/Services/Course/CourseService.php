@@ -109,26 +109,25 @@ class CourseService
     }
 
     /**
-     * @param int | string $courseIdentifier Course id | slug
-     * @param array        $parameters       Parameters
+     * @param int | string $courseId   Course id
+     * @param string       $status     Status
+     * @param array        $parameters Parameters
      *
      * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
      */
-    public function getCourseToEdit($courseIdentifier, array $parameters = array())
+    public function getCourseToEdit($courseId, $status, array $parameters = array())
     {
-        if (is_null(ArrayUtils::getValue($parameters, CourseResource::STATUS))) {
-            $parameters[CourseResource::STATUS] = CourseResource::STATUS_DRAFT;
-        }
+        $parameters[CourseResource::STATUS] = $status;
 
-        return $this->courseRepository->find($courseIdentifier, $parameters);
+        return $this->courseRepository->findToEdit($courseId, $parameters);
     }
 
     /**
      * Save a course
      *
-     * @param int | string   $courseIdentifier          Course id | slug
-     * @param CourseResource $course                    Course
-     * @param array          $parameters                Parameters
+     * @param int | string   $courseIdentifier Course id | slug
+     * @param CourseResource $course           Course
+     * @param array          $parameters       Parameters
      *
      * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
      */

@@ -1,8 +1,8 @@
 {{ course.title }}
 {{ course.status }}
-<form action="{{ path('simple_it_claire_component_course_status_waiting_for_publication', { 'courseId': course.id, 'status': course.status}) }}" method="post">
-    <input type="submit">
-</form>
+{#<form action="{{ path('simple_it_claire_component_course_status_waiting_for_publication', { 'courseId': course.id, 'status': course.status}) }}" method="post">#}
+    {#<input type="submit">#}
+{#</form>#}
 <form action="{{ path('simple_it_claire_component_course_status_published', { 'courseId': course.id, 'status': course.status}) }}" method="post">
     <input type="submit">
 </form>

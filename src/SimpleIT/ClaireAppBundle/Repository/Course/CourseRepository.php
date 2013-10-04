@@ -66,6 +66,22 @@ class CourseRepository extends AppRepository
     }
 
     /**
+     * Find a course to edit
+     *
+     * @param string $courseIdentifier Course id | slug
+     * @param array  $parameters       Parameters
+     *
+     * @return CourseResource
+     */
+    public function findToEdit($courseIdentifier, array $parameters = array())
+    {
+        return $this->findResource(
+            array('courseIdentifier' => $courseIdentifier),
+            $parameters
+        );
+    }
+
+    /**
      * Update a course
      *
      * @param string         $courseIdentifier Course id | slug
