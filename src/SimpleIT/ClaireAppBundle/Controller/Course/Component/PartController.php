@@ -112,20 +112,11 @@ class PartController extends AppController
      */
     public function viewContentAction(Request $request, $courseIdentifier, $partIdentifier)
     {
-        $partContent = $this->get('simple_it.claire.course.part')->getContent(
+        return new Response($this->get('simple_it.claire.course.part')->getContent(
             $courseIdentifier,
             $partIdentifier,
             $this->getStatus($request)
-        );
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/Part/Component:viewContent.html.twig',
-            array(
-                'courseIdentifier' => $courseIdentifier,
-                'partIdentifier'   => $partIdentifier,
-                'partContent'      => $partContent
-            )
-        );
+        ));
     }
 
 //    /**

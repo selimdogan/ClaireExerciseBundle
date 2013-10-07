@@ -18,6 +18,7 @@ use SimpleIT\ClaireAppBundle\Repository\User\AuthorRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
 use SimpleIT\AppBundle\Annotation\Cache;
+use SimpleIT\AppBundle\Annotation\CacheInvalidation;
 
 /**
  * Class CourseRepository
@@ -89,6 +90,7 @@ class CourseRepository extends AppRepository
      * @param array          $parameters       Parameters
      *
      * @return CourseResource
+     * @CacheInvalidation(namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
     public function update($courseIdentifier, CourseResource $course, array $parameters = array())
     {
