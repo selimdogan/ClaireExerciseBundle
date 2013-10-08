@@ -188,6 +188,22 @@ class PartService
     }
 
     /**
+     * Get a part content
+     *
+     * @param integer $courseIdentifier Course id | slug
+     * @param integer $partIdentifier   Part id | slug
+     * @param string  $status           Asked status
+     *
+     * @return mixed
+     */
+    public function getContentToEdit($courseIdentifier, $partIdentifier, $status)
+    {
+        $parameters = array('status' => $status);
+
+        return $this->partContentRepository->findToEdit($courseIdentifier, $partIdentifier, $parameters);
+    }
+
+    /**
      * Get a part toc
      *
      * @param int | string $courseIdentifier Course id | slug

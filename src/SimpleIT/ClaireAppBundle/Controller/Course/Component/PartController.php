@@ -159,7 +159,7 @@ class PartController extends AppController
     {
         $partContent = null;
         if (RequestUtils::METHOD_GET == $request->getMethod()) {
-            $partContent = $this->get('simple_it.claire.course.part')->getContent(
+            $partContent = $this->get('simple_it.claire.course.part')->getContentToEdit(
                 $courseIdentifier,
                 $partIdentifier,
                 $this->getStatusToEdit($request)
