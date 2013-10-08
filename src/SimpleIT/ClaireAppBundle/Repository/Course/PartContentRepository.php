@@ -43,6 +43,31 @@ class PartContentRepository extends AppRepository
     protected $resourceClass = '';
 
     /**
+ * Get a part content
+ *
+ * @param string $courseIdentifier Course id | slug
+ * @param string $partIdentifier   Part id | slug
+ * @param array  $parameters       Parameters
+ * @param string $format           Format
+ *
+ * @return mixed
+ * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+ */
+    public function find(
+        $courseIdentifier,
+        $partIdentifier,
+        $parameters = array(),
+        $format = FormatUtils::HTML
+    )
+    {
+        return parent::findResource(
+            array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier),
+            $parameters,
+            $format
+        );
+    }
+
+    /**
      * Get a part content
      *
      * @param string $courseIdentifier Course id | slug
@@ -51,9 +76,8 @@ class PartContentRepository extends AppRepository
      * @param string $format           Format
      *
      * @return mixed
-     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
-    public function find(
+    public function findToEdit(
         $courseIdentifier,
         $partIdentifier,
         $parameters = array(),
