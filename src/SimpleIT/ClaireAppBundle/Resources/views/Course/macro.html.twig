@@ -23,24 +23,23 @@
 
             {% for child in part.children %}
                 <li>
-                        <a class="course-title course-title-{{ level + 1 }}" data-claire-course-slug="{{ child.slug }}" href="{{ path ('simple_it_claire_course_part_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier, 'partIdentifier': child.slug})}}">
-                        {% if child.metadatas.image is defined %}
-                            <img class="course-icon" src="{{ child.metadatas.image }}" />
-                        {% endif %}
+                    <a class="course-title course-title-{{ level + 1 }}" data-claire-course-slug="{{ child.slug }}" href="{{ path ('simple_it_claire_course_part_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier, 'partIdentifier': child.slug})}}">
+                            {% if child.metadatas.image is defined %}
+                                <img class="course-icon" src="{{ child.metadatas.image }}" />
+                            {% endif %}
+                                {% if displayLevel == 2 and mainClass != 'course-toc-side' and mainClass != 'toc-medium' %}
 
-                        {% if displayLevel == 2 and mainClass != 'course-toc-side' and mainClass != 'toc-medium' %}
-
-                                {% if (level + 1) == 1 %}
-                                        <span>Partie {{ position }} - {{ child.title -}}</span>
-                                {% elseif (level + 1) == 2 %}
-                                        <span class="chapter">Chapitre {{ position }}</span>
-                                        <span>{{- child.title -}}</span>
+                                        {% if (level + 1) == 1 %}
+                                                <span>Partie {{ position }} - {{ child.title -}}</span>
+                                        {% elseif (level + 1) == 2 %}
+                                                <span class="chapter">Chapitre {{ position }}</span>
+                                                <span>{{- child.title -}}</span>
+                                        {% else %}
+                                            <span>{{- child.title -}}</span>
+                                        {% endif %}
                                 {% else %}
                                     <span>{{- child.title -}}</span>
                                 {% endif %}
-                        {% else %}
-                            <span>{{- child.title -}}</span>
-                        {% endif %}
                     </a>
                     {% if level + 1 == 1  and displayLevel == 2 %}
                         <section>
