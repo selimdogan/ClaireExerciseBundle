@@ -6,7 +6,7 @@ simple_it_claire_component_part_edit:
 
 simple_it_claire_component_part_content_edit:
     pattern: /{partIdentifier}/content
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/PartContent:edit }
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Part:editContent }
     requirements:
             _method: GET|POST
 
