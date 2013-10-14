@@ -56,7 +56,7 @@ class CourseRepository extends AppRepository
      * @param array  $parameters       Parameters
      *
      * @return CourseResource
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function find($courseIdentifier, array $parameters = array())
     {

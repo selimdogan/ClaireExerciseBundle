@@ -45,7 +45,7 @@ class PartRepository extends AppRepository
      * @param array  $parameters       Parameters
      *
      * @return PartResource
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function find(
         $courseIdentifier,
