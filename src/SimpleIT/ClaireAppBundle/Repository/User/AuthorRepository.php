@@ -15,6 +15,12 @@ use SimpleIT\Utils\Collection\CollectionInformation;
 class AuthorRepository extends AppRepository
 {
 
+    /** URL for authors ressources */
+    const URL_AUTHORS = '/authors/';
+
+    /** URL for courses collection in an author ressource */
+    const URL_COURSES = '/courses/';
+
     /**
      * @var string
      */

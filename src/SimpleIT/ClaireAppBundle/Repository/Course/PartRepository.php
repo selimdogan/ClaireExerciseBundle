@@ -88,7 +88,8 @@ class PartRepository extends AppRepository
      * ***** OLD SHIT ***** *
      *
      * **********************/
-   /** @var ClaireApi The Claire Api */
+    
+    /** @var ClaireApi The Claire Api */
     protected $claireApi;
 
     /** The base url for courses = '/courses/' */

@@ -18,6 +18,7 @@ use SimpleIT\ClaireAppBundle\Repository\User\AuthorRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
 use SimpleIT\AppBundle\Annotation\Cache;
+use SimpleIT\AppBundle\Annotation\CacheInvalidation;
 
 /**
  * Class CourseRepository
@@ -66,6 +67,22 @@ class CourseRepository extends AppRepository
     }
 
     /**
+     * Find a course to edit
+     *
+     * @param string $courseIdentifier Course id | slug
+     * @param array  $parameters       Parameters
+     *
+     * @return CourseResource
+     */
+    public function findToEdit($courseIdentifier, array $parameters = array())
+    {
+        return $this->findResource(
+            array('courseIdentifier' => $courseIdentifier),
+            $parameters
+        );
+    }
+
+    /**
      * Update a course
      *
      * @param string         $courseIdentifier Course id | slug
@@ -73,6 +90,7 @@ class CourseRepository extends AppRepository
      * @param array          $parameters       Parameters
      *
      * @return CourseResource
+     * @CacheInvalidation(namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
     public function update($courseIdentifier, CourseResource $course, array $parameters = array())
     {

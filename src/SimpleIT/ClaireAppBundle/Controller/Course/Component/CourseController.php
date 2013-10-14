@@ -3,15 +3,16 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
+use SimpleIT\AppBundle\Annotation\Cache;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\Utils\ArrayUtils;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\AppBundle\Annotation\Cache;
+use SimpleIT\Utils\HTTP;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use SimpleIT\AppBundle\Model\AppResponse;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class CourseController
@@ -50,6 +51,7 @@ class CourseController extends AppController
     /**
      * List courses
      *
+     * @param Request               $request               Request
      * @param CollectionInformation $collectionInformation Collection Information
      * @param string                $paginationUrl         Pagination url
      *
@@ -95,10 +97,13 @@ class CourseController extends AppController
                     $course->getMetadatas(),
                     MetadataResource::COURSE_METADATA_IMAGE
                 ),
-                'url' => $this->generateUrl('simple_it_claire_course_course_view', array(
+                'url'   => $this->generateUrl(
+                    'simple_it_claire_course_course_view',
+                    array(
                         'categoryIdentifier' => $course->getCategory()->getSlug(),
-                        'courseIdentifier' => $course->getSlug()
-                    ))
+                        'courseIdentifier'   => $course->getSlug()
+                    )
+                )
             );
         }
 
@@ -158,7 +163,37 @@ class CourseController extends AppController
     }
 
     /**
-     * TODO: to be double checked by a backend guy
+     * View table of content
+     *
+     * @param int | string $courseIdentifier   Course id | slug
+     * @param int          $displayLevel       Display level
+     * @param int | string $categoryIdentifier Category id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
+     */
+    public function viewTocAction($courseIdentifier, $displayLevel, $categoryIdentifier)
+    {
+        $toc = $this->get('simple_it.claire.course.course')->getToc($courseIdentifier);
+
+        if ($displayLevel == CourseResource::DISPLAY_LEVEL_MEDIUM) {
+            $template = 'SimpleITClaireAppBundle:Course/Course/Component:viewTocMedium.html.twig';
+        } else {
+            $template = 'SimpleITClaireAppBundle:Course/Course/Component:viewTocBig.html.twig';
+        }
+
+        return $this->render(
+            $template,
+            array(
+                'toc'                => $toc,
+                'displayLevel'       => $displayLevel,
+                'courseIdentifier'   => $courseIdentifier,
+                'categoryIdentifier' => $categoryIdentifier
+            )
+        );
+    }
+
+    /**
      * View TocAside
      *
      * @param int | string $courseIdentifier   Course id | slug
@@ -184,37 +219,6 @@ class CourseController extends AppController
                 'toc'                => $toc,
                 'displayLevel'       => $displayLevel,
                 'partIdentifier'     => $partIdentifier,
-                'courseIdentifier'   => $courseIdentifier,
-                'categoryIdentifier' => $categoryIdentifier
-            )
-        );
-    }
-
-    /**
-     * View table of content
-     *
-     * @param int | string $courseIdentifier   Course id | slug
-     * @param int          $displayLevel       Display level
-     * @param int | string $categoryIdentifier Category id | slug
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
-     */
-    public function viewTocAction($courseIdentifier, $displayLevel, $categoryIdentifier)
-    {
-        $toc = $this->get('simple_it.claire.course.course')->getToc($courseIdentifier);
-
-        if ($displayLevel == CourseResource::DISPLAY_LEVEL_MEDIUM) {
-            $template = 'SimpleITClaireAppBundle:Course/Course/Component:viewTocMedium.html.twig';
-        } else {
-            $template = 'SimpleITClaireAppBundle:Course/Course/Component:viewTocBig.html.twig';
-        }
-
-        return $this->render(
-            $template,
-            array(
-                'toc'                => $toc,
-                'displayLevel'       => $displayLevel,
                 'courseIdentifier'   => $courseIdentifier,
                 'categoryIdentifier' => $categoryIdentifier
             )
@@ -269,5 +273,73 @@ class CourseController extends AppController
             'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
             array('content' => $content)
         );
+    }
+
+    /**
+     * Edit a course
+     *
+     * @param int    $courseId Course id
+     * @param string $status   Status
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editAction($courseId, $status)
+    {
+        $course = $this->get('simple_it.claire.course.course')->getCourseToEdit(
+            $courseId,
+            $status
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:edit.html.twig',
+            array('course' => $course)
+        );
+    }
+
+    /**
+     * Edit a course status to waiting for publication
+     *
+     * @param int    $courseId      Course id
+     * @param string $initialStatus Initial status
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editStatusToWaitingForPublicationAction($courseId, $initialStatus)
+    {
+        if (is_null($initialStatus)) {
+            throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST);
+        }
+        $this->get('simple_it.claire.course.course')->changeStatus(
+            $courseId,
+            $initialStatus,
+            CourseResource::STATUS_WAITING_FOR_PUBLICATION
+        );
+
+        return new Response();
+    }
+
+    /**
+     * Edit a course status to published
+     *
+     * @param int    $courseId      Course id
+     * @param string $initialStatus Initial status
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    public function editStatusToPublishedAction(Request $request, $courseId)
+    {
+        $initialStatus = $request->get(CourseResource::STATUS);
+        if (is_null($initialStatus)) {
+            throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST);
+        }
+        $this->get('simple_it.claire.course.course')->changeStatus(
+            $courseId,
+            $initialStatus,
+            CourseResource::STATUS_PUBLISHED
+        );
+
+        return new Response();
     }
 }
