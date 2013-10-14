@@ -23,7 +23,7 @@ class MetadataByCourseController extends AbstractMetadataController
      * @param int | string $courseIdentifier Course id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
     public function viewInformationsAction($courseIdentifier)
     {
@@ -43,7 +43,7 @@ class MetadataByCourseController extends AbstractMetadataController
      * @param int | string $courseIdentifier Course id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
     public function viewDescriptionAction($courseIdentifier)
     {
@@ -105,7 +105,7 @@ class MetadataByCourseController extends AbstractMetadataController
      * @param int | string $courseIdentifier Course id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
     public function viewImageAction($courseIdentifier)
     {
@@ -167,7 +167,7 @@ class MetadataByCourseController extends AbstractMetadataController
      * @param int | string $courseIdentifier Course id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
     public function viewRatingAction($courseIdentifier)
     {
@@ -193,7 +193,7 @@ class MetadataByCourseController extends AbstractMetadataController
      * @param int | string $courseIdentifier Course id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
     public function viewDifficultyAction($courseIdentifier)
     {
@@ -267,7 +267,7 @@ class MetadataByCourseController extends AbstractMetadataController
      * @param int | string $courseIdentifier Course id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
     public function viewTimeRequiredAction($courseIdentifier)
     {
@@ -354,7 +354,7 @@ class MetadataByCourseController extends AbstractMetadataController
      * @param int | string $courseIdentifier Course id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
     public function viewLicenseAction($courseIdentifier)
     {

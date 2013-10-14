@@ -33,7 +33,7 @@ class MetadataByPartRepository extends AppRepository
      * @param CollectionInformation $collectionInformation Collection information
      *
      * @return array
-     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
     public function findAll(
         $courseIdentifier,
