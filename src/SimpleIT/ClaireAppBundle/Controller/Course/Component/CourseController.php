@@ -111,7 +111,7 @@ class CourseController extends AppController
      * @param int | string $courseIdentifier Course id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
     public function viewIntroductionAction($courseIdentifier)
     {
@@ -134,7 +134,7 @@ class CourseController extends AppController
      * @param int | string $partIdentifier     Current part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
     public function viewTimelineAction(
         $courseIdentifier,
@@ -167,7 +167,7 @@ class CourseController extends AppController
      * @param int | string $partIdentifier     Current part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
     public function viewTocAsideAction(
         $courseIdentifier,
@@ -198,7 +198,7 @@ class CourseController extends AppController
      * @param int | string $categoryIdentifier Category id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
     public function viewTocAction($courseIdentifier, $displayLevel, $categoryIdentifier)
     {
@@ -229,7 +229,7 @@ class CourseController extends AppController
      * @param int | string $partIdentifier     Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
     public function viewPaginationAction(
         $courseIdentifier,
@@ -259,7 +259,7 @@ class CourseController extends AppController
      * @param int | string $courseIdentifier Course id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
     public function viewContentAction($courseIdentifier)
     {
