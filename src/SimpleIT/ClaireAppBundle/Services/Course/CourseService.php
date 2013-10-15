@@ -8,7 +8,6 @@ use SimpleIT\ClaireAppBundle\Repository\Course\CourseContentRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\CourseIntroductionRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\CourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\CourseTocRepository;
-use SimpleIT\Utils\ArrayUtils;
 use SimpleIT\Utils\Collection\CollectionInformation;
 
 /**

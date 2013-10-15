@@ -94,16 +94,16 @@ class CourseController extends AppController
             $search[] = array(
                 'title' => $course->getTitle(),
                 'image' => ArrayUtils::getValue(
-                    $course->getMetadatas(),
-                    MetadataResource::COURSE_METADATA_IMAGE
-                ),
+                        $course->getMetadatas(),
+                        MetadataResource::COURSE_METADATA_IMAGE
+                    ),
                 'url'   => $this->generateUrl(
-                    'simple_it_claire_course_course_view',
-                    array(
-                        'categoryIdentifier' => $course->getCategory()->getSlug(),
-                        'courseIdentifier'   => $course->getSlug()
+                        'simple_it_claire_course_course_view',
+                        array(
+                            'categoryIdentifier' => $course->getCategory()->getSlug(),
+                            'courseIdentifier'   => $course->getSlug()
+                        )
                     )
-                )
             );
         }
 
@@ -299,14 +299,15 @@ class CourseController extends AppController
     /**
      * Edit a course status to waiting for publication
      *
-     * @param int    $courseId      Course id
-     * @param string $initialStatus Initial status
+     * @param Request $request  Request
+     * @param int     $courseId Course id
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editStatusToWaitingForPublicationAction($courseId, $initialStatus)
+    public function editStatusToWaitingForPublicationAction(Request $request, $courseId)
     {
+        $initialStatus = $request->get(CourseResource::STATUS);
         if (is_null($initialStatus)) {
             throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST);
         }
@@ -322,8 +323,8 @@ class CourseController extends AppController
     /**
      * Edit a course status to published
      *
-     * @param int    $courseId      Course id
-     * @param string $initialStatus Initial status
+     * @param Request $request  Request
+     * @param int     $courseId Course id
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
