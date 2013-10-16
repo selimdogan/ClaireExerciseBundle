@@ -98,25 +98,115 @@ class CourseService
      * Get a course
      *
      * @param int | string $courseIdentifier Course id | slug
+     * @param array        $parameters       Parameters
      *
      * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
      */
-    public function get($courseIdentifier)
+    public function get($courseIdentifier, array $parameters = array())
     {
-        return $this->courseRepository->find($courseIdentifier);
+        return $this->courseRepository->find($courseIdentifier, $parameters);
+    }
+
+    /**
+     * @param int | string $courseId   Course id
+     * @param string       $status     Status
+     * @param array        $parameters Parameters
+     *
+     * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
+     */
+    public function getCourseToEdit($courseId, $status, array $parameters = array())
+    {
+        $parameters[CourseResource::STATUS] = $status;
+
+        return $this->courseRepository->findToEdit($courseId, $parameters);
     }
 
     /**
      * Save a course
      *
-     * @param int | string $courseIdentifier                 Course id | slug
-     * @param CourseResource $course                         Course
+     * @param int | string   $courseIdentifier Course id | slug
+     * @param CourseResource $course           Course
+     * @param array          $parameters       Parameters
      *
      * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
      */
-    public function save($courseIdentifier, CourseResource $course)
+    public function save($courseIdentifier, CourseResource $course, array $parameters = array())
     {
-        return $this->courseRepository->update($courseIdentifier, $course);
+        return $this->courseRepository->update($courseIdentifier, $course, $parameters);
+    }
+
+    /**
+     * Change status of a course
+     *
+     * @param int    $courseId      Course id
+     * @param string $initialStatus The initial status
+     * @param string $finalStatus   The status to be
+     *
+     * @throws \InvalidArgumentException
+     * @return CourseResource
+     */
+    public function changeStatus($courseId, $initialStatus, $finalStatus)
+    {
+        $course = null;
+        switch ($finalStatus) {
+            case CourseResource::STATUS_WAITING_FOR_PUBLICATION :
+                $course = $this->setCourseStatusToWaitingforPublication(
+                    $courseId,
+                    $initialStatus
+                );
+                break;
+            case CourseResource::STATUS_PUBLISHED :
+                $course = $this->setCourseStatusToPublished(
+                    $courseId,
+                    $initialStatus
+                );
+                break;
+            default:
+                throw new \InvalidArgumentException();
+                break;
+        }
+
+        return $course;
+    }
+
+    /**
+     * Set Course status to waiting for publication
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param string       $initialStatus    Initial status
+     *
+     * @return CourseResource
+     */
+    private function setCourseStatusToWaitingForPublication(
+        $courseIdentifier,
+        $initialStatus
+    )
+    {
+        $course = new CourseResource();
+        $course->setStatus(CourseResource::STATUS_WAITING_FOR_PUBLICATION);
+        $parameters = array(CourseResource::STATUS => $initialStatus);
+
+        return $this->courseRepository->update($courseIdentifier, $course, $parameters);
+    }
+
+    /**
+     * Set Course status to published
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param string       $initialStatus    Initial status
+     *
+     * @return CourseResource
+     */
+    private function setCourseStatusToPublished(
+        $courseIdentifier,
+        $initialStatus
+    )
+    {
+        $course = new CourseResource();
+        $course->setStatus(CourseResource::STATUS_PUBLISHED);
+        $parameters = array(CourseResource::STATUS => $initialStatus);
+
+        return $this->courseRepository->update($courseIdentifier, $course, $parameters);
     }
 
     /**

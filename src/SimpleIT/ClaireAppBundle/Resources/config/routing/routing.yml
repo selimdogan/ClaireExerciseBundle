@@ -14,6 +14,12 @@ simple_it_claire_component_part_tag:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/associatedContent/component_part_tag.yml"
     prefix:   components/courses/{courseIdentifier}/parts/{partIdentifier}/tags/
 
+simple_it_claire_ui_kit:
+    pattern: /claire/uikit
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template: 'SimpleITClaireAppBundle:Uikit:uikit.html.twig'
+
 simple_it_claire_exercise:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/exercise.yml"
     prefix:   /exercises

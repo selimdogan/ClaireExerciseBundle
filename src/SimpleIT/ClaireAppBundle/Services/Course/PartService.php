@@ -144,12 +144,18 @@ class PartService
      * @param integer $courseId Course id
      * @param integer $partId   Part id
      * @param mixed   $content  Content
+     * @param string  $status   Status
      *
      * @return mixed
      */
-    public function saveContent($courseId, $partId, $content)
+    public function saveContent($courseId, $partId, $content, $status)
     {
-        return $this->partContentRepository->update($courseId, $partId, $content);
+        return $this->partContentRepository->update(
+            $courseId,
+            $partId,
+            $content,
+            array('status' => $status)
+        );
     }
 
     /**
@@ -170,12 +176,31 @@ class PartService
      *
      * @param integer $courseIdentifier Course id | slug
      * @param integer $partIdentifier   Part id | slug
+     * @param string  $status           Asked status
      *
      * @return mixed
      */
-    public function getContent($courseIdentifier, $partIdentifier)
+    public function getContent($courseIdentifier, $partIdentifier, $status)
     {
-        return $this->partContentRepository->find($courseIdentifier, $partIdentifier);
+        $parameters = array('status' => $status);
+
+        return $this->partContentRepository->find($courseIdentifier, $partIdentifier, $parameters);
+    }
+
+    /**
+     * Get a part content
+     *
+     * @param integer $courseIdentifier Course id | slug
+     * @param integer $partIdentifier   Part id | slug
+     * @param string  $status           Asked status
+     *
+     * @return mixed
+     */
+    public function getContentToEdit($courseIdentifier, $partIdentifier, $status)
+    {
+        $parameters = array('status' => $status);
+
+        return $this->partContentRepository->findToEdit($courseIdentifier, $partIdentifier, $parameters);
     }
 
     /**
