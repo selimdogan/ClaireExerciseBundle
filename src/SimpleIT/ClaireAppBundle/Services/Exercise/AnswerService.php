@@ -69,9 +69,9 @@ class AnswerService implements AnswerServiceInterface
 
         $answerResource = $this->getResourceFromAnswer($answers, $itemRes);
 
-        $answerResource = $this->answerByItemRepository->insertResource(
+        $answerResource = $this->answerByItemRepository->insert(
             $answerResource,
-            array('itemId' => $itemRes->getItemId())
+            $itemRes->getItemId()
         );
 
         return $answerResource;

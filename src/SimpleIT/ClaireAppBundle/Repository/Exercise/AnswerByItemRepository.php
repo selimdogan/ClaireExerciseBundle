@@ -20,4 +20,9 @@ class AnswerByItemRepository extends AppRepository
      * @var  string
      */
     protected $resourceClass = 'SimpleIT\ApiResourcesBundle\Exercise\AnswerResource';
+
+    public function insert($resource, $itemsId)
+    {
+        return $this->insertResource($resource, array('itemId' => $itemsId));
+    }
 }
