@@ -94,16 +94,16 @@ class CourseController extends AppController
             $search[] = array(
                 'title' => $course->getTitle(),
                 'image' => ArrayUtils::getValue(
-                    $course->getMetadatas(),
-                    MetadataResource::COURSE_METADATA_IMAGE
-                ),
+                        $course->getMetadatas(),
+                        MetadataResource::COURSE_METADATA_IMAGE
+                    ),
                 'url'   => $this->generateUrl(
-                    'simple_it_claire_course_course_view',
-                    array(
-                        'categoryIdentifier' => $course->getCategory()->getSlug(),
-                        'courseIdentifier'   => $course->getSlug()
+                        'simple_it_claire_course_course_view',
+                        array(
+                            'categoryIdentifier' => $course->getCategory()->getSlug(),
+                            'courseIdentifier'   => $course->getSlug()
+                        )
                     )
-                )
             );
         }
 
@@ -260,18 +260,40 @@ class CourseController extends AppController
     /**
      * View content
      *
+     * @param Request      $request          Request
      * @param int | string $courseIdentifier Course id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
-    public function viewContentAction($courseIdentifier)
+    public function viewContentAction(Request $request, $courseIdentifier)
     {
-        $content = $this->get('simple_it.claire.course.course')->getContent($courseIdentifier);
+        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_PUBLISHED);
+        $content = $this->get('simple_it.claire.course.course')->getContent(
+            $courseIdentifier,
+            $status
+        );
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
             array('content' => $content)
+        );
+    }
+
+    /**
+     * Create a course
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function createAction()
+    {
+        $course = $this->get('simple_it.claire.course.course')->add();
+
+        return $this->redirect(
+            $this->generateUrl(
+                'simple_it_claire_course_course_edit',
+                array('courseId' => $course->getId())
+            )
         );
     }
 
@@ -341,5 +363,45 @@ class CourseController extends AppController
         );
 
         return new Response();
+    }
+
+    /**
+     * Edit Dashboard
+     *
+     * @param int    $courseId Course id
+     * @param string $status   Status
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editDashboardAction($courseId, $status)
+    {
+        $course = $this->get('simple_it.claire.course.course')->get(
+            $courseId,
+            array(CourseResource::STATUS => $status)
+        );
+        $collectionInformation = new CollectionInformation();
+        $collectionInformation->addFilter(CourseResource::STATUS, $status);
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
+            $course->getId(),
+            $collectionInformation
+        );
+
+        $authors = $this->get('simple_it.claire.user.author')->getAllByCourse(
+            $course->getId(),
+            $collectionInformation
+        );
+        $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourse(
+            $course->getId(), $collectionInformation
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:editDashboard.html.twig',
+            array(
+                'course'    => $course,
+                'metadatas' => $metadatas,
+                'authors'   => $authors,
+                'tags'      => $tags
+            )
+        );
     }
 }

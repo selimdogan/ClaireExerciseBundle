@@ -1,0 +1,50 @@
+Image : {% if metadatas.image is defined %}
+    <img src="{{ metadatas.image }}"/>
+{% endif %}
+{{ course.title }}
+{{ course.status }}
+Auteurs: {% for author in authors %}
+    {{ author.username }}
+{% endfor %}
+
+{#<form action="{{ path('simple_it_claire_component_course_status_waiting_for_publication', { 'courseId': course.id, 'status': course.status}) }}" method="post">#}
+    {#<input type="submit">#}
+{#</form>#}
+<form class="form js-confirm-draft js-no-disable" action="{{ path('simple_it_claire_component_course_status_published', { 'courseId': course.id, 'status': course.status}) }}" method="post">
+    {#<input class="oc-btn orange-btn" type="submit" value="Publier">#}
+    <button type="submit" class="oc-btn orange-btn">
+        <i class="indicator icon-spinner icon-spin"></i> Publier
+    </button>
+</form>
+
+<section class="dashboard">
+    <div class="dashboard-content">
+        {% if metadatas.difficulty is defined %}
+            {{ metadatas.difficulty }}
+        {% endif %}
+        {% if metadatas.aggregateRating is defined %}
+            {{ metadatas.aggregateRating }}
+        {% endif %}
+        {% if metadatas.duration is defined %}
+            {{ metadatas.duration }}
+        {% endif %}
+        {#{% render 'SimpleITClaireAppBundle:Course/Component/Course:viewTimeline' with{'courseIdentifier': course.id, 'displayLevel': course.displayLevel}, {'standalone': true} %}#}
+
+        <div class="thematic-tags">
+            <span></span>
+            <div>
+                <p>Thématiques</p>
+                <p itemprop="keywords">
+                    {% for tag in tags %}
+                        {#<a href="{{ path('simple_it_claire_associated_content_tag_view', {'categoryIdentifier': tag.category.slug, 'tagIdentifier': tag.slug }) }}">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}#}
+                    {% endfor %}
+                </p>
+            </div>
+        </div>
+
+
+        <div class="update" itemprop="dateModified" title="Mis à jour">
+            Mis à jour le {{ course.updatedAt | localizeddate ('full', 'none') }}
+        </div>
+    </div>
+</section>

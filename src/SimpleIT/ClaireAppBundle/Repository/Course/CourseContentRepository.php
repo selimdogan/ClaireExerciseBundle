@@ -50,8 +50,32 @@ class CourseContentRepository extends AppRepository
      * @param string $format           Format
      *
      * @return mixed
+     *
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function find(
+        $courseIdentifier,
+        $parameters = array(),
+        $format = FormatUtils::HTML
+    )
+    {
+        return parent::findResource(
+            array('courseIdentifier' => $courseIdentifier),
+            $parameters,
+            $format
+        );
+    }
+
+    /**
+     * Get a course content
+     *
+     * @param string $courseIdentifier Course id | slug
+     * @param array  $parameters       Parameters
+     * @param string $format           Format
+     *
+     * @return mixed
+     */
+    public function findToEdit(
         $courseIdentifier,
         $parameters = array(),
         $format = FormatUtils::HTML
@@ -68,8 +92,7 @@ class CourseContentRepository extends AppRepository
      * Update a part content
      *
      * @param string $courseIdentifier Course id | slug
-     * @param string $partIdentifier   Part id | slug
-     * @param string $partContent      Part content
+     * @param string $courseContent    Course content
      * @param array  $parameters       Parameters
      * @param string $format           Format
      *
@@ -77,15 +100,14 @@ class CourseContentRepository extends AppRepository
      */
     public function update(
         $courseIdentifier,
-        $partIdentifier,
-        $partContent,
+        $courseContent,
         $parameters = array(),
         $format = FormatUtils::HTML
     )
     {
         return parent::updateResource(
-            $partContent,
-            array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier),
+            $courseContent,
+            array('courseIdentifier' => $courseIdentifier),
             $parameters,
             $format
         );

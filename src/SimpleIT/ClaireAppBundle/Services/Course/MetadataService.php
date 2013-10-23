@@ -6,6 +6,7 @@ use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\ClaireAppBundle\Repository\Course\MetadataByCourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\MetadataByPartRepository;
 use SimpleIT\Utils\ArrayUtils;
+use SimpleIT\Utils\Collection\CollectionInformation;
 
 /**
  * Class MetadataService
@@ -47,13 +48,20 @@ class MetadataService
     /**
      * Get metadatas from a course
      *
-     * @param string $courseIdentifier Course id | slug
+     * @param string                $courseIdentifier      Course id | slug
+     * @param CollectionInformation $collectionInformation Collection information
      *
      * @return string
      */
-    public function getAllFromCourse($courseIdentifier)
+    public function getAllFromCourse(
+        $courseIdentifier,
+        CollectionInformation $collectionInformation = null
+    )
     {
-        return $this->metadataByCourseRepository->findAll($courseIdentifier);
+        return $this->metadataByCourseRepository->findAll(
+            $courseIdentifier,
+            $collectionInformation
+        );
     }
 
     /**

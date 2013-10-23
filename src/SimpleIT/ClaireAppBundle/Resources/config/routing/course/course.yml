@@ -1,8 +1,8 @@
-simple_it_claire_course_course_edit:
-    pattern: /{categoryIdentifier}/course/{courseId}/edit
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Module/Course:edit }
+simple_it_claire_course_course_create:
+    pattern: /create
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course:create }
     requirements:
-        _method: GET|POST
+        _method: GET
 
 simple_it_claire_part:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/part.yml"

@@ -158,11 +158,12 @@ class PartController extends AppController
     public function editContentAction(Request $request, $courseIdentifier, $partIdentifier)
     {
         $partContent = null;
+        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
         if (RequestUtils::METHOD_GET == $request->getMethod()) {
             $partContent = $this->get('simple_it.claire.course.part')->getContentToEdit(
                 $courseIdentifier,
                 $partIdentifier,
-                $this->getStatusToEdit($request)
+                $status
             );
         } elseif (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()
         ) {
@@ -171,7 +172,7 @@ class PartController extends AppController
                 $courseIdentifier,
                 $partIdentifier,
                 $partContent,
-                $this->getStatusToEdit($request)
+                $status
             );
 
             return new AppResponse($partContent);
