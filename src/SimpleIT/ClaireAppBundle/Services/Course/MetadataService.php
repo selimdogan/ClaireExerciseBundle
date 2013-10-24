@@ -90,9 +90,9 @@ class MetadataService
      *
      * @return array
      */
-    public function getInformationsFromCourse($courseIdentifier)
+    public function getInformationsFromCourse($courseIdentifier, $collectionInformation)
     {
-        $metadatas = $this->getAllFromCourse($courseIdentifier);
+        $metadatas = $this->getAllFromCourse($courseIdentifier, $collectionInformation);
         $informations = array();
         $difficulty = ArrayUtils::getValue(
             $metadatas,

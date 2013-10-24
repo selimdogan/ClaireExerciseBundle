@@ -144,7 +144,7 @@ class CourseController extends AppController
     public function viewTimelineAction(
         $courseIdentifier,
         $displayLevel,
-        $categoryIdentifier,
+        $categoryIdentifier = null,
         $partIdentifier = null
     )
     {
@@ -368,19 +368,21 @@ class CourseController extends AppController
     /**
      * Edit Dashboard
      *
-     * @param int    $courseId Course id
-     * @param string $status   Status
+     * @param CollectionInformation $collectionInformation Collection information
+     * @param int                   $courseId              Course id
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editDashboardAction($courseId, $status)
+    public function editDashboardAction(CollectionInformation $collectionInformation, $courseId)
     {
         $course = $this->get('simple_it.claire.course.course')->get(
             $courseId,
-            array(CourseResource::STATUS => $status)
+            array(
+                CourseResource::STATUS => $collectionInformation->getFilter(
+                        CourseResource::STATUS
+                    )
+            )
         );
-        $collectionInformation = new CollectionInformation();
-        $collectionInformation->addFilter(CourseResource::STATUS, $status);
         $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
             $course->getId(),
             $collectionInformation
@@ -391,16 +393,18 @@ class CourseController extends AppController
             $collectionInformation
         );
         $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourse(
-            $course->getId(), $collectionInformation
+            $course->getId(),
+            $collectionInformation
         );
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:editDashboard.html.twig',
             array(
-                'course'    => $course,
-                'metadatas' => $metadatas,
-                'authors'   => $authors,
-                'tags'      => $tags
+                'course'                => $course,
+                'metadatas'             => $metadatas,
+                'authors'               => $authors,
+                'tags'                  => $tags,
+                'collectionInformation' => $collectionInformation
             )
         );
     }

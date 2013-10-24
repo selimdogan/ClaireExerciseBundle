@@ -6,6 +6,7 @@ use SimpleIT\ApiResourcesBundle\Course\DifficultyMetadataResource;
 use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\Utils\ArrayUtils;
+use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\DateUtils;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -19,17 +20,22 @@ use SimpleIT\AppBundle\Annotation\Cache;
 class MetadataByCourseController extends AbstractMetadataController
 {
     /**
-     * View a collection of informations
+     * View a collection of information
      *
-     * @param int | string $courseIdentifier Course id | slug
+     * @param CollectionInformation $collectionInformation Collection information
+     * @param int|string            $courseIdentifier      Course id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
-    public function viewInformationsAction($courseIdentifier)
+    public function viewInformationsAction(
+        CollectionInformation $collectionInformation,
+        $courseIdentifier
+    )
     {
         $informations = $this->get('simple_it.claire.course.metadata')->getInformationsFromCourse(
-            $courseIdentifier
+            $courseIdentifier,
+            $collectionInformation
         );
 
         return $this->render(
@@ -227,7 +233,10 @@ class MetadataByCourseController extends AbstractMetadataController
         $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseToEdit(
             $courseId
         );
-        $difficultyMetadata = new DifficultyMetadataResource(ArrayUtils::getValue($metadatas, DifficultyMetadataResource::KEY));
+        $difficultyMetadata = new DifficultyMetadataResource(ArrayUtils::getValue(
+            $metadatas,
+            DifficultyMetadataResource::KEY
+        ));
         //FIXME trans
         $form = $this->createFormBuilder($difficultyMetadata)
             ->add(

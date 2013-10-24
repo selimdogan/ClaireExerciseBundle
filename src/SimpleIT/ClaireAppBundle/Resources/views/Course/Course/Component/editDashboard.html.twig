@@ -1,11 +1,5 @@
-{% if metadatas.image is defined %}
-    <img src="{{ metadatas.image }}"/>
-{% endif %}
 {{ course.title }}
 {{ course.status }}
-{% for author in authors %}
-    {{ author.username }}
-{% endfor %}
 
 {#<form action="{{ path('simple_it_claire_component_course_status_waiting_for_publication', { 'courseId': course.id, 'status': course.status}) }}" method="post">#}
     {#<input type="submit">#}
@@ -17,36 +11,16 @@
     </button>
 </form>
 
-<section class="dashboard">
-    <div class="dashboard-content">
 
+{% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:viewInformations' with{'courseIdentifier': course.id, 'collectionInformation': collectionInformation}, {'standalone': true} %}
 
-        {% if metadatas.difficulty is defined %}
-            {{ metadatas.difficulty }}
-        {% endif %}
-        {% if metadatas.aggregateRating is defined %}
-            {{ metadatas.aggregateRating }}
-        {% endif %}
-        {% if metadatas.duration is defined %}
-            {{ metadatas.duration }}
-        {% endif %}
-        {#{% render 'SimpleITClaireAppBundle:Course/Component/Course:viewTimeline' with{'courseIdentifier': course.id, 'displayLevel': course.displayLevel}, {'standalone': true} %}#}
+<div class="col8">
+    {#{% render 'SimpleITClaireAppBundle:Course/Component/Course:viewTimeline' with{'courseIdentifier': course.id, 'displayLevel': course.displayLevel, 'categoryIdentifier': 'informatique'}, {'standalone': true} %}#}
+</div>
+{% render 'SimpleITClaireAppBundle:AssociatedContent/Component/TagByCourse:list' with{'courseIdentifier': course.id}, {'standalone': true} %}
 
-        <div class="thematic-tags">
-            <span></span>
-            <div>
-                <p>Thématiques</p>
-                <p itemprop="keywords">
-                    {% for tag in tags %}
-                        {#<a href="{{ path('simple_it_claire_associated_content_tag_view', {'categoryIdentifier': tag.category.slug, 'tagIdentifier': tag.slug }) }}">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}#}
-                    {% endfor %}
-                </p>
-            </div>
-        </div>
-
-
-        <div class="update" itemprop="dateModified" title="Mis à jour">
-            Mis à jour le {{ course.updatedAt | localizeddate ('full', 'none') }}
-        </div>
+<div class="col4">
+    <div class="update" itemprop="dateModified" title="Mis à jour">
+        Mis à jour le {{ course.updatedAt | localizeddate ('full', 'none') }}
     </div>
-</section>
+</div>
