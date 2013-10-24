@@ -14,6 +14,12 @@ simple_it_claire_component_course_content_edit:
     requirements:
             _method: GET|POST
 
+simple_it_claire_component_course_course_edit:
+    pattern: /{courseId}
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course:edit }
+    requirements:
+            _method: GET|POST
+
 simple_it_claire_component_course_status_published:
     pattern: /{courseId}/publish
     defaults: { _controller : SimpleITClaireAppBundle:Course/Component/Course:editStatusToPublished }

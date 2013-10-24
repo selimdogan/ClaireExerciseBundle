@@ -1,9 +1,10 @@
-{{ course.title }}
-{{ course.status }}
-{#<form action="{{ path('simple_it_claire_component_course_status_waiting_for_publication', { 'courseId': course.id, 'status': course.status}) }}" method="post">#}
-    {#<input type="submit">#}
-{#</form>#}
-<form class="form js-confirm-draft js-no-disable" action="{{ path('simple_it_claire_component_course_status_published', { 'courseId': course.id, 'status': course.status}) }}" method="post">
-    {#<input class="oc-btn orange-btn" type="submit" value="Publier">#}
-    <button type="submit" class="oc-btn orange-btn"><i class="indicator icon-spinner icon-spin"></i> Publier</button>
+<form class="claire-part-description js-course-description" action="{{ path('simple_it_claire_component_course_course_edit', { 'courseId': course.id}) }}" method="post" {{ form_enctype(form) }}>
+    <label>Informations du cours <br />Description de cette page</label>
+
+    {{ form_errors(form) }}
+    {{ form_errors(form.title) }}
+    {{ form_widget(form.title) }}
+    {{ form_rest(form) }}
+    <input type="submit">
+    {#Remove submit#}
 </form>

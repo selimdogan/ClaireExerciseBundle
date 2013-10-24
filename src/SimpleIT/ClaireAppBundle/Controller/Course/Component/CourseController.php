@@ -300,21 +300,27 @@ class CourseController extends AppController
     /**
      * Edit a course
      *
-     * @param int    $courseId Course id
-     * @param string $status   Status
+     * @param Request $request  Request
+     * @param int     $courseId Course id
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editAction($courseId, $status)
+    public function editAction(Request $request, $courseId)
     {
+        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
         $course = $this->get('simple_it.claire.course.course')->getCourseToEdit(
             $courseId,
             $status
         );
 
+        $form = $this->createFormBuilder($course)
+            ->add('title', 'text')
+            ->getForm();
+
+
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:edit.html.twig',
-            array('course' => $course)
+            array('course' => $course, 'form' => $form->createView())
         );
     }
 
@@ -378,9 +384,8 @@ class CourseController extends AppController
         $course = $this->get('simple_it.claire.course.course')->get(
             $courseId,
             array(
-                CourseResource::STATUS => $collectionInformation->getFilter(
-                        CourseResource::STATUS
-                    )
+                CourseResource::STATUS =>
+                    $collectionInformation->getFilter(CourseResource::STATUS)
             )
         );
         $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
