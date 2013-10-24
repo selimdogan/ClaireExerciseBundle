@@ -21,7 +21,7 @@ class CourseContentController extends AppController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request, $courseId)
+    public function editViewAction(Request $request, $courseId)
     {
         $courseContent = null;
 

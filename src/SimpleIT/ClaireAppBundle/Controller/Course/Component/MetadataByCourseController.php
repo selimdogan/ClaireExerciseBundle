@@ -2,6 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
+use SimpleIT\ApiResourcesBundle\Course\DifficultyMetadataResource;
 use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\Utils\ArrayUtils;
@@ -216,26 +217,26 @@ class MetadataByCourseController extends AbstractMetadataController
     /**
      * Edit a course difficulty
      *
-     * @param Request      $request          Request
-     * @param int | string $courseIdentifier Course id | slug
+     * @param Request $request  Request
+     * @param int     $courseId Course id
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editDifficultyAction(Request $request, $courseIdentifier)
+    public function editDifficultyAction(Request $request, $courseId)
     {
-        $metadataName = MetadataResource::COURSE_METADATA_DIFFICULTY;
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
-            $courseIdentifier
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseToEdit(
+            $courseId
         );
+        $difficultyMetadata = new DifficultyMetadataResource(ArrayUtils::getValue($metadatas, DifficultyMetadataResource::KEY));
         //FIXME trans
-        $form = $this->createFormBuilder($metadatas)
+        $form = $this->createFormBuilder($difficultyMetadata)
             ->add(
-                $metadataName,
+                'value',
                 'choice',
                 array(
                     'choices'     => array(
                         'easy'   => 'facile',
-                        'middle' => 'moyen',
+                        'medium' => 'moyen',
                         'hard'   => 'difficile'
                     ),
                     'empty_value' => '',
@@ -247,16 +248,14 @@ class MetadataByCourseController extends AbstractMetadataController
         $form = $this->processCourseEdit(
             $request,
             $form,
-            $courseIdentifier,
-            $metadatas,
-            $metadataName
+            $courseId
         );
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/MetadataByCourse/Component:editDifficulty.html.twig',
             array(
-                'courseIdentifier' => $courseIdentifier,
-                'form'             => $form->createView()
+                'courseId' => $courseId,
+                'form'     => $form->createView()
             )
         );
     }
@@ -298,7 +297,6 @@ class MetadataByCourseController extends AbstractMetadataController
      */
     public function editTimeRequiredAction(Request $request, $courseIdentifier)
     {
-        $metadataName = MetadataResource::COURSE_METADATA_TIME_REQUIRED;
         $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
             $courseIdentifier
         );
