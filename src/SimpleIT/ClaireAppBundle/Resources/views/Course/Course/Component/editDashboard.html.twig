@@ -1,9 +1,9 @@
-Image : {% if metadatas.image is defined %}
+{% if metadatas.image is defined %}
     <img src="{{ metadatas.image }}"/>
 {% endif %}
 {{ course.title }}
 {{ course.status }}
-Auteurs: {% for author in authors %}
+{% for author in authors %}
     {{ author.username }}
 {% endfor %}
 
@@ -19,6 +19,8 @@ Auteurs: {% for author in authors %}
 
 <section class="dashboard">
     <div class="dashboard-content">
+
+
         {% if metadatas.difficulty is defined %}
             {{ metadatas.difficulty }}
         {% endif %}

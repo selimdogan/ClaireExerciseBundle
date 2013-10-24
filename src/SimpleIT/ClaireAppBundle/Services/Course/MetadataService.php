@@ -65,6 +65,25 @@ class MetadataService
     }
 
     /**
+     * Get metadatas from a course to edit
+     *
+     * @param string                $courseIdentifier      Course id | slug
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return string
+     */
+    public function getAllFromCourseToEdit(
+        $courseIdentifier,
+        CollectionInformation $collectionInformation = null
+    )
+    {
+        return $this->metadataByCourseRepository->findAll(
+            $courseIdentifier,
+            $collectionInformation
+        );
+    }
+
+    /**
      * Get informations from a course
      *
      * @param int | string $courseIdentifier Course id | slug
