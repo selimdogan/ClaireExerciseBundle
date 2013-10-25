@@ -1,14 +1,16 @@
 <section class="centered">
     <div class="row">
         <h1 class="highlighted">Information</h1>
-        <div class="col12">
-            {% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDescriptionView' with{'courseId': course.id}, {'standalone': true} %}
-        </div>
+        <div class="dashboard-course">
+            <div class="col12 description">
+                {% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDescriptionView' with{'courseId': course.id}, {'standalone': true} %}
+            </div>
 
-        {#<div class="{{ _user.showAds ? "col8" : "col12" }}">#}
-        <div class="col8">
-            <div class="row">
-                <div class="dashboard-course">
+            <hr/>
+
+            {#<div class="{{ _user.showAds ? "col8" : "col12" }}">#}
+            <div class="col8">
+                <div class="row">
                     {#{% render 'SimpleITClaireAppBundle:AssociatedContent/Component/CategoryByCourse:editView' with{'courseId': course.id}, {'standalone': true} %}#}
                     {#{% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDisplayLevelView' with{'courseId': course.id}, {'standalone': true} %}#}
 
@@ -21,15 +23,30 @@
                         </div>
                     </div>
 
-                    <div class="col2 space-bottom">
+                    <div class="col2 space-bottom course-feature">
                         {% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDifficultyView' with{'courseId': course.id}, {'standalone': true} %}
                     </div>
 
-                    <div class="col2 space-bottom">
-                        Note:
+                    <div class="col2 space-bottom course-feature">
+                        <div class="img-text-align">
+                            <span class="align-middle background-icon-black"><i class="icon-star"></i></span>
+                            <div class="align-middle">
+                                <p class="text-top-dashboard">Note</p>
+                                <p itemprop="aggregateRating" class="star">
+                                </p><div class="starClassment">
+
+                                    <span class="oneStar"></span>
+                                    <span class="oneStar"></span>
+                                    <span class="oneStar"></span>
+                                    <span class="oneStar"></span>
+                                    <span class="noStar"></span>
+                                </div>
+                                <p></p>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="col2 space-bottom">
+                    <div class="col2 space-bottom course-feature">
                         {% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editTimeRequiredView' with{'courseId': course.id}, {'standalone': true} %}
                     </div>
 
@@ -49,7 +66,14 @@
                 </div>
             </div>
         </div>
+
+        {#{%  if (_user.showAds) %}#}
+            <div class="col4">
+                {% include "CommonBundle:Advertise/partial:advertise.html.twig" with {'num' : '1355149687749-3', 'class' : 'pavement'} %}
+            </div>
+        {#{% endif %}#}
     </div>
+
     <form action="{{ path('simple_it_claire_component_course_status_waiting_for_publication', { 'courseId': course.id, 'status': course.status}) }}" method="post">
         <input type="submit">
     </form>
@@ -58,4 +82,5 @@
             <i class="indicator icon-spinner icon-spin"></i> Publier
         </button>
     </form>
+
 </section>
