@@ -357,11 +357,11 @@ class CourseController extends AppController
     /**
      * Edit a course status to published
      *
-     * @param int    $courseId      Course id
-     * @param string $initialStatus Initial status
+     * @param Request $request  Request
+     * @param int     $courseId Course id
      *
-     * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function editStatusToPublishedAction(Request $request, $courseId)
     {
