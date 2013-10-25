@@ -67,7 +67,7 @@ class CourseController extends AppController
         $courses = $this->get('simple_it.claire.course.course')->getAll($collectionInformation);
 
         if ($request->isXmlHttpRequest()) {
-            return new Response($this->searchListJson($courses));
+            return new Response(json_encode($courses));
         }
 
         return $this->render(
@@ -78,36 +78,6 @@ class CourseController extends AppController
                 'paginationUrl'         => $paginationUrl
             )
         );
-    }
-
-    /**
-     * Prepare result course list in Json format
-     *
-     * @param $courses
-     *
-     * @return string
-     */
-    protected function searchListJson($courses)
-    {
-        $search = array();
-        foreach ($courses as $course) {
-            $search[] = array(
-                'title' => $course->getTitle(),
-                'image' => ArrayUtils::getValue(
-                        $course->getMetadatas(),
-                        MetadataResource::COURSE_METADATA_IMAGE
-                    ),
-                'url'   => $this->generateUrl(
-                        'simple_it_claire_course_course_view',
-                        array(
-                            'categoryIdentifier' => $course->getCategory()->getSlug(),
-                            'courseIdentifier'   => $course->getSlug()
-                        )
-                    )
-            );
-        }
-
-        return json_encode($search);
     }
 
     /**
@@ -305,7 +275,7 @@ class CourseController extends AppController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request, $courseId)
+    public function editViewAction(Request $request, $courseId)
     {
         $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
         $course = $this->get('simple_it.claire.course.course')->getCourseToEdit(
@@ -317,9 +287,37 @@ class CourseController extends AppController
             ->add('title', 'text')
             ->getForm();
 
-
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:edit.html.twig',
+            array('course' => $course, 'form' => $form->createView())
+        );
+    }
+
+    /**
+     * Edit a course (POST)
+     *
+     * @param Request $request  Request
+     * @param int     $courseId Course id
+     *
+     * @return string
+     */
+    public function editAction(Request $request, CollectionInformation $collectionInformation, $courseId)
+    {
+        $course = new CourseResource();
+        $form = $this->createFormBuilder($course)
+            ->add('title', 'text')
+            ->getForm();
+        $form->bind($request);
+
+        if ($form->isValid()) {
+            $course = $this->get('simple_it.claire.course.course')->save($courseId, $course);
+            if ($request->isXmlHttpRequest()) {
+                return json_encode($course);
+            }
+        }
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course:edit.html.twig',
             array('course' => $course, 'form' => $form->createView())
         );
     }
