@@ -2,6 +2,8 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
+use SimpleIT\ApiResourcesBundle\Course\TimeRequiredMetadataResource;
+use SimpleIT\AppBundle\Annotation\Cache;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\DescriptionMetadataResource;
 use SimpleIT\ApiResourcesBundle\Course\DifficultyMetadataResource;
@@ -11,8 +13,6 @@ use SimpleIT\Utils\ArrayUtils;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\DateUtils;
 use Symfony\Component\HttpFoundation\Request;
-
-use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class MetadataController
@@ -75,7 +75,8 @@ class MetadataByCourseController extends AbstractMetadataController
     /**
      * Edit a description (GET)
      *
-     * @param int $courseId Course id
+     * @param CollectionInformation $collectionInformation Collection information
+     * @param int                   $courseId              Course id
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -84,10 +85,8 @@ class MetadataByCourseController extends AbstractMetadataController
         $courseId
     )
     {
-        $status = $collectionInformation->getFilter(CourseResource::STATUS);
-        if (is_null($status)) {
-            $collectionInformation->addFilter(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
-        }
+        $collectionInformation = $this->setStatusToDraftIfNotDefined($collectionInformation);
+
         $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseToEdit(
             $courseId,
             $collectionInformation
@@ -99,9 +98,10 @@ class MetadataByCourseController extends AbstractMetadataController
         $form = $this->createFormBuilder($descriptionMetadata)
             ->add(
                 'value',
-                'text',
+                'textarea',
                 array(
-                    'required'    => true
+                    'required'   => true,
+                    'max_length' => 255,
                 )
             )
             ->getForm();
@@ -113,7 +113,6 @@ class MetadataByCourseController extends AbstractMetadataController
                 'form'     => $form->createView()
             )
         );
-
     }
 
     /**
@@ -152,7 +151,7 @@ class MetadataByCourseController extends AbstractMetadataController
 
         $metadataName = MetadataResource::COURSE_METADATA_DESCRIPTION;
         $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
-            $courseIdentifier
+            $courseId
         );
 
         $form = $this->createFormBuilder($metadatas)
@@ -162,7 +161,7 @@ class MetadataByCourseController extends AbstractMetadataController
         $form = $this->processCourseEdit(
             $request,
             $form,
-            $courseIdentifier,
+            $courseId,
             $metadatas,
             $metadataName
         );
@@ -170,7 +169,7 @@ class MetadataByCourseController extends AbstractMetadataController
         return $this->render(
             'SimpleITClaireAppBundle:Course/MetadataByCourse/Component:editDescription.html.twig',
             array(
-                'courseIdentifier' => $courseIdentifier,
+                'courseIdentifier' => $courseId,
                 'form'             => $form->createView()
             )
         );
@@ -291,6 +290,54 @@ class MetadataByCourseController extends AbstractMetadataController
     }
 
     /**
+     * Edit a difficulty (GET)
+     *
+     * @param CollectionInformation $collectionInformation Collection information
+     * @param int                   $courseId              Course id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editDifficultyViewAction(
+        CollectionInformation $collectionInformation,
+        $courseId
+    )
+    {
+        $collectionInformation = $this->setStatusToDraftIfNotDefined($collectionInformation);
+
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseToEdit(
+            $courseId,
+            $collectionInformation
+        );
+        $difficultyMetadata = new DifficultyMetadataResource(ArrayUtils::getValue(
+            $metadatas,
+            DifficultyMetadataResource::KEY
+        ));
+        $form = $this->createFormBuilder($difficultyMetadata)
+            ->add(
+                'value',
+                'choice',
+                array(
+                    'choices'     => array(
+                        'easy'   => 'facile',
+                        'medium' => 'moyen',
+                        'hard'   => 'difficile'
+                    ),
+                    'empty_value' => '',
+                    'required'    => true
+                )
+            )
+            ->getForm();
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/MetadataByCourse/Component:editDifficulty.html.twig',
+            array(
+                'courseId' => $courseId,
+                'form'     => $form->createView()
+            )
+        );
+    }
+
+    /**
      * Edit a course difficulty
      *
      * @param Request $request  Request
@@ -314,9 +361,9 @@ class MetadataByCourseController extends AbstractMetadataController
                 'choice',
                 array(
                     'choices'     => array(
-                        'easy'   => 'facile',
-                        'medium' => 'moyen',
-                        'hard'   => 'difficile'
+                        'easy'   => 'Facile',
+                        'medium' => 'Moyen',
+                        'hard'   => 'Difficile'
                     ),
                     'empty_value' => '',
                     'required'    => true
@@ -365,6 +412,51 @@ class MetadataByCourseController extends AbstractMetadataController
             )
         );
     }
+
+    /**
+     * Edit a time required (GET)
+     *
+     * @param CollectionInformation $collectionInformation Collection information
+     * @param int                   $courseId              Course id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editTimeRequiredViewAction(
+        CollectionInformation $collectionInformation,
+        $courseId
+    )
+    {
+        $collectionInformation = $this->setStatusToDraftIfNotDefined($collectionInformation);
+
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseToEdit(
+            $courseId,
+            $collectionInformation
+        );
+        $timeRequiredMetadata= new DifficultyMetadataResource(ArrayUtils::getValue(
+            $metadatas,
+            TimeRequiredMetadataResource::KEY
+        ));
+        $form = $this->createFormBuilder($timeRequiredMetadata)
+            ->add(
+                'value',
+                'choice',
+                array(
+                    'choices'     => TimeRequiredMetadataResource::getTimeRequired(),
+                    'empty_value' => '',
+                    'required'    => true
+                )
+            )
+            ->getForm();
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/MetadataByCourse/Component:editTimeRequired.html.twig',
+            array(
+                'courseId' => $courseId,
+                'form'     => $form->createView()
+            )
+        );
+    }
+
 
     /**
      * Edit a course duration

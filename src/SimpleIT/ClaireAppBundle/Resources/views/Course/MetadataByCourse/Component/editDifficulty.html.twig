@@ -1,4 +1,4 @@
-<form class="js-course-difficulty" action="{{ path('simple_it_claire_component_course_metadata_edit_difficulty', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post" {{ form_enctype(form) }}>
+<form class="js-course-difficulty" action="{{ path('simple_it_claire_component_course_course_metadata_difficulty_edit', { 'courseId': courseId}) }}" method="post" {{ form_enctype(form) }}>
     {{ form_errors(form) }}
     {{ form_errors(form.value) }}
     {{ form_widget(form.value) }}

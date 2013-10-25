@@ -1,6 +1,4 @@
-<form class="claire-part-description js-course-description" action="{{ path('simple_it_claire_component_course_course_edit', { 'courseId': course.id}) }}" method="post" {{ form_enctype(form) }}>
-    <label>Informations du cours <br />Description de cette page</label>
-
+<form action="{{ path('simple_it_claire_component_course_course_edit', { 'courseId': course.id}) }}" method="post" {{ form_enctype(form) }}>
     {{ form_errors(form) }}
     {{ form_errors(form.title) }}
     {{ form_widget(form.title) }}

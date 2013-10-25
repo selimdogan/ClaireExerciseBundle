@@ -3,11 +3,13 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Model\AppResponse;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\Utils\ArrayUtils;
+use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -94,5 +96,22 @@ abstract class AbstractMetadataController extends AppController
         }
 
         return $form;
+    }
+
+    /**
+     * Set status to draft if not defined in collection information
+     *
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return CollectionInformation
+     */
+    protected function setStatusToDraftIfNotDefined(CollectionInformation $collectionInformation)
+    {
+        $status = $collectionInformation->getFilter(CourseResource::STATUS);
+        if (is_null($status)) {
+            $collectionInformation->addFilter(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
+        }
+
+        return $collectionInformation;
     }
 }
