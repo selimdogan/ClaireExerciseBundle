@@ -1,23 +1,61 @@
-{% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDescriptionView' with{'courseId': course.id}, {'standalone': true} %}
-{#{% render 'SimpleITClaireAppBundle:AssociatedContent/Component/CategoryByCourse:editView' with{'courseId': course.id}, {'standalone': true} %}#}
-{#{% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDisplayLevelView' with{'courseId': course.id}, {'standalone': true} %}#}
-{#{% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editImageView' with{'courseId': course.id}, {'standalone': true} %}#}
-{% render 'SimpleITClaireAppBundle:Course/Component/Course:editView' with{'courseId': course.id}, {'standalone': true} %}
-{% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDifficultyView' with{'courseId': course.id}, {'standalone': true} %}
-{% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editTimeRequiredView' with{'courseId': course.id}, {'standalone': true} %}
-{#{% render 'SimpleITClaireAppBundle:Course/Component/Course:viewTimeline' with{'courseIdentifier': course.id, 'displayLevel': course.displayLevel, 'categoryIdentifier': 'informatique'}, {'standalone': true} %}#}
-{% render 'SimpleITClaireAppBundle:AssociatedContent/Component/TagByCourse:listEditView' with{'courseId': course.id}, {'standalone': true} %}
-<div class="col4">
-    <div class="update" itemprop="dateModified" title="Mis à jour">
-        Mis à jour le {{ course.updatedAt | localizeddate ('full', 'none') }}
-    </div>
-</div>
+<section class="centered">
+    <div class="row">
+        <h1 class="highlighted">Information</h1>
+        <div class="col12">
+            {% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDescriptionView' with{'courseId': course.id}, {'standalone': true} %}
+        </div>
 
-<form action="{{ path('simple_it_claire_component_course_status_waiting_for_publication', { 'courseId': course.id, 'status': course.status}) }}" method="post">
-    <input type="submit">
-</form>
-<form class="form js-confirm-draft js-no-disable" action="{{ path('simple_it_claire_component_course_status_published', { 'courseId': course.id, 'status': course.status}) }}" method="post">
-    <button type="submit" class="oc-btn orange-btn">
-        <i class="indicator icon-spinner icon-spin"></i> Publier
-    </button>
-</form>
+        {#<div class="{{ _user.showAds ? "col8" : "col12" }}">#}
+        <div class="col8">
+            <div class="row">
+                <div class="dashboard-course">
+                    {#{% render 'SimpleITClaireAppBundle:AssociatedContent/Component/CategoryByCourse:editView' with{'courseId': course.id}, {'standalone': true} %}#}
+                    {#{% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDisplayLevelView' with{'courseId': course.id}, {'standalone': true} %}#}
+
+                    <div class="col8 space-bottom">
+                        <div class="img-text-align tuto-title">
+                            {#{% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editImageView' with{'courseId': course.id}, {'standalone': true} %}#}
+                            <div class="align-middle">
+                                {% render 'SimpleITClaireAppBundle:Course/Component/Course:editView' with{'courseId': course.id}, {'standalone': true} %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col2 space-bottom">
+                        {% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDifficultyView' with{'courseId': course.id}, {'standalone': true} %}
+                    </div>
+
+                    <div class="col2 space-bottom">
+                        Note:
+                    </div>
+
+                    <div class="col2 space-bottom">
+                        {% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editTimeRequiredView' with{'courseId': course.id}, {'standalone': true} %}
+                    </div>
+
+                    <div class="col8 space-bottom">
+                        {#{% render 'SimpleITClaireAppBundle:Course/Component/Course:viewTimeline' with{'courseIdentifier': course.id, 'displayLevel': course.displayLevel, 'categoryIdentifier': 'informatique'}, {'standalone': true} %}#}
+                    </div>
+
+                    <div class="col4">
+                        {% render 'SimpleITClaireAppBundle:AssociatedContent/Component/TagByCourse:listEditView' with{'courseId': course.id}, {'standalone': true} %}
+                    </div
+
+                    <div class="col4">
+                        <div class="update" itemprop="dateModified" title="Mis à jour">
+                            Mis à jour le {{ course.updatedAt | localizeddate ('full', 'none') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form action="{{ path('simple_it_claire_component_course_status_waiting_for_publication', { 'courseId': course.id, 'status': course.status}) }}" method="post">
+        <input type="submit">
+    </form>
+    <form class="form js-confirm-draft js-no-disable" action="{{ path('simple_it_claire_component_course_status_published', { 'courseId': course.id, 'status': course.status}) }}" method="post">
+        <button type="submit" class="oc-btn orange-btn">
+            <i class="indicator icon-spinner icon-spin"></i> Publier
+        </button>
+    </form>
+</section>
