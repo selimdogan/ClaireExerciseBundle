@@ -9,6 +9,7 @@ use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\Utils\ArrayUtils;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\Utils\FormatUtils;
 use SimpleIT\Utils\HTTP;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,9 +66,8 @@ class CourseController extends AppController
     )
     {
         $courses = $this->get('simple_it.claire.course.course')->getAll($collectionInformation);
-
         if ($request->isXmlHttpRequest()) {
-            return new Response(json_encode($courses));
+            return new Response($this->get('serializer')->serialize($courses->toArray(), FormatUtils::JSON));
         }
 
         return $this->render(

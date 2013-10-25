@@ -81,7 +81,7 @@ class MetadataByCourseController extends AbstractMetadataController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editDescriptionAction(Request $request, $courseIdentifier)
+    public function editDescriptionAction(Request $request, $courseId)
     {
         $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseToEdit(
             $courseId
