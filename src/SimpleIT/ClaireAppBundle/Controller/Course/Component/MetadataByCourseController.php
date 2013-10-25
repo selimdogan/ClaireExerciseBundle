@@ -106,10 +106,15 @@ class MetadataByCourseController extends AbstractMetadataController
             ->getForm();
 
         return $this->render(
-            'SimpleITClaireAppBundle:Course/MetadataByCourse/Component:editDescription.html.twig',
+            'SimpleITClaireAppBundle:Course/Metadata/Component:editDescription.html.twig',
             array(
+                'courseId' => $courseId,
                 'form'     => $form->createView(),
-                'action'=> $this->generateUrl('simple_it_claire_component_course_course_metadata_description_edit', )
+                'action'   =>
+                    $this->generateUrl(
+                        'simple_it_claire_component_course_course_metadata_description_edit',
+                        array('courseId' => $courseId)
+                    )
             )
         );
     }
@@ -328,7 +333,7 @@ class MetadataByCourseController extends AbstractMetadataController
             ->getForm();
 
         return $this->render(
-            'SimpleITClaireAppBundle:Course/MetadataByCourse/Component:editDifficulty.html.twig',
+            'SimpleITClaireAppBundle:Course/Metadata/Component:editDifficulty.html.twig',
             array(
                 'courseId' => $courseId,
                 'form'     => $form->createView()
@@ -377,7 +382,7 @@ class MetadataByCourseController extends AbstractMetadataController
         );
 
         return $this->render(
-            'SimpleITClaireAppBundle:Course/MetadataByCourse/Component:editDifficulty.html.twig',
+            'SimpleITClaireAppBundle:Course/Metadata/Component:editDifficulty.html.twig',
             array(
                 'courseId' => $courseId,
                 'form'     => $form->createView()
@@ -431,7 +436,7 @@ class MetadataByCourseController extends AbstractMetadataController
             $courseId,
             $collectionInformation
         );
-        $timeRequiredMetadata= new DifficultyMetadataResource(ArrayUtils::getValue(
+        $timeRequiredMetadata = new DifficultyMetadataResource(ArrayUtils::getValue(
             $metadatas,
             TimeRequiredMetadataResource::KEY
         ));
@@ -448,14 +453,13 @@ class MetadataByCourseController extends AbstractMetadataController
             ->getForm();
 
         return $this->render(
-            'SimpleITClaireAppBundle:Course/MetadataByCourse/Component:editTimeRequired.html.twig',
+            'SimpleITClaireAppBundle:Course/Metadata/Component:editTimeRequired.html.twig',
             array(
                 'courseId' => $courseId,
                 'form'     => $form->createView()
             )
         );
     }
-
 
     /**
      * Edit a course duration
