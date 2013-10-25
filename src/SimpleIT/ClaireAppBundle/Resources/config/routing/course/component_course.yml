@@ -8,6 +8,12 @@ simple_it_claire_course_component_course_list:
     requirements:
         _method: GET
 
+simple_it_claire_course_component_course_search_list:
+    pattern: /search
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course:searchList, paginationUrl: null }
+    requirements:
+        _method: GET
+
 simple_it_claire_component_course_content_edit:
     pattern: /{courseIdentifier}/content
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/CourseContent:edit }
@@ -15,7 +21,7 @@ simple_it_claire_component_course_content_edit:
             _method: GET|POST
 
 simple_it_claire_component_course_course_edit:
-    pattern: /{courseId}
+    pattern: /{courseId}/edit
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course:edit }
     requirements:
             _method: GET|POST
@@ -31,9 +37,3 @@ simple_it_claire_component_course_status_waiting_for_publication:
     defaults: { _controller : SimpleITClaireAppBundle:Course/Component/Course:editStatusToWaitingForPublication }
     requirements :
         -method: POST
-
-simple_it_claire_course_component_course_search_list:
-    pattern: /search
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course:searchList, paginationUrl: null }
-    requirements:
-        _method: GET

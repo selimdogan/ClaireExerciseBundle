@@ -70,6 +70,9 @@ class MetadataByCourseController extends AbstractMetadataController
         );
     }
 
+    public function editDescriptionView(){
+
+    }
     /**
      * Edit a course description
      *
@@ -80,6 +83,31 @@ class MetadataByCourseController extends AbstractMetadataController
      */
     public function editDescriptionAction(Request $request, $courseIdentifier)
     {
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseToEdit(
+            $courseId
+        );
+        $difficultyMetadata = new DifficultyMetadataResource(ArrayUtils::getValue(
+            $metadatas,
+            DifficultyMetadataResource::KEY
+        ));
+        //FIXME trans
+        $form = $this->createFormBuilder($difficultyMetadata)
+            ->add(
+                'value',
+                'choice',
+                array(
+                    'choices'     => array(
+                        'easy'   => 'facile',
+                        'medium' => 'moyen',
+                        'hard'   => 'difficile'
+                    ),
+                    'empty_value' => '',
+                    'required'    => true
+                )
+            )
+            ->getForm();
+
+
         $metadataName = MetadataResource::COURSE_METADATA_DESCRIPTION;
         $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
             $courseIdentifier
