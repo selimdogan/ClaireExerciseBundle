@@ -2,6 +2,8 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
+use SimpleIT\ApiResourcesBundle\Course\DescriptionMetadataResource;
 use SimpleIT\ApiResourcesBundle\Course\DifficultyMetadataResource;
 use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\AppBundle\Util\RequestUtils;
@@ -70,9 +72,50 @@ class MetadataByCourseController extends AbstractMetadataController
         );
     }
 
-    public function editDescriptionView(){
+    /**
+     * Edit a description (GET)
+     *
+     * @param int $courseId Course id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editDescriptionViewAction(
+        CollectionInformation $collectionInformation,
+        $courseId
+    )
+    {
+        $status = $collectionInformation->getFilter(CourseResource::STATUS);
+        if (is_null($status)) {
+            $collectionInformation->addFilter(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
+        }
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseToEdit(
+            $courseId,
+            $collectionInformation
+        );
+        $descriptionMetadata = new DescriptionMetadataResource(ArrayUtils::getValue(
+            $metadatas,
+            DescriptionMetadataResource::KEY
+        ));
+        $form = $this->createFormBuilder($descriptionMetadata)
+            ->add(
+                'value',
+                'text',
+                array(
+                    'required'    => true
+                )
+            )
+            ->getForm();
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/MetadataByCourse/Component:editDescription.html.twig',
+            array(
+                'courseId' => $courseId,
+                'form'     => $form->createView()
+            )
+        );
 
     }
+
     /**
      * Edit a course description
      *
@@ -106,7 +149,6 @@ class MetadataByCourseController extends AbstractMetadataController
                 )
             )
             ->getForm();
-
 
         $metadataName = MetadataResource::COURSE_METADATA_DESCRIPTION;
         $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(

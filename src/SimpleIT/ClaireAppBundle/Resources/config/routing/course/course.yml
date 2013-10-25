@@ -7,3 +7,7 @@ simple_it_claire_course_course_create:
 simple_it_claire_part:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/part.yml"
     prefix:   /{courseIdentifier}/parts
+
+simple_it_claire_course_metadata:
+    resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/component_course_metadata.yml"
+    prefix:   /{courseId}/metadatas
