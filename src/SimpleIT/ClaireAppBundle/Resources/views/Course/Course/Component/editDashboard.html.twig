@@ -5,6 +5,8 @@
             {% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDescriptionView' with{'courseId': course.id}, {'standalone': true} %}
         </div>
 
+        <hr/>
+
         {#<div class="{{ _user.showAds ? "col8" : "col12" }}">#}
         <div class="col8">
             <div class="row">
@@ -39,7 +41,7 @@
 
                     <div class="col4">
                         {% render 'SimpleITClaireAppBundle:AssociatedContent/Component/TagByCourse:listEditView' with{'courseId': course.id}, {'standalone': true} %}
-                    </div
+                    </div>
 
                     <div class="col4">
                         <div class="update" itemprop="dateModified" title="Mis à jour">
@@ -49,7 +51,14 @@
                 </div>
             </div>
         </div>
+
+        {#{%  if (_user.showAds) %}#}
+            <div class="col4">
+                {% include "CommonBundle:Advertise/partial:advertise.html.twig" with {'num' : '1355149687749-3', 'class' : 'pavement'} %}
+            </div>
+        {#{% endif %}#}
     </div>
+
     <form action="{{ path('simple_it_claire_component_course_status_waiting_for_publication', { 'courseId': course.id, 'status': course.status}) }}" method="post">
         <input type="submit">
     </form>
@@ -58,4 +67,5 @@
             <i class="indicator icon-spinner icon-spin"></i> Publier
         </button>
     </form>
+
 </section>
