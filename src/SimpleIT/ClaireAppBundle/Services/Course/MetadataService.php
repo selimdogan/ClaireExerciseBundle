@@ -2,6 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Services\Course;
 
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\ClaireAppBundle\Repository\Course\MetadataByCourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\MetadataByPartRepository;
@@ -243,19 +244,30 @@ class MetadataService
      *
      * @return string
      */
-    public function saveFromCourse($courseIdentifier, $metadatas)
+    public function saveFromCourse(
+        $courseIdentifier,
+        $metadatas
+    )
     {
-        $metadatasToUpdate = $this->metadataByCourseRepository->findAll($courseIdentifier);
+        $collectionInformation = new CollectionInformation();
+        $collectionInformation->addFilter(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
+        $metadatasToUpdate = $this->metadataByCourseRepository->findAll(
+            $courseIdentifier,
+            $collectionInformation
+        );
+        $parameters = array('status' => $collectionInformation->getFilter(CourseResource::STATUS));
         foreach ($metadatas as $key => $value) {
             if (array_key_exists($key, $metadatasToUpdate)) {
                 $metadatasToUpdate = $this->metadataByCourseRepository->update(
                     $courseIdentifier,
-                    array($key => $value)
+                    array($key => $value),
+                    $parameters
                 );
             } else {
                 $metadatasToUpdate = $this->metadataByCourseRepository->insert(
                     $courseIdentifier,
-                    array($key => $value)
+                    array($key => $value),
+                    $parameters
                 );
             }
         }
