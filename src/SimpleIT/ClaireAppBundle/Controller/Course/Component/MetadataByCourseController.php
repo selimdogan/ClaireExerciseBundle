@@ -13,6 +13,7 @@ use SimpleIT\Utils\ArrayUtils;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\DateUtils;
 use SimpleIT\Utils\HTTP;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -114,35 +115,35 @@ class MetadataByCourseController extends AbstractMetadataController
     }
 
     /**
-     * Edit a course description (POST)
+     * Edit a course description (POST AJAX)
      *
-     * @param Request $request          Request
-     * @param int     $courseIdentifier Course id | slug
+     * @param Request $request  Request
+     * @param int     $courseId Course id
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @return string
      */
     public function editDescriptionAction(
         Request $request,
         $courseId
     )
     {
-        if ($request->isXmlHttpRequest()) {
-            $descriptionMetadata = new DescriptionMetadataResource();
-            $form = $this->createForm(new DescriptionMetadataType(), $descriptionMetadata);
-            $form->bind($request);
+        $descriptionMetadata = new DescriptionMetadataResource();
+        $form = $this->createForm(new DescriptionMetadataType(), $descriptionMetadata);
+        $form->bind($request);
 
-            if ($form->isValid()) {
-                $metadatas = $this->get('simple_it.claire.course.metadata')->saveFromCourse(
-                    $courseId,
-                    array($descriptionMetadata->getKey() => $descriptionMetadata->getValue())
-                );
+        if ($form->isValid()) {
+            $metadatas = $this->get('simple_it.claire.course.metadata')->saveFromCourse(
+                $courseId,
+                array($descriptionMetadata->getKey() => $descriptionMetadata->getValue())
+            );
 
-                return json_encode(
-                    ArrayUtils::getValue($metadatas, $descriptionMetadata->getKey())
-                );
-            } else {
-                throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST, $form->getErrors());
-            }
+            return new JsonResponse(ArrayUtils::getValue(
+                $metadatas[0],
+                $descriptionMetadata->getKey()
+            ));
+        } else {
+            throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST, $form->getErrors());
         }
     }
 
