@@ -2,9 +2,8 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
-use SimpleIT\ApiResourcesBundle\Course\TimeRequiredMetadataResource;
 use SimpleIT\AppBundle\Annotation\Cache;
-use SimpleIT\ApiResourcesBundle\Course\CourseResource;
+use SimpleIT\ApiResourcesBundle\Course\TimeRequiredMetadataResource;
 use SimpleIT\ApiResourcesBundle\Course\DescriptionMetadataResource;
 use SimpleIT\ApiResourcesBundle\Course\DifficultyMetadataResource;
 use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
@@ -109,8 +108,8 @@ class MetadataByCourseController extends AbstractMetadataController
         return $this->render(
             'SimpleITClaireAppBundle:Course/MetadataByCourse/Component:editDescription.html.twig',
             array(
-                'courseId' => $courseId,
-                'form'     => $form->createView()
+                'form'     => $form->createView(),
+                'action'=> $this->generateUrl('simple_it_claire_component_course_course_metadata_description_edit', )
             )
         );
     }
