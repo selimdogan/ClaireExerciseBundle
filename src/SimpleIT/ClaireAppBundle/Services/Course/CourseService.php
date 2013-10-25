@@ -44,15 +44,12 @@ class CourseService
 
     /**
      * @param int | string $courseId   Course id
-     * @param string       $status     Status
      * @param array        $parameters Parameters
      *
      * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
      */
-    public function getCourseToEdit($courseId, $status, array $parameters = array())
+    public function getCourseToEdit($courseId, array $parameters = array())
     {
-        $parameters[CourseResource::STATUS] = $status;
-
         return $this->courseRepository->findToEdit($courseId, $parameters);
     }
 
@@ -158,7 +155,7 @@ class CourseService
         $course->setStatus(CourseResource::STATUS_PUBLISHED);
         $parameters = array(CourseResource::STATUS => $initialStatus);
 
-        return $this->courseRepository->update($courseIdentifier, $course, $parameters);
+        return $this->courseRepository->updateToPublished($courseIdentifier, $course, $parameters);
     }
 
     /**

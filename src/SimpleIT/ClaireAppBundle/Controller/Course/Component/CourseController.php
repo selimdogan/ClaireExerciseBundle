@@ -1,16 +1,14 @@
 <?php
 
-
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\AppBundle\Annotation\Cache;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
-use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
-use SimpleIT\Utils\ArrayUtils;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\FormatUtils;
 use SimpleIT\Utils\HTTP;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -67,7 +65,10 @@ class CourseController extends AppController
     {
         $courses = $this->get('simple_it.claire.course.course')->getAll($collectionInformation);
         if ($request->isXmlHttpRequest()) {
-            return new Response($this->get('serializer')->serialize($courses->toArray(), FormatUtils::JSON));
+            return new Response($this->get('serializer')->serialize(
+                $courses->toArray(),
+                FormatUtils::JSON
+            ));
         }
 
         return $this->render(
@@ -277,10 +278,13 @@ class CourseController extends AppController
      */
     public function editViewAction(Request $request, $courseId)
     {
-        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
+        $parameters[CourseResource::STATUS] = $request->get(
+            CourseResource::STATUS,
+            CourseResource::STATUS_DRAFT
+        );
         $course = $this->get('simple_it.claire.course.course')->getCourseToEdit(
             $courseId,
-            $status
+            $parameters
         );
 
         $form = $this->createFormBuilder($course)
@@ -299,10 +303,15 @@ class CourseController extends AppController
      * @param Request $request  Request
      * @param int     $courseId Course id
      *
-     * @return string
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function editAction(Request $request, CollectionInformation $collectionInformation, $courseId)
+    public function editAction(Request $request, $courseId)
     {
+        $parameters[CourseResource::STATUS] = $request->get(
+            CourseResource::STATUS,
+            CourseResource::STATUS_DRAFT
+        );
         $course = new CourseResource();
         $form = $this->createFormBuilder($course)
             ->add('title', 'text')
@@ -310,16 +319,16 @@ class CourseController extends AppController
         $form->bind($request);
 
         if ($form->isValid()) {
-            $course = $this->get('simple_it.claire.course.course')->save($courseId, $course);
-            if ($request->isXmlHttpRequest()) {
-                return json_encode($course);
-            }
-        }
+            $course = $this->get('simple_it.claire.course.course')->save(
+                $courseId,
+                $course,
+                $parameters
+            );
 
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/Course:edit.html.twig',
-            array('course' => $course, 'form' => $form->createView())
-        );
+            return new JsonResponse($course->getTitle());
+        } else {
+            throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST, $form->getErrors());
+        }
     }
 
     /**
@@ -372,19 +381,21 @@ class CourseController extends AppController
     /**
      * Edit Dashboard
      *
-     * @param CollectionInformation $collectionInformation Collection information
-     * @param int                   $courseId              Course id
+     * @param Request $request  Request
+     * @param int     $courseId Course id
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editDashboardAction(CollectionInformation $collectionInformation, $courseId)
+    public function editDashboardAction(Request $request, $courseId)
     {
+        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
+        $parameters[CourseResource::STATUS] = $status;
+        $collectionInformation = new CollectionInformation();
+        $collectionInformation->addFilter(CourseResource::STATUS, $status);
+
         $course = $this->get('simple_it.claire.course.course')->get(
             $courseId,
-            array(
-                CourseResource::STATUS =>
-                    $collectionInformation->getFilter(CourseResource::STATUS)
-            )
+            $parameters
         );
         $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
             $course->getId(),
@@ -403,11 +414,10 @@ class CourseController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:editDashboard.html.twig',
             array(
-                'course'                => $course,
-                'metadatas'             => $metadatas,
-                'authors'               => $authors,
-                'tags'                  => $tags,
-                'collectionInformation' => $collectionInformation
+                'course'    => $course,
+                'metadatas' => $metadatas,
+                'authors'   => $authors,
+                'tags'      => $tags,
             )
         );
     }

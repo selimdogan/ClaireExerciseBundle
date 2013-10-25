@@ -90,9 +90,27 @@ class CourseRepository extends AppRepository
      * @param array          $parameters       Parameters
      *
      * @return CourseResource
-     * @CacheInvalidation(namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
     public function update($courseIdentifier, CourseResource $course, array $parameters = array())
+    {
+        return $this->updateResource(
+            $course,
+            array('courseIdentifier' => $courseIdentifier,),
+            $parameters
+        );
+    }
+
+    /**
+     * Update a course status to published
+     *
+     * @param string         $courseIdentifier Course id | slug
+     * @param CourseResource $course           Course
+     * @param array          $parameters       Parameters
+     *
+     * @return CourseResource
+     * @CacheInvalidation(namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
+     */
+    public function updateToPublished($courseIdentifier, CourseResource $course, array $parameters = array())
     {
         return $this->updateResource(
             $course,
