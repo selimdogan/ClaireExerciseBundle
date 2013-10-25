@@ -6,7 +6,7 @@
 {% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDifficultyView' with{'courseId': course.id}, {'standalone': true} %}
 {% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editTimeRequiredView' with{'courseId': course.id}, {'standalone': true} %}
 {#{% render 'SimpleITClaireAppBundle:Course/Component/Course:viewTimeline' with{'courseIdentifier': course.id, 'displayLevel': course.displayLevel, 'categoryIdentifier': 'informatique'}, {'standalone': true} %}#}
-{#{% render 'SimpleITClaireAppBundle:AssociatedContent/Component/TagByCourse:editView' with{'courseIdentifier': course.id}, {'standalone': true} %}#}
+{% render 'SimpleITClaireAppBundle:AssociatedContent/Component/TagByCourse:listEditView' with{'courseId': course.id}, {'standalone': true} %}
 <div class="col4">
     <div class="update" itemprop="dateModified" title="Mis à jour">
         Mis à jour le {{ course.updatedAt | localizeddate ('full', 'none') }}

@@ -2,11 +2,14 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\AssociatedContent\Component;
 
+use SimpleIT\AppBundle\Annotation\Cache;
+use SimpleIT\ApiResourcesBundle\AssociatedContent\TagResource;
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
-use SimpleIT\AppBundle\Annotation\Cache;
+
 
 /**
  * Class TagByCourseController
@@ -38,10 +41,50 @@ class TagByCourseController extends AppController
     }
 
     /**
+     * Edit a list of tags (GET)
+     *
+     * @param CollectionInformation $collectionInformation Collection Information
+     * @param int                   $courseId              Course id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listEditViewAction(CollectionInformation $collectionInformation, $courseId)
+    {
+        $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourse(
+            $courseId,
+            $collectionInformation
+        );
+        $outputTags = array();
+
+        /** @type TagResource $tag */
+        foreach ($tags as $tag) {
+            $outputTags[$tag->getId()] = $tag->getName();
+        }
+
+        $form = $this->createFormBuilder($outputTags)
+            ->add(
+                'tags',
+                'text',
+                array(
+                    'required' => true
+                )
+            )
+            ->getForm();
+
+        return $this->render(
+            'SimpleITClaireAppBundle:AssociatedContent/Tag/Component:editListByCourse.html.twig',
+            array(
+                'courseId' => $courseId,
+                'form'     => $form->createView()
+            )
+        );
+    }
+
+    /**
      * Edit tags
      *
-     * @param Request         $request                  Request
-     * @param integer |string $courseIdentifier         Course id | slug
+     * @param Request         $request          Request
+     * @param integer |string $courseIdentifier Course id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -63,11 +106,28 @@ class TagByCourseController extends AppController
         }
 
         return $this->render(
-            'SimpleITClaireAppBundle:AssociatedContent/Tag/Component:editByCourse.html.twig',
+            'editListByCourse.html.twig',
             array(
                 'courseIdentifier' => $courseIdentifier,
                 'tags'             => $tagsString
             )
         );
+    }
+
+    /**
+     * Set status to draft if not defined in collection information
+     *
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return CollectionInformation
+     */
+    protected function setStatusToDraftIfNotDefined(CollectionInformation $collectionInformation)
+    {
+        $status = $collectionInformation->getFilter(CourseResource::STATUS);
+        if (is_null($status)) {
+            $collectionInformation->addFilter(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
+        }
+
+        return $collectionInformation;
     }
 }
