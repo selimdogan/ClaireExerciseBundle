@@ -43,58 +43,6 @@ class CourseService
     private $courseContentRepository;
 
     /**
-     * Set courseIntroductionRepository
-     *
-     * @param CourseIntroductionRepository $courseIntroductionRepository
-     */
-    public function setCourseIntroductionRepository($courseIntroductionRepository)
-    {
-        $this->courseIntroductionRepository = $courseIntroductionRepository;
-    }
-
-    /**
-     * Set courseRepository
-     *
-     * @param CourseRepository $courseRepository
-     */
-    public function setCourseRepository($courseRepository)
-    {
-        $this->courseRepository = $courseRepository;
-    }
-
-    /**
-     * Set courseTocRepository
-     *
-     * @param CourseTocRepository $courseTocRepository
-     */
-    public function setCourseTocRepository($courseTocRepository)
-    {
-        $this->courseTocRepository = $courseTocRepository;
-    }
-
-    /**
-     * Set courseContentRepository
-     *
-     * @param \SimpleIT\ClaireAppBundle\Repository\Course\CourseContentRepository $courseContentRepository
-     */
-    public function setCourseContentRepository($courseContentRepository)
-    {
-        $this->courseContentRepository = $courseContentRepository;
-    }
-
-    /**
-     * Get all courses
-     *
-     * @param CollectionInformation $collectionInformation Collection information
-     *
-     * @return \SimpleIT\Utils\Collection\PaginatedCollection
-     */
-    public function getAll(CollectionInformation $collectionInformation = null)
-    {
-        return $this->courseRepository->findAll($collectionInformation);
-    }
-
-    /**
      * @param int | string $courseId   Course id
      * @param string       $status     Status
      * @param array        $parameters Parameters
