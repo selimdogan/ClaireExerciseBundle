@@ -8,10 +8,14 @@ use SimpleIT\ApiResourcesBundle\Course\DescriptionMetadataResource;
 use SimpleIT\ApiResourcesBundle\Course\DifficultyMetadataResource;
 use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\AppBundle\Util\RequestUtils;
+use SimpleIT\ClaireAppBundle\Form\Type\Course\DescriptionMetadataType;
 use SimpleIT\Utils\ArrayUtils;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\DateUtils;
+use SimpleIT\Utils\HTTP;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class MetadataController
@@ -45,31 +49,31 @@ class MetadataByCourseController extends AbstractMetadataController
         );
     }
 
-    /**
-     * View a course description
-     *
-     * @param int | string $courseIdentifier Course id | slug
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
-     */
-    public function viewDescriptionAction($courseIdentifier)
-    {
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
-            $courseIdentifier
-        );
-        $description = ArrayUtils::getValue(
-            $metadatas,
-            MetadataResource::COURSE_METADATA_DESCRIPTION
-        );
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/Metadata/Component:viewDescription.html.twig',
-            array(
-                MetadataResource::COURSE_METADATA_DESCRIPTION => $description
-            )
-        );
-    }
+//    /**
+//     * View a course description
+//     *
+//     * @param int | string $courseIdentifier Course id | slug
+//     *
+//     * @return \Symfony\Component\HttpFoundation\Response
+//     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+//     */
+//    public function viewDescriptionAction($courseIdentifier)
+//    {
+//        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
+//            $courseIdentifier
+//        );
+//        $description = ArrayUtils::getValue(
+//            $metadatas,
+//            MetadataResource::COURSE_METADATA_DESCRIPTION
+//        );
+//
+//        return $this->render(
+//            'SimpleITClaireAppBundle:Course/Metadata/Component:viewDescription.html.twig',
+//            array(
+//                MetadataResource::COURSE_METADATA_DESCRIPTION => $description
+//            )
+//        );
+//    }
 
     /**
      * Edit a description (GET)
@@ -94,16 +98,7 @@ class MetadataByCourseController extends AbstractMetadataController
             $metadatas,
             DescriptionMetadataResource::KEY
         ));
-        $form = $this->createFormBuilder($descriptionMetadata)
-            ->add(
-                'value',
-                'textarea',
-                array(
-                    'required'   => true,
-                    'max_length' => 255,
-                )
-            )
-            ->getForm();
+        $form = $this->createForm(new DescriptionMetadataType(), $descriptionMetadata);
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/Metadata/Component:editDescription.html.twig',
@@ -120,152 +115,88 @@ class MetadataByCourseController extends AbstractMetadataController
     }
 
     /**
-     * Edit a course description
+     * Edit a course description (POST AJAX)
      *
-     * @param Request      $request          Request
-     * @param int | string $courseIdentifier Course id | slug
+     * @param Request $request  Request
+     * @param int     $courseId Course id
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @return string
      */
-    public function editDescriptionAction(Request $request, $courseId)
+    public function editDescriptionAction(
+        Request $request,
+        $courseId
+    )
     {
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseToEdit(
-            $courseId
-        );
-        $difficultyMetadata = new DifficultyMetadataResource(ArrayUtils::getValue(
-            $metadatas,
-            DifficultyMetadataResource::KEY
-        ));
-        //FIXME trans
-        $form = $this->createFormBuilder($difficultyMetadata)
-            ->add(
-                'value',
-                'choice',
-                array(
-                    'choices'     => array(
-                        'easy'   => 'facile',
-                        'medium' => 'moyen',
-                        'hard'   => 'difficile'
-                    ),
-                    'empty_value' => '',
-                    'required'    => true
-                )
-            )
-            ->getForm();
+        $descriptionMetadata = new DescriptionMetadataResource();
+        $form = $this->createForm(new DescriptionMetadataType(), $descriptionMetadata);
+        $form->bind($request);
 
-        $metadataName = MetadataResource::COURSE_METADATA_DESCRIPTION;
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
-            $courseId
-        );
+        if ($form->isValid()) {
+            $metadatas = $this->get('simple_it.claire.course.metadata')->saveFromCourse(
+                $courseId,
+                array($descriptionMetadata->getKey() => $descriptionMetadata->getValue())
+            );
 
-        $form = $this->createFormBuilder($metadatas)
-            ->add($metadataName, 'textarea')
-            ->getForm();
-
-        $form = $this->processCourseEdit(
-            $request,
-            $form,
-            $courseId,
-            $metadatas,
-            $metadataName
-        );
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/MetadataByCourse/Component:editDescription.html.twig',
-            array(
-                'courseIdentifier' => $courseId,
-                'form'             => $form->createView()
-            )
-        );
+            return new JsonResponse(ArrayUtils::getValue(
+                $metadatas[0],
+                $descriptionMetadata->getKey()
+            ));
+        } else {
+            throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST, $form->getErrors());
+        }
     }
 
-    /**
-     * View a course image
-     *
-     * @param int | string $courseIdentifier Course id | slug
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
-     */
-    public function viewImageAction($courseIdentifier)
-    {
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
-            $courseIdentifier
-        );
-        $image = ArrayUtils::getValue(
-            $metadatas,
-            MetadataResource::COURSE_METADATA_IMAGE
-        );
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/Metadata/Component:viewImage.html.twig',
-            array(
-                MetadataResource::COURSE_METADATA_IMAGE => $image
-            )
-        );
-    }
-
-    /**
-     * Edit a course image
-     *
-     * @param Request          $request          Request
-     * @param integer | string $courseIdentifier Course id | slug
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function editImageAction(Request $request, $courseIdentifier)
-    {
-        $metadataName = MetadataResource::COURSE_METADATA_IMAGE;
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
-            $courseIdentifier
-        );
-
-        $form = $this->createFormBuilder($metadatas)
-            ->add($metadataName, 'url')
-            ->getForm();
-
-        $form = $this->processCourseEdit(
-            $request,
-            $form,
-            $courseIdentifier,
-            $metadatas,
-            $metadataName
-        );
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/MetadataByCourse/Component:editImage.html.twig',
-            array(
-                'courseIdentifier' => $courseIdentifier,
-                'form'             => $form->createView()
-            )
-        );
-    }
-
-    /**
-     * View a course rating
-     *
-     * @param int | string $courseIdentifier Course id | slug
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
-     */
-    public function viewRatingAction($courseIdentifier)
-    {
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
-            $courseIdentifier
-        );
-        $rating = ArrayUtils::getValue(
-            $metadatas,
-            MetadataResource::COURSE_METADATA_AGGREGATE_RATING
-        );
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/Metadata/Component:viewRating.html.twig',
-            array(
-                MetadataResource::COURSE_METADATA_AGGREGATE_RATING => $rating
-            )
-        );
-    }
+//}
+//        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseToEdit(
+//            $courseId
+//        );
+//        $difficultyMetadata = new DifficultyMetadataResource(ArrayUtils::getValue(
+//            $metadatas,
+//            DifficultyMetadataResource::KEY
+//        ));
+//        //FIXME trans
+//        $form = $this->createFormBuilder($difficultyMetadata)
+//            ->add(
+//                'value',
+//                'choice',
+//                array(
+//                    'choices'     => array(
+//                        'easy'   => 'facile',
+//                        'medium' => 'moyen',
+//                        'hard'   => 'difficile'
+//                    ),
+//                    'empty_value' => '',
+//                    'required'    => true
+//                )
+//            )
+//            ->getForm();
+//
+//        $metadataName = MetadataResource::COURSE_METADATA_DESCRIPTION;
+//        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
+//            $courseId
+//        );
+//
+//        $form = $this->createFormBuilder($metadatas)
+//            ->add($metadataName, 'textarea')
+//            ->getForm();
+//
+//        $form = $this->processCourseEdit(
+//            $request,
+//            $form,
+//            $courseId,
+//            $metadatas,
+//            $metadataName
+//        );
+//
+//        return $this->render(
+//            'SimpleITClaireAppBundle:Course/MetadataByCourse/Component:editDescription.html.twig',
+//            array(
+//                'courseIdentifier' => $courseId,
+//                'form'             => $form->createView()
+//            )
+//        );
+//    }
 
     /**
      * View a course difficulty
@@ -336,7 +267,12 @@ class MetadataByCourseController extends AbstractMetadataController
             'SimpleITClaireAppBundle:Course/Metadata/Component:editDifficulty.html.twig',
             array(
                 'courseId' => $courseId,
-                'form'     => $form->createView()
+                'form'     => $form->createView(),
+                'action'   =>
+                    $this->generateUrl(
+                        'simple_it_claire_component_course_course_metadata_difficulty_edit',
+                        array('courseId' => $courseId)
+                    )
             )
         );
     }
@@ -456,7 +392,12 @@ class MetadataByCourseController extends AbstractMetadataController
             'SimpleITClaireAppBundle:Course/Metadata/Component:editTimeRequired.html.twig',
             array(
                 'courseId' => $courseId,
-                'form'     => $form->createView()
+                'form'     => $form->createView(),
+                'action'   =>
+                    $this->generateUrl(
+                        'simple_it_claire_component_course_course_metadata_time_required_edit',
+                        array('courseId' => $courseId)
+                    )
             )
         );
     }
@@ -542,6 +483,94 @@ class MetadataByCourseController extends AbstractMetadataController
             'SimpleITClaireAppBundle:Course/Metadata/Component:viewLicense.html.twig',
             array(
                 MetadataResource::COURSE_METADATA_LICENSE => $license
+            )
+        );
+    }
+
+    /**
+     * View a course image
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     */
+    public function viewImageAction($courseIdentifier)
+    {
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
+            $courseIdentifier
+        );
+        $image = ArrayUtils::getValue(
+            $metadatas,
+            MetadataResource::COURSE_METADATA_IMAGE
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Metadata/Component:viewImage.html.twig',
+            array(
+                MetadataResource::COURSE_METADATA_IMAGE => $image
+            )
+        );
+    }
+
+    /**
+     * Edit a course image
+     *
+     * @param Request          $request          Request
+     * @param integer | string $courseIdentifier Course id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editImageAction(Request $request, $courseIdentifier)
+    {
+        $metadataName = MetadataResource::COURSE_METADATA_IMAGE;
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
+            $courseIdentifier
+        );
+
+        $form = $this->createFormBuilder($metadatas)
+            ->add($metadataName, 'url')
+            ->getForm();
+
+        $form = $this->processCourseEdit(
+            $request,
+            $form,
+            $courseIdentifier,
+            $metadatas,
+            $metadataName
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/MetadataByCourse/Component:editImage.html.twig',
+            array(
+                'courseIdentifier' => $courseIdentifier,
+                'form'             => $form->createView()
+            )
+        );
+    }
+
+    /**
+     * View a course rating
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     */
+    public function viewRatingAction($courseIdentifier)
+    {
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
+            $courseIdentifier
+        );
+        $rating = ArrayUtils::getValue(
+            $metadatas,
+            MetadataResource::COURSE_METADATA_AGGREGATE_RATING
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Metadata/Component:viewRating.html.twig',
+            array(
+                MetadataResource::COURSE_METADATA_AGGREGATE_RATING => $rating
             )
         );
     }
