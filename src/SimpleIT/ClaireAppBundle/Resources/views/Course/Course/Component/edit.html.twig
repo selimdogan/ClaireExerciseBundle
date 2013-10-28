@@ -6,3 +6,23 @@
     <input type="submit">
     {#Remove submit#}
 </form>
+
+{% if authors is defined and authors|length > 0 %}
+    <div class="text-top-dashboard">
+        Par
+        {% for author in authors %}{% if not loop.first and not loop.last %},{% elseif loop.last and not loop.first %} et                    {% endif %}
+            <span itemprop="author">
+                <a href="{{ path('fos_user_profile_show', { 'slug': author.slug }) }}">
+                    {% if author.firstname is defined and author.lastname is defined and ((author.firstname ~ author.lastname) | length > 0) %}
+                        {{ author.firstname }} {{ author.lastname }}
+                        {% if authors|length==1 %}
+                            alias {{ author.username }}
+                        {% endif %}
+                    {% else %}
+                        {{ author.username }}
+                    {% endif %}
+                </a>
+            </span>
+        {% endfor %}
+    </div>
+{% endif %}
