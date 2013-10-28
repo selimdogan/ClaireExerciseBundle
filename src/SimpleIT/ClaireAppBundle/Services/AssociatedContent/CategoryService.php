@@ -1,9 +1,9 @@
 <?php
 
-
 namespace SimpleIT\ClaireAppBundle\Services\AssociatedContent;
 
 use SimpleIT\ApiResourcesBundle\AssociatedContent\CategoryResource;
+use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\CategoryByCourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\CategoryRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\CourseByCategoryRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCategoryRepository;
@@ -17,49 +17,24 @@ use SimpleIT\Utils\Collection\CollectionInformation;
 class CategoryService
 {
     /**
-     * @var CategoryRepository
+     * @type CategoryRepository
      */
     private $categoryRepository;
 
     /**
-     * @var CourseByCategoryRepository
+     * @type CourseByCategoryRepository
      */
     private $courseByCategoryRepository;
 
     /**
-     * @var  TagByCategoryRepository
+     * @type TagByCategoryRepository
      */
     private $tagByCategoryRepository;
 
     /**
-     * Set categoryRepository
-     *
-     * @param \SimpleIT\ClaireAppBundle\Repository\AssociatedContent\CategoryRepository $categoryRepository
+     * @type CategoryByCourseRepository
      */
-    public function setCategoryRepository($categoryRepository)
-    {
-        $this->categoryRepository = $categoryRepository;
-    }
-
-    /**
-     * Set courseByCategoryRepository
-     *
-     * @param CourseByCategoryRepository $courseByCategoryRepository
-     */
-    public function setCourseByCategoryRepository($courseByCategoryRepository)
-    {
-        $this->courseByCategoryRepository = $courseByCategoryRepository;
-    }
-
-    /**
-     * Set tagByCategoryRepository
-     *
-     * @param TagByCategoryRepository $tagByCategoryRepository
-     */
-    public function setTagByCategoryRepository($tagByCategoryRepository)
-    {
-        $this->tagByCategoryRepository = $tagByCategoryRepository;
-    }
+    private $categoryByCourseRepository;
 
     /**
      * Get a list of categories
@@ -81,9 +56,15 @@ class CategoryService
      *
      * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
-    public function getAllCourses($categoryIdentifier, CollectionInformation $collectionInformation = null)
+    public function getAllCourses(
+        $categoryIdentifier,
+        CollectionInformation $collectionInformation = null
+    )
     {
-        return $this->courseByCategoryRepository->findAll($categoryIdentifier, $collectionInformation);
+        return $this->courseByCategoryRepository->findAll(
+            $categoryIdentifier,
+            $collectionInformation
+        );
     }
 
     /**
@@ -108,5 +89,74 @@ class CategoryService
     public function get($categoryIdentifier)
     {
         return $this->categoryRepository->find($categoryIdentifier);
+    }
+
+    /**
+     * Get a category by course
+     *
+     * @param int|string $courseIdentifier Course id | slug
+     *
+     * @return CategoryResource
+     */
+    public function getByCourse($courseIdentifier)
+    {
+        return $this->categoryByCourseRepository->find($courseIdentifier);
+    }
+
+    /**
+     * Add a course to a category
+     *
+     * @param int $categoryId Category id
+     * @param int $courseId   Course id
+     *
+     * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
+     */
+    public function addCourse($categoryId, $courseId)
+    {
+        return $this->courseByCategoryRepository->insert($categoryId, $courseId);
+    }
+
+    /**
+     * Set categoryRepository
+     *
+     * @param CategoryRepository $categoryRepository
+     */
+    public function setCategoryRepository(CategoryRepository $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+
+    /**
+     * Set courseByCategoryRepository
+     *
+     * @param CourseByCategoryRepository $courseByCategoryRepository
+     */
+    public function setCourseByCategoryRepository(
+        CourseByCategoryRepository $courseByCategoryRepository
+    )
+    {
+        $this->courseByCategoryRepository = $courseByCategoryRepository;
+    }
+
+    /**
+     * Set categoryByCourseRepository
+     *
+     * @param CategoryByCourseRepository $categoryByCourseRepository
+     */
+    public function setCategoryByCourseRepository(
+        CategoryByCourseRepository $categoryByCourseRepository
+    )
+    {
+        $this->categoryByCourseRepository = $categoryByCourseRepository;
+    }
+
+    /**
+     * Set tagByCategoryRepository
+     *
+     * @param TagByCategoryRepository $tagByCategoryRepository
+     */
+    public function setTagByCategoryRepository(TagByCategoryRepository $tagByCategoryRepository)
+    {
+        $this->tagByCategoryRepository = $tagByCategoryRepository;
     }
 }

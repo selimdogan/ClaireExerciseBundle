@@ -1,0 +1,5 @@
+simple_it_claire_component_associated_content_category_category_by_course_edit:
+    pattern: /categories/
+    defaults: { _controller: SimpleITClaireAppBundle:AssociatedContent/Component/CategoryByCourse:create }
+    requirements:
+        _method: POST
