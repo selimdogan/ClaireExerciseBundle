@@ -173,6 +173,21 @@ class CourseService
     /**
      * Get a course introduction
      *
+     * @param int|string $courseIdentifier Course id | slug
+     *
+     * @return string
+     */
+    public function getIntroductionToEdit($courseIdentifier)
+    {
+        return $this->courseIntroductionRepository->findToEdit(
+            $courseIdentifier,
+            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT)
+        );
+    }
+
+    /**
+     * Get a course introduction
+     *
      * @param int | string $courseIdentifier Course id | slug
      * @param string       $status           Status
      *
@@ -180,7 +195,10 @@ class CourseService
      */
     public function getContent($courseIdentifier, $status)
     {
-        return $this->courseContentRepository->find($courseIdentifier, array('status' => $status));
+        return $this->courseContentRepository->find(
+            $courseIdentifier,
+            array(CourseResource::STATUS => $status)
+        );
     }
 
     /**
@@ -192,7 +210,10 @@ class CourseService
      */
     public function getContentToEdit($courseIdentifier)
     {
-        return $this->courseContentRepository->find($courseIdentifier, array('status' => CourseResource::STATUS_DRAFT));
+        return $this->courseContentRepository->findToEdit(
+            $courseIdentifier,
+            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT)
+        );
     }
 
     /**
@@ -247,6 +268,22 @@ class CourseService
     }
 
     /**
+     * Get a course table of content
+     *
+     * @param int|string $courseIdentifier Course id | slug
+     * @param string     $status           Status
+     *
+     * @return CourseResource
+     */
+    public function getTocToEdit($courseIdentifier, $status)
+    {
+        return $this->courseTocRepository->findToEdit(
+            $courseIdentifier,
+            array(CourseResource::STATUS, $status)
+        );
+    }
+
+    /**
      * @param PartResource $part         Part
      * @param int | string $identifier   Current element id | slug
      * @param int          $displayLevel Display level
@@ -280,6 +317,7 @@ class CourseService
 
         for ($i = 0; $i < count($list); $i++) {
             /* Find the current node */
+            /** @type PartResource $list [$i] */
             if ($identifier == $list[$i]->getId() || $identifier == $list[$i]->getSlug()) {
                 $pagination['previous'] = $previous;
 

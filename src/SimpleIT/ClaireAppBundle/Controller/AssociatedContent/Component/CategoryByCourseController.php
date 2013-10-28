@@ -27,7 +27,6 @@ class CategoryByCourseController extends AppController
      */
     public function createViewAction($courseId)
     {
-        // Get course category
         try {
             $category = $this->get('simple_it.claire.associated_content.category')->getByCourse(
                 $courseId

@@ -21,6 +21,11 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class CourseController extends AppController
 {
+    /* **************** *
+     *                  *
+     * ***** LIST ***** *
+     *                  *
+     * **************** */
     /**
      * List courses
      *
@@ -81,25 +86,11 @@ class CourseController extends AppController
         );
     }
 
-    /**
-     * View introduction
-     *
-     * @param int | string $courseIdentifier Course id | slug
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
-     */
-    public function viewIntroductionAction($courseIdentifier)
-    {
-        $introduction = $this->get('simple_it.claire.course.course')->getIntroduction(
-            $courseIdentifier
-        );
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
-            array('content' => $introduction)
-        );
-    }
+    /* ************************ *
+     *                          *
+     * ***** TIMELINE ***** *
+     *                          *
+     * ************************ */
 
     /**
      * View timeline
@@ -133,6 +124,59 @@ class CourseController extends AppController
         );
     }
 
+    /* ************************ *
+     *                          *
+     * ***** INTRODUCTION ***** *
+     *                          *
+     * ************************ */
+
+    /**
+     * View introduction
+     *
+     * @param int|string $courseIdentifier Course id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     */
+    public function viewIntroductionAction($courseIdentifier)
+    {
+        $introduction = $this->get('simple_it.claire.course.course')->getIntroduction(
+            $courseIdentifier
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
+            array('content' => $introduction)
+        );
+    }
+
+    /**
+     * Edit introduction (GET)
+     *
+     * @param Request $request  Request
+     * @param int     $courseId Course id
+     *
+     * @return Response
+     */
+    public function editIntroductionViewAction(Request $request, $courseId)
+    {
+        $introduction = $this->get('simple_it.claire.course.course')->getIntroductionToEdit(
+            $courseId,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
+            array('content' => $introduction)
+        );
+    }
+
+    /* *************** *
+     *                 *
+     * ***** TOC ***** *
+     *                 *
+     * *************** */
+
     /**
      * View table of content
      *
@@ -160,6 +204,38 @@ class CourseController extends AppController
                 'displayLevel'       => $displayLevel,
                 'courseIdentifier'   => $courseIdentifier,
                 'categoryIdentifier' => $categoryIdentifier
+            )
+        );
+    }
+
+    /**
+     * Edit a table of content (GET)
+     *
+     * @param Request      $request          Request
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int          $displayLevel     Display level
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editTocViewAction(Request $request, $courseIdentifier, $displayLevel)
+    {
+        $toc = $this->get('simple_it.claire.course.course')->getTocToEdit(
+            $courseIdentifier,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
+        if ($displayLevel == CourseResource::DISPLAY_LEVEL_MEDIUM) {
+            $template = 'SimpleITClaireAppBundle:Course/Course/Component:viewTocMedium.html.twig';
+        } else {
+            $template = 'SimpleITClaireAppBundle:Course/Course/Component:viewTocBig.html.twig';
+        }
+
+        return $this->render(
+            $template,
+            array(
+                'toc'              => $toc,
+                'displayLevel'     => $displayLevel,
+                'courseIdentifier' => $courseIdentifier,
             )
         );
     }
