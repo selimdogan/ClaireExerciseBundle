@@ -1,4 +1,4 @@
-Tags :<form action="{{ path('simple_it_claire_component_course_course_metadata_description_edit', { 'courseId': courseId}) }}" method="post" {{ form_enctype(form) }}>
+<form action="{{ path('simple_it_claire_component_course_course_metadata_description_edit', { 'courseId': courseId}) }}" method="post" {{ form_enctype(form) }}>
     {{ form_errors(form) }}
     {{ form_errors(form.tags) }}
     {{ form_widget(form.tags) }}

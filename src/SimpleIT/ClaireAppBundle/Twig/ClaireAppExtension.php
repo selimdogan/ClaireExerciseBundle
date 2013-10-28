@@ -77,22 +77,21 @@ class ClaireAppExtension extends \Twig_Extension
     {
         $content = null;
         if (!is_null($license)) {
-            $content = '<span class="license-cc" title="CC"></span>';
+            $content = '<i class="icon-cc" title="CC"></i>';
             $licenseArray = explode('-', $license);
             foreach ($licenseArray as $partLicense) {
                 switch ($partLicense) {
                     case MetadataResource::LICENSE_CC_BY:
-                        $content .= '<span class="license-cc-by" title="BY"></span>';
+                        $content .= '<i class="icon-ccby" title="BY"></i>';
                         break;
                     case MetadataResource::LICENSE_CC_NC:
-                        $content .= '<span class="license-cc-nc" title="NC"></span>';
+                        $content .= '<i class="icon-ccnc" title="NC"></i>';
                         break;
                     case MetadataResource::LICENSE_CC_SA:
-                        $content .= '<span class="license-cc-sa" title="SA"></span>';
+                        $content .= '<i class="icon-ccnd" title="SA"></i>';
                         break;
                     default:
                         break;
-
                 }
 
             }
