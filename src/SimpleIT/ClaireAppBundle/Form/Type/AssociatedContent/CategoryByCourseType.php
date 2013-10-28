@@ -1,17 +1,17 @@
 <?php
 
 
-namespace SimpleIT\ClaireAppBundle\Form\Type\Course;
+namespace SimpleIT\ClaireAppBundle\Form\Type\AssociatedContent;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class DescriptionMetadataType
+ * Class CategoryByCourseType
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class DescriptionMetadataType extends AbstractType
+class CategoryByCourseType extends AbstractType
 {
     /**
      * @inheritdoc
@@ -19,11 +19,11 @@ class DescriptionMetadataType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add(
-            'value',
-            'textarea',
+            'categoryId',
+            'choice',
             array(
-                'required'   => true,
-                'max_length' => 255,
+                'choices'  => array(1 => 'Informatique', 2 => 'Sciences', 3 => 'Entreprise'),
+                'required' => true,
             )
         );
     }
@@ -33,6 +33,6 @@ class DescriptionMetadataType extends AbstractType
      */
     public function getName()
     {
-        return 'DescriptionMetadata';
+        return 'CategoryByCourse';
     }
 }

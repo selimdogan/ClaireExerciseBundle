@@ -5,6 +5,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 use SimpleIT\AppBundle\Annotation\Cache;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
+use SimpleIT\ClaireAppBundle\Form\Type\Course\CourseDisplayLevelType;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\FormatUtils;
 use SimpleIT\Utils\HTTP;
@@ -20,7 +21,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class CourseController extends AppController
 {
-
     /**
      * List courses
      *
@@ -329,6 +329,59 @@ class CourseController extends AppController
         } else {
             throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST, $form->getErrors());
         }
+    }
+
+    /**
+     * Edit a course display level (GET)
+     *
+     * @param Request $request  Request
+     * @param int     $courseId Course id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editDisplayLevelViewAction(Request $request, $courseId)
+    {
+        $parameters[CourseResource::STATUS] = $request->get(
+            CourseResource::STATUS,
+            CourseResource::STATUS_DRAFT
+        );
+
+        $course = $this->get('simple_it.claire.course.course')->getCourseToEdit(
+            $courseId,
+            $parameters
+        );
+
+        $form = $this->createForm(new CourseDisplayLevelType(), $course);
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:editDisplayLevel.html.twig',
+            array('course' => $course, 'form' => $form->createView())
+        );
+    }
+
+    /**
+     * Edit a course display level (POST)
+     *
+     * @param Request $request  Request
+     * @param int     $courseId Course id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function displayLevelEditAction(Request $request, $courseId)
+    {
+        $course = new CourseResource();
+        $form = $this->createForm(new CourseDisplayLevelType(), $course);
+        $form->bind($request);
+        if ($form->isValid()) {
+            $course = $this->get('simple_it.claire.course.course')->save($courseId, $course);
+        }
+
+        return $this->redirect(
+            $this->generateUrl(
+                'simple_it_claire_course_course_edit',
+                array('courseId' => $course->getId())
+            )
+        );
     }
 
     /**
