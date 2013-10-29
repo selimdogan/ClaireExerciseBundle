@@ -150,10 +150,6 @@ class CourseController extends AppController
      */
     public function editAction(Request $request, $courseId)
     {
-        $parameters[CourseResource::STATUS] = $request->get(
-            CourseResource::STATUS,
-            CourseResource::STATUS_DRAFT
-        );
         $course = new CourseResource();
         $form = $this->createFormBuilder($course)
             ->add('title', 'text')
@@ -164,7 +160,7 @@ class CourseController extends AppController
             $course = $this->get('simple_it.claire.course.course')->save(
                 $courseId,
                 $course,
-                $parameters
+                $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
             );
 
             return new JsonResponse($course->getTitle());
