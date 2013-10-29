@@ -28,7 +28,7 @@
         <!--COURSE-->
         <service id="simple_it.claire.course.repository.course" class="%simple_it.claire.course.repository.course.class%">
             <call method="setClient">
-                <argument type="service" id="simple_it.claire.http_client"/>
+                <argument type="service" id="simple_it.claire.http_client.authenticated"/>
             </call>
             <call method="setSerializer">
                 <argument type="service" id="simple_it.claire.serializer"/>

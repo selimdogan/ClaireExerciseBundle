@@ -33,4 +33,20 @@ class CategoryByCourseRepository extends AppRepository
     {
         return parent::findResource(array('courseIdentifier' => $courseIdentifier));
     }
+
+    /**
+     * Insert a category
+     *
+     * @param int|string $courseIdentifier Course id | slug
+     * @param int        $categoryId       Category id
+     *
+     * @return mixed
+     */
+    public function insert($courseIdentifier, $categoryId)
+    {
+        return parent::insertResource(
+            array($categoryId),
+            array('courseIdentifier' => $courseIdentifier)
+        );
+    }
 }
