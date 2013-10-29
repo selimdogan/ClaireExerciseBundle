@@ -20,6 +20,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Services\Course;
 
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartContentRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartIntroductionRepository;
@@ -176,15 +177,13 @@ class PartService
      *
      * @param integer $courseIdentifier Course id | slug
      * @param integer $partIdentifier   Part id | slug
-     * @param string  $status           Asked status
      *
      * @return mixed
      */
-    public function getContent($courseIdentifier, $partIdentifier, $status)
+    public function getContent($courseIdentifier, $partIdentifier)
     {
-        $parameters = array('status' => $status);
 
-        return $this->partContentRepository->find($courseIdentifier, $partIdentifier, $parameters);
+        return $this->partContentRepository->find($courseIdentifier, $partIdentifier);
     }
 
     /**
@@ -198,9 +197,11 @@ class PartService
      */
     public function getContentToEdit($courseIdentifier, $partIdentifier, $status)
     {
-        $parameters = array('status' => $status);
-
-        return $this->partContentRepository->findToEdit($courseIdentifier, $partIdentifier, $parameters);
+        return $this->partContentRepository->findToEdit(
+            $courseIdentifier,
+            $partIdentifier,
+            array(CourseResource::STATUS => $status)
+        );
     }
 
     /**

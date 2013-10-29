@@ -41,13 +41,17 @@ class CategoryRepository extends AppRepository
     /**
      * Find a category
      *
-     * @param int | string $categoryIdentifier Category id | slug
+     * @param int|string $categoryIdentifier Category id | slug
+     * @param array      $parameters         Parameters
      *
      * @return CategoryResource
      * @cache
      */
-    public function find($categoryIdentifier)
+    public function find($categoryIdentifier, $parameters = array())
     {
-        return parent::findResource(array('categoryIdentifier' => $categoryIdentifier));
+        return parent::findResource(
+            array('categoryIdentifier' => $categoryIdentifier),
+            $parameters
+        );
     }
 }

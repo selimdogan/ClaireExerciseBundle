@@ -44,17 +44,4 @@ class CourseByCategoryRepository extends AppRepository
             $collectionInformation
         );
     }
-
-    /**
-     * Insert a course to a category
-     *
-     * @param int $categoryId Category id
-     * @param int $courseId   Course id
-     *
-     * @return CourseResource
-     */
-    public function insert($categoryId, $courseId)
-    {
-        return parent::insertResource(array($courseId), array('categoryIdentifier' => $categoryId));
-    }
 }

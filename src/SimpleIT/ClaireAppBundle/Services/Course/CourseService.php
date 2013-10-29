@@ -23,34 +23,57 @@ class CourseService
     );
 
     /**
-     * @var  CourseRepository
+     * @type  CourseRepository
      */
     private $courseRepository;
 
     /**
-     * @var  CourseTocRepository
+     * @type CourseTocRepository
      */
     private $courseTocRepository;
 
     /**
-     * @var  CourseIntroductionRepository
+     * @type CourseIntroductionRepository
      */
     private $courseIntroductionRepository;
 
     /**
-     * @var  CourseContentRepository
+     * @type CourseContentRepository
      */
     private $courseContentRepository;
 
+    /* ****************** *
+     *                    *
+     * ***** COURSE ***** *
+     *                    *
+     * ****************** */
+
     /**
-     * @param int | string $courseId   Course id
-     * @param array        $parameters Parameters
+     * Get a course
+     *
+     * @param int|string $courseIdentifier Course id | slug
      *
      * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
      */
-    public function getCourseToEdit($courseId, array $parameters = array())
+    public function get($courseIdentifier)
     {
-        return $this->courseRepository->findToEdit($courseId, $parameters);
+        return $this->courseRepository->find($courseIdentifier);
+    }
+
+    /**
+     * Get a course where status is not published
+     *
+     * @param int    $courseId Course id
+     * @param string $status   Status
+     *
+     * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
+     */
+    public function getToEdit($courseId, $status)
+    {
+        return $this->courseRepository->findToEdit(
+            $courseId,
+            array(CourseResource::STATUS => $status)
+        );
     }
 
     /**
@@ -65,7 +88,10 @@ class CourseService
         $course->setTitle('Sans titre');
         $course = $this->courseRepository->insert($course);
 
-        $this->courseContentRepository->update($course->getId(), '<h2>Test</h2>');
+        $this->courseContentRepository->update(
+            $course->getId(),
+            '<h2>Titre 1</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ultricies massa sapien. Vivamus condimentum ante ac dolor accumsan laoreet. Ut facilisis lobortis turpis quis faucibus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer ornare nibh at semper dapibus. Pellentesque risus libero, rhoncus ac lorem pulvinar, sollicitudin ultricies leo. Morbi mollis augue at urna aliquam tempus. Phasellus quis velit a nisi malesuada scelerisque. Nulla volutpat metus non ligula sagittis placerat. Sed semper erat dictum quam euismod egestas. Fusce mauris ligula, euismod id tempor at, bibendum eu lorem. Integer at nulla nec massa condimentum luctus id suscipit felis. Integer dignissim mollis eros ac vulputate. Nullam eleifend justo eu mauris aliquam accumsan. Quisque aliquam magna in commodo scelerisque. Quisque pharetra gravida elit sed venenatis.</p>'
+        );
 
         return $course;
     }
@@ -73,15 +99,19 @@ class CourseService
     /**
      * Save a course
      *
-     * @param int | string   $courseIdentifier Course id | slug
-     * @param CourseResource $course           Course
-     * @param array          $parameters       Parameters
+     * @param int            $courseId Course id
+     * @param CourseResource $course   Course
+     * @param string         $status   Status
      *
      * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
      */
-    public function save($courseIdentifier, CourseResource $course, array $parameters = array())
+    public function save($courseId, CourseResource $course, $status)
     {
-        return $this->courseRepository->update($courseIdentifier, $course, $parameters);
+        return $this->courseRepository->update(
+            $courseId,
+            $course,
+            array(CourseResource::STATUS => $status)
+        );
     }
 
     /**
@@ -121,13 +151,13 @@ class CourseService
     /**
      * Set Course status to waiting for publication
      *
-     * @param int | string $courseIdentifier Course id | slug
-     * @param string       $initialStatus    Initial status
+     * @param int    $courseId      Course id
+     * @param string $initialStatus Initial status
      *
      * @return CourseResource
      */
     private function setCourseStatusToWaitingForPublication(
-        $courseIdentifier,
+        $courseId,
         $initialStatus
     )
     {
@@ -135,19 +165,19 @@ class CourseService
         $course->setStatus(CourseResource::STATUS_WAITING_FOR_PUBLICATION);
         $parameters = array(CourseResource::STATUS => $initialStatus);
 
-        return $this->courseRepository->update($courseIdentifier, $course, $parameters);
+        return $this->courseRepository->update($courseId, $course, $parameters);
     }
 
     /**
      * Set Course status to published
      *
-     * @param int | string $courseIdentifier Course id | slug
-     * @param string       $initialStatus    Initial status
+     * @param int    $courseId      Course id
+     * @param string $initialStatus Initial status
      *
      * @return CourseResource
      */
     private function setCourseStatusToPublished(
-        $courseIdentifier,
+        $courseId,
         $initialStatus
     )
     {
@@ -155,8 +185,66 @@ class CourseService
         $course->setStatus(CourseResource::STATUS_PUBLISHED);
         $parameters = array(CourseResource::STATUS => $initialStatus);
 
-        return $this->courseRepository->updateToPublished($courseIdentifier, $course, $parameters);
+        return $this->courseRepository->updateToPublished($courseId, $course, $parameters);
     }
+
+    /* ******************* *
+     *                     *
+     * ***** CONTENT ***** *
+     *                     *
+     * ******************* */
+
+    /**
+     * Get a course content
+     *
+     * @param int|string $courseIdentifier Course id | slug
+     *
+     * @return array
+     */
+    public function getContent($courseIdentifier)
+    {
+        return $this->courseContentRepository->find($courseIdentifier);
+    }
+
+    /**
+     * Get a course content
+     *
+     * @param int    $courseId Course id
+     * @param string $status   Status
+     *
+     * @return array
+     */
+    public function getContentToEdit($courseId, $status)
+    {
+        return $this->courseContentRepository->findToEdit(
+            $courseId,
+            array(CourseResource::STATUS => $status)
+        );
+    }
+
+    /**
+     * Save a course content
+     *
+     * @param int    $courseId Course id
+     * @param string $content  Course content
+     * @param string $status   Status
+     *
+     * @return string
+     */
+    public function saveContent($courseId, $content, $status)
+    {
+        return $this->courseContentRepository->update(
+            $courseId,
+            $content,
+            array(CourseResource::STATUS => $status)
+        );
+    }
+
+    /* ************************ *
+     *                          *
+     * ***** INTRODUCTION ***** *
+     *                          *
+     * ************************ */
 
     /**
      * Get a course introduction
@@ -171,35 +259,66 @@ class CourseService
     }
 
     /**
-     * Get a course introduction
+     * Get a course introduction to edit
+     *
+     * @param int    $courseId Course id
+     * @param string $status   Status
+     *
+     * @return string
+     */
+    public function getIntroductionToEdit($courseId, $status)
+    {
+        return $this->courseIntroductionRepository->findToEdit(
+            $courseId,
+            array(CourseResource::STATUS => $status)
+        );
+    }
+
+    /* *************** *
+     *                 *
+     * ***** TOC ***** *
+     *                 *
+     * *************** */
+
+    /**
+     * Get a course table of content
      *
      * @param int | string $courseIdentifier Course id | slug
-     * @param string       $status           Status
      *
-     * @return array
+     * @return CourseResource
      */
-    public function getContent($courseIdentifier, $status)
+    public function getToc($courseIdentifier)
     {
-        return $this->courseContentRepository->find($courseIdentifier, array('status' => $status));
+        return $this->courseTocRepository->find($courseIdentifier);
     }
 
     /**
-     * Get a course introduction
+     * Get a course table of content
      *
      * @param int|string $courseIdentifier Course id | slug
+     * @param string     $status           Status
      *
-     * @return array
+     * @return CourseResource
      */
-    public function getContentToEdit($courseIdentifier)
+    public function getTocToEdit($courseIdentifier, $status)
     {
-        return $this->courseContentRepository->find($courseIdentifier, array('status' => CourseResource::STATUS_DRAFT));
+        return $this->courseTocRepository->findToEdit(
+            $courseIdentifier,
+            array(CourseResource::STATUS, $status)
+        );
     }
+
+    /* ********************** *
+     *                        *
+     * ***** PAGINATION ***** *
+     *                        *
+     * ********************** */
 
     /**
      * Get a course or a part previous page and next page
      *
-     * @param int | string $courseIdentifier Course id | slug
-     * @param int | string $identifier       Part id | slug
+     * @param int|string $courseIdentifier Course id | slug
+     * @param int|string $identifier       Part id | slug
      *
      * @return array
      */
@@ -222,28 +341,30 @@ class CourseService
     }
 
     /**
-     * Get a course
+     * Get a course or a part previous page and next page
      *
-     * @param int | string $courseIdentifier Course id | slug
-     * @param array        $parameters       Parameters
+     * @param int    $courseId Course id
+     * @param string $status   Status
+     * @param int    $partId   Part id
      *
-     * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
+     * @return array
      */
-    public function get($courseIdentifier, array $parameters = array())
+    public function getPaginationToEdit($courseId, $status, $partId = null)
     {
-        return $this->courseRepository->find($courseIdentifier, $parameters);
-    }
+        $course = $this->getToEdit($courseId, $status);
+        $toc = $this->getTocToEdit($courseId, $status);
 
-    /**
-     * Get a course table of content
-     *
-     * @param int | string $courseIdentifier Course id | slug
-     *
-     * @return mixed
-     */
-    public function getToc($courseIdentifier)
-    {
-        return $this->courseTocRepository->find($courseIdentifier);
+        if (is_null($partId)) {
+            $pagination = $this->buildPagination(
+                $toc,
+                $courseId,
+                $course->getDisplayLevel()
+            );
+        } else {
+            $pagination = $this->buildPagination($toc, $partId, $course->getDisplayLevel());
+        }
+
+        return $pagination;
     }
 
     /**
@@ -280,6 +401,7 @@ class CourseService
 
         for ($i = 0; $i < count($list); $i++) {
             /* Find the current node */
+            /** @type array<PartResource> $list */
             if ($identifier == $list[$i]->getId() || $identifier == $list[$i]->getSlug()) {
                 $pagination['previous'] = $previous;
 

@@ -15,17 +15,17 @@ use SimpleIT\AppBundle\Annotation\Cache;
 class CourseTocRepository extends AppRepository
 {
     /**
-     * @var string
+     * @type string
      */
     protected $path = 'courses/{courseIdentifier}/toc';
 
     /**
-     * @var  string
+     * @type string
      */
     protected $resourceClass = 'SimpleIT\ApiResourcesBundle\Course\PartResource';
 
     /**
-     * Find a course
+     * Find a course toc
      *
      * @param string $courseIdentifier Course id | slug
      * @param array  $parameters       Parameters
@@ -35,6 +35,28 @@ class CourseTocRepository extends AppRepository
      * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function find(
+        $courseIdentifier,
+        array $parameters = array(),
+        $format = FormatUtils::JSON
+    )
+    {
+        return $this->findResource(
+            array('courseIdentifier' => $courseIdentifier),
+            $parameters,
+            $format
+        );
+    }
+
+    /**
+     * Find a course toc to edit
+     *
+     * @param string $courseIdentifier Course id | slug
+     * @param array  $parameters       Parameters
+     * @param string $format           Format
+     *
+     * @return mixed
+     */
+    public function findToEdit(
         $courseIdentifier,
         array $parameters = array(),
         $format = FormatUtils::JSON
