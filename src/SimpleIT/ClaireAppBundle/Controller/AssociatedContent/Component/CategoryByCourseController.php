@@ -4,7 +4,6 @@ namespace SimpleIT\ClaireAppBundle\Controller\AssociatedContent\Component;
 
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\Form\Type\AssociatedContent\CategoryByCourseType;
-use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\ApiResourcesBundle\AssociatedContent\CategoryResource;
 use SimpleIT\Utils\HTTP;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,15 +21,12 @@ class CategoryByCourseController extends AppController
     /**
      * Add a category to a course (GET)
      *
-     * @param CollectionInformation $collectionInformation Collection information
-     * @param int                   $courseId              Course id
+     * @param int $courseId Course id
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function createViewAction(CollectionInformation $collectionInformation, $courseId)
+    public function createViewAction($courseId)
     {
-
-
         // Get course category
         try {
             $category = $this->get('simple_it.claire.associated_content.category')->getByCourse(
@@ -70,13 +66,13 @@ class CategoryByCourseController extends AppController
         $category = new CategoryResource();
         $form = $this->createForm(new CategoryByCourseType(), $category);
         $form->bind($request);
-        if ($form->isValid()) {
-            $this->get('simple_it.claire.associated_content.category')->addCourse(
+        if ($this->get('validator')->validate($form->getData())) {
+            $category = $this->get('simple_it.claire.associated_content.category')->addToCourse(
                 $category->getId(),
                 $courseId
             );
 
-            return new JsonResponse();
+            return new JsonResponse($category);
         } else {
             throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST, $form->getErrors());
         }

@@ -19,7 +19,7 @@ class CategoryByCourseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add(
-            'categoryId',
+            'id',
             'choice',
             array(
                 'choices'  => array(1 => 'Informatique', 2 => 'Sciences', 3 => 'Entreprise'),

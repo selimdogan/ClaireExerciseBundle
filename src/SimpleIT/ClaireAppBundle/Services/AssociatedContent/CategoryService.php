@@ -111,9 +111,9 @@ class CategoryService
      *
      * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
      */
-    public function addCourse($categoryId, $courseId)
+    public function addToCourse($categoryId, $courseId)
     {
-        return $this->courseByCategoryRepository->insert($categoryId, $courseId);
+        return $this->categoryByCourseRepository->insert($courseId, $categoryId);
     }
 
     /**
