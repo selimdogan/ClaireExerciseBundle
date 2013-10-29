@@ -18,7 +18,7 @@ use SimpleIT\Utils\Collection\CollectionInformation;
 class CourseService
 {
     private static $allowedTypes = array(
-        1 => array('course', 'title-1', 'title-2'),
+        1 => array('course', 'title-1'),
         2 => array('course', 'title-2', 'title-3')
     );
 
@@ -43,82 +43,31 @@ class CourseService
     private $courseContentRepository;
 
     /**
-     * Set courseIntroductionRepository
-     *
-     * @param CourseIntroductionRepository $courseIntroductionRepository
-     */
-    public function setCourseIntroductionRepository($courseIntroductionRepository)
-    {
-        $this->courseIntroductionRepository = $courseIntroductionRepository;
-    }
-
-    /**
-     * Set courseRepository
-     *
-     * @param CourseRepository $courseRepository
-     */
-    public function setCourseRepository($courseRepository)
-    {
-        $this->courseRepository = $courseRepository;
-    }
-
-    /**
-     * Set courseTocRepository
-     *
-     * @param CourseTocRepository $courseTocRepository
-     */
-    public function setCourseTocRepository($courseTocRepository)
-    {
-        $this->courseTocRepository = $courseTocRepository;
-    }
-
-    /**
-     * Set courseContentRepository
-     *
-     * @param \SimpleIT\ClaireAppBundle\Repository\Course\CourseContentRepository $courseContentRepository
-     */
-    public function setCourseContentRepository($courseContentRepository)
-    {
-        $this->courseContentRepository = $courseContentRepository;
-    }
-
-    /**
-     * Get all courses
-     *
-     * @param CollectionInformation $collectionInformation Collection information
-     *
-     * @return \SimpleIT\Utils\Collection\PaginatedCollection
-     */
-    public function getAll(CollectionInformation $collectionInformation = null)
-    {
-        return $this->courseRepository->findAll($collectionInformation);
-    }
-
-    /**
-     * Get a course
-     *
-     * @param int | string $courseIdentifier Course id | slug
-     * @param array        $parameters       Parameters
-     *
-     * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
-     */
-    public function get($courseIdentifier, array $parameters = array())
-    {
-        return $this->courseRepository->find($courseIdentifier, $parameters);
-    }
-
-    /**
      * @param int | string $courseId   Course id
-     * @param string       $status     Status
      * @param array        $parameters Parameters
      *
      * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
      */
-    public function getCourseToEdit($courseId, $status, array $parameters = array())
+    public function getCourseToEdit($courseId, array $parameters = array())
     {
-        $parameters[CourseResource::STATUS] = $status;
-
         return $this->courseRepository->findToEdit($courseId, $parameters);
+    }
+
+    /**
+     * Add a course
+     *
+     * @return CourseResource
+     */
+    public function add()
+    {
+        $course = new CourseResource();
+        $course->setDisplayLevel(CourseResource::DISPLAY_LEVEL_SMALL);
+        $course->setTitle('Sans titre');
+        $course = $this->courseRepository->insert($course);
+
+        $this->courseContentRepository->update($course->getId(), '<h2>Test</h2>');
+
+        return $course;
     }
 
     /**
@@ -206,19 +155,7 @@ class CourseService
         $course->setStatus(CourseResource::STATUS_PUBLISHED);
         $parameters = array(CourseResource::STATUS => $initialStatus);
 
-        return $this->courseRepository->update($courseIdentifier, $course, $parameters);
-    }
-
-    /**
-     * Get a course table of content
-     *
-     * @param int | string $courseIdentifier Course id | slug
-     *
-     * @return mixed
-     */
-    public function getToc($courseIdentifier)
-    {
-        return $this->courseTocRepository->find($courseIdentifier);
+        return $this->courseRepository->updateToPublished($courseIdentifier, $course, $parameters);
     }
 
     /**
@@ -237,12 +174,25 @@ class CourseService
      * Get a course introduction
      *
      * @param int | string $courseIdentifier Course id | slug
+     * @param string       $status           Status
      *
      * @return array
      */
-    public function getContent($courseIdentifier)
+    public function getContent($courseIdentifier, $status)
     {
-        return $this->courseContentRepository->find($courseIdentifier);
+        return $this->courseContentRepository->find($courseIdentifier, array('status' => $status));
+    }
+
+    /**
+     * Get a course introduction
+     *
+     * @param int|string $courseIdentifier Course id | slug
+     *
+     * @return array
+     */
+    public function getContentToEdit($courseIdentifier)
+    {
+        return $this->courseContentRepository->find($courseIdentifier, array('status' => CourseResource::STATUS_DRAFT));
     }
 
     /**
@@ -272,6 +222,31 @@ class CourseService
     }
 
     /**
+     * Get a course
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param array        $parameters       Parameters
+     *
+     * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
+     */
+    public function get($courseIdentifier, array $parameters = array())
+    {
+        return $this->courseRepository->find($courseIdentifier, $parameters);
+    }
+
+    /**
+     * Get a course table of content
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     *
+     * @return mixed
+     */
+    public function getToc($courseIdentifier)
+    {
+        return $this->courseTocRepository->find($courseIdentifier);
+    }
+
+    /**
      * @param PartResource $part         Part
      * @param int | string $identifier   Current element id | slug
      * @param int          $displayLevel Display level
@@ -285,11 +260,12 @@ class CourseService
     )
     {
         $stack = new \SplStack();
+        $list = array();
         $pagination = array('previous' => null, 'next' => null);
         $previous = null;
 
+        /* Linearies the tree in $list */
         $stack->push($part);
-
         do {
             $current = $stack->pop();
 
@@ -299,18 +275,82 @@ class CourseService
                 }
             }
 
-            if ($identifier == $current->getId() || $identifier == $current->getSlug()) {
+            $list[] = $current;
+        } while (!$stack->isEmpty());
+
+        for ($i = 0; $i < count($list); $i++) {
+            /* Find the current node */
+            if ($identifier == $list[$i]->getId() || $identifier == $list[$i]->getSlug()) {
                 $pagination['previous'] = $previous;
-                $pagination['next'] = $stack->pop();
+
+                /* Find the next acceptable node */
+                for ($k = $i + 1; $k < count($list); $k++) {
+                    if (in_array($list[$k]->getSubtype(), self::$allowedTypes[$displayLevel])) {
+                        $pagination['next'] = $list[$k];
+                        break;
+                    }
+                }
                 break;
             }
 
-            if (in_array($current->getSubtype(), self::$allowedTypes[$displayLevel])) {
-                $previous = $current;
+            /* Memorize previous acceptable node */
+            if (in_array($list[$i]->getSubtype(), self::$allowedTypes[$displayLevel])) {
+                $previous = $list[$i];
             }
-
-        } while (!$stack->isEmpty());
+        }
 
         return $pagination;
+    }
+
+    /**
+     * Set courseIntroductionRepository
+     *
+     * @param CourseIntroductionRepository $courseIntroductionRepository
+     */
+    public function setCourseIntroductionRepository($courseIntroductionRepository)
+    {
+        $this->courseIntroductionRepository = $courseIntroductionRepository;
+    }
+
+    /**
+     * Set courseRepository
+     *
+     * @param CourseRepository $courseRepository
+     */
+    public function setCourseRepository($courseRepository)
+    {
+        $this->courseRepository = $courseRepository;
+    }
+
+    /**
+     * Set courseTocRepository
+     *
+     * @param CourseTocRepository $courseTocRepository
+     */
+    public function setCourseTocRepository($courseTocRepository)
+    {
+        $this->courseTocRepository = $courseTocRepository;
+    }
+
+    /**
+     * Set courseContentRepository
+     *
+     * @param \SimpleIT\ClaireAppBundle\Repository\Course\CourseContentRepository $courseContentRepository
+     */
+    public function setCourseContentRepository($courseContentRepository)
+    {
+        $this->courseContentRepository = $courseContentRepository;
+    }
+
+    /**
+     * Get all courses
+     *
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
+     */
+    public function getAll(CollectionInformation $collectionInformation = null)
+    {
+        return $this->courseRepository->findAll($collectionInformation);
     }
 }

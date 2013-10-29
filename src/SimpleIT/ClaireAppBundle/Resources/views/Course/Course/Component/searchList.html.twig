@@ -8,7 +8,7 @@
     <input type="submit" value="">
     <select name="sort" class="light-grey_button course-filter" onchange="this.form.submit()">
         <option value="title">Trier par nom</option>
-        <option value="updatedAt desc" {% if collectionInformation.sorts.0.property == 'updatedAt' %} selected="selected" {% endif %}>Trier par date</option>
+        <option value="updatedAt desc" {% if collectionInformation.sorts.0 is defined and collectionInformation.sorts.0.property == 'updatedAt' %} selected="selected" {% endif %}>Trier par date</option>
     </select>
 </form>
 {% include 'SimpleITClaireAppBundle:Course/Course/Component:list.html.twig' with{'courses': courses, 'collectionInformation': collectionInformation, 'paginationUrl': paginationUrl} %}

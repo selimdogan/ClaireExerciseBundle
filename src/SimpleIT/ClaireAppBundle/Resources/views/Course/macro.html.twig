@@ -22,7 +22,7 @@
             {% set position = 1 %}
 
             {% for child in part.children %}
-                <li>
+                <li{% if level == 1 and mainClass == 'toc-big' %} class="col4"{% endif %}>
                     <a class="course-title course-title-{{ level + 1 }}" data-claire-course-slug="{{ child.slug }}" href="{{ path ('simple_it_claire_course_part_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier, 'partIdentifier': child.slug})}}">
                             {% if child.metadatas.image is defined %}
                                 <img class="course-icon" src="{{ child.metadatas.image }}" />
