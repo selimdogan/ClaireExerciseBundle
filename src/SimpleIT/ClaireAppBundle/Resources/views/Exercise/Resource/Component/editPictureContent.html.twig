@@ -1,0 +1,9 @@
+<form action="{{ path('simple_it_claire_component_exercise_resource_picture_content_edit',
+{ 'resourceId': resource.id}) }}" method="post" {{ form_enctype(form) }}>
+    {{ form_errors(form) }}
+    {{ form_errors(form.source) }}
+    {{ form_widget(form.source) }}
+    {{ form_rest(form) }}
+    <input type="submit">
+    {#Remove submit#}
+</form>

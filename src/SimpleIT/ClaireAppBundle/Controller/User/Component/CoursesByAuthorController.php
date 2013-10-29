@@ -18,7 +18,7 @@ class CoursesByAuthorController extends AppController
      * @param CollectionInformation $collectionInformation Collection information
      * @param int|string            $userIdentifier        User id | slug
      *
-     * @paramConverter ("collectionInformation",options={"itemsPerPage" = "all", "sort" = "updatedAt"})
+     * FIXME paramConverter ("collectionInformation",options={"itemsPerPage" = "all", "sort" = "updatedAt"})
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listAction(CollectionInformation $collectionInformation, $userIdentifier)
