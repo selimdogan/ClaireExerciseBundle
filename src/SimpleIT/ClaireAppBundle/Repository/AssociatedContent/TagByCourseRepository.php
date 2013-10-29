@@ -27,7 +27,7 @@ class TagByCourseRepository extends AppRepository
     /**
      * Find a list of tags for a course
      *
-     * @param int | string          $courseIdentifier      Course id | slug
+     * @param int|string            $courseIdentifier      Course id | slug
      * @param CollectionInformation $collectionInformation Collection information
      *
      * @return PaginatedCollection
@@ -38,6 +38,24 @@ class TagByCourseRepository extends AppRepository
         return parent::findAllResources(
             array(
                 'courseIdentifier' => $courseIdentifier
+            ),
+            $collectionInformation
+        );
+    }
+
+    /**
+     * Find a list of tags for a course
+     *
+     * @param int                   $courseId              Course id
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return PaginatedCollection
+     */
+    public function findAllToEdit($courseId, CollectionInformation $collectionInformation = null)
+    {
+        return parent::findAllResources(
+            array(
+                'courseIdentifier' => $courseId
             ),
             $collectionInformation
         );

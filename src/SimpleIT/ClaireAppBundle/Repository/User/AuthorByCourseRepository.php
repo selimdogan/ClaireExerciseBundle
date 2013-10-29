@@ -2,6 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Repository\User;
 
+use SimpleIT\AppBundle\Annotation\Cache;
 use Doctrine\Common\Collections\Collection;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\ApiResourcesBundle\User\AuthorResource;
@@ -31,6 +32,7 @@ class AuthorByCourseRepository extends AppRepository
      * @param CollectionInformation $collectionInformation Collection information
      *
      * @return Collection
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function findAll($courseIdentifier, CollectionInformation $collectionInformation = null)
     {
@@ -43,9 +45,30 @@ class AuthorByCourseRepository extends AppRepository
     }
 
     /**
+     * Find all authors of a course
+     *
+     * @param int | string          $courseIdentifier      Course id | slug
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return Collection
+     */
+    public function findAllToEdit(
+        $courseIdentifier,
+        CollectionInformation $collectionInformation = null
+    )
+    {
+        return parent::findAllResources(
+            array(
+                'courseIdentifier' => $courseIdentifier
+            ),
+            $collectionInformation
+        );
+    }
+
+    /**
      * Associate an author to a course
      *
-     * @param int | string   $courseIdentifier Course id | slug
+     * @param int|string     $courseIdentifier Course id | slug
      * @param AuthorResource $author           Author
      * @param array          $parameters       Parameters
      *

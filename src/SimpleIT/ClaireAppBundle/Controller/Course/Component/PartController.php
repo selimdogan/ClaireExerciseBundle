@@ -20,14 +20,13 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
-use SimpleIT\ApiResourcesBundle\Course\CourseResource;
+use SimpleIT\AppBundle\Annotation\Cache;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Model\AppResponse;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class PartController
@@ -37,8 +36,8 @@ use SimpleIT\AppBundle\Annotation\Cache;
 class PartController extends AppController
 {
     /**
-     * @param int | string $courseIdentifier Course id | slug
-     * @param int | string $partIdentifier   Part id | slug
+     * @param int|string $courseIdentifier Course id | slug
+     * @param int|string $partIdentifier   Part id | slug
      *
      * @return Response
      * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
@@ -101,94 +100,6 @@ class PartController extends AppController
     }
 
     /**
-     * View Part content
-     *
-     * @param Request      $request          Request
-     * @param int | string $courseIdentifier Course id | slug
-     * @param int | string $partIdentifier   Part id | slug
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
-     */
-    public function viewContentAction(Request $request, $courseIdentifier, $partIdentifier)
-    {
-        return new Response($this->get('simple_it.claire.course.part')->getContent(
-            $courseIdentifier,
-            $partIdentifier,
-            $this->getStatus($request)
-        ));
-    }
-
-//    /**
-//     * View Part content
-//     *
-//     * @param Request      $request          Request
-//     * @param int | string $courseIdentifier Course id | slug
-//     * @param int | string $partIdentifier   Part id | slug
-//     *
-//     * @return \Symfony\Component\HttpFoundation\Response
-//     */
-//    public function viewContentToEditAction(Request $request, $courseIdentifier, $partIdentifier)
-//    {
-//        $partContent = $this->get('simple_it.claire.course.part')->getContent(
-//            $courseIdentifier,
-//            $partIdentifier,
-//            $this->getStatusToEdit($request)
-//        );
-//
-//        return $this->render(
-//            'SimpleITClaireAppBundle:Course/Part/Component:viewContent.html.twig',
-//            array(
-//                'courseIdentifier' => $courseIdentifier,
-//                'partIdentifier'   => $partIdentifier,
-//                'partContent'      => $partContent
-//            )
-//        );
-//    }
-
-    /**
-     * Edit part content
-     *
-     * @param Request      $request          Request
-     * @param int | string $courseIdentifier Course id | slug
-     * @param int | string $partIdentifier   Part id | slug
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function editContentAction(Request $request, $courseIdentifier, $partIdentifier)
-    {
-        $partContent = null;
-        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
-        if (RequestUtils::METHOD_GET == $request->getMethod()) {
-            $partContent = $this->get('simple_it.claire.course.part')->getContentToEdit(
-                $courseIdentifier,
-                $partIdentifier,
-                $status
-            );
-        } elseif (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()
-        ) {
-            $partContent = $request->get('partContent');
-            $partContent = $this->get('simple_it.claire.course.part')->saveContent(
-                $courseIdentifier,
-                $partIdentifier,
-                $partContent,
-                $status
-            );
-
-            return new AppResponse($partContent);
-        }
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/PartContent/Component:edit.html.twig',
-            array(
-                'courseIdentifier' => $courseIdentifier,
-                'partIdentifier'   => $partIdentifier,
-                'partContent'      => $partContent
-            )
-        );
-    }
-
-    /**
      * View table of content Medium
      *
      * @param int | string $courseIdentifier   Course id | slug
@@ -225,9 +136,9 @@ class PartController extends AppController
     /**
      * View table of content BIG
      *
-     * @param int | string $courseIdentifier   Course id | slug
-     * @param int | string $partIdentifier     Current part id | slug
-     * @param int | string $categoryIdentifier Category id | slug
+     * @param int|string $courseIdentifier   Course id | slug
+     * @param int|string $partIdentifier     Current part id | slug
+     * @param int|string $categoryIdentifier Category id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
@@ -252,8 +163,8 @@ class PartController extends AppController
     /**
      * View introduction
      *
-     * @param int | string $courseIdentifier Course id | slug
-     * @param int | string $partIdentifier   Part id | slug
+     * @param int|string $courseIdentifier Course id | slug
+     * @param int|string $partIdentifier   Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
@@ -269,37 +180,5 @@ class PartController extends AppController
             'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
             array('content' => $introduction)
         );
-    }
-
-    /**
-     * Get asked status
-     *
-     * @param Request $request Request
-     *
-     * @return string
-     */
-    private function getStatus(Request $request)
-    {
-        if (is_null($status = $request->attributes->get('status'))) {
-            $status= CourseResource::STATUS_PUBLISHED;
-        }
-
-        return $status;
-    }
-
-    /**
-     * Get asked status
-     *
-     * @param Request $request Request
-     *
-     * @return string
-     */
-    private function getStatusToEdit(Request $request)
-    {
-        if (is_null($status = $request->attributes->get('status'))) {
-            $status= CourseResource::STATUS_DRAFT;
-        }
-
-        return $status;
     }
 }

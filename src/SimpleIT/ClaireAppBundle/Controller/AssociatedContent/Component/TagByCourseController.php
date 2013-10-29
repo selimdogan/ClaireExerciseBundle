@@ -2,14 +2,13 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\AssociatedContent\Component;
 
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Annotation\Cache;
 use SimpleIT\ApiResourcesBundle\AssociatedContent\TagResource;
-use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
-
 
 /**
  * Class TagByCourseController
@@ -31,6 +30,34 @@ class TagByCourseController extends AppController
     {
         $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourse(
             $courseIdentifier,
+            $collectionInformation
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:AssociatedContent/Tag/Component:viewByCourse.html.twig',
+            array('tags' => $tags)
+        );
+    }
+
+    /**
+     * Get a list of tags of a course with status different of published
+     *
+     * @param Request               $request               Request
+     * @param CollectionInformation $collectionInformation Collection information
+     * @param int                   $courseId              Course id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Cache
+     */
+    public function listToEditAction(
+        Request $request,
+        CollectionInformation $collectionInformation,
+        $courseId
+    )
+    {
+        $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourseToEdit(
+            $courseId,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
             $collectionInformation
         );
 
@@ -112,22 +139,5 @@ class TagByCourseController extends AppController
                 'tags'             => $tagsString
             )
         );
-    }
-
-    /**
-     * Set status to draft if not defined in collection information
-     *
-     * @param CollectionInformation $collectionInformation Collection information
-     *
-     * @return CollectionInformation
-     */
-    protected function setStatusToDraftIfNotDefined(CollectionInformation $collectionInformation)
-    {
-        $status = $collectionInformation->getFilter(CourseResource::STATUS);
-        if (is_null($status)) {
-            $collectionInformation->addFilter(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
-        }
-
-        return $collectionInformation;
     }
 }

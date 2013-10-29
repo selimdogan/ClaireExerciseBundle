@@ -69,15 +69,19 @@ class MetadataService
      * Get metadatas from a course to edit
      *
      * @param string                $courseIdentifier      Course id | slug
+     * @param string                $status                Status
      * @param CollectionInformation $collectionInformation Collection information
      *
      * @return string
      */
     public function getAllFromCourseToEdit(
         $courseIdentifier,
-        CollectionInformation $collectionInformation = null
+        $status,
+        CollectionInformation $collectionInformation
     )
     {
+        $collectionInformation->addFilter(CourseResource::STATUS, $status);
+
         return $this->metadataByCourseRepository->findAll(
             $courseIdentifier,
             $collectionInformation

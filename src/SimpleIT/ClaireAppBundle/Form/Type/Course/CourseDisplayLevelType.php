@@ -23,7 +23,6 @@ class CourseDisplayLevelType extends AbstractType
             CourseResource::DISPLAY_LEVEL_MEDIUM => 'Moyen',
             CourseResource::DISPLAY_LEVEL_BIG    => 'Grand'
         );
-
         $builder->add(
             'displayLevel',
             'choice',

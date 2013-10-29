@@ -102,14 +102,10 @@
             </div>
         {% endif %}#}
     </div>
-
+    {% if course.status == 'draft' %}
     <form action="{{ path('simple_it_claire_component_course_status_waiting_for_publication', { 'courseId': course.id, 'status': course.status}) }}" method="post">
         <input type="submit">
     </form>
-    <form class="form js-confirm-draft js-no-disable" action="{{ path('simple_it_claire_component_course_status_published', { 'courseId': course.id, 'status': course.status}) }}" method="post">
-        <button type="submit" class="oc-btn orange-btn">
-            <i class="indicator icon-spinner icon-spin"></i> Publier
-        </button>
-    </form>
+    {% endif %}
 
 </section>

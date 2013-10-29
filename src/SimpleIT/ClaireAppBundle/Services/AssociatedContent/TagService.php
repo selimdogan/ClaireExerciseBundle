@@ -3,6 +3,7 @@
 namespace SimpleIT\ClaireAppBundle\Services\AssociatedContent;
 
 use SimpleIT\ApiResourcesBundle\AssociatedContent\TagResource;
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\CourseByTagRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\RecommendedCourseByTagRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCategoryRepository;
@@ -101,6 +102,26 @@ class TagService
     }
 
     /**
+     * Get all the tags of a course to edit
+     *
+     * @param int                   $courseId              Course id
+     * @param string                $status                Status
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
+     */
+    public function getAllByCourseToEdit(
+        $courseId,
+        $status,
+        CollectionInformation $collectionInformation = null
+    )
+    {
+        $collectionInformation->addFilter(CourseResource::STATUS, $status);
+
+        return $this->tagByCourseRepository->findAll($courseId, $collectionInformation);
+    }
+
+    /**
      * Get all the tags of a part
      *
      * @param int | string          $courseIdentifier      Course id | slug
@@ -114,7 +135,8 @@ class TagService
         $partIdentifier,
         CollectionInformation $collectionInformation = null
 
-    ) {
+    )
+    {
         $tags = $this->tagByPartRepository->findAll(
             $courseIdentifier,
             $partIdentifier,
