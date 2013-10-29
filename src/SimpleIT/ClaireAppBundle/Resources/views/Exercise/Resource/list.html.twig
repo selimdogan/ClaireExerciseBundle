@@ -1,0 +1,46 @@
+<h3>Filtres :</h3>
+<ul>
+{% for key, value in collectionInformation.filters %}
+    <li>
+        {{ key }} : {{ value }}
+    </li>
+{% endfor %}
+</ul>
+
+<ul>
+    {% for ownerResource in ownerResources %}
+        <li>
+            <a href="www.google.fr">
+                <span>
+                    {{ ownerResource.id }}
+                </span>
+            </a>
+            <ul>
+                <li>
+                    Public : {{ ownerResource.public }}
+                </li>
+                {% if ownerResource.content.source is defined %}
+                    <li>
+                        Source : {{ ownerResource.content.source }}
+                    </li>
+                {% elseif ownerResource.content.sequenceType is defined %}
+                    <li>
+                        Type de séquence : {{ ownerResource.content.sequenceType }}
+                    </li>
+                {% elseif ownerResource.content.question is defined %}
+                    <li>
+                        Question : {{ ownerResource.content.question }}
+                    </li>
+                {% endif %}
+                <li>
+                    Metadonnées :
+                    {% for key, value in ownerResource.metadata %}
+                        <ul>
+                            {{ key }} : {{ value }}
+                        </ul>
+                    {% endfor %}
+                </li>
+            </ul>
+        </li>
+    {% endfor %}
+</ul>
