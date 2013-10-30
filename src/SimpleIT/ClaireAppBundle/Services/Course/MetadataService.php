@@ -89,36 +89,74 @@ class MetadataService
     }
 
     /**
-     * Get informations from a course
+     * Get information from a course
      *
-     * @param int | string $courseIdentifier Course id | slug
+     * @param int|string            $courseIdentifier      Course id | slug
+     * @param CollectionInformation $collectionInformation Collection information
      *
      * @return array
      */
     public function getInformationsFromCourse($courseIdentifier, $collectionInformation)
     {
         $metadatas = $this->getAllFromCourse($courseIdentifier, $collectionInformation);
-        $informations = array();
+
+        return $this->prepareMetadatas($metadatas);
+    }
+
+    /**
+     * Get information from a course with status different of published
+     *
+     * @param int                   $courseId              Course id
+     * @param string                $status                Status
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return array
+     */
+    public function getInformationsFromCourseToEdit(
+        $courseId,
+        $status,
+        $collectionInformation
+    )
+    {
+        $metadatas = $this->getAllFromCourseToEdit(
+            $courseId,
+            $status,
+            $collectionInformation
+        );
+
+        return $this->prepareMetadatas($metadatas);
+    }
+
+    /**
+     * Format metadatas
+     *
+     * @param array $metadatas Matadatas
+     *
+     * @return array
+     */
+    private function prepareMetadatas(array $metadatas = array())
+    {
+        $information = array();
         $difficulty = ArrayUtils::getValue(
             $metadatas,
             MetadataResource::COURSE_METADATA_DIFFICULTY
         );
-        $informations[MetadataResource::COURSE_METADATA_DIFFICULTY] = $difficulty;
+        $information[MetadataResource::COURSE_METADATA_DIFFICULTY] = $difficulty;
         $aggregateRating = ArrayUtils::getValue(
             $metadatas,
             MetadataResource::COURSE_METADATA_AGGREGATE_RATING
         );
-        $informations[MetadataResource::COURSE_METADATA_AGGREGATE_RATING] = $aggregateRating;
+        $information[MetadataResource::COURSE_METADATA_AGGREGATE_RATING] = $aggregateRating;
         $timeRequired = ArrayUtils::getValue(
             $metadatas,
-            MetadataResource::COURSE_METADATA_DURATION
+            MetadataResource::COURSE_METADATA_TIME_REQUIRED
         );
         if (!is_null($timeRequired)) {
             $timeRequired = new \DateInterval($timeRequired);
         }
-        $informations[MetadataResource::COURSE_METADATA_TIME_REQUIRED] = $timeRequired;
+        $information[MetadataResource::COURSE_METADATA_TIME_REQUIRED] = $timeRequired;
 
-        return $informations;
+        return $information;
     }
 
     /**
@@ -146,7 +184,7 @@ class MetadataService
     {
         $metadatas = $this->getAllFromPart($courseIdentifier, $partIdentifier);
         $courseMetadatas = null;
-        $informations = array();
+        $information = array();
 
         /*
          * Difficulty
@@ -162,7 +200,7 @@ class MetadataService
                 MetadataResource::COURSE_METADATA_DIFFICULTY
             );
         }
-        $informations[MetadataResource::COURSE_METADATA_DIFFICULTY] = $difficulty;
+        $information[MetadataResource::COURSE_METADATA_DIFFICULTY] = $difficulty;
 
         /*
          * Aggregate Rating
@@ -180,14 +218,14 @@ class MetadataService
                 MetadataResource::COURSE_METADATA_AGGREGATE_RATING
             );
         }
-        $informations[MetadataResource::COURSE_METADATA_AGGREGATE_RATING] = $aggregateRating;
+        $information[MetadataResource::COURSE_METADATA_AGGREGATE_RATING] = $aggregateRating;
 
         /*
          * Time required
          */
         $timeRequired = ArrayUtils::getValue(
             $metadatas,
-            MetadataResource::COURSE_METADATA_DURATION
+            MetadataResource::COURSE_METADATA_TIME_REQUIRED
         );
         if (is_null($timeRequired)) {
             if (is_null($courseMetadatas)) {
@@ -195,15 +233,15 @@ class MetadataService
             }
             $timeRequired = ArrayUtils::getValue(
                 $courseMetadatas,
-                MetadataResource::COURSE_METADATA_DURATION
+                MetadataResource::COURSE_METADATA_TIME_REQUIRED
             );
         }
         if (!is_null($timeRequired)) {
             $timeRequired = new \DateInterval($timeRequired);
         }
-        $informations[MetadataResource::COURSE_METADATA_TIME_REQUIRED] = $timeRequired;
+        $information[MetadataResource::COURSE_METADATA_TIME_REQUIRED] = $timeRequired;
 
-        return $informations;
+        return $information;
     }
 
     /**
@@ -311,11 +349,5 @@ class MetadataService
         }
 
         return $metadatasToUpdate;
-    }
-
-    private function getAllFromCourseSingleton($courseIdentifier)
-    {
-
-        $courseMetadatas = $this->getAllFromCourse($courseIdentifier);
     }
 }

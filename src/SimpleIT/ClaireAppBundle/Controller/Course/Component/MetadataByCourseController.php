@@ -2,8 +2,8 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
-use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Annotation\Cache;
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\TimeRequiredMetadataResource;
 use SimpleIT\ApiResourcesBundle\Course\DescriptionMetadataResource;
 use SimpleIT\ApiResourcesBundle\Course\DifficultyMetadataResource;
@@ -41,6 +41,35 @@ class MetadataByCourseController extends AbstractMetadataController
     {
         $informations = $this->get('simple_it.claire.course.metadata')->getInformationsFromCourse(
             $courseIdentifier,
+            $collectionInformation
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Metadata/Component:viewInformations.html.twig',
+            array('informations' => $informations)
+        );
+    }
+
+    /**
+     * View a collection of information for all ki
+     *
+     * @param Request               $request               Request
+     * @param CollectionInformation $collectionInformation Collection information
+     * @param int                   $courseId              Course id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewInformationToEditAction(
+        Request $request,
+        CollectionInformation $collectionInformation,
+        $courseId
+    )
+    {
+        $informations = $this->get(
+            'simple_it.claire.course.metadata'
+        )->getInformationsFromCourseToEdit(
+            $courseId,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
             $collectionInformation
         );
 
@@ -183,7 +212,8 @@ class MetadataByCourseController extends AbstractMetadataController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editDifficultyViewAction(Request $request,
+    public function editDifficultyViewAction(
+        Request $request,
         CollectionInformation $collectionInformation,
         $courseId
     )
@@ -235,7 +265,11 @@ class MetadataByCourseController extends AbstractMetadataController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editDifficultyAction(Request $request, CollectionInformation $collectionInformation, $courseId)
+    public function editDifficultyAction(
+        Request $request,
+        CollectionInformation $collectionInformation,
+        $courseId
+    )
     {
         $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseToEdit(
             $courseId,
@@ -313,7 +347,8 @@ class MetadataByCourseController extends AbstractMetadataController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editTimeRequiredViewAction(Request $request,
+    public function editTimeRequiredViewAction(
+        Request $request,
         CollectionInformation $collectionInformation,
         $courseId
     )

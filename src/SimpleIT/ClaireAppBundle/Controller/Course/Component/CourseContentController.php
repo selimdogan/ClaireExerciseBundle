@@ -2,6 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
+use SimpleIT\AppBundle\Annotation\Cache;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,16 +36,16 @@ class CourseContentController extends AppController
     /**
      * View content with status different of published
      *
-     * @param Request $request          Request
-     * @param int     $courseIdentifier Course id
+     * @param Request $request  Request
+     * @param int     $courseId Course id
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewToEditAction(Request $request, $courseIdentifier)
+    public function viewToEditAction(Request $request, $courseId)
     {
         $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
         $content = $this->get('simple_it.claire.course.course')->getContentToEdit(
-            $courseIdentifier,
+            $courseId,
             $status
         );
 

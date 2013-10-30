@@ -2,27 +2,9 @@
     <div class="row">
         <h1 class="highlighted">Information</h1>
         <div class="dashboard-course">
-            <div class="description">
-                <div class="col12"><strong>Description (&asymp; 300 caractères)</strong></div>
-                <div class="col6">
-                    {% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDescriptionView' with{'courseId': course.id}, {'standalone': true} %}
-                </div>
-                <div class="col3">
-                    {% render 'SimpleITClaireAppBundle:AssociatedContent/Component/CategoryByCourse:createView' with{'courseId': course.id}, {'standalone': true} %}
-                </div>
-                <div class="col3">
-                    {% render 'SimpleITClaireAppBundle:Course/Component/Course:editDisplayLevelView' with{'courseId': course.id}, {'standalone': true} %}
-                </div>
-            </div>
-
-            <hr/>
-
             {#<div class="{{ _user.showAds ? "col8" : "col12" }}">#}
             <div class="col12">
                 <div class="row">
-                    {#{% render 'SimpleITClaireAppBundle:AssociatedContent/Component/CategoryByCourse:editView' with{'courseId': course.id}, {'standalone': true} %}#}
-                    {#{% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDisplayLevelView' with{'courseId': course.id}, {'standalone': true} %}#}
-
                     <div class="col12 space-bottom">
                         <div class="img-text-align">
                             <span class="align-middle bg-icon-large float-img">
@@ -34,6 +16,7 @@
                             <div class="align-middle float-block-large">
                                 {% render 'SimpleITClaireAppBundle:Course/Component/Course:editView' with{'courseId': course.id}, {'standalone': true} %}
                             </div>
+                            {% render 'SimpleITClaireAppBundle:User/Component/AuthorByCourse:editView' with{'courseId': course.id}, {'standalone': true} %}
                         </div>
                     </div>
 

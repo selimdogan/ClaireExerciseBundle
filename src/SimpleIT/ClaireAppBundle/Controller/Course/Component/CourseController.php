@@ -135,7 +135,10 @@ class CourseController extends AppController
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:edit.html.twig',
-            array('course' => $course, 'form' => $form->createView())
+            array(
+                'course'             => $course,
+                'form'               => $form->createView()
+            )
         );
     }
 
@@ -150,10 +153,6 @@ class CourseController extends AppController
      */
     public function editAction(Request $request, $courseId)
     {
-        $parameters[CourseResource::STATUS] = $request->get(
-            CourseResource::STATUS,
-            CourseResource::STATUS_DRAFT
-        );
         $course = new CourseResource();
         $form = $this->createFormBuilder($course)
             ->add('title', 'text')
@@ -164,7 +163,7 @@ class CourseController extends AppController
             $course = $this->get('simple_it.claire.course.course')->save(
                 $courseId,
                 $course,
-                $parameters
+                $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
             );
 
             return new JsonResponse($course->getTitle());
@@ -429,6 +428,45 @@ class CourseController extends AppController
                 'displayLevel'       => $displayLevel,
                 'courseIdentifier'   => $courseId,
                 'categoryIdentifier' => $categoryIdentifier
+            )
+        );
+    }
+
+    /**
+     * View a table of content with a course status different of published
+     *
+     * @param Request      $request      Request
+     * @param int          $courseId     Course id
+     * @param int          $displayLevel Display level
+     * @param int | string $categoryId   Category id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewEditTocAction(
+        Request $request,
+        $courseId,
+        $displayLevel,
+        $categoryId
+    )
+    {
+        $toc = $this->get('simple_it.claire.course.course')->getTocToEdit(
+            $courseId,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
+        if ($displayLevel == CourseResource::DISPLAY_LEVEL_MEDIUM) {
+            $template = 'SimpleITClaireAppBundle:Course/Course/Component:viewTocMedium.html.twig';
+        } else {
+            $template = 'SimpleITClaireAppBundle:Course/Course/Component:viewTocBig.html.twig';
+        }
+
+        return $this->render(
+            $template,
+            array(
+                'toc'                => $toc,
+                'displayLevel'       => $displayLevel,
+                'courseIdentifier'   => $courseId,
+                'categoryIdentifier' => $categoryId
             )
         );
     }
