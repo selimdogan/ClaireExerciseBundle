@@ -33,3 +33,4 @@ simple_it_claire_component_exercise_resource_mcquestion_content_edit:
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/Resource:mcQuestionContentEdit }
     requirements:
         _method: POST
+

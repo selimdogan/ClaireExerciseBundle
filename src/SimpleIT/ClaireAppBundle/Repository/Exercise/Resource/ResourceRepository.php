@@ -54,4 +54,26 @@ class ResourceRepository extends AppRepository
             $parameters
         );
     }
+
+    /**
+     * Insert a resource
+     *
+     * @param ResourceResource $resource
+     *
+     * @return ResourceResource
+     */
+    public function insert(ResourceResource $resource)
+    {
+        return $this->insertResource($resource);
+    }
+
+    /**
+     * Delete a resource
+     *
+     * @param $resourceId
+     */
+    public function delete($resourceId)
+    {
+        $this->deleteResource(array('resourceId' => $resourceId));
+    }
 }

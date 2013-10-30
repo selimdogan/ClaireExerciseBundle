@@ -43,3 +43,7 @@ simple_it_claire_component_owner_resources:
 simple_it_claire_component_exercise_resources:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/component_resource.yml"
     prefix:   /components/resources
+
+simple_it_claire_resource:
+    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/resource.yml"
+    prefix:   /resources

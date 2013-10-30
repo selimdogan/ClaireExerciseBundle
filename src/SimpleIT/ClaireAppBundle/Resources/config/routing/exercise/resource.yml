@@ -1,0 +1,23 @@
+simple_it_claire_exercise_resource_edit:
+    pattern: /{resourceId}/edit
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/Resource:editView }
+    requirements:
+        _method: GET
+
+simple_it_claire_exercise_resource_create_view:
+    pattern: /create
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/Resource:createResourceView }
+    requirements:
+        _method: GET
+
+simple_it_claire_exercise_resource_create:
+    pattern: /create
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/Resource:create }
+    requirements:
+        _method: POST
+
+simple_it_claire_exercise_resource_delete:
+    pattern: /{resourceId}/delete
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/Resource:delete }
+    requirements:
+        _method: GET

@@ -1,0 +1,11 @@
+<h3>Type d'exercice à créer :</h3>
+<form action="{{ path('simple_it_claire_component_exercise_resource_create',
+{ 'resourceId': resource.id}) }}" method="post" {{ form_enctype(form) }}>
+    {{ form_errors(form) }}
+    {{ form_errors(form.type) }}
+    {{ form_widget(form.type) }}
+    {{ form_rest(form) }}
+    <input type="submit">
+    {#Remove submit#}
+</form>
+

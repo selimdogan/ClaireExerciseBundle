@@ -24,6 +24,68 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class ResourceController extends AppController
 {
     /**
+     * Create a resource: select the type (GET)
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function createResourceViewAction()
+    {
+        $form = $this->createForm(new ResourceTypeType(), new ResourceResource());
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Exercise/Resource:create.html.twig',
+            array('form' => $form->createView())
+        );
+    }
+
+    /**
+     * Create a new resource with default values in basic fields
+     *
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function createAction(Request $request)
+    {
+        $resource = new ResourceResource();
+        $form = $this->createForm(new ResourceTypeType(), $resource);
+        $form->bind($request);
+        if ($this->get('validator')->validate($form, 'appCreate')) {
+            $resource = $this->get('simple_it.claire.exercise.resource')->add(
+                $resource
+            );
+        }
+
+        return $this->redirect(
+            $this->generateUrl(
+                'simple_it_claire_exercise_resource_edit',
+                array('resourceId' => $resource->getId())
+            )
+        );
+    }
+
+    /**
+     * Edit a resource
+     *
+     * @param int $resourceId Resource id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editViewAction($resourceId)
+    {
+        $resource = $this->get('simple_it.claire.exercise.resource')->getToEdit(
+            $resourceId
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Exercise/Resource:edit.html.twig',
+            array(
+                'resource' => $resource
+            )
+        );
+    }
+
+    /**
      * Edit a resource type (GET)
      *
      * @param int $resourceId Resource id
@@ -64,7 +126,7 @@ class ResourceController extends AppController
             );
         }
 
-        return new JsonResponse($resource);
+        return new JsonResponse($resource->getType());
     }
 
     /**
@@ -207,7 +269,7 @@ class ResourceController extends AppController
             );
         }
 
-        return new JsonResponse($resource);
+        return new JsonResponse($resource->getId());
     }
 
     /**
@@ -226,6 +288,20 @@ class ResourceController extends AppController
             $resourceData
         );
 
-        return new JsonResponse($resource);
+        return new JsonResponse($resource->getId());
+    }
+
+    /**
+     * Delete a resource
+     *
+     * @param $resourceId
+     *
+     * @return JsonResponse
+     */
+    public function deleteAction($resourceId)
+    {
+        $this->get('simple_it.claire.exercise.resource')->delete($resourceId);
+
+        return new JsonResponse('Ressource supprimée : ' . $resourceId);
     }
 }

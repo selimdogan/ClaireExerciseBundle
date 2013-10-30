@@ -3,9 +3,12 @@
 namespace SimpleIT\ClaireAppBundle\Services\Exercise\Resource;
 
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
+use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource\CommonResource;
 use
     SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource\MultipleChoice\MultipleChoicePropositionResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource\MultipleChoiceQuestionResource;
+use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource\PictureResource;
+use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource\TextResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ResourceResource;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\Resource\ResourceRepository;
 
@@ -88,5 +91,65 @@ class ResourceService
         $resource->setContent($question);
 
         return $this->save($resourceId, $resource);
+    }
+
+    /**
+     * Add a resource
+     *
+     * @param ResourceResource $resource
+     *
+     * @return ResourceResource
+     */
+    public function add(ResourceResource $resource)
+    {
+        $content = null;
+        switch ($resource->getType()) {
+            case CommonResource::MULTIPLE_CHOICE_QUESTION:
+                $content = new MultipleChoiceQuestionResource();
+                $content->setQuestion('Ennoncé de la question');
+                $content->setComment(
+                    'Commentaire qui sera affiché à l\'apprenant quand il verra la correction'
+                );
+                $content->setMaxNumberOfPropositions(0);
+                $content->setMaxNumberOfRightPropositions(0);
+                break;
+            case CommonResource::TEXT:
+                $content = new TextResource();
+                $content->setText('Exemple de texte');
+                break;
+            case CommonResource::PICTURE:
+                $content = new PictureResource();
+                $content->setSource('adresse/de/votre/image');
+                break;
+        }
+
+        $resource->setContent($content);
+        $resource->setRequiredExerciseResources(array());
+
+        $resource = $this->resourceRepository->insert($resource);
+
+        return $resource;
+    }
+
+    /**
+     * Get a resource
+     *
+     * @param int $resourceId Resource id
+     *
+     * @return ResourceResource
+     */
+    public function getToEdit($resourceId)
+    {
+        return $this->resourceRepository->findToEdit($resourceId);
+    }
+
+    /**
+     * Delete a resource
+     *
+     * @param $resourceId
+     */
+    public function delete($resourceId)
+    {
+        $this->resourceRepository->delete($resourceId);
     }
 }
