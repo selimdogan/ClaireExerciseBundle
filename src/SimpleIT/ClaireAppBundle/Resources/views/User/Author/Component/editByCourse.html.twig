@@ -1,9 +1,28 @@
-<form class="claire-part-author" action="{{ path('simple_it_claire_component_course_author_list_edit', { 'courseIdentifier': courseIdentifier}) }}" method="post">
-    {#{{ form_errors(form) }}#}
-    <input type="text" value="{{ authors }}">
-    {#{{ form_errors(form.authors) }}#}
-    {#{{ form_widget(form.autors) }}#}
-    {#{{ form_rest(form) }}#}
-    {#<input type="submit">#}
-    {#Remove submit#}
-</form>
+{#<form class="claire-part-author" action="{{ path('simple_it_claire_component_course_author_list_edit', { 'courseId': course.id}) }}" method="post">#}
+    {#&#123;&#35;{{ form_errors(form) }}&#35;&#125;#}
+    {#<input type="text" value="{{ authors }}">#}
+    {#&#123;&#35;{{ form_errors(form.authors) }}&#35;&#125;#}
+    {#&#123;&#35;{{ form_widget(form.autors) }}&#35;&#125;#}
+    {#&#123;&#35;{{ form_rest(form) }}&#35;&#125;#}
+    {#&#123;&#35;<input type="submit">&#35;&#125;#}
+    {#&#123;&#35;Remove submit&#35;&#125;#}
+{#</form>#}
+{% if authors is defined and authors|length > 0 %}
+    <div class="text-top-dashboard">
+        Par
+        {% for author in authors %}{% if not loop.first and not loop.last %},{% elseif loop.last and not loop.first %} et                    {% endif %}
+            <span itemprop="author">
+                            <a href="{{ path('fos_user_profile_show', { 'slug': author.slug }) }}">
+                                {% if author.firstname is defined and author.lastname is defined and ((author.firstname ~ author.lastname) | length > 0) %}
+                                    {{ author.firstname }} {{ author.lastname }}
+                                    {% if authors|length==1 %}
+                                        alias {{ author.username }}
+                                    {% endif %}
+                                {% else %}
+                                    {{ author.username }}
+                                {% endif %}
+                            </a>
+                        </span>
+        {% endfor %}
+    </div>
+{% endif %}

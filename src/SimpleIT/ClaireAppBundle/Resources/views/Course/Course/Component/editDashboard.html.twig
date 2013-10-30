@@ -5,9 +5,6 @@
             {#<div class="{{ _user.showAds ? "col8" : "col12" }}">#}
             <div class="col12">
                 <div class="row">
-                    {#{% render 'SimpleITClaireAppBundle:AssociatedContent/Component/CategoryByCourse:editView' with{'courseId': course.id}, {'standalone': true} %}#}
-                    {#{% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDisplayLevelView' with{'courseId': course.id}, {'standalone': true} %}#}
-
                     <div class="col12 space-bottom">
                         <div class="img-text-align">
                             <span class="align-middle bg-icon-large float-img">
@@ -19,6 +16,7 @@
                             <div class="align-middle float-block-large">
                                 {% render 'SimpleITClaireAppBundle:Course/Component/Course:editView' with{'courseId': course.id}, {'standalone': true} %}
                             </div>
+                            {% render 'SimpleITClaireAppBundle:User/Component/AuthorByCourse:editView' with{'courseId': course.id}, {'standalone': true} %}
                         </div>
                     </div>
 

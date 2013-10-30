@@ -51,7 +51,7 @@ class MetadataByCourseController extends AbstractMetadataController
     }
 
     /**
-     * View a collection of information
+     * View a collection of information for all ki
      *
      * @param Request               $request               Request
      * @param CollectionInformation $collectionInformation Collection information
