@@ -33,40 +33,6 @@ class AuthorByCourseController extends AppController
         );
     }
 
-//    /**
-//     * Edit authors
-//     *
-//     * @param Request         $request          Request
-//     * @param integer |string $courseIdentifier Course id | slug
-//     *
-//     * @return \Symfony\Component\HttpFoundation\Response
-//     */
-//    public function editListAction(Request $request, $courseIdentifier)
-//    {
-//        $authors = array();
-//
-//        if (RequestUtils::METHOD_GET == $request->getMethod()) {
-//            $authors = $this->get('simple_it.claire.user.author')->getAllByCourse(
-//                $courseIdentifier
-//            );
-//        }
-//        $authorsString = '';
-//        foreach ($authors as $author) {
-//            if ($authorsString != '') {
-//                $authorsString .= ',';
-//            }
-//            $authorsString .= $author->getUsername();
-//        }
-//
-//        return $this->render(
-//            'SimpleITClaireAppBundle:User/Author/Component:editByCourse.html.twig',
-//            array(
-//                'courseIdentifier' => $courseIdentifier,
-//                'authors'          => $authorsString
-//            )
-//        );
-//    }
-
     /**
      * Edit a list of authors
      *
