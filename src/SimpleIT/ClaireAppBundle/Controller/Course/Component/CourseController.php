@@ -136,8 +136,8 @@ class CourseController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:edit.html.twig',
             array(
-                'course'             => $course,
-                'form'               => $form->createView()
+                'course' => $course,
+                'form'   => $form->createView()
             )
         );
     }
@@ -396,37 +396,39 @@ class CourseController extends AppController
     /**
      * View a table of content with a course status different of published
      *
-     * @param Request      $request            Request
-     * @param int          $courseId           Course id
-     * @param int          $displayLevel       Display level
-     * @param int | string $categoryIdentifier Category id | slug
+     * @param Request    $request            Request
+     * @param int        $courseId           Course id
+     * @param int|string $categoryIdentifier Category id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function viewTocToEditAction(
         Request $request,
         $courseId,
-        $displayLevel,
         $categoryIdentifier
     )
     {
+        $course = $this->get('simple_it.claire.course.course')->getToEdit(
+            $courseId,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
         $toc = $this->get('simple_it.claire.course.course')->getTocToEdit(
             $courseId,
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
         );
 
-        if ($displayLevel == CourseResource::DISPLAY_LEVEL_MEDIUM) {
-            $template = 'SimpleITClaireAppBundle:Course/Course/Component:viewTocMedium.html.twig';
+        if ($course->getDisplayLevel() == CourseResource::DISPLAY_LEVEL_MEDIUM) {
+            $template = 'SimpleITClaireAppBundle:Course/Course/Component:tocMediumEdit.html.twig';
         } else {
-            $template = 'SimpleITClaireAppBundle:Course/Course/Component:viewTocBig.html.twig';
+            $template = 'SimpleITClaireAppBundle:Course/Course/Component:tocBigEdit.html.twig';
         }
 
         return $this->render(
             $template,
             array(
                 'toc'                => $toc,
-                'displayLevel'       => $displayLevel,
-                'courseIdentifier'   => $courseId,
+                'course'             => $course,
                 'categoryIdentifier' => $categoryIdentifier
             )
         );
@@ -544,35 +546,41 @@ class CourseController extends AppController
     /**
      * View timeline with a course status different of published
      *
-     * @param Request      $request            Request
-     * @param int          $courseId           Course id
-     * @param int          $displayLevel       Display level
-     * @param int | string $categoryIdentifier Category id | slug
-     * @param int | string $partIdentifier     Current part id | slug
+     * @param Request    $request  Request
+     * @param int        $courseId Course id
+     * @param int|string $partId   Current part id
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function viewTimelineToEditAction(
         Request $request,
         $courseId,
-        $displayLevel,
-        $categoryIdentifier = null,
-        $partIdentifier = null
+        $partId = null
     )
     {
+
+        $course = $this->get('simple_it.claire.course.course')->getToEdit(
+            $courseId,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
+        $category = $this->get('simple_it.claire.associated_content.category')->getByCourseToEdit(
+            $course->getId(),
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
         $toc = $this->get('simple_it.claire.course.course')->getTocToEdit(
             $courseId,
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
         );
 
         return $this->render(
-            'SimpleITClaireAppBundle:Course/Course/Component:viewTimeline.html.twig',
+            'SimpleITClaireAppBundle:Course/Course/Component:timelineEdit.html.twig',
             array(
                 'toc'                => $toc,
-                'displayLevel'       => $displayLevel,
-                'partIdentifier'     => $partIdentifier,
-                'courseIdentifier'   => $courseId,
-                'categoryIdentifier' => $categoryIdentifier
+                'partIdentifier'     => $partId,
+                'course'             => $course,
+                'categoryIdentifier' => $category->getSlug()
             )
         );
     }
@@ -668,6 +676,7 @@ class CourseController extends AppController
             $courseId,
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
         );
+
         $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseToEdit(
             $course->getId(),
             $status,
@@ -689,7 +698,7 @@ class CourseController extends AppController
                 'course'    => $course,
                 'metadatas' => $metadatas,
                 'authors'   => $authors,
-                'tags'      => $tags,
+                'tags'      => $tags
             )
         );
     }

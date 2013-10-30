@@ -35,6 +35,19 @@ class CategoryByCourseRepository extends AppRepository
     }
 
     /**
+     * Find a category
+     *
+     * @param int   $courseId   Course id
+     * @param array $parameters Parameters
+     *
+     * @return CategoryResource
+     */
+    public function findToEdit($courseId, $parameters)
+    {
+        return parent::findResource(array('courseIdentifier' => $courseId), $parameters);
+    }
+
+    /**
      * Insert a category
      *
      * @param int|string $courseIdentifier Course id | slug
