@@ -7,8 +7,10 @@ use SimpleIT\ApiResourcesBundle\Exercise\ResourceResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ResourceContent\PictureType;
+use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ResourceContent\TextType;
 use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ResourceTypeType;
 use SimpleIT\Utils\HTTP;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -90,6 +92,12 @@ class ResourceController extends AppController
             case ExerciseResource\CommonResource::PICTURE:
                 $view = $this->editPictureView($resource);
                 break;
+            case ExerciseResource\CommonResource::TEXT:
+                $view = $this->editTextView($resource);
+                break;
+            case ExerciseResource\CommonResource::MULTIPLE_CHOICE_QUESTION:
+                $view = $this->editMCQuestionView($resource);
+                break;
             default:
                 throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST);
         }
@@ -115,6 +123,38 @@ class ResourceController extends AppController
     }
 
     /**
+     * View the edition component for a text
+     *
+     * @param ResourceResource $resource
+     *
+     * @return Response
+     */
+    private function editTextView(ResourceResource $resource)
+    {
+        $form = $this->createForm(new TextType(), $resource->getContent());
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Exercise/Resource/Component:editTextContent.html.twig',
+            array('resource' => $resource, 'form' => $form->createView())
+        );
+    }
+
+    /**
+     * View the edition component for a MC question
+     *
+     * @param ResourceResource $resource
+     *
+     * @return Response
+     */
+    private function editMCQuestionView(ResourceResource $resource)
+    {
+        return $this->render(
+            'SimpleITClaireAppBundle:Exercise/Resource/Component:editMCQuestionContent.html.twig',
+            array('resource' => $resource)
+        );
+    }
+
+    /**
      * Edit a picture resource content (POST)
      *
      * @param Request $request    Request
@@ -125,17 +165,77 @@ class ResourceController extends AppController
     public function pictureContentEditAction(Request $request, $resourceId)
     {
         $content = new ExerciseResource\PictureResource();
-//        return print_r($content,true);
         $form = $this->createForm(new PictureType(), $content);
+
+        return $this->contentEdit($request, $form, $content, $resourceId);
+    }
+
+    /**
+     * Edit a text resource content (POST)
+     *
+     * @param Request $request    Request
+     * @param int     $resourceId Resource
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function textContentEditAction(Request $request, $resourceId)
+    {
+        $content = new ExerciseResource\TextResource();
+        $form = $this->createForm(new TextType(), $content);
+
+        return $this->contentEdit($request, $form, $content, $resourceId);
+    }
+
+    /**
+     * Edit the resource content
+     *
+     * @param Request                         $request
+     * @param Form                            $form
+     * @param ExerciseResource\CommonResource $content
+     * @param int                                $resourceId
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    private function contentEdit(
+        Request $request,
+        Form $form,
+        ExerciseResource\CommonResource $content,
+        $resourceId
+    )
+    {
         $form->bind($request);
         $resource = new ResourceResource();
-        if ($this->get('validator')->validate($form, 'editType')) {
+        if ($this->get('validator')->validate($form, 'editContent')) {
             $resource->setContent($content);
             $resource = $this->get('simple_it.claire.exercise.resource')->save(
                 $resourceId,
                 $resource
             );
         }
+
+        return $this->redirect(
+            $this->generateUrl(
+                'simple_it_claire_component_exercise_resource_content_edit_view',
+                array('resourceId' => $resource->getId())
+            )
+        );
+    }
+
+    /**
+     * Edit a multiple choice question resource content (POST)
+     *
+     * @param Request $request    Request
+     * @param int     $resourceId Resource
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function mcQuestionContentEditAction(Request $request, $resourceId)
+    {
+        $resourceData = $request->request->all();
+        $resource = $this->get('simple_it.claire.exercise.resource')->saveMCQuestion(
+            $resourceId,
+            $resourceData
+        );
 
         return $this->redirect(
             $this->generateUrl(

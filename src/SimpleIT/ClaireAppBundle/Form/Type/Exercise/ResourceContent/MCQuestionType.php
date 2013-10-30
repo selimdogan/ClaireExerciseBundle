@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class PictureType extends AbstractType
+class MCQuestionType extends AbstractType
 {
     /**
      * @inheritdoc
@@ -18,7 +18,11 @@ class PictureType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add(
-            'source',
+            'question',
+            'text'
+        );
+        $builder->add(
+            'comment',
             'text'
         );
     }
