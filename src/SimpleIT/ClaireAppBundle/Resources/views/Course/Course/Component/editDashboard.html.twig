@@ -2,30 +2,28 @@
     <div class="row">
         <h1 class="highlighted">Information</h1>
         <div class="dashboard-course">
-            <div class="col12 description">
-                {% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDescriptionView' with{'courseId': course.id}, {'standalone': true} %}
-            </div>
-
-            <hr/>
-
             {#<div class="{{ _user.showAds ? "col8" : "col12" }}">#}
             <div class="col12">
                 <div class="row">
-                    {#{% render 'SimpleITClaireAppBundle:AssociatedContent/Component/CategoryByCourse:editView' with{'courseId': course.id}, {'standalone': true} %}#}
-                    {#{% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDisplayLevelView' with{'courseId': course.id}, {'standalone': true} %}#}
-
                     <div class="col12 space-bottom">
-                        <div class="img-text-align tuto-title">
+                        <div class="img-text-align">
+                            <span class="align-middle bg-icon-large float-img">
+                                <i class="icon-image"></i>
+                                <span class="icon-upload bg-icon-inside-right"></span>
+
+                            </span>
                             {#{% render 'SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editImageView' with{'courseId': course.id}, {'standalone': true} %}#}
-                            <div class="align-middle">
+                            <div class="align-middle float-block-large">
                                 {% render 'SimpleITClaireAppBundle:Course/Component/Course:editView' with{'courseId': course.id}, {'standalone': true} %}
                             </div>
+                            {% render 'SimpleITClaireAppBundle:User/Component/AuthorByCourse:editView' with{'courseId': course.id}, {'standalone': true} %}
                         </div>
                     </div>
 
+
                     <div class="col4 space-bottom course-feature">
                         <div class="img-text-align">
-                            <span class="align-middle background-icon-black float-img">
+                            <span class="align-middle bg-icon-black float-img">
                                 <i class="icon-level"></i>
                             </span>
                             <div class="align-middle float-block">
@@ -37,27 +35,24 @@
 
                     <div class="col4 space-bottom course-feature">
                         <div class="img-text-align">
-                            <span class="align-middle background-icon-black"><i class="icon-star"></i></span>
+                            <span class="align-middle bg-icon-black"><i class="icon-star"></i></span>
                             <div class="align-middle">
                                 <p class="text-top-dashboard">Note</p>
                                 <p itemprop="aggregateRating" class="star">
-                                </p><div class="starClassment">
-
-                                    <span class="oneStar"></span>
-                                    <span class="oneStar"></span>
-                                    <span class="oneStar"></span>
-                                    <span class="oneStar"></span>
-                                    <span class="noStar"></span>
-                                </div>
-                                <p></p>
+                                    {% if informations.aggregateRating is not defined %}
+                                        {% set aggregateRating = 0 %}
+                                    {% else %}
+                                        {% set aggregateRating = informations.aggregateRating %}
+                                    {% endif %}
+                                    {% include "SimpleITClaireAppBundle:Common:rating.html.twig" with { 'note' : aggregateRating } %}
+                                </p>
                             </div>
                         </div>
                     </div>
-
                     <div class="col4 space-bottom course-feature">
 
                         <div class="img-text-align">
-                            <span class="align-middle background-icon-black float-img">
+                            <span class="align-middle bg-icon-black float-img">
                                 <i class="icon-duration"></i>
                             </span>
                             <div class="align-middle float-block">
@@ -72,9 +67,8 @@
                     </div>
 
                     <div class="col8">
-
                         <div class="img-text-align">
-                            <span class="align-middle background-icon-black float-img">
+                            <span class="align-middle bg-icon-black float-img">
                                 <i class="icon-tag"></i>
                             </span>
                             <div class="align-middle float-block">
@@ -82,9 +76,6 @@
                                 {% render 'SimpleITClaireAppBundle:AssociatedContent/Component/TagByCourse:listEditView' with{'courseId': course.id}, {'standalone': true} %}
                             </div>
                         </div>
-
-
-
                     </div>
 
                     <div class="col4">
@@ -102,14 +93,10 @@
             </div>
         {% endif %}#}
     </div>
-
+    {% if course.status == 'draft' %}
     <form action="{{ path('simple_it_claire_component_course_status_waiting_for_publication', { 'courseId': course.id, 'status': course.status}) }}" method="post">
-        <input type="submit">
+        <input type="submit" class="oc-btn orange-alt-btn" value="Soumettre à publication">
     </form>
-    <form class="form js-confirm-draft js-no-disable" action="{{ path('simple_it_claire_component_course_status_published', { 'courseId': course.id, 'status': course.status}) }}" method="post">
-        <button type="submit" class="oc-btn orange-btn">
-            <i class="indicator icon-spinner icon-spin"></i> Publier
-        </button>
-    </form>
+    {% endif %}
 
 </section>

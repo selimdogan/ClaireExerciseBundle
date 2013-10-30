@@ -3,8 +3,10 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\User\Component;
 
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
+use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -25,40 +27,63 @@ class AuthorByCourseController extends AppController
     {
         $authors = $this->get('simple_it.claire.user.author')->getAllByCourse($courseIdentifier);
 
-        return $this->render('SimpleITClaireAppBundle:User/Author/Component:viewAuthorsByCourse.html.twig', array('authors' => $authors));
+        return $this->render(
+            'SimpleITClaireAppBundle:User/Author/Component:viewAuthorsByCourse.html.twig',
+            array('authors' => $authors)
+        );
     }
 
     /**
-     * Edit authors
+     * Edit a list of authors
      *
-     * @param Request         $request          Request
-     * @param integer |string $courseIdentifier Course id | slug
+     * @param Request               $request               Request
+     * @param CollectionInformation $collectionInformation Collection information
+     * @param int                   $courseId              Course id
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editListAction(Request $request, $courseIdentifier)
+    public function editViewAction(
+        Request $request,
+        CollectionInformation $collectionInformation,
+        $courseId
+    )
     {
-        $authors = array();
-
-        if (RequestUtils::METHOD_GET == $request->getMethod()) {
-            $authors = $this->get('simple_it.claire.user.author')->getAllByCourse(
-                $courseIdentifier
-            );
-        }
-        $authorsString = '';
-        foreach ($authors as $author) {
-            if ($authorsString != '') {
-                $authorsString .= ',';
-            }
-            $authorsString .= $author->getUsername();
-        }
+        $authors = $this->get('simple_it.claire.user.author')->getAllByCourseToEdit(
+            $courseId,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
+            $collectionInformation
+        );
 
         return $this->render(
             'SimpleITClaireAppBundle:User/Author/Component:editByCourse.html.twig',
-            array(
-                'courseIdentifier' => $courseIdentifier,
-                'authors'          => $authorsString
-            )
+            array('authors' => $authors)
+        );
+    }
+
+    /**
+     * View the list of the course's authors for different status
+     *
+     * @param Request               $request               Request
+     * @param int                   $courseId              Course id
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewToEditAction(
+        Request $request,
+        $courseId,
+        CollectionInformation $collectionInformation
+    )
+    {
+        $authors = $this->get('simple_it.claire.user.author')->getAllByCourseToEdit(
+            $courseId,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
+            $collectionInformation
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:User/Author/Component:viewAuthorsByCourse.html.twig',
+            array('authors' => $authors)
         );
     }
 }

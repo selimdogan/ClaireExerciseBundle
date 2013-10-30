@@ -1,6 +1,4 @@
-<strong>Description (&asymp; 300 caractères)</strong>
-
-<form action="{{ path('simple_it_claire_component_course_course_metadata_description_edit', { 'courseId': courseId}) }}" method="post" {{ form_enctype(form) }}>
+<form action="{{ action }}" method="post" {{ form_enctype(form) }}>
     {{ form_errors(form) }}
     {{ form_errors(form.value) }}
     {{ form_widget(form.value) }}

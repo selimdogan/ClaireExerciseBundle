@@ -1,6 +1,5 @@
 <?php
 
-
 namespace SimpleIT\ClaireAppBundle\Repository\AssociatedContent;
 
 use SimpleIT\AppBundle\Repository\AppRepository;
@@ -10,7 +9,7 @@ use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class TagByCategoryRepository
- * 
+ *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
 class TagByCategoryRepository extends AppRepository
