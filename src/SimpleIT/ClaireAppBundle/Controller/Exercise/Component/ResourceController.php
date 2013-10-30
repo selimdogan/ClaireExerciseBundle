@@ -11,6 +11,7 @@ use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ResourceContent\TextType;
 use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ResourceTypeType;
 use SimpleIT\Utils\HTTP;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -25,12 +26,11 @@ class ResourceController extends AppController
     /**
      * Edit a resource type (GET)
      *
-     * @param Request $request    Request
-     * @param int     $resourceId Resource id
+     * @param int $resourceId Resource id
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editTypeViewAction(Request $request, $resourceId)
+    public function editTypeViewAction($resourceId)
     {
         $resource = $this->get('simple_it.claire.exercise.resource')->getResourceToEdit(
             $resourceId
@@ -64,24 +64,18 @@ class ResourceController extends AppController
             );
         }
 
-        return $this->redirect(
-            $this->generateUrl(
-                'simple_it_claire_component_exercise_resource_type_edit_view',
-                array('resourceId' => $resource->getId())
-            )
-        );
+        return new JsonResponse($resource);
     }
 
     /**
      * Edit a resource content (GET)
      *
-     * @param Request $request    Request
-     * @param int     $resourceId Resource id
+     * @param int $resourceId Resource id
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editContentViewAction(Request $request, $resourceId)
+    public function editContentViewAction($resourceId)
     {
         $resource = $this->get('simple_it.claire.exercise.resource')->getResourceToEdit(
             $resourceId
@@ -192,9 +186,9 @@ class ResourceController extends AppController
      * @param Request                         $request
      * @param Form                            $form
      * @param ExerciseResource\CommonResource $content
-     * @param int                                $resourceId
+     * @param int                             $resourceId
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     private function contentEdit(
         Request $request,
@@ -213,12 +207,7 @@ class ResourceController extends AppController
             );
         }
 
-        return $this->redirect(
-            $this->generateUrl(
-                'simple_it_claire_component_exercise_resource_content_edit_view',
-                array('resourceId' => $resource->getId())
-            )
-        );
+        return new JsonResponse($resource);
     }
 
     /**
@@ -227,7 +216,7 @@ class ResourceController extends AppController
      * @param Request $request    Request
      * @param int     $resourceId Resource
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function mcQuestionContentEditAction(Request $request, $resourceId)
     {
@@ -237,11 +226,6 @@ class ResourceController extends AppController
             $resourceData
         );
 
-        return $this->redirect(
-            $this->generateUrl(
-                'simple_it_claire_component_exercise_resource_content_edit_view',
-                array('resourceId' => $resource->getId())
-            )
-        );
+        return new JsonResponse($resource);
     }
 }
