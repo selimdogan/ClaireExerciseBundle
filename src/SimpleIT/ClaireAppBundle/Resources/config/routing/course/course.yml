@@ -7,6 +7,8 @@ simple_it_claire_course_course_create:
 simple_it_claire_course_waiting_for_publication_list:
     pattern: /waiting-for-publication-list
     defaults : { _controller: SimpleITClaireAppBundle:Course/Course:waitingForPublicationList }
+    requirements:
+            _method: GET
 
 simple_it_claire_part:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/part.yml"
