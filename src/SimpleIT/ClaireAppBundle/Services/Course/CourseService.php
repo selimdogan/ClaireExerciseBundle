@@ -304,7 +304,7 @@ class CourseService
     {
         return $this->courseTocRepository->findToEdit(
             $courseIdentifier,
-            array(CourseResource::STATUS, $status)
+            array(CourseResource::STATUS => $status)
         );
     }
 
