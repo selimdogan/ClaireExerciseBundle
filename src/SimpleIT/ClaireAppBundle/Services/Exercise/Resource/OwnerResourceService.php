@@ -32,12 +32,30 @@ class OwnerResourceService
     /**
      * Get all owner resources
      *
-     * @param CollectionInformation $collectionInformation Collection information
+     * @param array $metadataArray
      *
      * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
-    public function getAll(CollectionInformation $collectionInformation = null)
+    public function getAll(array $metadataArray)
     {
+        if (!empty ($metadataArray))
+        {
+        $collectionInformation = new CollectionInformation();
+
+        $mdFilter = '';
+        foreach ($metadataArray as $key => $value) {
+            if ($mdFilter !== '') {
+                $mdFilter .= ',';
+            }
+            $mdFilter .= $key . ':' . $value;
+        }
+
+        $collectionInformation->addFilter('metadata', $mdFilter);
+        }
+        else {
+            $collectionInformation = null;
+        }
+
         return $this->ownerResourceRepository->findAll($collectionInformation);
     }
 
@@ -84,5 +102,27 @@ class OwnerResourceService
         $resource->setPublic($array['public']);
 
         return $resource;
+    }
+
+    /**
+     * Save a resource
+     *
+     * @param int                   $ownerResourceId ownerResource id
+     * @param OwnerResourceResource $ownerResource
+     * @param array                 $parameters
+     *
+     * @return OwnerResourceResource
+     */
+    public function save(
+        $ownerResourceId,
+        OwnerResourceResource $ownerResource,
+        array $parameters = array()
+    )
+    {
+        return $this->ownerResourceRepository->update(
+            $ownerResourceId,
+            $ownerResource,
+            $parameters
+        );
     }
 }

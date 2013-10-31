@@ -1,16 +1,7 @@
-<h3>Filtres :</h3>
-<ul>
-{% for key, value in collectionInformation.filters %}
-    <li>
-        {{ key }} : {{ value }}
-    </li>
-{% endfor %}
-</ul>
-
 <ul>
     {% for ownerResource in ownerResources %}
         <li>
-            <a href="www.google.fr">
+            <a href="{{ path('simple_it_claire_exercise_owner_resource_edit',{ 'ownerResourceId': ownerResource.id}) }}">
                 <span>
                     {{ ownerResource.id }}
                 </span>

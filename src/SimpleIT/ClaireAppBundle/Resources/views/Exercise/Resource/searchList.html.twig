@@ -1,8 +1,0 @@
-<form action="{{ paginationUrl }}" method="GET" class="search-list-form">
-    <input type="search" name="author" value="{% if collectionInformation.filters.author is defined %}{{ collectionInformation.filters.author }}{% endif %}">
-    <input type="submit" value="">
-    <select name="sort" class="light-grey_button course-filter" onchange="this.form.submit()">
-        <option value="title">Trier par nom</option>
-    </select>
-</form>
-{% include 'SimpleITClaireAppBundle:Exercise/Resource:list.html.twig' with{'ownerResources':ownerResources,'collectionInformation': collectionInformation, 'paginationUrl': paginationUrl} %}

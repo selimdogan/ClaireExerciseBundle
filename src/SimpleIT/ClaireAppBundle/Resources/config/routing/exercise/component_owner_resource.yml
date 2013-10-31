@@ -6,12 +6,18 @@ simple_it_claire_course_component_owner_resource_list:
 
 simple_it_claire_course_component_owner_resource_search_list:
     pattern: /search
-    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:searchList, paginationUrl: null }
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:searchList }
     requirements:
         _method: GET
 
-simple_it_claire_course_component_owner_resource_search_list:
-    pattern: /{ownerResourceId}
-    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:edit }
+simple_it_claire_component_exercise_owner_resource_public_edit_view:
+    pattern: /{ownerResourceId}/public
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:editPublicView }
     requirements:
-        _method: GET|POST
+        _method: GET
+
+simple_it_claire_component_exercise_owner_resource_public_edit:
+    pattern: /{ownerResourceId}/public
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:publicEdit }
+    requirements:
+        _method: POST

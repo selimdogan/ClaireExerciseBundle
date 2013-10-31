@@ -1,0 +1,88 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"></script>
+
+<form action="{{ path('simple_it_claire_course_component_owner_resource_search_list') }}" method="GET">
+
+    <input type="button" onclick="addProposition()" value="Ajouter"/>
+
+    <table id="filters">
+        {% set _cptFilters = 0 %}
+        {% if metadataArray |length > 0 %}
+            {% for key, value in metadataArray %}
+                <tr>
+                    <td>
+                        Clé :
+                    </td>
+                    <td>
+                        <input type="text" size="20" name="metaKey{{ _cptFilters }}" value="{{ key }}"/>
+                    </td>
+                    <td>
+                        Valeur :
+                    </td>
+                    <td>
+                        <input type="search" name="metaValue{{ _cptFilters }}" value="{{ value }}"/>
+                    </td>
+                    <td>
+                        <button type="button" class="js-remove">-</button>
+                    </td>
+                </tr>
+                {% set _cptFilters = _cptFilters + 1 %}
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td>
+                    Clé :
+                </td>
+                <td>
+                    <input type="text" size="20" name="metaKey{{ _cptFilters }}"/>
+                </td>
+                <td>
+                    Valeur :
+                </td>
+                <td>
+                    <input type="search" name="metaValue{{ _cptFilters }}"/>
+                </td>
+                <td>
+                    <button type="button" class="js-remove">-</button>
+                </td>
+            </tr>
+        {% endif %}
+    </table>
+
+    <input type="submit">
+</form>
+{% include 'SimpleITClaireAppBundle:Exercise/OwnerResource:list.html.twig'
+with{'ownerResources':ownerResources,'collectionInformation': collectionInformation} %}
+
+<script>
+    function addProposition() {
+        var $table = $('#filters'),
+                $lines = $('tr', $table),
+                $last = $lines.last(),
+                $inputText = $last.find('input[type=text]'),
+                $clone = $last.clone(),
+                prevId = ($inputText.length > 0) ? ($inputText.attr('name').match(/([0-9]+)/))[1] : 0;
+
+
+        prevId = parseInt(prevId, 0);
+
+        // metaKey
+        $clone
+                .find('input[type=text]')
+                .attr('name', 'metaKey' + (prevId + 1))
+                .val('');
+
+        // metaValue
+        $clone
+                .find('input[type=search]')
+                .attr('name', 'metaValue' + (prevId + 1))
+                .val('');
+
+        $clone.appendTo($table);
+    }
+
+    $(function () {
+        $('table').on('click', '.js-remove', function (event) {
+            $(event.target).closest('tr').remove();
+        })
+    })
+</script>
