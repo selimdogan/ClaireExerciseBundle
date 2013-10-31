@@ -10,7 +10,7 @@ use SimpleIT\Utils\Collection\CollectionInformation;
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class CoursesByAuthorController extends AppController
+class CourseByAuthorController extends AppController
 {
     /**
      * Get a list of courses for an author
@@ -18,7 +18,7 @@ class CoursesByAuthorController extends AppController
      * @param CollectionInformation $collectionInformation Collection information
      * @param int|string            $userIdentifier        User id | slug
      *
-     * @paramConverter ("collectionInformation",options={"itemsPerPage" = "all", "sort" = "updatedAt"})
+     * paramConverter ("collectionInformation",options={"itemsPerPage" = "all", "sort" = "updatedAt"})
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listAction(CollectionInformation $collectionInformation, $userIdentifier)
@@ -29,7 +29,7 @@ class CoursesByAuthorController extends AppController
         );
 
         return $this->render(
-            'SimpleITClaireAppBundle:Course/Course/Component:list.html.twig',
+            'SimpleITClaireAppBundle:User/Author/Component:viewCoursesByAuthor.html.twig',
             array(
                 'courses' => $courses,
                 'collectionInformation' => $collectionInformation,

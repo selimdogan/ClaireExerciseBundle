@@ -14,7 +14,7 @@
         <a href="{{ pagination.getUrlWithParameters(paginationUrl, collectionInformation, paginatedCollection.previousPageNumber )|trim }}">{{ paginatedCollection.previousPageNumber }}</a>
     {% endif %}
 
-    <span>{{ paginatedCollection.pageNumber }}</span>
+    <span class="current">{{ paginatedCollection.pageNumber }}</span>
 
     {% if paginatedCollection.nextPageNumber is not null %}
         {% if  paginatedCollection.nextPageNumber < paginatedCollection.totalPageNumber %}
