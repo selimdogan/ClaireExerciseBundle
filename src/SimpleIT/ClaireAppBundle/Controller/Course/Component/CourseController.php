@@ -647,7 +647,7 @@ class CourseController extends AppController
                 array(
                     'categoryIdentifier' => $categoryIdentifier,
                     'courseIdentifier'   => $course->getSlug(),
-                    'partIdentifier'   => $next->getId(),
+                    'partIdentifier'     => $next->getSlug(),
                 )
             );
         }
@@ -708,7 +708,7 @@ class CourseController extends AppController
                 array(
                     'categoryIdentifier' => $categoryIdentifier,
                     'courseIdentifier'   => $course->getId(),
-                    'partIdentifier'   => $previous->getId(),
+                    'partIdentifier'     => $previous->getId(),
                     'status'             => $course->getStatus()
                 )
             );
@@ -719,10 +719,88 @@ class CourseController extends AppController
         $next = $pagination['next'];
         if (!is_null($next)) {
             $nextUrl = $this->generateUrl(
-                'simple_it_claire_course_course_view',
+                'simple_it_claire_course_part_view',
                 array(
                     'categoryIdentifier' => $categoryIdentifier,
-                    'courseIdentifier'   => $next->getId(),
+                    'courseIdentifier'   => $course->getId(),
+                    'partIdentifier'     => $next->getId(),
+                    'status'             => $course->getStatus()
+                )
+            );
+        }
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:viewPagination.html.twig',
+            array(
+                'previous'    => $previous,
+                'previousUrl' => $previousUrl,
+                'next'        => $next,
+                'nextUrl'     => $nextUrl
+            )
+        );
+    }
+
+    /**
+     * View pagination in edit mode
+     *
+     * @param Request    $request            Request
+     * @param int        $courseId           Course id
+     * @param int|string $categoryIdentifier Category id | slug
+     * @param int|string $partId             Part id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewPaginationEditAction(
+        Request $request,
+        $courseId,
+        $categoryIdentifier,
+        $partId = null
+    )
+    {
+        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
+        $course = $this->get('simple_it.claire.course.course')->getToEdit($courseId, $status);
+        $pagination = $this->get('simple_it.claire.course.course')->getPaginationToEdit(
+            $courseId,
+            $status,
+            $partId
+        );
+
+        $previousUrl = null;
+        /** @var PartResource $previous */
+        $previous = $pagination['previous'];
+        if (!is_null($previous)) {
+            if (PartResource::COURSE == $previous->getSubtype()) {
+                $previousUrl = $this->generateUrl(
+                    'simple_it_claire_course_course_edit',
+                    array(
+                        'categoryIdentifier' => $categoryIdentifier,
+                        'courseId'           => $course->getId(),
+                        'status'             => $course->getStatus()
+                    )
+                );
+            }
+        } else {
+            $previousUrl = $this->generateUrl(
+                'simple_it_claire_course_part_edit',
+                array(
+                    'categoryIdentifier' => $categoryIdentifier,
+                    'courseIdentifier'   => $course->getId(),
+                    'partIdentifier'     => $previous->getId(),
+                    'status'             => $course->getStatus()
+                )
+            );
+        }
+
+        $nextUrl = null;
+        /** @var PartResource $next */
+        $next = $pagination['next'];
+        if (!is_null($next)) {
+            $nextUrl = $this->generateUrl(
+                'simple_it_claire_course_part_edit',
+                array(
+                    'categoryIdentifier' => $categoryIdentifier,
+                    'courseId'           => $course->getId(),
+                    'partId'             => $next->getId(),
                     'status'             => $course->getStatus()
                 )
             );

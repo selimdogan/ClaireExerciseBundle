@@ -1,17 +1,13 @@
 {% import 'SimpleITClaireAppBundle:Common:macros.html.twig' as macro %}
-<ul class="level-2">
+<ul class="grid-blocs-list {% if app.request.get('grid3') %} grid-blocs-3 {% else %} grid-blocs-2 {% endif %}">
     {% for course in courses %}
-        <li class="col6">
-            <a class="course-title course-title-2" href="{{ path('simple_it_claire_course_course_view', {'categoryIdentifier': course.category.slug,'courseIdentifier':course.id, 'status':'waiting-for-publication'}) }}">
-                <div class="image">
-                    {% if course.metadatas.image is not defined %}
-                        <i class="icon-web"></i>
-                    {% else %}
-                        <img src="{{ course.metadatas.image }}" />
-                    {% endif %}
-                </div>
-                <div class="courses-content">
-                    <strong>{{ course.title }}</strong> <br/>
+        <li class="grid-bloc">
+            <a class="grid-bloc-link" href="{{ path('simple_it_claire_course_course_view', {'categoryIdentifier': course.category.slug,'courseIdentifier':course.id, 'status':'waiting-for-publication'}) }}">
+                <span class="grid-bloc-image">
+                    <img src="{{ course.metadatas | courseImage }}"/>
+                </span>
+                <span class="grid-bloc-title">
+                    <span class="course-title" title="{{ course.title }}">{{ course.title }}</span>
                     {% if course.tags > 0 %}
                         <span class="course-tags">
                             {% for tag in course.tags %}
@@ -19,7 +15,7 @@
                             {% endfor %}
                         </span>
                     {% endif %}
-                </div>
+                </span>
             </a>
         </li>
     {% endfor %}

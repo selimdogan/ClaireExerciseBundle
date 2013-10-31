@@ -18,7 +18,8 @@ class CourseByAuthorController extends AppController
      * @param CollectionInformation $collectionInformation Collection information
      * @param int|string            $userIdentifier        User id | slug
      *
-     * paramConverter ("collectionInformation",options={"itemsPerPage" = "all", "sort" = "updatedAt"})
+     *paramConverter ("collectionInformation",options={"itemsPerPage" = "all", "sort" = "updatedAt"})
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listAction(CollectionInformation $collectionInformation, $userIdentifier)
@@ -31,7 +32,7 @@ class CourseByAuthorController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:User/Author/Component:viewCoursesByAuthor.html.twig',
             array(
-                'courses' => $courses,
+                'courses'               => $courses,
                 'collectionInformation' => $collectionInformation,
             )
         );
