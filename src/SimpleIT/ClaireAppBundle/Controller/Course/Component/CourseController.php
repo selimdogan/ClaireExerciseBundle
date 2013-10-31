@@ -2,6 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
+use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Annotation\Cache;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
@@ -607,18 +608,57 @@ class CourseController extends AppController
         $partIdentifier = null
     )
     {
+        $course = $this->get('simple_it.claire.course.course')->get($courseIdentifier);
         $pagination = $this->get('simple_it.claire.course.course')->getPagination(
             $courseIdentifier,
             $partIdentifier
         );
 
+        $previousUrl = null;
+        /** @var PartResource $previous */
+        $previous = $pagination['previous'];
+        if (!is_null($previous)) {
+            if (PartResource::COURSE == $previous->getSubtype()) {
+                $previousUrl = $this->generateUrl(
+                    'simple_it_claire_course_course_view',
+                    array(
+                        'categoryIdentifier' => $categoryIdentifier,
+                        'courseIdentifier'   => $previous->getSlug(),
+                    )
+                );
+            } else {
+                $previousUrl = $this->generateUrl(
+                    'simple_it_claire_course_part_view',
+                    array(
+                        'categoryIdentifier' => $categoryIdentifier,
+                        'courseIdentifier'   => $course->getSlug(),
+                        'partIdentifier'     => $previous->getSlug(),
+                    )
+                );
+            }
+        }
+
+        $nextUrl = null;
+        /** @var PartResource $next */
+        $next = $pagination['next'];
+        if (!is_null($next)) {
+            $nextUrl = $this->generateUrl(
+                'simple_it_claire_course_part_view',
+                array(
+                    'categoryIdentifier' => $categoryIdentifier,
+                    'courseIdentifier'   => $course->getSlug(),
+                    'partIdentifier'   => $next->getId(),
+                )
+            );
+        }
+
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:viewPagination.html.twig',
             array(
-                'courseIdentifier'   => $courseIdentifier,
-                'categoryIdentifier' => $categoryIdentifier,
-                'previous'           => $pagination['previous'],
-                'next'               => $pagination['next']
+                'previous'    => $previous,
+                'previousUrl' => $previousUrl,
+                'next'        => $next,
+                'nextUrl'     => $nextUrl
             )
         );
     }
@@ -629,7 +669,7 @@ class CourseController extends AppController
      * @param Request    $request            Request
      * @param int        $courseId           Course id
      * @param int|string $categoryIdentifier Category id | slug
-     * @param int|string $partIdentifier     Part id | slug
+     * @param int|string $partId             Part id
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -637,22 +677,64 @@ class CourseController extends AppController
         Request $request,
         $courseId,
         $categoryIdentifier,
-        $partIdentifier = null
+        $partId = null
     )
     {
+        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
+        $course = $this->get('simple_it.claire.course.course')->getToEdit($courseId, $status);
         $pagination = $this->get('simple_it.claire.course.course')->getPaginationToEdit(
             $courseId,
-            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
-            $partIdentifier
+            $status,
+            $partId
         );
+
+        $previousUrl = null;
+        /** @var PartResource $previous */
+        $previous = $pagination['previous'];
+        if (!is_null($previous)) {
+            if (PartResource::COURSE == $previous->getSubtype()) {
+                $previousUrl = $this->generateUrl(
+                    'simple_it_claire_course_course_view',
+                    array(
+                        'categoryIdentifier' => $categoryIdentifier,
+                        'courseIdentifier'   => $course->getId(),
+                        'status'             => $course->getStatus()
+                    )
+                );
+            }
+        } else {
+            $previousUrl = $this->generateUrl(
+                'simple_it_claire_course_part_view',
+                array(
+                    'categoryIdentifier' => $categoryIdentifier,
+                    'courseIdentifier'   => $course->getId(),
+                    'partIdentifier'   => $previous->getId(),
+                    'status'             => $course->getStatus()
+                )
+            );
+        }
+
+        $nextUrl = null;
+        /** @var PartResource $next */
+        $next = $pagination['next'];
+        if (!is_null($next)) {
+            $nextUrl = $this->generateUrl(
+                'simple_it_claire_course_course_view',
+                array(
+                    'categoryIdentifier' => $categoryIdentifier,
+                    'courseIdentifier'   => $next->getId(),
+                    'status'             => $course->getStatus()
+                )
+            );
+        }
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:viewPagination.html.twig',
             array(
-                'courseIdentifier'   => $courseId,
-                'categoryIdentifier' => $categoryIdentifier,
-                'previous'           => $pagination['previous'],
-                'next'               => $pagination['next']
+                'previous'    => $previous,
+                'previousUrl' => $previousUrl,
+                'next'        => $next,
+                'nextUrl'     => $nextUrl
             )
         );
     }
