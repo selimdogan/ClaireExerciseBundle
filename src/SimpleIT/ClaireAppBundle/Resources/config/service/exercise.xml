@@ -21,6 +21,7 @@
 
         <parameter key="simple_it.claire.exercise.resource.class">SimpleIT\ClaireAppBundle\Services\Exercise\Resource\ResourceService</parameter>
         <parameter key="simple_it.claire.exercise.repository.resource.class">SimpleIT\ClaireAppBundle\Repository\Exercise\Resource\ResourceRepository</parameter>
+        <parameter key="simple_it.claire.exercise.repository.required_resource_by_resource.class">SimpleIT\ClaireAppBundle\Repository\Exercise\Resource\RequiredResourceByResourceRepository</parameter>
 
     </parameters>
 
@@ -90,6 +91,14 @@
                 <argument type="service" id="simple_it.claire.serializer"/>
             </call>
         </service>
+        <service id="simple_it.claire.exercise.repository.required_resource_by_resource" class="%simple_it.claire.exercise.repository.required_resource_by_resource.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
 
         <!-- Services -->
         <service id="simple_it.claire.exercise.exercise_model" class="%simple_it.claire.exercise.exercise_model.class%">
@@ -135,6 +144,9 @@
         <service id="simple_it.claire.exercise.resource" class="%simple_it.claire.exercise.resource.class%">
             <call method="setResourceRepository">
                 <argument type="service" id="simple_it.claire.exercise.repository.resource"/>
+            </call>
+            <call method="setRequiredResourceByResourceRepository">
+                <argument type="service" id="simple_it.claire.exercise.repository.required_resource_by_resource"/>
             </call>
         </service>
     </services>

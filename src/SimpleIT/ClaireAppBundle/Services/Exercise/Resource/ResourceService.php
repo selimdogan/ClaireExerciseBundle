@@ -2,6 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Services\Exercise\Resource;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource\CommonResource;
 use
@@ -10,6 +11,7 @@ use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource\MultipleChoiceQuestion
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource\PictureResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource\TextResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ResourceResource;
+use SimpleIT\ClaireAppBundle\Repository\Exercise\Resource\RequiredResourceByResourceRepository;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\Resource\ResourceRepository;
 
 /**
@@ -25,6 +27,11 @@ class ResourceService
     private $resourceRepository;
 
     /**
+     * @var RequiredResourceByResourceRepository
+     */
+    private $requiredResourceByResourceRepository;
+
+    /**
      * Set resourceRepository
      *
      * @param \SimpleIT\ClaireAppBundle\Repository\Exercise\Resource\ResourceRepository $resourceRepository
@@ -32,6 +39,16 @@ class ResourceService
     public function setResourceRepository($resourceRepository)
     {
         $this->resourceRepository = $resourceRepository;
+    }
+
+    /**
+     * Set requiredResourceByResourceRepository
+     *
+     * @param \SimpleIT\ClaireAppBundle\Repository\Exercise\Resource\RequiredResourceByResourceRepository $requiredResourceByResourceRepository
+     */
+    public function setRequiredResourceByResourceRepository($requiredResourceByResourceRepository)
+    {
+        $this->requiredResourceByResourceRepository = $requiredResourceByResourceRepository;
     }
 
     /**
@@ -91,6 +108,29 @@ class ResourceService
         $resource->setContent($question);
 
         return $this->save($resourceId, $resource);
+    }
+
+    /**
+     * Save required resources
+     *
+     * @param       $resourceId
+     * @param array $resourceContentArray
+     *
+     * @return ResourceResource
+     */
+    public function saveRequiredResource($resourceId, array $resourceContentArray)
+    {
+        $requiredResources = array();
+        if (isset($resourceContentArray['requirement'])) {
+            foreach ($resourceContentArray['requirement'] as $requirement) {
+                $requiredResources[] = $requirement;
+            }
+        }
+
+        return $this->requiredResourceByResourceRepository->update(
+            $resourceId,
+            new ArrayCollection($requiredResources)
+        );
     }
 
     /**

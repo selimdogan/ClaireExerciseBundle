@@ -1,5 +1,7 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"></script>
 
+<h2>Edition de la question de QCM</h2>
+
 <form action="{{ path('simple_it_claire_component_exercise_resource_mcquestion_content_edit',{ 'resourceId': resource.id}) }}" method="post">
     <table>
         <tr>
@@ -103,9 +105,6 @@
                 .find('input[type=checkbox]')
                 .attr('name', 'propositionRight[' + (prevId + 1) + ']')
                 .prop('checked', false);
-
-
-        console.log(prevId);
 
         $clone.appendTo($table);
     }

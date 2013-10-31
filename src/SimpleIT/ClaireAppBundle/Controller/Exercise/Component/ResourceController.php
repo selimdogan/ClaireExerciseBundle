@@ -302,6 +302,6 @@ class ResourceController extends AppController
     {
         $this->get('simple_it.claire.exercise.resource')->delete($resourceId);
 
-        return new JsonResponse('Ressource supprimée : ' . $resourceId);
+        return new JsonResponse($resourceId);
     }
 }

@@ -1,0 +1,74 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"></script>
+
+<h2>Ressources requises</h2>
+
+<form action="{{ path('simple_it_claire_component_exercise_resource_required_resource_edit',{ 'resourceId': resource.id}) }}" method="post">
+
+    <input type="button" onclick="addRequirement()" value="Ajouter"/>
+
+    <table id="required">
+        {% set _cptReq = 0 %}
+        {% if resource.requiredExerciseResources |length > 0 %}
+            {% for requirement in resource.requiredExerciseResources %}
+                <tr>
+                    <td>
+                        Ressource requise :
+                    </td>
+                    <td>
+                        <input type="text" size="4" name="requirement[{{ _cptReq }}]"
+                               value="{{ requirement }}"/>
+                    </td>
+                    <td>
+                        <button type="button" class="js-remove">-</button>
+                    </td>
+                </tr>
+                {% set _cptReq = _cptReq + 1 %}
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td>
+                    Ressource requise :
+                </td>
+                <td>
+                    <input type="text" size="4" name="requirement[{{ _cptReq }}]"
+                           value="0"/>
+                </td>
+                <td>
+                    <button type="button" class="js-remove">-</button>
+                </td>
+            </tr>
+            {% set _cptReq = _cptReq + 1 %}
+        {% endif %}
+    </table>
+
+    <input type="submit"/>
+</form>
+
+<script>
+    function addRequirement() {
+        var
+                $table = $('#required'),
+                $lines = $('tr', $table),
+                $last = $lines.last(),
+                $inputText = $last.find('input[type=text]'),
+                $clone = $last.clone(),
+                prevId = ($inputText.length > 0) ? ($inputText.attr('name').match(/\[([0-9]+)\]/))[1] : 0;
+
+
+        prevId = parseInt(prevId, 0);
+
+        // text
+        $clone
+                .find('input[type=text]')
+                .attr('name', 'requirement[' + (prevId + 1) + ']')
+                .val('0');
+
+        $clone.appendTo($table);
+    }
+
+    $(function () {
+        $('table').on('click', '.js-remove', function (event) {
+            $(event.target).closest('tr').remove();
+        })
+    })
+</script>

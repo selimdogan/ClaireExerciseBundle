@@ -34,3 +34,16 @@ simple_it_claire_component_exercise_resource_mcquestion_content_edit:
     requirements:
         _method: POST
 
+simple_it_claire_component_exercise_resource_required_resource_edit_view:
+    pattern: /{resourceId}/required-resources
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/RequiredResourceByResource:editRequiredResourcesView }
+    requirements:
+        _method: GET
+
+
+simple_it_claire_component_exercise_resource_required_resource_edit:
+    pattern: /{resourceId}/required-resources
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/RequiredResourceByResource:RequiredResourceEdit }
+    requirements:
+        _method: POST
+
