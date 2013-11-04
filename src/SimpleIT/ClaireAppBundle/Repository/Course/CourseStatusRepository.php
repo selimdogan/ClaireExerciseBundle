@@ -3,7 +3,6 @@
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
 use SimpleIT\AppBundle\Repository\AppRepository;
-use SimpleIT\Utils\FormatUtils;
 
 /**
  * Class CourseStatusRepository
@@ -26,21 +25,11 @@ class CourseStatusRepository extends AppRepository
      * Get a course content
      *
      * @param int|string $courseIdentifier Course id | slug
-     * @param array      $parameters       Parameters
-     * @param string     $format           Format
      *
      * @return mixed
      */
-    public function find(
-        $courseIdentifier,
-        $parameters = array(),
-        $format = FormatUtils::HTML
-    )
+    public function findAll($courseIdentifier)
     {
-        return parent::findResource(
-            array('courseIdentifier' => $courseIdentifier),
-            $parameters,
-            $format
-        );
+        return parent::findAllResources(array('courseIdentifier' => $courseIdentifier));
     }
 }

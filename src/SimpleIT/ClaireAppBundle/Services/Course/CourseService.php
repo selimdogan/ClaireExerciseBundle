@@ -77,7 +77,7 @@ class CourseService
      */
     public function getAllByCourseIdentifier($courseIdentifier)
     {
-        return $this->courseStatusRepository->find($courseIdentifier);
+        return $this->courseStatusRepository->findAll($courseIdentifier);
     }
 
     /**
