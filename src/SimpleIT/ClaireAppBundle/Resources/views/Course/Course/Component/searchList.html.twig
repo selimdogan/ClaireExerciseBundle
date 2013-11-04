@@ -15,7 +15,7 @@
                 </span>
             </div>
         </div>
-        <div class="col2">
+        <div class="col6">
             <select name="sort" class="course-filter" onchange="this.form.submit()">
                 <option value="title">Trier par nom</option>
                 <option value="updatedAt desc" {% if collectionInformation.sorts.0 is defined and collectionInformation.sorts.0.property == 'updatedAt' %} selected="selected" {% endif %}>Trier par date</option>
