@@ -107,11 +107,28 @@ class CourseService
      * @param int    $courseId Course id
      * @param string $status   Status
      *
+     * @deprecated use getByStatus
      * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
      */
     public function getToEdit($courseId, $status)
     {
-        return $this->courseRepository->findToEdit(
+        return $this->courseRepository->findByStatus(
+            $courseId,
+            array(CourseResource::STATUS => $status)
+        );
+    }
+
+    /**
+     * Get a course by status
+     *
+     * @param int    $courseId Course id
+     * @param string $status   Status
+     *
+     * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
+     */
+    public function getByStatus($courseId, $status)
+    {
+        return $this->courseRepository->findByStatus(
             $courseId,
             array(CourseResource::STATUS => $status)
         );
