@@ -211,10 +211,29 @@ class PartService
      * @param string  $status           Asked status
      *
      * @return mixed
+     * @deprecated use getContentByStatus
      */
     public function getContentToEdit($courseIdentifier, $partIdentifier, $status)
     {
-        return $this->partContentRepository->findToEdit(
+        return $this->partContentRepository->findByStatus(
+            $courseIdentifier,
+            $partIdentifier,
+            array(CourseResource::STATUS => $status)
+        );
+    }
+
+    /**
+     * Get a part content
+     *
+     * @param integer $courseIdentifier Course id | slug
+     * @param integer $partIdentifier   Part id | slug
+     * @param string  $status           Asked status
+     *
+     * @return mixed
+     */
+    public function getContentByStatus($courseIdentifier, $partIdentifier, $status)
+    {
+        return $this->partContentRepository->findByStatus(
             $courseIdentifier,
             $partIdentifier,
             array(CourseResource::STATUS => $status)

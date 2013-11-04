@@ -77,7 +77,7 @@ class PartContentRepository extends AppRepository
      *
      * @return mixed
      */
-    public function findToEdit(
+    public function findByStatus(
         $courseIdentifier,
         $partIdentifier,
         $parameters = array(),

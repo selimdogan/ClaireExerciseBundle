@@ -8,10 +8,9 @@ use SimpleIT\ClaireAppBundle\Repository\Course\CourseContentRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\CourseIntroductionRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\CourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\CourseTocRepository;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireAppBundle\Repository\Course\CourseStatusRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
-use SimpleIT\Utils\NumberUtils;
 
 /**
  * Class CourseService
@@ -45,6 +44,11 @@ class CourseService
      */
     private $courseContentRepository;
 
+    /**
+     * @var CourseStatusRepository
+     */
+    private $courseStatusRepository;
+
     /* ****************** *
      *                    *
      * ***** COURSE ***** *
@@ -73,20 +77,7 @@ class CourseService
      */
     public function getAllByCourseIdentifier($courseIdentifier)
     {
-
-        $collectionInformation = new CollectionInformation();
-        if (NumberUtils::isInteger($courseIdentifier)) {
-            $collectionInformation->addFilter(CourseResource::ID, $courseIdentifier);
-        } else {
-            $collectionInformation->addFilter(CourseResource::SLUG, $courseIdentifier);
-        }
-
-        $collectionInformation->addFilter(
-            CourseResource::STATUS,
-            CourseResource::STATUS_DRAFT . ',' . CourseResource::STATUS_WAITING_FOR_PUBLICATION . ',' . CourseResource::STATUS_PUBLISHED
-        );
-
-        return $this->courseRepository->findAll($collectionInformation);
+        return $this->courseStatusRepository->find($courseIdentifier);
     }
 
     /**
@@ -538,5 +529,15 @@ class CourseService
     public function setCourseContentRepository($courseContentRepository)
     {
         $this->courseContentRepository = $courseContentRepository;
+    }
+
+    /**
+     * Set courseStatusRepository
+     *
+     * @param \SimpleIT\ClaireAppBundle\Repository\Course\CourseStatusRepository $courseStatusRepository
+     */
+    public function setCourseStatusRepository(CourseStatusRepository $courseStatusRepository)
+    {
+        $this->courseStatusRepository = $courseStatusRepository;
     }
 }

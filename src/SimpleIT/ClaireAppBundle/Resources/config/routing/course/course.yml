@@ -17,3 +17,9 @@ simple_it_claire_part:
 simple_it_claire_course_metadata:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/component_course_metadata.yml"
     prefix:   /{courseId}/metadatas
+
+simple_it_claire_component_course_part_content_edit:
+    pattern: /{courseId}/parts/{partId}/content
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/PartContent:edit }
+    requirements:
+        _method: POST

@@ -73,8 +73,12 @@ class CourseContentController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:editContent.html.twig',
             array(
-                'courseId'      => $courseId,
-                'courseContent' => $courseContent
+                'content' => $courseContent,
+                'action'  =>
+                    $this->generateUrl(
+                        'simple_it_claire_component_course_content_edit',
+                        array('courseId' => $courseId)
+                    )
             )
         );
     }
@@ -89,7 +93,7 @@ class CourseContentController extends AppController
      */
     public function editAction(Request $request, $courseId)
     {
-        $content = $request->get('courseContent');
+        $content = $request->get('content');
         $content = $this->get('simple_it.claire.course.course')->saveContent(
             $courseId,
             $content,

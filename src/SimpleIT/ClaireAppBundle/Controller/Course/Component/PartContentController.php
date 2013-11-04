@@ -5,7 +5,6 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 use SimpleIT\AppBundle\Annotation\Cache;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
-use SimpleIT\Utils\RequestUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -52,44 +51,54 @@ class PartContentController extends AppController
     }
 
     /**
-     * Edit part content
+     * Edit course content (GET)
      *
-     * @param Request      $request          Request
-     * @param int | string $courseIdentifier Course id | slug
-     * @param int | string $partIdentifier   Part id | slug
+     * @param Request $request  Request
+     * @param int     $courseId Course id
+     * @param int     $partId   Part id
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editContentAction(Request $request, $courseIdentifier, $partIdentifier)
+    public function editViewAction(Request $request, $courseId, $partId)
     {
-        $partContent = null;
-        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
-        if (RequestUtils::METHOD_GET == $request->getMethod()) {
-            $partContent = $this->get('simple_it.claire.course.part')->getContentToEdit(
-                $courseIdentifier,
-                $partIdentifier,
-                $status
-            );
-        } elseif (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()
-        ) {
-            $partContent = $request->get('partContent');
-            $partContent = $this->get('simple_it.claire.course.part')->saveContent(
-                $courseIdentifier,
-                $partIdentifier,
-                $partContent,
-                $status
-            );
-
-            return new Response($partContent);
-        }
+        $partContent = $this->get('simple_it.claire.course.part')->getContentByStatus(
+            $courseId,
+            $partId,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
 
         return $this->render(
-            'SimpleITClaireAppBundle:Course/PartContent/Component:edit.html.twig',
+            'SimpleITClaireAppBundle:Course/Course/Component:editContent.html.twig',
             array(
-                'courseIdentifier' => $courseIdentifier,
-                'partIdentifier'   => $partIdentifier,
-                'partContent'      => $partContent
+                'content' => $partContent,
+                'action'  =>
+                    $this->generateUrl(
+                        'simple_it_claire_component_course_part_content_edit',
+                        array('courseId' => $courseId, 'partId' => $partId)
+                    )
             )
         );
+    }
+
+    /**
+     * Edit course content (POST)
+     *
+     * @param Request $request  Request
+     * @param int     $courseId Course id
+     * @param int     $partId   Part id
+     *
+     * @return Response
+     */
+    public function editAction(Request $request, $courseId, $partId)
+    {
+        $content = $request->get('content');
+        $content = $this->get('simple_it.claire.course.part')->saveContent(
+            $courseId,
+            $partId,
+            $content,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
+        return new Response($content);
     }
 }

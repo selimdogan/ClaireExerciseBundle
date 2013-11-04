@@ -681,7 +681,7 @@ class CourseController extends AppController
     )
     {
         $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
-        $course = $this->get('simple_it.claire.course.course')->getToEdit($courseId, $status);
+        $course = $this->get('simple_it.claire.course.course')->getByStatus($courseId, $status);
         $pagination = $this->get('simple_it.claire.course.course')->getPaginationToEdit(
             $courseId,
             $status,
@@ -701,17 +701,18 @@ class CourseController extends AppController
                         'status'             => $course->getStatus()
                     )
                 );
+
+            } else {
+                $previousUrl = $this->generateUrl(
+                    'simple_it_claire_course_part_view',
+                    array(
+                        'categoryIdentifier' => $categoryIdentifier,
+                        'courseIdentifier'   => $course->getId(),
+                        'partIdentifier'     => $previous->getId(),
+                        'status'             => $course->getStatus()
+                    )
+                );
             }
-        } else {
-            $previousUrl = $this->generateUrl(
-                'simple_it_claire_course_part_view',
-                array(
-                    'categoryIdentifier' => $categoryIdentifier,
-                    'courseIdentifier'   => $course->getId(),
-                    'partIdentifier'     => $previous->getId(),
-                    'status'             => $course->getStatus()
-                )
-            );
         }
 
         $nextUrl = null;
