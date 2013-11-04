@@ -10,6 +10,7 @@ use SimpleIT\ClaireAppBundle\Repository\Course\CourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\CourseTocRepository;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\Utils\Collection\PaginatedCollection;
 use SimpleIT\Utils\NumberUtils;
 
 /**
@@ -68,7 +69,7 @@ class CourseService
      * @param int|string $courseIdentifier Course id | slug
      *
      * @throws \SimpleIT\CoreBundle\Exception\NonExistingObjectException
-     * @return array
+     * @return PaginatedCollection
      */
     public function getAllByCourseIdentifier($courseIdentifier)
     {
@@ -85,26 +86,7 @@ class CourseService
             CourseResource::STATUS_DRAFT . ',' . CourseResource::STATUS_WAITING_FOR_PUBLICATION . ',' . CourseResource::STATUS_PUBLISHED
         );
 
-        $courses = $this->courseRepository->findAll($collectionInformation);
-
-        $coursesByStatus = array();
-        /** @var CourseResource $course */
-        foreach ($courses as $course) {
-            switch ($course->getStatus()) {
-                case CourseResource::STATUS_DRAFT:
-                    $coursesByStatus[CourseResource::STATUS_DRAFT] = $course;
-                    break;
-                case CourseResource::STATUS_WAITING_FOR_PUBLICATION:
-                    $coursesByStatus[CourseResource::STATUS_WAITING_FOR_PUBLICATION] = $course;
-                    break;
-                case CourseResource::STATUS_PUBLISHED:
-                    $coursesByStatus[CourseResource::STATUS_PUBLISHED] = $course;
-                    break;
-                default:
-                    throw new NonExistingObjectException();
-            }
-        }
-        return $coursesByStatus;
+        return $this->courseRepository->findAll($collectionInformation);
     }
 
     /**
@@ -133,6 +115,24 @@ class CourseService
             $courseId,
             array(CourseResource::STATUS => $status)
         );
+    }
+
+    /**
+     * Get course id
+     *
+     * @param int|string $courseIdentifier Course id | slug
+     *
+     * @return int
+     */
+    public function getId($courseIdentifier)
+    {
+        $courseId = $courseIdentifier;
+        if (!CourseResource::isCourseId($courseIdentifier)) {
+            $course = $this->get($courseIdentifier);
+            $courseId = $course->getId();
+        }
+
+        return $courseId;
     }
 
     /**

@@ -126,6 +126,24 @@ class PartService
     }
 
     /**
+     * Get a part by status
+     *
+     * @param string | integer $courseIdentifier Course id | slug
+     * @param string | integer $partIdentifier   Part id | slug
+     * @param string           $status           Status
+     *
+     * @return PartResource
+     */
+    public function getByStatus($courseIdentifier, $partIdentifier, $status)
+    {
+        return $this->partRepository->findByStatus(
+            $courseIdentifier,
+            $partIdentifier,
+            array(CourseResource::STATUS => $status)
+        );
+    }
+
+    /**
      * Update a part
      *
      * @param string       $courseIdentifier Course id | slug
@@ -182,7 +200,6 @@ class PartService
      */
     public function getContent($courseIdentifier, $partIdentifier)
     {
-
         return $this->partContentRepository->find($courseIdentifier, $partIdentifier);
     }
 
