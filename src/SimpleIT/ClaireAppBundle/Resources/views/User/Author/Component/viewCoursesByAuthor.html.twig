@@ -1,7 +1,7 @@
 <ul class="level-2">
     {% for course in courses %}
         <li class="col6">
-            <a class="course-title course-title-2" href="{{ path('simple_it_claire_course_course_view', {'courseIdentifier': course.slug, 'categoryIdentifier': course.category.slug }) }}">
+            <a class="course-title course-title-2" href="{{ path('simple_it_claire_course_course_view', {'courseIdentifier': course.id, 'categoryIdentifier': course.category.slug, 'status': 'draft' }) }}">
                 <div class="image">
                     {% if course.metadatas.image is not defined %}
                         <i class="icon-web"></i>
