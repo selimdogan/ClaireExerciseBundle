@@ -20,6 +20,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Annotation\Cache;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Controller\AppController;
@@ -134,6 +135,42 @@ class PartController extends AppController
     }
 
     /**
+     * View table of content Medium
+     *
+     * @param Request      $request            Request
+     * @param int | string $courseIdentifier   Course id | slug
+     * @param int | string $partIdentifier     Current part id | slug
+     * @param int | string $categoryIdentifier Category id | slug
+     * @param int          $displayLevel       Course display level
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewTocMediumByStatusAction(
+        Request $request,
+        $courseIdentifier,
+        $partIdentifier,
+        $categoryIdentifier,
+        $displayLevel
+    )
+    {
+        $toc = $this->get('simple_it.claire.course.part')->getTocByStatus(
+            $courseIdentifier,
+            $partIdentifier,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:viewTocMedium.html.twig',
+            array(
+                'toc'                => $toc,
+                'courseIdentifier'   => $courseIdentifier,
+                'categoryIdentifier' => $categoryIdentifier,
+                'displayLevel'       => $displayLevel
+            )
+        );
+    }
+
+    /**
      * View table of content BIG
      *
      * @param int|string $courseIdentifier   Course id | slug
@@ -161,6 +198,39 @@ class PartController extends AppController
     }
 
     /**
+     * View table of content BIG
+     *
+     * @param Request    $request            Request
+     * @param int|string $courseIdentifier   Course id | slug
+     * @param int|string $partIdentifier     Current part id | slug
+     * @param int|string $categoryIdentifier Category id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewTocBigByStatusAction(
+        Request $request,
+        $courseIdentifier,
+        $partIdentifier,
+        $categoryIdentifier
+    )
+    {
+        $toc = $this->get('simple_it.claire.course.part')->getTocByStatus(
+            $courseIdentifier,
+            $partIdentifier,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:viewTocBig.html.twig',
+            array(
+                'toc'                => $toc,
+                'courseIdentifier'   => $courseIdentifier,
+                'categoryIdentifier' => $categoryIdentifier
+            )
+        );
+    }
+
+    /**
      * View introduction
      *
      * @param int|string $courseIdentifier Course id | slug
@@ -174,6 +244,33 @@ class PartController extends AppController
         $introduction = $this->get('simple_it.claire.course.part')->getIntroduction(
             $courseIdentifier,
             $partIdentifier
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
+            array('content' => $introduction)
+        );
+    }
+
+    /**
+     * View introduction
+     *
+     * @param Request    $request          Request
+     * @param int|string $courseIdentifier Course id | slug
+     * @param int|string $partIdentifier   Part id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewIntroductionByStatusAction(
+        Request $request,
+        $courseIdentifier,
+        $partIdentifier
+    )
+    {
+        $introduction = $this->get('simple_it.claire.course.part')->getIntroductionByStatus(
+            $courseIdentifier,
+            $partIdentifier,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
         );
 
         return $this->render(

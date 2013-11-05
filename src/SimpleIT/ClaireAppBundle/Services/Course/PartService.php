@@ -191,6 +191,24 @@ class PartService
     }
 
     /**
+     * Get a course introduction
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param integer      $partIdentifier   Part id | slug
+     * @param string       $status           Asked status
+     *
+     * @return mixed
+     */
+    public function getIntroductionByStatus($courseIdentifier, $partIdentifier, $status)
+    {
+        return $this->partIntroductionRepository->findByStatus(
+            $courseIdentifier,
+            $partIdentifier,
+            array(CourseResource::STATUS => $status)
+        );
+    }
+
+    /**
      * Get a part content
      *
      * @param integer $courseIdentifier Course id | slug
@@ -251,6 +269,24 @@ class PartService
     public function getToc($courseIdentifier, $partIdentifier)
     {
         return $this->partTocRepository->find($courseIdentifier, $partIdentifier);
+    }
+
+    /**
+     * Get a part toc
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier   Part id | slug
+     * @param string       $status           Asked status
+     *
+     * @return mixed
+     */
+    public function getTocByStatus($courseIdentifier, $partIdentifier, $status)
+    {
+        return $this->partTocRepository->findByStatus(
+            $courseIdentifier,
+            $partIdentifier,
+            array(CourseResource::STATUS => $status)
+        );
     }
 
     /**

@@ -41,9 +41,9 @@ class PartContentController extends AppController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewToEditAction(Request $request, $courseId, $partId)
+    public function viewByStatusAction(Request $request, $courseId, $partId)
     {
-        return new Response($this->get('simple_it.claire.course.part')->getContentToEdit(
+        return new Response($this->get('simple_it.claire.course.part')->getContentByStatus(
             $courseId,
             $partId,
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)

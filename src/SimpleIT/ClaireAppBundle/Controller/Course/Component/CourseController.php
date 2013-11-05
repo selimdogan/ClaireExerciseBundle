@@ -837,7 +837,7 @@ class CourseController extends AppController
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
         );
 
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseToEdit(
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseByStatus(
             $course->getId(),
             $status,
             $collectionInformation
