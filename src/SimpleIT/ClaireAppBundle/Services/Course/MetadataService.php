@@ -143,14 +143,16 @@ class MetadataService
             MetadataResource::COURSE_METADATA_DIFFICULTY
         );
         $information[MetadataResource::COURSE_METADATA_DIFFICULTY] = $difficulty;
+
         $aggregateRating = ArrayUtils::getValue(
             $metadatas,
             MetadataResource::COURSE_METADATA_AGGREGATE_RATING
         );
         $information[MetadataResource::COURSE_METADATA_AGGREGATE_RATING] = $aggregateRating;
+
         $timeRequired = ArrayUtils::getValue(
             $metadatas,
-            MetadataResource::COURSE_METADATA_TIME_REQUIRED
+            'duration'
         );
         if (!is_null($timeRequired)) {
             $timeRequired = new \DateInterval($timeRequired);
