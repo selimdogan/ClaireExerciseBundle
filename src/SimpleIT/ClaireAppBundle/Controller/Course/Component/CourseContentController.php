@@ -41,7 +41,7 @@ class CourseContentController extends AppController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewToEditAction(Request $request, $courseId)
+    public function viewByStatusAction(Request $request, $courseId)
     {
         $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
         $content = $this->get('simple_it.claire.course.course')->getContentToEdit(
