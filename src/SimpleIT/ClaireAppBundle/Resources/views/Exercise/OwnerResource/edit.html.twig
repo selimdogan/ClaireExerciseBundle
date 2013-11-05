@@ -1,5 +1,6 @@
 <h1>Edition de ressources possédée : {{ ownerResource.type }}</h1>
 
 {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/OwnerResource:editPublicView',{ 'ownerResourceId': ownerResource.id })) }}
+{{ render(controller('SimpleITClaireAppBundle:Exercise/Component/MetadataByOwnerResource:editMetadataView',{ 'ownerResourceId': ownerResource.id })) }}
 
 

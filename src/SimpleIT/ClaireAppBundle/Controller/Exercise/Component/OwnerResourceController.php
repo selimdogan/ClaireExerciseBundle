@@ -93,7 +93,7 @@ class OwnerResourceController extends AppController
             );
 
         if ($request->isXmlHttpRequest()) {
-        return new Response($this->searchListJson($ownerResources));
+            return new Response($this->searchListJson($ownerResources));
 
         }
 
@@ -221,5 +221,29 @@ class OwnerResourceController extends AppController
         }
 
         return new JsonResponse($ownerResource->getPublic());
+    }
+
+    /**
+     * Add the same metadata key/value to several ownerResources
+     *
+     * @param Request $request
+     */
+    public function multipleMetadataCreateAction(Request $request)
+    {
+        $ownerResourceIds = $request->request->get('resourceIds');
+        $metaKey = $request->request->get('metaKey');
+        $metaValue = $request->request->get('metaValue');
+
+        if (empty($ownerResourceIds) || empty($metaValue)) {
+            throw new \Exception('A value and at least one resource must be specified');
+        }
+
+        $this->get('simple_it.claire.exercise.owner_resource')->addMultipleMetadata(
+            $ownerResourceIds,
+            $metaKey,
+            $metaValue
+        );
+
+        return new JsonResponse($metaKey . ':' . $metaValue);
     }
 }

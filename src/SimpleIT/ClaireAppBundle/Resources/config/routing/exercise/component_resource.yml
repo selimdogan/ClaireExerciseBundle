@@ -40,7 +40,6 @@ simple_it_claire_component_exercise_resource_required_resource_edit_view:
     requirements:
         _method: GET
 
-
 simple_it_claire_component_exercise_resource_required_resource_edit:
     pattern: /{resourceId}/required-resources
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/RequiredResourceByResource:RequiredResourceEdit }

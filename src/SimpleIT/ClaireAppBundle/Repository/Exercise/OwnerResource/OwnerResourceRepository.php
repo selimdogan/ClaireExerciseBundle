@@ -1,5 +1,5 @@
 <?php
-namespace SimpleIT\ClaireAppBundle\Repository\Exercise\Resource;
+namespace SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource;
 
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Exercise\OwnerResourceResource;

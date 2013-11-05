@@ -21,3 +21,17 @@ simple_it_claire_component_exercise_owner_resource_public_edit:
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:publicEdit }
     requirements:
         _method: POST
+
+
+simple_it_claire_component_exercise_owner_resource_metadata_edit_view:
+    pattern: /{ownerResourceId}/metadatas
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/MetadataByOwnerResource:editMetadataView }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_exercise_owner_resource_metadata_edit:
+    pattern: /{ownerResourceId}/metadatas
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/MetadataByOwnerResource:MetadataEdit }
+    requirements:
+        _method: POST
+
