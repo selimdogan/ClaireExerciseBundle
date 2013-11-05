@@ -56,7 +56,7 @@ class CourseTocRepository extends AppRepository
      *
      * @return mixed
      */
-    public function findToEdit(
+    public function findByStatus(
         $courseIdentifier,
         array $parameters = array(),
         $format = FormatUtils::JSON

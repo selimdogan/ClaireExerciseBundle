@@ -367,9 +367,9 @@ class CourseService
      *
      * @return CourseResource
      */
-    public function getTocToEdit($courseIdentifier, $status)
+    public function getTocByStatus($courseIdentifier, $status)
     {
-        return $this->courseTocRepository->findToEdit(
+        return $this->courseTocRepository->findByStatus(
             $courseIdentifier,
             array(CourseResource::STATUS => $status)
         );
@@ -416,15 +416,15 @@ class CourseService
      *
      * @return array
      */
-    public function getPaginationToEdit($courseId, $status, $partId = null)
+    public function getPaginationByStatus($courseId, $status, $partId = null)
     {
-        $course = $this->getToEdit($courseId, $status);
-        $toc = $this->getTocToEdit($courseId, $status);
+        $course = $this->getByStatus($courseId, $status);
+        $toc = $this->getTocByStatus($courseId, $status);
 
         if (is_null($partId)) {
             $pagination = $this->buildPagination(
                 $toc,
-                $courseId,
+                $course->getId(),
                 $course->getDisplayLevel()
             );
         } else {

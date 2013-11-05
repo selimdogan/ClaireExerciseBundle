@@ -59,15 +59,13 @@ class MetadataByCourseController extends AbstractMetadataController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewInformationToEditAction(
+    public function viewInformationByStatusAction(
         Request $request,
         CollectionInformation $collectionInformation,
         $courseId
     )
     {
-        $informations = $this->get(
-            'simple_it.claire.course.metadata'
-        )->getInformationsFromCourseToEdit(
+        $informations = $this->get('simple_it.claire.course.metadata')->getInformationsFromCourseToEdit(
             $courseId,
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
             $collectionInformation

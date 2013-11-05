@@ -49,7 +49,7 @@ class TagByCourseController extends AppController
      * @return \Symfony\Component\HttpFoundation\Response
      * @Cache
      */
-    public function listToEditAction(
+    public function listByStatusAction(
         Request $request,
         CollectionInformation $collectionInformation,
         $courseId

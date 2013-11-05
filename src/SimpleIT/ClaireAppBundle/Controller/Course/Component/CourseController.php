@@ -323,7 +323,7 @@ class CourseController extends AppController
      * @return \Symfony\Component\HttpFoundation\Response
      * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
-    public function viewIntroductionToEditAction(Request $request, $courseId)
+    public function viewIntroductionByStatusAction(Request $request, $courseId)
     {
         $introduction = $this->get('simple_it.claire.course.course')->getIntroductionToEdit(
             $courseId,
@@ -403,7 +403,7 @@ class CourseController extends AppController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewTocToEditAction(
+    public function viewTocByStatusAction(
         Request $request,
         $courseId,
         $categoryIdentifier
@@ -414,7 +414,7 @@ class CourseController extends AppController
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
         );
 
-        $toc = $this->get('simple_it.claire.course.course')->getTocToEdit(
+        $toc = $this->get('simple_it.claire.course.course')->getTocByStatus(
             $courseId,
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
         );
@@ -452,7 +452,7 @@ class CourseController extends AppController
         $categoryId
     )
     {
-        $toc = $this->get('simple_it.claire.course.course')->getTocToEdit(
+        $toc = $this->get('simple_it.claire.course.course')->getTocByStatus(
             $courseId,
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
         );
@@ -553,7 +553,7 @@ class CourseController extends AppController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewTimelineToEditAction(
+    public function viewTimelineByStatusAction(
         Request $request,
         $courseId,
         $partId = null
@@ -570,7 +570,7 @@ class CourseController extends AppController
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
         );
 
-        $toc = $this->get('simple_it.claire.course.course')->getTocToEdit(
+        $toc = $this->get('simple_it.claire.course.course')->getTocByStatus(
             $courseId,
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
         );
@@ -673,7 +673,7 @@ class CourseController extends AppController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewPaginationToEditAction(
+    public function viewPaginationByStatusAction(
         Request $request,
         $courseId,
         $categoryIdentifier,
@@ -682,7 +682,7 @@ class CourseController extends AppController
     {
         $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
         $course = $this->get('simple_it.claire.course.course')->getByStatus($courseId, $status);
-        $pagination = $this->get('simple_it.claire.course.course')->getPaginationToEdit(
+        $pagination = $this->get('simple_it.claire.course.course')->getPaginationByStatus(
             $courseId,
             $status,
             $partId
@@ -751,7 +751,7 @@ class CourseController extends AppController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewPaginationEditAction(
+    public function viewPaginationToEditAction(
         Request $request,
         $courseId,
         $categoryIdentifier,
@@ -759,8 +759,8 @@ class CourseController extends AppController
     )
     {
         $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
-        $course = $this->get('simple_it.claire.course.course')->getToEdit($courseId, $status);
-        $pagination = $this->get('simple_it.claire.course.course')->getPaginationToEdit(
+        $course = $this->get('simple_it.claire.course.course')->getByStatus($courseId, $status);
+        $pagination = $this->get('simple_it.claire.course.course')->getPaginationByStatus(
             $courseId,
             $status,
             $partId
@@ -779,17 +779,17 @@ class CourseController extends AppController
                         'status'             => $course->getStatus()
                     )
                 );
+
+            } else {
+                $previousUrl = $this->generateUrl(
+                    'simple_it_claire_course_part_edit',
+                    array(
+                        'courseId' => $course->getId(),
+                        'partId'   => $previous->getId(),
+                        'status'   => $course->getStatus()
+                    )
+                );
             }
-        } else {
-            $previousUrl = $this->generateUrl(
-                'simple_it_claire_course_part_edit',
-                array(
-                    'categoryIdentifier' => $categoryIdentifier,
-                    'courseIdentifier'   => $course->getId(),
-                    'partIdentifier'     => $previous->getId(),
-                    'status'             => $course->getStatus()
-                )
-            );
         }
 
         $nextUrl = null;
@@ -799,10 +799,9 @@ class CourseController extends AppController
             $nextUrl = $this->generateUrl(
                 'simple_it_claire_course_part_edit',
                 array(
-                    'categoryIdentifier' => $categoryIdentifier,
-                    'courseId'           => $course->getId(),
-                    'partId'             => $next->getId(),
-                    'status'             => $course->getStatus()
+                    'courseId' => $course->getId(),
+                    'partId'   => $next->getId(),
+                    'status'   => $course->getStatus()
                 )
             );
         }
@@ -833,7 +832,7 @@ class CourseController extends AppController
         $collectionInformation = new CollectionInformation();
         $collectionInformation->addFilter(CourseResource::STATUS, $status);
 
-        $course = $this->get('simple_it.claire.course.course')->getToEdit(
+        $course = $this->get('simple_it.claire.course.course')->getByStatus(
             $courseId,
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
         );
