@@ -148,7 +148,7 @@
         <!--METADATA-->
         <service id="simple_it.claire.course.repository.metadata_by_course" class="%simple_it.claire.course.repository.metadata_by_course.class%">
             <call method="setClient">
-                <argument type="service" id="simple_it.claire.http_client"/>
+                <argument type="service" id="simple_it.claire.http_client.authenticated"/>
             </call>
             <call method="setSerializer">
                 <argument type="service" id="simple_it.claire.serializer"/>
@@ -157,7 +157,7 @@
 
         <service id="simple_it.claire.course.repository.metadata_by_part" class="%simple_it.claire.course.repository.metadata_by_part.class%">
             <call method="setClient">
-                <argument type="service" id="simple_it.claire.http_client"/>
+                <argument type="service" id="simple_it.claire.http_client.authenticated"/>
             </call>
             <call method="setSerializer">
                 <argument type="service" id="simple_it.claire.serializer"/>
