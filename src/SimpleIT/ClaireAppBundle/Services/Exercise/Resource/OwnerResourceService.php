@@ -15,6 +15,11 @@ use SimpleIT\Utils\Collection\CollectionInformation;
 class OwnerResourceService
 {
     /**
+     * @const MISC_METADATA_KEY = "_misc"
+     */
+    const MISC_METADATA_KEY = "_misc";
+
+    /**
      * @var  OwnerResourceRepository
      */
     private $ownerResourceRepository;
@@ -38,25 +43,38 @@ class OwnerResourceService
      */
     public function getAll(array $metadataArray)
     {
-        if (!empty ($metadataArray))
-        {
-        $collectionInformation = new CollectionInformation();
 
-        $mdFilter = '';
-        foreach ($metadataArray as $key => $value) {
-            if ($mdFilter !== '') {
-                $mdFilter .= ',';
+        if (!empty ($metadataArray)) {
+            $collectionInformation = new CollectionInformation();
+
+            $mdFilter = '';
+            foreach ($metadataArray as $key => $value) {
+                if ($mdFilter !== '') {
+                    $mdFilter .= ',';
+                }
+                $mdFilter .= $key . ':' . $value;
             }
-            $mdFilter .= $key . ':' . $value;
-        }
 
-        $collectionInformation->addFilter('metadata', $mdFilter);
-        }
-        else {
+            $collectionInformation->addFilter('metadata', $mdFilter);
+        } else {
             $collectionInformation = null;
         }
+        $paginatedCollection = $this->ownerResourceRepository->findAll($collectionInformation);
 
-        return $this->ownerResourceRepository->findAll($collectionInformation);
+        foreach ($paginatedCollection as &$ownerResource) {
+            /** @var OwnerResourceResource $ownerResource */
+            $metadata = array();
+            foreach ($ownerResource->getMetadata() as $mkey => $value) {
+                if ($mkey === self::MISC_METADATA_KEY) {
+                    $metadata[$mkey] = explode(';', $value);
+                } else {
+                    $metadata[$mkey] = $value;
+                }
+            }
+            $ownerResource->setMetadata($metadata);
+        }
+
+        return $paginatedCollection;
     }
 
     /**

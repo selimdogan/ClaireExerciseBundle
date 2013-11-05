@@ -25,11 +25,24 @@
                 {% endif %}
                 <li>
                     Metadonnées :
-                    {% for key, value in ownerResource.metadata %}
-                        <ul>
-                            {{ key }} : {{ value }}
-                        </ul>
-                    {% endfor %}
+                    <ul>
+                        {% for key, value in ownerResource.metadata %}
+                            <li>
+                                {% if key == "_misc" %}
+                                    Divers :
+                                    <ul>
+                                        {% for miscVal in value %}
+                                            <li>
+                                                {{ miscVal }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    {{ key }} : {{ value }}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </li>
             </ul>
         </li>

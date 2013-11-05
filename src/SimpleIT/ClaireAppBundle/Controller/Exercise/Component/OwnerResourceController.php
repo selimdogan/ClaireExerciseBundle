@@ -56,9 +56,10 @@ class OwnerResourceController extends AppController
         $paginationUrl
     )
     {
+        $metadataArray = $this->metadataToArray($collectionInformation);
         $ownerResources = $this->get('simple_it.claire.exercise.owner_resource')->getAll
             (
-                $collectionInformation
+                $metadataArray
             );
 
         return $this->render(
@@ -85,13 +86,15 @@ class OwnerResourceController extends AppController
     )
     {
         $metadataArray = $this->metadataToArray($collectionInformation);
+
         $ownerResources = $this->get('simple_it.claire.exercise.owner_resource')->getAll
             (
                 $metadataArray
             );
 
         if ($request->isXmlHttpRequest()) {
-            return new Response($this->searchListJson($ownerResources));
+        return new Response($this->searchListJson($ownerResources));
+
         }
 
         return $this->render(
@@ -139,17 +142,17 @@ class OwnerResourceController extends AppController
         foreach ($ownerResources as $or) {
             /** @var OwnerResourceResource $or */
             switch ($or->getType()) {
-                case ResourceResource::MULTIPLE_CHOICE_QUESTION_CLASS:
+                case ExerciseResource\CommonResource::MULTIPLE_CHOICE_QUESTION:
                     /** @var ExerciseResource\MultipleChoiceQuestionResource $mcQuestion */
                     $mcQuestion = $or->getContent();
                     $content = $mcQuestion->getQuestion();
                     break;
-                case ResourceResource::PICTURE_CLASS:
+                case ExerciseResource\CommonResource::PICTURE:
                     /** @var ExerciseResource\PictureResource $picture */
                     $picture = $or->getContent();
                     $content = $picture->getSource();
                     break;
-                case ResourceResource::SEQUENCE_CLASS:
+                case ExerciseResource\CommonResource::SEQUENCE:
                     /** @var ExerciseResource\SequenceResource $sequence */
                     $sequence = $or->getContent();
                     $content = $sequence->getSequenceType();
