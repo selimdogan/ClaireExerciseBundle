@@ -111,14 +111,14 @@ class OwnerResourceService
     /**
      * Get an owner resource
      *
-     * @param int | string $courseIdentifier Course id | slug
-     * @param array        $parameters       Parameters
+     * @param int | string $ownerResourceId
+     * @param array        $parameters
      *
      * @return OwnerResourceResource
      */
-    public function get($courseIdentifier, array $parameters = array())
+    public function get($ownerResourceId, array $parameters = array())
     {
-        return $this->ownerResourceRepository->find($courseIdentifier, $parameters);
+        return $this->ownerResourceRepository->find($ownerResourceId, $parameters);
     }
 
     /**
@@ -155,6 +155,39 @@ class OwnerResourceService
         }
 
         return $metadata;
+    }
+
+    /**
+     * Add a key to several values (creates new key/values) and remove the value from misc if
+     * existing
+     *
+     * @param $metaKey
+     * @param $ownerResourceIds
+     * @param $values
+     *
+     * @throws \Exception
+     */
+    public function addMultipleKeyMetadata($metaKey, $ownerResourceIds, $values)
+    {
+        foreach ($ownerResourceIds as $key => $id) {
+            $orMd = $this->get($id)->getMetadata();
+            if (isset($orMd['_misc'])) {
+                $misc = explode(';', $orMd['_misc']);
+                if (($delKey = array_search($values[$key], $misc)) !== false) {
+                    unset($misc[$delKey]);
+                }
+                $orMd['_misc'] = implode(';', $misc);
+            }
+
+            if (isset($orMd[$metaKey])) {
+                throw new \Exception ('impossible to add this key to resource ' . $id .
+                'because metadata key already in use : ' . $metaKey . ':' . $orMd[$metaKey]);
+            }
+
+            $orMd[$metaKey] = $values[$key];
+
+            $this->metadataByOwnerResourceRepository->update($id, new ArrayCollection($orMd));
+        }
     }
 
     /**

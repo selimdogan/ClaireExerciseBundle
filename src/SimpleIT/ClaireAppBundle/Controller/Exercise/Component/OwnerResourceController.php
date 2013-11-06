@@ -264,7 +264,7 @@ class OwnerResourceController extends AppController
     public function createMultipleMetadataViewAction()
     {
         return $this->render(
-            'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:editMultipleOwnerResourcesMetadata.html.twig'
+            'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:createMultipleOwnerResourcesMetadata.html.twig'
         );
     }
 
@@ -293,6 +293,45 @@ class OwnerResourceController extends AppController
         );
 
         return new JsonResponse($metaKey . ':' . $metaValue);
+    }
+
+    /**
+     * Add the same metadata key to several ownerResources values (GET)
+     *
+     * @return Response
+     */
+    public function createMultipleKeyMetadataViewAction()
+    {
+        return $this->render(
+            'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:createMultipleOwnerResourcesKeyMetadata.html.twig'
+        );
+    }
+
+    /**
+     * Add the same metadata key to several ownerResources values  (POST)
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function multipleKeyMetadataCreateAction(Request $request)
+    {
+        $ownerResourceIds = $request->request->get('resourceIds');
+        $values = $request->request->get('values');
+        $metaKey = $request->request->get('metaKey');
+
+        if (empty($ownerResourceIds) || empty($metaKey)) {
+            throw new \Exception('A key and at least one resource must be specified');
+        }
+
+        $this->get('simple_it.claire.exercise.owner_resource')->addMultipleKeyMetadata(
+            $metaKey,
+            $ownerResourceIds,
+            $values
+        );
+
+        return new JsonResponse($metaKey);
     }
 
 }

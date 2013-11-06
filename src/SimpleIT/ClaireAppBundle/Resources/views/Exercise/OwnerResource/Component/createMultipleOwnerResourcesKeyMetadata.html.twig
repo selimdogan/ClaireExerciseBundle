@@ -1,0 +1,66 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"></script>
+
+<h2>Outil d'ajout multiple de clés à des métadonnées ou valeurs</h2>
+
+<form action="{{ path('simple_it_claire_component_exercise_multiple_owner_resource_key_metadata_edit') }}" method="post">
+    <table>
+        <tr>
+            <td>
+                <input type="text" size="20" name="metaKey"/>
+            </td>
+        </tr>
+    </table>
+
+    <input type="button" onclick="addResourceId()" value="Ajouter"/>
+
+    <table id="ownerResourceList">
+        <tr>
+            <td>
+                <input type="text" size="10" name="resourceIds[0]"/>
+            </td>
+            <td>
+                <input type="search" size="30" name="values[0]"/>
+            </td>
+            <td>
+                <button type="button" class="js-remove">-</button>
+            </td>
+        </tr>
+    </table>
+
+    <input type="submit"/>
+</form>
+
+<script>
+    function addResourceId() {
+        var
+                $table = $('#ownerResourceList'),
+                $lines = $('tr', $table),
+                $last = $lines.last(),
+                $inputText = $last.find('input[type=text]'),
+                $clone = $last.clone(),
+                prevId = ($inputText.length > 0) ? ($inputText.attr('name').match(/\[([0-9]+)\]/))[1] : 0;
+
+
+        prevId = parseInt(prevId, 0);
+
+        // resourceId
+        $clone
+                .find('input[type=text]')
+                .attr('name', 'resourceIds[' + (prevId + 1) + ']')
+                .val('');
+
+        // value
+        $clone
+                .find('input[type=search]')
+                .attr('name', 'values[' + (prevId + 1) + ']')
+                .val('');
+
+        $clone.appendTo($table);
+    }
+
+    $(function () {
+        $('table').on('click', '.js-remove', function (event) {
+            $(event.target).closest('tr').remove();
+        })
+    })
+</script>
