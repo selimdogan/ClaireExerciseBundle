@@ -55,15 +55,19 @@ class OwnerResourceService
      * Get all owner resources
      *
      * @param array $metadataArray
+     * @param array $miscArray
      *
      * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
-    public function getAll(array $metadataArray)
+    public function getAll(array $metadataArray, array $miscArray)
     {
 
-        if (!empty ($metadataArray)) {
+        if (empty ($metadataArray) && empty($miscArray)) {
+            $collectionInformation = null;
+        } else {
             $collectionInformation = new CollectionInformation();
 
+            // metadata
             $mdFilter = '';
             foreach ($metadataArray as $key => $value) {
                 if ($mdFilter !== '') {
@@ -73,9 +77,19 @@ class OwnerResourceService
             }
 
             $collectionInformation->addFilter('metadata', $mdFilter);
-        } else {
-            $collectionInformation = null;
+
+            // keywords
+            $keywordFilter = '';
+            foreach ($miscArray as $value) {
+                if ($keywordFilter !== '') {
+                    $keywordFilter .= ',';
+                }
+                $keywordFilter .= $value;
+            }
+
+            $collectionInformation->addFilter('keywords', $keywordFilter);
         }
+
         $paginatedCollection = $this->ownerResourceRepository->findAll($collectionInformation);
 
         foreach ($paginatedCollection as &$ownerResource) {
@@ -123,9 +137,24 @@ class OwnerResourceService
         );
     }
 
+    /**
+     * Add a key/value metadata to a set of owner resources
+     *
+     * @param $ownerResourceIds
+     * @param $metaKey
+     * @param $metaValue
+     *
+     * @return ArrayCollection
+     */
     public function addMultipleMetadata($ownerResourceIds, $metaKey, $metaValue)
     {
+        $metadata = new ArrayCollection(array($metaKey => $metaValue));
 
+        foreach ($ownerResourceIds as $id) {
+            $this->metadataByOwnerResourceRepository->insert($id, $metadata);
+        }
+
+        return $metadata;
     }
 
     /**

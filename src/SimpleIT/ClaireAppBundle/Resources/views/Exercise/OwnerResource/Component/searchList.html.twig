@@ -1,9 +1,10 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"></script>
 
+<h2>Recherche</h2>
 <form action="{{ path('simple_it_claire_course_component_owner_resource_search_list') }}" method="GET">
 
-    <input type="button" onclick="addProposition()" value="Ajouter"/>
-
+<h3>Par clé/valeurs</h3>
+    <input type="button" onclick="addFilter()" value="Ajouter"/>
     <table id="filters">
         {% set _cptFilters = 0 %}
         {% if metadataArray |length > 0 %}
@@ -48,13 +49,47 @@
         {% endif %}
     </table>
 
+<h3>Par mot-clé</h3>
+    <input type="button" onclick="addKeyWords()" value="Ajouter"/>
+    <table id="keywords">
+        {% set _cptKW = 0 %}
+        {% if miscArray |length > 0 %}
+            {% for value in miscArray %}
+                <tr>
+                    <td>
+                        Valeur :
+                    </td>
+                    <td>
+                        <input type="search" name="misc{{ _cptKW }}" value="{{ value }}"/>
+                    </td>
+                    <td>
+                        <button type="button" class="js-remove">-</button>
+                    </td>
+                </tr>
+                {% set _cptKW = _cptKW + 1 %}
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td>
+                    Valeur :
+                </td>
+                <td>
+                    <input type="search" name="misc{{ _cptKW }}"/>
+                </td>
+                <td>
+                    <button type="button" class="js-remove">-</button>
+                </td>
+            </tr>
+        {% endif %}
+    </table>
+
     <input type="submit">
 </form>
-{% include 'SimpleITClaireAppBundle:Exercise/OwnerResource:list.html.twig'
+{% include 'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:list.html.twig'
 with{'ownerResources':ownerResources,'collectionInformation': collectionInformation} %}
 
 <script>
-    function addProposition() {
+    function addFilter() {
         var $table = $('#filters'),
                 $lines = $('tr', $table),
                 $last = $lines.last(),
@@ -75,6 +110,26 @@ with{'ownerResources':ownerResources,'collectionInformation': collectionInformat
         $clone
                 .find('input[type=search]')
                 .attr('name', 'metaValue' + (prevId + 1))
+                .val('');
+
+        $clone.appendTo($table);
+    }
+
+    function addKeyWords() {
+        var $table = $('#keywords'),
+                $lines = $('tr', $table),
+                $last = $lines.last(),
+                $inputText = $last.find('input[type=search]'),
+                $clone = $last.clone(),
+                prevId = ($inputText.length > 0) ? ($inputText.attr('name').match(/([0-9]+)/))[1] : 0;
+
+
+        prevId = parseInt(prevId, 0);
+
+        // value
+        $clone
+                .find('input[type=search]')
+                .attr('name', 'misc' + (prevId + 1))
                 .val('');
 
         $clone.appendTo($table);

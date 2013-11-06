@@ -1,3 +1,9 @@
+simple_it_claire_course_component_owner_resource_browser:
+    pattern: /browser
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:browserView }
+    requirements:
+        _method: GET
+
 simple_it_claire_course_component_owner_resource_list:
     pattern: /
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:list }
@@ -22,7 +28,6 @@ simple_it_claire_component_exercise_owner_resource_public_edit:
     requirements:
         _method: POST
 
-
 simple_it_claire_component_exercise_owner_resource_metadata_edit_view:
     pattern: /{ownerResourceId}/metadatas
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/MetadataByOwnerResource:editMetadataView }
@@ -32,6 +37,19 @@ simple_it_claire_component_exercise_owner_resource_metadata_edit_view:
 simple_it_claire_component_exercise_owner_resource_metadata_edit:
     pattern: /{ownerResourceId}/metadatas
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/MetadataByOwnerResource:MetadataEdit }
+    requirements:
+        _method: POST
+
+
+simple_it_claire_component_exercise_multiple_owner_resource_metadata_edit_view:
+    pattern: /multiple-metadatas-create
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:createMultipleMetadataView }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_exercise_multiple_owner_resource_metadata_edit:
+    pattern: /multiple-metadatas-create
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:multipleMetadataCreate }
     requirements:
         _method: POST
 

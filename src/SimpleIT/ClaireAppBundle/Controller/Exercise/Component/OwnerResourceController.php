@@ -2,12 +2,10 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Exercise\Component;
 
-use SimpleIT\ApiResourcesBundle\Exercise\Exercise\Common\CommonExercise;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource;
 use SimpleIT\ApiResourcesBundle\Exercise\OwnerResourceResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ResourceResource;
 use SimpleIT\AppBundle\Controller\AppController;
-use SimpleIT\AppBundle\Model\AppResponse;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\ClaireAppBundle\Form\Type\Exercise\OwnerResourcePublicType;
 use SimpleIT\Utils\Collection\CollectionInformation;
@@ -22,6 +20,18 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class OwnerResourceController extends AppController
 {
+    /**
+     * Browser
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function browserViewAction()
+    {
+        return $this->render(
+            'SimpleITClaireAppBundle:Exercise/OwnerResource:browser.html.twig'
+        );
+    }
+
     /**
      * Edit an owner resource
      *
@@ -47,27 +57,25 @@ class OwnerResourceController extends AppController
      * List ownerResources
      *
      * @param CollectionInformation $collectionInformation Collection Information
-     * @param string                $paginationUrl         Pagination url
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listAction(
-        CollectionInformation $collectionInformation,
-        $paginationUrl
-    )
+    public function listAction(CollectionInformation $collectionInformation)
     {
         $metadataArray = $this->metadataToArray($collectionInformation);
+        $miscArray = $this->miscToArray($collectionInformation);
+
         $ownerResources = $this->get('simple_it.claire.exercise.owner_resource')->getAll
             (
-                $metadataArray
+                $metadataArray,
+                $miscArray
             );
 
         return $this->render(
-            'SimpleITClaireAppBundle:Exercise/OwnerResource:searchList.html.twig',
+            'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:list.html.twig',
             array(
                 'ownerResources'        => $ownerResources,
-                'collectionInformation' => $collectionInformation,
-                'paginationUrl'         => $paginationUrl
+                'collectionInformation' => $collectionInformation
             )
         );
     }
@@ -86,10 +94,12 @@ class OwnerResourceController extends AppController
     )
     {
         $metadataArray = $this->metadataToArray($collectionInformation);
+        $miscArray = $this->miscToArray($collectionInformation);
 
         $ownerResources = $this->get('simple_it.claire.exercise.owner_resource')->getAll
             (
-                $metadataArray
+                $metadataArray,
+                $miscArray
             );
 
         if ($request->isXmlHttpRequest()) {
@@ -98,11 +108,12 @@ class OwnerResourceController extends AppController
         }
 
         return $this->render(
-            'SimpleITClaireAppBundle:Exercise/OwnerResource:searchList.html.twig',
+            'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:searchList.html.twig',
             array(
                 'ownerResources'        => $ownerResources,
                 'collectionInformation' => $collectionInformation,
-                'metadataArray'         => $metadataArray
+                'metadataArray'         => $metadataArray,
+                'miscArray'             => $miscArray,
             )
         );
     }
@@ -127,6 +138,28 @@ class OwnerResourceController extends AppController
         }
 
         return $metadata;
+    }
+
+    /**
+     * Create an array of keywords from collection information
+     *
+     * @param CollectionInformation $collectionInformation
+     *
+     * @return array
+     */
+    private function miscToArray(CollectionInformation $collectionInformation)
+    {
+        $filters = $collectionInformation->getFilters();
+
+        $misc = array();
+        foreach ($filters as $key => $filter) {
+            $str = str_split($key, strlen('misc'));
+            if ($str[0] == 'misc' && is_numeric($str[1])) {
+                $misc[] = $filter;
+            }
+        }
+
+        return $misc;
     }
 
     /**
@@ -184,7 +217,7 @@ class OwnerResourceController extends AppController
      *
      * @param int $ownerResourceId Resource id
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function editPublicViewAction($ownerResourceId)
     {
@@ -224,9 +257,24 @@ class OwnerResourceController extends AppController
     }
 
     /**
-     * Add the same metadata key/value to several ownerResources
+     * Add the same metadata key/value to several ownerResources (GET)
+     *
+     * @return Response
+     */
+    public function createMultipleMetadataViewAction()
+    {
+        return $this->render(
+            'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:editMultipleOwnerResourcesMetadata.html.twig'
+        );
+    }
+
+    /**
+     * Add the same metadata key/value to several ownerResources (POST)
      *
      * @param Request $request
+     *
+     * @return JsonResponse
+     * @throws \Exception
      */
     public function multipleMetadataCreateAction(Request $request)
     {
@@ -246,4 +294,5 @@ class OwnerResourceController extends AppController
 
         return new JsonResponse($metaKey . ':' . $metaValue);
     }
+
 }
