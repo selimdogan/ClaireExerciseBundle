@@ -3,7 +3,6 @@
 namespace SimpleIT\ClaireAppBundle\Services\Exercise\Resource;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource\CommonResource;
 use
     SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource\MultipleChoice\MultipleChoicePropositionResource;
@@ -152,11 +151,10 @@ class ResourceService
      * Add a resource
      *
      * @param ResourceResource $resource
-     * @param int              $authorId
      *
      * @return ResourceResource
      */
-    public function addFromType(ResourceResource $resource, $authorId)
+    public function addFromType(ResourceResource $resource)
     {
         $content = null;
         switch ($resource->getType()) {

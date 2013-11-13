@@ -54,10 +54,7 @@ class ResourceController extends AppController
         $form = $this->createForm(new ResourceTypeType(), $resource);
         $form->bind($request);
         if ($this->get('validator')->validate($form, 'appCreate')) {
-            $resource = $this->get('simple_it.claire.exercise.resource')->addFromType(
-                $resource,
-                $authorId
-            );
+            $resource = $this->get('simple_it.claire.exercise.resource')->addFromType($resource);
         }
 
         return $this->redirect(
