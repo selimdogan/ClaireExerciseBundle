@@ -18,6 +18,7 @@
 
         <parameter key="simple_it.claire.exercise.owner_resource.class">SimpleIT\ClaireAppBundle\Services\Exercise\Resource\OwnerResourceService</parameter>
         <parameter key="simple_it.claire.exercise.repository.owner_resource.class">SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\OwnerResourceRepository</parameter>
+        <parameter key="simple_it.claire.exercise.repository.owner_resource_by_owner.class">SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\OwnerResourceByOwnerRepository</parameter>
         <parameter key="simple_it.claire.exercise.repository.metadata_by_owner_resource.class">SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\MetadataByOwnerResourceRepository</parameter>
 
         <parameter key="simple_it.claire.exercise.resource.class">SimpleIT\ClaireAppBundle\Services\Exercise\Resource\ResourceService</parameter>
@@ -77,6 +78,14 @@
             </call>
         </service>
         <service id="simple_it.claire.exercise.repository.owner_resource" class="%simple_it.claire.exercise.repository.owner_resource.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
+        <service id="simple_it.claire.exercise.repository.owner_resource_by_owner" class="%simple_it.claire.exercise.repository.owner_resource_by_owner.class%">
             <call method="setClient">
                 <argument type="service" id="simple_it.claire.http_client"/>
             </call>
@@ -151,6 +160,9 @@
             </call>
             <call method="setMetadataByOwnerResourceRepository">
                 <argument type="service" id="simple_it.claire.exercise.repository.metadata_by_owner_resource"/>
+            </call>
+            <call method="setOwnerResourceByOwnerRepository">
+                <argument type="service" id="simple_it.claire.exercise.repository.owner_resource_by_owner"/>
             </call>
         </service>
         <service id="simple_it.claire.exercise.resource" class="%simple_it.claire.exercise.resource.class%">

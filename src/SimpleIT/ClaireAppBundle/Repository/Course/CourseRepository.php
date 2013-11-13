@@ -62,7 +62,7 @@ class CourseRepository extends AppRepository
      *
      * @return CourseResource
      */
-    public function findToEdit($courseIdentifier, array $parameters = array())
+    public function findByStatus($courseIdentifier, array $parameters = array())
     {
         return $this->findResource(
             array('courseIdentifier' => $courseIdentifier),

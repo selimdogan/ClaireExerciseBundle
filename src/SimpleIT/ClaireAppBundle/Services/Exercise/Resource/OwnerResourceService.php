@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Exercise\OwnerResourceResource;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\MetadataByOwnerResourceRepository;
+use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\OwnerResourceByOwnerRepository;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\OwnerResourceRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 
@@ -32,6 +33,11 @@ class OwnerResourceService
     private $metadataByOwnerResourceRepository;
 
     /**
+     * @var OwnerResourceByOwnerRepository
+     */
+    private $ownerResourceByOwnerRepository;
+
+    /**
      * Set OwnerResourceRepository
      *
      * @param OwnerResourceRepository $OwnerResourceRepository
@@ -39,6 +45,16 @@ class OwnerResourceService
     public function setOwnerResourceRepository($OwnerResourceRepository)
     {
         $this->ownerResourceRepository = $OwnerResourceRepository;
+    }
+
+    /**
+     * Set ownerResourceByOwnerRepository
+     *
+     * @param \SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\OwnerResourceByOwnerRepository $ownerResourceByOwnerRepository
+     */
+    public function setOwnerResourceByOwnerRepository($ownerResourceByOwnerRepository)
+    {
+        $this->ownerResourceByOwnerRepository = $ownerResourceByOwnerRepository;
     }
 
     /**
@@ -52,21 +68,30 @@ class OwnerResourceService
     }
 
     /**
-     * Get all owner resources
+     * Get all owner resources and if a user is specified, show only the public resource except
+     * user's ones
      *
      * @param array $metadataArray
      * @param array $miscArray
+     * @param null  $userId
+     * @param bool  $personalResource
      *
      * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
-    public function getAll(array $metadataArray, array $miscArray)
+    public function getAll(
+        array $metadataArray,
+        array $miscArray,
+        $userId = null,
+        $personalResource = true
+    )
     {
 
-        if (empty ($metadataArray) && empty($miscArray)) {
+        if (empty ($metadataArray) && empty($miscArray) && $userId === null) {
             $collectionInformation = null;
         } else {
             $collectionInformation = new CollectionInformation();
-
+        }
+        if (!empty ($metadataArray)) {
             // metadata
             $mdFilter = '';
             foreach ($metadataArray as $key => $value) {
@@ -77,7 +102,8 @@ class OwnerResourceService
             }
 
             $collectionInformation->addFilter('metadata', $mdFilter);
-
+        }
+        if (!empty ($miscArray)) {
             // keywords
             $keywordFilter = '';
             foreach ($miscArray as $value) {
@@ -90,7 +116,18 @@ class OwnerResourceService
             $collectionInformation->addFilter('keywords', $keywordFilter);
         }
 
-        $paginatedCollection = $this->ownerResourceRepository->findAll($collectionInformation);
+        if (!is_null($userId) && $personalResource === true) {
+            $paginatedCollection = $this->ownerResourceByOwnerRepository->findAll
+                (
+                    $userId,
+                    $collectionInformation
+                );
+        } else {
+            if (!is_null($userId) && $personalResource === false) {
+                $collectionInformation->addFilter('public-except-user', $userId);
+            }
+            $paginatedCollection = $this->ownerResourceRepository->findAll($collectionInformation);
+        }
 
         foreach ($paginatedCollection as &$ownerResource) {
             /** @var OwnerResourceResource $ownerResource */

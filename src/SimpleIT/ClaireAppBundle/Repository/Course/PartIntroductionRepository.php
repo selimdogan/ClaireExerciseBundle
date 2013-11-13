@@ -48,4 +48,28 @@ class PartIntroductionRepository extends AppRepository
             $format
         );
     }
+
+    /**
+     * Find a part introduction
+     *
+     * @param string $courseIdentifier Course id | slug
+     * @param string $partIdentifier   Part id | slug
+     * @param array  $parameters       Parameters
+     * @param string $format           Format
+     *
+     * @return mixed
+     */
+    public function findByStatus(
+        $courseIdentifier,
+        $partIdentifier,
+        array $parameters = array(),
+        $format = FormatUtils::HTML
+    )
+    {
+        return $this->findResource(
+            array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier),
+            $parameters,
+            $format
+        );
+    }
 }

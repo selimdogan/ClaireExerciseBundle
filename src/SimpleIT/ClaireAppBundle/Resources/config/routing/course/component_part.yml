@@ -4,12 +4,6 @@ simple_it_claire_component_part_edit:
     requirements:
             _method: GET|POST
 
-simple_it_claire_component_part_content_edit:
-    pattern: /{partIdentifier}/content
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Part:editContent }
-    requirements:
-            _method: GET|POST
-
 simple_it_claire_component_part_metadata:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/component_part_metadata.yml"
     prefix:   /{partIdentifier}/metadatas/

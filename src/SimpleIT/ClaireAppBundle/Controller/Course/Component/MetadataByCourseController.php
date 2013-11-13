@@ -59,7 +59,7 @@ class MetadataByCourseController extends AbstractMetadataController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewInformationToEditAction(
+    public function viewInformationByStatusAction(
         Request $request,
         CollectionInformation $collectionInformation,
         $courseId
@@ -120,7 +120,7 @@ class MetadataByCourseController extends AbstractMetadataController
         $courseId
     )
     {
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseToEdit(
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseByStatus(
             $courseId,
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
             $collectionInformation
@@ -218,7 +218,7 @@ class MetadataByCourseController extends AbstractMetadataController
         $courseId
     )
     {
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseToEdit(
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseByStatus(
             $courseId,
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
             $collectionInformation
@@ -271,7 +271,7 @@ class MetadataByCourseController extends AbstractMetadataController
         $courseId
     )
     {
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseToEdit(
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseByStatus(
             $courseId,
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
             $collectionInformation
@@ -355,7 +355,7 @@ class MetadataByCourseController extends AbstractMetadataController
     {
         $collectionInformation = $this->setStatusToDraftIfNotDefined($collectionInformation);
 
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseToEdit(
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseByStatus(
             $courseId,
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
             $collectionInformation
@@ -461,6 +461,34 @@ class MetadataByCourseController extends AbstractMetadataController
     {
         $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
             $courseIdentifier
+        );
+        $license = ArrayUtils::getValue(
+            $metadatas,
+            MetadataResource::COURSE_METADATA_LICENSE
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Metadata/Component:viewLicense.html.twig',
+            array(
+                MetadataResource::COURSE_METADATA_LICENSE => $license
+            )
+        );
+    }
+
+    /**
+     * View a course license
+     *
+     * @param Request      $request          Request
+     * @param int | string $courseIdentifier Course id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewLicenseByStatusAction(Request $request, $courseIdentifier)
+    {
+        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseByStatus(
+            $courseIdentifier,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
+            new CollectionInformation
         );
         $license = ArrayUtils::getValue(
             $metadatas,

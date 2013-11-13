@@ -14,7 +14,7 @@ simple_it_claire_course_component_course_search_list:
     requirements:
         _method: GET
 
-simple_it_claire_component_course_content_edit:
+simple_it_claire_component_course_course_content_edit:
     pattern: /{courseId}/content
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/CourseContent:edit }
     requirements:

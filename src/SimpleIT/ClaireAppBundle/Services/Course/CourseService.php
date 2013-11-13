@@ -8,7 +8,9 @@ use SimpleIT\ClaireAppBundle\Repository\Course\CourseContentRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\CourseIntroductionRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\CourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\CourseTocRepository;
+use SimpleIT\ClaireAppBundle\Repository\Course\CourseStatusRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\Utils\Collection\PaginatedCollection;
 
 /**
  * Class CourseService
@@ -42,11 +44,41 @@ class CourseService
      */
     private $courseContentRepository;
 
+    /**
+     * @var CourseStatusRepository
+     */
+    private $courseStatusRepository;
+
     /* ****************** *
      *                    *
      * ***** COURSE ***** *
      *                    *
      * ****************** */
+
+    /**
+     * Get all courses
+     *
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
+     */
+    public function getAll(CollectionInformation $collectionInformation = null)
+    {
+        return $this->courseRepository->findAll($collectionInformation);
+    }
+
+    /**
+     * Get all courses for a courseIdentifier (all status)[status => $course]
+     *
+     * @param int|string $courseIdentifier Course id | slug
+     *
+     * @throws \SimpleIT\CoreBundle\Exception\NonExistingObjectException
+     * @return PaginatedCollection
+     */
+    public function getAllByCourseIdentifier($courseIdentifier)
+    {
+        return $this->courseStatusRepository->findAll($courseIdentifier);
+    }
 
     /**
      * Get a course
@@ -66,14 +98,49 @@ class CourseService
      * @param int    $courseId Course id
      * @param string $status   Status
      *
+     * @deprecated use getByStatus
      * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
      */
     public function getToEdit($courseId, $status)
     {
-        return $this->courseRepository->findToEdit(
+        return $this->courseRepository->findByStatus(
             $courseId,
             array(CourseResource::STATUS => $status)
         );
+    }
+
+    /**
+     * Get a course by status
+     *
+     * @param int    $courseId Course id
+     * @param string $status   Status
+     *
+     * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
+     */
+    public function getByStatus($courseId, $status)
+    {
+        return $this->courseRepository->findByStatus(
+            $courseId,
+            array(CourseResource::STATUS => $status)
+        );
+    }
+
+    /**
+     * Get course id
+     *
+     * @param int|string $courseIdentifier Course id | slug
+     *
+     * @return int
+     */
+    public function getId($courseIdentifier)
+    {
+        $courseId = $courseIdentifier;
+        if (!CourseResource::isCourseId($courseIdentifier)) {
+            $course = $this->get($courseIdentifier);
+            $courseId = $course->getId();
+        }
+
+        return $courseId;
     }
 
     /**
@@ -300,9 +367,9 @@ class CourseService
      *
      * @return CourseResource
      */
-    public function getTocToEdit($courseIdentifier, $status)
+    public function getTocByStatus($courseIdentifier, $status)
     {
-        return $this->courseTocRepository->findToEdit(
+        return $this->courseTocRepository->findByStatus(
             $courseIdentifier,
             array(CourseResource::STATUS => $status)
         );
@@ -349,15 +416,15 @@ class CourseService
      *
      * @return array
      */
-    public function getPaginationToEdit($courseId, $status, $partId = null)
+    public function getPaginationByStatus($courseId, $status, $partId = null)
     {
-        $course = $this->getToEdit($courseId, $status);
-        $toc = $this->getTocToEdit($courseId, $status);
+        $course = $this->getByStatus($courseId, $status);
+        $toc = $this->getTocByStatus($courseId, $status);
 
         if (is_null($partId)) {
             $pagination = $this->buildPagination(
                 $toc,
-                $courseId,
+                $course->getId(),
                 $course->getDisplayLevel()
             );
         } else {
@@ -465,14 +532,12 @@ class CourseService
     }
 
     /**
-     * Get all courses
+     * Set courseStatusRepository
      *
-     * @param CollectionInformation $collectionInformation Collection information
-     *
-     * @return \SimpleIT\Utils\Collection\PaginatedCollection
+     * @param \SimpleIT\ClaireAppBundle\Repository\Course\CourseStatusRepository $courseStatusRepository
      */
-    public function getAll(CollectionInformation $collectionInformation = null)
+    public function setCourseStatusRepository(CourseStatusRepository $courseStatusRepository)
     {
-        return $this->courseRepository->findAll($collectionInformation);
+        $this->courseStatusRepository = $courseStatusRepository;
     }
 }

@@ -48,9 +48,9 @@ class MetadataByCourseRepository extends AppRepository
      *
      * @return array
      */
-    public function findAllToEdit(
+    public function findAllByStatus(
         $courseIdentifier,
-        CollectionInformation $collectionInformation = null
+        CollectionInformation $collectionInformation
     )
     {
         return parent::findAllResources(

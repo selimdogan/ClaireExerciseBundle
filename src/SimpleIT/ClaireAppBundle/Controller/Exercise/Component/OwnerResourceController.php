@@ -96,10 +96,23 @@ class OwnerResourceController extends AppController
         $metadataArray = $this->metadataToArray($collectionInformation);
         $miscArray = $this->miscToArray($collectionInformation);
 
+        // TODO User
+        $userId = 1000001;
+
         $ownerResources = $this->get('simple_it.claire.exercise.owner_resource')->getAll
             (
                 $metadataArray,
-                $miscArray
+                $miscArray,
+                $userId,
+                true
+            );
+
+        $publicOwnerResources = $this->get('simple_it.claire.exercise.owner_resource')->getAll
+            (
+                $metadataArray,
+                $miscArray,
+                $userId,
+                false
             );
 
         if ($request->isXmlHttpRequest()) {
@@ -111,6 +124,7 @@ class OwnerResourceController extends AppController
             'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:searchList.html.twig',
             array(
                 'ownerResources'        => $ownerResources,
+                'publicOwnerResources'  => $publicOwnerResources,
                 'collectionInformation' => $collectionInformation,
                 'metadataArray'         => $metadataArray,
                 'miscArray'             => $miscArray,

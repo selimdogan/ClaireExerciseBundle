@@ -40,6 +40,28 @@ class MetadataByPartController extends AbstractMetadataController
     }
 
     /**
+     * View a collection of informations
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier   Part id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewInformationsByStatusAction(Request $request, $courseIdentifier, $partIdentifier)
+    {
+
+        $informations = $this->get('simple_it.claire.course.metadata')->getInformationsFromPart(
+            $courseIdentifier,
+            $partIdentifier
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Metadata/Component:viewInformations.html.twig',
+            array('informations' => $informations)
+        );
+    }
+
+    /**
      * Show part rate
      *
      * @param integer | string $courseIdentifier Course id | slug

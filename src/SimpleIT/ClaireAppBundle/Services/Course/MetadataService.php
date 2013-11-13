@@ -8,6 +8,7 @@ use SimpleIT\ClaireAppBundle\Repository\Course\MetadataByCourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\MetadataByPartRepository;
 use SimpleIT\Utils\ArrayUtils;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class MetadataService
@@ -74,7 +75,7 @@ class MetadataService
      *
      * @return string
      */
-    public function getAllFromCourseToEdit(
+    public function getAllFromCourseByStatus(
         $courseIdentifier,
         $status,
         CollectionInformation $collectionInformation
@@ -82,7 +83,7 @@ class MetadataService
     {
         $collectionInformation->addFilter(CourseResource::STATUS, $status);
 
-        return $this->metadataByCourseRepository->findAll(
+        return $this->metadataByCourseRepository->findAllByStatus(
             $courseIdentifier,
             $collectionInformation
         );
@@ -118,7 +119,7 @@ class MetadataService
         $collectionInformation
     )
     {
-        $metadatas = $this->getAllFromCourseToEdit(
+        $metadatas = $this->getAllFromCourseByStatus(
             $courseId,
             $status,
             $collectionInformation
@@ -142,14 +143,16 @@ class MetadataService
             MetadataResource::COURSE_METADATA_DIFFICULTY
         );
         $information[MetadataResource::COURSE_METADATA_DIFFICULTY] = $difficulty;
+
         $aggregateRating = ArrayUtils::getValue(
             $metadatas,
             MetadataResource::COURSE_METADATA_AGGREGATE_RATING
         );
         $information[MetadataResource::COURSE_METADATA_AGGREGATE_RATING] = $aggregateRating;
+
         $timeRequired = ArrayUtils::getValue(
             $metadatas,
-            MetadataResource::COURSE_METADATA_TIME_REQUIRED
+            'duration'
         );
         if (!is_null($timeRequired)) {
             $timeRequired = new \DateInterval($timeRequired);
@@ -173,6 +176,27 @@ class MetadataService
     }
 
     /**
+     * Get metadatas from a part
+     *
+     * @param string $courseIdentifier Course id | slug
+     * @param string $partIdentifier   Part id | slug
+     * @param string $status           Status
+     *
+     * @return string
+     */
+    public function getAllFromPartByStatus($courseIdentifier, $partIdentifier, $status)
+    {
+        $collectionInformation = new CollectionInformation();
+        $collectionInformation->addFilter(CourseResource::STATUS, $status);
+
+        return $this->metadataByPartRepository->findAll(
+            $courseIdentifier,
+            $partIdentifier,
+            $collectionInformation
+        );
+    }
+
+    /**
      * Get informations from a course
      *
      * @param int | string $courseIdentifier Course id | slug
@@ -183,18 +207,57 @@ class MetadataService
     public function getInformationsFromPart($courseIdentifier, $partIdentifier)
     {
         $metadatas = $this->getAllFromPart($courseIdentifier, $partIdentifier);
-        $courseMetadatas = null;
+        $courseMetadatas = $this->getAllFromCourse($courseIdentifier);
+
+        return $this->formatMetadatas($metadatas, $courseMetadatas);
+    }
+
+    /**
+     * Get informations from a course
+     *
+     * @param Request      $request          Request
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier   Part id | slug
+     *
+     * @return array
+     */
+    public function getInformationsFromPartByStatus(
+        Request $request,
+        $courseIdentifier,
+        $partIdentifier
+    )
+    {
+        $status = $request->get(
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+        $metadatas = $this->getAllFromPartByStatus($courseIdentifier, $partIdentifier, $status);
+        $courseMetadatas = $this->getAllFromCourseByStatus(
+            $courseIdentifier,
+            $status,
+            new CollectionInformation()
+        );
+
+        return $this->formatMetadatas($metadatas, $courseMetadatas);
+    }
+
+    /**
+     * @param $partMetadatas
+     * @param $courseMetadatas
+     *
+     * @return array
+     */
+    private function formatMetadatas($partMetadatas, $courseMetadatas)
+    {
         $information = array();
 
         /*
          * Difficulty
          */
         $difficulty = ArrayUtils::getValue(
-            $metadatas,
+            $partMetadatas,
             MetadataResource::COURSE_METADATA_DIFFICULTY
         );
         if (is_null($difficulty)) {
-            $courseMetadatas = $this->getAllFromCourse($courseIdentifier);
             $difficulty = ArrayUtils::getValue(
                 $courseMetadatas,
                 MetadataResource::COURSE_METADATA_DIFFICULTY
@@ -206,12 +269,11 @@ class MetadataService
          * Aggregate Rating
          */
         $aggregateRating = ArrayUtils::getValue(
-            $metadatas,
+            $partMetadatas,
             MetadataResource::COURSE_METADATA_AGGREGATE_RATING
         );
         if (is_null($aggregateRating)) {
             if (is_null($courseMetadatas)) {
-                $courseMetadatas = $this->getAllFromCourse($courseIdentifier);
             }
             $aggregateRating = ArrayUtils::getValue(
                 $courseMetadatas,
@@ -224,12 +286,11 @@ class MetadataService
          * Time required
          */
         $timeRequired = ArrayUtils::getValue(
-            $metadatas,
+            $partMetadatas,
             MetadataResource::COURSE_METADATA_TIME_REQUIRED
         );
         if (is_null($timeRequired)) {
             if (is_null($courseMetadatas)) {
-                $courseMetadatas = $this->getAllFromCourse($courseIdentifier);
             }
             $timeRequired = ArrayUtils::getValue(
                 $courseMetadatas,
@@ -350,4 +411,5 @@ class MetadataService
 
         return $metadatasToUpdate;
     }
+
 }
