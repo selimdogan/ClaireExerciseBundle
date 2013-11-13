@@ -32,6 +32,11 @@ class ResourceService
     private $requiredResourceByResourceRepository;
 
     /**
+     * @var OwnerResourceService
+     */
+    private $ownerResourceService;
+
+    /**
      * Set resourceRepository
      *
      * @param \SimpleIT\ClaireAppBundle\Repository\Exercise\Resource\ResourceRepository $resourceRepository
@@ -49,6 +54,16 @@ class ResourceService
     public function setRequiredResourceByResourceRepository($requiredResourceByResourceRepository)
     {
         $this->requiredResourceByResourceRepository = $requiredResourceByResourceRepository;
+    }
+
+    /**
+     * Set ownerResourceService
+     *
+     * @param \SimpleIT\ClaireAppBundle\Services\Exercise\Resource\OwnerResourceService $ownerResourceService
+     */
+    public function setOwnerResourceService($ownerResourceService)
+    {
+        $this->ownerResourceService = $ownerResourceService;
     }
 
     /**
@@ -137,10 +152,11 @@ class ResourceService
      * Add a resource
      *
      * @param ResourceResource $resource
+     * @param int              $authorId
      *
      * @return ResourceResource
      */
-    public function add(ResourceResource $resource)
+    public function addFromType(ResourceResource $resource, $authorId)
     {
         $content = null;
         switch ($resource->getType()) {
@@ -165,10 +181,24 @@ class ResourceService
 
         $resource->setContent($content);
         $resource->setRequiredExerciseResources(array());
+        $resource = $this->add($resource);
 
-        $resource = $this->resourceRepository->insert($resource);
+//        throw new \Exception($resource->getId());
+        $this->ownerResourceService->addBasicFromResource($resource->getId());
 
         return $resource;
+    }
+
+    /**
+     * Insert a new resource
+     *
+     * @param ResourceResource $resource
+     *
+     * @return ResourceResource
+     */
+    public function add(ResourceResource $resource)
+    {
+        return $this->resourceRepository->insert($resource);
     }
 
     /**

@@ -47,12 +47,16 @@ class ResourceController extends AppController
      */
     public function createAction(Request $request)
     {
+        // TODO user
+        $authorId = 1000001;
+
         $resource = new ResourceResource();
         $form = $this->createForm(new ResourceTypeType(), $resource);
         $form->bind($request);
         if ($this->get('validator')->validate($form, 'appCreate')) {
-            $resource = $this->get('simple_it.claire.exercise.resource')->add(
-                $resource
+            $resource = $this->get('simple_it.claire.exercise.resource')->addFromType(
+                $resource,
+                $authorId
             );
         }
 

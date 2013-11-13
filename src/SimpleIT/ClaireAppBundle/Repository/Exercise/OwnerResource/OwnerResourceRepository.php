@@ -91,4 +91,16 @@ class OwnerResourceRepository extends AppRepository
             $format
         );
     }
+
+    /**
+     * Insert a new ownerResource
+     *
+     * @param OwnerResourceResource $ownerResourceResource
+     *
+     * @return OwnerResourceResource
+     */
+    public function insert(OwnerResourceResource $ownerResourceResource)
+    {
+        return $this->insertResource($ownerResourceResource);
+    }
 }

@@ -7,6 +7,7 @@ use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Exercise\OwnerResourceResource;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\MetadataByOwnerResourceRepository;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\OwnerResourceByOwnerRepository;
+use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\OwnerResourceByResourceRepository;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\OwnerResourceRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 
@@ -38,6 +39,11 @@ class OwnerResourceService
     private $ownerResourceByOwnerRepository;
 
     /**
+     * @var OwnerResourceByResourceRepository
+     */
+    private $ownerResourceByResourceRepository;
+
+    /**
      * Set OwnerResourceRepository
      *
      * @param OwnerResourceRepository $OwnerResourceRepository
@@ -65,6 +71,16 @@ class OwnerResourceService
     public function setMetadataByOwnerResourceRepository($metadataByOwnerResourceRepository)
     {
         $this->metadataByOwnerResourceRepository = $metadataByOwnerResourceRepository;
+    }
+
+    /**
+     * Set ownerResourceByResourceRepository
+     *
+     * @param \SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\OwnerResourceByResourceRepository $ownerResourceByResourceRepository
+     */
+    public function setOwnerResourceByResourceRepository($ownerResourceByResourceRepository)
+    {
+        $this->ownerResourceByResourceRepository = $ownerResourceByResourceRepository;
     }
 
     /**
@@ -257,6 +273,40 @@ class OwnerResourceService
             $ownerResourceId,
             new ArrayCollection($metadatas)
         );
+    }
+
+    /**
+     * Insert a new owner resource
+     *
+     * @param OwnerResourceResource $ownerResourceResource
+     *
+     * @return OwnerResourceResource
+     */
+    public function add(OwnerResourceResource $ownerResourceResource)
+    {
+        $resourceId = $ownerResourceResource->getResource();
+        $ownerResourceResource->setResource(null);
+        return $this->ownerResourceByResourceRepository->insert(
+            $ownerResourceResource,
+            $resourceId
+        );
+    }
+
+    /**
+     * Insert a basic owner resource with a resource
+     *
+     * @param $resourceId
+     *
+     * @return OwnerResourceResource
+     */
+    public function addBasicFromResource($resourceId)
+    {
+        $ownerResourceResource = new OwnerResourceResource();
+        $ownerResourceResource->setResource($resourceId);
+        $ownerResourceResource->setMetadata(array());
+        $ownerResourceResource->setPublic(false);
+
+        return $this->add($ownerResourceResource);
     }
 
     /**
