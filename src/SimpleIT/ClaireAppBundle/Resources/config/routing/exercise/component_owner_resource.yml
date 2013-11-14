@@ -1,16 +1,16 @@
-simple_it_claire_course_component_owner_resource_browser:
+simple_it_claire_component_owner_resource_browser:
     pattern: /browser
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:browserView }
     requirements:
         _method: GET
 
-simple_it_claire_course_component_owner_resource_list:
+simple_it_claire_component_owner_resource_list:
     pattern: /
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:list }
     requirements:
         _method: GET
 
-simple_it_claire_course_component_owner_resource_search_list:
+simple_it_claire_component_owner_resource_search_list:
     pattern: /search
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:searchList }
     requirements:

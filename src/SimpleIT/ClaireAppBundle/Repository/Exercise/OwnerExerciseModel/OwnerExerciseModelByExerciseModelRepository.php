@@ -16,7 +16,7 @@ class OwnerExerciseModelByExerciseModelRepository extends AppRepository
     /**
      * @var string
      */
-    protected $path = 'resources/{exerciseModelId}/owner-resources/{ownerExerciseModelId}';
+    protected $path = 'exercise-models/{exerciseModelId}/owner-exercise-models/{ownerExerciseModelId}';
 
     /**
      * @var string

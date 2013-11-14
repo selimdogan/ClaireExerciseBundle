@@ -47,9 +47,6 @@ class ResourceController extends AppController
      */
     public function createAction(Request $request)
     {
-        // TODO user
-        $authorId = 1000001;
-
         $resource = new ResourceResource();
         $form = $this->createForm(new ResourceTypeType(), $resource);
         $form->bind($request);

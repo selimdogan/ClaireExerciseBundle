@@ -207,6 +207,18 @@ class ExerciseModelService
     }
 
     /**
+     * Get an exercise model
+     *
+     * @param int $exerciseModelId Resource id
+     *
+     * @return ExerciseModelResource
+     */
+    public function get($exerciseModelId)
+    {
+        return $this->exerciseModelRepository->find($exerciseModelId);
+    }
+
+    /**
      * Delete an exercise model
      *
      * @param $exerciseModelId

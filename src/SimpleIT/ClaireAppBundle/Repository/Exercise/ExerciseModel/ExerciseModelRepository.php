@@ -38,6 +38,22 @@ class ExerciseModelRepository extends AppRepository
     }
 
     /**
+     * Find an exercise model
+     *
+     * @param string $exerciseModelId       Exercise model id
+     * @param array  $parameters            Parameters
+     *
+     * @return ExerciseModelResource
+     */
+    public function find($exerciseModelId, array $parameters = array())
+    {
+        return $this->findResource(
+            array('exerciseModelId' => $exerciseModelId),
+            $parameters
+        );
+    }
+
+    /**
      * Update an exercise model
      *
      * @param string                $exerciseModelId               Exercise model id

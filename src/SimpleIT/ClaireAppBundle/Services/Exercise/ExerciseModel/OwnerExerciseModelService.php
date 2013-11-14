@@ -46,7 +46,7 @@ class OwnerExerciseModelService
     /**
      * Set metadataByOwnerExerciseModelRepository
      *
-     * @param MetadataByOwnerExerciseModelRepository $metadataByOwnerExerciseModelRepository
+     * @param \SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\MetadataByOwnerExerciseModelRepository $metadataByOwnerExerciseModelRepository
      */
     public function setMetadataByOwnerExerciseModelRepository(
         $metadataByOwnerExerciseModelRepository
@@ -58,9 +58,9 @@ class OwnerExerciseModelService
     /**
      * Set ownerExerciseModelByExerciseModelRepository
      *
-     * @param OwnerExerciseModelByExerciseModelRepository $ownerExerciseModelByExerciseModelRepository
+     * @param \SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\OwnerExerciseModelByExerciseModelRepository $ownerExerciseModelByExerciseModelRepository
      */
-    public function setOwnerResourceByExerciseModelRepository(
+    public function setOwnerExerciseModelByExerciseModelRepository(
         $ownerExerciseModelByExerciseModelRepository
     )
     {
@@ -70,9 +70,9 @@ class OwnerExerciseModelService
     /**
      * Set ownerExerciseModelByOwnerRepository
      *
-     * @param OwnerExerciseModelByOwnerRepository $ownerExerciseModelByOwnerRepository
+     * @param \SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\OwnerExerciseModelByOwnerRepository $ownerExerciseModelByOwnerRepository
      */
-    public function setOwnerResourceByOwnerRepository($ownerExerciseModelByOwnerRepository)
+    public function setOwnerExerciseModelByOwnerRepository($ownerExerciseModelByOwnerRepository)
     {
         $this->ownerExerciseModelByOwnerRepository = $ownerExerciseModelByOwnerRepository;
     }
@@ -80,9 +80,9 @@ class OwnerExerciseModelService
     /**
      * Set ownerExerciseModelRepository
      *
-     * @param OwnerExerciseModelRepository $ownerExerciseModelRepository
+     * @param \SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\OwnerExerciseModelRepository $ownerExerciseModelRepository
      */
-    public function setOwnerResourceRepository($ownerExerciseModelRepository)
+    public function setOwnerExerciseModelRepository($ownerExerciseModelRepository)
     {
         $this->ownerExerciseModelRepository = $ownerExerciseModelRepository;
     }
@@ -306,7 +306,7 @@ class OwnerExerciseModelService
      *
      * @return OwnerExerciseModelResource
      */
-    public function addBasicFromResource($exerciseModelId)
+    public function addBasicFromExerciseModel($exerciseModelId)
     {
         $ownerExerciseModelResource = new OwnerExerciseModelResource();
         $ownerExerciseModelResource->setExerciseModel($exerciseModelId);

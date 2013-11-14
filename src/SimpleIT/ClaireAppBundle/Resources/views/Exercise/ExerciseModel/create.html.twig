@@ -1,0 +1,12 @@
+<h1>Créer un nouveau modèle d'exercice</h1>
+
+<h2>Choix du type</h2>
+
+<form action="{{ path('simple_it_claire_exercise_exercise_model_create') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_errors(form) }}
+    {{ form_errors(form.type) }}
+    {{ form_widget(form.type) }}
+    {{ form_rest(form) }}
+    <input type="submit">
+    {#Remove submit#}
+</form>
