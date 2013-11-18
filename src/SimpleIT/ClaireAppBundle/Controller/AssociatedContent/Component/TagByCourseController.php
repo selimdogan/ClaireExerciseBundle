@@ -121,21 +121,21 @@ class TagByCourseController extends AppController
     {
         $formData = array();
         $form = $this->createFormBuilder($formData);
-        $
-        foreach ($tags as $tag) {
-            if ($tagsString != '') {
-                $tagsString .= ',';
-            }
-
-            $tagsString .= $tag->getName();
-        }
-
-        return $this->render(
-            'editListByCourse.html.twig',
-            array(
-                'courseIdentifier' => $courseIdentifier,
-                'tags'             => $tagsString
-            )
-        );
+//        $this->get('simple_it.claire.associated_content.repository.tag_by_category')->findAll();
+//        foreach ($tags as $tag) {
+//            if ($tagsString != '') {
+//                $tagsString .= ',';
+//            }
+//
+//            $tagsString .= $tag->getName();
+//        }
+//
+//        return $this->render(
+//            'editListByCourse.html.twig',
+//            array(
+//                'courseIdentifier' => $courseIdentifier,
+//                'tags'             => $tagsString
+//            )
+//        );
     }
 }
