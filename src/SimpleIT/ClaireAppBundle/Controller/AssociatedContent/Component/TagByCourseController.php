@@ -104,7 +104,8 @@ class TagByCourseController extends AppController
             'SimpleITClaireAppBundle:AssociatedContent/Tag/Component:editListByCourse.html.twig',
             array(
                 'searchAction' => $this->generateUrl(
-                        'simple_it_claire_associated_content_search_tag'
+                        'simple_it_claire_associated_content_search_tag_by_course',
+                        array('courseId' => $courseId)
                     ),
                 'courseId'     => $courseId,
                 'form'         => $form->createView()
@@ -145,7 +146,7 @@ class TagByCourseController extends AppController
         foreach ($tags as $tag) {
             $outputTags[$tag->getId()] = $tag->getName();
         }
-        $eligibleTags = array_diff($outputTags,$outputCourseTags);
+        $eligibleTags = array_diff($outputTags, $outputCourseTags);
 
         return new JsonResponse($eligibleTags);
     }
