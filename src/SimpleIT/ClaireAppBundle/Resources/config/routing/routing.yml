@@ -14,6 +14,10 @@ simple_it_claire_associated_content_component_category_by_course:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/associatedContent/component_category_by_course.yml"
     prefix:   components/courses/{courseId}
 
+simple_it_claire_associated_content_component_tag_by_course:
+    resource: "@SimpleITClaireAppBundle/Resources/config/routing/associatedContent/component_tag_by_course.yml"
+    prefix:   components/courses/{courseId}/tags/
+
 simple_it_claire_component_course:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/component_course.yml"
     prefix:   components/courses

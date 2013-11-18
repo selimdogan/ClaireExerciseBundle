@@ -138,6 +138,9 @@
             <call method="setPartService">
                 <argument type="service" id="simple_it.claire.course.part"/>
             </call>
+            <call method="setCourseService">
+                <argument type="service" id="simple_it.claire.course.course"/>
+            </call>
         </service>
     </services>
 </container>
