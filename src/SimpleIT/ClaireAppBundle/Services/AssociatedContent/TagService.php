@@ -86,22 +86,6 @@ class TagService
     }
 
     /**
-     * Get all the tags of a course
-     *
-     * @param int | string          $courseIdentifier      Course id | slug
-     * @param CollectionInformation $collectionInformation Collection information
-     *
-     * @return \SimpleIT\Utils\Collection\PaginatedCollection
-     */
-    public function getAllByCourse(
-        $courseIdentifier,
-        CollectionInformation $collectionInformation = null
-    )
-    {
-        return $this->tagByCourseRepository->findAll($courseIdentifier, $collectionInformation);
-    }
-
-    /**
      * Get all the tags of a course to edit
      *
      * @param int                   $courseId              Course id
@@ -113,7 +97,7 @@ class TagService
     public function getAllByCourseToEdit(
         $courseId,
         $status,
-        CollectionInformation $collectionInformation = null
+        CollectionInformation $collectionInformation
     )
     {
         $collectionInformation->addFilter(CourseResource::STATUS, $status);
@@ -163,6 +147,22 @@ class TagService
         }
 
         return $tags;
+    }
+
+    /**
+     * Get all the tags of a course
+     *
+     * @param int | string          $courseIdentifier      Course id | slug
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
+     */
+    public function getAllByCourse(
+        $courseIdentifier,
+        CollectionInformation $collectionInformation = null
+    )
+    {
+        return $this->tagByCourseRepository->findAll($courseIdentifier, $collectionInformation);
     }
 
     /**

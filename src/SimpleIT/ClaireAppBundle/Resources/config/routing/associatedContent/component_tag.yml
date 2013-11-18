@@ -3,3 +3,9 @@ simple_it_claire_associated_content_search_tag:
     defaults: {_controller: SimpleITClaireAppBundle:AssociatedContent/Component/Tag:searchList}
     requirements:
         _method: GET
+
+simple_it_claire_associated_content_search_tag_by_course:
+    pattern: /searchByCourse
+    defaults: {_controller: SimpleITClaireAppBundle:AssociatedContent/Component/TagByCourse:searchListToAdd}
+    requirements:
+        _method: GET

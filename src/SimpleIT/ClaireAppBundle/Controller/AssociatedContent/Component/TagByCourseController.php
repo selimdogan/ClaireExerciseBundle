@@ -8,6 +8,7 @@ use SimpleIT\ApiResourcesBundle\AssociatedContent\TagResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -88,7 +89,7 @@ class TagByCourseController extends AppController
             $outputTags[$tag->getId()] = $tag->getName();
         }
         $outputTags = array(1 => 'test');
-        $formData = array('tags'=>json_encode($outputTags));
+        $formData = array('tags' => json_encode($outputTags));
         $form = $this->createFormBuilder($formData)
             ->add(
                 'tags',
@@ -102,11 +103,51 @@ class TagByCourseController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:AssociatedContent/Tag/Component:editListByCourse.html.twig',
             array(
-                'searchAction' => $this->generateUrl('simple_it_claire_associated_content_search_tag'),
-                'courseId'=>$courseId,
-                'form' => $form->createView()
+                'searchAction' => $this->generateUrl(
+                        'simple_it_claire_associated_content_search_tag'
+                    ),
+                'courseId'     => $courseId,
+                'form'         => $form->createView()
             )
         );
+    }
+
+    /**
+     * @param Request $request
+     * @param         $courseId
+     *
+     * @return JsonResponse
+     */
+    public function searchListToAddAction(Request $request)
+    {
+        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
+        $course = $this->get('simple_it.claire.course.course')->getByStatus(
+            $request->get('courseId'),
+            $status
+        );
+        $courseTags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourseToEdit(
+            $course->getId(),
+            $status,
+            new CollectionInformation()
+        );
+
+        $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCategory(
+            $course->getCategory()->getId()
+        );
+
+        $outputCourseTags = array();
+        /** @var TagResource $tag */
+        foreach ($courseTags as $tag) {
+            $outputCourseTags[$tag->getId()] = $tag->getName();
+        }
+        $outputTags = array();
+        /** @var TagResource $tag */
+        foreach ($tags as $tag) {
+            $outputTags[$tag->getId()] = $tag->getName();
+        }
+        $eligibleTags = array_diff($outputTags,$outputCourseTags);
+
+        return new JsonResponse($eligibleTags);
     }
 
     /**
