@@ -72,10 +72,12 @@ class CourseController extends AppController
     {
         $courses = $this->get('simple_it.claire.course.course')->getAll($collectionInformation);
         if ($request->isXmlHttpRequest()) {
-            return new Response($this->get('serializer')->serialize(
-                $courses->toArray(),
-                FormatUtils::JSON
-            ));
+            return new Response(
+                $this->get('serializer')->serialize(
+                    $courses->toArray(),
+                    FormatUtils::JSON
+                )
+            );
         }
 
         return $this->render(

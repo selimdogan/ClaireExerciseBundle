@@ -3,3 +3,4 @@ simple_it_claire_tag_view:
     defaults: { _controller: TutorialBundle:AssociatedContent/Tag:view }
     requirements:
             _method: GET
+

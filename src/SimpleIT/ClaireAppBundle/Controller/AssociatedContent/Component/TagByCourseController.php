@@ -87,8 +87,9 @@ class TagByCourseController extends AppController
         foreach ($tags as $tag) {
             $outputTags[$tag->getId()] = $tag->getName();
         }
-
-        $form = $this->createFormBuilder($outputTags)
+        $outputTags = array(1 => 'test');
+        $formData = array('tags'=>json_encode($outputTags));
+        $form = $this->createFormBuilder($formData)
             ->add(
                 'tags',
                 'text',
@@ -101,8 +102,9 @@ class TagByCourseController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:AssociatedContent/Tag/Component:editListByCourse.html.twig',
             array(
-                'courseId' => $courseId,
-                'form'     => $form->createView()
+                'searchAction' => $this->generateUrl('simple_it_claire_associated_content_search_tag'),
+                'courseId'=>$courseId,
+                'form' => $form->createView()
             )
         );
     }
@@ -117,13 +119,9 @@ class TagByCourseController extends AppController
      */
     public function editListAction(Request $request, $courseIdentifier)
     {
-        $tags = array();
-        if (RequestUtils::METHOD_GET == $request->getMethod()) {
-            $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourse(
-                $courseIdentifier
-            );
-        }
-        $tagsString = '';
+        $formData = array();
+        $form = $this->createFormBuilder($formData);
+        $
         foreach ($tags as $tag) {
             if ($tagsString != '') {
                 $tagsString .= ',';
