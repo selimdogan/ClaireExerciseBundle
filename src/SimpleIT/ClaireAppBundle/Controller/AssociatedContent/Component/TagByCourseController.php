@@ -79,7 +79,7 @@ class TagByCourseController extends AppController
      */
     public function listEditViewAction(CollectionInformation $collectionInformation, $courseId)
     {
-        $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourse(
+        $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourseToEdit(
             $courseId,
             $collectionInformation
         );
