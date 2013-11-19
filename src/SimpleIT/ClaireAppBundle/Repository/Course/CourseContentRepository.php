@@ -90,7 +90,7 @@ class CourseContentRepository extends AppRepository
     }
 
     /**
-     * Update a part content
+     * Update a course content
      *
      * @param string $courseIdentifier Course id | slug
      * @param string $courseContent    Course content

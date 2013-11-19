@@ -67,4 +67,29 @@ class CourseIntroductionRepository extends AppRepository
             $format
         );
     }
+
+    /**
+     * Update a course introduction content
+     *
+     * @param string $courseIdentifier    Course id | slug
+     * @param string $introductionContent Introduction content
+     * @param array  $parameters          Parameters
+     * @param string $format              Format
+     *
+     * @return string
+     */
+    public function update(
+        $courseIdentifier,
+        $introductionContent,
+        $parameters = array(),
+        $format = FormatUtils::HTML
+    )
+    {
+        return parent::updateResource(
+            $introductionContent,
+            array('courseIdentifier' => $courseIdentifier),
+            $parameters,
+            $format
+        );
+    }
 }

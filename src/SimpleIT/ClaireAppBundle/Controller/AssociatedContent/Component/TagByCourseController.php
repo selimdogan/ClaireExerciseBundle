@@ -10,6 +10,7 @@ use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class TagByCourseController
@@ -154,5 +155,7 @@ class TagByCourseController extends AppController
             $courseId,
             array_keys($tags)
         );
+
+        return new Response();
     }
 }

@@ -354,9 +354,36 @@ class CourseController extends AppController
         );
 
         return $this->render(
-            'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
-            array('content' => $introduction)
+            'SimpleITClaireAppBundle:Course/Course/Component:editContent.html.twig',
+            array(
+                'content' => $introduction,
+                'action'  =>
+                    $this->generateUrl(
+                        'simple_it_claire_component_course_course_introduction_edit',
+                        array('courseId' => $courseId)
+                    )
+            )
         );
+    }
+
+    /**
+     * Edit introduction course content (POST)
+     *
+     * @param Request $request  Request
+     * @param int     $courseId Course id
+     *
+     * @return Response
+     */
+    public function editIntroductionAction(Request $request, $courseId)
+    {
+        $content = $request->get('content');
+        $content = $this->get('simple_it.claire.course.course')->saveContent(
+            $courseId,
+            $content,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
+        return new Response($content);
     }
 
     /* *************** *

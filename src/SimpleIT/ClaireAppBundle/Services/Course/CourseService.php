@@ -341,6 +341,24 @@ class CourseService
         );
     }
 
+    /**
+     * Save an introduction
+     *
+     * @param int    $courseId Course id
+     * @param string $content  Content
+     * @param string $status   Status
+     *
+     * @return mixed
+     */
+    public function saveIntroduction($courseId, $content, $status)
+    {
+        return $this->courseIntroductionRepository->update(
+            $courseId,
+            $content,
+            array(CourseResource::STATUS => $status)
+        );
+    }
+
     /* *************** *
      *                 *
      * ***** TOC ***** *
