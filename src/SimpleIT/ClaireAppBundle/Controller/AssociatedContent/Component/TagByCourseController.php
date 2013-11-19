@@ -77,11 +77,12 @@ class TagByCourseController extends AppController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listEditViewAction(CollectionInformation $collectionInformation, $courseId)
+    public function listEditViewAction(Request $request, $courseId)
     {
         $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourseToEdit(
             $courseId,
-            $collectionInformation
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
+            new CollectionInformation()
         );
         $outputTags = array();
 
@@ -155,7 +156,6 @@ class TagByCourseController extends AppController
             $courseId,
             array_keys($tags)
         );
-
 
         return new JsonResponse($updatedTags);
     }
