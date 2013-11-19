@@ -60,4 +60,14 @@ class TagByCourseRepository extends AppRepository
             $collectionInformation
         );
     }
+
+    public function update($courseId, array $tagIds)
+    {
+        return parent::updateResource(
+            $tagIds,
+            array(
+                'courseIdentifier' => $courseId
+            )
+        );
+    }
 }
