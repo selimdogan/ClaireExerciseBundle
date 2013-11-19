@@ -61,6 +61,12 @@ class TagByCourseRepository extends AppRepository
         );
     }
 
+    /**
+     * @param       $courseId
+     * @param array $tagIds
+     *
+     * @return mixed
+     */
     public function update($courseId, array $tagIds)
     {
         return parent::updateResource(
