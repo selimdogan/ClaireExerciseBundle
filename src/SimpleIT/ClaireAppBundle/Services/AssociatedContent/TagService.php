@@ -252,9 +252,23 @@ class TagService
         );
     }
 
+    /**
+     * Add tags to a course
+     *
+     * @param int   $courseId Course id
+     * @param array $tagIds   Tag ids
+     *
+     * @return array
+     */
     public function addTagsToCourse($courseId, array $tagIds)
     {
-        $this->tagByCourseRepository->update($courseId, $tagIds);
+        $tags = $this->tagByCourseRepository->update($courseId, $tagIds);
+        $outputTags = array();
+        /** @var TagResource $tag */
+        foreach ($tags as $tag) {
+            $outputTags[$tag->getId()] = $tag->getName();
+        }
+        return $outputTags;
     }
 
     /**

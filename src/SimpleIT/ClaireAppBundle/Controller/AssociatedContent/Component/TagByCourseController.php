@@ -151,11 +151,12 @@ class TagByCourseController extends AppController
         $form->bind($request);
         $data = $form->getData();
         $tags = json_decode($data['tags'], true);
-        $this->get('simple_it.claire.associated_content.tag')->addTagsToCourse(
+        $updatedTags = $this->get('simple_it.claire.associated_content.tag')->addTagsToCourse(
             $courseId,
             array_keys($tags)
         );
 
-        return new Response();
+
+        return new JsonResponse($updatedTags);
     }
 }
