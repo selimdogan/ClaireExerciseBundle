@@ -76,6 +76,7 @@ class TagService
     }
 
     /**
+     * @deprecated
      * @return array
      */
     public function getAllByCourseToAdd($courseId, $status)
@@ -123,7 +124,7 @@ class TagService
     {
         $collectionInformation->addFilter(CourseResource::STATUS, $status);
 
-        return $this->tagByCourseRepository->findAll($courseId, $collectionInformation);
+        return $this->tagByCourseRepository->findAllToEdit($courseId, $collectionInformation);
     }
 
     /**
