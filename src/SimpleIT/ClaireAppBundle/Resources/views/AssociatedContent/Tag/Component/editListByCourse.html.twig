@@ -1,9 +1,12 @@
 <form action="{{ path('simple_it_claire_associated_content_edit_tag_by_course', { 'courseId': courseId}) }}" method="post" {{ form_enctype(form) }}>
     {{ form_errors(form) }}
     {{ form_errors(form.tags) }}
-    {{ form_widget(form.tags) }}
+
+    <div class="input-group fullwidth with-border flat js-tags-select" data-option_json-value="true"  data-option_data="{{ form.tags.vars.value }}" data-option_data-url="{{ searchAction }}">
+        {{ form_widget(form.tags, { 'value': '' }) }}
+        <i class="indicator icon-large icon-spinner icon-spin"></i>
+    </div>
+
     {{ form_rest(form) }}
     <input type="submit">
-    {{ searchAction }}
-    {#Remove submit#}
 </form>
