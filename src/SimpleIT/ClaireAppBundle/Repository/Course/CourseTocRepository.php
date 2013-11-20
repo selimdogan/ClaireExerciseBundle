@@ -17,7 +17,7 @@ class CourseTocRepository extends AppRepository
     /**
      * @type string
      */
-    protected $path = 'courses/{courseIdentifier}/toc';
+    protected $path = 'courses/{courseIdentifier}/course';
 
     /**
      * @type string
@@ -25,7 +25,7 @@ class CourseTocRepository extends AppRepository
     protected $resourceClass = 'SimpleIT\ApiResourcesBundle\Course\PartResource';
 
     /**
-     * Find a course toc
+     * Find a course course
      *
      * @param string $courseIdentifier Course id | slug
      * @param array  $parameters       Parameters
@@ -48,7 +48,7 @@ class CourseTocRepository extends AppRepository
     }
 
     /**
-     * Find a course toc to edit
+     * Find a course course to edit
      *
      * @param string $courseIdentifier Course id | slug
      * @param array  $parameters       Parameters

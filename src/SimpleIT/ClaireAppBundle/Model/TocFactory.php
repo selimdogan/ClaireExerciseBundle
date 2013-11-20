@@ -9,11 +9,11 @@ namespace SimpleIT\ClaireAppBundle\Model;
 class TocFactory
 {
     /**
-     * Create a toc
+     * Create a course
      *
      * @param array $tocResource
      *
-     * @return array The toc
+     * @return array The course
      */
     public static function create(array $tocResource)
     {

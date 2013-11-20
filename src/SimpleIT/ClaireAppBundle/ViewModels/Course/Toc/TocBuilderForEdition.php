@@ -11,7 +11,7 @@ use Symfony\Component\Routing\RouterInterface;
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class TocBuilder
+class TocBuilderForEdition
 {
     public static $displayableSubtypes = array(
         PartResource::COURSE,
@@ -71,7 +71,9 @@ class TocBuilder
                 $tocItem = $this->addTocItems($child);
                 $parent->children[] = $tocItem;
             }
+
         }
+        $parent = $this->addCreationItem($parent);
 
         return $parent;
     }
@@ -84,8 +86,6 @@ class TocBuilder
         );
         $tocItemDisplay->id = $part->getId();
         $tocItemDisplay->title = $part->getTitle();
-        $tocItemDisplay->subtype = $part->getSubtype();
-        //$tocItemDisplay->image = $part->getMetadatas();
         $tocItemDisplay->url = $this->router->generate(
             'simple_it_claire_component_part_edit',
             array(
@@ -104,5 +104,63 @@ class TocBuilder
     private function isDisplayable(PartResource $child)
     {
         return in_array($child->getSubtype(), self::$displayableSubtypes);
+    }
+
+    /**
+     * @param $parent
+     */
+    private function addCreationItem($parent)
+    {
+        if ($this->isParentAPart($parent)) {
+            $this->addChapterCreationItem($parent);
+        } elseif ($this->isParentACourse($parent)) {
+            $this->addPartCreationItem($parent);
+        }
+
+        return $parent;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isParentAPart($parent)
+    {
+        return $parent->subtype == PartItem::SUBTYPE;
+    }
+
+    /**
+     * @param $parent
+     */
+    private function addChapterCreationItem($parent)
+    {
+        $chapterCreationItem = $this->tocItemFactory->make(TocItemFactory::CHAPTER_CREATION);
+        $chapterCreationItem->title = 'Sans titre';
+        $chapterCreationItem->url = $this->router->generate(
+            'simple_it_claire_component_course_toc_edit',
+            array('courseId' => $this->course->getId(), 'parentId' => $parent->id)
+        );
+        $parent->children[] = $chapterCreationItem;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isParentACourse($parent)
+    {
+        return $parent->subtype == CourseItem::SUBTYPE;
+    }
+
+    /**
+     * @param $parent
+     */
+    private function addPartCreationItem($parent)
+    {
+        $chapterCreationItem = $this->tocItemFactory->make(TocItemFactory::PART_CREATION);
+        $chapterCreationItem->title = 'Sans titre';
+        $chapterCreationItem->url = $this->router->generate(
+            'simple_it_claire_component_course_toc_edit',
+            array('courseId' => $this->course->getId(), 'parentId' => $parent->id)
+        );
+        $parent->children[] = $chapterCreationItem;
     }
 }

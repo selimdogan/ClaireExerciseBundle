@@ -17,7 +17,7 @@ class PartTocRepository extends AppRepository
     /**
      * @var string
      */
-    protected $path = 'courses/{courseIdentifier}/parts/{partIdentifier}/toc';
+    protected $path = 'courses/{courseIdentifier}/parts/{partIdentifier}/course';
 
     /**
      * @var  string
@@ -25,7 +25,7 @@ class PartTocRepository extends AppRepository
     protected $resourceClass = 'SimpleIT\ApiResourcesBundle\Course\PartResource';
 
     /**
-     * Find a part toc
+     * Find a part course
      *
      * @param string $courseIdentifier Course id | slug
      * @param string $partIdentifier   Part id | slug
@@ -50,7 +50,7 @@ class PartTocRepository extends AppRepository
     }
 
     /**
-     * Find a toc without cache
+     * Find a course without cache
      *
      * @param string $courseIdentifier Course id | slug
      * @param string $partIdentifier   Part id | slug

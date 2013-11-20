@@ -3,13 +3,11 @@
 namespace SimpleIT\ClaireAppBundle\ViewModels\Course\Toc;
 
 /**
- * Class TocItemViewModel
+ * Class ChapterCreationItem
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class TocItemViewModel
+class ChapterCreationItem extends TocItemCreation
 {
-    public $id;
 
-    public $subtype;
 }

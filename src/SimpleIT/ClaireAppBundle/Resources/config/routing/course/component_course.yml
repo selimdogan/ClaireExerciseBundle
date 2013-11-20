@@ -26,6 +26,12 @@ simple_it_claire_component_course_course_introduction_edit:
     requirements:
         _method: POST
 
+simple_it_claire_component_course_toc_edit:
+    pattern: /{courseId}/toc
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/TocByCourse:editToc }
+    requirements:
+        _method: POST
+
 simple_it_claire_component_course_course_edit:
     pattern: /{courseId}/edit
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course:edit }

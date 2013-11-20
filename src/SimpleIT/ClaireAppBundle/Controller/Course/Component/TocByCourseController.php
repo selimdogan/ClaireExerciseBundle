@@ -6,6 +6,7 @@ use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TocBuilder;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class TocByCourseController
@@ -23,12 +24,17 @@ class TocByCourseController extends AppController
 //            $courseId,
 //            $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
 //        );
-//        $toc = $this->get('simple_it.claire.course.course')->getByStatus($courseId, $status);
+//        $course = $this->get('simple_it.claire.course.course')->getByStatus($courseId, $status);
 //
 //        $tocVMBuilder = new TocBuilder();
 //
-//        $tocVM = $tocVMBuilder->buildTocForEdit($toc);
+//        $tocVM = $tocVMBuilder->buildTocForEdit($course);
 //
 //        return null;
+    }
+
+    public function editAction()
+    {
+        return new Response();
     }
 }

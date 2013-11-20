@@ -415,7 +415,7 @@ class CourseController extends AppController
         return $this->render(
             $template,
             array(
-                'toc'                => $toc,
+                'course'                => $toc,
                 'displayLevel'       => $displayLevel,
                 'courseIdentifier'   => $courseIdentifier,
                 'categoryIdentifier' => $categoryIdentifier
@@ -457,7 +457,7 @@ class CourseController extends AppController
         return $this->render(
             $template,
             array(
-                'toc'                => $toc,
+                'course'                => $toc,
                 'course'             => $course,
                 'categoryIdentifier' => $categoryIdentifier
             )
@@ -495,7 +495,7 @@ class CourseController extends AppController
         return $this->render(
             $template,
             array(
-                'toc'                => $toc,
+                'course'                => $toc,
                 'displayLevel'       => $displayLevel,
                 'courseIdentifier'   => $courseId,
                 'categoryIdentifier' => $categoryId
@@ -526,7 +526,7 @@ class CourseController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:viewTocAside.html.twig',
             array(
-                'toc'                => $toc,
+                'course'                => $toc,
                 'displayLevel'       => $displayLevel,
                 'partIdentifier'     => $partIdentifier,
                 'courseIdentifier'   => $courseIdentifier,
@@ -564,7 +564,7 @@ class CourseController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:viewTimeline.html.twig',
             array(
-                'toc'                => $toc,
+                'course'                => $toc,
                 'displayLevel'       => $displayLevel,
                 'partIdentifier'     => $partIdentifier,
                 'courseIdentifier'   => $courseIdentifier,
@@ -607,7 +607,7 @@ class CourseController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:timelineEdit.html.twig',
             array(
-                'toc'                => $toc,
+                'course'                => $toc,
                 'partIdentifier'     => $partId,
                 'course'             => $course,
                 'categoryIdentifier' => $category->getSlug()
