@@ -23,7 +23,7 @@ class TocStub1 extends PartResource
 
     public function __construct()
     {
-        $this->children = array(new TitleOneStub(), new TitleOneStub());
+        $this->children = array(new TitleOneStub(), new TitleOneStub(), new TitleOneWithNullChildrenStub());
     }
 
     /**
