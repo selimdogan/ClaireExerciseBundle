@@ -30,6 +30,10 @@ simple_it_claire_component_part_tag:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/associatedContent/component_part_tag.yml"
     prefix:   components/courses/{courseIdentifier}/parts/{partIdentifier}/tags/
 
+simple_it_claire_component_part:
+    resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/component_part.yml"
+    prefix:   /
+
 simple_it_claire_ui_kit:
     pattern: /claire/uikit
     defaults:

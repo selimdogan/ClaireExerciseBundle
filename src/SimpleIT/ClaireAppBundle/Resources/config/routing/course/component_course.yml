@@ -1,7 +1,3 @@
-simple_it_claire_component_part:
-    resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/component_part.yml"
-    prefix:   /{courseIdentifier}/parts
-
 simple_it_claire_course_component_course_list:
     pattern: /
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course:list }

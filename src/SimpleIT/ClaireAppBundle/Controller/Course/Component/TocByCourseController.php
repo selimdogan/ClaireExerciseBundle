@@ -20,17 +20,18 @@ class TocByCourseController extends AppController
      */
     public function editViewAction(Request $request, $courseId)
     {
-//        $course = $this->get('simple_it.claire.course.course')->getByStatus(
-//            $courseId,
-//            $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
-//        );
-//        $toc = $this->get('simple_it.claire.course.course')->getByStatus($courseId, $status);
-//
-//        $tocVMBuilder = new TocBuilder();
-//
-//        $tocVM = $tocVMBuilder->buildTocForEdit($toc);
-//
-//        return null;
+        $toc = $this->get('simple_it.claire.course.course')->getTocByStatus(
+            $courseId,
+            $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
+        $tocVMBuilder = new TocBuilder($this->get('router'));
+        $tocVM = $tocVMBuilder->buildTocForEdition($toc);
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:tocEdit.html.twig',
+            array('toc' => $tocVM)
+        );
     }
 
     public function editAction()
