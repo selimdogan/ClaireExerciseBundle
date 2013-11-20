@@ -66,12 +66,13 @@ class TocBuilderForEdition
     private function addTocItems(PartResource $part)
     {
         $parent = $this->buildTocItem($part);
-        foreach ($part->getChildren() as $child) {
-            if ($this->isDisplayable($child)) {
-                $tocItem = $this->addTocItems($child);
-                $parent->children[] = $tocItem;
+        if ($this->partHasChildren($part)) {
+            foreach ($part->getChildren() as $child) {
+                if ($this->isDisplayable($child)) {
+                    $tocItem = $this->addTocItems($child);
+                    $parent->children[] = $tocItem;
+                }
             }
-
         }
         $parent = $this->addCreationItem($parent);
 
@@ -96,6 +97,16 @@ class TocBuilderForEdition
         );
 
         return $tocItemDisplay;
+    }
+
+    /**
+     * @param PartResource $part
+     *
+     * @return bool
+     */
+    private function partHasChildren(PartResource $part)
+    {
+        return !is_null($part->getChildren()) || count($part->getChildren()) > 0;
     }
 
     /**

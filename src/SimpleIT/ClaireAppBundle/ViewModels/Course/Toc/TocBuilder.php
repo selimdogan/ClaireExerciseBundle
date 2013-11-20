@@ -66,10 +66,12 @@ class TocBuilder
     private function addTocItems(PartResource $part)
     {
         $parent = $this->buildTocItem($part);
-        foreach ($part->getChildren() as $child) {
-            if ($this->isDisplayable($child)) {
-                $tocItem = $this->addTocItems($child);
-                $parent->children[] = $tocItem;
+        if ($this->partHasChildren($part)) {
+            foreach ($part->getChildren() as $child) {
+                if ($this->isDisplayable($child)) {
+                    $tocItem = $this->addTocItems($child);
+                    $parent->children[] = $tocItem;
+                }
             }
         }
 
@@ -85,6 +87,7 @@ class TocBuilder
         $tocItemDisplay->id = $part->getId();
         $tocItemDisplay->title = $part->getTitle();
         $tocItemDisplay->subtype = $part->getSubtype();
+
         //$tocItemDisplay->image = $part->getMetadatas();
 //        $tocItemDisplay->url = $this->router->generate(
 //            'simple_it_claire_component_part_edit',
@@ -96,6 +99,16 @@ class TocBuilder
 //        );
 
         return $tocItemDisplay;
+    }
+
+    /**
+     * @param PartResource $part
+     *
+     * @return bool
+     */
+    private function partHasChildren(PartResource $part)
+    {
+        return !is_null($part->getChildren()) || count($part->getChildren()) > 0;
     }
 
     /**

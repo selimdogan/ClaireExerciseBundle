@@ -15,7 +15,7 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class TocBuilderForEditionTest extends \PHPUnit_Framework_TestCase
 {
-    const TOC_VM_EXPECTED_COUNT = 10;
+    const TOC_VM_EXPECTED_COUNT = 12;
 
     const DISPLAY_LEVEL_1 = 1;
 
