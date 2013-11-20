@@ -17,7 +17,6 @@ use SimpleIT\ApiResourcesBundle\Exercise\ModelObject\ObjectId;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModel\ExerciseModelRepository;
 use
     SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModel\RequiredResourceByExerciseModelRepository;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class ExerciseModelService
@@ -182,7 +181,7 @@ class ExerciseModelService
 
         $exerciseModel->setContent($content);
         $exerciseModel->setRequiredExerciseResources(array());
-        $exerciseModel->setTitle('Titre du modèle d\'exercice');
+        $exerciseModel->setTitle('Titre du modèle d\'exercices');
         $exerciseModel = $this->add($exerciseModel);
 
         $this->ownerExerciseModelService->addBasicFromExerciseModel($exerciseModel->getId());

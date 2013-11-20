@@ -1,5 +1,6 @@
 <h1>Edition de modèle d'exercice : {{ exerciseModel.type }}</h1>
 
+{{ render(controller('SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:editTitleView',{ 'exerciseModelId': exerciseModel.id })) }}
 {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:editContentView',{ 'exerciseModelId': exerciseModel.id })) }}
 {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/RequiredResourceByExerciseModel:editRequiredResourcesView',{ 'exerciseModelId': exerciseModel.id })) }}
 

@@ -5,6 +5,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\Exercise\Component;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\Common\CommonModel;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModelResource;
 use SimpleIT\AppBundle\Controller\AppController;
+use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ExerciseModelTitleType;
 use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ExerciseModelTypeType;
 use SimpleIT\Utils\HTTP;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -147,6 +148,52 @@ class ExerciseModelController extends AppController
         }
 
         return new JsonResponse($exerciseModel->getType());
+    }
+
+    /**
+     * Edit an exercise model title (GET)
+     *
+     * @param int $exerciseModelId Exercise model id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editTitleViewAction($exerciseModelId)
+    {
+        $exerciseModel = $this->get(
+            'simple_it.claire.exercise.exercise_model'
+        )->getExerciseModelToEdit(
+            $exerciseModelId
+        );
+
+        $form = $this->createForm(new ExerciseModelTitleType(), $exerciseModel);
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:editTitle.html.twig',
+            array('exerciseModel' => $exerciseModel, 'form' => $form->createView())
+        );
+    }
+
+    /**
+     * Edit an exercise model title (POST)
+     *
+     * @param Request $request         Request
+     * @param int     $exerciseModelId Course id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function titleEditAction(Request $request, $exerciseModelId)
+    {
+        $exerciseModel = new ExerciseModelResource();
+        $form = $this->createForm(new ExerciseModelTitleType(), $exerciseModel);
+        $form->bind($request);
+        if ($this->get('validator')->validate($form, 'editTitle')) {
+            $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->save(
+                $exerciseModelId,
+                $exerciseModel
+            );
+        }
+
+        return new JsonResponse($exerciseModel->getTitle());
     }
 
     /**

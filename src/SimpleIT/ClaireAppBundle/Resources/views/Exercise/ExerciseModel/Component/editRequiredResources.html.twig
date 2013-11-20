@@ -45,30 +45,30 @@
 </form>
 
 <script>
-    function addRequirement() {
-        var
-                $table = $('#required'),
-                $lines = $('tr', $table),
-                $last = $lines.last(),
-                $inputText = $last.find('input[type=text]'),
-                $clone = $last.clone(),
-                prevId = ($inputText.length > 0) ? ($inputText.attr('name').match(/\[([0-9]+)\]/))[1] : 0;
-
-
-        prevId = parseInt(prevId, 0);
-
-        // text
-        $clone
-                .find('input[type=text]')
-                .attr('name', 'requirement[' + (prevId + 1) + ']')
-                .val('0');
-
-        $clone.appendTo($table);
-    }
-
-    $(function () {
-        $('table').on('click', '.js-remove', function (event) {
-            $(event.target).closest('tr').remove();
-        })
-    })
+//    function addRequirement() {
+//        var
+//                $table = $('#required'),
+//                $lines = $('tr', $table),
+//                $last = $lines.last(),
+//                $inputText = $last.find('input[type=text]'),
+//                $clone = $last.clone(),
+//                prevId = ($inputText.length > 0) ? ($inputText.attr('name').match(/\[([0-9]+)\]/))[1] : 0;
+//
+//
+//        prevId = parseInt(prevId, 0);
+//
+//        // text
+//        $clone
+//                .find('input[type=text]')
+//                .attr('name', 'requirement[' + (prevId + 1) + ']')
+//                .val('0');
+//
+//        $clone.appendTo($table);
+//    }
+//
+//    $(function () {
+//        $('table').on('click', '.js-remove', function (event) {
+//            $(event.target).closest('tr').remove();
+//        })
+//    })
 </script>

@@ -10,6 +10,18 @@ simple_it_claire_component_exercise_exercise_model_type_edit:
     requirements:
         _method: POST
 
+simple_it_claire_component_exercise_exercise_model_title_edit_view:
+    pattern: /{exerciseModelId}/title
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:editTitleView }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_exercise_exercise_model_title_edit:
+    pattern: /{exerciseModelId}/title
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:titleEdit }
+    requirements:
+        _method: POST
+
 simple_it_claire_component_exercise_exercise_model_content_edit_view:
     pattern: /{exerciseModelId}/content
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:editContentView }
