@@ -86,14 +86,14 @@ class TocBuilder
         $tocItemDisplay->title = $part->getTitle();
         $tocItemDisplay->subtype = $part->getSubtype();
         //$tocItemDisplay->image = $part->getMetadatas();
-        $tocItemDisplay->url = $this->router->generate(
-            'simple_it_claire_component_part_edit',
-            array(
-                'courseId'       => $this->course->getId(),
-                'partIdentifier' => $part->getId(),
-                'status'         => $this->course->getStatus()
-            )
-        );
+//        $tocItemDisplay->url = $this->router->generate(
+//            'simple_it_claire_component_part_edit',
+//            array(
+//                'courseIdentifier' => $this->course->getId(),
+//                'partIdentifier'   => $part->getId(),
+//                'status'           => $this->course->getStatus()
+//            )
+//        );
 
         return $tocItemDisplay;
     }
