@@ -1,0 +1,492 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"></script>
+<h2>Edition de questionnaire à choix multiples</h2>
+
+<form action="{{ path('simple_it_claire_component_exercise_exercise_model_multiple_choice_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
+
+<label>Titre
+    <input type="text" size="200" name="title" value="{{ exerciseModel.title }}"/>
+</label>
+
+<table>
+    <tr>
+        <td><label for="wording">Question :</label></td>
+        <td>
+            <input type="text" size="200" name="wording" id="wording" value="{{ exerciseModel.content.wording }}"/>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="shuffle">Mélanger ordre :</label></td>
+        <td>
+            <select name="shuffle" id="shuffle">
+                <option value="1" {% if exerciseModel.content.shuffleQuestionsOrder %}selected{% endif %}>Mélanger</option>
+                <option value="0" {% if not exerciseModel.content.shuffleQuestionsOrder %}selected{% endif %}>Ne pas mélanger</option>
+            </select>
+        </td>
+    </tr>
+</table>
+
+<input type="button" onclick="addDocument()" value="Ajouter document"/>
+
+<table id="documents">
+    {% if exerciseModel.content.documents |length > 0 %}
+        {% for document in exerciseModel.content.documents %}
+            <tr>
+                <td>
+                    Document :
+                </td>
+                <td>
+                    <input type="text" size="20" name="documents[]" value="{{ document.id }}"/>
+                </td>
+                <td>
+                    <button type="button" class="js-remove-tr">-</button>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td>
+                Document :
+            </td>
+            <td>
+                <input type="text" size="200" name="documents[]" value=""/>
+            </td>
+            <td>
+                <button type="button" class="js-remove-tr">-</button>
+            </td>
+        </tr>
+    {% endif %}
+</table>
+
+<table id="blocks">
+{% set _cptBlock = 0 %}
+{% if exerciseModel.content.questionBlocks |length > 0 %}
+    {% for block in exerciseModel.content.questionBlocks %}
+        <tr>
+            <h3>Bloc n° {{ _cptBlock + 1 }}</h3>
+        </tr>
+        <tr>
+        <table>
+        <tr>
+            <td>
+                Nombre maximal de propositions :
+            </td>
+            <td>
+                <input type="text" size="20" name="blocks[{{ _cptBlock }}][maxNumberOfPropositions]"
+                       value="{{ block.maxNumberOfPropositions }}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Nombre maximal de propositions justes :
+            </td>
+            <td>
+                <input type="text" size="20" name="blocks[{{ _cptBlock }}][maxNumberOfRightPropositions]"
+                       value="{{ block.maxNumberOfRightPropositions }}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Nombre de questions :
+            </td>
+            <td>
+                <input type="text" size="20" name="blocks[{{ _cptBlock }}][numberOfOccurences]"
+                       value="{{ block.numberOfOccurences }}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="radio" name="blocks[{{ _cptBlock }}][resourceOrigin]"
+                       value="list"
+                       {% if block.resources |length > 0 %}checked{% endif %}/>
+                Liste de ressources
+            </td>
+            <td>
+                <input type="radio" name="blocks[{{ _cptBlock }}][resourceOrigin]"
+                       value="constraints"
+                       {% if block.resources |length == 0 %}checked{% endif %}/>
+                Contraintes
+            </td>
+        </tr>
+        {% if block.resources |length > 0 %}
+            <tr>
+                <table>
+                    <tr><h4>Liste des ressources</h4></tr>
+                    <tr>
+                        <td>
+                            <button type="button" class="js-add">+</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Id de ressource</th>
+                    </tr>
+                    {% for resource in block.resources %}
+                        <tr>
+                            <td>
+                                <input type="text" size="20" name="resources[{{ _cptBlock }}][]" value="{{ resource.id }}"/>
+                            </td>
+                            <td>
+                                <button type="button" class="js-remove-tr">-</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </tr>
+        {% else %}
+            <tr>
+                <table>
+                    <tr><h4>Liste des ressources</h4></tr>
+                    <tr>
+                        <td>
+                            <button type="button" class="js-add">+</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Id de ressource</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" size="20" name="resources[{{ _cptBlock }}][]"/>
+                        </td>
+                        <td>
+                            <button type="button" class="js-remove-tr">-</button>
+                        </td>
+                    </tr>
+                </table>
+            </tr>
+        {% endif %}
+
+        {% if block.resourceConstraint != NULL %}
+
+            <tr>
+                <table>
+                    <tr><h4>Contraintes</h4></tr>
+                    <tr>
+                        <table>
+                            <tr><h5>Liste des filtres de recherche</h5></tr>
+                            <tr>
+                                <td>
+                                    <button type="button" class="js-add-constraint">+</button>
+                                </td>
+                            </tr>
+                            {% set _cptMdc = 0 %}
+                            {% for mdc in block.resourceConstraint.metadataConstraints %}
+                                <tr>
+                                    <td>
+                                        <button type="button" class="js-remove-tr">-</button>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="key" size="20" name="key[{{ _cptBlock }}][{{ _cptMdc }}]" value="{{ mdc.key }}"/>
+                                    </td>
+                                    <td>
+                                        <select class="comparator" name="comparator[{{ _cptBlock }}][{{ _cptMdc }}]">
+                                            <option value="in"
+                                                    {% if mdc.comparator == "in" %}
+                                            selected
+                                                    {% endif %}>à valeur dans la liste
+                                            </option>
+                                            <option value="between"
+                                                    {% if mdc.comparator == "between" %}
+                                            selected
+                                                    {% endif %}>entre . et .
+                                            </option>
+                                            <option value="lt"
+                                                    {% if mdc.comparator == "lt" %}
+                                            selected
+                                                    {% endif %}>inférieur à
+                                            </option>
+                                            <option value="lte"
+                                                    {% if mdc.comparator == "lte" %}
+                                            selected
+                                                    {% endif %}>inférieur ou égal à
+                                            </option>
+                                            <option value="gt"
+                                                    {% if mdc.comparator == "gt" %}
+                                            selected
+                                                    {% endif %}>supérieur à
+                                            </option>
+                                            <option value="gte"
+                                                    {% if mdc.comparator == "gte" %}
+                                            selected
+                                                    {% endif %}>supérieur ou égal à
+                                            </option>
+                                            <option value="exists"
+                                                    {% if mdc.comparator == "exists" %}
+                                            selected
+                                                    {% endif %}>clé existe
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="js-add-value">+</button>
+                                    </td>
+                                    {% for value in mdc.values %}
+                                        <td>
+                                            <input class="values" type="text" size="20"
+                                                   name="values[{{ _cptBlock }}][{{ _cptMdc }}][]" value="{{ value }}"/>
+                                            <button type="button" class="js-remove-td">x</button>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                                {% set _cptMdc = _cptMdc + 1 %}
+                            {% endfor %}
+                        </table>
+                    </tr>
+                </table>
+            </tr>
+        {% else %}
+            <tr>
+                <table>
+                    <tr><h4>Contraintes</h4></tr>
+                    <tr>
+                        <table>
+                            <tr><h5>Liste des filtres de recherche</h5></tr>
+                            <tr>
+                                <td>
+                                    <button type="button" class="js-add-constraint">+</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button type="button" class="js-remove-tr">-</button>
+                                </td>
+                                <td>
+                                    <input type="text" class="key" size="20" name="key[{{ _cptBlock }}][0]"/>
+                                </td>
+                                <td>
+                                    <select class="comparator" name="comparator[{{ _cptBlock }}][0]">
+                                        <option value="in">à valeur dans la liste</option>
+                                        <option value="between">entre . et .</option>
+                                        <option value="lt">inférieur à</option>
+                                        <option value="lte">inférieur ou égal à</option>
+                                        <option value="gt">supérieur à</option>
+                                        <option value="gte">supérieur ou égal à</option>
+                                        <option value="exists">clé existe</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <button type="button" class="js-add-value">+</button>
+                                </td>
+                                <td>
+                                    <input class="values" type="text" size="20"
+                                           name="values[{{ _cptBlock }}][0][]"/>
+                                    <button type="button" class="js-remove-td">x</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </tr>
+                </table>
+            </tr>
+        {% endif %}
+        </table>
+        </tr>
+        {% set _cptBlock = _cptBlock + 1 %}
+    {% endfor %}
+{% else %}
+    <tr>
+        <h3>Bloc n° {{ _cptBlock + 1 }}</h3>
+    </tr>
+    <tr>
+        <table>
+            <tr>
+                <td>
+                    Nombre maximal de propositions :
+                </td>
+                <td>
+                    <input type="text" size="20" name="blocks[0][maxNumberOfPropositions]"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Nombre maximal de propositions justes :
+                </td>
+                <td>
+                    <input type="text" size="20" name="blocks[0][maxNumberOfRightPropositions]"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Nombre de questions :
+                </td>
+                <td>
+                    <input type="text" size="20" name="blocks[0][numberOfOccurences]"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="radio" name="blocks[0][resourceOrigin]"
+                           value="list"/>
+                    Liste de ressources
+                </td>
+                <td>
+                    <input type="radio" name="blocks[0][resourceOrigin]"
+                           value="constraints"/>
+                    Contraintes
+                </td>
+            </tr>
+            <tr>
+                <table>
+                    <tr><h4>Liste des ressources</h4></tr>
+                    <tr>
+                        <td>
+                            <button type="button" class="js-add">+</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Id de ressource</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" size="20" name="resources[0][]"/>
+                        </td>
+                        <td>
+                            <button type="button" class="js-remove-tr">-</button>
+                        </td>
+                    </tr>
+                </table>
+            </tr>
+
+            <tr>
+                <table>
+                    <tr><h4>Contraintes</h4></tr>
+                    <tr>
+                        <table>
+                            <tr><h5>Liste des filtres de recherche</h5></tr>
+                            <tr>
+                                <td>
+                                    <button type="button" class="js-add-constraint">+</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button type="button" class="js-remove-tr">-</button>
+                                </td>
+                                <td>
+                                    <input type="text" class="key" size="20" name="key[0][0]"/>
+                                </td>
+                                <td>
+                                    <select class="comparator" name="comparator[0][0]">
+                                        <option value="in">à valeur dans la liste</option>
+                                        <option value="between">entre . et .</option>
+                                        <option value="lt">inférieur à</option>
+                                        <option value="lte">inférieur ou égal à</option>
+                                        <option value="gt">supérieur à</option>
+                                        <option value="gte">supérieur ou égal à</option>
+                                        <option value="exists">clé existe</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <button type="button" class="js-add-value">+</button>
+                                </td>
+                                <td>
+                                    <input class="values" type="text" size="20"
+                                           name="values[0][0][]"/>
+                                    <button type="button" class="js-remove-td">x</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </tr>
+                </table>
+            </tr>
+        </table>
+    </tr>
+{% endif %}
+</table>
+
+<input type="submit"/>
+</form>
+
+<script>
+    function addDocument() {
+        var $table = $('#documents'),
+                $lines = $('tr', $table),
+                $last = $lines.last(),
+                $clone = $last.clone();
+
+        // text
+        $clone
+                .find('input[type=text]')
+                .val('');
+
+        $clone.appendTo($table);
+    }
+
+    $(function () {
+        $('table').on('click', '.js-remove-tr', function (event) {
+            $(event.target).closest('tr').remove();
+        })
+    })
+
+    $(function () {
+        $('table').on('click', '.js-remove-td', function (event) {
+            $(event.target).closest('td').remove();
+        })
+    })
+
+    $(function () {
+        $('table').on('click', '.js-add', function (event) {
+            var $table = $(event.target).closest('table'),
+                    $lines = $('tr', $table),
+                    $last = $lines.last(),
+                    $clone = $last.clone();
+
+            $clone
+                    .find('input[type=text]')
+                    .val('');
+
+            $clone.appendTo($table);
+        })
+    })
+
+    $(function () {
+        $('tr').on('click', '.js-add-value', function (event) {
+            console.log('test');
+            var $line = $(event.target).closest('tr'),
+                    $tds = $('td', $line),
+                    $last = $tds.last(),
+                    $clone = $last.clone();
+
+            $clone
+                    .find('input[type=text]')
+                    .val('');
+
+            $clone.appendTo($line);
+        })
+    })
+
+    $(function () {
+        $('table').on('click', '.js-add-constraint', function (event) {
+            var $table = $(event.target).closest('table'),
+                    $lines = $('tr', $table),
+                    $last = $lines.last(),
+                    $inputText = $last.find('input[type=text]'),
+                    $clone = $last.clone(),
+                    blockId = ($inputText.length > 0) ? ($inputText.attr('name').match(/\[([0-9]+)\]\[/))[1] : 0,
+                    prevId = ($inputText.length > 0) ? ($inputText.attr('name').match(/\[([0-9]+)\]$/))[1] : 0;
+
+
+            prevId = parseInt(prevId, 0);
+            blockId = parseInt(blockId, 0);
+
+            // key
+            $clone
+                    .find('input[class=key]')
+                    .attr('name', 'key[' + blockId + '][' + (prevId + 1) + ']')
+                    .val('');
+
+            // comparator
+            $clone
+                    .find('select[class=comparator]')
+                    .attr('name', 'comparator[' + blockId + '][' + (prevId + 1) + ']')
+                    .val('');
+
+            // values
+            $clone
+                    .find('input[class=values]')
+                    .attr('name', 'values[' + blockId + '][' + (prevId + 1) + '][]')
+                    .val('');
+
+            $clone.appendTo($table);
+        })
+    })
+
+</script>

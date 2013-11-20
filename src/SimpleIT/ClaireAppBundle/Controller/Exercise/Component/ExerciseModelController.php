@@ -255,6 +255,7 @@ class ExerciseModelController extends AppController
     public function multipleChoiceContentEditAction(Request $request, $exerciseModelId)
     {
         $resourceData = $request->request->all();
+
         $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->saveMultipleChoice(
             $exerciseModelId,
             $resourceData
