@@ -34,6 +34,7 @@ class TocItemFactoryImpl implements TocItemFactory
             default:
                 throw new \InvalidArgumentException();
         }
+
         return $item;
     }
 }

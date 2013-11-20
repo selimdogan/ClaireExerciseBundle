@@ -2,7 +2,6 @@
 
 namespace SimpleIT\ClaireAppBundle\ViewModels\Course\Toc;
 
-use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 
 /**

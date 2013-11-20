@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\ViewModels\Course\Toc;
 
-use SimpleIT\ApiResourcesBundle\Course\CourseResource;
+use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Routing\Router;
@@ -37,7 +37,7 @@ class TocBuilderTest extends \PHPUnit_Framework_TestCase
     private $tocBuilder;
 
     /**
-     * @var CourseResource
+     * @var PartResource
      */
     private $toc;
 
@@ -89,7 +89,7 @@ class TocBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(self::TOC_VM_EXPECTED_COUNT, $this->tocItems);
     }
 
-    private function flattenToc($parent)
+    private function flattenToc(TocItem $parent)
     {
         $this->tocItems[] = $parent;
         /** @var TocItem $tocItem */
@@ -101,9 +101,44 @@ class TocBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function tocItemsShouldHaveCorrectId()
+    public function tocHierarchyIsCorrect()
     {
-
+        $this->initializeToc();
+        $this->tocVM = $this->tocBuilder->buildTocForEdition($this->toc);
+        $this->assertParentSubtype($this->tocVM);
     }
 
+    private function assertParentSubtype(TocItem $parent)
+    {
+        foreach ($parent->children as $child) {
+            if ($this->isPart($child)) {
+                $this->assertTrue($parent instanceof CourseItem);
+            } elseif ($this->isChapter($child)) {
+                $this->assertTrue($parent instanceof PartItem);
+            } else {
+                $this->fail();
+            }
+            $this->assertParentSubtype($child);
+        }
+    }
+
+    /**
+     * @param $child
+     *
+     * @return bool
+     */
+    private function isPart($child)
+    {
+        return $child instanceof PartItem;
+    }
+
+    /**
+     * @param $child
+     *
+     * @return bool
+     */
+    private function isChapter($child)
+    {
+        return $child instanceof ChapterItem;
+    }
 }

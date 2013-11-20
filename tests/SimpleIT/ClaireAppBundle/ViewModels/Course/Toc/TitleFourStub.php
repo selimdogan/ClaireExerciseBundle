@@ -6,7 +6,7 @@ use SimpleIT\ApiResourcesBundle\Course\PartResource;
 
 /**
  * Class TitleFourStub
- * 
+ *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
 class TitleFourStub extends PartResource

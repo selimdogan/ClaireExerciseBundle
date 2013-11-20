@@ -457,7 +457,7 @@ class CourseController extends AppController
         return $this->render(
             $template,
             array(
-                'course'                => $toc,
+                'toc'                => $toc,
                 'course'             => $course,
                 'categoryIdentifier' => $categoryIdentifier
             )

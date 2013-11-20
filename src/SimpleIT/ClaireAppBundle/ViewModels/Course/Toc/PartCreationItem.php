@@ -9,5 +9,7 @@ namespace SimpleIT\ClaireAppBundle\ViewModels\Course\Toc;
  */
 class PartCreationItem extends TocItemCreation
 {
+    const SUBTYPE = 'part-creation';
 
+    public $subtype = self::SUBTYPE;
 }

@@ -9,5 +9,7 @@ namespace SimpleIT\ClaireAppBundle\ViewModels\Course\Toc;
  */
 class ChapterCreationItem extends TocItemCreation
 {
+    const SUBTYPE = 'chapter-creation';
 
+    public $subtype = self::SUBTYPE;
 }
