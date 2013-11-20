@@ -589,7 +589,7 @@ class CourseController extends AppController
     )
     {
 
-        $course = $this->get('simple_it.claire.course.course')->getToEdit(
+        $course = $this->get('simple_it.claire.course.course')->getByStatus(
             $courseId,
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
         );
@@ -876,8 +876,9 @@ class CourseController extends AppController
             $course->getId(),
             $collectionInformation
         );
-        $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourse(
+        $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourseToEdit(
             $course->getId(),
+            $status,
             $collectionInformation
         );
 
