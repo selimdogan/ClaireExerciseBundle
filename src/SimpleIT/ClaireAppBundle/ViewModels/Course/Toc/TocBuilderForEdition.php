@@ -89,9 +89,9 @@ class TocBuilderForEdition
         $tocItemDisplay->url = $this->router->generate(
             'simple_it_claire_component_part_edit',
             array(
-                'courseId'       => $this->course->getId(),
-                'partIdentifier' => $part->getId(),
-                'status'         => $this->course->getStatus()
+                'courseId' => $this->course->getId(),
+                'partId'   => $part->getId(),
+                'status'   => $this->course->getStatus()
             )
         );
 

@@ -1,5 +1,5 @@
 simple_it_claire_component_part_edit:
-    pattern: /{partIdentifier}
+    pattern: /{courseId}/parts/{partId}
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Part:edit }
     requirements:
             _method: GET|POST
