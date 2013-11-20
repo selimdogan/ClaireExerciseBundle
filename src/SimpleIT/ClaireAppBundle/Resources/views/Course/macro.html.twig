@@ -2,7 +2,7 @@
 {% macro processToc(mainClass, part, level, categoryIdentifier, courseIdentifier, displayLevel) %}
     {% if level == 0 %}
         <div class="{{ mainClass }}">
-        {% if mainClass != 'course-medium' %}
+        {% if mainClass != 'toc-medium' %}
             <nav>
             <ul class="level-0">
 
@@ -18,17 +18,17 @@
         {% endif %}
     {% endif %}
 
-    {% if part.children|length > 0 and (level < 1 or (displayLevel > 1 and mainClass != 'course-medium')) %}
+    {% if part.children|length > 0 and (level < 1 or (displayLevel > 1 and mainClass != 'toc-medium')) %}
         <ul class="level-{{ level + 1 }}">
             {% set position = 1 %}
 
             {% for child in part.children %}
-                <li{% if level == 1 and mainClass == 'course-big' %} class="col4"{% endif %}>
+                <li{% if level == 1 and mainClass == 'toc-big' %} class="col4"{% endif %}>
                     <a class="course-title course-title-{{ level + 1 }}" data-claire-course-slug="{{ child.slug }}" href="{{ path ('simple_it_claire_course_part_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier, 'partIdentifier': child.slug})}}">
                         {% if child.metadatas.image is defined %}
                             <img class="course-icon" src="{{ child.metadatas.image }}" />
                         {% endif %}
-                        {% if displayLevel == 2 and mainClass != 'course-course-side' and mainClass != 'course-medium' %}
+                        {% if displayLevel == 2 and mainClass != 'course-toc-side' and mainClass != 'toc-medium' %}
 
                             {% if (level + 1) == 1 %}
                                 <span>Partie {{ position }} - {{ child.title -}}</span>
@@ -59,7 +59,7 @@
     {% endif %}
 
     {% if level == 0 %}
-        {% if mainClass != 'course-medium' %}
+        {% if mainClass != 'toc-medium' %}
             </li>
             </ul>
             </nav>
@@ -71,7 +71,7 @@
 {% macro processTocEdit(mainClass, part, level, categoryIdentifier, course) %}
     {% if level == 0 %}
         <div class="{{ mainClass }}">
-        {% if mainClass != 'course-medium' %}
+        {% if mainClass != 'toc-medium' %}
             <nav>
             <ul class="level-0">
 
@@ -87,17 +87,17 @@
         {% endif %}
     {% endif %}
 
-    {% if part.children|length > 0 and (level < 1 or (course.displayLevel > 1 and mainClass != 'course-medium')) %}
+    {% if part.children|length > 0 and (level < 1 or (course.displayLevel > 1 and mainClass != 'toc-medium')) %}
         <ul class="level-{{ level + 1 }}">
             {% set position = 1 %}
 
             {% for child in part.children %}
-                <li{% if level == 1 and mainClass == 'course-big' %} class="col4"{% endif %}>
+                <li{% if level == 1 and mainClass == 'toc-big' %} class="col4"{% endif %}>
                     <a class="course-title course-title-{{ level + 1 }}" data-claire-course-slug="{{ child.slug }}" href="{{ path ('simple_it_claire_course_part_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier, 'partIdentifier': child.slug, 'status':course.status})}}">
                         {% if child.metadatas.image is defined %}
                             <img class="course-icon" src="{{ child.metadatas.image }}" />
                         {% endif %}
-                        {% if course.displayLevel == 2 and mainClass != 'course-course-side' and mainClass != 'course-medium' %}
+                        {% if course.displayLevel == 2 and mainClass != 'course-toc-side' and mainClass != 'toc-medium' %}
 
                             {% if (level + 1) == 1 %}
                                 <span>Partie {{ position }} - {{ child.title -}}</span>
@@ -128,7 +128,7 @@
     {% endif %}
 
     {% if level == 0 %}
-        {% if mainClass != 'course-medium' %}
+        {% if mainClass != 'toc-medium' %}
             </li>
             </ul>
             </nav>
