@@ -126,7 +126,7 @@ class PartController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:viewTocMedium.html.twig',
             array(
-                'course'                => $toc,
+                'toc'                => $toc,
                 'courseIdentifier'   => $courseIdentifier,
                 'categoryIdentifier' => $categoryIdentifier,
                 'displayLevel'       => $displayLevel
@@ -162,7 +162,7 @@ class PartController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:viewTocMedium.html.twig',
             array(
-                'course'                => $toc,
+                'toc'                => $toc,
                 'courseIdentifier'   => $courseIdentifier,
                 'categoryIdentifier' => $categoryIdentifier,
                 'displayLevel'       => $displayLevel
@@ -190,7 +190,7 @@ class PartController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:viewTocBig.html.twig',
             array(
-                'course'                => $toc,
+                'toc'                => $toc,
                 'courseIdentifier'   => $courseIdentifier,
                 'categoryIdentifier' => $categoryIdentifier
             )
@@ -223,7 +223,7 @@ class PartController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:viewTocBig.html.twig',
             array(
-                'course'                => $toc,
+                'toc'                => $toc,
                 'courseIdentifier'   => $courseIdentifier,
                 'categoryIdentifier' => $categoryIdentifier
             )

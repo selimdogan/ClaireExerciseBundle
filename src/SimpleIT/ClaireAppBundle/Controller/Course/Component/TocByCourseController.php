@@ -24,11 +24,11 @@ class TocByCourseController extends AppController
 //            $courseId,
 //            $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
 //        );
-//        $course = $this->get('simple_it.claire.course.course')->getByStatus($courseId, $status);
+//        $toc = $this->get('simple_it.claire.course.course')->getByStatus($courseId, $status);
 //
 //        $tocVMBuilder = new TocBuilder();
 //
-//        $tocVM = $tocVMBuilder->buildTocForEdit($course);
+//        $tocVM = $tocVMBuilder->buildTocForEdit($toc);
 //
 //        return null;
     }

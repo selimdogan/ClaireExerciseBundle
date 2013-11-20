@@ -259,7 +259,7 @@ class PartService
     }
 
     /**
-     * Get a part course
+     * Get a part toc
      *
      * @param int | string $courseIdentifier Course id | slug
      * @param int | string $partIdentifier   Part id | slug
@@ -272,7 +272,7 @@ class PartService
     }
 
     /**
-     * Get a part course
+     * Get a part toc
      *
      * @param int | string $courseIdentifier Course id | slug
      * @param int | string $partIdentifier   Part id | slug
@@ -307,7 +307,7 @@ class PartService
     }
 
     /**
-     * Scan complete course and retrieve parents
+     * Scan complete toc and retrieve parents
      *
      * @param array        $partParents    Part parents
      * @param PartResource $parent         Parent element

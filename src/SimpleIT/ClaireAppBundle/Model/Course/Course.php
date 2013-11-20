@@ -332,9 +332,9 @@ class Course
     }
 
     /**
-     * Getter for $course
+     * Getter for $toc
      *
-     * @return function the $course
+     * @return function the $toc
      */
     public function getToc()
     {
@@ -342,7 +342,7 @@ class Course
     }
 
     /**
-     * Setter for $course
+     * Setter for $toc
      *
      * @param array $toc
      */
