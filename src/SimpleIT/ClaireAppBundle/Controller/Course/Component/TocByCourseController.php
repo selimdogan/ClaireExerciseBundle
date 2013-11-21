@@ -5,6 +5,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TocBuilder;
+use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TocBuilderForEdition;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,7 +26,7 @@ class TocByCourseController extends AppController
             $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
         );
 
-        $tocVMBuilder = new TocBuilder($this->get('router'));
+        $tocVMBuilder = new TocBuilderForEdition($this->get('router'));
         $tocVM = $tocVMBuilder->buildTocForEdition($toc);
 
         return $this->render(

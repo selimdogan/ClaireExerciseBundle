@@ -1,3 +1,10 @@
-{% macro render(toc) %}
-    Test
+{% macro build(toc) %}
+    {% for child in toc.children %}
+        {% if child.subtype == 'chapter' or child.subtype == 'part' %}
+            <a href="{{ child.url }}">{{ child.image }}{{ child.title }}</a>
+        {% elseif child.subtype == 'chapter-creation' or child.subtype == 'part-creation' %}
+            <a href="{{ child.url }}">+</a>
+        {% endif %}
+        {{ _self.build(child) }}
+    {% endfor %}
 {% endmacro %}
