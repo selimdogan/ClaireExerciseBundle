@@ -19,4 +19,4 @@ interface PartFactory
      * @return Part
      */
     public function make($subtype);
-} 
+}

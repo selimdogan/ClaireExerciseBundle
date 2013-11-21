@@ -24,11 +24,6 @@ class AddElementToToc implements UseCase
     );
 
     /**
-     * @var AddElementToTocRequestDTO
-     */
-    private $request;
-
-    /**
      * @var AddElementToTocResponseDTO
      */
     private $response;
@@ -73,6 +68,21 @@ class AddElementToToc implements UseCase
      */
     private $find = false;
 
+    /**
+     * @var array
+     */
+    private $oldTocIndex = array();
+
+    /**
+     * @var PartResource
+     */
+    private $newToc;
+
+    /**
+     * @var PartResource
+     */
+    private $newElement;
+
     public function __construct($tocByCourseGateway)
     {
         $this->tocByCourseGateway = $tocByCourseGateway;
@@ -80,42 +90,37 @@ class AddElementToToc implements UseCase
 
     public function execute(UseCaseRequest $useCaseRequest)
     {
-        /** @var AddElementToTocRequestDTO $request */
-        $this->request = $useCaseRequest;
-        $this->parentId = $this->request->parentId;
-        $this->courseId = $this->request->courseId;
+        /** @var AddElementToTocRequestDTO $useCaseRequest */
+        $this->parentId = $useCaseRequest->parentId;
+        $this->courseId = $useCaseRequest->courseId;
 
         $this->toc = $this->tocByCourseGateway->findByStatus(
             $this->courseId,
             array(CourseResource::STATUS => CourseResource::STATUS_DRAFT)
         );
+
         $this->parent = $this->toc;
+        $this->oldTocIndex[] = $this->toc->getId();
         $this->addChild();
         $this->save();
+
+        $this->getNewElement();
 
         $this->buildResponse();
 
         return $this->response;
     }
 
-    private function save()
-    {
-        if ($this->find) {
-            $this->tocByCourseGateway->update($this->courseId, $this->toc);
-        }
-    }
-
     private function addChild()
     {
         /** @var PartResource $child */
         foreach ($this->parent->getChildren() as $this->child) {
-            if ($this->isAlreadyAdded()) {
-                if ($this->parent->getId() == $this->parentId) {
-                    $this->addChildToToc();
-                } else {
-                    $this->parent = $this->child;
-                    self::addChild();
-                }
+            $this->oldTocIndex[] = $this->child->getId();
+            if ($this->isElementAddable()) {
+                $this->addChildToToc();
+            } else {
+                $this->parent = $this->child;
+                self::addChild();
             }
         }
     }
@@ -123,9 +128,9 @@ class AddElementToToc implements UseCase
     /**
      * @return bool
      */
-    private function isAlreadyAdded()
+    private function isElementAddable()
     {
-        return !$this->find;
+        return !$this->find && $this->parent->getId() == $this->parentId;
     }
 
     private function addChildToToc()
@@ -147,9 +152,34 @@ class AddElementToToc implements UseCase
         $this->createdChild->setTitle('Sans titre');
     }
 
+    private function save()
+    {
+        if ($this->find) {
+            $this->newToc = $this->tocByCourseGateway->update($this->courseId, $this->toc);
+        }
+    }
+
+    private function getNewElement()
+    {
+
+        $this->findNewElement($this->newToc);
+    }
+
+    private function findNewElement(PartResource $parent)
+    {
+        if (!in_array($parent->getId(), $this->oldTocIndex)) {
+            $this->newElement = $parent;
+        } else {
+            foreach ($parent->getChildren() as $child) {
+                $this->findNewElement($child);
+            }
+        }
+    }
+
     private function buildResponse()
     {
         $this->response = new AddElementToTocResponseDTO();
         $this->response->toc = $this->toc;
+        $this->response->newElement = $this->newElement;
     }
 }

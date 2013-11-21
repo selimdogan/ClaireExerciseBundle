@@ -97,7 +97,6 @@ class TocBuilder
 //                'status'           => $this->course->getStatus()
 //            )
 //        );
-
         return $tocItemDisplay;
     }
 

@@ -33,6 +33,7 @@ class PartFactoryImpl implements PartFactory
             default:
                 throw new \InvalidArgumentException();
         }
+
         return $part;
     }
 

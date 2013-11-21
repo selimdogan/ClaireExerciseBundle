@@ -3,8 +3,9 @@
 namespace SimpleIT\ClaireAppBundle\UseCases\Course\Toc;
 
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
+use SimpleIT\ClaireAppBundle\Requestors\Course\Toc\AddElementToTocRequest;
+use SimpleIT\ClaireAppBundle\Responders\Course\Toc\AddElementToTocResponse;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Toc\DTO\AddElementToTocRequestDTO;
-use SimpleIT\ClaireAppBundle\UseCases\Course\Toc\DTO\AddElementToTocResponseDTO;
 
 /**
  * Class AddElementToTocTest
@@ -13,14 +14,25 @@ use SimpleIT\ClaireAppBundle\UseCases\Course\Toc\DTO\AddElementToTocResponseDTO;
  */
 class AddElementToTocTest extends \PHPUnit_Framework_TestCase
 {
-    const EXPECTED_ELEMENTS_COUNT = 32;
+    const NEW_ELEMENT_ID_EXPECTED = 999;
 
-    private $elementCount = 1;
+    const EXPECTED_ELEMENTS_COUNT = 31;
 
+    private $elementCount = 0;
+
+    /**
+     * @var AddElementToTocResponse
+     */
     private $response;
 
+    /**
+     * @var AddElementToTocRequest
+     */
     private $request;
 
+    /**
+     * @var AddElementToToc
+     */
     private $useCase;
 
     /**
@@ -29,10 +41,10 @@ class AddElementToTocTest extends \PHPUnit_Framework_TestCase
     public function countShouldBeCorrectAfterAddingAPart()
     {
         $this->makeAddPartUseCase();
-        /** @var AddElementToTocResponseDTO $response */
-        $this->response = $this->useCase->execute($this->request);
+        $this->executeUseCase();
 
-        $this->countTocElements($this->response->toc);
+        $this->elementCount = 0;
+        $this->countTocElements($this->response->getToc());
         $this->assertEquals(self::EXPECTED_ELEMENTS_COUNT, $this->elementCount);
     }
 
@@ -49,6 +61,11 @@ class AddElementToTocTest extends \PHPUnit_Framework_TestCase
         $this->request->setCourseId(1);
     }
 
+    private function executeUseCase()
+    {
+        $this->response = $this->useCase->execute($this->request);
+    }
+
     private function countTocElements(PartResource $parent)
     {
         foreach ($parent->getChildren() as $child) {
@@ -62,13 +79,18 @@ class AddElementToTocTest extends \PHPUnit_Framework_TestCase
      */
     public function countShouldBeCorrectAfterAddingAChapter()
     {
+        $this->makeAddChapterUseCase();
+        $this->executeUseCase();
+
+        $this->elementCount = 0;
+        $this->countTocElements($this->response->getToc());
+        $this->assertEquals(self::EXPECTED_ELEMENTS_COUNT, $this->elementCount);
+    }
+
+    private function makeAddChapterUseCase()
+    {
         $this->buildAppChapterRequest();
         $this->useCase = new AddElementToToc(new TocByCourseRepositoryStub());
-        /** @var AddElementToTocResponseDTO $response */
-        $this->response = $this->useCase->execute($this->request);
-
-        $this->countTocElements($this->response->toc);
-        $this->assertEquals(self::EXPECTED_ELEMENTS_COUNT, $this->elementCount);
     }
 
     private function buildAppChapterRequest()
@@ -94,6 +116,34 @@ class AddElementToTocTest extends \PHPUnit_Framework_TestCase
         $this->request = new AddElementToTocRequestDTO();
         $this->request->setParentId(100);
         $this->request->setCourseId(1);
+    }
+
+    /**
+     * @test
+     */
+    public function addAPartShouldReturnTheNewElement()
+    {
+        $this->makeAddPartUseCase();
+        $this->executeUseCase();
+        $this->assertEquals(
+            self::NEW_ELEMENT_ID_EXPECTED,
+            $this->response->getNewElement()->getId()
+        );
+        $this->assertEquals(PartResource::TITLE_1, $this->response->getNewElement()->getSubtype());
+    }
+
+    /**
+     * @test
+     */
+    public function addAChapterShouldReturnTheNewElement()
+    {
+        $this->makeAddChapterUseCase();
+        $this->executeUseCase();
+        $this->assertEquals(
+            self::NEW_ELEMENT_ID_EXPECTED,
+            $this->response->getNewElement()->getId()
+        );
+        $this->assertEquals(PartResource::TITLE_2, $this->response->getNewElement()->getSubtype());
     }
 
     public function addAPartShouldProvideANewPartAtTheEnd()

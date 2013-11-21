@@ -5,15 +5,15 @@ namespace SimpleIT\ClaireAppBundle\UseCases\Course\Toc;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 
 /**
- * Class TitleOneStub
+ * Class TitleTwoStub
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class TitleOneStub extends PartResource
+class TitleTwoQuatroStub extends PartResource
 {
-    const ID = 10;
+    const ID = 103;
 
-    const SUBTYPE = self::TITLE_1;
+    const SUBTYPE = self::TITLE_2;
 
     protected $id = self::ID;
 
@@ -21,7 +21,6 @@ class TitleOneStub extends PartResource
 
     public function __construct()
     {
-        $this->children = array(New TitleTwoStub(), new TitleTwoBisStub());
+        $this->children = array(new TitleTreeStub(), new TitleTreeStub());
     }
-
 }

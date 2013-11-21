@@ -10,4 +10,4 @@ namespace SimpleIT\ClaireAppBundle\Requestors;
 interface UseCase
 {
     public function execute(UseCaseRequest $useCaseRequest);
-} 
+}

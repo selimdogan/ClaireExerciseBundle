@@ -9,9 +9,9 @@ use SimpleIT\ApiResourcesBundle\Course\PartResource;
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class TitleOneStub extends PartResource
+class TitleOneBisStub extends PartResource
 {
-    const ID = 10;
+    const ID = 11;
 
     const SUBTYPE = self::TITLE_1;
 
@@ -21,7 +21,7 @@ class TitleOneStub extends PartResource
 
     public function __construct()
     {
-        $this->children = array(New TitleTwoStub(), new TitleTwoBisStub());
+        $this->children = array(New TitleTwoTerStub(), new TitleTwoQuatroStub());
     }
 
 }
