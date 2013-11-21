@@ -31,7 +31,7 @@ class TocByCourseController extends AppController
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:tocEdit.html.twig',
-            array('toc' => $tocVM)
+            array('toc' => $tocVM, 'courseId' => $tocVM->id)
         );
     }
 

@@ -62,13 +62,14 @@ class PartController extends AppController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request, $courseIdentifier, $partIdentifier)
+    public function editAction(Request $request, $courseId, $partId)
     {
         $part = new PartResource();
         if (RequestUtils::METHOD_GET == $request->getMethod()) {
-            $part = $this->get('simple_it.claire.course.part')->get(
-                $courseIdentifier,
-                $partIdentifier
+            $part = $this->get('simple_it.claire.course.part')->getByStatus(
+                $courseId,
+                $partId,
+                CourseResource::STATUS_DRAFT
             );
         }
 
@@ -80,8 +81,8 @@ class PartController extends AppController
             $form->bind($request);
             if ($form->isValid()) {
                 $part = $this->get('simple_it.claire.course.part')->save(
-                    $courseIdentifier,
-                    $partIdentifier,
+                    $courseId,
+                    $partId,
                     $part
                 );
             }
@@ -92,8 +93,8 @@ class PartController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Part/Component:edit.html.twig',
             array(
-                'courseIdentifier' => $courseIdentifier,
-                'partIdentifier'   => $partIdentifier,
+                'courseIdentifier' => $courseId,
+                'partIdentifier'   => $partId,
                 'part'             => $part,
                 'form'             => $form->createView()
             )
