@@ -5,7 +5,9 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TocBuilder;
+use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TocBuilderForEdition;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class TocByCourseController
@@ -19,16 +21,22 @@ class TocByCourseController extends AppController
      */
     public function editViewAction(Request $request, $courseId)
     {
-//        $course = $this->get('simple_it.claire.course.course')->getByStatus(
-//            $courseId,
-//            $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
-//        );
-//        $toc = $this->get('simple_it.claire.course.course')->getByStatus($courseId, $status);
-//
-//        $tocVMBuilder = new TocBuilder();
-//
-//        $tocVM = $tocVMBuilder->buildTocForEdit($toc);
-//
-//        return null;
+        $toc = $this->get('simple_it.claire.course.course')->getTocByStatus(
+            $courseId,
+            $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
+        $tocVMBuilder = new TocBuilderForEdition($this->get('router'));
+        $tocVM = $tocVMBuilder->buildTocForEdition($toc);
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:tocEdit.html.twig',
+            array('toc' => $tocVM)
+        );
+    }
+
+    public function editAction()
+    {
+        return new Response();
     }
 }

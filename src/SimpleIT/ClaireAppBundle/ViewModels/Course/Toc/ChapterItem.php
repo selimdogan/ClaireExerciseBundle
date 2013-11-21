@@ -3,13 +3,13 @@
 namespace SimpleIT\ClaireAppBundle\ViewModels\Course\Toc;
 
 /**
- * Class TocItemViewModel
+ * Class ChapterItem
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class TocItemViewModel
+class ChapterItem extends TocItemDisplay
 {
-    public $id;
+    const SUBTYPE = 'chapter';
 
-    public $subtype;
+    public $subtype = self::SUBTYPE;
 }
