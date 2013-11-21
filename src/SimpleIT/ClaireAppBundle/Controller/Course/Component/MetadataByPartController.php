@@ -194,12 +194,12 @@ class MetadataByPartController extends AbstractMetadataController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editImageAction(Request $request, $courseIdentifier, $partIdentifier)
+    public function editImageAction(Request $request, $courseId, $partId)
     {
         $metadataName = MetadataResource::COURSE_METADATA_IMAGE;
         $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromPart(
-            $courseIdentifier,
-            $partIdentifier
+            $courseId,
+            $partId
         );
 
         $form = $this->createFormBuilder($metadatas)
@@ -209,8 +209,8 @@ class MetadataByPartController extends AbstractMetadataController
         $form = $this->processPartEdit(
             $request,
             $form,
-            $courseIdentifier,
-            $partIdentifier,
+            $courseId,
+            $partId,
             $metadatas,
             $metadataName
         );
@@ -218,8 +218,8 @@ class MetadataByPartController extends AbstractMetadataController
         return $this->render(
             'SimpleITClaireAppBundle:Course/MetadataByPart/Component:editImage.html.twig',
             array(
-                'courseIdentifier' => $courseIdentifier,
-                'partIdentifier'   => $partIdentifier,
+                'courseIdentifier' => $courseId,
+                'partIdentifier'   => $partId,
                 'form'             => $form->createView()
             )
         );
