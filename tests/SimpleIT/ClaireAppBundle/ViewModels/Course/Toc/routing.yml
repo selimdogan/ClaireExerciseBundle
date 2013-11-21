@@ -1,4 +1,4 @@
-simple_it_claire_component_part_edit:
+simple_it_claire_course_part_edit:
     pattern: /{courseId}/parts/{partId}
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Part:edit }
     requirements:
