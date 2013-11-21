@@ -35,6 +35,9 @@ class TocByCourseController extends AppController
         );
     }
 
+    /**
+     * @return Response
+     */
     public function editAction()
     {
         return new Response();
