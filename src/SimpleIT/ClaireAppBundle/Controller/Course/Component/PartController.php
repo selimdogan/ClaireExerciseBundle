@@ -93,10 +93,10 @@ class PartController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Part/Component:edit.html.twig',
             array(
-                'courseIdentifier' => $courseId,
-                'partIdentifier'   => $partId,
-                'part'             => $part,
-                'form'             => $form->createView()
+                'courseId' => $courseId,
+                'partId'   => $partId,
+                'part'     => $part,
+                'form'     => $form->createView()
             )
         );
     }
