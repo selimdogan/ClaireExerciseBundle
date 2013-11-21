@@ -16,7 +16,7 @@ class AddElementToTocTest extends \PHPUnit_Framework_TestCase
 {
     const NEW_ELEMENT_ID_EXPECTED = 999;
 
-    const EXPECTED_ELEMENTS_COUNT = 31;
+    const EXPECTED_ELEMENTS_COUNT = 32;
 
     private $elementCount = 0;
 
@@ -68,10 +68,48 @@ class AddElementToTocTest extends \PHPUnit_Framework_TestCase
 
     private function countTocElements(PartResource $parent)
     {
+        $this->elementCount++;
         foreach ($parent->getChildren() as $child) {
-            $this->elementCount++;
             $this->countTocElements($child);
         }
+    }
+
+    /**
+     * @test
+     */
+    public function countShouldBeCorrectAfterAddingAPartOnAnEmptyToc()
+    {
+        $this->makeAddPartUseCaseOnEmptyToc();
+        $this->executeUseCase();
+
+        $this->elementCount = 0;
+        $this->countTocElements($this->response->getToc());
+        $this->assertEquals(2, $this->elementCount);
+    }
+
+    private function makeAddPartUseCaseOnEmptyToc()
+    {
+        $this->buildAddPartRequest();
+        $this->useCase = new AddElementToToc(new TocByCourseWithEmptyTocRepositoryStub());
+    }
+
+    /**
+     * @test
+     */
+    public function countShouldBeCorrectAfterAddingAChapterOnAnEmptyPart()
+    {
+        $this->makeAddChapterUseCaseOnEmptyToc();
+        $this->executeUseCase();
+
+        $this->elementCount = 0;
+        $this->countTocElements($this->response->getToc());
+        $this->assertEquals(3, $this->elementCount);
+    }
+
+    private function makeAddChapterUseCaseOnEmptyToc()
+    {
+        $this->buildAddChapterRequest();
+        $this->useCase = new AddElementToToc(new TocByCourseWithEmptyPartRepositoryStub());
     }
 
     /**
@@ -89,11 +127,11 @@ class AddElementToTocTest extends \PHPUnit_Framework_TestCase
 
     private function makeAddChapterUseCase()
     {
-        $this->buildAppChapterRequest();
+        $this->buildAddChapterRequest();
         $this->useCase = new AddElementToToc(new TocByCourseRepositoryStub());
     }
 
-    private function buildAppChapterRequest()
+    private function buildAddChapterRequest()
     {
         $this->request = new AddElementToTocRequestDTO();
         $this->request->setParentId(10);
@@ -116,6 +154,19 @@ class AddElementToTocTest extends \PHPUnit_Framework_TestCase
         $this->request = new AddElementToTocRequestDTO();
         $this->request->setParentId(100);
         $this->request->setCourseId(1);
+    }
+
+    /**
+     * @test
+     * @expectedException \DomainException
+     */
+    public function exceptionShouldBeThrownAfterAddingFromAParentThatDoesNotExist()
+    {
+        $this->request = new AddElementToTocRequestDTO();
+        $this->request->setParentId(-1);
+        $this->request->setCourseId(1);
+        $this->useCase = new AddElementToToc(new TocByCourseRepositoryStub());
+        $this->response = $this->useCase->execute($this->request);
     }
 
     /**

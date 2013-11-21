@@ -102,6 +102,9 @@ class AddElementToToc implements UseCase
         $this->parent = $this->toc;
         $this->oldTocIndex[] = $this->toc->getId();
         $this->addChild();
+        if (!$this->find) {
+            throw new \DomainException();
+        }
         $this->save();
 
         $this->getNewElement();
@@ -113,12 +116,13 @@ class AddElementToToc implements UseCase
 
     private function addChild()
     {
-        /** @var PartResource $child */
-        foreach ($this->parent->getChildren() as $this->child) {
-            $this->oldTocIndex[] = $this->child->getId();
-            if ($this->isElementAddable()) {
-                $this->addChildToToc();
-            } else {
+        if ($this->isElementAddable()) {
+            $this->addChildToToc();
+        } else {
+            /** @var PartResource $child */
+            foreach ($this->parent->getChildren() as $this->child) {
+                $this->oldTocIndex[] = $this->child->getId();
+
                 $this->parent = $this->child;
                 self::addChild();
             }

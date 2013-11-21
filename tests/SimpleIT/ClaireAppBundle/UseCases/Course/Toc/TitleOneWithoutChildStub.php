@@ -9,7 +9,7 @@ use SimpleIT\ApiResourcesBundle\Course\PartResource;
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class TitleOneWithNullChildrenStub extends PartResource
+class TitleOneWithoutChildStub extends PartResource
 {
     const ID = 10;
 
