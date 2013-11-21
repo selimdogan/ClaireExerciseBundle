@@ -152,9 +152,9 @@ class PartService
      *
      * @return PartResource
      */
-    public function save($courseIdentifier, $partIdentifier, $part)
+    public function save($courseIdentifier, $partIdentifier, $part, $status)
     {
-        return $this->partRepository->update($courseIdentifier, $partIdentifier, $part);
+        return $this->partRepository->update($courseIdentifier, $partIdentifier, $part, $status);
     }
 
     /**

@@ -83,7 +83,8 @@ class PartController extends AppController
                 $part = $this->get('simple_it.claire.course.part')->save(
                     $courseId,
                     $partId,
-                    $part
+                    $part,
+                    $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
                 );
             }
 
