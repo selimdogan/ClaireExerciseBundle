@@ -3,6 +3,7 @@
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
+use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Toc\DTO\AddElementToTocRequestDTO;
 use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TocBuilder;
@@ -45,17 +46,21 @@ class TocByCourseController extends AppController
         $useCaseRequest->courseId = $courseId;
         $parentId = $request->get('parentId');
         $useCaseRequest->parentId = $parentId;
-        $useCaseReponse = $this->get('simple_it.claire.course.toc.add_element_to_toc')->execute(
+        $useCaseResponse = $this->get('simple_it.claire.course.toc.add_element_to_toc')->execute(
             $useCaseRequest
         );
 
-        if ($parentId == $courseId) {
+        $newElement = $useCaseResponse->getNewElement();
+        if ($newElement->getSubtype() == PartResource::TITLE_1) {
             $url = $this->generateUrl(
                 'simple_it_claire_course_course_edit',
                 array('courseId' => $courseId)
             );
-        } else {
-            $url = '';
+        } elseif ($newElement->getSubtype() == PartResource::TITLE_2) {
+            $url = $this->generateUrl(
+                'simple_it_claire_course_part_edit',
+                array('courseId' => $courseId, 'partId' => $newElement->getId())
+            );
 
         }
 
