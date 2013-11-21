@@ -3,7 +3,9 @@
 
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
+use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
+use SimpleIT\ClaireAppBundle\Gateways\Course\Toc\TocByCourseGateway;
 use SimpleIT\Utils\FormatUtils;
 use SimpleIT\AppBundle\Annotation\Cache;
 
@@ -68,4 +70,10 @@ class CourseTocRepository extends AppRepository
             $format
         );
     }
+
+    public function update($courseId, PartResource $toc)
+    {
+        return $this->updateResource($toc, array('courseIdentifier' => $courseId));
+    }
+
 }

@@ -4,6 +4,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
+use SimpleIT\ClaireAppBundle\UseCases\Course\Toc\DTO\AddElementToTocRequestDTO;
 use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TocBuilder;
 use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TocBuilderForEdition;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,8 +39,28 @@ class TocByCourseController extends AppController
     /**
      * @return Response
      */
-    public function editAction()
+    public function editAction(Request $request, $courseId)
     {
-        return new Response();
+        $useCaseRequest = new AddElementToTocRequestDTO();
+        $useCaseRequest->courseId = $courseId;
+        $parentId = $request->get('parentId');
+        $useCaseRequest->parentId = $parentId;
+        $useCaseReponse = $this->get('simple_it.claire.course.toc.add_element_to_toc')->execute(
+            $useCaseRequest
+        );
+
+        if ($parentId == $courseId) {
+            $url = $this->generateUrl(
+                'simple_it_claire_course_course_edit',
+                array('courseId' => $courseId)
+            );
+        } else {
+            $url = '';
+
+        }
+
+        return $this->redirect(
+            $this->generateUrl($url)
+        );
     }
 }

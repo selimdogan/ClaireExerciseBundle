@@ -41,6 +41,11 @@ class AddElementToToc implements UseCase
     /**
      * @var int
      */
+    private $courseId;
+
+    /**
+     * @var int
+     */
     private $parentId;
 
     /**
@@ -68,7 +73,7 @@ class AddElementToToc implements UseCase
      */
     private $find = false;
 
-    public function __construct(TocByCourseGateway $tocByCourseGateway)
+    public function __construct($tocByCourseGateway)
     {
         $this->tocByCourseGateway = $tocByCourseGateway;
     }
@@ -78,17 +83,26 @@ class AddElementToToc implements UseCase
         /** @var AddElementToTocRequestDTO $request */
         $this->request = $useCaseRequest;
         $this->parentId = $this->request->parentId;
+        $this->courseId = $this->request->courseId;
 
         $this->toc = $this->tocByCourseGateway->findByStatus(
-            $this->request->courseId,
-            CourseResource::STATUS_DRAFT
+            $this->courseId,
+            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT)
         );
         $this->parent = $this->toc;
         $this->addChild();
+        $this->save();
 
         $this->buildResponse();
 
         return $this->response;
+    }
+
+    private function save()
+    {
+        if ($this->find) {
+            $this->tocByCourseGateway->update($this->courseId, $this->toc);
+        }
     }
 
     private function addChild()
