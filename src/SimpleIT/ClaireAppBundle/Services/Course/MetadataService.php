@@ -222,14 +222,12 @@ class MetadataService
      * @return array
      */
     public function getInformationsFromPartByStatus(
-        Request $request,
         $courseIdentifier,
-        $partIdentifier
+        $partIdentifier,
+    $status
     )
     {
-        $status = $request->get(
-            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
-        );
+
         $metadatas = $this->getAllFromPartByStatus($courseIdentifier, $partIdentifier, $status);
         $courseMetadatas = $this->getAllFromCourseByStatus(
             $courseIdentifier,

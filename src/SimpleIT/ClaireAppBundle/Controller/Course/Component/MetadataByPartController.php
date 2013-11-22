@@ -2,6 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\Utils\ArrayUtils;
@@ -50,9 +51,10 @@ class MetadataByPartController extends AbstractMetadataController
     public function viewInformationsByStatusAction(Request $request, $courseIdentifier, $partIdentifier)
     {
 
-        $informations = $this->get('simple_it.claire.course.metadata')->getInformationsFromPart(
+        $informations = $this->get('simple_it.claire.course.metadata')->getInformationsFromPartByStatus(
             $courseIdentifier,
-            $partIdentifier
+            $partIdentifier,
+            $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
         );
 
         return $this->render(
