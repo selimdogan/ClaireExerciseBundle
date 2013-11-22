@@ -1,11 +1,9 @@
 <?php
 
-
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
-use SimpleIT\ClaireAppBundle\Gateways\Course\Toc\TocByCourseGateway;
 use SimpleIT\Utils\FormatUtils;
 use SimpleIT\AppBundle\Annotation\Cache;
 
@@ -25,6 +23,18 @@ class CourseTocRepository extends AppRepository
      * @type string
      */
     protected $resourceClass = 'SimpleIT\ApiResourcesBundle\Course\PartResource';
+
+    /**
+     * @var PartResource
+     */
+    private $child;
+
+    /**
+     * @var PartResource
+     */
+    private $parent;
+
+    private $toc;
 
     /**
      * Find a course toc
@@ -73,7 +83,28 @@ class CourseTocRepository extends AppRepository
 
     public function update($courseId, PartResource $toc)
     {
-        return $this->updateResource($toc, array('courseIdentifier' => $courseId));
+        $data = $this->serializer->serialize($toc, 'json', array('edit'));
+        $request = $this->client->put(
+            array($this->path, self::formatIdentifiers(array('courseIdentifier' => $courseId))),
+            null,
+            $data
+        );
+
+        return $this->getSingleResource($request);
+
+    }
+
+    private function formatToc()
+    {
+        /** @var PartResource $child */
+        foreach ($this->parent->getChildren() as $this->child) {
+            $child->setCreatedAt(null);
+            $child->setMetadatas(null);
+            $child->setSlug(null);
+            $child->setUpdatedAt(null);
+            $this->parent = $this->child;
+            $this->formatToc();
+        }
     }
 
 }
