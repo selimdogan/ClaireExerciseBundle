@@ -1,33 +1,20 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"></script>
-<h2>Edition de groupement d'objets</h2>
+<h2>Edition d'appariement d'objets</h2>
 
-<form action="{{ path('simple_it_claire_component_exercise_exercise_model_group_items_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
+<form action="{{ path('simple_it_claire_component_exercise_exercise_model_pair_items_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
 
     <table>
         <tr>
-            <td><label for="wording">Consigne :</label></td>
             <td>
-                <input type="text" size="200" name="wording" id="wording" value="{{ exerciseModel.content.wording }}"/>
-            </td>
-        </tr>
-        <tr>
-            <td><label for="displayGroupNames">Afficher le nom des groupes :</label></td>
-            <td>
-                <select name="displayGroupNames" id="displayGroupNames">
-                    <option value="show" {% if exerciseModel.content.displayGroupNames %}selected{% endif %}>montrer</option>
-                    <option value="hide" {% if not exerciseModel.content.displayGroupNames %}selected{% endif %}>cacher</option>
-                    <option value="ask" {% if not exerciseModel.content.displayGroupNames %}selected{% endif %}>demander</option>
-                </select>
+                <label>Consigne :
+                    <input type="text" size="200" name="wording" id="wording" value="{{ exerciseModel.content.wording }}"/>
+                </label>
             </td>
         </tr>
     </table>
 
     {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/documents.html.twig'
     with {'documents' : exerciseModel.content.documents} %}
-
-    {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/groupingCriteria.html.twig'
-    with {'classifConstr' : exerciseModel.content.classifConstr, 'blockId' : 'root'} %}
-
 
     <table id="blocks" border="1">
         <tr>
@@ -37,8 +24,8 @@
             </td>
         </tr>
         {% set _cptBlock = 0 %}
-        {% if exerciseModel.content.objectBlocks |length > 0 %}
-            {% for block in exerciseModel.content.objectBlocks %}
+        {% if exerciseModel.content.pairBlocks |length > 0 %}
+            {% for block in exerciseModel.content.pairBlocks %}
                 <tr>
                     <td>
                         <button type="button" class="js-remove-block">Supprimer bloc</button>
@@ -50,9 +37,27 @@
                             </tr>
                             <tr>
                                 <td>
-                                    {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/groupingCriteria.html.twig'
-                                    with {'classifConstr' : block.classifConstr,
-                                    'blockId' : _cptBlock} %}
+                                    <label>Clé de la métadonnée utilisée pour créer la partie
+                                        mobile
+                                        <input type="text" size="20" name="blocks[{{ _cptBlock }}][metaKey]"
+                                                value="{{ block.pairMetaKey }}"/>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>Type d'association
+                                        <select name="blocks[{{ _cptBlock }}][pairType]">
+                                            <option value="text-meta-value"
+                                                    {% if block.pairType == 'text-meta-value' %}selected
+                                                    {% endif %}>Texte en métadonnée
+                                            </option>
+                                            <option value="resource-meta-value"
+                                                    {% if block.pairType == 'resource-meta-value' %}selected
+                                                    {% endif %}>Ressource en métadonnée
+                                            </option>
+                                        </select>
+                                    </label>
                                 </td>
                             </tr>
                             <tr>
@@ -84,18 +89,27 @@
                 <td>
                     <table>
                         <tr>
-                            <td><h3>Bloc n°1</h3></td>
+                            <td><h3>Bloc n° 1</h3></td>
                         </tr>
                         <tr>
                             <td>
-                                <h3>Critères de groupement</h3>
+                                <label>Clé de la métadonnée utilisée pour créer la partie mobile
+                                    <input type="text" size="20" name="blocks[0][metaKey]"/>
+                                </label>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/groupingCriteria.html.twig'
-                                with {'classifConstr' : block.classifConstr,
-                                'blockId' : 0} %}
+                                <label>Type d'association
+                                    <select name="blocks[0][pairType]">
+                                        <option value="text-meta-value">
+                                            Texte en métadonnée
+                                        </option>
+                                        <option value="resource-meta-value">
+                                            Ressource en métadonnée
+                                        </option>
+                                    </select>
+                                </label>
                             </td>
                         </tr>
                         <tr>
@@ -111,7 +125,7 @@
                         'comparatorName' : 'comparator',
                         'valuesName' : 'values',
                         '_cptBlock' : 0,
-                        'block' : NULL,
+                        'block' : block,
                         'askType' : true
                         } %}
                     </table>

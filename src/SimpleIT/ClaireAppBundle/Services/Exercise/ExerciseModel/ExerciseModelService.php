@@ -18,6 +18,7 @@ use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\MultipleChoice\QuestionBl
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\OrderItems\Model as OrderItems;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\OrderItems\SequenceBlock;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\PairItems\Model as PairItems;
+use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\PairItems\PairBlock;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModelResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource\CommonResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ModelObject\MetadataConstraint;
@@ -187,7 +188,6 @@ class ExerciseModelService
      */
     public function saveOrderItems($exerciseModelId, array $oiArray)
     {
-//        throw new \Exception(print_r($piArray, true));
         $orderItems = new OrderItems();
         $this->setWordingAndDocuments($oiArray, $orderItems);
 
@@ -225,6 +225,29 @@ class ExerciseModelService
         } else {
             throw new \Exception('order items: a content must be chosen');
         }
+
+        $exerciseModel = new ExerciseModelResource();
+        $exerciseModel->setContent($orderItems);
+
+        return $this->save($exerciseModelId, $exerciseModel);
+    }
+
+    /**
+     * Save an order items
+     *
+     * @param int   $exerciseModelId
+     * @param array $piArray
+     *
+     * @throws \Exception
+     * @return ExerciseModelResource
+     */
+    public function savePairItems($exerciseModelId, array $piArray)
+    {
+//        throw new \Exception(print_r($piArray, true));
+        $orderItems = new PairItems();
+        $this->setWordingAndDocuments($piArray, $orderItems);
+
+        $this->addPairItemsObjectBlocksFromArray($piArray, $orderItems);
 
         $exerciseModel = new ExerciseModelResource();
         $exerciseModel->setContent($orderItems);
@@ -386,6 +409,36 @@ class ExerciseModelService
         }
 
         $model->setObjectBlocks($objectBlocks);
+    }
+
+    /**
+     * Create the object blocks from the modelArray
+     *
+     * @param array     $modelArray
+     * @param PairItems $model
+     */
+    private function addPairItemsObjectBlocksFromArray(array $modelArray, &$model)
+    {
+        $objectBlocks = array();
+
+        foreach ($modelArray['blocks'] as $blockId => $blockArray) {
+            $block = new PairBlock(
+                $blockArray['numberOfOccurences'],
+                $blockArray['pairType'],
+                $blockArray['metaKey']
+            );
+
+            $this->setResourceOrigin(
+                $block,
+                $blockArray,
+                $modelArray,
+                $blockId
+            );
+
+            $objectBlocks[] = $block;
+        }
+
+        $model->setPairBlocks($objectBlocks);
     }
 
     /**
