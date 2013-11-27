@@ -1,21 +1,23 @@
+{% if onlyOneOccurence is not defined or onlyOneOccurence != true %}
 <tr>
     <td>
         <label>Nombre de {{ objectName }} :
-            <input type="text" size="20" name="blocks[{{ _cptBlock }}][numberOfOccurences]"
+            <input type="text" size="20" name="{{ blocksName }}[{{ _cptBlock }}][numberOfOccurences]"
                    {% if block != NULL %}value="{{ block.numberOfOccurences }}{% endif %}"/>
         </label>
     </td>
 </tr>
+{% endif %}
 <tr>
     <td>
         <label>
-            <input type="radio" name="blocks[{{ _cptBlock }}][resourceOrigin]"
+            <input type="radio" name="{{ blocksName }}[{{ _cptBlock }}][resourceOrigin]"
                    value="list"
                    {% if block != NULL and block.resources |length > 0 %}checked{% endif %}/>
         </label>
         Liste de ressources
         <label>
-            <input type="radio" name="blocks[{{ _cptBlock }}][resourceOrigin]"
+            <input type="radio" name="{{ blocksName }}[{{ _cptBlock }}][resourceOrigin]"
                    value="constraints"
                    {% if block != NULL and block.resources |length == 0 %}checked{% endif %}/>
         </label>
@@ -41,7 +43,7 @@
                     <tr>
                         <td>
                             <label>
-                                <input type="text" size="20" name="resources[{{ _cptBlock }}][]" value="{{ resource.id }}"/>
+                                <input type="text" size="20" name="{{ resourcesName }}[{{ _cptBlock }}][]" value="{{ resource.id }}"/>
                             </label>
                         </td>
                         <td>
@@ -70,7 +72,7 @@
                 <tr>
                     <td>
                         <label>
-                            <input type="text" size="20" name="resources[{{ _cptBlock }}][]"/>
+                            <input type="text" size="20" name="{{ resourcesName }}[{{ _cptBlock }}][]"/>
                         </label>
                     </td>
                     <td>
@@ -117,9 +119,9 @@
 
                                 {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/classificationConstraints.html.twig'
                                 with {'mdc' : mdc,
-                                'keyName' : 'key',
-                                'comparatorName' : 'comparator',
-                                'valuesName' : 'values',
+                                'keyName' : keyName,
+                                'comparatorName' : comparatorName,
+                                'valuesName' : valuesName,
                                 'cptBlock' : _cptBlock,
                                 'cptMdc' : _cptMdc} %}
 
@@ -155,9 +157,9 @@
 
                             {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/classificationConstraints.html.twig'
                             with {'mdc' : NULL,
-                            'keyName' : 'key',
-                            'comparatorName' : 'comparator',
-                            'valuesName' : 'values',
+                            'keyName' : keyName,
+                            'comparatorName' : comparatorName,
+                            'valuesName' : valuesName,
                             'cptBlock' : _cptBlock,
                             'cptMdc' : 0} %}
                         </table>

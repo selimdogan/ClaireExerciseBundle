@@ -8,16 +8,23 @@ use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\Common\ResourceBlock;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\GroupItems\ClassificationConstraints;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\GroupItems\Group;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\GroupItems\Model as GroupItems;
-use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\GroupItems\ObjectBlock;
+use
+    SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\GroupItems\ObjectBlock as GroupItemsObjectBlock;
+
+use
+    SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\OrderItems\ObjectBlock as OrderItemsObjectBlock;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\MultipleChoice\Model as MultipleChoice;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\MultipleChoice\QuestionBlock;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\OrderItems\Model as OrderItems;
+use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\OrderItems\SequenceBlock;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\PairItems\Model as PairItems;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModelResource;
+use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource\CommonResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ModelObject\MetadataConstraint;
 use SimpleIT\ApiResourcesBundle\Exercise\ModelObject\ModelDocument;
 use SimpleIT\ApiResourcesBundle\Exercise\ModelObject\ObjectConstraints;
 use SimpleIT\ApiResourcesBundle\Exercise\ModelObject\ObjectId;
+use SimpleIT\ApiResourcesBundle\Exercise\ResourceResource;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModel\ExerciseModelRepository;
 use
     SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModel\RequiredResourceByExerciseModelRepository;
@@ -143,7 +150,6 @@ class ExerciseModelService
      */
     public function saveGroupItems($exerciseModelId, array $giArray)
     {
-//        throw new \Exception(print_r($giArray, true));
         $groupItems = new GroupItems();
         $this->setWordingAndDocuments($giArray, $groupItems);
         switch ($giArray['displayGroupNames']) {
@@ -167,7 +173,63 @@ class ExerciseModelService
         $exerciseModel = new ExerciseModelResource();
         $exerciseModel->setContent($groupItems);
 
-//        throw new \Exception(print_r($exerciseModel, true));
+        return $this->save($exerciseModelId, $exerciseModel);
+    }
+
+    /**
+     * Save an order items
+     *
+     * @param int   $exerciseModelId
+     * @param array $oiArray
+     *
+     * @throws \Exception
+     * @return ExerciseModelResource
+     */
+    public function saveOrderItems($exerciseModelId, array $oiArray)
+    {
+//        throw new \Exception(print_r($piArray, true));
+        $orderItems = new OrderItems();
+        $this->setWordingAndDocuments($oiArray, $orderItems);
+
+        $orderItems->setGiveFirst(isset($oiArray['give-first']) && $oiArray['give-first'] === "1");
+        $orderItems->setGiveLast(isset($oiArray['give-last']) && $oiArray['give-last'] === "1");
+
+        if ($oiArray['sequence-origin'] == 'sequence-resource') {
+            $sequenceBlock = new SequenceBlock();
+            $sequenceBlock->setKeepAll($oiArray['keepAll']);
+            $sequenceBlock->setNumberOfParts($oiArray['number-of-parts']);
+            $sequenceBlock->setUseFirst($oiArray['use-first'] === "1");
+            $sequenceBlock->setUseLast($oiArray['use-last'] === "1");
+            $this->setResourceOrigin(
+                $sequenceBlock,
+                $oiArray['sequence-blocks'][0],
+                $oiArray,
+                0,
+                CommonResource::SEQUENCE,
+                'sequence-resources',
+                'sequence-key',
+                'sequence-comparator',
+                'sequence-values'
+            );
+            $orderItems->setSequenceBlock($sequenceBlock);
+        } elseif ($oiArray['sequence-origin'] == 'resource-list') {
+            if ($oiArray['order'] == "desc") {
+                $orderItems->setOrder(OrderItems::DESCENDENT);
+            } else {
+                $orderItems->setOrder(OrderItems::ASCENDENT);
+            }
+            $orderItems->setShowValues(
+                isset($oiArray['show-values']) && $oiArray['show-values'] === "1"
+            );
+            $this->addOrderItemsObjectBlocksFromArray($oiArray, $orderItems);
+        } else {
+            throw new \Exception('order items: a content must be chosen');
+        }
+
+        $exerciseModel = new ExerciseModelResource();
+        $exerciseModel->setContent($orderItems);
+
+//        throw new \Exception(print_r($exerciseModel->getContent(), true));
 
         return $this->save($exerciseModelId, $exerciseModel);
     }
@@ -307,7 +369,7 @@ class ExerciseModelService
         $objectBlocks = array();
 
         foreach ($modelArray['blocks'] as $blockId => $blockArray) {
-            $block = new ObjectBlock($blockArray['numberOfOccurences']);
+            $block = new GroupItemsObjectBlock($blockArray['numberOfOccurences']);
 
             if ($localGroups) {
                 $block->setClassifConstr($this->createClassifConstraints($modelArray, $blockId));
@@ -327,13 +389,47 @@ class ExerciseModelService
     }
 
     /**
+     * Create the object blocks from the modelArray
+     *
+     * @param array      $modelArray
+     * @param OrderItems $model
+     */
+    private function addOrderItemsObjectBlocksFromArray(array $modelArray, &$model)
+    {
+        $objectBlocks = array();
+
+        foreach ($modelArray['blocks'] as $blockId => $blockArray) {
+            $block = new OrderItemsObjectBlock(
+                $blockArray['numberOfOccurences'],
+                $blockArray['metaKey']
+            );
+
+            $this->setResourceOrigin(
+                $block,
+                $blockArray,
+                $modelArray,
+                $blockId
+            );
+
+            $objectBlocks[] = $block;
+        }
+
+        $model->setObjectBlocks($objectBlocks);
+    }
+
+    /**
      * Set the resource list or resource constraints in a resource block
      *
-     * @param ResourceBlock $block
-     * @param array         $blockArray
-     * @param array         $modelArray
-     * @param int|string    $blockId
-     * @param null          $type
+     * @param ResourceBlock $block          The block object
+     * @param array         $blockArray     The block array
+     * @param array         $modelArray     The array of the model
+     * @param int|string    $blockId        The id or name of the block
+     * @param string        $type
+     * @param string        $resourcesName  The name of the field resources in the array
+     * @param string        $keyName        The name of the field key in the array
+     * @param string        $comparatorName The name of the field comparator in the array
+     * @param string        $valuesName     The name of the field values in the array
+     * @param string        $typeName       The name of the field type in the array
      *
      * @throws \Exception
      */
@@ -342,12 +438,17 @@ class ExerciseModelService
         array $blockArray,
         array $modelArray,
         $blockId,
-        $type = null
+        $type = null,
+        $resourcesName = 'resources',
+        $keyName = 'key',
+        $comparatorName = 'comparator',
+        $valuesName = 'values',
+        $typeName = 'type'
     )
     {
         if ($blockArray['resourceOrigin'] === "list") {
             $resourceList = array();
-            foreach ($modelArray['resources'][$blockId] as $resId) {
+            foreach ($modelArray[$resourcesName][$blockId] as $resId) {
                 $resource = new ObjectId();
                 $resource->setId($resId);
                 $resourceList[] = $resource;
@@ -356,16 +457,16 @@ class ExerciseModelService
         } elseif ($blockArray['resourceOrigin'] === "constraints") {
             $objConstraint = new ObjectConstraints();
             if ($type === null) {
-                $type = $modelArray['type'][$blockId];
+                $type = $modelArray[$typeName][$blockId];
             }
             $objConstraint->setType($type);
 
             $mdConstraints = array();
-            foreach ($modelArray['key'][$blockId] as $constrKey => $metaKey) {
+            foreach ($modelArray[$keyName][$blockId] as $constrKey => $metaKey) {
                 $mdConstraints[] = $this->createMdConstraint(
                     $metaKey,
-                    $modelArray['comparator'][$blockId][$constrKey],
-                    $modelArray['values'][$blockId][$constrKey]
+                    $modelArray[$comparatorName][$blockId][$constrKey],
+                    $modelArray[$valuesName][$blockId][$constrKey]
                 );
             }
             $objConstraint->setMetadataConstraints($mdConstraints);
