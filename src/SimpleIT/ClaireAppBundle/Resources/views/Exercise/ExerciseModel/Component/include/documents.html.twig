@@ -1,0 +1,53 @@
+<input type="button" onclick="addDocument()" value="Ajouter document"/>
+
+<table id="documents">
+    {% if documents |length > 0 %}
+        {% for document in documents %}
+            <tr>
+                <td>
+                    <label>Document :
+                        <input type="text" size="20" name="documents[]" value="{{ document.id }}"/>
+                    </label>
+                </td>
+                <td>
+                    <button type="button" class="js-remove-document">-</button>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td>
+                <label>Document :
+                    <input type="text" size="20" name="documents[]"/>
+                </label>
+            </td>
+            <td>
+                <button type="button" class="js-remove-document">-</button>
+            </td>
+        </tr>
+    {% endif %}
+</table>
+
+<script>
+    function addDocument() {
+        var $table = $('#documents'),
+                $lines = $('tr', $table),
+                $last = $lines.last(),
+                $clone = $last.clone();
+
+        // text
+        $clone
+                .find('input[type=text]')
+                .val('');
+
+        $clone.appendTo($table);
+    }
+
+    $(function () {
+        $('table').on('click', '.js-remove-document', function (event) {
+            $(event.target).closest('tr').remove();
+        })
+    });
+</script>
+
+

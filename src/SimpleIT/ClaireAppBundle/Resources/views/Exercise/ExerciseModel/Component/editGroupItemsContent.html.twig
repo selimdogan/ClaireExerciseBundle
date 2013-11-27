@@ -1,21 +1,22 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"></script>
-<h2>Edition de questionnaire à choix multiples</h2>
+<h2>Edition de groupement d'objets</h2>
 
-<form action="{{ path('simple_it_claire_component_exercise_exercise_model_multiple_choice_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
+<form action="{{ path('simple_it_claire_component_exercise_exercise_model_group_items_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
 
     <table>
         <tr>
-            <td><label for="wording">Question :</label></td>
+            <td><label for="wording">Consigne :</label></td>
             <td>
                 <input type="text" size="200" name="wording" id="wording" value="{{ exerciseModel.content.wording }}"/>
             </td>
         </tr>
         <tr>
-            <td><label for="shuffle">Mélanger ordre :</label></td>
+            <td><label for="displayGroupNames">Afficher le nom des groupes :</label></td>
             <td>
-                <select name="shuffle" id="shuffle">
-                    <option value="1" {% if exerciseModel.content.shuffleQuestionsOrder %}selected{% endif %}>Mélanger</option>
-                    <option value="0" {% if not exerciseModel.content.shuffleQuestionsOrder %}selected{% endif %}>Ne pas mélanger</option>
+                <select name="displayGroupNames" id="displayGroupNames">
+                    <option value="show" {% if exerciseModel.content.displayGroupNames %}selected{% endif %}>montrer</option>
+                    <option value="hide" {% if not exerciseModel.content.displayGroupNames %}selected{% endif %}>cacher</option>
+                    <option value="ask" {% if not exerciseModel.content.displayGroupNames %}selected{% endif %}>demander</option>
                 </select>
             </td>
         </tr>
@@ -23,6 +24,10 @@
 
     {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/documents.html.twig'
     with {'documents' : exerciseModel.content.documents} %}
+
+    {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/groupingCriteria.html.twig'
+    with {'classifConstr' : exerciseModel.content.classifConstr, 'blockId' : 'root'} %}
+
 
     <table id="blocks" border="1">
         <tr>
@@ -32,8 +37,8 @@
             </td>
         </tr>
         {% set _cptBlock = 0 %}
-        {% if exerciseModel.content.questionBlocks |length > 0 %}
-            {% for block in exerciseModel.content.questionBlocks %}
+        {% if exerciseModel.content.objectBlocks |length > 0 %}
+            {% for block in exerciseModel.content.objectBlocks %}
                 <tr>
                     <td>
                         <button type="button" class="js-remove-block">Supprimer bloc</button>
@@ -45,25 +50,21 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <label>Nombre maximal de propositions :
-                                        <input class="refId" type="text" size="20" name="blocks[{{ _cptBlock }}][maxNumberOfPropositions]"
-                                               value="{{ block.maxNumberOfPropositions }}"/>
-                                    </label>
+                                    {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/groupingCriteria.html.twig'
+                                    with {'classifConstr' : block.classifConstr,
+                                    'blockId' : _cptBlock} %}
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <label>Nombre maximal de propositions justes :
-                                        <input type="text" size="20" name="blocks[{{ _cptBlock }}][maxNumberOfRightPropositions]"
-                                               value="{{ block.maxNumberOfRightPropositions }}"/>
-                                    </label>
+                                    <h3>Ressources du bloc</h3>
                                 </td>
                             </tr>
                             {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
                             'objectName' : 'questions',
                             '_cptBlock' : _cptBlock,
                             'block' : block,
-                            'askType' : false
+                            'askType' : true
                             } %}
                         </table>
                     </td>
@@ -73,7 +74,7 @@
         {% else %}
             <tr>
                 <td>
-                    <button type="button" class="js-remove-tr">Supprimer bloc</button>
+                    <button type="button" class="js-remove-block">Supprimer bloc</button>
                 </td>
                 <td>
                     <table>
@@ -82,23 +83,26 @@
                         </tr>
                         <tr>
                             <td>
-                                <label>Nombre maximal de propositions :
-                                    <input type="text" size="20" name="blocks[0][maxNumberOfPropositions]"/>
-                                </label>
+                                <h3>Critères de groupement</h3>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <label>Nombre maximal de propositions justes :
-                                    <input type="text" size="20" name="blocks[0][maxNumberOfRightPropositions]"/>
-                                </label>
+                                {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/groupingCriteria.html.twig'
+                                with {'classifConstr' : block.classifConstr,
+                                'blockId' : 0} %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h3>Ressources du bloc</h3>
                             </td>
                         </tr>
                         {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
                         'objectName' : 'questions',
                         '_cptBlock' : 0,
                         'block' : NULL,
-                        'askType' : false
+                        'askType' : true
                         } %}
                     </table>
                 </td>
@@ -200,6 +204,98 @@
             $(event.target).closest('tr').remove();
         })
     });
+
+
+    $(function () {
+        $('.constrBloc').on('click', '.js-add-classifConstraint', function (event) {
+            var $table = $(event.target).closest('table'),
+                    $lines = $('tr', $table),
+                    $last = $lines.last(),
+                    $inputText = $last.find('input[class=key]'),
+                    $clone = $last.clone(),
+                    blockId = ($inputText.length > 0) ? ($inputText.attr('name').match(/y\[(.+)\]\[[0-9]+\]\[[0-9]+\]/))[1] : 0,
+                    groupId = ($inputText.length > 0) ? ($inputText.attr('name').match(/\]\[([0-9]+)\]\[/))[1] : 0,
+                    prevId = ($inputText.length > 0) ? ($inputText.attr('name').match(/\[([0-9]+)\]$/))[1] : 0;
+
+
+            prevId = parseInt(prevId, 0);
+
+            // key
+            $clone
+                    .find('input[class=key]')
+                    .attr('name', 'classifKey[' + blockId + '][' + groupId + '][' + (prevId + 1) + ']')
+                    .val('');
+
+            // comparator
+            $clone
+                    .find('select[class=comparator]')
+                    .attr('name', 'classifComparator[' + blockId + '][' + groupId + '][' + (prevId + 1) + ']')
+                    .val('');
+
+            // values
+            $clone
+                    .find('input[class=values]')
+                    .attr('name', 'classifValues[' + blockId + '][' + groupId + '][' + (prevId + 1) + '][]')
+                    .val('');
+
+            $clone.appendTo($table);
+        })
+    });
+
+    $(function () {
+        $('.grouping-criteria').on('click', '.js-add-group', function (event) {
+            var $table = $(event.target).closest('table'),
+                    $lines = $('.grouping-group', $table),
+                    $last = $lines.last(),
+                    $clone = $last.clone(true, true),
+                    $inputText = $last.find('input[class=group-name]'),
+                    blockId = ($inputText.length > 0) ? ($inputText.attr('name').match(/group\[(.+)\]\[[0-9]+\]/))[1] : 0,
+                    groupId = ($inputText.length > 0) ? ($inputText.attr('name').match(/group\[.+\]\[([0-9]+)\]/))[1] : 0;
+
+
+            groupId = parseInt(groupId, 0) + 1;
+
+            // group name
+            $clone
+                    .find('input[class=group-name]')
+                    .attr('name', 'group[' + blockId + '][' + groupId + ']')
+                    .val('');
+
+            // only one classif tr
+            var $classifTrs = $('.classifTr', $clone),
+                    $i,
+                    $length = $classifTrs.length;
+            for ($i = 1; $i < $length; $i++) {
+                console.error($i);
+                $classifTrs[$i].remove();
+            }
+
+            // key
+            $clone
+                    .find('input[class=key]')
+                    .attr('name', 'classifKey[' + blockId + '][' + groupId + '][0]')
+                    .val('');
+
+            // comparator
+            $clone
+                    .find('select[class=comparator]')
+                    .attr('name', 'classifComparator[' + blockId + '][' + groupId + '][0]')
+                    .val('');
+
+            // values
+            $clone
+                    .find('input[class=values]')
+                    .attr('name', 'classifValues[' + blockId + '][' + groupId + '][0][]')
+                    .val('');
+
+
+            $clone.appendTo($table);
+        })
+    });
+
+    $(function () {
+        $('.grouping-criteria').on('click', '.js-remove-group', function (event) {
+            $(event.target).closest('tr').remove();
+        })
+    });
 </script>
-
-
