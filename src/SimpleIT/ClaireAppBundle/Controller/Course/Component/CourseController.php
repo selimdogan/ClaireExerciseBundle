@@ -354,7 +354,7 @@ class CourseController extends AppController
         );
 
         return $this->render(
-            'SimpleITClaireAppBundle:Course/Course/Component:editContent.html.twig',
+            'SimpleITClaireAppBundle:Course/Course/Component:editIntroduction.html.twig',
             array(
                 'content' => $introduction,
                 'action'  =>
@@ -376,8 +376,8 @@ class CourseController extends AppController
      */
     public function editIntroductionAction(Request $request, $courseId)
     {
-        $content = $request->get('content');
-        $content = $this->get('simple_it.claire.course.course')->saveContent(
+        $content = $request->get('courseContent');
+        $content = $this->get('simple_it.claire.course.course')->saveIntroduction(
             $courseId,
             $content,
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
