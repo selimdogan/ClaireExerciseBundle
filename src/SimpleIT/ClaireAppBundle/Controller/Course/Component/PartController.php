@@ -74,11 +74,17 @@ class PartController extends AppController
             );
         }
 
-        $form = $this->createFormBuilder($part)
+        $form = $this->createFormBuilder(
+                        $part,
+                        array(
+                            'validation_groups' => array('edit')
+                        )
+        )
             ->add('title')
             ->getForm();
 
         if (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()) {
+
             $form->bind($request);
             if ($form->isValid()) {
                 $part = $this->get('simple_it.claire.course.part')->save(

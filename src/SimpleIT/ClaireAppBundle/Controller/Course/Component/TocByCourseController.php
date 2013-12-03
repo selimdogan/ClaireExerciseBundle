@@ -64,8 +64,6 @@ class TocByCourseController extends AppController
 
         }
 
-        return $this->redirect(
-            $this->generateUrl($url)
-        );
+        return $this->redirect($url);
     }
 }
