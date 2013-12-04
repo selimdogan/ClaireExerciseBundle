@@ -243,7 +243,6 @@ class ExerciseModelService
      */
     public function savePairItems($exerciseModelId, array $piArray)
     {
-//        throw new \Exception(print_r($piArray, true));
         $orderItems = new PairItems();
         $this->setWordingAndDocuments($piArray, $orderItems);
 
@@ -251,8 +250,6 @@ class ExerciseModelService
 
         $exerciseModel = new ExerciseModelResource();
         $exerciseModel->setContent($orderItems);
-
-//        throw new \Exception(print_r($exerciseModel->getContent(), true));
 
         return $this->save($exerciseModelId, $exerciseModel);
     }
@@ -424,7 +421,6 @@ class ExerciseModelService
         foreach ($modelArray['blocks'] as $blockId => $blockArray) {
             $block = new PairBlock(
                 $blockArray['numberOfOccurences'],
-                $blockArray['pairType'],
                 $blockArray['metaKey']
             );
 

@@ -94,7 +94,7 @@
                     <tr>
                         <td>
                             <label>Type :
-                                <select name="type[{{ _cptBlock }}]">
+                                <select name="{{ typeName }}[{{ _cptBlock }}]">
                                     <option value="" {% if block.resourceConstraint.type is not defined %}selected{% endif %}></option>
                                     <option value="picture" {% if block.resourceConstraint.type is defined and block.resourceConstraint.type == 'picture' %}selected{% endif %}>Image</option>
                                     <option value="text" {% if block.resourceConstraint.type is defined and block.resourceConstraint.type == 'text' %}selected{% endif %}>Texte</option>
@@ -130,6 +130,15 @@
                         </table>
                     <td>
                 </tr>
+
+                <tr>
+                    <td>
+                        {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/excluded.html.twig'
+                        with {'excludeds' : block.resourceConstraint.excluded,
+                        'excludedName' : excludedName ~ '[' ~ _cptBlock ~']'}
+                        %}
+                    </td>
+                </tr>
             </table>
         </td>
     </tr>
@@ -140,9 +149,19 @@
                 <tr>
                     <td><h4>Contraintes</h4></td>
                 </tr>
-                <tr>
-                    <td><input type="text" size="20" name="type[{{ _cptBlock }}]"/></td>
-                </tr>
+                {% if askType %}
+                    <tr>
+                        <td>
+                            <label>Type :
+                                <select name="{{ typeName }}[{{ _cptBlock }}]">
+                                    <option value=""></option>
+                                    <option value="picture">Image</option>
+                                    <option value="text">Texte</option>
+                                </select>
+                            </label>
+                        </td>
+                    </tr>
+                {% endif %}
                 <tr>
                     <td>
                         <table class="constrBloc">
@@ -163,6 +182,14 @@
                             'cptBlock' : _cptBlock,
                             'cptMdc' : 0} %}
                         </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/excluded.html.twig'
+                        with {'excludeds' : NULL,
+                        'excludedName' : excludedName ~ '[' ~ _cptBlock ~']'}
+                        %}
                     </td>
                 </tr>
             </table>

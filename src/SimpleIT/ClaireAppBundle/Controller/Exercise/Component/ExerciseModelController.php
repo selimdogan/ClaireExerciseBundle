@@ -301,11 +301,9 @@ class ExerciseModelController extends AppController
      */
     public function multipleChoiceContentEditAction(Request $request, $exerciseModelId)
     {
-        $resourceData = $request->request->all();
-
         $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->saveMultipleChoice(
             $exerciseModelId,
-            $resourceData
+            $request->request->all()
         );
 
         return new JsonResponse($exerciseModel->getId());
@@ -321,10 +319,9 @@ class ExerciseModelController extends AppController
      */
     public function groupItemsContentEditAction(Request $request, $exerciseModelId)
     {
-        $resourceData = $request->request->all();
         $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->saveGroupItems(
             $exerciseModelId,
-            $resourceData
+            $request->request->all()
         );
 
         return new JsonResponse($exerciseModel->getId());
@@ -359,10 +356,9 @@ class ExerciseModelController extends AppController
      */
     public function pairItemsContentEditAction(Request $request, $exerciseModelId)
     {
-        $resourceData = $request->request->all();
         $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->savePairItems(
             $exerciseModelId,
-            $resourceData
+            $request->request->all()
         );
 
         return new JsonResponse($exerciseModel->getId());

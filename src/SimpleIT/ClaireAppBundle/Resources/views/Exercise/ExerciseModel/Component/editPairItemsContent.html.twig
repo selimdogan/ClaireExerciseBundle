@@ -46,22 +46,6 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <label>Type d'association
-                                        <select name="blocks[{{ _cptBlock }}][pairType]">
-                                            <option value="text-meta-value"
-                                                    {% if block.pairType == 'text-meta-value' %}selected
-                                                    {% endif %}>Texte en métadonnée
-                                            </option>
-                                            <option value="resource-meta-value"
-                                                    {% if block.pairType == 'resource-meta-value' %}selected
-                                                    {% endif %}>Ressource en métadonnée
-                                            </option>
-                                        </select>
-                                    </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
                                     <h3>Ressources du bloc</h3>
                                 </td>
                             </tr>
@@ -72,6 +56,8 @@
                             'keyName' : 'key',
                             'comparatorName' : 'comparator',
                             'valuesName' : 'values',
+                            'excludedName' : 'excluded',
+                            'typeName' : 'type',
                             '_cptBlock' : _cptBlock,
                             'block' : block,
                             'askType' : true
@@ -124,6 +110,8 @@
                         'keyName' : 'key',
                         'comparatorName' : 'comparator',
                         'valuesName' : 'values',
+                        'excludedName' : 'excluded',
+                        'typeName' : 'type',
                         '_cptBlock' : 0,
                         'block' : block,
                         'askType' : true
