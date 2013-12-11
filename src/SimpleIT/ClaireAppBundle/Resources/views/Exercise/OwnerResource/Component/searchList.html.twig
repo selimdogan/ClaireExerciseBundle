@@ -1,7 +1,7 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"></script>
 
 <h2>Recherche</h2>
-<form action="{{ path('simple_it_claire_course_component_owner_resource_search_list') }}" method="GET">
+<form action="{{ path('simple_it_claire_component_owner_resource_search_list') }}" method="GET">
 
 <h3>Par clé/valeurs</h3>
     <input type="button" onclick="addFilter()" value="Ajouter"/>
@@ -87,11 +87,11 @@
 </form>
 <h2>Espace personnel</h2>
 {% include 'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:list.html.twig'
-with{'ownerResources':ownerResources,'collectionInformation': collectionInformation} %}
+with{'ownerResources':ownerResources} %}
 
 <h2>Espace public</h2>
 {% include 'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:list.html.twig'
-with{'ownerResources':publicOwnerResources,'collectionInformation': collectionInformation} %}
+with{'ownerResources':publicOwnerResources} %}
 
 <script>
     function addFilter() {

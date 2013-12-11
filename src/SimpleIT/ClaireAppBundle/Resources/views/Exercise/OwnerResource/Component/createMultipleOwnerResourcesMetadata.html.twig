@@ -3,19 +3,38 @@
 <h2>Outil d'ajout multiple de métadonnées</h2>
 
 <form action="{{ path('simple_it_claire_component_exercise_multiple_owner_resource_metadata_edit') }}" method="post">
+    <input type="button" onclick="addMD()" value="Ajouter"/>
     <table id="metadataList">
         <tr>
             <td>
                 Clé :
             </td>
             <td>
-                <input type="text" size="20" name="metaKey"/>
+                <input type="text" size="20" name="metaKey[0]"/>
             </td>
             <td>
                 Valeur :
             </td>
             <td>
-                <input type="text" size="30" name="metaValue"/>
+                <input type="search" size="30" name="metaValue[0]"/>
+            </td>
+            <td>
+                <button type="button" class="js-remove">-</button>
+            </td>
+        </tr>
+    </table>
+
+    <input type="button" onclick="addKW()" value="Ajouter"/>
+    <table id="keyWords">
+        <tr>
+            <td>
+                Mot-clé :
+            </td>
+            <td>
+                <input type="text" size="20" name="keyWord[]"/>
+            </td>
+            <td>
+                <button type="button" class="js-remove">-</button>
             </td>
         </tr>
     </table>
@@ -38,6 +57,47 @@
 </form>
 
 <script>
+    function addMD() {
+        var $table = $('#metadataList'),
+                $lines = $('tr', $table),
+                $last = $lines.last(),
+                $inputText = $last.find('input[type=text]'),
+                $clone = $last.clone(),
+                prevId = ($inputText.length > 0) ? ($inputText.attr('name').match(/\[([0-9]+)\]/))[1] : 0;
+
+
+        prevId = parseInt(prevId, 0);
+
+        // key
+        $clone
+                .find('input[type=text]')
+                .attr('name', 'metaKey[' + (prevId + 1) + ']')
+                .val('');
+
+        // value
+        $clone
+                .find('input[type=search]')
+                .attr('name', 'metaValue[' + (prevId + 1) + ']')
+                .val('');
+
+        $clone.appendTo($table);
+    }
+
+    function addKW() {
+        var $table = $('#keyWords'),
+                $lines = $('tr', $table),
+                $last = $lines.last(),
+                $clone = $last.clone();
+
+        // key
+        $clone
+                .find('input[type=text]')
+                .attr('name', 'keyWord[]')
+                .val('');
+
+        $clone.appendTo($table);
+    }
+
     function addResourceId() {
         var
                 $table = $('#ownerResourceList'),

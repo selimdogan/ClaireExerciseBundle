@@ -1,5 +1,14 @@
 <h1>Edition de ressources possédée : {{ ownerResource.type }}</h1>
 
+<p>
+    <a href="{{ path('simple_it_claire_exercise_resource_edit',
+    { 'resourceId': ownerResource.resource}) }}">
+        Editer le contenu de la ressource
+    </a>
+    (Possible uniquement si vous êtes l'auteur et que la ressource n'est pas encore utilisée par
+    d'autres)
+</p>
+
 {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/OwnerResource:editPublicView',{ 'ownerResourceId': ownerResource.id })) }}
 {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/MetadataByOwnerResource:editMetadataView',{ 'ownerResourceId': ownerResource.id })) }}
 

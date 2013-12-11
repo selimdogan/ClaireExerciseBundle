@@ -81,7 +81,7 @@ class OwnerResourceController extends AppController
     }
 
     /**
-     * List courses
+     * List and search
      *
      * @param Request               $request               Request
      * @param CollectionInformation $collectionInformation Collection Information
@@ -117,17 +117,15 @@ class OwnerResourceController extends AppController
 
         if ($request->isXmlHttpRequest()) {
             return new Response($this->searchListJson($ownerResources));
-
         }
 
         return $this->render(
             'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:searchList.html.twig',
             array(
-                'ownerResources'        => $ownerResources,
-                'publicOwnerResources'  => $publicOwnerResources,
-                'collectionInformation' => $collectionInformation,
-                'metadataArray'         => $metadataArray,
-                'miscArray'             => $miscArray,
+                'ownerResources'       => $ownerResources,
+                'publicOwnerResources' => $publicOwnerResources,
+                'metadataArray'        => $metadataArray,
+                'miscArray'            => $miscArray,
             )
         );
     }
@@ -295,18 +293,20 @@ class OwnerResourceController extends AppController
         $ownerResourceIds = $request->request->get('resourceIds');
         $metaKey = $request->request->get('metaKey');
         $metaValue = $request->request->get('metaValue');
+        $misc = $request->request->get('misc');
 
-        if (empty($ownerResourceIds) || empty($metaValue)) {
+        if (empty($ownerResourceIds) || (empty($metaValue) && empty($misc))) {
             throw new \Exception('A value and at least one resource must be specified');
         }
 
         $this->get('simple_it.claire.exercise.owner_resource')->addMultipleMetadata(
             $ownerResourceIds,
             $metaKey,
-            $metaValue
+            $metaValue,
+            $misc
         );
 
-        return new JsonResponse($metaKey . ':' . $metaValue);
+        return new JsonResponse($ownerResourceIds);
     }
 
     /**

@@ -20,6 +20,14 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class ExerciseModelController extends AppController
 {
+    public function listAction()
+    {
+        $exerciseModels = $this->get('simple_it.claire.exercise.exercise_model')->getAll();
+
+        return $this->render('@SimpleITClaireApp/Exercise/ExerciseModel/Component/list.html.twig',
+        array("exerciseModels" => $exerciseModels));
+    }
+
     /**
      * View an exercise model
      *

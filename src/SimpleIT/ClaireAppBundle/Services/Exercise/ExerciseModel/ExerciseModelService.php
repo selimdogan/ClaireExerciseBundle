@@ -676,4 +676,9 @@ class ExerciseModelService
 
         return $mdConstraint;
     }
+
+    public function getAll()
+    {
+        return $this->exerciseModelRepository->findAllResources();
+    }
 }

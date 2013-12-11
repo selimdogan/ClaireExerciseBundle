@@ -181,7 +181,6 @@ class ResourceService
         $resource->setRequiredExerciseResources(array());
         $resource = $this->add($resource);
 
-//        throw new \Exception($resource->getId());
         $this->ownerResourceService->addBasicFromResource($resource->getId());
 
         return $resource;

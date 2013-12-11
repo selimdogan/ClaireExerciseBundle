@@ -7,7 +7,6 @@
     <input type="button" onclick="addRequirement()" value="Ajouter"/>
 
     <table id="required">
-        {% set _cptReq = 0 %}
         {% if resource.requiredExerciseResources |length > 0 %}
             {% for requirement in resource.requiredExerciseResources %}
                 <tr>
@@ -15,14 +14,13 @@
                         Ressource requise :
                     </td>
                     <td>
-                        <input type="text" size="4" name="requirement[{{ _cptReq }}]"
+                        <input type="text" size="4" name="requirement[]"
                                value="{{ requirement }}"/>
                     </td>
                     <td>
                         <button type="button" class="js-remove">-</button>
                     </td>
                 </tr>
-                {% set _cptReq = _cptReq + 1 %}
             {% endfor %}
         {% else %}
             <tr>
@@ -30,14 +28,13 @@
                     Ressource requise :
                 </td>
                 <td>
-                    <input type="text" size="4" name="requirement[{{ _cptReq }}]"
+                    <input type="text" size="4" name="requirement[]"
                            value="0"/>
                 </td>
                 <td>
                     <button type="button" class="js-remove">-</button>
                 </td>
             </tr>
-            {% set _cptReq = _cptReq + 1 %}
         {% endif %}
     </table>
 
@@ -50,18 +47,13 @@
                 $table = $('#required'),
                 $lines = $('tr', $table),
                 $last = $lines.last(),
-                $inputText = $last.find('input[type=text]'),
-                $clone = $last.clone(),
-                prevId = ($inputText.length > 0) ? ($inputText.attr('name').match(/\[([0-9]+)\]/))[1] : 0;
-
-
-        prevId = parseInt(prevId, 0);
+                $clone = $last.clone();
 
         // text
         $clone
                 .find('input[type=text]')
-                .attr('name', 'requirement[' + (prevId + 1) + ']')
-                .val('0');
+                .attr('name', 'requirement[]')
+                .val('');
 
         $clone.appendTo($table);
     }

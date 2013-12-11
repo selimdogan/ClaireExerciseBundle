@@ -1,24 +1,20 @@
 <h1>Liste des modèles d'exercices</h1>
 
-{% for type, exList in exerciseModels %}
+<table>
 
-    <h2>{{ type }}</h2>
-    <table>
-
-        {% for exerciseModel in exList %}
-            <tr>
-                <td>{{ exerciseModel.title }}</td>
-                <td>
-                    <a href="{{ path('simple_it_exercise_model_view',
-                    {'exerciseModelId': exerciseModel.id }) }}">Voir le modèle</a>
-                </td>
-                <td>
-                    <a href="{{ path
-                    ('simple_it_exercise_generate',
-                    {'exerciseModelId': exerciseModel.id }) }}">Créer une instance d'exercice</a>
-                </td>
-
-            </tr>
-        {% endfor %}
-    </table>
-{% endfor %}
+    {% for exerciseModel in exerciseModels %}
+        <tr>
+            <td>{{ exerciseModel.title }}</td>
+            <td>{{ exerciseModel.type }}</td>
+            <td>
+                <a href="{{ path('simple_it_claire_exercise_exercise_model_edit',
+                {'exerciseModelId': exerciseModel.id }) }}">Voir/éditer le modèle</a>
+            </td>
+            {#<td>#}
+            {#<a href="{{ path#}
+            {#('simple_it_exercise_generate',#}
+            {#{'exerciseModelId': exerciseModel.id }) }}">Créer une instance d'exercice</a>#}
+            {#</td>#}
+        </tr>
+    {% endfor %}
+</table>
