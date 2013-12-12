@@ -3,6 +3,7 @@ namespace SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModel;
 
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModelResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
+use SimpleIT\Utils\Collection\CollectionInformation;
 
 /**
  * Class ExerciseModelRepository
@@ -95,5 +96,17 @@ class ExerciseModelRepository extends AppRepository
     public function delete($exerciseModelId)
     {
         $this->deleteResource(array('exerciseModelId' => $exerciseModelId));
+    }
+
+    /**
+     * Find all the exercise models
+     *
+     * @param CollectionInformation $collectionInformation
+     *
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
+     */
+    public function findAll($collectionInformation = null)
+    {
+        return $this->findAllResources();
     }
 }

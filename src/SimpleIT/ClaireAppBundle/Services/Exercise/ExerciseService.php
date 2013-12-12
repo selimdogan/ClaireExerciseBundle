@@ -6,8 +6,10 @@ namespace SimpleIT\ClaireAppBundle\Services\Exercise;
 use JMS\Serializer\SerializerInterface;
 use SimpleIT\ApiResourcesBundle\Exercise\Exercise\Common\CommonExercise;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource;
-use SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseByExerciseModelRepository;
-use SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseRepository;
+use SimpleIT\ApiResourcesBundle\Exercise\ItemResource;
+use SimpleIT\ClaireAppBundle\Repository\Exercise\Exercise\ExerciseByOwnerExerciseModelRepository;
+use SimpleIT\ClaireAppBundle\Repository\Exercise\Exercise\ExerciseRepository;
+use SimpleIT\ClaireAppBundle\Repository\Exercise\Item\ItemByExerciseRepository;
 
 /**
  * Class ExerciseService
@@ -22,9 +24,14 @@ class ExerciseService implements ExerciseServiceInterface
     private $exerciseRepository;
 
     /**
-     * @var  ExerciseByExerciseModelRepository
+     * @var ExerciseByOwnerExerciseModelRepository
      */
-    private $exerciseByExerciseModelRepository;
+    private $exerciseByOwnerExerciseModelRepository;
+
+    /**
+     * @var ItemByExerciseRepository
+     */
+    private $itemByExerciseRepository;
 
     /**
      * @var SerializerInterface
@@ -42,6 +49,28 @@ class ExerciseService implements ExerciseServiceInterface
     }
 
     /**
+     * Set exerciseByOwnerExerciseModelRepository
+     *
+     * @param ExerciseByOwnerExerciseModelRepository $exerciseByOwnerExerciseModelRepository
+     */
+    public function setExerciseByOwnerExerciseModelRepository(
+        $exerciseByOwnerExerciseModelRepository
+    )
+    {
+        $this->exerciseByOwnerExerciseModelRepository = $exerciseByOwnerExerciseModelRepository;
+    }
+
+    /**
+     * Set itemByExerciseRepository
+     *
+     * @param \SimpleIT\ClaireAppBundle\Repository\Exercise\Item\ItemByExerciseRepository $itemByExerciseRepository
+     */
+    public function setItemByExerciseRepository($itemByExerciseRepository)
+    {
+        $this->itemByExerciseRepository = $itemByExerciseRepository;
+    }
+
+    /**
      * Set exerciseRepository
      *
      * @param ExerciseRepository $exerciseRepository
@@ -49,18 +78,6 @@ class ExerciseService implements ExerciseServiceInterface
     public function setExerciseRepository(ExerciseRepository $exerciseRepository)
     {
         $this->exerciseRepository = $exerciseRepository;
-    }
-
-    /**
-     * Set exerciseByExerciseModelRepository
-     *
-     * @param ExerciseByExerciseModelRepository $exerciseByExerciseModelRepository
-     */
-    public function setExerciseByExerciseModelRepository(
-        ExerciseByExerciseModelRepository $exerciseByExerciseModelRepository
-    )
-    {
-        $this->exerciseByExerciseModelRepository = $exerciseByExerciseModelRepository;
     }
 
     /**
@@ -78,13 +95,13 @@ class ExerciseService implements ExerciseServiceInterface
     /**
      * Generate a new instance of exercise with this model
      *
-     * @param int $exerciseModelId
+     * @param int $ownerExerciseModelId
      *
      * @return ExerciseResource
      */
-    public function generate($exerciseModelId)
+    public function generate($ownerExerciseModelId)
     {
-        return $this->exerciseByExerciseModelRepository->generate($exerciseModelId);
+        return $this->exerciseByOwnerExerciseModelRepository->generate($ownerExerciseModelId);
     }
 
     /**
@@ -99,5 +116,24 @@ class ExerciseService implements ExerciseServiceInterface
         $exerciseResource = $this->get($exerciseId);
 
         return $exerciseResource->getContent();
+    }
+
+    /**
+     * Get the ids of the items of an exercise
+     *
+     * @param int $exerciseId
+     *
+     * @return array
+     */
+    public function getItemIds($exerciseId)
+    {
+        $items = $this->itemByExerciseRepository->findAll($exerciseId);
+        $itemIds = array();
+        /** @var ItemResource $item */
+        foreach ($items as $item)
+        {
+            $itemIds[] = $item->getItemId();
+        }
+        return $itemIds;
     }
 }

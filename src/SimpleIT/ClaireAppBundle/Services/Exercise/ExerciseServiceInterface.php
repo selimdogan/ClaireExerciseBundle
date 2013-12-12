@@ -24,9 +24,9 @@ interface ExerciseServiceInterface
     /**
      * Generate a new instance of exercise with this model
      *
-     * @param int $exerciseModelId
+     * @param int $ownerExerciseModelId
      *
      * @return ExerciseResource
      */
-    public function generate($exerciseModelId);
+    public function generate($ownerExerciseModelId);
 }

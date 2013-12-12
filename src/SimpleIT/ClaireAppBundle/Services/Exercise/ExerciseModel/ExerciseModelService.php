@@ -29,6 +29,7 @@ use SimpleIT\ApiResourcesBundle\Exercise\ResourceResource;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModel\ExerciseModelRepository;
 use
     SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModel\RequiredResourceByExerciseModelRepository;
+use SimpleIT\Utils\Collection\CollectionInformation;
 
 /**
  * Class ExerciseModelService
@@ -677,8 +678,15 @@ class ExerciseModelService
         return $mdConstraint;
     }
 
-    public function getAll()
+    /**
+     * Get all the exercise models
+     *
+     * @param CollectionInformation $collectionInformation
+     *
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
+     */
+    public function getAll($collectionInformation = null)
     {
-        return $this->exerciseModelRepository->findAllResources();
+        return $this->exerciseModelRepository->findAll($collectionInformation);
     }
 }

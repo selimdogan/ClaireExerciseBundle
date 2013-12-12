@@ -11,13 +11,6 @@ simple_it_exercise_model_view:
         _method: GET
         exerciseModelId: \d+
 
-simple_it_exercise_generate:
-    pattern: /{exerciseModelId}/new
-    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseByExerciseModel:generate }
-    requirements:
-        _method: GET
-        exerciseModelId: \d+
-
 simple_it_claire_exercise_exercise_model_edit:
     pattern: /{exerciseModelId}/edit
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:editView }

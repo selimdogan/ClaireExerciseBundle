@@ -14,12 +14,12 @@ interface AnswerServiceInterface
     /**
      * Add a new Learner Answer to an item
      *
-     * @param int   $exerciseId
-     * @param int   $itemNumber
+     * @param int   $attemptId
+     * @param int   $itemId
      * @param array $answers
      *
      * @internal param int $itemId
      * @return AnswerResource
      */
-    public function add($exerciseId, $itemNumber, array $answers);
+    public function add($attemptId, $itemId, array $answers);
 }

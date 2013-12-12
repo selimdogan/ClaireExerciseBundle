@@ -6,15 +6,9 @@ use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ResourceResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
-use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ResourceContent\PictureType;
-use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ResourceContent\TextType;
-use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ResourceTypeType;
-use SimpleIT\Utils\HTTP;
-use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class RequiredResourceByResourceController

@@ -20,6 +20,11 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class ExerciseModelController extends AppController
 {
+    /**
+     * List exercise models (TODO dev)
+     *
+     * @return Response
+     */
     public function listAction()
     {
         $exerciseModels = $this->get('simple_it.claire.exercise.exercise_model')->getAll();

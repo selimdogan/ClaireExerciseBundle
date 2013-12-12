@@ -13,15 +13,20 @@
         <parameter key="simple_it.claire.exercise.repository.metadata_by_owner_exercise_model.class">SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\MetadataByOwnerExerciseModelRepository</parameter>
 
         <parameter key="simple_it.claire.exercise.exercise.class">SimpleIT\ClaireAppBundle\Services\Exercise\ExerciseService</parameter>
-        <parameter key="simple_it.claire.exercise.repository.exercise_by_exercise_model.class">SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseByExerciseModelRepository</parameter>
-        <parameter key="simple_it.claire.exercise.repository.exercise.class">SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseRepository</parameter>
+        <parameter key="simple_it.claire.exercise.repository.exercise_by_owner_exercise_model.class">SimpleIT\ClaireAppBundle\Repository\Exercise\Exercise\ExerciseByOwnerExerciseModelRepository</parameter>
+        <parameter key="simple_it.claire.exercise.repository.exercise.class">SimpleIT\ClaireAppBundle\Repository\Exercise\Exercise\ExerciseRepository</parameter>
 
         <parameter key="simple_it.claire.exercise.item.class">SimpleIT\ClaireAppBundle\Services\Exercise\ItemService</parameter>
-        <parameter key="simple_it.claire.exercise.repository.item.class">SimpleIT\ClaireAppBundle\Repository\Exercise\ItemRepository</parameter>
-        <parameter key="simple_it.claire.exercise.repository.item_by_exercise.class">SimpleIT\ClaireAppBundle\Repository\Exercise\ItemByExerciseRepository</parameter>
+        <parameter key="simple_it.claire.exercise.repository.item.class">SimpleIT\ClaireAppBundle\Repository\Exercise\Item\ItemRepository</parameter>
+        <parameter key="simple_it.claire.exercise.repository.item_by_exercise.class">SimpleIT\ClaireAppBundle\Repository\Exercise\Item\ItemByExerciseRepository</parameter>
+        <parameter key="simple_it.claire.exercise.repository.item_by_attempt.class">SimpleIT\ClaireAppBundle\Repository\Exercise\Item\ItemByAttemptRepository</parameter>
 
         <parameter key="simple_it.claire.exercise.answer.class">SimpleIT\ClaireAppBundle\Services\Exercise\AnswerService</parameter>
-        <parameter key="simple_it.claire.exercise.repository.answer_by_item.class">SimpleIT\ClaireAppBundle\Repository\Exercise\AnswerByItemRepository</parameter>
+        <parameter key="simple_it.claire.exercise.repository.answer_by_item_by_attempt.class">SimpleIT\ClaireAppBundle\Repository\Exercise\Answer\AnswerByItemByAttemptRepository</parameter>
+
+        <parameter key="simple_it.claire.exercise.resource.class">SimpleIT\ClaireAppBundle\Services\Exercise\Resource\ResourceService</parameter>
+        <parameter key="simple_it.claire.exercise.repository.resource.class">SimpleIT\ClaireAppBundle\Repository\Exercise\Resource\ResourceRepository</parameter>
+        <parameter key="simple_it.claire.exercise.repository.required_resource_by_resource.class">SimpleIT\ClaireAppBundle\Repository\Exercise\Resource\RequiredResourceByResourceRepository</parameter>
 
         <parameter key="simple_it.claire.exercise.owner_resource.class">SimpleIT\ClaireAppBundle\Services\Exercise\Resource\OwnerResourceService</parameter>
         <parameter key="simple_it.claire.exercise.repository.owner_resource.class">SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\OwnerResourceRepository</parameter>
@@ -29,14 +34,15 @@
         <parameter key="simple_it.claire.exercise.repository.owner_resource_by_resource.class">SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\OwnerResourceByResourceRepository</parameter>
         <parameter key="simple_it.claire.exercise.repository.metadata_by_owner_resource.class">SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\MetadataByOwnerResourceRepository</parameter>
 
-        <parameter key="simple_it.claire.exercise.resource.class">SimpleIT\ClaireAppBundle\Services\Exercise\Resource\ResourceService</parameter>
-        <parameter key="simple_it.claire.exercise.repository.resource.class">SimpleIT\ClaireAppBundle\Repository\Exercise\Resource\ResourceRepository</parameter>
-        <parameter key="simple_it.claire.exercise.repository.required_resource_by_resource.class">SimpleIT\ClaireAppBundle\Repository\Exercise\Resource\RequiredResourceByResourceRepository</parameter>
-
+        <parameter key="simple_it.claire.exercise.attempt.class">SimpleIT\ClaireAppBundle\Services\Exercise\Attempt\AttemptService</parameter>
+        <parameter key="simple_it.claire.exercise.repository.attempt.class">SimpleIT\ClaireAppBundle\Repository\Exercise\Attempt\AttemptRepository</parameter>
+        <parameter key="simple_it.claire.exercise.repository.attempt_by_exercise.class">SimpleIT\ClaireAppBundle\Repository\Exercise\Attempt\AttemptByExerciseRepository</parameter>
     </parameters>
 
     <services>
-        <!-- Repositories -->
+        <!-- ***** REPOSITORIES ***** -->
+
+        <!-- Exercise model -->
         <service id="simple_it.claire.exercise.repository.exercise_model" class="%simple_it.claire.exercise.repository.exercise_model.class%">
             <call method="setClient">
                 <argument type="service" id="simple_it.claire.http_client"/>
@@ -53,6 +59,8 @@
                 <argument type="service" id="simple_it.claire.serializer"/>
             </call>
         </service>
+
+        <!-- Owner exercise model -->
         <service id="simple_it.claire.exercise.repository.owner_exercise_model" class="%simple_it.claire.exercise.repository.owner_exercise_model.class%">
             <call method="setClient">
                 <argument type="service" id="simple_it.claire.http_client"/>
@@ -85,7 +93,9 @@
                 <argument type="service" id="simple_it.claire.serializer"/>
             </call>
         </service>
-        <service id="simple_it.claire.exercise.repository.exercise_by_exercise_model" class="%simple_it.claire.exercise.repository.exercise_by_exercise_model.class%">
+
+        <!-- Exercise -->
+        <service id="simple_it.claire.exercise.repository.exercise_by_owner_exercise_model" class="%simple_it.claire.exercise.repository.exercise_by_owner_exercise_model.class%">
             <call method="setClient">
                 <argument type="service" id="simple_it.claire.http_client"/>
             </call>
@@ -101,6 +111,8 @@
                 <argument type="service" id="simple_it.claire.serializer"/>
             </call>
         </service>
+
+        <!-- Item -->
         <service id="simple_it.claire.exercise.repository.item" class="%simple_it.claire.exercise.repository.item.class%">
             <call method="setClient">
                 <argument type="service" id="simple_it.claire.http_client"/>
@@ -117,7 +129,7 @@
                 <argument type="service" id="simple_it.claire.serializer"/>
             </call>
         </service>
-        <service id="simple_it.claire.exercise.repository.answer_by_item" class="%simple_it.claire.exercise.repository.answer_by_item.class%">
+        <service id="simple_it.claire.exercise.repository.item_by_attempt" class="%simple_it.claire.exercise.repository.item_by_attempt.class%">
             <call method="setClient">
                 <argument type="service" id="simple_it.claire.http_client"/>
             </call>
@@ -125,6 +137,36 @@
                 <argument type="service" id="simple_it.claire.serializer"/>
             </call>
         </service>
+
+        <!-- Answer -->
+        <service id="simple_it.claire.exercise.repository.answer_by_item_by_attempt" class="%simple_it.claire.exercise.repository.answer_by_item_by_attempt.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
+
+        <!-- Resource -->
+        <service id="simple_it.claire.exercise.repository.resource" class="%simple_it.claire.exercise.repository.resource.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
+        <service id="simple_it.claire.exercise.repository.required_resource_by_resource" class="%simple_it.claire.exercise.repository.required_resource_by_resource.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
+
+        <!-- Owner Resource -->
         <service id="simple_it.claire.exercise.repository.owner_resource" class="%simple_it.claire.exercise.repository.owner_resource.class%">
             <call method="setClient">
                 <argument type="service" id="simple_it.claire.http_client"/>
@@ -157,7 +199,9 @@
                 <argument type="service" id="simple_it.claire.serializer"/>
             </call>
         </service>
-        <service id="simple_it.claire.exercise.repository.resource" class="%simple_it.claire.exercise.repository.resource.class%">
+
+        <!-- Attempt -->
+        <service id="simple_it.claire.exercise.repository.attempt" class="%simple_it.claire.exercise.repository.attempt.class%">
             <call method="setClient">
                 <argument type="service" id="simple_it.claire.http_client"/>
             </call>
@@ -165,7 +209,7 @@
                 <argument type="service" id="simple_it.claire.serializer"/>
             </call>
         </service>
-        <service id="simple_it.claire.exercise.repository.required_resource_by_resource" class="%simple_it.claire.exercise.repository.required_resource_by_resource.class%">
+        <service id="simple_it.claire.exercise.repository.attempt_by_exercise" class="%simple_it.claire.exercise.repository.attempt_by_exercise.class%">
             <call method="setClient">
                 <argument type="service" id="simple_it.claire.http_client"/>
             </call>
@@ -174,7 +218,9 @@
             </call>
         </service>
 
-        <!-- Services -->
+        <!-- ***** SERVICES ***** -->
+
+        <!-- Exercise Model -->
         <service id="simple_it.claire.exercise.exercise_model" class="%simple_it.claire.exercise.exercise_model.class%">
             <call method="setExerciseModelRepository">
                 <argument type="service" id="simple_it.claire.exercise.repository.exercise_model"/>
@@ -186,6 +232,8 @@
                 <argument type="service" id="simple_it.claire.exercise.owner_exercise_model"/>
             </call>
         </service>
+
+        <!-- Owner Exercise Model -->
         <service id="simple_it.claire.exercise.owner_exercise_model" class="%simple_it.claire.exercise.owner_exercise_model.class%">
             <call method="setOwnerExerciseModelRepository">
                 <argument type="service" id="simple_it.claire.exercise.repository.owner_exercise_model"/>
@@ -200,20 +248,14 @@
                 <argument type="service" id="simple_it.claire.exercise.repository.owner_exercise_model_by_owner"/>
             </call>
         </service>
+
+        <!-- Exercise -->
         <service id="simple_it.claire.exercise.exercise" class="%simple_it.claire.exercise.exercise.class%">
             <call method="setExerciseRepository">
                 <argument type="service" id="simple_it.claire.exercise.repository.exercise"/>
             </call>
-            <call method="setExerciseByExerciseModelRepository">
-                <argument type="service" id="simple_it.claire.exercise.repository.exercise_by_exercise_model"/>
-            </call>
-            <call method="setSerializer">
-                <argument type="service" id="jms_serializer.serializer"/>
-            </call>
-        </service>
-        <service id="simple_it.claire.exercise.item" class="%simple_it.claire.exercise.item.class%">
-            <call method="setItemRepository">
-                <argument type="service" id="simple_it.claire.exercise.repository.item"/>
+            <call method="setExerciseByOwnerExerciseModelRepository">
+                <argument type="service" id="simple_it.claire.exercise.repository.exercise_by_owner_exercise_model"/>
             </call>
             <call method="setItemByExerciseRepository">
                 <argument type="service" id="simple_it.claire.exercise.repository.item_by_exercise"/>
@@ -222,14 +264,47 @@
                 <argument type="service" id="jms_serializer.serializer"/>
             </call>
         </service>
+
+        <!-- Item -->
+        <service id="simple_it.claire.exercise.item" class="%simple_it.claire.exercise.item.class%">
+            <call method="setItemRepository">
+                <argument type="service" id="simple_it.claire.exercise.repository.item"/>
+            </call>
+            <call method="setItemByExerciseRepository">
+                <argument type="service" id="simple_it.claire.exercise.repository.item_by_exercise"/>
+            </call>
+            <call method="setItemByAttemptRepository">
+                <argument type="service" id="simple_it.claire.exercise.repository.item_by_attempt"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="jms_serializer.serializer"/>
+            </call>
+        </service>
+
+        <!-- Answer -->
         <service id="simple_it.claire.exercise.answer" class="%simple_it.claire.exercise.answer.class%">
-            <call method="setAnswerByItemRepository">
-                <argument type="service" id="simple_it.claire.exercise.repository.answer_by_item"/>
+            <call method="setAnswerByItemByAttemptRepository">
+                <argument type="service" id="simple_it.claire.exercise.repository.answer_by_item_by_attempt"/>
             </call>
             <call method="setItemService">
                 <argument type="service" id="simple_it.claire.exercise.item"/>
             </call>
         </service>
+
+        <!-- Resource -->
+        <service id="simple_it.claire.exercise.resource" class="%simple_it.claire.exercise.resource.class%">
+            <call method="setResourceRepository">
+                <argument type="service" id="simple_it.claire.exercise.repository.resource"/>
+            </call>
+            <call method="setRequiredResourceByResourceRepository">
+                <argument type="service" id="simple_it.claire.exercise.repository.required_resource_by_resource"/>
+            </call>
+            <call method="setOwnerResourceService">
+                <argument type="service" id="simple_it.claire.exercise.owner_resource"/>
+            </call>
+        </service>
+
+        <!-- Owner Resource -->
         <service id="simple_it.claire.exercise.owner_resource" class="%simple_it.claire.exercise.owner_resource.class%">
             <call method="setOwnerResourceRepository">
                 <argument type="service" id="simple_it.claire.exercise.repository.owner_resource"/>
@@ -244,15 +319,14 @@
                 <argument type="service" id="simple_it.claire.exercise.repository.owner_resource_by_owner"/>
             </call>
         </service>
-        <service id="simple_it.claire.exercise.resource" class="%simple_it.claire.exercise.resource.class%">
-            <call method="setResourceRepository">
-                <argument type="service" id="simple_it.claire.exercise.repository.resource"/>
+
+        <!-- Attempt -->
+        <service id="simple_it.claire.exercise.attempt" class="%simple_it.claire.exercise.attempt.class%">
+            <call method="setAttemptByExerciseRepository">
+                <argument type="service" id="simple_it.claire.exercise.repository.attempt_by_exercise"/>
             </call>
-            <call method="setRequiredResourceByResourceRepository">
-                <argument type="service" id="simple_it.claire.exercise.repository.required_resource_by_resource"/>
-            </call>
-            <call method="setOwnerResourceService">
-                <argument type="service" id="simple_it.claire.exercise.owner_resource"/>
+            <call method="setAttemptRepository">
+                <argument type="service" id="simple_it.claire.exercise.repository.attempt"/>
             </call>
         </service>
     </services>

@@ -7,28 +7,27 @@ use SimpleIT\AppBundle\Controller\AppController;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class ExerciseController
+ * Class AttemptController
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseController extends AppController
+class AttemptController extends AppController
 {
     /**
-     * Try a new attempt for this exercise. It creates the attempt and redirects to the exercise
-     * resolution
+     * View an attempt. Redirects to the first item of the attempt
      *
-     * @param $exerciseId
+     * @param $attemptId
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function tryAction($exerciseId)
+    public function viewAction($attemptId)
     {
-        $attempt = $this->get('simple_it.claire.exercise.attempt')->create($exerciseId);
+        $itemId = $this->get('simple_it.claire.exercise.item')->getFirstItemId($attemptId);
 
         return $this->redirect(
             $this->generateUrl(
-                'simple_it_claire_component_exercise_attempt_view',
-                array('attemptId' => $attempt->getId())
+                'simple_it_claire_component_exercise_item_by_attempt_view',
+                array('attemptId' => $attemptId, 'itemId' => $itemId)
             )
         );
     }

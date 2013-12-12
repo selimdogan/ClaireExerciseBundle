@@ -2,10 +2,8 @@
 
 namespace SimpleIT\ClaireAppBundle\Services\Exercise;
 
-use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ItemResource;
-use SimpleIT\ClaireAppBundle\Repository\Exercise\ItemByExerciseRepository;
-use SimpleIT\ClaireAppBundle\Repository\Exercise\ItemRepository;
+use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
 
 /**
@@ -16,35 +14,35 @@ use SimpleIT\Utils\Collection\PaginatedCollection;
 interface ItemServiceInterface
 {
     /**
-     * Get an item
+     * Get an item by its id
      *
-     * @param int $itemId Item Id
+     * @param int  $itemId Item Id
+     * @param bool $showCorrection
      *
      * @return ItemResource
      */
-    public function get($itemId);
+    public function get($itemId, $showCorrection = false);
 
     /**
-     * Get an item object form the id of the exercise and the number of the item in the exercise
+     * Get an item object from the id of the attempt and the id of the item
      *
-     * @param int     $exerciseId
-     * @param int     $itemNumber
+     * @param int     $attemptId
+     * @param int     $itemId
      * @param boolean $corrected
      *
      * @return object The item object
      */
-    public function getItemObjectFromExerciseAndItem($exerciseId, $itemNumber, &$corrected);
+    public function getItemObjectFromAttempt($attemptId, $itemId, &$corrected);
 
     /**
-     * Get ItemResource from exercise
+     * Get an item (corrected if it is answered) by its attempt and id
      *
-     * @param int $exerciseId
-     * @param int $itemNumber
+     * @param $attemptId
+     * @param $itemId
      *
-     * @throws \OutOfBoundsException
      * @return ItemResource
      */
-    public function getItemResourceFromExercise($exerciseId, $itemNumber);
+    public function getByAttempt($attemptId, $itemId);
 
     /**
      * Get all the items of an exercise
@@ -56,11 +54,21 @@ interface ItemServiceInterface
     public function getAllFromExercise($exerciseId);
 
     /**
-     * Get an item object from a resource
+     * Get all the items for this attempt
      *
-     * @param ItemResource $itemResource
+     * @param int                   $attemptId
+     * @param CollectionInformation $collectionInformation
      *
-     * @return object The item object
+     * @return PaginatedCollection
      */
-    public function getItemObjectFromResource(ItemResource $itemResource);
+    public function getAll($attemptId, $collectionInformation = null);
+
+    /**
+     * Get the id of the first item of an attempt
+     *
+     * @param $attemptId
+     *
+     * @return mixed
+     */
+    public function getFirstItemId($attemptId);
 }

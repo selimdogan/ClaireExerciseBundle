@@ -9,9 +9,12 @@ use SimpleIT\ApiResourcesBundle\Exercise\Exercise\MultipleChoice\Question;
 use SimpleIT\ApiResourcesBundle\Exercise\Exercise\OrderItems\Item as OrderItemsItem;
 use SimpleIT\ApiResourcesBundle\Exercise\Exercise\PairItems\Item as PairItemsItem;
 use SimpleIT\ApiResourcesBundle\Exercise\ItemResource;
-use SimpleIT\ClaireAppBundle\Repository\Exercise\ItemByExerciseRepository;
-use SimpleIT\ClaireAppBundle\Repository\Exercise\ItemRepository;
+use SimpleIT\ClaireAppBundle\Repository\Exercise\Item\ItemByAttemptRepository;
+use SimpleIT\ClaireAppBundle\Repository\Exercise\Item\ItemByExerciseRepository;
+use SimpleIT\ClaireAppBundle\Repository\Exercise\Item\ItemRepository;
+use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
+use SimpleIT\Utils\Collection\Sort;
 
 /**
  * Class ItemService
@@ -24,6 +27,11 @@ class ItemService implements ItemServiceInterface
      * @var  ItemRepository
      */
     private $itemRepository;
+
+    /**
+     * @var ItemByAttemptRepository
+     */
+    private $itemByAttemptRepository;
 
     /**
      * @var  ItemByExerciseRepository
@@ -81,6 +89,16 @@ class ItemService implements ItemServiceInterface
     }
 
     /**
+     * Set itemByAttemptRepository
+     *
+     * @param ItemByAttemptRepository $itemByAttemptRepository
+     */
+    public function setItemByAttemptRepository($itemByAttemptRepository)
+    {
+        $this->itemByAttemptRepository = $itemByAttemptRepository;
+    }
+
+    /**
      * Get an item by its id
      *
      * @param int  $itemId Item Id
@@ -100,19 +118,19 @@ class ItemService implements ItemServiceInterface
     }
 
     /**
-     * Get an item object form the id of the exercise and the number of the item in the exercise
+     * Get an item object from the id of the attempt and the id of the item
      *
-     * @param int  $exerciseId
-     * @param int  $itemNumber
-     * @param bool $corrected
+     * @param int     $attemptId
+     * @param int     $itemId
+     * @param boolean $corrected
      *
      * @return object The item object
      */
-    public function getItemObjectFromExerciseAndItem($exerciseId, $itemNumber, &$corrected)
+    public function getItemObjectFromAttempt($attemptId, $itemId, &$corrected)
     {
-        $itemResource = $this->getItemResourceFromExercise($exerciseId, $itemNumber);
-        $corrected = $itemResource->getCorrected();
-        $object = $this->getItemObjectFromResource($itemResource);
+        $item = $this->getByAttempt($attemptId, $itemId);
+        $corrected = $item->getCorrected();
+        $object = $item->getContent();
 
         if ($corrected) {
             $this->correctAndExplain($object);
@@ -124,33 +142,16 @@ class ItemService implements ItemServiceInterface
     }
 
     /**
-     * Get an item object from a resource
+     * Get an item (corrected if it is answered) by its attempt and id
      *
-     * @param ItemResource $itemResource
+     * @param $attemptId
+     * @param $itemId
      *
-     * @return CommonItem The item object
-     */
-    public function getItemObjectFromResource(ItemResource $itemResource)
-    {
-        return $itemResource->getContent();
-    }
-
-    /**
-     * Get ItemResource from exercise
-     *
-     * @param int $exerciseId
-     * @param int $itemNumber
-     *
-     * @throws \LogicException
      * @return ItemResource
      */
-    public function getItemResourceFromExercise($exerciseId, $itemNumber)
+    public function getByAttempt($attemptId, $itemId)
     {
-        $items = $this->getAllFromExercise($exerciseId);
-        $keys = $items->getKeys();
-        $itemId = $items->get($keys[$itemNumber - 1])->getItemId();
-
-        return $this->get($itemId, true);
+        return $this->itemByAttemptRepository->find($attemptId, $itemId);
     }
 
     /**
@@ -262,5 +263,31 @@ class ItemService implements ItemServiceInterface
             $item->setAllRight(false);
             $item->setExplanation('Il y a des erreurs');
         }
+    }
+
+    /**
+     * Get all the items for this attempt
+     *
+     * @param int                   $attemptId
+     * @param CollectionInformation $collectionInformation
+     *
+     * @return PaginatedCollection
+     */
+    public function getAll($attemptId, $collectionInformation = null)
+    {
+        return $this->itemByAttemptRepository->findAll($attemptId, $collectionInformation);
+    }
+
+    /**
+     * Get the id of the first item of an attempt
+     *
+     * @param $attemptId
+     *
+     * @return mixed
+     */
+    public function getFirstItemId($attemptId)
+    {
+        $items = $this->getAll($attemptId);
+        return $items[0]->getItemId();
     }
 }

@@ -9,7 +9,7 @@ use SimpleIT\ApiResourcesBundle\Exercise\Exercise\OrderItems\Item as OrderItemsI
 use SimpleIT\ApiResourcesBundle\Exercise\Exercise\PairItems\Item as PairItemsItem;
 use SimpleIT\ApiResourcesBundle\Exercise\ItemResource;
 use SimpleIT\ClaireAppBundle\Model\Exercise\AnswerResourceFactory;
-use SimpleIT\ClaireAppBundle\Repository\Exercise\AnswerByItemRepository;
+use SimpleIT\ClaireAppBundle\Repository\Exercise\Answer\AnswerByItemByAttemptRepository;
 
 /**
  * Class AnswerService
@@ -24,9 +24,9 @@ class AnswerService implements AnswerServiceInterface
     const HTML_CHECKBOX_SELECTED = 'on';
 
     /**
-     * @var  AnswerByItemRepository
+     * @var AnswerByItemByAttemptRepository
      */
-    private $answerByItemRepository;
+    private $answerByItemByAttemptRepository;
 
     /**
      * @var  ItemServiceInterface
@@ -34,13 +34,13 @@ class AnswerService implements AnswerServiceInterface
     private $itemService;
 
     /**
-     * Set answerByItemRepository
+     * Set answerByItemByAttemptRepository
      *
-     * @param AnswerByItemRepository $answerRepository
+     * @param AnswerByItemByAttemptRepository $answerByItemByAttemptRepository
      */
-    public function setAnswerByItemRepository(AnswerByItemRepository $answerRepository)
+    public function setAnswerByItemByAttemptRepository($answerByItemByAttemptRepository)
     {
-        $this->answerByItemRepository = $answerRepository;
+        $this->answerByItemByAttemptRepository = $answerByItemByAttemptRepository;
     }
 
     /**
@@ -56,22 +56,22 @@ class AnswerService implements AnswerServiceInterface
     /**
      * Add a new Learner Answer to an item
      *
-     * @param int   $exerciseId
-     * @param int   $itemNumber
+     * @param int   $attemptId
+     * @param int   $itemId
      * @param array $answers
      *
-     * @internal param int $itemId
      * @return AnswerResource
      */
-    public function add($exerciseId, $itemNumber, array $answers)
+    public function add($attemptId, $itemId, array $answers)
     {
-        $itemRes = $this->itemService->getItemResourceFromExercise($exerciseId, $itemNumber);
+        $item = $this->itemService->getByAttempt($attemptId, $itemId);
+        $answerResource = $this->getResourceFromAnswer($answers, $item);
 
-        $answerResource = $this->getResourceFromAnswer($answers, $itemRes);
-
-        $answerResource = $this->answerByItemRepository->insert(
-            $answerResource,
-            $itemRes->getItemId()
+//        throw new \Exception(print_r($answerResource,true));
+        $answerResource = $this->answerByItemByAttemptRepository->insert(
+            $attemptId,
+            $itemId,
+            $answerResource
         );
 
         return $answerResource;
@@ -88,7 +88,7 @@ class AnswerService implements AnswerServiceInterface
      */
     private function getResourceFromAnswer(array $la, ItemResource $itemRes)
     {
-        $item = $this->itemService->getItemObjectFromResource($itemRes);
+        $item = $itemRes->getContent();
 
         switch (get_class($item)) {
             case ItemResource::MULTIPLE_CHOICE_CLASS:
@@ -223,7 +223,7 @@ class AnswerService implements AnswerServiceInterface
      */
     private function getResourceFromPairItemsAnswer(PairItemsItem $item, array $answers)
     {
-        $numberOfObjects = count($item->getLeftParts());
+        $numberOfObjects = count($item->getFixParts());
 
         $array = array();
 

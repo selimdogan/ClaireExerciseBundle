@@ -36,26 +36,6 @@ simple_it_claire_exercise_model:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/exercise_model.yml"
     prefix:   /exercise-models
 
-simple_it_claire_component_owner_exercise_model:
-    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/component_owner_exercise_model.yml"
-    prefix:   /components/owner-exercise-models
-
-simple_it_claire_component_exercise_exercise_model:
-    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/component_exercise_model.yml"
-    prefix:   /components/exercise-models
-
-simple_it_claire_owner_exercise_model:
-    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/owner_exercise_model.yml"
-    prefix:   /owner-exercise-models
-
-simple_it_claire_component_owner_resources:
-    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/component_owner_resource.yml"
-    prefix:   /components/owner-resources
-
-simple_it_claire_component_exercise_resources:
-    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/component_resource.yml"
-    prefix:   /components/resources
-
 simple_it_claire_resource:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/resource.yml"
     prefix:   /resources
@@ -63,3 +43,32 @@ simple_it_claire_resource:
 simple_it_claire_owner_resource:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/owner_resource.yml"
     prefix:   /owner-resources
+
+simple_it_claire_owner_exercise_model:
+    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/owner_exercise_model.yml"
+    prefix:   /owner-exercise-models
+
+simple_it_claire_component_exercise_owner_exercise_model:
+    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/component_owner_exercise_model.yml"
+    prefix:   /components/owner-exercise-models
+
+simple_it_claire_component_exercise_exercise_model:
+    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/component_exercise_model.yml"
+    prefix:   /components/exercise-models
+
+simple_it_claire_component_exerciseowner_resources:
+    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/component_owner_resource.yml"
+    prefix:   /components/owner-resources
+
+simple_it_claire_component_exercise_resources:
+    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/component_resource.yml"
+    prefix:   /components/resources
+
+simple_it_claire_component_exercise_attempts:
+    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/component_attempt.yml"
+    prefix:   /components/attempts
+
+simple_it_claire_component_exercise_exercises:
+    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/component_exercise.yml"
+    prefix:   /components/exercises
+

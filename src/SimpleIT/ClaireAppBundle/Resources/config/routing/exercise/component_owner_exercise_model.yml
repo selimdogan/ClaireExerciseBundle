@@ -64,3 +64,8 @@ simple_it_claire_component_exercise_multiple_owner_exercise_model_key_metadata_e
     requirements:
         _method: POST
 
+simple_it_claire_component_exercise_owner_exercise_model_try:
+    pattern: /{ownerExerciseModelId}/try
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModel:try }
+    requirements:
+        _method: GET
