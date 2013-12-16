@@ -1,6 +1,7 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\AppBundle\Annotation\Cache;
@@ -79,13 +80,14 @@ class PartRepository extends AppRepository
         $courseIdentifier,
         $partIdentifier,
         PartResource $part,
-        Array $parameters = array()
+        $status
     )
     {
+
         return $this->updateResource(
             $part,
             array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier),
-            $parameters
+            array(CourseResource::STATUS => $status)
         );
     }
 }

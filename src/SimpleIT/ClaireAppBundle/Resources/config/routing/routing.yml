@@ -6,9 +6,17 @@ simple_it_claire_category:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/associatedContent/category.yml"
     prefix:   /categories
 
+simple_it_claire_component_tag:
+    resource: '@SimpleITClaireAppBundle/Resources/config/routing/associatedContent/component_tag.yml'
+    prefix : /components/associated-content/tags/
+
 simple_it_claire_associated_content_component_category_by_course:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/associatedContent/component_category_by_course.yml"
     prefix:   components/courses/{courseId}
+
+simple_it_claire_associated_content_component_tag_by_course:
+    resource: "@SimpleITClaireAppBundle/Resources/config/routing/associatedContent/component_tag_by_course.yml"
+    prefix:   components/courses/{courseId}/tags/
 
 simple_it_claire_component_course:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/component_course.yml"
@@ -21,6 +29,10 @@ simple_it_claire_component_course_author:
 simple_it_claire_component_part_tag:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/associatedContent/component_part_tag.yml"
     prefix:   components/courses/{courseIdentifier}/parts/{partIdentifier}/tags/
+
+simple_it_claire_component_part:
+    resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/component_part.yml"
+    prefix:   /
 
 simple_it_claire_ui_kit:
     pattern: /claire/uikit

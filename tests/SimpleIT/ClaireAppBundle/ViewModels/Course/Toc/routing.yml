@@ -1,0 +1,11 @@
+simple_it_claire_course_part_edit:
+    pattern: /{courseId}/parts/{partId}
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Part:edit }
+    requirements:
+            _method: GET|POST
+
+simple_it_claire_component_course_toc_edit:
+    pattern: /{courseId}/toc
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course:editToc }
+    requirements:
+        _method: POST

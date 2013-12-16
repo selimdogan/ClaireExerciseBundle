@@ -72,10 +72,12 @@ class CourseController extends AppController
     {
         $courses = $this->get('simple_it.claire.course.course')->getAll($collectionInformation);
         if ($request->isXmlHttpRequest()) {
-            return new Response($this->get('serializer')->serialize(
-                $courses->toArray(),
-                FormatUtils::JSON
-            ));
+            return new Response(
+                $this->get('serializer')->serialize(
+                    $courses->toArray(),
+                    FormatUtils::JSON
+                )
+            );
         }
 
         return $this->render(
@@ -352,9 +354,36 @@ class CourseController extends AppController
         );
 
         return $this->render(
-            'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
-            array('content' => $introduction)
+            'SimpleITClaireAppBundle:Course/Course/Component:editIntroduction.html.twig',
+            array(
+                'content' => $introduction,
+                'action'  =>
+                    $this->generateUrl(
+                        'simple_it_claire_component_course_course_introduction_edit',
+                        array('courseId' => $courseId)
+                    )
+            )
         );
+    }
+
+    /**
+     * Edit introduction course content (POST)
+     *
+     * @param Request $request  Request
+     * @param int     $courseId Course id
+     *
+     * @return Response
+     */
+    public function editIntroductionAction(Request $request, $courseId)
+    {
+        $content = $request->get('courseContent');
+        $content = $this->get('simple_it.claire.course.course')->saveIntroduction(
+            $courseId,
+            $content,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
+        return new Response($content);
     }
 
     /* *************** *
@@ -560,7 +589,7 @@ class CourseController extends AppController
     )
     {
 
-        $course = $this->get('simple_it.claire.course.course')->getToEdit(
+        $course = $this->get('simple_it.claire.course.course')->getByStatus(
             $courseId,
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
         );
@@ -847,8 +876,9 @@ class CourseController extends AppController
             $course->getId(),
             $collectionInformation
         );
-        $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourse(
+        $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourseToEdit(
             $course->getId(),
+            $status,
             $collectionInformation
         );
 

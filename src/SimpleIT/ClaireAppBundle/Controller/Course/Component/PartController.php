@@ -26,6 +26,7 @@ use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Model\AppResponse;
 use SimpleIT\AppBundle\Util\RequestUtils;
+use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -62,27 +63,35 @@ class PartController extends AppController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request, $courseIdentifier, $partIdentifier)
+    public function editAction(Request $request, $courseId, $partId)
     {
         $part = new PartResource();
         if (RequestUtils::METHOD_GET == $request->getMethod()) {
-            $part = $this->get('simple_it.claire.course.part')->get(
-                $courseIdentifier,
-                $partIdentifier
+            $part = $this->get('simple_it.claire.course.part')->getByStatus(
+                $courseId,
+                $partId,
+                CourseResource::STATUS_DRAFT
             );
         }
 
-        $form = $this->createFormBuilder($part)
+        $form = $this->createFormBuilder(
+                        $part,
+                        array(
+                            'validation_groups' => array('edit')
+                        )
+        )
             ->add('title')
             ->getForm();
 
         if (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()) {
+
             $form->bind($request);
             if ($form->isValid()) {
                 $part = $this->get('simple_it.claire.course.part')->save(
-                    $courseIdentifier,
-                    $partIdentifier,
-                    $part
+                    $courseId,
+                    $partId,
+                    $part,
+                    $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
                 );
             }
 
@@ -92,10 +101,10 @@ class PartController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Part/Component:edit.html.twig',
             array(
-                'courseIdentifier' => $courseIdentifier,
-                'partIdentifier'   => $partIdentifier,
-                'part'             => $part,
-                'form'             => $form->createView()
+                'courseId' => $courseId,
+                'partId'   => $partId,
+                'part'     => $part,
+                'form'     => $form->createView()
             )
         );
     }
@@ -276,6 +285,49 @@ class PartController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
             array('content' => $introduction)
+        );
+    }
+
+    /**
+     * Edit Dashboard
+     *
+     * @param Request $request  Request
+     * @param int     $courseId Course id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editDashboardAction(Request $request, $courseId, $partId)
+    {
+        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
+        $parameters[CourseResource::STATUS] = $status;
+        $collectionInformation = new CollectionInformation();
+        $collectionInformation->addFilter(CourseResource::STATUS, $status);
+
+        $course = $this->get('simple_it.claire.course.course')->getByStatus(
+            $courseId,
+            $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
+        $part = $this->get('simple_it.claire.course.part')->getByStatus(
+            $courseId,
+            $partId,
+            $status
+        );
+
+        $authors = $this->get('simple_it.claire.user.author')->getAllByCourse(
+            $course->getId(),
+            $collectionInformation
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Part/Component:editDashboard.html.twig',
+            array(
+                'course'    => $course,
+                'part'      => $part,
+                'metadatas' => array(),
+                'authors'   => $authors,
+                'tags'      => array()
+            )
         );
     }
 }

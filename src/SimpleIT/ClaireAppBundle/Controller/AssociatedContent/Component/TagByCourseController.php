@@ -8,7 +8,9 @@ use SimpleIT\ApiResourcesBundle\AssociatedContent\TagResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class TagByCourseController
@@ -75,11 +77,12 @@ class TagByCourseController extends AppController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listEditViewAction(CollectionInformation $collectionInformation, $courseId)
+    public function listEditViewAction(Request $request, $courseId)
     {
-        $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourse(
+        $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourseToEdit(
             $courseId,
-            $collectionInformation
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
+            new CollectionInformation()
         );
         $outputTags = array();
 
@@ -87,8 +90,8 @@ class TagByCourseController extends AppController
         foreach ($tags as $tag) {
             $outputTags[$tag->getId()] = $tag->getName();
         }
-
-        $form = $this->createFormBuilder($outputTags)
+        $formData = array('tags' => json_encode($outputTags));
+        $form = $this->createFormBuilder($formData)
             ->add(
                 'tags',
                 'text',
@@ -101,10 +104,28 @@ class TagByCourseController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:AssociatedContent/Tag/Component:editListByCourse.html.twig',
             array(
-                'courseId' => $courseId,
-                'form'     => $form->createView()
+                'searchAction' =>
+                    $this->generateUrl(
+                        'simple_it_claire_associated_content_search_tag_by_course',
+                        array('courseId' => $courseId)
+                    ),
+                'courseId'     => $courseId,
+                'form'         => $form->createView()
             )
         );
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function searchListToAddAction(Request $request, $courseId)
+    {
+        $eligibleTags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourseToAdd(
+            $courseId,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
+        return new JsonResponse($eligibleTags);
     }
 
     /**
@@ -115,29 +136,27 @@ class TagByCourseController extends AppController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editListAction(Request $request, $courseIdentifier)
+    public function editListAction(Request $request, $courseId)
     {
-        $tags = array();
-        if (RequestUtils::METHOD_GET == $request->getMethod()) {
-            $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourse(
-                $courseIdentifier
-            );
-        }
-        $tagsString = '';
-        foreach ($tags as $tag) {
-            if ($tagsString != '') {
-                $tagsString .= ',';
-            }
-
-            $tagsString .= $tag->getName();
-        }
-
-        return $this->render(
-            'editListByCourse.html.twig',
-            array(
-                'courseIdentifier' => $courseIdentifier,
-                'tags'             => $tagsString
+        $formData = array();
+        $form = $this->createFormBuilder($formData)
+            ->add(
+                'tags',
+                'text',
+                array(
+                    'required' => true
+                )
             )
+            ->getForm();
+
+        $form->bind($request);
+        $data = $form->getData();
+        $tags = json_decode($data['tags'], true);
+        $updatedTags = $this->get('simple_it.claire.associated_content.tag')->addTagsToCourse(
+            $courseId,
+            array_keys($tags)
         );
+
+        return new JsonResponse($updatedTags);
     }
 }
