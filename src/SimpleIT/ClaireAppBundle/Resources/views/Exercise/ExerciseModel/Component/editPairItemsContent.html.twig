@@ -1,7 +1,12 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"></script>
 <h2>Edition d'appariement d'objets</h2>
 
-<form action="{{ path('simple_it_claire_component_exercise_exercise_model_pair_items_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
+{% for error in errors %}
+    <p>{{ error }}</p>
+{% endfor %}
+
+<form action="{{ path('simple_it_claire_component_exercise_exercise_model_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
+    <input type="hidden" name="model-type" value="pair-items">
 
     <table>
         <tr>

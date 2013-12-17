@@ -3,8 +3,9 @@
 {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:editTitleView',{ 'exerciseModelId': exerciseModel.id })) }}
 {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:editContentView',{ 'exerciseModelId': exerciseModel.id })) }}
 {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/RequiredResourceByExerciseModel:editRequiredResourcesView',{ 'exerciseModelId': exerciseModel.id })) }}
+{{ render(controller('SimpleITClaireAppBundle:Exercise/Component/OwnerResource:browserView')) }}
+
 
 <form action="{{ path('simple_it_claire_exercise_exercise_model_delete',{ 'exerciseModelId': exerciseModel.id}) }}" method="get">
     <input type="submit" value="Supprimer le modèle d'exercice">
 </form>
-

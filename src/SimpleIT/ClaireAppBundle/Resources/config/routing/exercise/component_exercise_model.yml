@@ -1,3 +1,15 @@
+simple_it_claire_exercise_exercise_model_create_view:
+    pattern: /create
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:createExerciseModelView }
+    requirements:
+        _method: GET
+
+simple_it_claire_exercise_exercise_model_create:
+    pattern: /create
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:create }
+    requirements:
+        _method: POST
+
 simple_it_claire_component_exercise_exercise_model_type_edit_view:
     pattern: /{exerciseModelId}/type
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:editTypeView }
@@ -28,27 +40,9 @@ simple_it_claire_component_exercise_exercise_model_content_edit_view:
     requirements:
         _method: GET
 
-simple_it_claire_component_exercise_exercise_model_multiple_choice_content_edit:
-    pattern: /{exerciseModelId}/multiple-choice/content
-    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:multipleChoiceContentEdit }
-    requirements:
-        _method: POST
-
-simple_it_claire_component_exercise_exercise_model_group_items_content_edit:
-    pattern: /{exerciseModelId}/group-items/content
-    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:groupItemsContentEdit }
-    requirements:
-        _method: POST
-
-simple_it_claire_component_exercise_exercise_model_order_items_content_edit:
-    pattern: /{exerciseModelId}/order-items/content
-    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:orderItemsContentEdit }
-    requirements:
-        _method: POST
-
-simple_it_claire_component_exercise_exercise_model_pair_items_content_edit:
-    pattern: /{exerciseModelId}/pair-items/content
-    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:pairItemsContentEdit }
+simple_it_claire_component_exercise_exercise_model_content_edit:
+    pattern: /{exerciseModelId}/content
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:exerciseModelContentEdit }
     requirements:
         _method: POST
 
