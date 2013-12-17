@@ -20,11 +20,14 @@
 
 namespace SimpleIT\ClaireAppBundle\Services\Course;
 
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartContentRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartIntroductionRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartRepository;
 use SimpleIT\ClaireAppBundle\Repository\Course\PartTocRepository;
+use SimpleIT\ClaireAppBundle\Repository\Course\CourseTocRepository;
+use SimpleIT\Utils\NumberUtils;
 
 /**
  * Class PartService
@@ -53,6 +56,11 @@ class PartService
      * @var  PartTocRepository
      */
     private $partTocRepository;
+
+    /**
+     * @var  CourseTocRepository
+     */
+    private $courseTocRepository;
 
     /**
      * Set partRepository
@@ -95,6 +103,16 @@ class PartService
     }
 
     /**
+     * Set courseTocRepository
+     *
+     * @param \SimpleIT\ClaireAppBundle\Repository\Course\CourseTocRepository $courseTocRepository
+     */
+    public function setCourseTocRepository($courseTocRepository)
+    {
+        $this->courseTocRepository = $courseTocRepository;
+    }
+
+    /**
      * Get a part
      *
      * @param string | integer $courseIdentifier Course id | slug
@@ -108,6 +126,24 @@ class PartService
     }
 
     /**
+     * Get a part by status
+     *
+     * @param string | integer $courseIdentifier Course id | slug
+     * @param string | integer $partIdentifier   Part id | slug
+     * @param string           $status           Status
+     *
+     * @return PartResource
+     */
+    public function getByStatus($courseIdentifier, $partIdentifier, $status)
+    {
+        return $this->partRepository->findByStatus(
+            $courseIdentifier,
+            $partIdentifier,
+            array(CourseResource::STATUS => $status)
+        );
+    }
+
+    /**
      * Update a part
      *
      * @param string       $courseIdentifier Course id | slug
@@ -116,9 +152,9 @@ class PartService
      *
      * @return PartResource
      */
-    public function save($courseIdentifier, $partIdentifier, $part)
+    public function save($courseIdentifier, $partIdentifier, $part, $status)
     {
-        return $this->partRepository->update($courseIdentifier, $partIdentifier, $part);
+        return $this->partRepository->update($courseIdentifier, $partIdentifier, $part, $status);
     }
 
     /**
@@ -127,12 +163,18 @@ class PartService
      * @param integer $courseId Course id
      * @param integer $partId   Part id
      * @param mixed   $content  Content
+     * @param string  $status   Status
      *
      * @return mixed
      */
-    public function saveContent($courseId, $partId, $content)
+    public function saveContent($courseId, $partId, $content, $status)
     {
-        return $this->partContentRepository->update($courseId, $partId, $content);
+        return $this->partContentRepository->update(
+            $courseId,
+            $partId,
+            $content,
+            array('status' => $status)
+        );
     }
 
     /**
@@ -149,6 +191,24 @@ class PartService
     }
 
     /**
+     * Get a course introduction
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param integer      $partIdentifier   Part id | slug
+     * @param string       $status           Asked status
+     *
+     * @return mixed
+     */
+    public function getIntroductionByStatus($courseIdentifier, $partIdentifier, $status)
+    {
+        return $this->partIntroductionRepository->findByStatus(
+            $courseIdentifier,
+            $partIdentifier,
+            array(CourseResource::STATUS => $status)
+        );
+    }
+
+    /**
      * Get a part content
      *
      * @param integer $courseIdentifier Course id | slug
@@ -162,15 +222,147 @@ class PartService
     }
 
     /**
+     * Get a part content
+     *
+     * @param integer $courseIdentifier Course id | slug
+     * @param integer $partIdentifier   Part id | slug
+     * @param string  $status           Asked status
+     *
+     * @return mixed
+     * @deprecated use getContentByStatus
+     */
+    public function getContentToEdit($courseIdentifier, $partIdentifier, $status)
+    {
+        return $this->partContentRepository->findByStatus(
+            $courseIdentifier,
+            $partIdentifier,
+            array(CourseResource::STATUS => $status)
+        );
+    }
+
+    /**
+     * Get a part content
+     *
+     * @param integer $courseIdentifier Course id | slug
+     * @param integer $partIdentifier   Part id | slug
+     * @param string  $status           Asked status
+     *
+     * @return mixed
+     */
+    public function getContentByStatus($courseIdentifier, $partIdentifier, $status)
+    {
+        return $this->partContentRepository->findByStatus(
+            $courseIdentifier,
+            $partIdentifier,
+            array(CourseResource::STATUS => $status)
+        );
+    }
+
+    /**
      * Get a part toc
      *
      * @param int | string $courseIdentifier Course id | slug
-     * @param int | string $partIdentifier Part id | slug
+     * @param int | string $partIdentifier   Part id | slug
      *
      * @return mixed
      */
     public function getToc($courseIdentifier, $partIdentifier)
     {
         return $this->partTocRepository->find($courseIdentifier, $partIdentifier);
+    }
+
+    /**
+     * Get a part toc
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier   Part id | slug
+     * @param string       $status           Asked status
+     *
+     * @return mixed
+     */
+    public function getTocByStatus($courseIdentifier, $partIdentifier, $status)
+    {
+        return $this->partTocRepository->findByStatus(
+            $courseIdentifier,
+            $partIdentifier,
+            array(CourseResource::STATUS => $status)
+        );
+    }
+
+    /**
+     * Get parents part from a part (included itself)
+     *
+     * @param int | string $courseIdentifier Course id | slug
+     * @param int | string $partIdentifier   Part id | slug
+     *
+     * @return array
+     */
+    public function getParents($courseIdentifier, $partIdentifier)
+    {
+        $courseToc = $this->courseTocRepository->find($courseIdentifier);
+        $partParents = array();
+        $partParents = $this->getParentsFromToc($partParents, $courseToc, $partIdentifier);
+
+        return $partParents;
+    }
+
+    /**
+     * Scan complete toc and retrieve parents
+     *
+     * @param array        $partParents    Part parents
+     * @param PartResource $parent         Parent element
+     * @param int | string $partIdentifier Part id | slug
+     *
+     * @return bool
+     */
+    private function getParentsFromToc($partParents, PartResource $parent, $partIdentifier)
+    {
+        if ($this->matchPart($parent, $partIdentifier)) {
+            return true;
+        }
+
+        if ($parent->getChildren()) {
+            foreach ($parent->getChildren() as $part) {
+                /* Limit deep level */
+                if (in_array(
+                    $part->getSubtype(),
+                    array(PartResource::TITLE_1, PartResource::TITLE_2, PartResource::TITLE_3)
+                )
+                ) {
+                    /* recursive deep scan */
+                    $found = $this->getParentsFromToc($partParents, $part, $partIdentifier);
+
+                    if ($found === true ||
+                        (is_array($found) && count($found) > count($partParents))
+                    ) {
+                        if (is_array($found)) {
+                            $partParents = $found;
+                        }
+                        /* send parent info up */
+                        $partParents[] = $part->getId();
+
+                        return $partParents;
+                    } else {
+                        $partParents = $found;
+                    }
+                }
+            }
+        }
+
+        return $partParents;
+    }
+
+    /**
+     * Match parts
+     *
+     * @param PartResource $parent         Parent element
+     * @param int | string $partIdentifier Part id | slug
+     *
+     * @return bool
+     */
+    private function matchPart(PartResource $parent, $partIdentifier)
+    {
+        return NumberUtils::isInteger($partIdentifier) && $parent->getId() == $partIdentifier ||
+        !NumberUtils::isInteger($partIdentifier) && $parent->getSlug() == $partIdentifier;
     }
 }

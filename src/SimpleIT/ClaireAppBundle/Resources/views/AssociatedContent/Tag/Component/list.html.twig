@@ -1,43 +1,17 @@
-<section class="tags">
-    <div class="tags-content">
-        <h3>Thématiques</h3>
-        {% set letter = '' %}
-        <ul class="tag-column">
-            {% for tag in tags %}
-                {% set currentLetter = tag.name|firstForList %}
-                {% if letter != currentLetter %}
-                    {% set letter = currentLetter %}
+{% set letter = '' %}
+<ul class="tag-column">
+    {% for tag in tags %}
+        {% set currentLetter = tag.name|firstForList %}
+        {% if letter != currentLetter %}
+            {% set letter = currentLetter %}
 
-                    {{ letter }}
+            <strong> {{ letter }} </strong>
 
-                {% endif %}
-                <li class="tag-content">
-                    <a class="tag-name" href="{{ path('simple_it_claire_associated_content_tag_view', {'categoryIdentifier' : tag.category.slug, 'tagIdentifier' : tag.slug }) }}">{{ tag.name }}</a>
-                    <a class="tag-number" href="{{ path('simple_it_claire_associated_content_tag_view', {'categoryIdentifier' : tag.category.slug, 'tagIdentifier' : tag.slug }) }}">({{ tag.coursesNumber }})</a>
-                    {% if tag.headlineCourse is not null %}
-                        <a class="tag-flag" href="{{ path('simple_it_claire_course_course_view', { 'categoryIdentifier' : tag.category.slug, 'courseIdentifier': tag.headlineCourse.slug}) }}" title="
-                            <div class='tag-tooltip' onmouseover='clearTimeout(timeoutObj);$(this).mouseleave(function() {$(this).parent().parent().hide();});'>
-                                    <div>
-                                        <span class='top'>Commencez par le tutoriel suivant:</span>
-                                        <span class='flag-white'></span>
-                                        <div class='clear'></div>
-                                    </div>
+        {% endif %}
+        <li class="tag-content">
+            <a class="tag-name" href="{{ path('simple_it_claire_associated_content_tag_view', {'categoryIdentifier' : tag.category.slug, 'tagIdentifier' : tag.slug }) }}">{{ tag.name }}</a>
+            <a class="tag-number" href="{{ path('simple_it_claire_associated_content_tag_view', {'categoryIdentifier' : tag.category.slug, 'tagIdentifier' : tag.slug }) }}">({{ tag.coursesNumber }})</a>
+        </li>
+    {% endfor %}
+</ul>
 
-                                    <a href='#' class='tag-bottom'>
-                                        <span class='image'>
-                                            {{ tag.headlineCourse|metaImageSimpleQuote }}
-                                        </span>
-                                        <span class='tag-tuto'>
-                                            <span class='courseTitle'>{{ tag.headlineCourse.title }}</span>
-                                                <span class='tags'></span>
-                                        </span>
-                                    </a>
-                                </div>">
-                            <span class="tag-flag-img"></span>
-                        </a>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-</section>

@@ -3,6 +3,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Services\User;
 
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ClaireAppBundle\Repository\User\AuthorByCourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\User\AuthorByPartRepository;
 use SimpleIT\ClaireAppBundle\Repository\User\AuthorRepository;
@@ -93,8 +94,8 @@ class AuthorService
     /**
      * Get all the authors of a course
      *
-     * @param integer | string      $courseIdentifier           Course id | slug
-     * @param CollectionInformation $collectionInformation      Collection information
+     * @param integer | string      $courseIdentifier      Course id | slug
+     * @param CollectionInformation $collectionInformation Collection information
      *
      * @return PaginatedCollection
      */
@@ -104,6 +105,26 @@ class AuthorService
     )
     {
         return $this->authorByCourseRepository->findAll($courseIdentifier, $collectionInformation);
+    }
+
+    /**
+     * Get all the authors of a course to edit
+     *
+     * @param int                   $courseId              Course id
+     * @param string                $status                Status
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return PaginatedCollection
+     */
+    public function getAllByCourseToEdit(
+        $courseId,
+        $status,
+        CollectionInformation $collectionInformation
+    )
+    {
+        $collectionInformation->addFilter(CourseResource::STATUS, $status);
+
+        return $this->authorByCourseRepository->findAllToEdit($courseId, $collectionInformation);
     }
 
     /**

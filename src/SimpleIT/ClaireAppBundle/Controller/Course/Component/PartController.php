@@ -21,13 +21,14 @@
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
+use SimpleIT\AppBundle\Annotation\Cache;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Model\AppResponse;
 use SimpleIT\AppBundle\Util\RequestUtils;
+use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class PartController
@@ -37,8 +38,8 @@ use SimpleIT\AppBundle\Annotation\Cache;
 class PartController extends AppController
 {
     /**
-     * @param int | string $courseIdentifier Course id | slug
-     * @param int | string $partIdentifier   Part id | slug
+     * @param int|string $courseIdentifier Course id | slug
+     * @param int|string $partIdentifier   Part id | slug
      *
      * @return Response
      * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
@@ -62,27 +63,35 @@ class PartController extends AppController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request, $courseIdentifier, $partIdentifier)
+    public function editAction(Request $request, $courseId, $partId)
     {
         $part = new PartResource();
         if (RequestUtils::METHOD_GET == $request->getMethod()) {
-            $part = $this->get('simple_it.claire.course.part')->get(
-                $courseIdentifier,
-                $partIdentifier
+            $part = $this->get('simple_it.claire.course.part')->getByStatus(
+                $courseId,
+                $partId,
+                CourseResource::STATUS_DRAFT
             );
         }
 
-        $form = $this->createFormBuilder($part)
+        $form = $this->createFormBuilder(
+                        $part,
+                        array(
+                            'validation_groups' => array('edit')
+                        )
+        )
             ->add('title')
             ->getForm();
 
         if (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()) {
+
             $form->bind($request);
             if ($form->isValid()) {
                 $part = $this->get('simple_it.claire.course.part')->save(
-                    $courseIdentifier,
-                    $partIdentifier,
-                    $part
+                    $courseId,
+                    $partId,
+                    $part,
+                    $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
                 );
             }
 
@@ -92,75 +101,10 @@ class PartController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Part/Component:edit.html.twig',
             array(
-                'courseIdentifier' => $courseIdentifier,
-                'partIdentifier'   => $partIdentifier,
-                'part'             => $part,
-                'form'             => $form->createView()
-            )
-        );
-    }
-
-    /**
-     * View Part content
-     *
-     * @param int | string $courseIdentifier Course id | slug
-     * @param int | string $partIdentifier   Part id | slug
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
-     */
-    public function viewContentAction($courseIdentifier, $partIdentifier)
-    {
-        $partContent = $this->get('simple_it.claire.course.part')->getContent(
-            $courseIdentifier,
-            $partIdentifier
-        );
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/Part/Component:viewContent.html.twig',
-            array(
-                'courseIdentifier' => $courseIdentifier,
-                'partIdentifier'   => $partIdentifier,
-                'partContent'      => $partContent
-            )
-        );
-    }
-
-    /**
-     * Edit part content
-     *
-     * @param Request      $request          Request
-     * @param int | string $courseIdentifier Course id | slug
-     * @param int | string $partIdentifier   Part id | slug
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function editContentAction(Request $request, $courseIdentifier, $partIdentifier)
-    {
-        $partContent = null;
-        if (RequestUtils::METHOD_GET == $request->getMethod()) {
-            $partContent = $this->get('simple_it.claire.course.part')->getContent(
-                $courseIdentifier,
-                $partIdentifier
-            );
-        } elseif (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()
-        ) {
-            $partContent = $request->get('partContent');
-            $partContent = $this->get('simple_it.claire.course.part')->saveContent(
-                $courseIdentifier,
-                $partIdentifier,
-                $partContent
-            );
-
-            return new AppResponse($partContent);
-        }
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/PartContent/Component:edit.html.twig',
-            array(
-                'courseIdentifier' => $courseIdentifier,
-                'partIdentifier'   => $partIdentifier,
-                'partContent'      => $partContent
+                'courseId' => $courseId,
+                'partId'   => $partId,
+                'part'     => $part,
+                'form'     => $form->createView()
             )
         );
     }
@@ -176,7 +120,12 @@ class PartController extends AppController
      * @return \Symfony\Component\HttpFoundation\Response
      * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
-    public function viewTocMediumAction($courseIdentifier, $partIdentifier, $categoryIdentifier, $displayLevel)
+    public function viewTocMediumAction(
+        $courseIdentifier,
+        $partIdentifier,
+        $categoryIdentifier,
+        $displayLevel
+    )
     {
         $toc = $this->get('simple_it.claire.course.part')->getToc(
             $courseIdentifier,
@@ -195,11 +144,47 @@ class PartController extends AppController
     }
 
     /**
-     * View table of content BIG
+     * View table of content Medium
      *
+     * @param Request      $request            Request
      * @param int | string $courseIdentifier   Course id | slug
      * @param int | string $partIdentifier     Current part id | slug
      * @param int | string $categoryIdentifier Category id | slug
+     * @param int          $displayLevel       Course display level
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewTocMediumByStatusAction(
+        Request $request,
+        $courseIdentifier,
+        $partIdentifier,
+        $categoryIdentifier,
+        $displayLevel
+    )
+    {
+        $toc = $this->get('simple_it.claire.course.part')->getTocByStatus(
+            $courseIdentifier,
+            $partIdentifier,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:viewTocMedium.html.twig',
+            array(
+                'toc'                => $toc,
+                'courseIdentifier'   => $courseIdentifier,
+                'categoryIdentifier' => $categoryIdentifier,
+                'displayLevel'       => $displayLevel
+            )
+        );
+    }
+
+    /**
+     * View table of content BIG
+     *
+     * @param int|string $courseIdentifier   Course id | slug
+     * @param int|string $partIdentifier     Current part id | slug
+     * @param int|string $categoryIdentifier Category id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
@@ -222,10 +207,43 @@ class PartController extends AppController
     }
 
     /**
+     * View table of content BIG
+     *
+     * @param Request    $request            Request
+     * @param int|string $courseIdentifier   Course id | slug
+     * @param int|string $partIdentifier     Current part id | slug
+     * @param int|string $categoryIdentifier Category id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewTocBigByStatusAction(
+        Request $request,
+        $courseIdentifier,
+        $partIdentifier,
+        $categoryIdentifier
+    )
+    {
+        $toc = $this->get('simple_it.claire.course.part')->getTocByStatus(
+            $courseIdentifier,
+            $partIdentifier,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:viewTocBig.html.twig',
+            array(
+                'toc'                => $toc,
+                'courseIdentifier'   => $courseIdentifier,
+                'categoryIdentifier' => $categoryIdentifier
+            )
+        );
+    }
+
+    /**
      * View introduction
      *
-     * @param int | string $courseIdentifier Course id | slug
-     * @param int | string $partIdentifier   Part id | slug
+     * @param int|string $courseIdentifier Course id | slug
+     * @param int|string $partIdentifier   Part id | slug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
@@ -240,6 +258,76 @@ class PartController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
             array('content' => $introduction)
+        );
+    }
+
+    /**
+     * View introduction
+     *
+     * @param Request    $request          Request
+     * @param int|string $courseIdentifier Course id | slug
+     * @param int|string $partIdentifier   Part id | slug
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewIntroductionByStatusAction(
+        Request $request,
+        $courseIdentifier,
+        $partIdentifier
+    )
+    {
+        $introduction = $this->get('simple_it.claire.course.part')->getIntroductionByStatus(
+            $courseIdentifier,
+            $partIdentifier,
+            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
+            array('content' => $introduction)
+        );
+    }
+
+    /**
+     * Edit Dashboard
+     *
+     * @param Request $request  Request
+     * @param int     $courseId Course id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editDashboardAction(Request $request, $courseId, $partId)
+    {
+        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
+        $parameters[CourseResource::STATUS] = $status;
+        $collectionInformation = new CollectionInformation();
+        $collectionInformation->addFilter(CourseResource::STATUS, $status);
+
+        $course = $this->get('simple_it.claire.course.course')->getByStatus(
+            $courseId,
+            $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
+        $part = $this->get('simple_it.claire.course.part')->getByStatus(
+            $courseId,
+            $partId,
+            $status
+        );
+
+        $authors = $this->get('simple_it.claire.user.author')->getAllByCourse(
+            $course->getId(),
+            $collectionInformation
+        );
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Part/Component:editDashboard.html.twig',
+            array(
+                'course'    => $course,
+                'part'      => $part,
+                'metadatas' => array(),
+                'authors'   => $authors,
+                'tags'      => array()
+            )
         );
     }
 }

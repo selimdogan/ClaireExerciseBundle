@@ -1,0 +1,48 @@
+simple_it_claire_component_exercise_resource_type_edit_view:
+    pattern: /{resourceId}/type
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/Resource:editTypeView }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_exercise_resource_type_edit:
+    pattern: /{resourceId}/type
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/Resource:typeEdit }
+    requirements:
+        _method: POST
+
+simple_it_claire_component_exercise_resource_content_edit_view:
+    pattern: /{resourceId}/content
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/Resource:editContentView }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_exercise_resource_picture_content_edit:
+    pattern: /{resourceId}/picture/content
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/Resource:pictureContentEdit }
+    requirements:
+        _method: POST
+
+simple_it_claire_component_exercise_resource_text_content_edit:
+    pattern: /{resourceId}/text/content
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/Resource:textContentEdit }
+    requirements:
+        _method: POST
+
+simple_it_claire_component_exercise_resource_mcquestion_content_edit:
+    pattern: /{resourceId}/mcquestion/content
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/Resource:mcQuestionContentEdit }
+    requirements:
+        _method: POST
+
+simple_it_claire_component_exercise_resource_required_resource_edit_view:
+    pattern: /{resourceId}/required-resources
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/RequiredResourceByResource:editRequiredResourcesView }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_exercise_resource_required_resource_edit:
+    pattern: /{resourceId}/required-resources
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/RequiredResourceByResource:RequiredResourceEdit }
+    requirements:
+        _method: POST
+

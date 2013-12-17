@@ -1,6 +1,5 @@
 <?php
 
-
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
 use SimpleIT\AppBundle\Repository\AppRepository;
@@ -15,12 +14,12 @@ use SimpleIT\AppBundle\Annotation\Cache;
 class MetadataByCourseRepository extends AppRepository
 {
     /**
-     * @var string
+     * @type string
      */
     protected $path = 'courses/{courseIdentifier}/metadatas/{metadataIdentifier}';
 
     /**
-     * @var  string
+     * @type string
      */
     protected $resourceClass = 'array';
 
@@ -34,6 +33,25 @@ class MetadataByCourseRepository extends AppRepository
      * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function findAll($courseIdentifier, CollectionInformation $collectionInformation = null)
+    {
+        return parent::findAllResources(
+            array('courseIdentifier' => $courseIdentifier),
+            $collectionInformation
+        );
+    }
+
+    /**
+     * Find metadatas to edit (No cache)
+     *
+     * @param int|string            $courseIdentifier      Course id | slug
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return array
+     */
+    public function findAllByStatus(
+        $courseIdentifier,
+        CollectionInformation $collectionInformation
+    )
     {
         return parent::findAllResources(
             array('courseIdentifier' => $courseIdentifier),

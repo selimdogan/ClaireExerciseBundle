@@ -1,0 +1,40 @@
+<table class="excluded">
+    <tr>
+        <td>
+            <h5>Ressource exclues</h5>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <button type="button" class="js-add-excluded">+</button>
+        </td>
+    </tr>
+
+    {% if excludeds != NULL and excludeds |length > 0 %}
+        {% for excluded in excludeds %}
+            <tr>
+                <td>
+                    <label>Ressource exclue :
+                        <input type="text" size="20" name="{{ excludedName }}[]"
+                               value="{{ excluded.id }}"/>
+                    </label>
+                </td>
+                <td>
+                    <button type="button" class="js-remove-excluded">-</button>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td>
+                <label>Ressource exclue :
+                    <input type="text" size="20" name="{{ excludedName }}[]"/>
+                </label>
+            </td>
+            <td>
+                <button type="button" class="js-remove-excluded">-</button>
+            </td>
+        </tr>
+    {% endif %}
+</table>

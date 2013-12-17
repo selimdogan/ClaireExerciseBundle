@@ -1,13 +1,39 @@
-<section class="category-header">
-    <div class="category-description">
-        <img class="category-image" alt="{{ category.name }}" src="{{ category.image }}">
-        <div class="category-definition">
-            <h1>{{ category.name }}</h1>
-            <p>
-                {% autoescape false %}
-                    {{ category.description }}
-                {% endautoescape %}
-            </p>
+{% if category.name == 'Informatique' %}
+    <div class="circle">
+        <span class="circle-content"></span>
+        <i class="icon-desktop"></i>
+
+        <div class="ribbon">
+            <div class="ribbon-stitches-top"></div>
+            <strong class="ribbon-content">
+                <h1>{{ category.name }}</h1>
+            </strong>
+
+            <div class="ribbon-stitches-bottom"></div>
         </div>
     </div>
-</section>
+
+{% elseif category.name == 'Sciences' %}
+    <div class="circle">
+        <span class="circle-content"></span>
+        <i class="icon-beaker"></i>
+
+        <div class="ribbon">
+            <div class="ribbon-stitches-top"></div>
+            <strong class="ribbon-content">
+                <h1>{{ category.name }}</h1>
+            </strong>
+
+            <div class="ribbon-stitches-bottom"></div>
+        </div>
+    </div>
+{% endif %}
+
+<div class="category-definition">
+    <p>
+        {% autoescape false %}
+        {{ category.description }}
+        {% endautoescape %}
+    </p>
+</div>
+

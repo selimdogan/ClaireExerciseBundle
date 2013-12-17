@@ -3,9 +3,13 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\AssociatedContent\Component;
 
+use SimpleIT\ApiResourcesBundle\AssociatedContent\TagResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\AppBundle\Annotation\Cache;
+use SimpleIT\Utils\FormatUtils;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class TagController
@@ -33,6 +37,26 @@ class TagController extends AppController
             'SimpleITClaireAppBundle:AssociatedContent/Tag/Component:list.html.twig',
             array('tags' => $tags)
         );
+    }
+
+    public function searchListAction(Request $request, CollectionInformation $collectionInformation)
+    {
+        $tags = $this->get('simple_it.claire.associated_content.tag')->getAll(
+            $collectionInformation
+        );
+        $formattedTags = array();
+        /** @var TagResource $tag */
+        foreach ($tags as $tag) {
+            $formattedTags[$tag->getId()] = $tag->getName();
+        }
+        if ($request->isXmlHttpRequest()) {
+            return new Response(
+                $this->get('serializer')->serialize(
+                    $formattedTags,
+                    FormatUtils::JSON
+                )
+            );
+        }
     }
 
     /**
@@ -85,13 +109,15 @@ class TagController extends AppController
      *
      * @param CollectionInformation $collectionInformation Collection information
      * @param mixed                 $tagIdentifier         Tag id | slug
+     * @param string                $paginationUrl         Pagination url
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @Cache
      */
     public function listCoursesAction(
         CollectionInformation $collectionInformation,
-        $tagIdentifier
+        $tagIdentifier,
+        $paginationUrl
     )
     {
         $courses = $this->get('simple_it.claire.associated_content.tag')->getAllCourses(
@@ -102,7 +128,9 @@ class TagController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:searchList.html.twig',
             array(
-                'courses' => $courses
+                'courses' => $courses,
+                'collectionInformation' => $collectionInformation,
+                'paginationUrl' => $paginationUrl
             )
         );
     }

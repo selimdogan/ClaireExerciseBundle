@@ -3,15 +3,16 @@
 namespace SimpleIT\ClaireAppBundle\Services\AssociatedContent;
 
 use SimpleIT\ApiResourcesBundle\AssociatedContent\TagResource;
-use SimpleIT\ClaireAppBundle\Model\Course\Part;
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\CourseByTagRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\RecommendedCourseByTagRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCategoryRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByPartRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagRepository;
+use SimpleIT\ClaireAppBundle\Services\Course\CourseService;
+use SimpleIT\ClaireAppBundle\Services\Course\PartService;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\NumberUtils;
 
 /**
  * Class TagService
@@ -21,7 +22,7 @@ use SimpleIT\Utils\NumberUtils;
 class TagService
 {
     /**
-     * @var  TagRepository
+     * @var TagRepository
      */
     private $tagRepository;
 
@@ -31,7 +32,7 @@ class TagService
     private $tagByCategoryRepository;
 
     /**
-     * @var  TagByCourseRepository
+     * @var TagByCourseRepository
      */
     private $tagByCourseRepository;
 
@@ -51,9 +52,14 @@ class TagService
     private $tagByPartRepository;
 
     /**
-     * @var  CourseTocRepository
+     * @var CourseService
      */
-    private $courseTocRepository;
+    private $courseService;
+
+    /**
+     * @var  PartService
+     */
+    private $partService;
 
     /**
      * Get a list of tags
@@ -67,6 +73,58 @@ class TagService
     )
     {
         return $this->tagRepository->findAll($collectionInformation);
+    }
+
+    /**
+     * @deprecated
+     * @return array
+     */
+    public function getAllByCourseToAdd($courseId, $status)
+    {
+        $course = $this->courseService->getByStatus(
+            $courseId,
+            $status
+        );
+        $courseTags = $this->getAllByCourseToEdit(
+            $course->getId(),
+            $status,
+            new CollectionInformation()
+        );
+
+        $tags = $this->getAllByCategory($course->getCategory()->getId());
+
+        $outputCourseTags = array();
+        /** @var TagResource $tag */
+        foreach ($courseTags as $tag) {
+            $outputCourseTags[$tag->getId()] = $tag->getName();
+        }
+        $outputTags = array();
+        /** @var TagResource $tag */
+        foreach ($tags as $tag) {
+            $outputTags[$tag->getId()] = $tag->getName();
+        }
+
+        return array_diff($outputTags, $outputCourseTags);
+    }
+
+    /**
+     * Get all the tags of a course to edit
+     *
+     * @param int                   $courseId              Course id
+     * @param string                $status                Status
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
+     */
+    public function getAllByCourseToEdit(
+        $courseId,
+        $status,
+        CollectionInformation $collectionInformation
+    )
+    {
+        $collectionInformation->addFilter(CourseResource::STATUS, $status);
+
+        return $this->tagByCourseRepository->findAllToEdit($courseId, $collectionInformation);
     }
 
     /**
@@ -86,19 +144,15 @@ class TagService
     }
 
     /**
-     * Get all the tags of a course
+     * Get a tag
      *
-     * @param int | string          $courseIdentifier      Course id | slug
-     * @param CollectionInformation $collectionInformation Collection information
+     * @param int | string $tagIdentifier Tag id | slug
      *
-     * @return \SimpleIT\Utils\Collection\PaginatedCollection
+     * @return TagResource
      */
-    public function getAllByCourse(
-        $courseIdentifier,
-        CollectionInformation $collectionInformation = null
-    )
+    public function get($tagIdentifier)
     {
-        return $this->tagByCourseRepository->findAll($courseIdentifier, $collectionInformation);
+        return $this->tagRepository->find($tagIdentifier);
     }
 
     /**
@@ -114,6 +168,7 @@ class TagService
         $courseIdentifier,
         $partIdentifier,
         CollectionInformation $collectionInformation = null
+
     )
     {
         $tags = $this->tagByPartRepository->findAll(
@@ -122,10 +177,21 @@ class TagService
             $collectionInformation
         );
 
-        if (is_null($tags) == 0) {
-            $tags = $this->getParentTag($courseIdentifier, $partIdentifier, $collectionInformation);
+        if (is_null($tags)) {
+            /* check parents */
+            $parents = $this->partService->getParents($courseIdentifier, $partIdentifier);
+
+            while (count($parents) > 0 && is_null($tags)) {
+                $parentPartIdentifier = array_shift($parents);
+                $tags = $this->tagByPartRepository->findAll(
+                    $courseIdentifier,
+                    $parentPartIdentifier,
+                    $collectionInformation
+                );
+            }
         }
 
+        /* finally get course tags */
         if (is_null($tags) == 0) {
             $tags = $this->getAllByCourse($courseIdentifier, $collectionInformation);
         }
@@ -134,81 +200,19 @@ class TagService
     }
 
     /**
-     * Get tags from parent part
+     * Get all the tags of a course
      *
      * @param int | string          $courseIdentifier      Course id | slug
-     * @param int | string          $partIdentifier        Part id | slug
      * @param CollectionInformation $collectionInformation Collection information
      *
      * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
-    public function getParentTag($courseIdentifier, $partIdentifier, CollectionInformation $collectionInformation = null)
+    public function getAllByCourse(
+        $courseIdentifier,
+        CollectionInformation $collectionInformation = null
+    )
     {
-        $courseToc = $this->courseTocRepository->find($courseIdentifier);
-
-        $foundParent = $this->scanDeepPart($courseToc, $partIdentifier);
-
-        $tags = $this->tagByPartRepository->findAll(
-            $courseIdentifier,
-            $foundParent,
-            $collectionInformation
-        );
-
-        return $tags;
-    }
-
-    /**
-     * Find parent identifier
-     *
-     * @param Part         $parent         Parent element
-     * @param int | string $partIdentifier Part id | slug
-     *
-     * @return mixed
-     */
-    protected function scanDeepPart($parent, $partIdentifier)
-    {
-        if ($this->matchPart($parent, $partIdentifier)) {
-            return true;
-        }
-
-        if ($parent->getChildren()) {
-            foreach ($parent->getChildren() as $part) {
-                /* Limit deep level */
-                if (!in_array(
-                    $part->getSubtype(),
-                    array(Part::TYPE_TITLE_1,Part::TYPE_TITLE_2,Part::TYPE_TITLE_3)
-                )) {
-                    return false;
-                }
-
-                /* recursive deep scan */
-                $found = $this->scanDeepPart($part, $partIdentifier);
-
-                if ($found === true && $part->getSubtype() == Part::TYPE_TITLE_1) {
-                    /* send parent info up */
-                    return $part->getId();
-                } elseif ($found !== false) {
-                    /* pass parent info through */
-                    return $found;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Match parts
-     *
-     * @param Part         $parent         Parent element
-     * @param int | string $partIdentifier Part id | slug
-     *
-     * @return bool
-     */
-    protected function matchPart($parent, $partIdentifier)
-    {
-        return NumberUtils::isInteger($partIdentifier) && $parent->getId() == $partIdentifier ||
-            !NumberUtils::isInteger($partIdentifier) && $parent->getSlug() == $partIdentifier;
+        return $this->tagByCourseRepository->findAll($courseIdentifier, $collectionInformation);
     }
 
     /**
@@ -250,15 +254,22 @@ class TagService
     }
 
     /**
-     * Get a tag
+     * Add tags to a course
      *
-     * @param int | string $tagIdentifier Tag id | slug
+     * @param int   $courseId Course id
+     * @param array $tagIds   Tag ids
      *
-     * @return TagResource
+     * @return array
      */
-    public function get($tagIdentifier)
+    public function addTagsToCourse($courseId, array $tagIds)
     {
-        return $this->tagRepository->find($tagIdentifier);
+        $tags = $this->tagByCourseRepository->update($courseId, $tagIds);
+        $outputTags = array();
+        /** @var TagResource $tag */
+        foreach ($tags as $tag) {
+            $outputTags[$tag->getId()] = $tag->getName();
+        }
+        return $outputTags;
     }
 
     /**
@@ -322,12 +333,23 @@ class TagService
     }
 
     /**
-     * Set courseTocRepository
+     * Set partService
      *
-     * @param \SimpleIT\ClaireAppBundle\Repository\Course\CourseTocRepository $courseTocRepository
+     * @param PartService $partService
      */
-    public function setCourseTocRepository($courseTocRepository)
+    public function setPartService($partService)
     {
-        $this->courseTocRepository = $courseTocRepository;
+        $this->partService = $partService;
     }
+
+    /**
+     * Set Course Service
+     *
+     * @param CourseService $courseService
+     */
+    public function setCourseService(CourseService $courseService)
+    {
+        $this->courseService = $courseService;
+    }
+
 }

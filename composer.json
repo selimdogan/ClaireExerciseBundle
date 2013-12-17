@@ -19,13 +19,17 @@
     "require": {
         "php": ">=5.3.3",
         "simpleit/app-bundle": "1.1.x-dev",
+        "jms/serializer-bundle": "0.13.x-dev",
         "simpleit/php-utils": "1.1.x-dev",
         "simpleit/api-resources-bundle": "1.0.x-dev",
-        "sensio/buzz-bundle": "dev-master"
+        "jms/security-extra-bundle": "1.5.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~3.7"
     },
     "autoload": {
         "psr-0": {
-            "SimpleIT": "src/"
+            "SimpleIT\\": "src/"
         }
     }
 }

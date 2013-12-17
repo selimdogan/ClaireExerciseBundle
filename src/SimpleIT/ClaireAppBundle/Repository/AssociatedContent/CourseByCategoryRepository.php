@@ -1,8 +1,8 @@
 <?php
 
-
 namespace SimpleIT\ClaireAppBundle\Repository\AssociatedContent;
 
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
@@ -34,7 +34,10 @@ class CourseByCategoryRepository extends AppRepository
      * @return PaginatedCollection
      * @cache
      */
-    public function findAll($categoryIdentifier, CollectionInformation $collectionInformation = null)
+    public function findAll(
+        $categoryIdentifier,
+        CollectionInformation $collectionInformation = null
+    )
     {
         return parent::findAllResources(
             array('categoryIdentifier' => $categoryIdentifier),

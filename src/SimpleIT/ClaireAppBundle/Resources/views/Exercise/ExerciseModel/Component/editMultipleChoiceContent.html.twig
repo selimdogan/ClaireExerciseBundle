@@ -1,0 +1,241 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"></script>
+<h2>Edition de questionnaire à choix multiples</h2>
+
+<form action="{{ path('simple_it_claire_component_exercise_exercise_model_multiple_choice_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
+
+    <table>
+        <tr>
+            <td><label for="wording">Consigne :</label></td>
+            <td>
+                <input type="text" size="200" name="wording" id="wording" value="{{ exerciseModel.content.wording }}"/>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="shuffle">Mélanger ordre :</label></td>
+            <td>
+                <select name="shuffle" id="shuffle">
+                    <option value="1" {% if exerciseModel.content.shuffleQuestionsOrder %}selected{% endif %}>Mélanger</option>
+                    <option value="0" {% if not exerciseModel.content.shuffleQuestionsOrder %}selected{% endif %}>Ne pas mélanger</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+
+    {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/documents.html.twig'
+    with {'documents' : exerciseModel.content.documents} %}
+
+    <table id="blocks" border="1">
+        <tr>
+            <td>
+                <!--TODO-->
+                <input type="button" value="Ajouter bloc"/>
+            </td>
+        </tr>
+        {% set _cptBlock = 0 %}
+        {% if exerciseModel.content.questionBlocks |length > 0 %}
+            {% for block in exerciseModel.content.questionBlocks %}
+                <tr>
+                    <td>
+                        <button type="button" class="js-remove-block">Supprimer bloc</button>
+                    </td>
+                    <td>
+                        <table>
+                            <tr>
+                                <td><h3>Bloc n° {{ _cptBlock + 1 }}</h3></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>Nombre maximal de propositions :
+                                        <input class="refId" type="text" size="20" name="blocks[{{ _cptBlock }}][maxNumberOfPropositions]"
+                                               value="{{ block.maxNumberOfPropositions }}"/>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>Nombre maximal de propositions justes :
+                                        <input type="text" size="20" name="blocks[{{ _cptBlock }}][maxNumberOfRightPropositions]"
+                                               value="{{ block.maxNumberOfRightPropositions }}"/>
+                                    </label>
+                                </td>
+                            </tr>
+                            {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
+                            'objectName' : 'questions',
+                            'resourcesName' : 'resources',
+                            'blocksName' : 'blocks',
+                            'keyName' : 'key',
+                            'comparatorName' : 'comparator',
+                            'valuesName' : 'values',
+                            'excludedName' : 'excluded',
+                            'typeName' : 'type',
+                            '_cptBlock' : _cptBlock,
+                            'block' : block,
+                            'askType' : false
+                            } %}
+                        </table>
+                    </td>
+                </tr>
+                {% set _cptBlock = _cptBlock + 1 %}
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td>
+                    <button type="button" class="js-remove-tr">Supprimer bloc</button>
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td><h3>Bloc n°1</h3></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Nombre maximal de propositions :
+                                    <input type="text" size="20" name="blocks[0][maxNumberOfPropositions]"/>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Nombre maximal de propositions justes :
+                                    <input type="text" size="20" name="blocks[0][maxNumberOfRightPropositions]"/>
+                                </label>
+                            </td>
+                        </tr>
+                        {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
+                        'objectName' : 'questions',
+                        'resourcesName' : 'resources',
+                        'blocksName' : 'blocks',
+                        'keyName' : 'key',
+                        'comparatorName' : 'comparator',
+                        'valuesName' : 'values',
+                        'excludedName' : 'excluded',
+                        'typeName' : 'type',
+                        '_cptBlock' : 0,
+                        'block' : NULL,
+                        'askType' : false
+                        } %}
+                    </table>
+                </td>
+            </tr>
+        {% endif %}
+    </table>
+
+    <input type="submit"/>
+</form>
+
+<script>
+    $(function () {
+        $('table').on('click', '.js-remove-block', function (event) {
+            $(event.target).closest('tr').remove();
+        })
+    });
+
+    $(function () {
+        $('.resourceList').on('click', '.js-add-resource', function (event) {
+            var $table = $(event.target).closest('table'),
+                    $lines = $('tr', $table),
+                    $last = $lines.last(),
+                    $clone = $last.clone();
+
+            $clone
+                    .find('input[type=text]')
+                    .val('');
+
+            $clone.appendTo($table);
+        })
+    });
+
+    $(function () {
+        $('.resourceList').on('click', '.js-remove-resource', function (event) {
+            $(event.target).closest('tr').remove();
+        })
+    });
+
+
+    $(function () {
+        $('.excluded').on('click', '.js-add-excluded', function (event) {
+            var $table = $(event.target).closest('table'),
+                    $lines = $('tr', $table),
+                    $last = $lines.last(),
+                    $clone = $last.clone();
+
+            $clone
+                    .find('input[type=text]')
+                    .val('');
+
+            $clone.appendTo($table);
+        })
+    });
+
+    $(function () {
+        $('.excluded').on('click', '.js-remove-excluded', function (event) {
+            $(event.target).closest('tr').remove();
+        })
+    });
+
+
+    $(function () {
+        $('.constrBloc').on('click', '.js-add-value', function (event) {
+            var $line = $(event.target).closest('tr'),
+                    $tds = $('td', $line),
+                    $last = $tds.last(),
+                    $clone = $last.clone();
+
+            $clone
+                    .find('input[type=text]')
+                    .val('');
+
+            $clone.appendTo($line);
+        })
+    });
+
+    $(function () {
+        $('.constrBloc').on('click', '.js-remove-value', function (event) {
+            $(event.target).closest('td').remove();
+        })
+    });
+
+    $(function () {
+        $('.constrBloc').on('click', '.js-add-constraint', function (event) {
+            var $table = $(event.target).closest('table'),
+                    $lines = $('tr', $table),
+                    $last = $lines.last(),
+                    $inputText = $last.find('input[type=text]'),
+                    $clone = $last.clone(),
+                    blockId = ($inputText.length > 0) ? ($inputText.attr('name').match(/\[([0-9]+)\]\[/))[1] : 0,
+                    prevId = ($inputText.length > 0) ? ($inputText.attr('name').match(/\[([0-9]+)\]$/))[1] : 0;
+
+
+            prevId = parseInt(prevId, 0);
+            blockId = parseInt(blockId, 0);
+
+            // key
+            $clone
+                    .find('input[class=key]')
+                    .attr('name', 'key[' + blockId + '][' + (prevId + 1) + ']')
+                    .val('');
+
+            // comparator
+            $clone
+                    .find('select[class=comparator]')
+                    .attr('name', 'comparator[' + blockId + '][' + (prevId + 1) + ']')
+                    .val('');
+
+            // values
+            $clone
+                    .find('input[class=values]')
+                    .attr('name', 'values[' + blockId + '][' + (prevId + 1) + '][]')
+                    .val('');
+
+            $clone.appendTo($table);
+        })
+    });
+
+    $(function () {
+        $('.constrBloc').on('click', '.js-remove-constraint', function (event) {
+            $(event.target).closest('tr').remove();
+        })
+    });
+</script>
+
+

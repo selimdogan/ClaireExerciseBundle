@@ -7,6 +7,7 @@
         <import resource="service/course.xml"/>
         <import resource="service/security.xml"/>
         <import resource="service/user.xml"/>
+        <import resource="service/exercise.xml"/>
     </imports>
 
     <parameters>
@@ -34,6 +35,9 @@
         </service>
 
         <service id="simple_it.claire.http_client" class="%simple_it.app.http_client.class%" factory-service="simple_it.app.client_factory" factory-method="get">
+            <argument>%simple_it_app.client_api.claire_api%</argument>
+        </service>
+        <service id="simple_it.claire.http_client.authenticated" class="%simple_it.app.http_client.class%" factory-service="simple_it.app.client_factory" factory-method="get">
             <argument>%simple_it_app.client_api.claire_api%</argument>
         </service>
         <service id="simple_it.claire.serializer" class="%simple_it.app.serializer.class%">

@@ -12,7 +12,7 @@
             </trans-unit>
             <trans-unit id="3">
                 <source>course.choice</source>
-                <target>[0, 1] %count% tutoriel|]1,Inf] %count% tutoriels</target>
+                <target>[0, 1] %count% cours|]1,Inf] %count% cours</target>
             </trans-unit>
             <trans-unit id="4">
                 <source>course.difficulty</source>

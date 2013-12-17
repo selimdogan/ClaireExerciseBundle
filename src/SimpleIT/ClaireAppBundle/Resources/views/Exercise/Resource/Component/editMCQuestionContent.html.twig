@@ -1,0 +1,117 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"></script>
+
+<h2>Edition de la question de QCM</h2>
+
+<form action="{{ path('simple_it_claire_component_exercise_resource_mcquestion_content_edit',{ 'resourceId': resource.id}) }}" method="post">
+    <table>
+        <tr>
+            <td><label for="question">Question :</label></td>
+            <td>
+                <input type="text" size="200" name="question" id="question" value="{{ resource.content.question }}"/>
+            </td>
+        </tr>
+    </table>
+
+    <table>
+        <tr>
+            <td><label for="maxProp">Nombre max de propositions :</label></td>
+            <td>
+                <input type="text" size="3" name="maxProp" id="maxProp" value="{{ resource.content.maxNumberOfPropositions }}"/>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="maxRightProp">Nombre max de bonnes propositions :</label></td>
+            <td>
+                <input type="text" size="3" name="maxRightProp" id="maxRightProp" value="{{ resource.content.maxNumberOfRightPropositions }}"/>
+            </td>
+        </tr>
+    </table>
+
+    <input type="button" onclick="addProposition()" value="Ajouter"/>
+
+    <table id="propositions">
+        {% set _cptProp = 0 %}
+        {% if resource.content.propositions |length > 0 %}
+            {% for proposition in resource.content.propositions %}
+                <tr>
+                    <td>
+                        Proposition :
+                    </td>
+                    <td>
+                        <input type="text" size="200" name="propositionText[{{ _cptProp }}]"
+                               value="{{ proposition.text }}"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="propositionRight[{{ _cptProp }}]"
+                               {% if proposition.right %}checked{% endif %} value="1"/>
+                    </td>
+                    <td>
+                        <button type="button" class="js-remove">-</button>
+                    </td>
+                </tr>
+                {% set _cptProp = _cptProp + 1 %}
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td>
+                    Proposition :
+                </td>
+                <td>
+                    <input type="text" size="200" name="propositionText[{{ _cptProp }}]"/>
+                </td>
+                <td>
+                    <input type="checkbox" name="propositionRight[{{ _cptProp }}]" value="1"/>
+                </td>
+                <td>
+                    <button type="button" class="js-remove">-</button>
+                </td>
+            </tr>
+        {% endif %}
+    </table>
+
+
+    <table>
+        <tr>
+            <td><label for="comment">Commentaire :</label></td>
+            <td>
+                <input type="text" size="200" name="comment" id="comment" value="{{ resource.content.comment }}"/>
+            </td>
+        </tr>
+    </table>
+
+    <input type="submit"/>
+</form>
+
+<script>
+    function addProposition() {
+        var $table = $('#propositions'),
+                $lines = $('tr', $table),
+                $last = $lines.last(),
+                $inputText = $last.find('input[type=text]'),
+                $clone = $last.clone(),
+                prevId = ($inputText.length > 0) ? ($inputText.attr('name').match(/\[([0-9]+)\]/))[1] : 0;
+
+
+        prevId = parseInt(prevId, 0);
+
+        // text
+        $clone
+                .find('input[type=text]')
+                .attr('name', 'propositionText[' + (prevId + 1) + ']')
+                .val('Proposition');
+
+        // checkbox
+        $clone
+                .find('input[type=checkbox]')
+                .attr('name', 'propositionRight[' + (prevId + 1) + ']')
+                .prop('checked', false);
+
+        $clone.appendTo($table);
+    }
+
+    $(function () {
+        $('table').on('click', '.js-remove', function (event) {
+            $(event.target).closest('tr').remove();
+        })
+    })
+</script>

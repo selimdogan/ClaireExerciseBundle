@@ -20,9 +20,10 @@
 
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
+use SimpleIT\AppBundle\Annotation\Cache;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\FormatUtils;
-use SimpleIT\AppBundle\Annotation\Cache;
+
 
 /**
  * Class CourseContentRepository
@@ -50,6 +51,8 @@ class CourseContentRepository extends AppRepository
      * @param string $format           Format
      *
      * @return mixed
+     *
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function find(
         $courseIdentifier,
@@ -65,11 +68,32 @@ class CourseContentRepository extends AppRepository
     }
 
     /**
-     * Update a part content
+     * Get a course content
      *
      * @param string $courseIdentifier Course id | slug
-     * @param string $partIdentifier   Part id | slug
-     * @param string $partContent      Part content
+     * @param array  $parameters       Parameters
+     * @param string $format           Format
+     *
+     * @return string
+     */
+    public function findToEdit(
+        $courseIdentifier,
+        $parameters = array(),
+        $format = FormatUtils::HTML
+    )
+    {
+        return parent::findResource(
+            array('courseIdentifier' => $courseIdentifier),
+            $parameters,
+            $format
+        );
+    }
+
+    /**
+     * Update a course content
+     *
+     * @param string $courseIdentifier Course id | slug
+     * @param string $courseContent    Course content
      * @param array  $parameters       Parameters
      * @param string $format           Format
      *
@@ -77,15 +101,14 @@ class CourseContentRepository extends AppRepository
      */
     public function update(
         $courseIdentifier,
-        $partIdentifier,
-        $partContent,
+        $courseContent,
         $parameters = array(),
         $format = FormatUtils::HTML
     )
     {
         return parent::updateResource(
-            $partContent,
-            array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier),
+            $courseContent,
+            array('courseIdentifier' => $courseIdentifier),
             $parameters,
             $format
         );

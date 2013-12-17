@@ -1,9 +1,8 @@
-<form class="claire-part-course-title js-course-title" action="{{ path('simple_it_claire_component_part_edit', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post" {{ form_enctype(form) }}>
+<form class="claire-part-course-title js-course-title" action="{{ path('simple_it_claire_component_part_edit', { 'courseId': courseId, 'partId': partId}) }}" method="post" {{ form_enctype(form) }}>
     {{ form_errors(form) }}
     {{ form_errors(form.title) }}
     {{ form_widget(form.title) }}
     {{ form_rest(form) }}
     <input type="submit">
-    {#Remove submit#}
 </form>
 

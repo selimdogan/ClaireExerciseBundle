@@ -1,0 +1,71 @@
+simple_it_claire_component_owner_exercise_model_browser:
+    pattern: /browser
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModel:browserView }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_owner_exercise_model_list:
+    pattern: /
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModel:list }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_owner_exercise_model_search_list:
+    pattern: /search
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModel:searchList }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_exercise_owner_exercise_model_public_edit_view:
+    pattern: /{ownerExerciseModelId}/public
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModel:editPublicView }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_exercise_owner_exercise_model_public_edit:
+    pattern: /{ownerExerciseModelId}/public
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModel:publicEdit }
+    requirements:
+        _method: POST
+
+simple_it_claire_component_exercise_owner_exercise_model_metadata_edit_view:
+    pattern: /{ownerExerciseModelId}/metadatas
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/MetadataByOwnerExerciseModel:editMetadataView }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_exercise_owner_exercise_model_metadata_edit:
+    pattern: /{ownerExerciseModelId}/metadatas
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/MetadataByOwnerExerciseModel:MetadataEdit }
+    requirements:
+        _method: POST
+
+simple_it_claire_component_exercise_multiple_owner_exercise_model_metadata_edit_view:
+    pattern: /multiple-metadatas-create
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModel:createMultipleMetadataView }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_exercise_multiple_owner_exercise_model_metadata_edit:
+    pattern: /multiple-metadatas-create
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModel:multipleMetadataCreate }
+    requirements:
+        _method: POST
+
+simple_it_claire_component_exercise_multiple_owner_exercise_model_key_metadata_edit_view:
+    pattern: /multiple-key-create
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModel:createMultipleKeyMetadataView }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_exercise_multiple_owner_exercise_model_key_metadata_edit:
+    pattern: /multiple-key-create
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModel:multipleKeyMetadataCreate }
+    requirements:
+        _method: POST
+
+simple_it_claire_component_exercise_owner_exercise_model_try:
+    pattern: /{ownerExerciseModelId}/try
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModel:try }
+    requirements:
+        _method: GET
