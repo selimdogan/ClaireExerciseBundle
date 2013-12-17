@@ -213,22 +213,44 @@ class ExerciseModelController extends AppController
     }
 
     /**
-     * Edit an exercise model content (GET)
+     * Edit an exercise model content (GET | POST)
      *
-     * @param int $exerciseModelId Exercise model id
+     * @param Request $request         Request
+     * @param int     $exerciseModelId Resource
      *
-     * @throws HttpException
-     * @return Response
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function editContentViewAction($exerciseModelId)
+    public function contentEditAction(Request $request, $exerciseModelId)
     {
+        if ($request->getMethod() === "GET") {
+            $exerciseModel = $this->get(
+                'simple_it.claire.exercise.exercise_model'
+            )->getExerciseModelToEdit(
+                    $exerciseModelId
+                );
+
+            return $this->viewContentEdit($exerciseModel);
+        }
+
         $exerciseModel = $this->get(
             'simple_it.claire.exercise.exercise_model'
-        )->getExerciseModelToEdit(
-                $exerciseModelId
-            );
+        )->createExerciseModel($request->request->all());
 
-        return $this->viewContentEdit($exerciseModel);
+        try {
+            $this->get('simple_it.claire.exercise.exercise_model')->validateExerciseModel(
+                $exerciseModel
+            );
+        } catch (InvalidModelException $ime) {
+            $exerciseModel->setId($exerciseModelId);
+
+            return $this->viewContentEdit($exerciseModel, array($ime->getMessage()));
+        }
+
+        $exerciseModel = $this->get(
+            'simple_it.claire.exercise.exercise_model'
+        )->saveExerciseModel($exerciseModelId, $exerciseModel);
+
+        return new JsonResponse($exerciseModel->getId());
     }
 
     /**
@@ -261,37 +283,6 @@ class ExerciseModelController extends AppController
         }
 
         return $this->render($view, array('exerciseModel' => $exerciseModel, 'errors' => $errors));
-    }
-
-    /**
-     * Edit an exercise model content (POST)
-     *
-     * @param Request $request         Request
-     * @param int     $exerciseModelId Resource
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function exerciseModelContentEditAction(Request $request, $exerciseModelId)
-    {
-        $exerciseModel = $this->get(
-            'simple_it.claire.exercise.exercise_model'
-        )->createExerciseModel($request->request->all());
-
-        try {
-            $this->get('simple_it.claire.exercise.exercise_model')->validateExerciseModel(
-                $exerciseModel
-            );
-        } catch (InvalidModelException $ime) {
-            $exerciseModel->setId($exerciseModelId);
-
-            return $this->viewContentEdit($exerciseModel, array($ime->getMessage()));
-        }
-
-        $exerciseModel = $this->get(
-            'simple_it.claire.exercise.exercise_model'
-        )->saveExerciseModel($exerciseModelId, $exerciseModel);
-
-        return new JsonResponse($exerciseModel->getId());
     }
 
     /**
