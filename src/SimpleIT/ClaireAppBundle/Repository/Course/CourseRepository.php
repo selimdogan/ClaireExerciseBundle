@@ -109,7 +109,8 @@ class CourseRepository extends AppRepository implements CourseGateway
 
         return $this->updateResource(
             $course,
-            array('courseIdentifier' => $courseId,)
+            array('courseIdentifier' => $courseId),
+            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT)
         );
     }
 
@@ -123,7 +124,9 @@ class CourseRepository extends AppRepository implements CourseGateway
 
         return $this->updateResource(
             $course,
-            array('courseIdentifier' => $courseId,)
+            array('courseIdentifier' => $courseId),
+            array(CourseResource::STATUS => CourseResource::STATUS_WAITING_FOR_PUBLICATION)
+
         );
     }
 }
