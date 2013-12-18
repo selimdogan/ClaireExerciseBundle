@@ -745,6 +745,8 @@ class ExerciseModelService
                 $this->validateMultipleChoice($exerciseModel);
             case ExerciseModelResource::GROUP_ITEMS_MODEL_CLASS:
                 $this->validateGroupItems($exerciseModel);
+            case ExerciseModelResource::PAIR_ITEMS_MODEL_CLASS:
+                $this->validatePairItems($exerciseModel);
         }
     }
 
@@ -770,6 +772,32 @@ class ExerciseModelService
     private function validateGroupItems(ExerciseModelResource $exerciseModel)
     {
         $this->validateBlock($exerciseModel, $exerciseModel->getContent()->getObjectBlocks());
+    }
+
+    /**
+     * Validate the content of an order items model
+     *
+     * @param ExerciseModelResource $exerciseModel
+     *
+     * @throws InvalidModelException
+     */
+    private function validatePairItems($exerciseModel)
+    {
+        $pairBlocks = $exerciseModel->getContent()->getPairBlocks();
+        $this->validateBlock($exerciseModel, $pairBlocks);
+
+        /** @var PairBlock $pairBlock */
+        foreach ($pairBlocks as $pairBlock)
+        {
+            $mk = $pairBlock->getPairMetaKey();
+            if (empty($mk))
+            {
+                throw new InvalidModelException(
+                    'Il faut préciser une clé de métadonnée pour former les paires',
+                    $exerciseModel
+                );
+            }
+        }
     }
 
     /**
