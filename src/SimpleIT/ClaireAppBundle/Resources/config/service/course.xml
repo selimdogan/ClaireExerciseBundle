@@ -5,7 +5,6 @@
     <parameters>
         <!--COURSE-->
         <parameter key="simple_it.claire.course.course.class">SimpleIT\ClaireAppBundle\Services\Course\CourseService</parameter>
-        <parameter key="simple_it.claire.course.repository.course.class">SimpleIT\ClaireAppBundle\Repository\Course\CourseRepository</parameter>
         <parameter key="simple_it.claire.course.repository.course_content.class">SimpleIT\ClaireAppBundle\Repository\Course\CourseContentRepository</parameter>
         <parameter key="simple_it.claire.course.repository.course_introduction.class">SimpleIT\ClaireAppBundle\Repository\Course\CourseIntroductionRepository</parameter>
         <parameter key="simple_it.claire.course.repository.course_toc.class">SimpleIT\ClaireAppBundle\Repository\Course\CourseTocRepository</parameter>

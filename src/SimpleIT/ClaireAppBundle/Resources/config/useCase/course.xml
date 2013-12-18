@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="simple_it.claire.use_cases.course.workflow.change_course_to_published.class">SimpleIT\ClaireAppBundle\UseCases\Course\Workflow\ChangeCourseToPublished</parameter>
+        <parameter key="simple_it.claire.use_cases.course.workflow.change_course_to_waiting_for_publication.class">SimpleIT\ClaireAppBundle\UseCases\Course\Workflow\ChangeCourseToWaitingForPublication</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="simple_it.claire.use_cases.course.workflow.change_course_to_published" class="%simple_it.claire.use_cases.course.workflow.change_course_to_published.class%">
+            <call method="setCourseGateway">
+                <argument type="service" id="simple_it.claire.course.repository.course"/>
+            </call>
+        </service>
+        <service id="simple_it.claire.use_cases.course.workflow.change_course_to_waiting_for_publication" class="%simple_it.claire.use_cases.course.workflow.change_course_to_waiting_for_publication.class%">
+            <call method="setCourseGateway">
+                <argument type="service" id="simple_it.claire.course.repository.course"/>
+            </call>
+        </service>
+    </services>
+</container>

@@ -2,9 +2,6 @@
 
 namespace SimpleIT\ClaireAppBundle\UseCases\Course\Toc;
 
-use SimpleIT\ApiResourcesBundle\Course\PartResource;
-use SimpleIT\ClaireAppBundle\Gateways\Course\Toc\TocByCourseGateway;
-
 /**
  * Class TocByCourseRepositoryStub
  *

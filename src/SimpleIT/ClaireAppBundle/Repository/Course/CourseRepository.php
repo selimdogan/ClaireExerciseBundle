@@ -3,17 +3,16 @@ namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
+use SimpleIT\ClaireAppBundle\Gateways\Course\Course\CourseGateway;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
-use SimpleIT\AppBundle\Annotation\Cache;
-use SimpleIT\AppBundle\Annotation\CacheInvalidation;
 
 /**
  * Class CourseRepository
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class CourseRepository extends AppRepository
+class CourseRepository extends AppRepository implements CourseGateway
 {
     /**
      * @var string
@@ -101,21 +100,30 @@ class CourseRepository extends AppRepository
     }
 
     /**
-     * Update a course status to published
-     *
-     * @param string         $courseIdentifier Course id | slug
-     * @param CourseResource $course           Course
-     * @param array          $parameters       Parameters
-     *
-     * @return CourseResource
      * @CacheInvalidation(namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
-    public function updateToPublished($courseIdentifier, CourseResource $course, array $parameters = array())
+    public function updateToWaitingForPublication($courseId)
     {
+        $course = new CourseResource();
+        $course->setStatus(CourseResource::STATUS_WAITING_FOR_PUBLICATION);
+
         return $this->updateResource(
             $course,
-            array('courseIdentifier' => $courseIdentifier,),
-            $parameters
+            array('courseIdentifier' => $courseId,)
+        );
+    }
+
+    /**
+     * @CacheInvalidation(namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
+     */
+    public function updateToPublished($courseId)
+    {
+        $course = new CourseResource();
+        $course->setStatus(CourseResource::STATUS_PUBLISHED);
+
+        return $this->updateResource(
+            $course,
+            array('courseIdentifier' => $courseId,)
         );
     }
 }
