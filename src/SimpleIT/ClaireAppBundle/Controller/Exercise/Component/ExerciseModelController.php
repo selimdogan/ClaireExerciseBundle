@@ -5,6 +5,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\Exercise\Component;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\Common\CommonModel;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModelResource;
 use SimpleIT\AppBundle\Controller\AppController;
+use SimpleIT\ClaireAppBundle\Exception\InvalidModelException;
 use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ExerciseModelTitleType;
 use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ExerciseModelTypeType;
 use SimpleIT\Utils\HTTP;
@@ -29,8 +30,10 @@ class ExerciseModelController extends AppController
     {
         $exerciseModels = $this->get('simple_it.claire.exercise.exercise_model')->getAll();
 
-        return $this->render('@SimpleITClaireApp/Exercise/ExerciseModel/Component/list.html.twig',
-        array("exerciseModels" => $exerciseModels));
+        return $this->render(
+            '@SimpleITClaireApp/Exercise/ExerciseModel/Component/list.html.twig',
+            array("exerciseModels" => $exerciseModels)
+        );
     }
 
     /**
@@ -129,8 +132,8 @@ class ExerciseModelController extends AppController
         $exerciseModel = $this->get(
             'simple_it.claire.exercise.exercise_model'
         )->getExerciseModelToEdit(
-            $exerciseModelId
-        );
+                $exerciseModelId
+            );
 
         $form = $this->createForm(new ExerciseModelTypeType(), $exerciseModel);
 
@@ -175,8 +178,8 @@ class ExerciseModelController extends AppController
         $exerciseModel = $this->get(
             'simple_it.claire.exercise.exercise_model'
         )->getExerciseModelToEdit(
-            $exerciseModelId
-        );
+                $exerciseModelId
+            );
 
         $form = $this->createForm(new ExerciseModelTitleType(), $exerciseModel);
 
@@ -210,171 +213,76 @@ class ExerciseModelController extends AppController
     }
 
     /**
-     * Edit an exercise model content (GET)
+     * Edit an exercise model content (GET | POST)
      *
-     * @param int $exerciseModelId Exercise model id
+     * @param Request $request         Request
+     * @param int     $exerciseModelId Resource
      *
-     * @throws HttpException
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function contentEditAction(Request $request, $exerciseModelId)
+    {
+        if ($request->getMethod() === "GET") {
+            $exerciseModel = $this->get(
+                'simple_it.claire.exercise.exercise_model'
+            )->getExerciseModelToEdit(
+                    $exerciseModelId
+                );
+
+            return $this->viewContentEdit($exerciseModel);
+        }
+
+        $exerciseModel = $this->get(
+            'simple_it.claire.exercise.exercise_model'
+        )->createExerciseModel($request->request->all());
+
+        try {
+            $this->get('simple_it.claire.exercise.exercise_model')->validateExerciseModel(
+                $exerciseModel
+            );
+        } catch (InvalidModelException $ime) {
+            $exerciseModel->setId($exerciseModelId);
+
+            return $this->viewContentEdit($exerciseModel, array($ime->getMessage()));
+        }
+
+        $exerciseModel = $this->get(
+            'simple_it.claire.exercise.exercise_model'
+        )->saveExerciseModel($exerciseModelId, $exerciseModel);
+
+        return new JsonResponse($exerciseModel->getId());
+    }
+
+    /**
+     * Render the edition view for exercise model content
+     *
+     * @param ExerciseModelResource $exerciseModel
+     * @param array                 $errors
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @return Response
      */
-    public function editContentViewAction($exerciseModelId)
+    private function viewContentEdit(ExerciseModelResource $exerciseModel, $errors = array())
     {
-        $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->getExerciseModelToEdit(
-            $exerciseModelId
-        );
-
         $view = null;
         switch ($exerciseModel->getType()) {
             case CommonModel::MULTIPLE_CHOICE:
-                $view = $this->editMultipleChoiceView($exerciseModel);
+                $view = 'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:editMultipleChoiceContent.html.twig';
                 break;
             case CommonModel::GROUP_ITEMS:
-                $view = $this->editGroupItemsView($exerciseModel);
+                $view = 'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:editGroupItemsContent.html.twig';
                 break;
             case CommonModel::ORDER_ITEMS:
-                $view = $this->editOrderItemsView($exerciseModel);
+                $view = 'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:editOrderItemsContent.html.twig';
                 break;
             case CommonModel::PAIR_ITEMS:
-                $view = $this->editPairItemsView($exerciseModel);
+                $view = 'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:editPairItemsContent.html.twig';
                 break;
             default:
                 throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST);
         }
 
-        return $view;
-    }
-
-    /**
-     * View the edition component for a MC
-     *
-     * @param ExerciseModelResource $exerciseModel
-     *
-     * @return Response
-     */
-    private function editMultipleChoiceView(ExerciseModelResource $exerciseModel)
-    {
-        return $this->render(
-            'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:editMultipleChoiceContent.html.twig',
-            array('exerciseModel' => $exerciseModel)
-        );
-    }
-
-    /**
-     * View the edition component for a Group Items
-     *
-     * @param ExerciseModelResource $exerciseModel
-     *
-     * @return Response
-     */
-    private function editGroupItemsView(ExerciseModelResource $exerciseModel)
-    {
-        return $this->render(
-            'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:editGroupItemsContent.html.twig',
-            array('exerciseModel' => $exerciseModel)
-        );
-    }
-
-    /**
-     * View the edition component for a Order Items
-     *
-     * @param ExerciseModelResource $exerciseModel
-     *
-     * @return Response
-     */
-    private function editOrderItemsView(ExerciseModelResource $exerciseModel)
-    {
-        return $this->render(
-            'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:editOrderItemsContent.html.twig',
-            array('exerciseModel' => $exerciseModel)
-        );
-    }
-
-    /**
-     * View the edition component for a Pair Items
-     *
-     * @param ExerciseModelResource $exerciseModel
-     *
-     * @return Response
-     */
-    private function editPairItemsView(ExerciseModelResource $exerciseModel)
-    {
-        return $this->render(
-            'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:editPairItemsContent.html.twig',
-            array('exerciseModel' => $exerciseModel)
-        );
-    }
-
-    /**
-     * Edit a multiple choice content (POST)
-     *
-     * @param Request $request         Request
-     * @param int     $exerciseModelId Resource
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function multipleChoiceContentEditAction(Request $request, $exerciseModelId)
-    {
-        $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->saveMultipleChoice(
-            $exerciseModelId,
-            $request->request->all()
-        );
-
-        return new JsonResponse($exerciseModel->getId());
-    }
-
-    /**
-     * Edit a group items content (POST)
-     *
-     * @param Request $request         Request
-     * @param int     $exerciseModelId Resource
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function groupItemsContentEditAction(Request $request, $exerciseModelId)
-    {
-        $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->saveGroupItems(
-            $exerciseModelId,
-            $request->request->all()
-        );
-
-        return new JsonResponse($exerciseModel->getId());
-    }
-
-    /**
-     * Edit a order items content (POST)
-     *
-     * @param Request $request         Request
-     * @param int     $exerciseModelId Resource
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function orderItemsContentEditAction(Request $request, $exerciseModelId)
-    {
-        $resourceData = $request->request->all();
-        $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->saveOrderItems(
-            $exerciseModelId,
-            $resourceData
-        );
-
-        return new JsonResponse($exerciseModel->getId());
-    }
-
-    /**
-     * Edit a pair items content (POST)
-     *
-     * @param Request $request         Request
-     * @param int     $exerciseModelId Resource
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function pairItemsContentEditAction(Request $request, $exerciseModelId)
-    {
-        $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->savePairItems(
-            $exerciseModelId,
-            $request->request->all()
-        );
-
-        return new JsonResponse($exerciseModel->getId());
+        return $this->render($view, array('exerciseModel' => $exerciseModel, 'errors' => $errors));
     }
 
     /**

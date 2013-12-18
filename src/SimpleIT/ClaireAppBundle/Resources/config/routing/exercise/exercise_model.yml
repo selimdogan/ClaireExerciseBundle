@@ -18,18 +18,6 @@ simple_it_claire_exercise_exercise_model_edit:
         _method: GET
         exerciseModelId: \d+
 
-simple_it_claire_exercise_exercise_model_create_view:
-    pattern: /create
-    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:createExerciseModelView }
-    requirements:
-        _method: GET
-
-simple_it_claire_exercise_exercise_model_create:
-    pattern: /create
-    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:create }
-    requirements:
-        _method: POST
-
 simple_it_claire_exercise_exercise_model_delete:
     pattern: /{exerciseModelId}/delete
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:delete }

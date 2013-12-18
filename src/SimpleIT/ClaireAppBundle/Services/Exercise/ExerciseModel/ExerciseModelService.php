@@ -26,6 +26,7 @@ use SimpleIT\ApiResourcesBundle\Exercise\ModelObject\ModelDocument;
 use SimpleIT\ApiResourcesBundle\Exercise\ModelObject\ObjectConstraints;
 use SimpleIT\ApiResourcesBundle\Exercise\ModelObject\ObjectId;
 use SimpleIT\ApiResourcesBundle\Exercise\ResourceResource;
+use SimpleIT\ClaireAppBundle\Exception\InvalidModelException;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModel\ExerciseModelRepository;
 use
     SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModel\RequiredResourceByExerciseModelRepository;
@@ -119,14 +120,35 @@ class ExerciseModelService
     }
 
     /**
-     * Save a multiple choice
+     * Create an exercise model resource from an array (from a form)
      *
-     * @param       $exerciseModelId
-     * @param array $mcArray
+     * @param array $emArray
      *
      * @return ExerciseModelResource
      */
-    public function saveMultipleChoice($exerciseModelId, array $mcArray)
+    public function createExerciseModel(array $emArray)
+    {
+        switch ($emArray['model-type']) {
+            case CommonModel::GROUP_ITEMS:
+                return $this->createGroupItems($emArray);
+            case CommonModel::MULTIPLE_CHOICE:
+                return $this->createMultipleChoice($emArray);
+            case CommonModel::ORDER_ITEMS:
+                return $this->createOrderItems($emArray);
+            case CommonModel::PAIR_ITEMS:
+                return $this->createPairItems($emArray);
+        }
+    }
+
+    /**
+     * Create a multiple choice
+     *
+     * @param array $mcArray
+     *
+     * @internal param $exerciseModelId
+     * @return ExerciseModelResource
+     */
+    private function createMultipleChoice(array $mcArray)
     {
         $multipleChoice = new MultipleChoice();
         $this->setWordingAndDocuments($mcArray, $multipleChoice);
@@ -134,23 +156,22 @@ class ExerciseModelService
         $this->addMultipleChoiceQuestionBlocksFromArray($mcArray, $multipleChoice);
 
         $exerciseModel = new ExerciseModelResource();
-        $exerciseModel->setTitle($mcArray['title']);
         $exerciseModel->setType(CommonModel::MULTIPLE_CHOICE);
         $exerciseModel->setContent($multipleChoice);
+        $exerciseModel->setType(CommonModel::MULTIPLE_CHOICE);
 
-        return $this->save($exerciseModelId, $exerciseModel);
+        return $exerciseModel;
     }
 
     /**
-     * Save a group items
+     * Create a group items
      *
-     * @param int   $exerciseModelId
      * @param array $giArray
      *
      * @throws \Exception
      * @return ExerciseModelResource
      */
-    public function saveGroupItems($exerciseModelId, array $giArray)
+    private function createGroupItems(array $giArray)
     {
         $groupItems = new GroupItems();
         $this->setWordingAndDocuments($giArray, $groupItems);
@@ -173,21 +194,21 @@ class ExerciseModelService
         $this->addGroupItemsObjectBlocksFromArray($giArray, $groupItems, $localGroups);
 
         $exerciseModel = new ExerciseModelResource();
+        $exerciseModel->setType(CommonModel::GROUP_ITEMS);
         $exerciseModel->setContent($groupItems);
 
-        return $this->save($exerciseModelId, $exerciseModel);
+        return $exerciseModel;
     }
 
     /**
-     * Save an order items
+     * Create an order items
      *
-     * @param int   $exerciseModelId
      * @param array $oiArray
      *
      * @throws \Exception
      * @return ExerciseModelResource
      */
-    public function saveOrderItems($exerciseModelId, array $oiArray)
+    private function createOrderItems(array $oiArray)
     {
         $orderItems = new OrderItems();
         $this->setWordingAndDocuments($oiArray, $orderItems);
@@ -229,20 +250,20 @@ class ExerciseModelService
 
         $exerciseModel = new ExerciseModelResource();
         $exerciseModel->setContent($orderItems);
+        $exerciseModel->setType(CommonModel::ORDER_ITEMS);
 
-        return $this->save($exerciseModelId, $exerciseModel);
+        return $exerciseModel;
     }
 
     /**
-     * Save an order items
+     * Create an order items
      *
-     * @param int   $exerciseModelId
      * @param array $piArray
      *
      * @throws \Exception
      * @return ExerciseModelResource
      */
-    public function savePairItems($exerciseModelId, array $piArray)
+    private function createPairItems(array $piArray)
     {
         $orderItems = new PairItems();
         $this->setWordingAndDocuments($piArray, $orderItems);
@@ -251,7 +272,22 @@ class ExerciseModelService
 
         $exerciseModel = new ExerciseModelResource();
         $exerciseModel->setContent($orderItems);
+        $exerciseModel->setType(CommonModel::PAIR_ITEMS);
 
+        return $exerciseModel;
+    }
+
+    /**
+     * Save an exercise model
+     *
+     * @param                       $exerciseModelId
+     * @param ExerciseModelResource $exerciseModel
+     *
+     * @internal param array $mcArray
+     * @return ExerciseModelResource
+     */
+    public function saveExerciseModel($exerciseModelId, ExerciseModelResource $exerciseModel)
+    {
         return $this->save($exerciseModelId, $exerciseModel);
     }
 
@@ -688,5 +724,93 @@ class ExerciseModelService
     public function getAll($collectionInformation = null)
     {
         return $this->exerciseModelRepository->findAll($collectionInformation);
+    }
+
+    /**
+     * Validate an exercise model
+     *
+     * @param ExerciseModelResource $exerciseModel
+     *
+     * @throws InvalidModelException
+     */
+    public function validateExerciseModel(ExerciseModelResource $exerciseModel)
+    {
+        $wording = $exerciseModel->getContent()->getWording();
+        if (empty ($wording)) {
+            throw new InvalidModelException('Il faut saisir une consigne', $exerciseModel);
+        }
+
+        switch (get_class($exerciseModel->getContent())) {
+            case ExerciseModelResource::MULTIPLE_CHOICE_MODEL_CLASS:
+                $this->validateMultipleChoice($exerciseModel);
+            case ExerciseModelResource::GROUP_ITEMS_MODEL_CLASS:
+                $this->validateGroupItems($exerciseModel);
+        }
+    }
+
+    /**
+     * Validate the content of a multiple choice model
+     *
+     * @param ExerciseModelResource $exerciseModel
+     *
+     * @throws InvalidModelException
+     */
+    private function validateMultipleChoice(ExerciseModelResource $exerciseModel)
+    {
+        $this->validateBlock($exerciseModel, $exerciseModel->getContent()->getQuestionBlocks());
+    }
+
+    /**
+     * Validate the content of a group items model
+     *
+     * @param ExerciseModelResource $exerciseModel
+     *
+     * @throws InvalidModelException
+     */
+    private function validateGroupItems(ExerciseModelResource $exerciseModel)
+    {
+        $this->validateBlock($exerciseModel, $exerciseModel->getContent()->getObjectBlocks());
+    }
+
+    /**
+     * Validate that a block is not empty
+     *
+     * @param ExerciseModelResource $exerciseModel
+     * @param array                 $blocks
+     *
+     * @throws \SimpleIT\ClaireAppBundle\Exception\InvalidModelException
+     */
+    private function validateBlock(ExerciseModelResource $exerciseModel, array $blocks)
+    {
+        if (empty ($blocks)) {
+            throw new InvalidModelException('Il faut au moins un block', $exerciseModel);
+        }
+
+        /** @var ResourceBlock $block */
+        foreach ($blocks as $block) {
+            if (!($block->getNumberOfOccurences() > 0)) {
+                throw new InvalidModelException(
+                    'Le nombre d\'occurences doit être positif',
+                    $exerciseModel
+                );
+            }
+            if ($block->isList()) {
+                $resourceList = $block->getResources();
+                if (empty($resourceList)) {
+                    throw new InvalidModelException(
+                        'Au moins une ressource doit être spécifiée dans le bloc',
+                        $exerciseModel
+                    );
+                }
+            } else {
+                $constraints = $block->getResourceConstraint();
+                if (empty($constraints)) {
+                    throw new InvalidModelException(
+                        'Le block ne peut être totalement vide',
+                        $exerciseModel
+                    );
+                }
+            }
+        }
     }
 }
