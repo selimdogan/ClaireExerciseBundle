@@ -104,7 +104,8 @@ class OwnerResourceController extends AppController
                 $metadataArray,
                 $miscArray,
                 $userId,
-                true
+                true,
+                $collectionInformation->getFilter('type')
             );
 
         $publicOwnerResources = $this->get('simple_it.claire.exercise.owner_resource')->getAll
@@ -112,7 +113,8 @@ class OwnerResourceController extends AppController
                 $metadataArray,
                 $miscArray,
                 $userId,
-                false
+                false,
+                $collectionInformation->getFilter('type')
             );
 
         if ($request->isXmlHttpRequest()) {
@@ -126,6 +128,7 @@ class OwnerResourceController extends AppController
                 'publicOwnerResources' => $publicOwnerResources,
                 'metadataArray'        => $metadataArray,
                 'miscArray'            => $miscArray,
+                'type'                 => $collectionInformation->getFilter('type')
             )
         );
     }

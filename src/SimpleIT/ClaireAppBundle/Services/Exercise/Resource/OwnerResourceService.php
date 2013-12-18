@@ -98,15 +98,13 @@ class OwnerResourceService
         array $metadataArray,
         array $miscArray,
         $userId = null,
-        $personalResource = true
+        $personalResource = true,
+        $type = null
     )
     {
 
-        if (empty ($metadataArray) && empty($miscArray) && $userId === null) {
-            $collectionInformation = null;
-        } else {
-            $collectionInformation = new CollectionInformation();
-        }
+        $collectionInformation = new CollectionInformation();
+
         if (!empty ($metadataArray)) {
             // metadata
             $mdFilter = '';
@@ -130,6 +128,11 @@ class OwnerResourceService
             }
 
             $collectionInformation->addFilter('keywords', $keywordFilter);
+        }
+
+        if (!empty($type))
+        {
+            $collectionInformation->addFilter('type', $type);
         }
 
         if (!is_null($userId) && $personalResource === true) {
@@ -286,6 +289,7 @@ class OwnerResourceService
     {
         $resourceId = $ownerResourceResource->getResource();
         $ownerResourceResource->setResource(null);
+
         return $this->ownerResourceByResourceRepository->insert(
             $ownerResourceResource,
             $resourceId

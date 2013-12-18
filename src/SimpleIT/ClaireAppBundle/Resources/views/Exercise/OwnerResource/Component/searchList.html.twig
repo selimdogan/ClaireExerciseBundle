@@ -1,7 +1,7 @@
 <h2>Recherche</h2>
 <form action="{{ path('simple_it_claire_component_owner_resource_search_list') }}" method="GET">
 
-<h3>Par clé/valeurs</h3>
+    <h3>Par clé/valeurs</h3>
     <input type="button" onclick="addFilter()" value="Ajouter"/>
     <table id="filters">
         {% set _cptFilters = 0 %}
@@ -47,7 +47,7 @@
         {% endif %}
     </table>
 
-<h3>Par mot-clé</h3>
+    <h3>Par mot-clé</h3>
     <input type="button" onclick="addKeyWords()" value="Ajouter"/>
     <table id="keywords">
         {% set _cptKW = 0 %}
@@ -80,6 +80,9 @@
             </tr>
         {% endif %}
     </table>
+
+    <h3>Type</h3>
+    <input type="text" name="type" {% if type is defined %}value="{{ type }}"{% endif %}/>
 
     <input type="submit">
 </form>
