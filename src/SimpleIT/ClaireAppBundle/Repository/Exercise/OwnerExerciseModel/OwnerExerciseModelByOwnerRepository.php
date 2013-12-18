@@ -15,12 +15,12 @@ class OwnerExerciseModelByOwnerRepository extends AppRepository
     /**
      * @var string
      */
-    protected $path = 'users/{userId}/owner-exercise-model/{ownerExerciseModelId}';
+    protected $path = 'users/{userId}/owner-exercise-models/{ownerExerciseModelId}';
 
     /**
      * @var  string
      */
-    protected $resourceClass = 'SimpleIT\ApiResourcesBundle\Exercise\OwnerResourceResource';
+    protected $resourceClass = 'SimpleIT\ApiResourcesBundle\Exercise\OwnerExerciseModelResource';
 
     /**
      * Find a list of ownerExerciseModels

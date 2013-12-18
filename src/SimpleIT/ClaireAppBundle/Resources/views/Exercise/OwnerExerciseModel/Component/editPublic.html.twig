@@ -1,0 +1,7 @@
+<form action="{{ path('simple_it_claire_component_exercise_owner_exercise_model_public_edit',{ 'ownerExerciseModelId': ownerExerciseModel.id}) }}" method="post" {{ form_enctype(form) }}>
+    {{ form_errors(form) }}
+    {{ form_errors(form.public) }}
+    {{ form_widget(form.public) }}
+    {{ form_rest(form) }}
+    <input type="submit">
+</form>

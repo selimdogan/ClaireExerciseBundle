@@ -1,0 +1,54 @@
+<h3>Liste des modèles</h3>
+<ul>
+    {% for ownerExerciseModel in ownerExerciseModels %}
+        <li>
+            <a href="{{ path('simple_it_claire_exercise_owner_exercise_model_edit',{ 'ownerExerciseModelId': ownerExerciseModel.id}) }}">
+                <span>
+                    {{ ownerExerciseModel.id }}
+                </span>
+            </a>
+            <ul>
+                <li>
+                    Type :
+                    {% if ownerExerciseModel.type == 'multiple-choice' %}
+                        QCM
+                    {% elseif ownerExerciseModel.type == 'group-items' %}
+                        Groupement
+                    {% elseif ownerExerciseModel.type == 'order-items' %}
+                        Ordonnancement
+                    {% elseif ownerExerciseModel.type == 'pair-items' %}
+                        Appariement
+                    {% endif %}
+                </li>
+                <li>
+                    Titre : {{ ownerExerciseModel.title }}
+                </li>
+
+                <li>
+                    Public : {{ ownerExerciseModel.public }}
+                </li>
+                <li>
+                    Metadonnées :
+                    <ul>
+                        {% for key, value in ownerExerciseModel.metadata %}
+                            <li>
+                                {% if key == "_misc" %}
+                                    Divers :
+                                    <ul>
+                                        {% for miscVal in value %}
+                                            <li>
+                                                {{ miscVal }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    {{ key }} : {{ value }}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    {% endfor %}
+</ul>
