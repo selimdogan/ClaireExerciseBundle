@@ -7,6 +7,7 @@ use SimpleIT\ClaireAppBundle\Gateways\Course\Course\CourseGateway;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
 use SimpleIT\AppBundle\Annotation\Cache;
+use SimpleIT\AppBundle\Annotation\CacheInvalidation;
 
 /**
  * Class CourseRepository
