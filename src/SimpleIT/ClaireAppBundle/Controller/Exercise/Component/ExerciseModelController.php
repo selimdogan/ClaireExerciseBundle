@@ -78,6 +78,7 @@ class ExerciseModelController extends AppController
      *
      * @param Request $request
      *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function createAction(Request $request)
@@ -85,11 +86,14 @@ class ExerciseModelController extends AppController
         $exerciseModel = new ExerciseModelResource();
         $form = $this->createForm(new ExerciseModelTypeType(), $exerciseModel);
         $form->bind($request);
-        if ($this->get('validator')->validate($form, 'appCreate')) {
-            $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->addFromType(
-                $exerciseModel
-            );
+
+        if (!$this->get('validator')->validate($form, 'appCreate')) {
+            throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST, $form->getErrors());
         }
+
+        $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->addFromType(
+            $exerciseModel
+        );
 
         return $this->redirect(
             $this->generateUrl(

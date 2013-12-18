@@ -31,6 +31,7 @@ use SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModel\ExerciseModelRepo
 use
     SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModel\RequiredResourceByExerciseModelRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\Utils\HTTP;
 
 /**
  * Class ExerciseModelService
@@ -529,7 +530,8 @@ class ExerciseModelService
         $keyName = 'key',
         $comparatorName = 'comparator',
         $valuesName = 'values',
-        $typeName = 'type'
+        $typeName = 'type',
+        $excludedName = 'excluded'
     )
     {
         if ($blockArray['resourceOrigin'] === "list") {
@@ -549,6 +551,9 @@ class ExerciseModelService
 
             $mdConstraints = array();
             foreach ($modelArray[$keyName][$blockId] as $constrKey => $metaKey) {
+                if (!isset($modelArray[$valuesName][$blockId][$constrKey])) {
+                    $modelArray[$valuesName][$blockId][$constrKey] = array();
+                }
                 $mdConstraints[] = $this->createMdConstraint(
                     $metaKey,
                     $modelArray[$comparatorName][$blockId][$constrKey],
@@ -556,9 +561,18 @@ class ExerciseModelService
                 );
             }
             $objConstraint->setMetadataConstraints($mdConstraints);
+
+            $excludedList = array();
+            foreach ($modelArray[$excludedName][$blockId] as $excluded) {
+                $excObj = new ObjectId();
+                $excObj->setId($excluded);
+                $excludedList[] = $excObj;
+            }
+            $objConstraint->setExcluded($excludedList);
+
             $block->setResourceConstraint($objConstraint);
         } else {
-            throw new \Exception('Invalid request: resource origin');
+            throw new \HttpException(HTTP::STATUS_CODE_BAD_REQUEST, 'Invalid request: resource origin');
         }
     }
 
