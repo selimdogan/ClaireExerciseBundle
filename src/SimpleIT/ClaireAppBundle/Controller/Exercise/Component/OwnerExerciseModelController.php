@@ -125,7 +125,8 @@ class OwnerExerciseModelController extends AppController
                 $metadataArray,
                 $miscArray,
                 $userId,
-                true
+                true,
+                $collectionInformation->getFilter('type')
             );
 
         $publicOwnerExerciseModels = $this->get(
@@ -135,7 +136,8 @@ class OwnerExerciseModelController extends AppController
                 $metadataArray,
                 $miscArray,
                 $userId,
-                false
+                false,
+                $collectionInformation->getFilter('type')
             );
 
         if ($request->isXmlHttpRequest()) {
@@ -149,6 +151,7 @@ class OwnerExerciseModelController extends AppController
                 'publicOwnerExerciseModels' => $publicOwnerExerciseModels,
                 'metadataArray'             => $metadataArray,
                 'miscArray'                 => $miscArray,
+                'type'                      => $collectionInformation->getFilter('type')
             )
         );
     }

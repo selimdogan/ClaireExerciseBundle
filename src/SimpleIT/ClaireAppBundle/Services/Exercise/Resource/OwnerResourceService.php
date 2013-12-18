@@ -87,10 +87,11 @@ class OwnerResourceService
      * Get all owner resources and if a user is specified, show only the public resource except
      * user's ones
      *
-     * @param array $metadataArray
-     * @param array $miscArray
-     * @param null  $userId
-     * @param bool  $personalResource
+     * @param array  $metadataArray
+     * @param array  $miscArray
+     * @param null   $userId
+     * @param bool   $personalResource
+     * @param string $type
      *
      * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
@@ -130,8 +131,7 @@ class OwnerResourceService
             $collectionInformation->addFilter('keywords', $keywordFilter);
         }
 
-        if (!empty($type))
-        {
+        if (!empty($type)) {
             $collectionInformation->addFilter('type', $type);
         }
 

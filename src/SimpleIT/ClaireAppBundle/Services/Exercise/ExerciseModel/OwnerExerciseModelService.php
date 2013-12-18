@@ -4,9 +4,12 @@ namespace SimpleIT\ClaireAppBundle\Services\Exercise\ExerciseModel;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use SimpleIT\ApiResourcesBundle\Exercise\OwnerExerciseModelResource;
-use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\MetadataByOwnerExerciseModelRepository;
-use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\OwnerExerciseModelByExerciseModelRepository;
-use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\OwnerExerciseModelByOwnerRepository;
+use
+    SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\MetadataByOwnerExerciseModelRepository;
+use
+    SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\OwnerExerciseModelByExerciseModelRepository;
+use
+    SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\OwnerExerciseModelByOwnerRepository;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\OwnerExerciseModelRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
@@ -91,10 +94,11 @@ class OwnerExerciseModelService
      * Get all owner exercise models and if a user is specified, show only the public exercise
      * models except user's ones
      *
-     * @param array $metadataArray
-     * @param array $miscArray
-     * @param null  $userId
-     * @param bool  $personalExerciseModel
+     * @param array  $metadataArray
+     * @param array  $miscArray
+     * @param null   $userId
+     * @param bool   $personalExerciseModel
+     * @param string $type
      *
      * @return PaginatedCollection
      */
@@ -102,15 +106,13 @@ class OwnerExerciseModelService
         array $metadataArray,
         array $miscArray,
         $userId = null,
-        $personalExerciseModel = true
+        $personalExerciseModel = true,
+        $type = null
     )
     {
 
-        if (empty ($metadataArray) && empty($miscArray) && $userId === null) {
-            $collectionInformation = null;
-        } else {
-            $collectionInformation = new CollectionInformation();
-        }
+        $collectionInformation = new CollectionInformation();
+
         if (!empty ($metadataArray)) {
             // metadata
             $mdFilter = '';
@@ -134,6 +136,10 @@ class OwnerExerciseModelService
             }
 
             $collectionInformation->addFilter('keywords', $keywordFilter);
+        }
+
+        if (!empty($type)) {
+            $collectionInformation->addFilter('type', $type);
         }
 
         if (!is_null($userId) && $personalExerciseModel === true) {
