@@ -1,10 +1,14 @@
-<h1>Edition de modèle d'exercice : {{ exerciseModel.type }}</h1>
+{% extends "SimpleITClaireAppBundle:Exercise:layout.html.twig" %}
 
-{{ render(controller('SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:editTitleView',{ 'exerciseModelId': exerciseModel.id })) }}
-{{ render(controller('SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:contentEdit',{ 'exerciseModelId': exerciseModel.id })) }}
-{{ render(controller('SimpleITClaireAppBundle:Exercise/Component/RequiredResourceByExerciseModel:editRequiredResourcesView',{ 'exerciseModelId': exerciseModel.id })) }}
-{{ render(controller('SimpleITClaireAppBundle:Exercise/Component/OwnerResource:browserView')) }}
+{% block content %}
+    <h1>Edition de modèle d'exercice : {{ exerciseModel.type }}</h1>
 
-<form action="{{ path('simple_it_claire_exercise_exercise_model_delete',{ 'exerciseModelId': exerciseModel.id}) }}" method="get">
-    <input type="submit" value="Supprimer le modèle d'exercice">
-</form>
+    {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:editTitleView',{ 'exerciseModelId': exerciseModel.id })) }}
+    {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:contentEdit',{ 'exerciseModelId': exerciseModel.id })) }}
+    {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/RequiredResourceByExerciseModel:editRequiredResourcesView',{ 'exerciseModelId': exerciseModel.id })) }}
+    {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/OwnerResource:browserView')) }}
+
+    <form action="{{ path('simple_it_claire_exercise_exercise_model_delete',{ 'exerciseModelId': exerciseModel.id}) }}" method="get">
+        <input type="submit" value="Supprimer le modèle d'exercice">
+    </form>
+{% endblock content %}
