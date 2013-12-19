@@ -1,0 +1,19 @@
+{% extends "SimpleITClaireAppBundle:Exercise:layout.html.twig" %}
+
+{% block content %}
+
+    <h1>Edition de modèles d'exercices possédée : {{ ownerExerciseModel.type }}</h1>
+
+    <p>
+        <a href="{{ path('simple_it_claire_exercise_exercise_model_edit',
+        { 'exerciseModelId': ownerExerciseModel.exerciseModel}) }}">
+            Editer le contenu du modèle d'exercice
+        </a>
+        (Possible uniquement si vous êtes l'auteur et que le modèle n'est pas encore utilisée par
+        d'autres)
+    </p>
+
+    {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModel:editPublicView',{ 'ownerExerciseModelId': ownerExerciseModel.id })) }}
+    {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/MetadataByOwnerExerciseModel:editMetadataView',{ 'ownerExerciseModelId': ownerExerciseModel.id })) }}
+
+{% endblock content %}

@@ -9,11 +9,11 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class OwnerResourcePublicType
+ * Class OwnerExerciseModelPublicType
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class OwnerResourcePublicType extends AbstractType
+class OwnerExerciseModelPublicType extends AbstractType
 {
     /**
      * @inheritdoc
@@ -21,8 +21,8 @@ class OwnerResourcePublicType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $types = array(
-            true => 'Ressource publique',
-            false => 'Ressource privée',
+            true => 'public',
+            false => 'privé',
         );
 
         $builder->add(
@@ -40,6 +40,6 @@ class OwnerResourcePublicType extends AbstractType
      */
     public function getName()
     {
-        return 'OwnerResourcePublic';
+        return 'OwnerExerciseModelPublic';
     }
 }

@@ -15,7 +15,7 @@ class MetadataByOwnerExerciseModelRepository extends AppRepository
     /**
      * @var string
      */
-    protected $path = 'owner-exercise-models/{ownerExerciseModelId}/metadata/{metaKey}';
+    protected $path = 'owner-exercise-models/{ownerExerciseModelId}/metadatas/{metaKey}';
 
     /**
      * @var string

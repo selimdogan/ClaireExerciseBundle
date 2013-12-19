@@ -1,10 +1,6 @@
 <h2>Edition d'ordonnancement d'objets</h2>
 {% set content = exerciseModel.content %}
 
-{% for error in errors %}
-    <p>{{ error }}</p>
-{% endfor %}
-
 <form action="{{ path('simple_it_claire_component_exercise_exercise_model_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
 <input type="hidden" name="model-type" value="order-items">
 

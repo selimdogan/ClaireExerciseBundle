@@ -1,5 +1,5 @@
-    <h2>Recherche</h2>
-<form action="{{ path('simple_it_claire_component_owner_resource_search_list') }}" method="GET">
+<h2>Recherche</h2>
+<form action="{{ path('simple_it_claire_component_owner_exercise_model_search_list') }}" method="GET">
 
     <h3>Par clé/valeurs</h3>
     <input type="button" onclick="addFilter()" value="Ajouter"/>
@@ -87,12 +87,12 @@
     <input type="submit">
 </form>
 <h2>Espace personnel</h2>
-{% include 'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:list.html.twig'
-with{'ownerResources':ownerResources} %}
+{% include 'SimpleITClaireAppBundle:Exercise/OwnerExerciseModel/Component:list.html.twig'
+with{'ownerExerciseModels':ownerExerciseModels} %}
 
 <h2>Espace public</h2>
-{% include 'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:list.html.twig'
-with{'ownerResources':publicOwnerResources} %}
+{% include 'SimpleITClaireAppBundle:Exercise/OwnerExerciseModel/Component:list.html.twig'
+with{'ownerExerciseModels':publicOwnerExerciseModels} %}
 
 <script>
     function addFilter() {

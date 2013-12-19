@@ -31,6 +31,7 @@ use SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModel\ExerciseModelRepo
 use
     SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModel\RequiredResourceByExerciseModelRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\Utils\HTTP;
 
 /**
  * Class ExerciseModelService
@@ -529,7 +530,8 @@ class ExerciseModelService
         $keyName = 'key',
         $comparatorName = 'comparator',
         $valuesName = 'values',
-        $typeName = 'type'
+        $typeName = 'type',
+        $excludedName = 'excluded'
     )
     {
         if ($blockArray['resourceOrigin'] === "list") {
@@ -549,6 +551,9 @@ class ExerciseModelService
 
             $mdConstraints = array();
             foreach ($modelArray[$keyName][$blockId] as $constrKey => $metaKey) {
+                if (!isset($modelArray[$valuesName][$blockId][$constrKey])) {
+                    $modelArray[$valuesName][$blockId][$constrKey] = array();
+                }
                 $mdConstraints[] = $this->createMdConstraint(
                     $metaKey,
                     $modelArray[$comparatorName][$blockId][$constrKey],
@@ -556,9 +561,18 @@ class ExerciseModelService
                 );
             }
             $objConstraint->setMetadataConstraints($mdConstraints);
+
+            $excludedList = array();
+            foreach ($modelArray[$excludedName][$blockId] as $excluded) {
+                $excObj = new ObjectId();
+                $excObj->setId($excluded);
+                $excludedList[] = $excObj;
+            }
+            $objConstraint->setExcluded($excludedList);
+
             $block->setResourceConstraint($objConstraint);
         } else {
-            throw new \Exception('Invalid request: resource origin');
+            throw new \HttpException(HTTP::STATUS_CODE_BAD_REQUEST, 'Invalid request: resource origin');
         }
     }
 
@@ -737,16 +751,19 @@ class ExerciseModelService
     {
         $wording = $exerciseModel->getContent()->getWording();
         if (empty ($wording)) {
-            throw new InvalidModelException('Il faut saisir une consigne', $exerciseModel);
+            throw new InvalidModelException('Il faut saisir une consigne');
         }
 
         switch (get_class($exerciseModel->getContent())) {
             case ExerciseModelResource::MULTIPLE_CHOICE_MODEL_CLASS:
                 $this->validateMultipleChoice($exerciseModel);
+                break;
             case ExerciseModelResource::GROUP_ITEMS_MODEL_CLASS:
                 $this->validateGroupItems($exerciseModel);
+                break;
             case ExerciseModelResource::PAIR_ITEMS_MODEL_CLASS:
                 $this->validatePairItems($exerciseModel);
+                break;
         }
     }
 
@@ -787,14 +804,11 @@ class ExerciseModelService
         $this->validateBlock($exerciseModel, $pairBlocks);
 
         /** @var PairBlock $pairBlock */
-        foreach ($pairBlocks as $pairBlock)
-        {
+        foreach ($pairBlocks as $pairBlock) {
             $mk = $pairBlock->getPairMetaKey();
-            if (empty($mk))
-            {
+            if (empty($mk)) {
                 throw new InvalidModelException(
-                    'Il faut préciser une clé de métadonnée pour former les paires',
-                    $exerciseModel
+                    'Il faut préciser une clé de métadonnée pour former les paires'
                 );
             }
         }
@@ -817,26 +831,19 @@ class ExerciseModelService
         /** @var ResourceBlock $block */
         foreach ($blocks as $block) {
             if (!($block->getNumberOfOccurences() > 0)) {
-                throw new InvalidModelException(
-                    'Le nombre d\'occurences doit être positif',
-                    $exerciseModel
-                );
+                throw new InvalidModelException('Le nombre d\'occurences doit être positif');
             }
             if ($block->isList()) {
                 $resourceList = $block->getResources();
                 if (empty($resourceList)) {
                     throw new InvalidModelException(
-                        'Au moins une ressource doit être spécifiée dans le bloc',
-                        $exerciseModel
+                        'Au moins une ressource doit être spécifiée dans le bloc'
                     );
                 }
             } else {
                 $constraints = $block->getResourceConstraint();
                 if (empty($constraints)) {
-                    throw new InvalidModelException(
-                        'Le block ne peut être totalement vide',
-                        $exerciseModel
-                    );
+                    throw new InvalidModelException('Le block ne peut être totalement vide');
                 }
             }
         }

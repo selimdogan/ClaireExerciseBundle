@@ -36,7 +36,7 @@ simple_it_claire_component_exercise_owner_resource_metadata_edit_view:
 
 simple_it_claire_component_exercise_owner_resource_metadata_edit:
     pattern: /{ownerResourceId}/metadatas
-    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/MetadataByOwnerResource:MetadataEdit }
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/MetadataByOwnerResource:metadataEdit }
     requirements:
         _method: POST
 

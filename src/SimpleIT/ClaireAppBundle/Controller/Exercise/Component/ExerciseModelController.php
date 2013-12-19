@@ -8,6 +8,7 @@ use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\Exception\InvalidModelException;
 use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ExerciseModelTitleType;
 use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ExerciseModelTypeType;
+use SimpleIT\ClaireAppBundle\ViewModelAssembler\ExerciseModel\ContentVMAssembler;
 use SimpleIT\Utils\HTTP;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -78,6 +79,7 @@ class ExerciseModelController extends AppController
      *
      * @param Request $request
      *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function createAction(Request $request)
@@ -85,11 +87,14 @@ class ExerciseModelController extends AppController
         $exerciseModel = new ExerciseModelResource();
         $form = $this->createForm(new ExerciseModelTypeType(), $exerciseModel);
         $form->bind($request);
-        if ($this->get('validator')->validate($form, 'appCreate')) {
-            $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->addFromType(
-                $exerciseModel
-            );
+
+        if (!$this->get('validator')->validate($form, 'appCreate')) {
+            throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST, $form->getErrors());
         }
+
+        $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->addFromType(
+            $exerciseModel
+        );
 
         return $this->redirect(
             $this->generateUrl(
@@ -118,52 +123,6 @@ class ExerciseModelController extends AppController
                 'exerciseModel' => $exerciseModel
             )
         );
-    }
-
-    /**
-     * Edit an exercise model type (GET)
-     *
-     * @param int $exerciseModelId Exercise model id
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function editTypeViewAction($exerciseModelId)
-    {
-        $exerciseModel = $this->get(
-            'simple_it.claire.exercise.exercise_model'
-        )->getExerciseModelToEdit(
-                $exerciseModelId
-            );
-
-        $form = $this->createForm(new ExerciseModelTypeType(), $exerciseModel);
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:editType.html.twig',
-            array('exerciseModel' => $exerciseModel, 'form' => $form->createView())
-        );
-    }
-
-    /**
-     * Edit an exercise model type (POST)
-     *
-     * @param Request $request         Request
-     * @param int     $exerciseModelId Course id
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function typeEditAction(Request $request, $exerciseModelId)
-    {
-        $exerciseModel = new ExerciseModelResource();
-        $form = $this->createForm(new ExerciseModelTypeType(), $exerciseModel);
-        $form->bind($request);
-        if ($this->get('validator')->validate($form, 'editType')) {
-            $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->save(
-                $exerciseModelId,
-                $exerciseModel
-            );
-        }
-
-        return new JsonResponse($exerciseModel->getType());
     }
 
     /**
@@ -218,6 +177,7 @@ class ExerciseModelController extends AppController
      * @param Request $request         Request
      * @param int     $exerciseModelId Resource
      *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function contentEditAction(Request $request, $exerciseModelId)
@@ -241,9 +201,7 @@ class ExerciseModelController extends AppController
                 $exerciseModel
             );
         } catch (InvalidModelException $ime) {
-            $exerciseModel->setId($exerciseModelId);
-
-            return $this->viewContentEdit($exerciseModel, array($ime->getMessage()));
+            throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST, $ime->getMessage());
         }
 
         $exerciseModel = $this->get(
@@ -257,12 +215,11 @@ class ExerciseModelController extends AppController
      * Render the edition view for exercise model content
      *
      * @param ExerciseModelResource $exerciseModel
-     * @param array                 $errors
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @return Response
      */
-    private function viewContentEdit(ExerciseModelResource $exerciseModel, $errors = array())
+    private function viewContentEdit(ExerciseModelResource $exerciseModel)
     {
         $view = null;
         switch ($exerciseModel->getType()) {
@@ -282,7 +239,10 @@ class ExerciseModelController extends AppController
                 throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST);
         }
 
-        return $this->render($view, array('exerciseModel' => $exerciseModel, 'errors' => $errors));
+        $exerciseModel = ContentVMAssembler::write($exerciseModel);
+//        throw new \Exception(print_r($exerciseModel, true));
+
+        return $this->render($view, array('exerciseModel' => $exerciseModel));
     }
 
     /**

@@ -1,15 +1,15 @@
 <h2>Métadonnées</h2>
 <h3>Métadonnées clé/valeur</h3>
 
-<form action="{{ path('simple_it_claire_component_exercise_owner_resource_metadata_edit',
-{ 'ownerResourceId': ownerResource.id}) }}" method="post">
+<form action="{{ path('simple_it_claire_component_exercise_owner_exercise_model_metadata_edit',
+{ 'ownerExerciseModelId': ownerExerciseModel.id}) }}" method="post">
 
     <input type="button" onclick="addMetadata()" value="Ajouter"/>
 
     <table id="metadataList">
         {% set _cptMd = 0 %}
-        {% if ownerResource.metadata |length > 0 %}
-            {% for key, value in ownerResource.metadata if key != '_misc' %}
+        {% if ownerExerciseModel.metadata |length > 0 %}
+            {% for key, value in ownerExerciseModel.metadata if key != '_misc' %}
                 <tr>
                     <td>
                         <input type="text" size="20" name="metaKey[{{ _cptMd }}]"
