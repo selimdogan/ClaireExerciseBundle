@@ -1,3 +1,4 @@
+
 <h2>Edition d'appariement d'objets</h2>
 
 {% for error in errors %}
@@ -7,127 +8,147 @@
 <form action="{{ path('simple_it_claire_component_exercise_exercise_model_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
     <input type="hidden" name="model-type" value="pair-items">
 
-    <table>
-        <tr>
-            <td>
-                <label>Consigne :
-                    <input type="text" size="200" name="wording" id="wording" value="{{ exerciseModel.content.wording }}"/>
-                </label>
-            </td>
-        </tr>
-    </table>
+    <div>
+        <label>Consigne :
+            <input type="text" size="200" name="wording" id="wording" value="{{ exerciseModel.content.wording }}"/>
+        </label>
+    </div>
 
     {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/documents.html.twig'
     with {'documents' : exerciseModel.content.documents} %}
 
-    <table id="blocks" border="1">
-        <tr>
-            <td>
-                <!--TODO-->
-                <input type="button" value="Ajouter bloc"/>
-            </td>
-        </tr>
-        {% set _cptBlock = 0 %}
-        {% if exerciseModel.content.pairBlocks |length > 0 %}
-            {% for block in exerciseModel.content.pairBlocks %}
-                <tr>
-                    <td>
-                        <button type="button" class="js-remove-block">Supprimer bloc</button>
-                    </td>
-                    <td>
-                        <table>
-                            <tr>
-                                <td><h3>Bloc n° {{ _cptBlock + 1 }}</h3></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label>Clé de la métadonnée utilisée pour créer la partie
-                                        mobile
-                                        <input type="text" size="20" name="blocks[{{ _cptBlock }}][metaKey]"
-                                                value="{{ block.pairMetaKey }}"/>
-                                    </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h3>Ressources du bloc</h3>
-                                </td>
-                            </tr>
-                            {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
-                            'objectName' : 'objets',
-                            'resourcesName' : 'resources',
-                            'blocksName' : 'blocks',
-                            'keyName' : 'key',
-                            'comparatorName' : 'comparator',
-                            'valuesName' : 'values',
-                            'excludedName' : 'excluded',
-                            'typeName' : 'type',
-                            '_cptBlock' : _cptBlock,
-                            'block' : block,
-                            'askType' : true
-                            } %}
-                        </table>
-                    </td>
-                </tr>
-                {% set _cptBlock = _cptBlock + 1 %}
-            {% endfor %}
-        {% else %}
-            <tr>
-                <td>
-                    <button type="button" class="js-remove-block">Supprimer bloc</button>
-                </td>
-                <td>
-                    <table>
-                        <tr>
-                            <td><h3>Bloc n° 1</h3></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label>Clé de la métadonnée utilisée pour créer la partie mobile
-                                    <input type="text" size="20" name="blocks[0][metaKey]"/>
-                                </label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label>Type d'association
-                                    <select name="blocks[0][pairType]">
-                                        <option value="text-meta-value">
-                                            Texte en métadonnée
-                                        </option>
-                                        <option value="resource-meta-value">
-                                            Ressource en métadonnée
-                                        </option>
-                                    </select>
-                                </label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h3>Ressources du bloc</h3>
-                            </td>
-                        </tr>
-                        {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
-                        'objectName' : 'objets',
-                        'resourcesName' : 'resources',
-                        'blocksName' : 'blocks',
-                        'keyName' : 'key',
-                        'comparatorName' : 'comparator',
-                        'valuesName' : 'values',
-                        'excludedName' : 'excluded',
-                        'typeName' : 'type',
-                        '_cptBlock' : 0,
-                        'block' : null,
-                        'askType' : true
-                        } %}
-                    </table>
-                </td>
-            </tr>
-        {% endif %}
-    </table>
+    <div id="blocks">
+        {#<table id="blocks" border="1">#}
+            {#<tr>#}
+                {#<td>#}
+                <div>
+                    <!--TODO-->
+                    <input type="button" value="Ajouter bloc"/>
+                </div>
 
+                {#</td>#}
+            {#</tr>#}
+            {% set _cptBlock = 0 %}
+            {% if exerciseModel.content.pairBlocks|length > 0 %}
+                {% for block in exerciseModel.content.pairBlocks %}
+                    <div class="block">
+                        <div>
+                            <button type="button" class="js-remove-block">Supprimer bloc</button>
+                        </div>
+                        <div>
+                            <h3>Bloc n° {{ _cptBlock + 1 }}</h3>
+                            <label>Clé de la métadonnée utilisée pour créer la partie mobile
+                                <input type="text" size="20" name="blocks[{{ _cptBlock }}][metaKey]" value="{{ block.pairMetaKey }}"/>
+                            </label>
+
+                            <h3>Ressources du bloc</h3>
+
+                            {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
+                                'objectName' : 'objets',
+                                'resourcesName' : 'resources',
+                                'blocksName' : 'blocks',
+                                'keyName' : 'key',
+                                'comparatorName' : 'comparator',
+                                'valuesName' : 'values',
+                                'excludedName' : 'excluded',
+                                'typeName' : 'type',
+                                '_cptBlock' : _cptBlock,
+                                'block' : block,
+                                'askType' : true
+                            } %}
+
+                        </div>
+                    </div>
+                    {% set _cptBlock = _cptBlock + 1 %}
+                {% endfor %}
+            {% else %}
+                    <div class="block">
+                        <div>
+                            <button type="button" class="js-remove-block">Supprimer bloc</button>
+                        </div>
+                        <div>
+                            <h3>Bloc n° 1</h3>
+                            <label>Clé de la métadonnée utilisée pour créer la partie mobile
+                                <input type="text" size="20" name="blocks[{{ _cptBlock }}][metaKey]" value=""/>
+                            </label>
+
+                            <h3>Ressources du bloc</h3>
+
+
+                            {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
+                                'objectName' : 'objets',
+                                'resourcesName' : 'resources',
+                                'blocksName' : 'blocks',
+                                'keyName' : 'key',
+                                'comparatorName' : 'comparator',
+                                'valuesName' : 'values',
+                                'excludedName' : 'excluded',
+                                'typeName' : 'type',
+                                '_cptBlock' : 0,
+                                'block' : null,
+                                'askType' : true
+                            } %}
+
+                        </div>
+                    </div>
+
+                {#<tr>#}
+                    {#<td>#}
+                        {#<button type="button" class="js-remove-block">Supprimer bloc</button>#}
+                    {#</td>#}
+                    {#<td>#}
+                        {#<table>#}
+                            {#<tr>#}
+                                {#<td><h3>Bloc n° 1</h3></td>#}
+                            {#</tr>#}
+                            {#<tr>#}
+                                {#<td>#}
+                                    {#<label>Clé de la métadonnée utilisée pour créer la partie mobile#}
+                                        {#<input type="text" size="20" name="blocks[0][metaKey]"/>#}
+                                    {#</label>#}
+                                {#</td>#}
+                            {#</tr>#}
+                            {#<tr>#}
+                                {#<td>#}
+                                    {#<label>Type d'association#}
+                                        {#<select name="blocks[0][pairType]">#}
+                                            {#<option value="text-meta-value">#}
+                                                {#Texte en métadonnée#}
+                                            {#</option>#}
+                                            {#<option value="resource-meta-value">#}
+                                                {#Ressource en métadonnée#}
+                                            {#</option>#}
+                                        {#</select>#}
+                                    {#</label>#}
+                                {#</td>#}
+                            {#</tr>#}
+                            {#<tr>#}
+                                {#<td>#}
+                                    {#<h3>Ressources du bloc</h3>#}
+                                {#</td>#}
+                            {#</tr>#}
+                            {#{% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {#}
+                            {#'objectName' : 'objets',#}
+                            {#'resourcesName' : 'resources',#}
+                            {#'blocksName' : 'blocks',#}
+                            {#'keyName' : 'key',#}
+                            {#'comparatorName' : 'comparator',#}
+                            {#'valuesName' : 'values',#}
+                            {#'excludedName' : 'excluded',#}
+                            {#'typeName' : 'type',#}
+                            {#'_cptBlock' : 0,#}
+                            {#'block' : null,#}
+                            {#'askType' : true#}
+                            {#} %}#}
+                        {#</table>#}
+                    {#</td>#}
+                {#</tr>#}
+            {% endif %}
+        {#</table>#}
+    </div>
     <input type="submit"/>
 </form>
+
 
 <script>
     $(function () {
