@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class WorkflowController extends AppController
 {
-    public function changeCourseToWaitingForPublication($courseId)
+    public function changeCourseToWaitingForPublicationAction($courseId)
     {
         try {
             $ucRequest = new ChangeCourseStatusRequestDTO($courseId);
@@ -27,7 +27,7 @@ class WorkflowController extends AppController
         }
     }
 
-    public function changeCourseToPublished($courseId)
+    public function changeCourseToPublishedAction($courseId)
     {
         try {
             $ucRequest = new ChangeCourseStatusRequestDTO($courseId);
