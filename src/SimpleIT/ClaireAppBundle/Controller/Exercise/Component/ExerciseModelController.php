@@ -8,6 +8,7 @@ use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\Exception\InvalidModelException;
 use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ExerciseModelTitleType;
 use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ExerciseModelTypeType;
+use SimpleIT\ClaireAppBundle\ViewModelAssembler\ExerciseModel\ContentVMAssembler;
 use SimpleIT\Utils\HTTP;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -214,12 +215,11 @@ class ExerciseModelController extends AppController
      * Render the edition view for exercise model content
      *
      * @param ExerciseModelResource $exerciseModel
-     * @param array                 $errors
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @return Response
      */
-    private function viewContentEdit(ExerciseModelResource $exerciseModel, $errors = array())
+    private function viewContentEdit(ExerciseModelResource $exerciseModel)
     {
         $view = null;
         switch ($exerciseModel->getType()) {
@@ -239,7 +239,10 @@ class ExerciseModelController extends AppController
                 throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST);
         }
 
-        return $this->render($view, array('exerciseModel' => $exerciseModel, 'errors' => $errors));
+        $exerciseModel = ContentVMAssembler::write($exerciseModel);
+//        throw new \Exception(print_r($exerciseModel, true));
+
+        return $this->render($view, array('exerciseModel' => $exerciseModel));
     }
 
     /**

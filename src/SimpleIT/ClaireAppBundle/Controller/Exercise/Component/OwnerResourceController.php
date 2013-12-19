@@ -350,5 +350,4 @@ class OwnerResourceController extends AppController
 
         return new JsonResponse($metaKey);
     }
-
 }
