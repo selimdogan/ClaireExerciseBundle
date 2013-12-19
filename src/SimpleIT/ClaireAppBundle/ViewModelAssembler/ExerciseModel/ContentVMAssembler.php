@@ -244,7 +244,7 @@ class ContentVMAssembler
         }
 
         /** @var MetadataConstraint $mdc */
-        foreach ($mdcs as $mdc) {
+        foreach ($mdcs as &$mdc) {
             $values = $mdc->getValues();
             if (empty($values)) {
                 $mdc->setValues(array(''));
@@ -269,7 +269,6 @@ class ContentVMAssembler
 
         $oc->setExcluded(self::fillResourceList($oc->getExcluded()));
         $oc->setMetadataConstraints(self::fillMetadataConstraints($oc->getMetadataConstraints()));
-
         return $oc;
     }
 }
