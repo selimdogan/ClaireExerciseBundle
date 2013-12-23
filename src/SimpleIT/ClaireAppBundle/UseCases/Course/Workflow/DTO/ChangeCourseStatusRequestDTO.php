@@ -26,5 +26,6 @@ class ChangeCourseStatusRequestDTO implements ChangeCourseStatusRequest
     public function getCourseId()
     {
         return $this->courseId;
+
     }
 }
