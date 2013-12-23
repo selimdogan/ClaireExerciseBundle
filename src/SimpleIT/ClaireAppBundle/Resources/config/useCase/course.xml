@@ -7,6 +7,7 @@
         <parameter key="simple_it.claire.use_cases.course.content.get_published_content.class">SimpleIT\ClaireAppBundle\UseCases\Course\Content\GetPublishedContent</parameter>
         <parameter key="simple_it.claire.use_cases.course.content.get_waiting_for_publication_content.class">SimpleIT\ClaireAppBundle\UseCases\Course\Content\GetWaitingForPublicationContent</parameter>
         <parameter key="simple_it.claire.use_cases.course.content.get_draft_content.class">SimpleIT\ClaireAppBundle\UseCases\Course\Content\GetDraftContent</parameter>
+        <parameter key="simple_it.claire.use_cases.course.edition.save_content.class">SimpleIT\ClaireAppBundle\UseCases\Course\Content\SaveContent</parameter>
     </parameters>
 
     <services>
@@ -22,7 +23,7 @@
         </service>
 
         <!--EDITION-->
-        <service id="simple_it.claire.use_cases.course.edition.edit_content" class="%simple_it.claire.use_cases.course.edition.edit_content.class%">
+        <service id="simple_it.claire.use_cases.course.edition.save_content" class="%simple_it.claire.use_cases.course.edition.save_content.class%">
             <call method="setCourseContentGateway">
                 <argument type="service" id="simple_it.claire.course.repository.course_content"/>
             </call>

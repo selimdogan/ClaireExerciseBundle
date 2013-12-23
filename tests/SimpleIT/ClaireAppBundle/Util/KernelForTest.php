@@ -38,7 +38,9 @@ class KernelForTest extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__ . '/../../../../src/SimpleIT/ClaireAppBundle/Resources/config/services.xml');
+        $loader->load(__DIR__ .'/config.yml');
+        $loader->load(__DIR__ . '/container_stub.xml');
+
     }
 
     public function initializeBundles()
