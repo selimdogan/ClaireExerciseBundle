@@ -34,17 +34,17 @@ class CourseContentController extends AppController
         switch ($status) {
             case CourseResource::STATUS_WAITING_FOR_PUBLICATION:
                 /** @var GetContent $useCase */
-                $useCase = $this->get('');
+                $useCase = $this->get('simple_it.claire.use_cases.course.content.get_waiting_for_publication_content');
                 $ucRequest = new GetWaitingForPublicationContentRequestDTO($courseIdentifier);
                 break;
             case CourseResource::STATUS_DRAFT:
                 /** @var GetContent $useCase */
-                $useCase = $this->get('');
+                $useCase = $this->get('simple_it.claire.use_cases.course.content.get_draft_content');
                 $ucRequest = new GetDraftContentRequestDTO($courseIdentifier);
                 break;
             default :
                 /** @var GetContent $useCase */
-                $useCase = $this->get('');
+                $useCase = $this->get('simple_it.claire.use_cases.course.content.get_published_content');
                 $ucRequest = new GetPublishedContentRequestDTO($courseIdentifier);
                 break;
         }

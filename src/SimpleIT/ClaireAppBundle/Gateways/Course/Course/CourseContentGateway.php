@@ -10,17 +10,17 @@ interface CourseContentGateway
     /**
      * @return string
      */
-    public function findPublished();
+    public function findPublished($courseIdentifier);
 
     /**
      * @return string
      */
-    public function findWaitingForPublication();
+    public function findWaitingForPublication($courseId);
 
     /**
      * @return string
      */
-    public function findDraft();
+    public function findDraft($courseId);
 
     /**
      * @return string

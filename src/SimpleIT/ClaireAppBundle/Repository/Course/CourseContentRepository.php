@@ -32,6 +32,7 @@ use SimpleIT\Utils\FormatUtils;
  */
 class CourseContentRepository extends AppRepository implements CourseContentGateway
 {
+    const FORMAT_HTML = 'HTML';
 
     /**
      * @var string
@@ -99,6 +100,44 @@ class CourseContentRepository extends AppRepository implements CourseContentGate
             array('courseIdentifier' => $courseId),
             array(CourseResource::STATUS => CourseResource::STATUS_DRAFT),
             FormatUtils::HTML
+        );
+    }
+
+    /**
+     * @return string
+     *
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     */
+    public function findPublished($courseIdentifier)
+    {
+        return parent::findResource(
+            array('courseIdentifier' => $courseIdentifier),
+            array(),
+            self::FORMAT_HTML
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function findWaitingForPublication($courseId)
+    {
+        return parent::findResource(
+            array('courseIdentifier' => $courseId),
+            array(CourseResource::STATUS => CourseResource::STATUS_WAITING_FOR_PUBLICATION),
+            self::FORMAT_HTML
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function findDraft($courseId)
+    {
+        return parent::findResource(
+            array('courseIdentifier' => $courseId),
+            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT),
+            self::FORMAT_HTML
         );
     }
 }
