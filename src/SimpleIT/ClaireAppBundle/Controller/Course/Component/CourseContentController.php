@@ -4,7 +4,11 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
+use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\GetDraftContentRequestDTO;
+use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\GetPublishedContentRequestDTO;
+use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\GetWaitingForPublicationContentRequestDTO;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\SaveContentRequestDTO;
+use SimpleIT\ClaireAppBundle\UseCases\Course\Content\GetContent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,9 +27,29 @@ class CourseContentController extends AppController
      * @return \Symfony\Component\HttpFoundation\Response
      * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
-    public function viewAction($courseIdentifier)
+    public function viewAction(Request $request, $courseIdentifier)
     {
-        $content = $this->get('simple_it.claire.course.course')->getContent($courseIdentifier);
+        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_PUBLISHED);
+
+        switch ($status) {
+            case CourseResource::STATUS_WAITING_FOR_PUBLICATION:
+                /** @var GetContent $useCase */
+                $useCase = $this->get('');
+                $ucRequest = new GetWaitingForPublicationContentRequestDTO($courseIdentifier);
+                break;
+            case CourseResource::STATUS_DRAFT:
+                /** @var GetContent $useCase */
+                $useCase = $this->get('');
+                $ucRequest = new GetDraftContentRequestDTO($courseIdentifier);
+                break;
+            default :
+                /** @var GetContent $useCase */
+                $useCase = $this->get('');
+                $ucRequest = new GetPublishedContentRequestDTO($courseIdentifier);
+                break;
+        }
+
+        $content = $useCase->execute($ucRequest);
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',

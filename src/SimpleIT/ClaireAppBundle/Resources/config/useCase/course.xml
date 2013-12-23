@@ -4,10 +4,12 @@
     <parameters>
         <parameter key="simple_it.claire.use_cases.course.workflow.change_course_to_published.class">SimpleIT\ClaireAppBundle\UseCases\Course\Workflow\ChangeCourseToPublished</parameter>
         <parameter key="simple_it.claire.use_cases.course.workflow.change_course_to_waiting_for_publication.class">SimpleIT\ClaireAppBundle\UseCases\Course\Workflow\ChangeCourseToWaitingForPublication</parameter>
+        <parameter key="simple_it.claire.use_cases.course.content.get_published_content.class">SimpleIT\ClaireAppBundle\UseCases\Course\Content\GetPublishedContent</parameter>
+        <parameter key="simple_it.claire.use_cases.course.content.get_waiting_for_publication_content.class">SimpleIT\ClaireAppBundle\UseCases\Course\Content\GetWaitingForPublicationContent</parameter>
+        <parameter key="simple_it.claire.use_cases.course.content.get_draft_content.class">SimpleIT\ClaireAppBundle\UseCases\Course\Content\GetDraftContent</parameter>
     </parameters>
 
     <services>
-
         <service id="simple_it.claire.use_cases.course.workflow.change_course_to_published" class="%simple_it.claire.use_cases.course.workflow.change_course_to_published.class%">
             <call method="setCourseGateway">
                 <argument type="service" id="simple_it.claire.course.repository.course"/>
@@ -21,6 +23,23 @@
 
         <!--EDITION-->
         <service id="simple_it.claire.use_cases.course.edition.edit_content" class="%simple_it.claire.use_cases.course.edition.edit_content.class%">
+            <call method="setCourseContentGateway">
+                <argument type="service" id="simple_it.claire.course.repository.course_content"/>
+            </call>
+        </service>
+
+        <!--CONTENT-->
+        <service id="simple_it.claire.use_cases.course.content.get_published_content" class="%simple_it.claire.use_cases.course.content.get_published_content.class%">
+            <call method="setCourseContentGateway">
+                <argument type="service" id="simple_it.claire.course.repository.course_content"/>
+            </call>
+        </service>
+        <service id="simple_it.claire.use_cases.course.content.get_waiting_for_publication_content" class="%simple_it.claire.use_cases.course.content.get_waiting_for_publication_content.class%">
+            <call method="setCourseContentGateway">
+                <argument type="service" id="simple_it.claire.course.repository.course_content"/>
+            </call>
+        </service>
+        <service id="simple_it.claire.use_cases.course.content.get_draft_content" class="%simple_it.claire.use_cases.course.content.get_draft_content.class%">
             <call method="setCourseContentGateway">
                 <argument type="service" id="simple_it.claire.course.repository.course_content"/>
             </call>
