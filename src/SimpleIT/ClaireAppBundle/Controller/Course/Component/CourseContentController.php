@@ -2,9 +2,9 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
-use SimpleIT\AppBundle\Annotation\Cache;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
+use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\SaveContentRequestDTO;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -93,11 +93,9 @@ class CourseContentController extends AppController
      */
     public function editAction(Request $request, $courseId)
     {
-        $content = $request->get('content');
-        $content = $this->get('simple_it.claire.course.course')->saveContent(
-            $courseId,
-            $content,
-            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        $ucRequest = new SaveContentRequestDTO($courseId, $content = $request->get('content'));
+        $content = $this->get('simple_it.claire.use_cases.course.edition.edit_content')->execute(
+            $ucRequest
         );
 
         return new Response($content);

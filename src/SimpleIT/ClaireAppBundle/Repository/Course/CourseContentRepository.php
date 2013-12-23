@@ -20,17 +20,17 @@
 
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
-use SimpleIT\AppBundle\Annotation\Cache;
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
+use SimpleIT\ClaireAppBundle\Gateways\Course\Course\CourseContentGateway;
 use SimpleIT\Utils\FormatUtils;
-
 
 /**
  * Class CourseContentRepository
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class CourseContentRepository extends AppRepository
+class CourseContentRepository extends AppRepository implements CourseContentGateway
 {
 
     /**
@@ -90,27 +90,15 @@ class CourseContentRepository extends AppRepository
     }
 
     /**
-     * Update a course content
-     *
-     * @param string $courseIdentifier Course id | slug
-     * @param string $courseContent    Course content
-     * @param array  $parameters       Parameters
-     * @param string $format           Format
-     *
      * @return string
      */
-    public function update(
-        $courseIdentifier,
-        $courseContent,
-        $parameters = array(),
-        $format = FormatUtils::HTML
-    )
+    public function update($courseId, $content)
     {
         return parent::updateResource(
-            $courseContent,
-            array('courseIdentifier' => $courseIdentifier),
-            $parameters,
-            $format
+            $content,
+            array('courseIdentifier' => $courseId),
+            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT),
+            FormatUtils::HTML
         );
     }
 }

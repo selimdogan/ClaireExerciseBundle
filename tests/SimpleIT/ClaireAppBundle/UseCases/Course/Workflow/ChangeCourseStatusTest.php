@@ -42,7 +42,7 @@ abstract class ChangeCourseStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function Execute_WithNonExistingCourse_ThrowException()
     {
-        $this->useCase->setCourseGateway(new CourseGatewayStubException());
+        $this->useCase->setCourseGateway(new CourseNotFoundCourseGatewayStub());
         $this->executeUseCase();
     }
 }

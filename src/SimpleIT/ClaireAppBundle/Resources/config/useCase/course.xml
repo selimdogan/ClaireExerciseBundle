@@ -18,5 +18,12 @@
                 <argument type="service" id="simple_it.claire.course.repository.course"/>
             </call>
         </service>
+
+        <!--EDITION-->
+        <service id="simple_it.claire.use_cases.course.edition.edit_content" class="%simple_it.claire.use_cases.course.edition.edit_content.class%">
+            <call method="setCourseContentGateway">
+                <argument type="service" id="simple_it.claire.course.repository.course_content"/>
+            </call>
+        </service>
     </services>
 </container>

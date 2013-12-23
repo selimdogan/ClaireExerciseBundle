@@ -8,7 +8,7 @@ use SimpleIT\ClaireAppBundle\Gateways\Course\Course\CourseNotFoundException;
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class CourseGatewayStubException implements CourseGateway
+class CourseNotFoundCourseGatewayStub implements CourseGateway
 {
     public function updateToWaitingForPublication($courseId)
     {

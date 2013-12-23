@@ -5,7 +5,6 @@
     <parameters>
         <!--COURSE-->
         <parameter key="simple_it.claire.course.course.class">SimpleIT\ClaireAppBundle\Services\Course\CourseService</parameter>
-        <parameter key="simple_it.claire.course.repository.course_content.class">SimpleIT\ClaireAppBundle\Repository\Course\CourseContentRepository</parameter>
         <parameter key="simple_it.claire.course.repository.course_introduction.class">SimpleIT\ClaireAppBundle\Repository\Course\CourseIntroductionRepository</parameter>
         <parameter key="simple_it.claire.course.repository.course_toc.class">SimpleIT\ClaireAppBundle\Repository\Course\CourseTocRepository</parameter>
         <parameter key="simple_it.claire.course.repository.course_status.class">SimpleIT\ClaireAppBundle\Repository\Course\CourseStatusRepository</parameter>
@@ -28,24 +27,6 @@
 
     <services>
         <!--COURSE-->
-        <service id="simple_it.claire.course.repository.course" class="%simple_it.claire.course.repository.course.class%">
-            <call method="setClient">
-                <argument type="service" id="simple_it.claire.http_client.authenticated"/>
-            </call>
-            <call method="setSerializer">
-                <argument type="service" id="simple_it.claire.serializer"/>
-            </call>
-        </service>
-
-        <service id="simple_it.claire.course.repository.course_content" class="%simple_it.claire.course.repository.course_content.class%">
-            <call method="setClient">
-                <argument type="service" id="simple_it.claire.http_client.authenticated"/>
-            </call>
-            <call method="setSerializer">
-                <argument type="service" id="simple_it.claire.serializer"/>
-            </call>
-        </service>
-
         <service id="simple_it.claire.course.repository.course_introduction" class="%simple_it.claire.course.repository.course_introduction.class%">
             <call method="setClient">
                 <argument type="service" id="simple_it.claire.http_client.authenticated"/>
