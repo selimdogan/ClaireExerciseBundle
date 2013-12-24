@@ -2,6 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\UseCases\Course\Workflow;
 
+use SimpleIT\ClaireAppBundle\Gateways\Course\Course\CourseNotFoundCourseGatewayStub;
 use SimpleIT;
 use SimpleIT\ClaireAppBundle\Requestors\Course\Workflow\ChangeCourseStatusRequest;
 

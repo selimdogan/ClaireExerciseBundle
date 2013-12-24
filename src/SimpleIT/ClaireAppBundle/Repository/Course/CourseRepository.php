@@ -6,8 +6,6 @@ use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\ClaireAppBundle\Gateways\Course\Course\CourseGateway;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
-use SimpleIT\AppBundle\Annotation\Cache;
-use SimpleIT\AppBundle\Annotation\CacheInvalidation;
 
 /**
  * Class CourseRepository
@@ -52,6 +50,17 @@ class CourseRepository extends AppRepository implements CourseGateway
         return $this->findResource(
             array('courseIdentifier' => $courseIdentifier),
             $parameters
+        );
+    }
+
+    /**
+     * @return CourseResource
+     */
+    public function findPublished($courseIdentifier)
+    {
+        return $this->findResource(
+            array('courseIdentifier' => $courseIdentifier),
+            array(CourseResource::STATUS => CourseResource::STATUS_PUBLISHED)
         );
     }
 

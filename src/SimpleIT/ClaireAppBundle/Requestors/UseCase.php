@@ -2,6 +2,8 @@
 
 namespace SimpleIT\ClaireAppBundle\Requestors;
 
+use SimpleIT\ClaireAppBundle\Responders\UseCaseResponse;
+
 /**
  * Interface UseCase
  *
@@ -9,5 +11,8 @@ namespace SimpleIT\ClaireAppBundle\Requestors;
  */
 interface UseCase
 {
+    /**
+     * @return UseCaseResponse
+     */
     public function execute(UseCaseRequest $useCaseRequest);
 }

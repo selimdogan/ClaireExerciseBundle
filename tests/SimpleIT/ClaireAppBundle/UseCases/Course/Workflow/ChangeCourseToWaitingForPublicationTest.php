@@ -1,7 +1,7 @@
 <?php
+use SimpleIT\ClaireAppBundle\Gateways\Course\Course\CourseGatewayDummy;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Workflow\ChangeCourseStatusTest;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Workflow\ChangeCourseToWaitingForPublication;
-use SimpleIT\ClaireAppBundle\UseCases\Course\Workflow\CourseGatewayDummy;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Workflow\DTO\ChangeCourseStatusRequestDTO;
 
 /**
