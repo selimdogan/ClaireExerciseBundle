@@ -4,13 +4,13 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
+use SimpleIT\ClaireAppBundle\Requestors\UseCaseFactory;
 use SimpleIT\ClaireAppBundle\Responders\Course\Content\GetContentResponse;
 use SimpleIT\ClaireAppBundle\Responders\Course\Content\SaveContentResponse;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\GetDraftContentRequestDTO;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\GetPublishedContentRequestDTO;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\GetWaitingForPublicationContentRequestDTO;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\SaveContentRequestDTO;
-use SimpleIT\ClaireAppBundle\UseCases\Course\Content\GetContent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use SimpleIT\AppBundle\Annotation\Cache;
@@ -34,27 +34,22 @@ class CourseContentController extends AppController
     {
         $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_PUBLISHED);
 
+        /** @var UseCaseFactory $useCaseFactory */
+        $useCaseFactory = $this->get('simple_it.claire.use_cases.use_case_factory');
+
         switch ($status) {
             case CourseResource::STATUS_WAITING_FOR_PUBLICATION:
-                /** @var GetContent $useCase */
-                $useCase = $this->get('simple_it.claire.use_cases.course.content.get_waiting_for_publication_content');
-                $ucRequest = new GetWaitingForPublicationContentRequestDTO($courseIdentifier);
+                $getContentResponse = $useCaseFactory->make('GetWaitingForPublicationContent')->execute(new GetWaitingForPublicationContentRequestDTO($courseIdentifier));
                 break;
             case CourseResource::STATUS_DRAFT:
-                /** @var GetContent $useCase */
-                $useCase = $this->get('simple_it.claire.use_cases.course.content.get_draft_content');
-                $ucRequest = new GetDraftContentRequestDTO($courseIdentifier);
+                $getContentResponse = $useCaseFactory->make('GetDraftContent')->execute(new GetDraftContentRequestDTO($courseIdentifier));
                 break;
             default :
-                /** @var GetContent $useCase */
-                $useCase = $this->get('simple_it.claire.use_cases.course.content.get_published_content');
-                $ucRequest = new GetPublishedContentRequestDTO($courseIdentifier);
+                $getContentResponse = $useCaseFactory->make('GetPublishedContent')->execute(new GetPublishedContentRequestDTO($courseIdentifier));
                 break;
         }
 
         /** @var GetContentResponse $getContentResponse */
-        $getContentResponse = $useCase->execute($ucRequest);
-
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
             array('content' => $getContentResponse->getContent())
@@ -122,11 +117,13 @@ class CourseContentController extends AppController
     public function editAction(Request $request, $courseId)
     {
         $ucRequest = new SaveContentRequestDTO($courseId, $content = $request->get('content'));
-        /** @var SaveContentResponse $saveContentResponse */
-        $saveContentResponse = $this->get('simple_it.claire.use_cases.course.edition.save_content')->execute(
-            $ucRequest
-        );
 
-        return new Response($saveContentResponse->getContent());
+        /** @var UseCaseFactory $useCaseFactory */
+        $useCaseFactory = $this->get('simple_it.claire.use_cases.use_case_factory');
+
+        /** @var SaveContentResponse $ucResponse */
+        $ucResponse = $useCaseFactory->make('SaveContent')->execute($ucRequest);
+
+        return new Response($ucResponse->getContent());
     }
 }
