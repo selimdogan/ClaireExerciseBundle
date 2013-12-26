@@ -64,28 +64,6 @@ class CourseContentController extends AppController
         );
     }
 
-//    /**
-//     * View content with status different of published
-//     *
-//     * @param Request $request  Request
-//     * @param int     $courseId Course id
-//     *
-//     * @return \Symfony\Component\HttpFoundation\Response
-//     */
-//    public function viewByStatusAction(Request $request, $courseId)
-//    {
-//        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
-//        $content = $this->get('simple_it.claire.course.course')->getContentToEdit(
-//            $courseId,
-//            $status
-//        );
-//
-//        return $this->render(
-//            'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
-//            array('content' => $content)
-//        );
-//    }
-
     /**
      * Edit course content (GET)
      *

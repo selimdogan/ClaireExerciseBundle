@@ -16,10 +16,9 @@ class WorkflowController extends AppController
     public function changeCourseToWaitingForPublicationAction($courseId)
     {
         try {
-            $ucRequest = new ChangeCourseStatusRequestDTO($courseId);
-            $this->get(
-                'simple_it.claire.use_cases.course.workflow.change_course_to_waiting_for_publication'
-            )->execute($ucRequest);
+            $this->get('simple_it.claire.use_cases.use_case_factory')
+                ->make('ChangeCourseToWaitingForPublication')
+                ->execute(new ChangeCourseStatusRequestDTO($courseId));
 
             return new Response();
         } catch (CourseNotFoundException $cnfe) {
@@ -30,10 +29,9 @@ class WorkflowController extends AppController
     public function changeCourseToPublishedAction($courseId)
     {
         try {
-            $ucRequest = new ChangeCourseStatusRequestDTO($courseId);
-            $this->get(
-                'simple_it.claire.use_cases.course.workflow.change_course_to_published'
-            )->execute($ucRequest);
+            $this->get('simple_it.claire.use_cases.use_case_factory')
+                ->make('ChangeCourseToPublished')
+                ->execute(new ChangeCourseStatusRequestDTO($courseId));
 
             return new Response();
         } catch (CourseNotFoundException $cnfe) {
