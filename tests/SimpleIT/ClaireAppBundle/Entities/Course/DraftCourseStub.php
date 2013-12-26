@@ -7,9 +7,9 @@ use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class PublishedCourseStub extends CourseStub
+class DraftCourseStub extends CourseStub
 {
-    const COURSE_STATUS = CourseResource::STATUS_PUBLISHED;
+    const COURSE_STATUS = CourseResource::STATUS_DRAFT;
 
     public function getStatus()
     {

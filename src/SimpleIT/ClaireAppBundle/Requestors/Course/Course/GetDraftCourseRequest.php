@@ -5,10 +5,10 @@ namespace SimpleIT\ClaireAppBundle\Requestors\Course\Course;
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-interface GetPublishedCourseRequest extends GetCourseRequest
+interface GetDraftCourseRequest extends GetCourseRequest
 {
     /**
-     * @return int|string
+     * @return int
      */
-    public function getCourseIdentifier();
+    public function getCourseId();
 }

@@ -4,58 +4,39 @@ namespace SimpleIT\ClaireAppBundle\UseCases\Course\Course;
 
 use SimpleIT\ClaireAppBundle\Entities\Course\PublishedCourseStub;
 use SimpleIT\ClaireAppBundle\Gateways\Course\Course\CourseGatewayStub;
-use SimpleIT\ClaireAppBundle\Gateways\Course\Course\CourseNotFoundCourseGatewayStub;
-use SimpleIT\ClaireAppBundle\Responders\Course\Course\GetCourseResponse;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Course\DTO\GetPublishedCourseRequestDTO;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class GetPublishedCourseTest extends \PHPUnit_Framework_TestCase
+class GetPublishedCourseTest extends GetCourseTest
 {
-    /**
-     * @var GetPublishedCourse
-     */
-    private $useCase;
 
     /**
      * @test
-     * @expectedException SimpleIT\ClaireAppBundle\Gateways\Course\Course\CourseNotFoundException
      */
-    public function NonExistingCourse_ThrowException()
+    public function CourseId_ReturnCourse()
     {
-        $this->useCase->setCourseGateway(new CourseNotFoundCourseGatewayStub());
-        $request = new GetPublishedCourseRequestDTO(1);
-        $this->useCase->execute($request);
+        $this->executeUseCase();
+        $this->assertCourse();
+        $this->assertEquals(PublishedCourseStub::COURSE_STATUS, $this->response->getStatus());
     }
 
     /**
      * @test
      */
-    public function ReturnCourse()
+    public function CourseSlug_ReturnCourse()
     {
-        $this->useCase->setCourseGateway(new CourseGatewayStub());
-        $request = new GetPublishedCourseRequestDTO(1);
-        /** @var GetCourseResponse $response */
-        $response = $this->useCase->execute($request);
-
-        $this->assertEquals(
-            new \DateTime(PublishedCourseStub::COURSE_CREATED_AT),
-            $response->getCreatedAt()
-        );
-        $this->assertEquals(
-            PublishedCourseStub::COURSE_DISPLAY_LEVEL,
-            $response->getDisplayLevel()
-        );
-        $this->assertEquals(PublishedCourseStub::COURSE_ID, $response->getId());
-        $this->assertEquals(PublishedCourseStub::COURSE_SLUG, $response->getSlug());
-        $this->assertEquals(PublishedCourseStub::COURSE_STATUS, $response->getStatus());
-        $this->assertEquals(PublishedCourseStub::COURSE_TITLE, $response->getTitle());
-        $this->assertEquals(new \DateTime(PublishedCourseStub::COURSE_UPDATED_AT), $response->getUpdatedAt());
+        $this->request = new GetPublishedCourseRequestDTO(self::COURSE_SLUG);
+        $this->executeUseCase();
+        $this->assertCourse();
+        $this->assertEquals(PublishedCourseStub::COURSE_STATUS, $this->response->getStatus());
     }
 
     protected function setup()
     {
         $this->useCase = new GetPublishedCourse();
+        $this->request = new GetPublishedCourseRequestDTO(self::COURSE_ID);
+        $this->useCase->setCourseGateway(new CourseGatewayStub());
     }
 }

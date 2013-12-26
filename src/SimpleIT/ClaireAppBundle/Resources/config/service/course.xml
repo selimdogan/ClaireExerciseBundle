@@ -21,8 +21,6 @@
         <parameter key="simple_it.claire.course.repository.metadata_by_course.class">SimpleIT\ClaireAppBundle\Repository\Course\MetadataByCourseRepository</parameter>
         <parameter key="simple_it.claire.course.repository.metadata_by_part.class">SimpleIT\ClaireAppBundle\Repository\Course\MetadataByPartRepository</parameter>
 
-        <!--TOC-->
-        <parameter key="simple_it.claire.course.toc.add_element_to_toc.class">SimpleIT\ClaireAppBundle\UseCases\Course\Toc\AddElementToToc</parameter>
     </parameters>
 
     <services>
@@ -153,10 +151,6 @@
             <call method="setMetadataByPartRepository">
                 <argument type="service" id="simple_it.claire.course.repository.metadata_by_part"/>
             </call>
-        </service>
-
-        <service id="simple_it.claire.course.toc.add_element_to_toc" class="%simple_it.claire.course.toc.add_element_to_toc.class%">
-            <argument type="service" id="simple_it.claire.course.repository.course_toc"/>
         </service>
     </services>
 </container>

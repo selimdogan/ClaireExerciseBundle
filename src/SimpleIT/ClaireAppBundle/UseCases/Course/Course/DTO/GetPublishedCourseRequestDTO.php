@@ -14,6 +14,11 @@ class GetPublishedCourseRequestDTO implements GetPublishedCourseRequest
      */
     public $courseIdentifier;
 
+    public function __construct($courseIdentifier)
+    {
+        $this->courseIdentifier = $courseIdentifier;
+    }
+
     /**
      * @return int|string
      */

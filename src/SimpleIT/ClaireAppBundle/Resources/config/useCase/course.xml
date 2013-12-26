@@ -2,30 +2,40 @@
 
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <parameters>
-        <parameter key="simple_it.claire.use_cases.course.workflow.change_course_to_published.class">SimpleIT\ClaireAppBundle\UseCases\Course\Workflow\ChangeCourseToPublished</parameter>
-        <parameter key="simple_it.claire.use_cases.course.workflow.change_course_to_waiting_for_publication.class">SimpleIT\ClaireAppBundle\UseCases\Course\Workflow\ChangeCourseToWaitingForPublication</parameter>
+        <!--COURSE-->
+        <parameter key="simple_it.claire.use_cases.course.course.get_published_course.class">SimpleIT\ClaireAppBundle\UseCases\Course\Course\GetPublishedCourse</parameter>
+        <parameter key="simple_it.claire.use_cases.course.course.get_waiting_for_publication_course.class">SimpleIT\ClaireAppBundle\UseCases\Course\Course\GetWaitingForPublicationCourse</parameter>
+        <parameter key="simple_it.claire.use_cases.course.course.get_draft_course.class">SimpleIT\ClaireAppBundle\UseCases\Course\Course\GetDraftCourse</parameter>
+
+        <!--CONTENT-->
         <parameter key="simple_it.claire.use_cases.course.content.get_published_content.class">SimpleIT\ClaireAppBundle\UseCases\Course\Content\GetPublishedContent</parameter>
         <parameter key="simple_it.claire.use_cases.course.content.get_waiting_for_publication_content.class">SimpleIT\ClaireAppBundle\UseCases\Course\Content\GetWaitingForPublicationContent</parameter>
         <parameter key="simple_it.claire.use_cases.course.content.get_draft_content.class">SimpleIT\ClaireAppBundle\UseCases\Course\Content\GetDraftContent</parameter>
         <parameter key="simple_it.claire.use_cases.course.edition.save_content.class">SimpleIT\ClaireAppBundle\UseCases\Course\Content\SaveContent</parameter>
+
+        <!--WORKFLOW-->
+        <parameter key="simple_it.claire.use_cases.course.workflow.change_course_to_published.class">SimpleIT\ClaireAppBundle\UseCases\Course\Workflow\ChangeCourseToPublished</parameter>
+        <parameter key="simple_it.claire.use_cases.course.workflow.change_course_to_waiting_for_publication.class">SimpleIT\ClaireAppBundle\UseCases\Course\Workflow\ChangeCourseToWaitingForPublication</parameter>
+
+        <!--TOC-->
+        <parameter key="simple_it.claire.use_cases.course.toc.add_element_to_toc.class">SimpleIT\ClaireAppBundle\UseCases\Course\Toc\AddElementToToc</parameter>
     </parameters>
 
     <services>
-        <service id="simple_it.claire.use_cases.course.workflow.change_course_to_published" class="%simple_it.claire.use_cases.course.workflow.change_course_to_published.class%">
+        <!--COURSE-->
+        <service id="simple_it.claire.use_cases.course.course.get_published_course" class="%simple_it.claire.use_cases.course.course.get_published_course.class%">
             <call method="setCourseGateway">
                 <argument type="service" id="simple_it.claire.course.repository.course"/>
             </call>
         </service>
-        <service id="simple_it.claire.use_cases.course.workflow.change_course_to_waiting_for_publication" class="%simple_it.claire.use_cases.course.workflow.change_course_to_waiting_for_publication.class%">
+        <service id="simple_it.claire.use_cases.course.course.get_waiting_for_publication_course" class="%simple_it.claire.use_cases.course.course.get_waiting_for_publication_course.class%">
             <call method="setCourseGateway">
                 <argument type="service" id="simple_it.claire.course.repository.course"/>
             </call>
         </service>
-
-        <!--EDITION-->
-        <service id="simple_it.claire.use_cases.course.edition.save_content" class="%simple_it.claire.use_cases.course.edition.save_content.class%">
-            <call method="setCourseContentGateway">
-                <argument type="service" id="simple_it.claire.course.repository.course_content"/>
+        <service id="simple_it.claire.use_cases.course.course.get_draft_course" class="%simple_it.claire.use_cases.course.course.get_draft_course.class%">
+            <call method="setCourseGateway">
+                <argument type="service" id="simple_it.claire.course.repository.course"/>
             </call>
         </service>
 
@@ -43,6 +53,28 @@
         <service id="simple_it.claire.use_cases.course.content.get_draft_content" class="%simple_it.claire.use_cases.course.content.get_draft_content.class%">
             <call method="setCourseContentGateway">
                 <argument type="service" id="simple_it.claire.course.repository.course_content"/>
+            </call>
+        </service>
+
+        <!--EDITION-->
+        <service id="simple_it.claire.use_cases.course.edition.save_content" class="%simple_it.claire.use_cases.course.edition.save_content.class%">
+            <call method="setCourseContentGateway">
+                <argument type="service" id="simple_it.claire.course.repository.course_content"/>
+            </call>
+        </service>
+        <service id="simple_it.claire.use_cases.course.toc.add_element_to_toc" class="%simple_it.claire.use_cases.course.toc.add_element_to_toc.class%">
+            <argument type="service" id="simple_it.claire.course.repository.course_toc"/>
+        </service>
+
+        <!--WORKFLOW-->
+        <service id="simple_it.claire.use_cases.course.workflow.change_course_to_published" class="%simple_it.claire.use_cases.course.workflow.change_course_to_published.class%">
+            <call method="setCourseGateway">
+                <argument type="service" id="simple_it.claire.course.repository.course"/>
+            </call>
+        </service>
+        <service id="simple_it.claire.use_cases.course.workflow.change_course_to_waiting_for_publication" class="%simple_it.claire.use_cases.course.workflow.change_course_to_waiting_for_publication.class%">
+            <call method="setCourseGateway">
+                <argument type="service" id="simple_it.claire.course.repository.course"/>
             </call>
         </service>
     </services>

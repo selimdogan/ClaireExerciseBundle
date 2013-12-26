@@ -55,12 +55,34 @@ class CourseRepository extends AppRepository implements CourseGateway
 
     /**
      * @return CourseResource
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function findPublished($courseIdentifier)
     {
         return $this->findResource(
+            array('courseIdentifier' => $courseIdentifier)
+        );
+    }
+
+    /**
+     * @return CourseResource
+     */
+    public function findWaitingForPublication($courseIdentifier)
+    {
+        return $this->findResource(
             array('courseIdentifier' => $courseIdentifier),
-            array(CourseResource::STATUS => CourseResource::STATUS_PUBLISHED)
+            array(CourseResource::STATUS => CourseResource::STATUS_WAITING_FOR_PUBLICATION)
+        );
+    }
+
+    /**
+     * @return CourseResource
+     */
+    public function findDraft($courseIdentifier)
+    {
+        return $this->findResource(
+            array('courseIdentifier' => $courseIdentifier),
+            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT)
         );
     }
 

@@ -17,6 +17,22 @@ class CourseNotFoundCourseGatewayStub implements CourseGateway
         throw new CourseNotFoundException();
     }
 
+    /**
+     * @return CourseResource
+     */
+    public function findWaitingForPublication($courseId)
+    {
+        throw new CourseNotFoundException();
+    }
+
+    /**
+     * @return CourseResource
+     */
+    public function findDraft($courseId)
+    {
+        throw new CourseNotFoundException();
+    }
+
     public function updateToWaitingForPublication($courseId)
     {
         throw new CourseNotFoundException();

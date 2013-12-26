@@ -17,6 +17,22 @@ class CourseGatewayDummy implements CourseGateway
         return null;
     }
 
+    /**
+     * @return CourseResource::
+     */
+    public function findWaitingForPublication($courseId)
+    {
+        return null;
+    }
+
+    /**
+     * @return CourseResource
+     */
+    public function findDraft($courseId)
+    {
+        return null;
+    }
+
     public function updateToWaitingForPublication($courseId)
     {
     }
