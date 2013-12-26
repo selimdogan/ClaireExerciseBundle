@@ -11,6 +11,7 @@ use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\SaveContentRequestDTO;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Content\GetContent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class CourseContentController
