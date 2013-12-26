@@ -5,6 +5,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\Responders\Course\Content\GetContentResponse;
+use SimpleIT\ClaireAppBundle\Responders\Course\Content\SaveContentResponse;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\GetDraftContentRequestDTO;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\GetPublishedContentRequestDTO;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\GetWaitingForPublicationContentRequestDTO;
@@ -121,10 +122,11 @@ class CourseContentController extends AppController
     public function editAction(Request $request, $courseId)
     {
         $ucRequest = new SaveContentRequestDTO($courseId, $content = $request->get('content'));
-        $content = $this->get('simple_it.claire.use_cases.course.edition.edit_content')->execute(
+        /** @var SaveContentResponse $saveContentResponse */
+        $saveContentResponse = $this->get('simple_it.claire.use_cases.course.edition.save_content')->execute(
             $ucRequest
         );
 
-        return new Response($content);
+        return new Response($saveContentResponse->getContent());
     }
 }
