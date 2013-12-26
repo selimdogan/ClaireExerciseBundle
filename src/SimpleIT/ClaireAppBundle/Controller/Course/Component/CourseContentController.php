@@ -4,6 +4,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
+use SimpleIT\ClaireAppBundle\Responders\Course\Content\GetContentResponse;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\GetDraftContentRequestDTO;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\GetPublishedContentRequestDTO;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\GetWaitingForPublicationContentRequestDTO;
@@ -50,11 +51,12 @@ class CourseContentController extends AppController
                 break;
         }
 
-        $content = $useCase->execute($ucRequest);
+        /** @var GetContentResponse $getContentResponse */
+        $getContentResponse = $useCase->execute($ucRequest);
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
-            array('content' => $content)
+            array('content' => $getContentResponse->getContent())
         );
     }
 

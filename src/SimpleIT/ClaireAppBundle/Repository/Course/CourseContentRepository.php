@@ -33,7 +33,7 @@ use SimpleIT\AppBundle\Annotation\Cache;
  */
 class CourseContentRepository extends AppRepository implements CourseContentGateway
 {
-    const FORMAT_HTML = 'HTML';
+    const FORMAT_HTML = 'html';
 
     /**
      * @var string
