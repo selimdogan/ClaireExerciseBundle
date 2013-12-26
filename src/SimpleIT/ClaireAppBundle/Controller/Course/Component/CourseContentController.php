@@ -14,6 +14,7 @@ use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\SaveContentRequestDTO;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Course\DTO\GetDraftCourseRequestDTO;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class CourseContentController
@@ -63,37 +64,36 @@ class CourseContentController extends AppController
         );
     }
 
-    /**
-     * View content with status different of published
-     *
-     * @param Request $request  Request
-     * @param int     $courseId Course id
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function viewByStatusAction(Request $request, $courseId)
-    {
-        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
-        $content = $this->get('simple_it.claire.course.course')->getContentToEdit(
-            $courseId,
-            $status
-        );
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
-            array('content' => $content)
-        );
-    }
+//    /**
+//     * View content with status different of published
+//     *
+//     * @param Request $request  Request
+//     * @param int     $courseId Course id
+//     *
+//     * @return \Symfony\Component\HttpFoundation\Response
+//     */
+//    public function viewByStatusAction(Request $request, $courseId)
+//    {
+//        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
+//        $content = $this->get('simple_it.claire.course.course')->getContentToEdit(
+//            $courseId,
+//            $status
+//        );
+//
+//        return $this->render(
+//            'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
+//            array('content' => $content)
+//        );
+//    }
 
     /**
      * Edit course content (GET)
      *
-     * @param Request $request  Request
-     * @param int     $courseId Course id
+     * @param int $courseId Course id
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editViewAction(Request $request, $courseId)
+    public function editViewAction($courseId)
     {
         /** @var GetContentResponse $ucResponse */
         $ucResponse = $this->get('simple_it.claire.use_cases.use_case_factory')
