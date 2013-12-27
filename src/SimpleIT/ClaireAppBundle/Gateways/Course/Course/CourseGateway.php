@@ -10,6 +10,11 @@ use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 interface CourseGateway
 {
     /**
+     * @return CourseResource[]
+     */
+    public function findAllStatus($courseIdentifier);
+
+    /**
      * @return CourseResource
      */
     public function findPublished($courseIdentifier);
