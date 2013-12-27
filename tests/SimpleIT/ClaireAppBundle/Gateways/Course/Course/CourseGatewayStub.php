@@ -13,6 +13,18 @@ use SimpleIT\ClaireAppBundle\Entities\Course\WaitingForPublicationCourseStub;
 class CourseGatewayStub implements CourseGateway
 {
     /**
+     * @return CourseResource[]
+     */
+    public function findAllStatus($courseIdentifier)
+    {
+        return array(
+            new PublishedCourseStub(),
+            new WaitingForPublicationCourseStub(),
+            new DraftCourseStub()
+        );
+    }
+
+    /**
      * @return CourseResource
      */
     public function findPublished($courseIdentifier)
