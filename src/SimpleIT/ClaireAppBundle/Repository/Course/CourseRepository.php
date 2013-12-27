@@ -27,6 +27,11 @@ class CourseRepository extends AppRepository implements CourseGateway
     protected $resourceClass = 'SimpleIT\ApiResourcesBundle\Course\CourseResource';
 
     /**
+     * @var CourseStatusRepository
+     */
+    private $courseStatusRepository;
+
+    /**
      * Find a list of courses
      *
      * @param CollectionInformation $collectionInformation Collection information
@@ -36,6 +41,14 @@ class CourseRepository extends AppRepository implements CourseGateway
     public function findAll(CollectionInformation $collectionInformation = null)
     {
         return $this->findAllResources(array(), $collectionInformation);
+    }
+
+    /**
+     * @return CourseResource[]
+     */
+    public function findAllStatus($courseIdentifier)
+    {
+        return $this->courseStatusRepository->findAll($courseIdentifier);
     }
 
     /**
@@ -163,5 +176,10 @@ class CourseRepository extends AppRepository implements CourseGateway
             array(CourseResource::STATUS => CourseResource::STATUS_WAITING_FOR_PUBLICATION)
 
         );
+    }
+
+    public function setCourseStatusRepository(CourseStatusRepository $courseStatusRepository)
+    {
+        $this->courseStatusRepository = $courseStatusRepository;
     }
 }

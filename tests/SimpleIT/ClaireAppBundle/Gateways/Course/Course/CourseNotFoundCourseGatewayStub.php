@@ -10,6 +10,14 @@ use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 class CourseNotFoundCourseGatewayStub implements CourseGateway
 {
     /**
+     * @return CourseResource[]
+     */
+    public function findAllStatus($courseIdentifier)
+    {
+        throw new CourseNotFoundException();
+    }
+
+    /**
      * @return CourseResource
      */
     public function findPublished($courseIdentifier)

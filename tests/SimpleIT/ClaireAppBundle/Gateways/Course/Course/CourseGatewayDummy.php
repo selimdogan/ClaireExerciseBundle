@@ -10,6 +10,14 @@ use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 class CourseGatewayDummy implements CourseGateway
 {
     /**
+     * @return CourseResource[]
+     */
+    public function findAllStatus($courseIdentifier)
+    {
+        return null;
+    }
+
+    /**
      * @return CourseResource
      */
     public function findPublished($courseIdentifier)
