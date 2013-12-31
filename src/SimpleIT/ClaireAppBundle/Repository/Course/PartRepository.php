@@ -83,7 +83,6 @@ class PartRepository extends AppRepository
         $status
     )
     {
-
         return $this->updateResource(
             $part,
             array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier),

@@ -6,7 +6,6 @@ use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\UseCases\Course\Toc\DTO\AddElementToTocRequestDTO;
-use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TocBuilder;
 use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TocBuilderForEdition;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

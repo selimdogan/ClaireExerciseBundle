@@ -1,6 +1,5 @@
 <?php
 
-
 namespace SimpleIT\ClaireAppBundle\Form\Type\AssociatedContent;
 
 use Symfony\Component\Form\AbstractType;

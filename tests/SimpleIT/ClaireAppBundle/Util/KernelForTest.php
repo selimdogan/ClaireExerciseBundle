@@ -13,8 +13,15 @@ use Symfony\Component\HttpKernel\Kernel;
  */
 class KernelForTest extends Kernel
 {
+    /**
+     * @var \Symfony\Component\Filesystem\Filesystem
+     */
+    private $fileSystem;
+
     public function __construct($debug = false)
     {
+        $this->fileSystem = new Filesystem();
+        $this->fileSystem->remove(array(__DIR__ . '/cache', __DIR__ . '/logs'));
         parent::__construct('test', $debug);
     }
 
@@ -61,7 +68,6 @@ class KernelForTest extends Kernel
     public function shutdown()
     {
         parent::shutdown();
-        $fs = new Filesystem();
-        $fs->remove(array(__DIR__ . '/cache', __DIR__ . '/logs'));
+        $this->fileSystem->remove(array(__DIR__ . '/cache', __DIR__ . '/logs'));
     }
 }

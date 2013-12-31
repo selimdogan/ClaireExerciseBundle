@@ -1,6 +1,5 @@
 <?php
 
-
 namespace SimpleIT\ClaireAppBundle\Services\User;
 
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
