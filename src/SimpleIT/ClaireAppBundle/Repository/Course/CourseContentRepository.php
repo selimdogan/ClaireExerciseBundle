@@ -20,9 +20,9 @@
 
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
+use OC\BusinessRules\Gateways\Course\Course\CourseContentGateway;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
-use SimpleIT\ClaireAppBundle\Gateways\Course\Course\CourseContentGateway;
 use SimpleIT\Utils\FormatUtils;
 use SimpleIT\AppBundle\Annotation\Cache;
 

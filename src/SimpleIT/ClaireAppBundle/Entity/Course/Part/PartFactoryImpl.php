@@ -2,8 +2,8 @@
 
 namespace SimpleIT\ClaireAppBundle\Entity\Course\Part;
 
+use OC\BusinessRules\Entities\Course\Part\PartFactory;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
-use SimpleIT\ClaireAppBundle\Entities\Course\Part\PartFactory;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>

@@ -3,8 +3,8 @@
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\AppBundle\Controller\AppController;
-use SimpleIT\ClaireAppBundle\Gateways\Course\Course\CourseNotFoundException;
-use SimpleIT\ClaireAppBundle\UseCases\Course\Workflow\DTO\ChangeCourseStatusRequestDTO;
+use OC\BusinessRules\Gateways\Course\Course\CourseNotFoundException;
+use OC\BusinessRules\UseCases\Course\Workflow\DTO\ChangeCourseStatusRequestDTO;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 

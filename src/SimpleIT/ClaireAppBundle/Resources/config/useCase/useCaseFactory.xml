@@ -3,10 +3,10 @@
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <parameters>
         <!--COURSE-->
-        <parameter key="simple_it.claire.use_cases.use_case_factory.class">SimpleIT\ClaireAppBundle\UseCases\UseCaseFactoryImpl</parameter>
+        <parameter key="oc.claire.use_cases.use_case_factory.class">OC\BusinessRules\UseCases\UseCaseFactoryImpl</parameter>
     </parameters>
     <services>
-        <service id="simple_it.claire.use_cases.use_case_factory" class="%simple_it.claire.use_cases.use_case_factory.class%">
+        <service id="oc.claire.use_cases.use_case_factory" class="%oc.claire.use_cases.use_case_factory.class%">
             <call method="setInjector">
                 <argument type="service" id="service_container"/>
             </call>

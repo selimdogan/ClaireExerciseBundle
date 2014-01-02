@@ -4,14 +4,12 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Controller\AppController;
-use SimpleIT\ClaireAppBundle\Requestors\UseCaseFactory;
-use SimpleIT\ClaireAppBundle\Responders\Course\Content\GetContentResponse;
-use SimpleIT\ClaireAppBundle\Responders\Course\Content\SaveContentResponse;
-use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\GetDraftContentRequestDTO;
-use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\GetPublishedContentRequestDTO;
-use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\GetWaitingForPublicationContentRequestDTO;
-use SimpleIT\ClaireAppBundle\UseCases\Course\Content\DTO\SaveContentRequestDTO;
-use SimpleIT\ClaireAppBundle\UseCases\Course\Course\DTO\GetDraftCourseRequestDTO;
+use OC\BusinessRules\Responders\Course\Content\SaveContentResponse;
+use OC\BusinessRules\UseCases\Course\Content\DTO\GetDraftContentRequestDTO;
+use OC\BusinessRules\UseCases\Course\Content\DTO\GetPublishedContentRequestDTO;
+use OC\BusinessRules\UseCases\Course\Content\DTO\GetWaitingForPublicationContentRequestDTO;
+use OC\BusinessRules\UseCases\Course\Content\DTO\SaveContentRequestDTO;
+use OC\BusinessRules\UseCases\Course\Course\DTO\GetDraftCourseRequestDTO;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use SimpleIT\AppBundle\Annotation\Cache;
@@ -35,7 +33,7 @@ class CourseContentController extends AppController
     {
         $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_PUBLISHED);
 
-        /** @var UseCaseFactory $useCaseFactory */
+        /** @var \OC\BusinessRules\Requestors\UseCaseFactory $useCaseFactory */
         $useCaseFactory = $this->get('simple_it.claire.use_cases.use_case_factory');
 
         switch ($status) {
@@ -56,7 +54,7 @@ class CourseContentController extends AppController
                 break;
         }
 
-        /** @var GetContentResponse $getContentResponse */
+        /** @var \OC\BusinessRules\Responders\Course\Content\GetContentResponse $getContentResponse */
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
@@ -73,7 +71,7 @@ class CourseContentController extends AppController
      */
     public function editViewAction($courseId)
     {
-        /** @var GetContentResponse $ucResponse */
+        /** @var \OC\BusinessRules\Responders\Course\Content\GetContentResponse $ucResponse */
         $ucResponse = $this->get('simple_it.claire.use_cases.use_case_factory')
             ->make('GetDraftContent')
             ->execute(new GetDraftCourseRequestDTO($courseId));
