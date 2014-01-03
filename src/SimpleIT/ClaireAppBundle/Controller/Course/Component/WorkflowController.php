@@ -16,7 +16,7 @@ class WorkflowController extends AppController
     public function changeCourseToWaitingForPublicationAction($courseId)
     {
         try {
-            $this->get('simple_it.claire.use_cases.use_case_factory')
+            $this->get('oc.claire.use_cases.use_case_factory')
                 ->make('ChangeCourseToWaitingForPublication')
                 ->execute(new ChangeCourseStatusRequestDTO($courseId));
 
@@ -29,7 +29,7 @@ class WorkflowController extends AppController
     public function changeCourseToPublishedAction($courseId)
     {
         try {
-            $this->get('simple_it.claire.use_cases.use_case_factory')
+            $this->get('oc.claire.use_cases.use_case_factory')
                 ->make('ChangeCourseToPublished')
                 ->execute(new ChangeCourseStatusRequestDTO($courseId));
 

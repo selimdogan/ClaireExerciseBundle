@@ -36,7 +36,7 @@ class CourseContentController extends AppController
         $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_PUBLISHED);
 
         /** @var UseCaseFactory $useCaseFactory */
-        $useCaseFactory = $this->get('simple_it.claire.use_cases.use_case_factory');
+        $useCaseFactory = $this->get('oc.claire.use_cases.use_case_factory');
 
         switch ($status) {
             case CourseResource::STATUS_WAITING_FOR_PUBLICATION:
@@ -74,7 +74,7 @@ class CourseContentController extends AppController
     public function editViewAction($courseId)
     {
         /** @var GetContentResponse $ucResponse */
-        $ucResponse = $this->get('simple_it.claire.use_cases.use_case_factory')
+        $ucResponse = $this->get('oc.claire.use_cases.use_case_factory')
             ->make('GetDraftContent')
             ->execute(new GetDraftCourseRequestDTO($courseId));
 
@@ -102,7 +102,7 @@ class CourseContentController extends AppController
     public function editAction(Request $request, $courseId)
     {
         /** @var SaveContentResponse $ucResponse */
-        $ucResponse = $this->get('simple_it.claire.use_cases.use_case_factory')
+        $ucResponse = $this->get('oc.claire.use_cases.use_case_factory')
             ->make('SaveContent')
             ->execute(new SaveContentRequestDTO($courseId, $content = $request->get('content')));
 
