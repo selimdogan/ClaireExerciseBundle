@@ -1,6 +1,6 @@
 <?php
 
-namespace OC\CLAIRE\BusinessRules\Gateways\Course\Course;
+namespace OC\CLAIRE\BusinessRules\Exceptions\Course\Course;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>

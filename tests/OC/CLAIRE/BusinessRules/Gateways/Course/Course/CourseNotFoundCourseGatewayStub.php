@@ -2,6 +2,7 @@
 
 namespace OC\CLAIRE\BusinessRules\Gateways\Course\Course;
 
+use OC\CLAIRE\BusinessRules\Exceptions\Course\Course\CourseNotFoundException;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 
 /**

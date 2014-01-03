@@ -23,6 +23,7 @@ class UseCaseFactoryImpl implements UseCaseFactory
     public function make($useCaseName)
     {
         switch ($useCaseName) {
+            // COURSE
             case 'GetPublishedCourse':
                 $useCase = $this->injector->get(
                     'oc.claire.use_cases.course.course.get_published_course'
@@ -36,6 +37,7 @@ class UseCaseFactoryImpl implements UseCaseFactory
             case 'GetDraftCourse':
                 $useCase = $this->injector->get('oc.claire.use_cases.course.course.get_draft_course');
                 break;
+            // CONTENT
             case 'GetPublishedContent':
                 $useCase = $this->injector->get(
                     'oc.claire.use_cases.course.content.get_published_content'
@@ -51,6 +53,12 @@ class UseCaseFactoryImpl implements UseCaseFactory
                     'oc.claire.use_cases.course.content.get_draft_content'
                 );
                 break;
+            case 'SaveContent':
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.edition.save_content'
+                );
+                break;
+            // WORKFLOW
             case 'ChangeCourseToPublished':
                 $useCase = $this->injector->get(
                     'oc.claire.use_cases.course.workflow.change_course_to_published'
@@ -61,9 +69,15 @@ class UseCaseFactoryImpl implements UseCaseFactory
                     'oc.claire.use_cases.course.workflow.change_course_to_waiting_for_publication'
                 );
                 break;
-            case 'SaveContent':
+            // METADATA
+            case 'GetCourseDifficulty':
                 $useCase = $this->injector->get(
-                    'oc.claire.use_cases.course.edition.save_content'
+                    'oc.claire.use_cases.course.difficulty.get_course_difficulty'
+                );
+                break;
+            case 'SaveCourseDifficulty':
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.difficulty.save_course_difficulty'
                 );
                 break;
             case 'AddElementToToc':

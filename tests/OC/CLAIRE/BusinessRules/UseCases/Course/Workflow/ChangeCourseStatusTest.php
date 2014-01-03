@@ -38,7 +38,7 @@ abstract class ChangeCourseStatusTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseNotFoundException
+     * @expectedException \OC\CLAIRE\BusinessRules\Exceptions\Course\Course\CourseNotFoundException
      */
     public function Execute_WithNonExistingCourse_ThrowException()
     {

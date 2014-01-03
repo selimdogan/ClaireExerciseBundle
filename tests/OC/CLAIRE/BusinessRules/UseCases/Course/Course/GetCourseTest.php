@@ -34,7 +34,7 @@ abstract class GetCourseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseNotFoundException
+     * @expectedException \OC\CLAIRE\BusinessRules\Exceptions\Course\Course\CourseNotFoundException
      */
     public function NonExistingCourse_ThrowException()
     {
