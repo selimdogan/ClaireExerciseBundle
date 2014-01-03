@@ -9,7 +9,7 @@ use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class SecurityRuleBySecurityUserRepository
- * 
+ *
  * @author Kévin Letord <kevin.letord@simple-it.fr>
  */
 class SecurityRuleBySecurityUserRepository extends AppRepository

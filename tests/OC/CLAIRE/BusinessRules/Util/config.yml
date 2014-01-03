@@ -1,0 +1,8 @@
+simple_it_claire_app:
+    host: ''
+
+simple_it_app:
+    client_api:
+        claire_api:
+            host: claire_api_host
+            default_format: json

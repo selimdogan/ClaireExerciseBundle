@@ -32,7 +32,7 @@ class TocItemFactoryImpl implements TocItemFactory
                 $item = new ChapterCreationItem();
                 break;
             default:
-                throw new \InvalidArgumentException();
+                throw new UnsupportedSubtypeException();
         }
 
         return $item;

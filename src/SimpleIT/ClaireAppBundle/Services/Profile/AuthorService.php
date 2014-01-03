@@ -44,7 +44,6 @@ class AuthorService
         $this->authorRepository = $authorRepository;
     }
 
-
     /**
      * @param integer|string $authorIdentifier Author identifier
      *
