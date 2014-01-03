@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Entity\Course\Part;
 
-use OC\BusinessRules\Entities\Course\Part\PartFactory;
+use OC\CLAIRE\BusinessRules\Entities\Course\Part\PartFactory;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 
 /**

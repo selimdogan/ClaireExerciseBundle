@@ -2,17 +2,15 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
-use OC\BusinessRules\Responders\Course\Toc\AddElementToTocResponse;
+use OC\CLAIRE\BusinessRules\Responders\Course\Toc\AddElementToTocResponse;
+use OC\CLAIRE\BusinessRules\UseCases\Course\Toc\DTO\AddElementToTocRequestDTO;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Controller\AppController;
-use OC\BusinessRules\UseCases\Course\Toc\DTO\AddElementToTocRequestDTO;
 use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TocBuilderForEdition;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class TocByCourseController
