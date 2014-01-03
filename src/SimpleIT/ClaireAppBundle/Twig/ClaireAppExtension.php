@@ -88,7 +88,7 @@ class ClaireAppExtension extends \Twig_Extension
                         $content .= '<i class="icon-ccnc" title="NC"></i>';
                         break;
                     case MetadataResource::LICENSE_CC_SA:
-                        $content .= '<i class="icon-ccnd" title="SA"></i>';
+                        $content .= '<i class="icon-ccsa" title="SA"></i>';
                         break;
                     default:
                         break;
