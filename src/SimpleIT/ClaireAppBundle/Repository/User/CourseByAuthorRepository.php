@@ -1,6 +1,5 @@
 <?php
 
-
 namespace SimpleIT\ClaireAppBundle\Repository\User;
 
 use Doctrine\Common\Collections\Collection;

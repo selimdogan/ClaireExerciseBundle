@@ -59,6 +59,7 @@ class CategoryFactory
             $category = self::create($categoryResource);
             $categories[] = $category;
         }
+
         return $categories;
     }
 }
