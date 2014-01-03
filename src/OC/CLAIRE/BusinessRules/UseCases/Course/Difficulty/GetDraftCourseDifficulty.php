@@ -7,12 +7,12 @@ use OC\CLAIRE\BusinessRules\Requestors\Course\Difficulty\GetCourseDifficultyRequ
 use OC\CLAIRE\BusinessRules\Requestors\UseCase;
 use OC\CLAIRE\BusinessRules\Requestors\UseCaseRequest;
 use OC\CLAIRE\BusinessRules\Responders\UseCaseResponse;
-use OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty\DTO\GetCourseDifficultyResponseDTO;
+use OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty\DTO\GetDraftCourseDifficultyResponseDTO;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class GetCourseDifficulty implements UseCase
+class GetDraftCourseDifficulty implements UseCase
 {
     /**
      * @var CourseDifficultyGateway
@@ -26,7 +26,7 @@ class GetCourseDifficulty implements UseCase
     {
         /** @var GetCourseDifficultyRequest $useCaseRequest */
         $difficulty = $this->courseDifficultyGateway->find($useCaseRequest->getCourseId());
-        $response = new GetCourseDifficultyResponseDTO($difficulty);
+        $response = new GetDraftCourseDifficultyResponseDTO($difficulty);
 
         return $response;
     }

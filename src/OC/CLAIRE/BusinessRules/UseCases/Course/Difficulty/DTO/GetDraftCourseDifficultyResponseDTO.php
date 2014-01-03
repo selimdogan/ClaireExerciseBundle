@@ -7,7 +7,7 @@ use OC\CLAIRE\BusinessRules\Responders\Course\Difficulty\GetCourseDifficultyResp
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class GetCourseDifficultyResponseDTO implements GetCourseDifficultyResponse
+class GetDraftCourseDifficultyResponseDTO implements GetCourseDifficultyResponse
 {
     /**
      * @var string

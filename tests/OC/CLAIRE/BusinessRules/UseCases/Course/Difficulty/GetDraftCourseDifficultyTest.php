@@ -7,12 +7,12 @@ use OC\CLAIRE\BusinessRules\Gateways\Course\Difficulty\CourseDifficultyGatewaySp
 use OC\CLAIRE\BusinessRules\Gateways\Course\Difficulty\CourseNotFoundCourseDifficultyGatewayStub;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Difficulty\WithoutDifficultyCourseDifficultyGatewayStub;
 use OC\CLAIRE\BusinessRules\Responders\Course\Difficulty\GetCourseDifficultyResponse;
-use OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty\DTO\GetCourseDifficultyRequestDTO;
+use OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty\DTO\GetDraftCourseRequestDTO;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class GetCourseDifficultyTest extends \PHPUnit_Framework_TestCase
+class GetDraftCourseDifficultyTest extends \PHPUnit_Framework_TestCase
 {
     const WITHOUT_DIFFICULTY_COURSE_ID = 998;
 
@@ -26,7 +26,7 @@ class GetCourseDifficultyTest extends \PHPUnit_Framework_TestCase
     private $response;
 
     /**
-     * @var GetCourseDifficulty
+     * @var GetDraftCourseDifficulty
      */
     private $useCase;
 
@@ -37,7 +37,7 @@ class GetCourseDifficultyTest extends \PHPUnit_Framework_TestCase
     public function NonExistingCourse_ThrowException()
     {
         $this->useCase->setCourseDifficultyGateway(new CourseNotFoundCourseDifficultyGatewayStub());
-        $this->executeUseCase(new GetCourseDifficultyRequestDTO(self::NON_EXISTING_COURSE_ID));
+        $this->executeUseCase(new GetDraftCourseRequestDTO(self::NON_EXISTING_COURSE_ID));
     }
 
     private function executeUseCase($request)
@@ -54,7 +54,7 @@ class GetCourseDifficultyTest extends \PHPUnit_Framework_TestCase
             new WithoutDifficultyCourseDifficultyGatewayStub()
         );
         $this->executeUseCase(
-            new GetCourseDifficultyRequestDTO(self::WITHOUT_DIFFICULTY_COURSE_ID)
+            new GetDraftCourseRequestDTO(self::WITHOUT_DIFFICULTY_COURSE_ID)
         );
         $this->assertDifficulty('');
     }
@@ -70,12 +70,12 @@ class GetCourseDifficultyTest extends \PHPUnit_Framework_TestCase
     public function ReturnDifficulty()
     {
         $this->useCase->setCourseDifficultyGateway(new CourseDifficultyGatewaySpy());
-        $this->executeUseCase(new GetCourseDifficultyRequestDTO(self::EASY_COURSE_ID));
+        $this->executeUseCase(new GetDraftCourseRequestDTO(self::EASY_COURSE_ID));
         $this->assertDifficulty(Difficulty::EASY);
     }
 
     protected function setup()
     {
-        $this->useCase = new GetCourseDifficulty();
+        $this->useCase = new GetDraftCourseDifficulty();
     }
 }

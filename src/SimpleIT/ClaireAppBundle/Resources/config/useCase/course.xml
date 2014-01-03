@@ -21,7 +21,7 @@
         <parameter key="oc.claire.use_cases.course.toc.add_element_to_toc.class">OC\CLAIRE\BusinessRules\UseCases\Course\Toc\AddElementToToc</parameter>
 
         <!--METADATA-->
-        <parameter key="oc.claire.use_cases.course.difficulty.get_course_difficulty.class">OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty\GetCourseDifficulty</parameter>
+        <parameter key="oc.claire.use_cases.course.difficulty.get_course_difficulty.class">OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty\GetDraftCourseDifficulty</parameter>
         <parameter key="oc.claire.use_cases.course.difficulty.save_course_difficulty.class">OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty\SaveCourseDifficulty</parameter>
     </parameters>
 
@@ -82,7 +82,7 @@
             </call>
         </service>
             <!--METADATA-->
-        <service id="oc.claire.use_cases.course.difficulty.get_course_difficulty" class="%oc.claire.use_cases.course.difficulty.get_course_difficulty.class%">
+        <service id="oc.claire.use_cases.course.difficulty.get_draft_course_difficulty" class="%oc.claire.use_cases.course.difficulty.get_course_difficulty.class%">
             <call method="setCourseDifficultyGateway">
                 <argument type="service" id="oc.claire.course.repository.course_difficulty"/>
             </call>

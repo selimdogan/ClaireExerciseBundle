@@ -70,9 +70,9 @@ class UseCaseFactoryImpl implements UseCaseFactory
                 );
                 break;
             // METADATA
-            case 'GetCourseDifficulty':
+            case 'GetDraftCourseDifficulty':
                 $useCase = $this->injector->get(
-                    'oc.claire.use_cases.course.difficulty.get_course_difficulty'
+                    'oc.claire.use_cases.course.difficulty.get_draft_course_difficulty'
                 );
                 break;
             case 'SaveCourseDifficulty':
