@@ -3,6 +3,7 @@
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
 use OC\CLAIRE\BusinessRules\Gateways\Course\Difficulty\CourseDifficultyGateway;
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
 
 /**
@@ -32,6 +33,10 @@ class CourseDifficultyRepository extends AppRepository implements CourseDifficul
 
     public function update($courseId, $difficulty)
     {
-        return null;
+        return parent::updateResource(
+            $difficulty,
+            array('courseIdentifier' => $courseId, 'metadataIdentifier' => 'difficulty'),
+            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT)
+        );
     }
 }

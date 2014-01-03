@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class CourseDifficultyController extends AppController
 {
-    public function editAction($courseId)
+    public function editViewAction($courseId)
     {
         try {
             $difficulty = $this->get('oc.claire.use_cases.use_case_factory')
@@ -22,7 +22,10 @@ class CourseDifficultyController extends AppController
                 ->execute(new GetCourseDifficultyRequestDTO($courseId));
             $form = $this->createForm(new CourseDifficultyType(), $difficulty);
 
-            return new Response();
+            return $this->render(
+                'SimpleITClaireAppBundle:Course/Metadata/Component:editDifficulty.html.twig',
+                array('form' => $form)
+            );
 
         } catch (CourseNotFoundException $cnfe) {
             throw new NotFoundHttpException();
