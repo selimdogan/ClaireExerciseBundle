@@ -25,7 +25,7 @@ class GetDraftCourseDifficulty implements UseCase
     public function execute(UseCaseRequest $useCaseRequest)
     {
         /** @var GetCourseDifficultyRequest $useCaseRequest */
-        $difficulty = $this->courseDifficultyGateway->find($useCaseRequest->getCourseId());
+        $difficulty = $this->courseDifficultyGateway->findDraft($useCaseRequest->getCourseId());
         $response = new GetDraftCourseDifficultyResponseDTO($difficulty);
 
         return $response;

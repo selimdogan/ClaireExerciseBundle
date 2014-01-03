@@ -12,7 +12,7 @@ class CourseNotFoundCourseDifficultyGatewayStub implements CourseDifficultyGatew
     /**
      * @return string
      */
-    public function find($courseId)
+    public function findDraft($courseId)
     {
         throw new CourseNotFoundException();
     }

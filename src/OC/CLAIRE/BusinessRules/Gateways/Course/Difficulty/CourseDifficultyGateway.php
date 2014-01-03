@@ -10,7 +10,7 @@ interface CourseDifficultyGateway
     /**
      * @return string
      */
-    public function find($courseId);
+    public function findDraft($courseId);
 
     public function update($courseId, $difficulty);
 }

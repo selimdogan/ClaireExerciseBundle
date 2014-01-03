@@ -22,7 +22,7 @@ class CourseDifficultyGatewaySpy implements CourseDifficultyGateway
     /**
      * @return string
      */
-    public function find($courseId)
+    public function findDraft($courseId)
     {
         return Difficulty::EASY;
     }

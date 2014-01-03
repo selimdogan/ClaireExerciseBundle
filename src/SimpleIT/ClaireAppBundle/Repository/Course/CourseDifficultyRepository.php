@@ -24,7 +24,7 @@ class CourseDifficultyRepository extends AppRepository implements CourseDifficul
     /**
      * @return string
      */
-    public function find($courseId)
+    public function findDraft($courseId)
     {
         return parent::findResource(
             array('courseIdentifier' => $courseId, 'metadataIdentifier' => 'difficulty')

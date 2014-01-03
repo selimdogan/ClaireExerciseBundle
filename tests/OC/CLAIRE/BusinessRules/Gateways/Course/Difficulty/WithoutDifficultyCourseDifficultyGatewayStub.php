@@ -10,7 +10,7 @@ class WithoutDifficultyCourseDifficultyGatewayStub implements CourseDifficultyGa
     /**
      * @return string
      */
-    public function find($courseId)
+    public function findDraft($courseId)
     {
         return null;
     }
