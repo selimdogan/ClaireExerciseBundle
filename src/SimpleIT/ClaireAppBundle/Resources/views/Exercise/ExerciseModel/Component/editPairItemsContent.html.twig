@@ -1,6 +1,6 @@
 <h2>Edition d'appariement d'objets</h2>
 
-<form action="{{ path('simple_it_claire_component_exercise_exercise_model_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
+<form class="js-ajax-form" action="{{ path('simple_it_claire_component_exercise_exercise_model_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
     <input type="hidden" name="model-type" value="pair-items">
 
     <div>
@@ -27,7 +27,7 @@
                 <div>
                     <h3>Bloc n° {{ _cptBlock + 1 }}</h3>
                     <label>Clé de la métadonnée utilisée pour créer la partie mobile
-                        <input type="text" size="20" name="blocks[{{ _cptBlock }}][metaKey]" value="{{ block.pairMetaKey }}"/>
+                        <input required type="text" size="20" name="blocks[{{ _cptBlock }}][metaKey]" value="{{ block.pairMetaKey }}"/>
                     </label>
 
                     <h3>Ressources du bloc</h3>

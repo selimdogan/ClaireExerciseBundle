@@ -19,6 +19,19 @@
 
         $('.js-resource-item').resourceItems();
 
+        $(document).on('submit', '.js-ajax-form', function (event) {
+            event.preventDefault();
+
+            var $form = $(event.target);
+
+            $.post($form.attr('action'), $form.serialize())
+            .done(function() {
+                toastr.success('Exercice sauvegardé')
+            })
+            .fail(function() {
+                toastr.error('Erreur durant la sauvegarde')
+            });
+        });
     });
 
 })();
