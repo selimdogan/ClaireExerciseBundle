@@ -7,7 +7,7 @@ use OC\CLAIRE\BusinessRules\Requestors\Course\Difficulty\GetCourseDifficultyRequ
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class GetDraftCourseRequestDTO implements GetCourseDifficultyRequest
+class GetDraftCourseDifficultyRequestDTO implements GetCourseDifficultyRequest
 {
     /**
      * @var int

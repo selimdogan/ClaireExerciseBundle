@@ -7,7 +7,7 @@ use OC\CLAIRE\BusinessRules\Gateways\Course\Difficulty\CourseDifficultyGatewaySp
 use OC\CLAIRE\BusinessRules\Gateways\Course\Difficulty\CourseNotFoundCourseDifficultyGatewayStub;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Difficulty\WithoutDifficultyCourseDifficultyGatewayStub;
 use OC\CLAIRE\BusinessRules\Responders\Course\Difficulty\GetCourseDifficultyResponse;
-use OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty\DTO\GetDraftCourseRequestDTO;
+use OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty\DTO\GetDraftCourseDifficultyRequestDTO;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
@@ -37,7 +37,7 @@ class GetDraftCourseDifficultyTest extends \PHPUnit_Framework_TestCase
     public function NonExistingCourse_ThrowException()
     {
         $this->useCase->setCourseDifficultyGateway(new CourseNotFoundCourseDifficultyGatewayStub());
-        $this->executeUseCase(new GetDraftCourseRequestDTO(self::NON_EXISTING_COURSE_ID));
+        $this->executeUseCase(new GetDraftCourseDifficultyRequestDTO(self::NON_EXISTING_COURSE_ID));
     }
 
     private function executeUseCase($request)
@@ -54,7 +54,7 @@ class GetDraftCourseDifficultyTest extends \PHPUnit_Framework_TestCase
             new WithoutDifficultyCourseDifficultyGatewayStub()
         );
         $this->executeUseCase(
-            new GetDraftCourseRequestDTO(self::WITHOUT_DIFFICULTY_COURSE_ID)
+            new GetDraftCourseDifficultyRequestDTO(self::WITHOUT_DIFFICULTY_COURSE_ID)
         );
         $this->assertDifficulty('');
     }
@@ -70,7 +70,7 @@ class GetDraftCourseDifficultyTest extends \PHPUnit_Framework_TestCase
     public function ReturnDifficulty()
     {
         $this->useCase->setCourseDifficultyGateway(new CourseDifficultyGatewaySpy());
-        $this->executeUseCase(new GetDraftCourseRequestDTO(self::EASY_COURSE_ID));
+        $this->executeUseCase(new GetDraftCourseDifficultyRequestDTO(self::EASY_COURSE_ID));
         $this->assertDifficulty(Difficulty::EASY);
     }
 
