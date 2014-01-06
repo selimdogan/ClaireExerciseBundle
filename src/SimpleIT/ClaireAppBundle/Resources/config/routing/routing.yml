@@ -80,6 +80,10 @@ simple_it_claire_component_exercise_attempts:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/component_attempt.yml"
     prefix:   /components/attempts
 
+simple_it_claire_component_exercise_test_attempts:
+    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/component_test_attempt.yml"
+    prefix:   /components/test-attempts
+
 simple_it_claire_component_exercise_exercises:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/component_exercise.yml"
     prefix:   /components/exercises

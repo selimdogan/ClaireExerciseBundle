@@ -1,0 +1,5 @@
+simple_it_claire_component_exercise_attempt_by_test_attempt_view:
+    pattern: /{testAttemptId}/{position}
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/AttemptByTestAttempt:view, position: 0 }
+    requirements:
+        _method: GET

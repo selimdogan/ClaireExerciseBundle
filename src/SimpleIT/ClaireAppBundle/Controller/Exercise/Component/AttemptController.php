@@ -24,11 +24,9 @@ class AttemptController extends AppController
     {
         $itemId = $this->get('simple_it.claire.exercise.item')->getFirstItemId($attemptId);
 
-        return $this->redirect(
-            $this->generateUrl(
-                'simple_it_claire_component_exercise_item_by_attempt_view',
-                array('attemptId' => $attemptId, 'itemId' => $itemId)
-            )
+        return $this->forward(
+            'SimpleITClaireAppBundle:Exercise/Component/ItemByAttempt:view',
+            array('attemptId' => $attemptId, 'itemId' => $itemId)
         );
     }
 }

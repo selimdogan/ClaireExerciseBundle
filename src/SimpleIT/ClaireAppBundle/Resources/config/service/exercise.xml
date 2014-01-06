@@ -37,6 +37,7 @@
         <parameter key="simple_it.claire.exercise.attempt.class">SimpleIT\ClaireAppBundle\Services\Exercise\Attempt\AttemptService</parameter>
         <parameter key="simple_it.claire.exercise.repository.attempt.class">SimpleIT\ClaireAppBundle\Repository\Exercise\Attempt\AttemptRepository</parameter>
         <parameter key="simple_it.claire.exercise.repository.attempt_by_exercise.class">SimpleIT\ClaireAppBundle\Repository\Exercise\Attempt\AttemptByExerciseRepository</parameter>
+        <parameter key="simple_it.claire.exercise.repository.attempt_by_test_attempt.class">SimpleIT\ClaireAppBundle\Repository\Exercise\Attempt\AttemptByTestAttemptRepository</parameter>
     </parameters>
 
     <services>
@@ -217,6 +218,14 @@
                 <argument type="service" id="simple_it.claire.serializer"/>
             </call>
         </service>
+        <service id="simple_it.claire.exercise.repository.attempt_by_test_attempt" class="%simple_it.claire.exercise.repository.attempt_by_test_attempt.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
 
         <!-- ***** SERVICES ***** -->
 
@@ -324,6 +333,9 @@
         <service id="simple_it.claire.exercise.attempt" class="%simple_it.claire.exercise.attempt.class%">
             <call method="setAttemptByExerciseRepository">
                 <argument type="service" id="simple_it.claire.exercise.repository.attempt_by_exercise"/>
+            </call>
+            <call method="setAttemptByTestAttemptRepository">
+                <argument type="service" id="simple_it.claire.exercise.repository.attempt_by_test_attempt"/>
             </call>
             <call method="setAttemptRepository">
                 <argument type="service" id="simple_it.claire.exercise.repository.attempt"/>
