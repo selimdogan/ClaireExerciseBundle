@@ -14,7 +14,7 @@ class CourseDifficultyRepository extends AppRepository implements CourseDifficul
     /**
      * @type string
      */
-    protected $path = 'courses/{courseIdentifier}/metadatas/{metadataIdentifier}';
+    protected $path = 'courses/{courseIdentifier}';
 
     /**
      * @type string
@@ -26,17 +26,21 @@ class CourseDifficultyRepository extends AppRepository implements CourseDifficul
      */
     public function findDraft($courseId)
     {
-        return parent::findResource(
-            array('courseIdentifier' => $courseId, 'metadataIdentifier' => 'difficulty'),
+        /** @var CourseResource $course */
+        $course = parent::findResource(
+            array('courseIdentifier' => $courseId),
             array(CourseResource::STATUS => CourseResource::STATUS_DRAFT)
         );
+        return $course->getDifficulty();
     }
 
     public function update($courseId, $difficulty)
     {
+        $course = new CourseResource();
+        $course->setDifficulty($difficulty);
         return parent::updateResource(
-            $difficulty,
-            array('courseIdentifier' => $courseId, 'metadataIdentifier' => 'difficulty'),
+            $course,
+            array('courseIdentifier' => $courseId),
             array(CourseResource::STATUS => CourseResource::STATUS_DRAFT)
         );
     }
