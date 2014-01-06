@@ -6,7 +6,7 @@ simple_it_claire_component_course_course_metadata_description_edit:
 
 simple_it_claire_component_course_course_metadata_difficulty_edit:
     pattern: /difficulty
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDifficulty }
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Difficulty/CourseDifficulty:edit }
     requirements:
         _method: POST
 
