@@ -1,13 +1,13 @@
 <?php
 
-namespace OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty;
+namespace OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty;
 
 use OC\CLAIRE\BusinessRules\Entities\Difficulty\Difficulty;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseGatewaySpy;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseNotFoundCourseGatewayStub;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Course\EmptyCourseGatewayStub;
 use OC\CLAIRE\BusinessRules\Responders\Course\Difficulty\GetDraftCourseDifficultyResponse;
-use OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty\DTO\GetDraftCourseDifficultyRequestDTO;
+use OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\DTO\GetDraftCourseDifficultyRequestDTO;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>

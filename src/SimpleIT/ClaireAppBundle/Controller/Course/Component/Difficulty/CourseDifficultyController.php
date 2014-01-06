@@ -4,8 +4,8 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component\Difficulty;
 
 use OC\CLAIRE\BusinessRules\Exceptions\Course\Course\CourseNotFoundException;
 use OC\CLAIRE\BusinessRules\Responders\Course\Difficulty\GetDraftCourseDifficultyResponse;
-use OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty\DTO\GetDraftCourseDifficultyRequestDTO;
-use OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty\DTO\SaveCourseDifficultyRequestDTO;
+use OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\DTO\GetDraftCourseDifficultyRequestDTO;
+use OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\DTO\SaveCourseDifficultyRequestDTO;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\Form\Course\Model\CourseDifficultyModel;
 use SimpleIT\ClaireAppBundle\Form\Course\Type\CourseDifficultyType;

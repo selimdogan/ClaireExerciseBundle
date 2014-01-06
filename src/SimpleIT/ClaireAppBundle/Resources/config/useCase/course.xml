@@ -21,8 +21,8 @@
         <parameter key="oc.claire.use_cases.course.toc.add_element_to_toc.class">OC\CLAIRE\BusinessRules\UseCases\Course\Toc\AddElementToToc</parameter>
 
         <!--METADATA-->
-        <parameter key="oc.claire.use_cases.course.difficulty.get_course_difficulty.class">OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty\GetDraftCourseDifficulty</parameter>
-        <parameter key="oc.claire.use_cases.course.difficulty.save_course_difficulty.class">OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty\SaveCourseDifficulty</parameter>
+        <parameter key="oc.claire.use_cases.course.difficulty.get_course_difficulty.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\GetDraftCourseDifficulty</parameter>
+        <parameter key="oc.claire.use_cases.course.difficulty.save_course_difficulty.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\SaveCourseDifficulty</parameter>
     </parameters>
 
     <services>

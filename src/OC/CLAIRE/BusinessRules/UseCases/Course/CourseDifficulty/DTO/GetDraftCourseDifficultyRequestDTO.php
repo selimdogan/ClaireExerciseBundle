@@ -1,6 +1,6 @@
 <?php
 
-namespace OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty\DTO;
+namespace OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\DTO;
 
 use OC\CLAIRE\BusinessRules\Requestors\Course\Difficulty\GetCourseDifficultyRequest;
 

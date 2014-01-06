@@ -1,6 +1,6 @@
 <?php
 
-namespace OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty;
+namespace OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty;
 
 use OC\CLAIRE\BusinessRules\Entities\Course\Course\CourseFactory;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseGateway;
