@@ -32,7 +32,6 @@ class CourseDifficultyController extends AppController
                 new CourseDifficultyType(),
                 new CourseDifficultyModel($ucResponse->getDifficulty())
             );
-
             return $this->render(
                 'SimpleITClaireAppBundle:Course/Metadata/Component:editDifficulty.html.twig',
                 array(
