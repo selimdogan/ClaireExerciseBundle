@@ -1,13 +1,13 @@
 <?php
 
-namespace OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\DTO;
+namespace OC\CLAIRE\BusinessRules\UseCases\Course\PartDifficulty\DTO;
 
-use OC\CLAIRE\BusinessRules\Responders\Course\CourseDifficulty\GetDraftCourseDifficultyResponse;
+use OC\CLAIRE\BusinessRules\Responders\Course\PartDifficulty\GetDraftPartDifficultyResponse;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class GetDraftCourseDifficultyResponseDTO implements GetDraftCourseDifficultyResponse
+class GetDraftPartDifficultyResponseDTO implements GetDraftPartDifficultyResponse
 {
     /**
      * @var string

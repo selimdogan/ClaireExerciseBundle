@@ -51,3 +51,9 @@ simple_it_claire_component_course_status_waiting_for_publication:
     defaults: { _controller : SimpleITClaireAppBundle:Course/Component/Workflow:changeCourseToWaitingForPublication }
     requirements :
         -method: POST
+
+simple_it_claire_component_course_difficulty:
+    pattern: /{courseId}/difficulty
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/CourseDifficulty:edit }
+    requirements:
+        _method: POST

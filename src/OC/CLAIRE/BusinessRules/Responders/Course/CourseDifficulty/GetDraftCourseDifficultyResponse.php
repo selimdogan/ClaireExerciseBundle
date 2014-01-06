@@ -1,6 +1,6 @@
 <?php
 
-namespace OC\CLAIRE\BusinessRules\Responders\Course\Difficulty;
+namespace OC\CLAIRE\BusinessRules\Responders\Course\CourseDifficulty;
 
 use OC\CLAIRE\BusinessRules\Responders\UseCaseResponse;
 

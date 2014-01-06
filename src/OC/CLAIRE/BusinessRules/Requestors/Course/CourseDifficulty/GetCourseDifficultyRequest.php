@@ -1,6 +1,6 @@
 <?php
 
-namespace OC\CLAIRE\BusinessRules\Requestors\Course\Difficulty;
+namespace OC\CLAIRE\BusinessRules\Requestors\Course\CourseDifficulty;
 
 use OC\CLAIRE\BusinessRules\Requestors\UseCaseRequest;
 

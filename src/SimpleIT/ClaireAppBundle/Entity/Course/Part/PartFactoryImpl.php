@@ -13,7 +13,7 @@ class PartFactoryImpl implements PartFactory
     /**
      * @return PartResource
      */
-    public function make($subtype)
+    public function make($subtype = null)
     {
         switch ($subtype) {
             case PartResource::TITLE_1:
@@ -27,6 +27,9 @@ class PartFactoryImpl implements PartFactory
             case PartResource::TITLE_3:
                 $part = new PartResource();
                 $part->setSubtype(PartResource::TITLE_3);
+                break;
+            case null:
+                $part = new PartResource();
                 break;
             default:
                 throw new \InvalidArgumentException();

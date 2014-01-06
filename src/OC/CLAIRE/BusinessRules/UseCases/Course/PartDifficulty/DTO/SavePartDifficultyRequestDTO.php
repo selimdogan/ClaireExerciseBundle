@@ -1,13 +1,13 @@
 <?php
 
-namespace OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\DTO;
+namespace OC\CLAIRE\BusinessRules\UseCases\Course\PartDifficulty\DTO;
 
-use OC\CLAIRE\BusinessRules\Requestors\Course\CourseDifficulty\SaveCourseDifficultyRequest;
+use OC\CLAIRE\BusinessRules\Requestors\Course\PartDifficulty\SavePartDifficultyRequest;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class SaveCourseDifficultyRequestDTO implements SaveCourseDifficultyRequest
+class SavePartDifficultyRequestDTO implements SavePartDifficultyRequest
 {
     /**
      * @var int
@@ -15,13 +15,19 @@ class SaveCourseDifficultyRequestDTO implements SaveCourseDifficultyRequest
     public $courseId;
 
     /**
+     * @var int
+     */
+    public $partId;
+
+    /**
      * @var string
      */
     public $difficulty;
 
-    public function __construct($courseId, $difficulty)
+    public function __construct($courseId, $partId, $difficulty)
     {
         $this->courseId = $courseId;
+        $this->partId = $partId;
         $this->difficulty = $difficulty;
     }
 
@@ -39,5 +45,13 @@ class SaveCourseDifficultyRequestDTO implements SaveCourseDifficultyRequest
     public function getDifficulty()
     {
         return $this->difficulty;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPartId()
+    {
+        return $this->partId;
     }
 }

@@ -10,7 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class CourseDifficultyType extends AbstractType
+class PartDifficultyType
 {
     /**
      * @inheritdoc
@@ -34,7 +34,7 @@ class CourseDifficultyType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-                'data_class' => 'SimpleIT\ClaireAppBundle\Form\Course\Model\CourseDifficultyModel',
+                'data_class' => 'SimpleIT\ClaireAppBundle\Form\Course\Model\PartDifficultyModel',
             ));
     }
 
@@ -43,6 +43,6 @@ class CourseDifficultyType extends AbstractType
      */
     public function getName()
     {
-        return 'CourseDifficulty';
+        return 'PartDifficulty';
     }
 }

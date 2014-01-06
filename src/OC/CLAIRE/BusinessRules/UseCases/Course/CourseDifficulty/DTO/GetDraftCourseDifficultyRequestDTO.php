@@ -2,7 +2,7 @@
 
 namespace OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\DTO;
 
-use OC\CLAIRE\BusinessRules\Requestors\Course\Difficulty\GetCourseDifficultyRequest;
+use OC\CLAIRE\BusinessRules\Requestors\Course\CourseDifficulty\GetCourseDifficultyRequest;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>

@@ -1,6 +1,7 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
+use OC\CLAIRE\BusinessRules\Gateways\Course\Part\PartGateway;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
@@ -11,7 +12,7 @@ use SimpleIT\AppBundle\Annotation\Cache;
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class PartRepository extends AppRepository
+class PartRepository extends AppRepository implements PartGateway
 {
     /**
      * @var string
@@ -89,4 +90,28 @@ class PartRepository extends AppRepository
             array(CourseResource::STATUS => $status)
         );
     }
+
+    /**
+     * @return PartResource
+     */
+    public function findDraft($courseId, $partId)
+    {
+        return $this->findResource(
+            array(
+                'courseIdentifier' => $courseId,
+                'partIdentifier'   => $partId
+            ),
+            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT)
+        );
+    }
+
+    public function updateDraft($courseId, $partId, PartResource $part)
+    {
+        return $this->updateResource(
+            $part,
+            array('courseIdentifier' => $courseId, 'partIdentifier' => $partId),
+            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT)
+        );
+    }
+
 }

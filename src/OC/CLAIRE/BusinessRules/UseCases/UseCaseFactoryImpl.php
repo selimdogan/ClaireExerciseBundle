@@ -80,6 +80,11 @@ class UseCaseFactoryImpl implements UseCaseFactory
                     'oc.claire.use_cases.course.difficulty.save_course_difficulty'
                 );
                 break;
+            case 'GetDraftPartDifficulty':
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.part_difficulty.get_draft_part_difficulty'
+                );
+                break;
             case 'AddElementToToc':
                 $useCase = $this->injector->get(
                     'oc.claire.use_cases.course.toc.add_element_to_toc'

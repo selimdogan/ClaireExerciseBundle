@@ -12,5 +12,5 @@ interface PartFactory
     /**
      * @return PartResource
      */
-    public function make($subtype);
+    public function make($subtype = null);
 }

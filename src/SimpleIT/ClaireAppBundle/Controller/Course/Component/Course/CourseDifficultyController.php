@@ -1,9 +1,9 @@
 <?php
 
-namespace SimpleIT\ClaireAppBundle\Controller\Course\Component\Difficulty;
+namespace SimpleIT\ClaireAppBundle\Controller\Course\Component\Course;
 
 use OC\CLAIRE\BusinessRules\Exceptions\Course\Course\CourseNotFoundException;
-use OC\CLAIRE\BusinessRules\Responders\Course\Difficulty\GetDraftCourseDifficultyResponse;
+use OC\CLAIRE\BusinessRules\Responders\Course\CourseDifficulty\GetDraftCourseDifficultyResponse;
 use OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\DTO\GetDraftCourseDifficultyRequestDTO;
 use OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\DTO\SaveCourseDifficultyRequestDTO;
 use SimpleIT\AppBundle\Controller\AppController;

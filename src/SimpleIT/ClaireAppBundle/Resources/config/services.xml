@@ -11,6 +11,7 @@
         <import resource="factory/factory.xml"/>
         <import resource="useCase/useCaseFactory.xml"/>
         <import resource="useCase/course.xml"/>
+        <import resource="useCase/part.xml"/>
     </imports>
 
     <parameters>

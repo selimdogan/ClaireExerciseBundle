@@ -5,7 +5,7 @@ namespace SimpleIT\ClaireAppBundle\Form\Course\Model;
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class CourseDifficultyModel
+class PartDifficultyModel
 {
     /**
      * @var string

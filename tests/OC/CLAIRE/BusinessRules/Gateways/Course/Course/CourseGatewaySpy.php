@@ -16,7 +16,7 @@ class CourseGatewaySpy implements CourseGateway
     public $courseId;
 
     /**
-     * @var CourseResource::
+     * @var CourseResource
      */
     public $course;
 

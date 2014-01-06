@@ -4,7 +4,7 @@ namespace OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty;
 
 use OC\CLAIRE\BusinessRules\Entities\Course\Course\CourseFactory;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseGateway;
-use OC\CLAIRE\BusinessRules\Requestors\Course\Difficulty\SaveCourseDifficultyRequest;
+use OC\CLAIRE\BusinessRules\Requestors\Course\CourseDifficulty\SaveCourseDifficultyRequest;
 use OC\CLAIRE\BusinessRules\Requestors\UseCase;
 use OC\CLAIRE\BusinessRules\Requestors\UseCaseRequest;
 use OC\CLAIRE\BusinessRules\Responders\UseCaseResponse;
