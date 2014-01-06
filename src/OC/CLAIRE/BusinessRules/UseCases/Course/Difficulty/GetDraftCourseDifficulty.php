@@ -2,7 +2,7 @@
 
 namespace OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty;
 
-use OC\CLAIRE\BusinessRules\Gateways\Course\Difficulty\CourseDifficultyGateway;
+use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseGateway;
 use OC\CLAIRE\BusinessRules\Requestors\Course\Difficulty\GetCourseDifficultyRequest;
 use OC\CLAIRE\BusinessRules\Requestors\UseCase;
 use OC\CLAIRE\BusinessRules\Requestors\UseCaseRequest;
@@ -15,9 +15,9 @@ use OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty\DTO\GetDraftCourseDifficu
 class GetDraftCourseDifficulty implements UseCase
 {
     /**
-     * @var CourseDifficultyGateway
+     * @var CourseGateway
      */
-    private $courseDifficultyGateway;
+    private $courseGateway;
 
     /**
      * @return UseCaseResponse
@@ -25,14 +25,14 @@ class GetDraftCourseDifficulty implements UseCase
     public function execute(UseCaseRequest $useCaseRequest)
     {
         /** @var GetCourseDifficultyRequest $useCaseRequest */
-        $difficulty = $this->courseDifficultyGateway->findDraft($useCaseRequest->getCourseId());
-        $response = new GetDraftCourseDifficultyResponseDTO($difficulty);
+        $course = $this->courseGateway->findDraft($useCaseRequest->getCourseId());
+        $response = new GetDraftCourseDifficultyResponseDTO($course->getDifficulty());
 
         return $response;
     }
 
-    public function setCourseDifficultyGateway(CourseDifficultyGateway $courseDifficultyGateway)
+    public function setCourseGateway(CourseGateway $courseGateway)
     {
-        $this->courseDifficultyGateway = $courseDifficultyGateway;
+        $this->courseGateway = $courseGateway;
     }
 }

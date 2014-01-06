@@ -32,4 +32,6 @@ interface CourseGateway
     public function updateToWaitingForPublication($courseId);
 
     public function updateToPublished($courseId);
+
+    public function updateDraft($courseId, CourseResource $course);
 }

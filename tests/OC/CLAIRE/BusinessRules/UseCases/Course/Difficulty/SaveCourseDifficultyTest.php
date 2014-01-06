@@ -3,9 +3,10 @@
 namespace OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty;
 
 use OC\CLAIRE\BusinessRules\Entities\Difficulty\Difficulty;
-use OC\CLAIRE\BusinessRules\Gateways\Course\Difficulty\CourseDifficultyGatewaySpy;
-use OC\CLAIRE\BusinessRules\Gateways\Course\Difficulty\CourseNotFoundCourseDifficultyGatewayStub;
+use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseGatewaySpy;
+use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseNotFoundCourseGatewayStub;
 use OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty\DTO\SaveCourseDifficultyRequestDTO;
+use SimpleIT\ClaireAppBundle\Entity\Course\Course\CourseFactoryImpl;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
@@ -24,9 +25,9 @@ class SaveCourseDifficultyTest extends \PHPUnit_Framework_TestCase
     private $useCase;
 
     /**
-     * @var CourseDifficultyGatewaySpy
+     * @var CourseGatewaySpy
      */
-    private $courseDifficultyGateway;
+    private $courseGateway;
 
     /**
      * @test
@@ -34,7 +35,7 @@ class SaveCourseDifficultyTest extends \PHPUnit_Framework_TestCase
      */
     public function NonExistingCourse_ThrowException()
     {
-        $this->useCase->setCourseDifficultyGateway(new CourseNotFoundCourseDifficultyGatewayStub());
+        $this->useCase->setCourseGateway(new CourseNotFoundCourseGatewayStub());
         $this->executeUseCase(
             new SaveCourseDifficultyRequestDTO(self::NON_EXISTING_COURSE_ID, Difficulty::EASY)
         );
@@ -50,8 +51,8 @@ class SaveCourseDifficultyTest extends \PHPUnit_Framework_TestCase
      */
     public function SaveDifficulty()
     {
-        $this->courseDifficultyGateway = new CourseDifficultyGatewaySpy();
-        $this->useCase->setCourseDifficultyGateway($this->courseDifficultyGateway);
+        $this->courseGateway = new CourseGatewaySpy();
+        $this->useCase->setCourseGateway($this->courseGateway);
         $this->executeUseCase(
             new SaveCourseDifficultyRequestDTO(self::COURSE_1_ID, self::COURSE_1_DIFFICULTY)
         );
@@ -60,15 +61,16 @@ class SaveCourseDifficultyTest extends \PHPUnit_Framework_TestCase
 
     private function assertDifficulty()
     {
-        $this->assertEquals(self::COURSE_1_ID, $this->courseDifficultyGateway->updatedCourseId);
+        $this->assertEquals(self::COURSE_1_ID, $this->courseGateway->courseId);
         $this->assertEquals(
             self::COURSE_1_DIFFICULTY,
-            $this->courseDifficultyGateway->updatedDifficulty
+            $this->courseGateway->course->getDifficulty()
         );
     }
 
     protected function setup()
     {
         $this->useCase = new SaveCourseDifficulty();
+        $this->useCase->setCourseFactory(new CourseFactoryImpl());
     }
 }

@@ -178,6 +178,15 @@ class CourseRepository extends AppRepository implements CourseGateway
         );
     }
 
+    public function updateDraft($courseId, CourseResource $course)
+    {
+        return $this->updateResource(
+            $course,
+            array('courseIdentifier' => $courseId,),
+            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT)
+        );
+    }
+
     public function setCourseStatusRepository(CourseStatusRepository $courseStatusRepository)
     {
         $this->courseStatusRepository = $courseStatusRepository;

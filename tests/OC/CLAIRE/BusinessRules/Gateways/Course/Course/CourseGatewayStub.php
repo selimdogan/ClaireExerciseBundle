@@ -58,4 +58,8 @@ class CourseGatewayStub implements CourseGateway
         return null;
     }
 
+    public function updateDraft($courseId, CourseResource $course)
+    {
+        return null;
+    }
 }
