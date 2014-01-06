@@ -83,13 +83,14 @@
         </service>
             <!--METADATA-->
         <service id="oc.claire.use_cases.course.difficulty.get_draft_course_difficulty" class="%oc.claire.use_cases.course.difficulty.get_course_difficulty.class%">
-            <call method="setCourseDifficultyGateway">
-                <argument type="service" id="oc.claire.course.repository.course_difficulty"/>
+            <call method="setCourseGateway">
+                <argument type="service" id="simple_it.claire.course.repository.course"/>
             </call>
         </service>
         <service id="oc.claire.use_cases.course.difficulty.save_course_difficulty" class="%oc.claire.use_cases.course.difficulty.save_course_difficulty.class%">
-            <call method="setCourseDifficultyGateway">
-                <argument type="service" id="oc.claire.course.repository.course_difficulty"/>
+            <call method="setCourseGateway">
+                <argument type="service" id="simple_it.claire.course.repository.course"/>
+                <argument type="service" id="oc.claire.entity.course_factory"/>
             </call>
         </service>
 

@@ -2,7 +2,8 @@
 
 namespace OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty;
 
-use OC\CLAIRE\BusinessRules\Gateways\Course\Difficulty\CourseDifficultyGateway;
+use OC\CLAIRE\BusinessRules\Entities\Course\Course\CourseFactory;
+use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseGateway;
 use OC\CLAIRE\BusinessRules\Requestors\Course\Difficulty\SaveCourseDifficultyRequest;
 use OC\CLAIRE\BusinessRules\Requestors\UseCase;
 use OC\CLAIRE\BusinessRules\Requestors\UseCaseRequest;
@@ -14,24 +15,33 @@ use OC\CLAIRE\BusinessRules\Responders\UseCaseResponse;
 class SaveCourseDifficulty implements UseCase
 {
     /**
-     * @var CourseDifficultyGateway
+     * @var CourseGateway
      */
-    private $courseDifficultyGateway;
+    private $courseGateway;
+
+    /**
+     * @var CourseFactory
+     */
+    private $courseFactory;
 
     /**
      * @return UseCaseResponse
      */
     public function execute(UseCaseRequest $useCaseRequest)
     {
+        $course = $this->courseFactory->make();
         /** @var SaveCourseDifficultyRequest $useCaseRequest */
-        $this->courseDifficultyGateway->update(
-            $useCaseRequest->getCourseId(),
-            $useCaseRequest->getDifficulty()
-        );
+        $course->setDifficulty($useCaseRequest->getDifficulty());
+        $this->courseGateway->updateDraft($useCaseRequest->getCourseId(), $course);
     }
 
-    public function setCourseDifficultyGateway(CourseDifficultyGateway $courseDifficultyGateway)
+    public function setCourseGateway(CourseGateway $courseGateway)
     {
-        $this->courseDifficultyGateway = $courseDifficultyGateway;
+        $this->courseGateway = $courseGateway;
+    }
+
+    public function setCourseFactory(CourseFactory $courseFactory)
+    {
+        $this->courseFactory = $courseFactory;
     }
 }

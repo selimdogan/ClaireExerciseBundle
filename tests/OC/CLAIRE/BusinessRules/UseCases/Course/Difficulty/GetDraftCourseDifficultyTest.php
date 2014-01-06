@@ -3,9 +3,9 @@
 namespace OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty;
 
 use OC\CLAIRE\BusinessRules\Entities\Difficulty\Difficulty;
-use OC\CLAIRE\BusinessRules\Gateways\Course\Difficulty\CourseDifficultyGatewaySpy;
-use OC\CLAIRE\BusinessRules\Gateways\Course\Difficulty\CourseNotFoundCourseDifficultyGatewayStub;
-use OC\CLAIRE\BusinessRules\Gateways\Course\Difficulty\WithoutDifficultyCourseDifficultyGatewayStub;
+use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseGatewaySpy;
+use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseNotFoundCourseGatewayStub;
+use OC\CLAIRE\BusinessRules\Gateways\Course\Course\EmptyCourseGatewayStub;
 use OC\CLAIRE\BusinessRules\Responders\Course\Difficulty\GetCourseDifficultyResponse;
 use OC\CLAIRE\BusinessRules\UseCases\Course\Difficulty\DTO\GetDraftCourseDifficultyRequestDTO;
 
@@ -36,7 +36,7 @@ class GetDraftCourseDifficultyTest extends \PHPUnit_Framework_TestCase
      */
     public function NonExistingCourse_ThrowException()
     {
-        $this->useCase->setCourseDifficultyGateway(new CourseNotFoundCourseDifficultyGatewayStub());
+        $this->useCase->setCourseGateway(new CourseNotFoundCourseGatewayStub());
         $this->executeUseCase(new GetDraftCourseDifficultyRequestDTO(self::NON_EXISTING_COURSE_ID));
     }
 
@@ -50,9 +50,7 @@ class GetDraftCourseDifficultyTest extends \PHPUnit_Framework_TestCase
      */
     public function WithoutDifficulty_ReturnNoDifficulty()
     {
-        $this->useCase->setCourseDifficultyGateway(
-            new WithoutDifficultyCourseDifficultyGatewayStub()
-        );
+        $this->useCase->setCourseGateway(new EmptyCourseGatewayStub());
         $this->executeUseCase(
             new GetDraftCourseDifficultyRequestDTO(self::WITHOUT_DIFFICULTY_COURSE_ID)
         );
@@ -69,7 +67,7 @@ class GetDraftCourseDifficultyTest extends \PHPUnit_Framework_TestCase
      */
     public function ReturnDifficulty()
     {
-        $this->useCase->setCourseDifficultyGateway(new CourseDifficultyGatewaySpy());
+        $this->useCase->setCourseGateway(new CourseGatewaySpy());
         $this->executeUseCase(new GetDraftCourseDifficultyRequestDTO(self::EASY_COURSE_ID));
         $this->assertDifficulty(Difficulty::EASY);
     }

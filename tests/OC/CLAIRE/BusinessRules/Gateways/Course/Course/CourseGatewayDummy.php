@@ -49,4 +49,8 @@ class CourseGatewayDummy implements CourseGateway
     {
     }
 
+    public function updateDraft($courseId, CourseResource $course)
+    {
+        return null;
+    }
 }
