@@ -1,3 +1,6 @@
+Pages : {{ ownerResources.totalPageNumber }}
+
+{% import 'SimpleITClaireAppBundle:Common:macros.html.twig' as macro %}
 <h3>Liste des ressources</h3>
 <ul class="simple-list">
     {% for ownerResource in ownerResources %}
@@ -51,3 +54,4 @@
         </li>
     {% endfor %}
 </ul>
+{{ macro.pagination(ownerResources, collectionInformation, paginationUrl) }}

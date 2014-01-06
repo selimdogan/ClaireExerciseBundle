@@ -10,6 +10,7 @@ use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\OwnerResourceByOw
 use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\OwnerResourceByResourceRepository;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\OwnerResourceRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\Utils\Collection\Page;
 
 /**
  * Class OwnerResourceService
@@ -87,24 +88,32 @@ class OwnerResourceService
      * Get all owner resources and if a user is specified, show only the public resource except
      * user's ones
      *
-     * @param array  $metadataArray
-     * @param array  $miscArray
-     * @param null   $userId
-     * @param bool   $personalResource
-     * @param string $type
+     * @param array                 $metadataArray
+     * @param array                 $miscArray
+     * @param CollectionInformation $inputCollectionInformation
+     * @param null                  $userId
+     * @param bool                  $personalResource
      *
      * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
     public function getAll(
         array $metadataArray,
         array $miscArray,
+        $inputCollectionInformation = null,
         $userId = null,
-        $personalResource = true,
-        $type = null
+        $personalResource = true
     )
     {
-
         $collectionInformation = new CollectionInformation();
+        $pageNumber = 1;
+        if ($inputCollectionInformation !== null
+            && $inputCollectionInformation->getPage() !== null
+            && $inputCollectionInformation->getPage()->getPageNumber() !== null
+        ) {
+            $pageNumber = $inputCollectionInformation->getPage()->getPageNumber();
+        }
+        $page = new Page(20, $pageNumber);
+        $collectionInformation->setPage($page);
 
         if (!empty ($metadataArray)) {
             // metadata
@@ -131,7 +140,8 @@ class OwnerResourceService
             $collectionInformation->addFilter('keywords', $keywordFilter);
         }
 
-        if (!empty($type)) {
+        $type = $inputCollectionInformation->getFilter('type');
+        if ($type !== null) {
             $collectionInformation->addFilter('type', $type);
         }
 
@@ -145,7 +155,7 @@ class OwnerResourceService
             if (!is_null($userId) && $personalResource === false) {
                 $collectionInformation->addFilter('public-except-user', $userId);
             }
-            $paginatedCollection = $this->ownerResourceRepository->findAll($collectionInformation);
+            $paginatedCollection = $this->ownerResourceRepository->findAll();
         }
 
         foreach ($paginatedCollection as &$ownerResource) {

@@ -54,33 +54,6 @@ class OwnerResourceController extends AppController
     }
 
     /**
-     * List ownerResources
-     *
-     * @param CollectionInformation $collectionInformation Collection Information
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function listAction(CollectionInformation $collectionInformation)
-    {
-        $metadataArray = $this->metadataToArray($collectionInformation);
-        $miscArray = $this->miscToArray($collectionInformation);
-
-        $ownerResources = $this->get('simple_it.claire.exercise.owner_resource')->getAll
-            (
-                $metadataArray,
-                $miscArray
-            );
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:list.html.twig',
-            array(
-                'ownerResources'        => $ownerResources,
-                'collectionInformation' => $collectionInformation
-            )
-        );
-    }
-
-    /**
      * List and search
      *
      * @param Request               $request               Request
@@ -103,18 +76,21 @@ class OwnerResourceController extends AppController
             (
                 $metadataArray,
                 $miscArray,
+                $collectionInformation,
                 $userId,
-                true,
-                $collectionInformation->getFilter('type')
+                true
             );
 
-        $publicOwnerResources = $this->get('simple_it.claire.exercise.owner_resource')->getAll
+        // FIXME pagination
+//        $ownerResources->setItemsPerPage(50);
+//        $ownerResources->setPageNumber(0);
+$publicOwnerResources = $this->get('simple_it.claire.exercise.owner_resource')->getAll
             (
                 $metadataArray,
                 $miscArray,
+                $collectionInformation,
                 $userId,
-                false,
-                $collectionInformation->getFilter('type')
+                false
             );
 
         if ($request->isXmlHttpRequest()) {
@@ -124,11 +100,13 @@ class OwnerResourceController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:searchList.html.twig',
             array(
-                'ownerResources'       => $ownerResources,
-                'publicOwnerResources' => $publicOwnerResources,
-                'metadataArray'        => $metadataArray,
-                'miscArray'            => $miscArray,
-                'type'                 => $collectionInformation->getFilter('type')
+                'ownerResources'        => $ownerResources,
+                'publicOwnerResources'  => $publicOwnerResources,
+                'metadataArray'         => $metadataArray,
+                'miscArray'             => $miscArray,
+                'type'                  => $collectionInformation->getFilter('type'),
+                'collectionInformation' => $collectionInformation,
+                'paginationUrl'         => $this->generateUrl('simple_it_claire_component_owner_resource_search_list')
             )
         );
     }
