@@ -1,4 +1,4 @@
-    <h2>Recherche</h2>
+<h2>Recherche</h2>
 <form action="{{ path('simple_it_claire_component_owner_resource_search_list') }}" method="GET">
 
     <h3>Par clé/valeurs</h3>
@@ -88,11 +88,11 @@
 </form>
 <h2>Espace personnel</h2>
 {% include 'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:list.html.twig'
-with{'ownerResources':ownerResources, 'collectionInformation':collectionInformation, 'paginationUrl': paginationUrl} %}
+with{'ownerResources':ownerResources, 'collectionInformation':collectionInformation, 'paginationUrl': privatePaginationUrl} %}
 
 <h2>Espace public</h2>
 {% include 'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:list.html.twig'
-with{'ownerResources':publicOwnerResources, 'collectionInformation':collectionInformation} %}
+with{'ownerResources':publicOwnerResources, 'collectionInformation':collectionInformation,'paginationUrl': publicPaginationUrl} %}
 
 <script>
     function addFilter() {

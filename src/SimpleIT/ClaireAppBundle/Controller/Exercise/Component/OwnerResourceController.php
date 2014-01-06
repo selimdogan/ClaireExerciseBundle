@@ -81,10 +81,7 @@ class OwnerResourceController extends AppController
                 true
             );
 
-        // FIXME pagination
-//        $ownerResources->setItemsPerPage(50);
-//        $ownerResources->setPageNumber(0);
-$publicOwnerResources = $this->get('simple_it.claire.exercise.owner_resource')->getAll
+        $publicOwnerResources = $this->get('simple_it.claire.exercise.owner_resource')->getAll
             (
                 $metadataArray,
                 $miscArray,
@@ -92,10 +89,6 @@ $publicOwnerResources = $this->get('simple_it.claire.exercise.owner_resource')->
                 $userId,
                 false
             );
-
-        if ($request->isXmlHttpRequest()) {
-            return new Response($this->searchListJson($ownerResources));
-        }
 
         return $this->render(
             'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:searchList.html.twig',
@@ -106,7 +99,95 @@ $publicOwnerResources = $this->get('simple_it.claire.exercise.owner_resource')->
                 'miscArray'             => $miscArray,
                 'type'                  => $collectionInformation->getFilter('type'),
                 'collectionInformation' => $collectionInformation,
-                'paginationUrl'         => $this->generateUrl('simple_it_claire_component_owner_resource_search_list')
+                'privatePaginationUrl'  => $this->generateUrl(
+                    'simple_it_claire_component_owner_resource_private_list'
+                ),
+                'publicPaginationUrl'   => $this->generateUrl(
+                    'simple_it_claire_component_owner_resource_public_list'
+                )
+            )
+        );
+    }
+
+    /**
+     * List private resources
+     *
+     * @param Request               $request               Request
+     * @param CollectionInformation $collectionInformation Collection Information
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function privateListAction(
+        Request $request,
+        CollectionInformation $collectionInformation
+    )
+    {
+        return $this->listResources(
+            true,
+            'simple_it_claire_component_owner_resource_private_list',
+            $collectionInformation,
+            $request->isXmlHttpRequest()
+        );
+    }
+
+    /**
+     * List public resources
+     *
+     * @param Request               $request               Request
+     * @param CollectionInformation $collectionInformation Collection Information
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function publicListAction(
+        Request $request,
+        CollectionInformation $collectionInformation
+    )
+    {
+        return $this->listResources(
+            false,
+            'simple_it_claire_component_owner_resource_public_list',
+            $collectionInformation,
+            $request->isXmlHttpRequest()
+        );
+    }
+
+    /**
+     * List the resources with pagination
+     *
+     * @param boolean               $private List private or public resources
+     * @param string                $action  The route to call in pagination
+     * @param CollectionInformation $collectionInformation
+     * @param boolean               $isXmlHttpRequest
+     *
+     * @return Response
+     */
+    private function listResources($private, $action, $collectionInformation, $isXmlHttpRequest)
+    {
+        $metadataArray = $this->metadataToArray($collectionInformation);
+        $miscArray = $this->miscToArray($collectionInformation);
+
+        // TODO User
+        $userId = 1000001;
+
+        $ownerResources = $this->get('simple_it.claire.exercise.owner_resource')->getAll
+            (
+                $metadataArray,
+                $miscArray,
+                $collectionInformation,
+                $userId,
+                $private
+            );
+
+        if ($isXmlHttpRequest) {
+            return new Response($this->searchListJson($ownerResources));
+        }
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Exercise/OwnerResource/Component:list.html.twig',
+            array(
+                'ownerResources'        => $ownerResources,
+                'collectionInformation' => $collectionInformation,
+                'paginationUrl'         => $this->generateUrl($action),
             )
         );
     }
@@ -124,9 +205,11 @@ $publicOwnerResources = $this->get('simple_it.claire.exercise.owner_resource')->
 
         $metadata = array();
         foreach ($filters as $key => $filter) {
-            $str = str_split($key, strlen('metaKey'));
-            if ($str[0] == 'metaKey' && is_numeric($str[1])) {
-                $metadata[$filter] = $filters['metaValue' . $str[1]];
+            if (!empty($filter)) {
+                $str = str_split($key, strlen('metaKey'));
+                if ($str[0] == 'metaKey' && is_numeric($str[1])) {
+                    $metadata[$filter] = $filters['metaValue' . $str[1]];
+                }
             }
         }
 
@@ -146,9 +229,11 @@ $publicOwnerResources = $this->get('simple_it.claire.exercise.owner_resource')->
 
         $misc = array();
         foreach ($filters as $key => $filter) {
-            $str = str_split($key, strlen('misc'));
-            if ($str[0] == 'misc' && is_numeric($str[1])) {
-                $misc[] = $filter;
+            if (!empty($filter)) {
+                $str = str_split($key, strlen('misc'));
+                if ($str[0] == 'misc' && is_numeric($str[1])) {
+                    $misc[] = $filter;
+                }
             }
         }
 

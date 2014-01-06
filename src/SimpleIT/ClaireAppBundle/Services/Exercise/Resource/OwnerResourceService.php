@@ -20,6 +20,11 @@ use SimpleIT\Utils\Collection\Page;
 class OwnerResourceService
 {
     /**
+     * @const ITEM_PER_PAGE = 20
+     */
+    const ITEM_PER_PAGE = 20;
+
+    /**
      * @const MISC_METADATA_KEY = "_misc"
      */
     const MISC_METADATA_KEY = "_misc";
@@ -104,6 +109,7 @@ class OwnerResourceService
         $personalResource = true
     )
     {
+        // FIXME Clean code for pagination and get (and not create) a clean Page object
         $collectionInformation = new CollectionInformation();
         $pageNumber = 1;
         if ($inputCollectionInformation !== null
@@ -112,7 +118,7 @@ class OwnerResourceService
         ) {
             $pageNumber = $inputCollectionInformation->getPage()->getPageNumber();
         }
-        $page = new Page(20, $pageNumber);
+        $page = new Page(self::ITEM_PER_PAGE, $pageNumber);
         $collectionInformation->setPage($page);
 
         if (!empty ($metadataArray)) {
@@ -155,7 +161,7 @@ class OwnerResourceService
             if (!is_null($userId) && $personalResource === false) {
                 $collectionInformation->addFilter('public-except-user', $userId);
             }
-            $paginatedCollection = $this->ownerResourceRepository->findAll();
+            $paginatedCollection = $this->ownerResourceRepository->findAll($collectionInformation);
         }
 
         foreach ($paginatedCollection as &$ownerResource) {

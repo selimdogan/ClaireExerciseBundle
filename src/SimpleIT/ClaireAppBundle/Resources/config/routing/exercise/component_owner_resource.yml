@@ -4,9 +4,15 @@ simple_it_claire_component_owner_resource_browser:
     requirements:
         _method: GET
 
-simple_it_claire_component_owner_resource_list:
-    pattern: /
-    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:list }
+simple_it_claire_component_owner_resource_private_list:
+    pattern: /private-list
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:privateList }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_owner_resource_public_list:
+    pattern: /public-list
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:publicList }
     requirements:
         _method: GET
 
