@@ -289,6 +289,24 @@ class CourseService
         );
     }
 
+    /**
+     * Save a course content
+     *
+     * @param int    $courseId Course id
+     * @param string $content  Course content
+     * @param string $status   Status
+     *
+     * @return string
+     */
+    public function saveContent($courseId, $content, $status)
+    {
+        return $this->courseContentRepository->update(
+            $courseId,
+            $content,
+            array(CourseResource::STATUS => $status)
+        );
+    }
+
     /* ************************ *
      *                          *
      * ***** INTRODUCTION ***** *

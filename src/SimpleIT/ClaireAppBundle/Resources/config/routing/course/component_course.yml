@@ -42,12 +42,12 @@ simple_it_claire_component_course_course_display_level_edit:
 
 simple_it_claire_component_course_status_published:
     pattern: /{courseId}/publish
-    defaults: { _controller : SimpleITClaireAppBundle:Course/Component/Workflow:changeCourseToPublished }
+    defaults: { _controller : SimpleITClaireAppBundle:Course/Component/Course:editStatusToPublished }
     requirements :
         -method: POST
 
 simple_it_claire_component_course_status_waiting_for_publication:
     pattern: /{courseId}/submitToPublication
-    defaults: { _controller : SimpleITClaireAppBundle:Course/Component/Workflow:changeCourseToWaitingForPublication }
+    defaults: { _controller : SimpleITClaireAppBundle:Course/Component/Course:editStatusToWaitingForPublication }
     requirements :
         -method: POST

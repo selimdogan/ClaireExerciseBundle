@@ -7,3 +7,4 @@ simple_it_claire_component_part_edit:
 simple_it_claire_component_part_metadata:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/component_part_metadata.yml"
     prefix:   /{courseIdentifier}/parts/{partIdentifier}/metadatas/
+

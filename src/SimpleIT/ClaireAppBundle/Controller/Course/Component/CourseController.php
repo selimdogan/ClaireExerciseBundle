@@ -238,6 +238,58 @@ class CourseController extends AppController
         );
     }
 
+    /* ****************** *
+     *                    *
+     * ***** STATUS ***** *
+     *                    *
+     * ****************** */
+
+    /**
+     * Edit a course status to waiting for publication
+     *
+     * @param Request $request  Request
+     * @param int     $courseId Course id
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editStatusToWaitingForPublicationAction(Request $request, $courseId)
+    {
+        if (is_null($initialStatus = $request->get(CourseResource::STATUS))) {
+            throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST);
+        }
+        $this->get('simple_it.claire.course.course')->changeStatus(
+            $courseId,
+            $initialStatus,
+            CourseResource::STATUS_WAITING_FOR_PUBLICATION
+        );
+
+        return new Response();
+    }
+
+    /**
+     * Edit a course status to published
+     *
+     * @param Request $request  Request
+     * @param int     $courseId Course id
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editStatusToPublishedAction(Request $request, $courseId)
+    {
+        if (is_null($initialStatus = $request->get(CourseResource::STATUS))) {
+            throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST);
+        }
+        $this->get('simple_it.claire.course.course')->changeStatus(
+            $courseId,
+            $initialStatus,
+            CourseResource::STATUS_PUBLISHED
+        );
+
+        return new Response();
+    }
+
     /* ************************ *
      *                          *
      * ***** INTRODUCTION ***** *

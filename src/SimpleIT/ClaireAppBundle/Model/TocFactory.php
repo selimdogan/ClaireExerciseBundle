@@ -31,7 +31,6 @@ class TocFactory
             }
             $toc[] = $part;
         }
-
         return $toc;
     }
 }

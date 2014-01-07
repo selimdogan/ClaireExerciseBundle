@@ -2,13 +2,12 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
-use OC\CLAIRE\BusinessRules\Responders\Course\Toc\AddElementToTocResponse;
-use OC\CLAIRE\BusinessRules\UseCases\Course\Toc\DTO\AddElementToTocRequestDTO;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Controller\AppController;
+use SimpleIT\ClaireAppBundle\UseCases\Course\Toc\DTO\AddElementToTocRequestDTO;
+use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TocBuilder;
 use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TocBuilderForEdition;
-use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -47,7 +46,6 @@ class TocByCourseController extends AppController
         $useCaseRequest->courseId = $courseId;
         $parentId = $request->get('parentId');
         $useCaseRequest->parentId = $parentId;
-        /** @var AddElementToTocResponse $useCaseResponse */
         $useCaseResponse = $this->get('simple_it.claire.course.toc.add_element_to_toc')->execute(
             $useCaseRequest
         );
@@ -63,8 +61,7 @@ class TocByCourseController extends AppController
                 'simple_it_claire_course_part_edit',
                 array('courseId' => $courseId, 'partId' => $newElement->getId())
             );
-        } else {
-            throw new InvalidArgumentException();
+
         }
 
         return $this->redirect($url);

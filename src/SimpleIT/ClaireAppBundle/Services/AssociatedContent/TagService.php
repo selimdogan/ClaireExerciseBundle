@@ -269,7 +269,6 @@ class TagService
         foreach ($tags as $tag) {
             $outputTags[$tag->getId()] = $tag->getName();
         }
-
         return $outputTags;
     }
 

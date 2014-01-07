@@ -1,9 +1,11 @@
 <?php
 
+
 namespace SimpleIT\ClaireAppBundle\Controller\AssociatedContent\Component;
 
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use Symfony\Component\HttpFoundation\Request;
 use SimpleIT\AppBundle\Annotation\Cache;
 
 /**

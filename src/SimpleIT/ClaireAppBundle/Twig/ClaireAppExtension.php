@@ -1,9 +1,11 @@
 <?php
 
+
 namespace SimpleIT\ClaireAppBundle\Twig;
 
 use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\Utils\ArrayUtils;
+use SimpleIT\Utils\StringUtils;
 
 /**
  * Class extension

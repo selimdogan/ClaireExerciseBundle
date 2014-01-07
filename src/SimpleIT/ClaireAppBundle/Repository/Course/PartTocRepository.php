@@ -1,5 +1,6 @@
 <?php
 
+
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
 use SimpleIT\AppBundle\Repository\AppRepository;

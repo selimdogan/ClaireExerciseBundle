@@ -55,7 +55,6 @@ class CourseFactory
         if (isset($courseResource['authors'])) {
             $course->setAuthors($courseResource['authors']);
         }
-
         return $course;
     }
 
@@ -73,7 +72,8 @@ class CourseFactory
             $course = self::create($courseResource);
             $courses[] = $course;
         }
-        if ($courseResources instanceof Paginator) {
+        if($courseResources instanceof Paginator)
+        {
             $courseResources->setData($courses);
             $courses = $courseResources;
         }

@@ -26,7 +26,6 @@ class MetadataFactory
         if (isset($metadataResource['value'])) {
             $metadata->setValue($metadataResource['value']);
         }
-
         return $metadata;
     }
 
@@ -44,7 +43,6 @@ class MetadataFactory
             $metadata = self::create($metadataResource);
             $metadatas[] = $metadata;
         }
-
         return $metadatas;
     }
 
@@ -75,7 +73,6 @@ class MetadataFactory
                 $metadatas[$key] = $value;
             }
         }
-
         return $metadatas;
     }
 }
