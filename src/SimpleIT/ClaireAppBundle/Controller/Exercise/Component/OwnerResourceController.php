@@ -358,9 +358,9 @@ class OwnerResourceController extends AppController
         $ownerResourceIds = $request->request->get('resourceIds');
         $metaKey = $request->request->get('metaKey');
         $metaValue = $request->request->get('metaValue');
-        $misc = $request->request->get('misc');
+        $keyword = $request->request->get('keyword');
 
-        if (empty($ownerResourceIds) || (empty($metaValue) && empty($misc))) {
+        if (empty($ownerResourceIds) || (empty($metaValue) && empty($keyword))) {
             throw new \Exception('A value and at least one resource must be specified');
         }
 
@@ -368,7 +368,7 @@ class OwnerResourceController extends AppController
             $ownerResourceIds,
             $metaKey,
             $metaValue,
-            $misc
+            $keyword
         );
 
         return new JsonResponse($ownerResourceIds);

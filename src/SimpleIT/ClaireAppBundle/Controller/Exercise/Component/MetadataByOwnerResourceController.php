@@ -3,6 +3,7 @@
 namespace SimpleIT\ClaireAppBundle\Controller\Exercise\Component;
 
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource;
+use SimpleIT\ApiResourcesBundle\Exercise\MetadataResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ResourceResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
@@ -31,8 +32,8 @@ class MetadataByOwnerResourceController extends AppController
         );
 
         $misc = null;
-        if (isset($ownerResource->getMetadata()['_misc'])) {
-            $misc = explode(';', $ownerResource->getMetadata()['_misc']);
+        if (isset($ownerResource->getMetadata()[MetadataResource::MISC_METADATA_KEY])) {
+            $misc = explode(';', $ownerResource->getMetadata()[MetadataResource::MISC_METADATA_KEY]);
         }
 
         return $this->render(

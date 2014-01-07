@@ -9,6 +9,7 @@ use SimpleIT\AppBundle\Util\RequestUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use SimpleIT\ApiResourcesBundle\Exercise\MetadataResource;
 
 /**
  * Class MetadataByOwnerExerciseModelController
@@ -31,8 +32,8 @@ class MetadataByOwnerExerciseModelController extends AppController
         );
 
         $misc = null;
-        if (isset($ownerExerciseModel->getMetadata()['_misc'])) {
-            $misc = explode(';', $ownerExerciseModel->getMetadata()['_misc']);
+        if (isset($ownerExerciseModel->getMetadata()[MetadataResource::MISC_METADATA_KEY])) {
+            $misc = explode(';', $ownerExerciseModel->getMetadata()[MetadataResource::MISC_METADATA_KEY]);
         }
 
         return $this->render(

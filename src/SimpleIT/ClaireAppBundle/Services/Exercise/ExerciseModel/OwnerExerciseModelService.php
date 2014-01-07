@@ -3,6 +3,7 @@
 namespace SimpleIT\ClaireAppBundle\Services\Exercise\ExerciseModel;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use SimpleIT\ApiResourcesBundle\Exercise\MetadataResource;
 use SimpleIT\ApiResourcesBundle\Exercise\OwnerExerciseModelResource;
 use
     SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\MetadataByOwnerExerciseModelRepository;
@@ -21,11 +22,6 @@ use SimpleIT\Utils\Collection\PaginatedCollection;
  */
 class OwnerExerciseModelService
 {
-    /**
-     * @const MISC_METADATA_KEY = "_misc"
-     */
-    const MISC_METADATA_KEY = "_misc";
-
     /**
      * @var OwnerExerciseModelRepository
      */
@@ -161,7 +157,7 @@ class OwnerExerciseModelService
             /** @var OwnerExerciseModelResource $ownerExerciseModel */
             $metadata = array();
             foreach ($ownerExerciseModel->getMetadata() as $mkey => $value) {
-                if ($mkey === self::MISC_METADATA_KEY) {
+                if ($mkey === MetadataResource::MISC_METADATA_KEY) {
                     $metadata[$mkey] = explode(';', $value);
                 } else {
                     $metadata[$mkey] = $value;
@@ -236,12 +232,12 @@ class OwnerExerciseModelService
     {
         foreach ($ownerExerciseModelIds as $key => $id) {
             $orMd = $this->get($id)->getMetadata();
-            if (isset($orMd['_misc'])) {
-                $misc = explode(';', $orMd['_misc']);
+            if (isset($orMd[MetadataResource::MISC_METADATA_KEY])) {
+                $misc = explode(';', $orMd[MetadataResource::MISC_METADATA_KEY]);
                 if (($delKey = array_search($values[$key], $misc)) !== false) {
                     unset($misc[$delKey]);
                 }
-                $orMd['_misc'] = implode(';', $misc);
+                $orMd[MetadataResource::MISC_METADATA_KEY] = implode(';', $misc);
             }
 
             if (isset($orMd[$metaKey])) {
@@ -268,14 +264,14 @@ class OwnerExerciseModelService
     {
         $metadatas = array();
         if (isset($resourceData['misc'])) {
-            $metadatas[self::MISC_METADATA_KEY] = $miscString = implode(';', $resourceData['misc']);
+            $metadatas[MetadataResource::MISC_METADATA_KEY] = $miscString = implode(';', $resourceData['misc']);
         }
 
         if (isset($resourceData['metaKey'])) {
             $metaValues = $resourceData['metaValue'];
             foreach ($resourceData['metaKey'] as $key => $keyValue) {
-                if ($keyValue === self::MISC_METADATA_KEY) {
-                    throw new \Exception(self::MISC_METADATA_KEY . 'is a reserved metadata key');
+                if ($keyValue === MetadataResource::MISC_METADATA_KEY) {
+                    throw new \Exception(MetadataResource::MISC_METADATA_KEY . 'is a reserved metadata key');
                 }
                 $metadatas[$keyValue] = $metaValues[$key];
             }

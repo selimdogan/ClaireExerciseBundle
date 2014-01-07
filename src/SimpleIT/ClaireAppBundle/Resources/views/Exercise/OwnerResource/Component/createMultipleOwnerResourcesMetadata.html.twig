@@ -23,13 +23,13 @@
     </table>
 
     <input type="button" onclick="addKW()" value="Ajouter"/>
-    <table id="keyWords">
+    <table id="keywords">
         <tr>
             <td>
                 Mot-clé :
             </td>
             <td>
-                <input type="text" size="20" name="keyWord[]"/>
+                <input type="text" size="20" name="keyword[]"/>
             </td>
             <td>
                 <button type="button" class="js-remove">-</button>
@@ -82,7 +82,7 @@
     }
 
     function addKW() {
-        var $table = $('#keyWords'),
+        var $table = $('#keywords'),
                 $lines = $('tr', $table),
                 $last = $lines.last(),
                 $clone = $last.clone();
@@ -90,7 +90,7 @@
         // key
         $clone
                 .find('input[type=text]')
-                .attr('name', 'keyWord[]')
+                .attr('name', 'keyword[]')
                 .val('');
 
         $clone.appendTo($table);

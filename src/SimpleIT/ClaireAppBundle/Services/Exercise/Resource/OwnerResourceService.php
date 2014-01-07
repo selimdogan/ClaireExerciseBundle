@@ -4,6 +4,7 @@ namespace SimpleIT\ClaireAppBundle\Services\Exercise\Resource;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
+use SimpleIT\ApiResourcesBundle\Exercise\MetadataResource;
 use SimpleIT\ApiResourcesBundle\Exercise\OwnerResourceResource;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\MetadataByOwnerResourceRepository;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\OwnerResourceByOwnerRepository;
@@ -23,11 +24,6 @@ class OwnerResourceService
      * @const ITEM_PER_PAGE = 20
      */
     const ITEM_PER_PAGE = 20;
-
-    /**
-     * @const MISC_METADATA_KEY = "_misc"
-     */
-    const MISC_METADATA_KEY = "_misc";
 
     /**
      * @var OwnerResourceRepository
@@ -168,7 +164,7 @@ class OwnerResourceService
             /** @var OwnerResourceResource $ownerResource */
             $metadata = array();
             foreach ($ownerResource->getMetadata() as $mkey => $value) {
-                if ($mkey === self::MISC_METADATA_KEY) {
+                if ($mkey === MetadataResource::MISC_METADATA_KEY) {
                     $metadata[$mkey] = explode(';', $value);
                 } else {
                     $metadata[$mkey] = $value;
@@ -215,15 +211,36 @@ class OwnerResourceService
      * @param $ownerResourceIds
      * @param $metaKey
      * @param $metaValue
+     * @param $keywords
      *
+     * @throws \Exception
      * @return ArrayCollection
      */
-    public function addMultipleMetadata($ownerResourceIds, $metaKey, $metaValue)
+    public function addMultipleMetadata($ownerResourceIds, $metaKey, $metaValue, $keywords)
     {
-        $metadata = new ArrayCollection(array($metaKey => $metaValue));
+        if (count(preg_grep('/;/', $keywords)) > 0) {
+            throw new \Exception('Keywords must not contain ";"', 400);
+        }
+
+        if (count(preg_grep('/^_/', $metaKey)) > 0) {
+            throw new \Exception('Metadata keys cannot start with "_"', 400);
+        }
+        $metadata = array_combine($metaKey, $metaValue);
 
         foreach ($ownerResourceIds as $id) {
-            $this->metadataByOwnerResourceRepository->insert($id, $metadata);
+            $or = $this->ownerResourceRepository->find($id);
+            $ormd = $or->getMetadata();
+            $metadata = array_merge($ormd, $metadata);
+
+            if (isset($ormd[MetadataResource::MISC_METADATA_KEY])) {
+                $orkw = explode(';', $ormd[MetadataResource::MISC_METADATA_KEY]);
+                $keywords = array_merge($keywords, $orkw);
+            }
+            if (!empty($keywords)) {
+                $metadata[MetadataResource::MISC_METADATA_KEY] = implode(';', $keywords);
+            }
+
+            $this->metadataByOwnerResourceRepository->update($id, new ArrayCollection($metadata));
         }
 
         return $metadata;
@@ -243,12 +260,12 @@ class OwnerResourceService
     {
         foreach ($ownerResourceIds as $key => $id) {
             $orMd = $this->get($id)->getMetadata();
-            if (isset($orMd['_misc'])) {
-                $misc = explode(';', $orMd['_misc']);
+            if (isset($orMd[MetadataResource::MISC_METADATA_KEY])) {
+                $misc = explode(';', $orMd[MetadataResource::MISC_METADATA_KEY]);
                 if (($delKey = array_search($values[$key], $misc)) !== false) {
                     unset($misc[$delKey]);
                 }
-                $orMd['_misc'] = implode(';', $misc);
+                $orMd[MetadataResource::MISC_METADATA_KEY] = implode(';', $misc);
             }
 
             if (isset($orMd[$metaKey])) {
@@ -275,14 +292,17 @@ class OwnerResourceService
     {
         $metadatas = array();
         if (isset($resourceData['misc'])) {
-            $metadatas[self::MISC_METADATA_KEY] = $miscString = implode(';', $resourceData['misc']);
+            $metadatas[MetadataResource::MISC_METADATA_KEY] = $miscString = implode(
+                ';',
+                $resourceData['misc']
+            );
         }
 
         if (isset($resourceData['metaKey'])) {
             $metaValues = $resourceData['metaValue'];
             foreach ($resourceData['metaKey'] as $key => $keyValue) {
-                if ($keyValue === self::MISC_METADATA_KEY) {
-                    throw new \Exception(self::MISC_METADATA_KEY . 'is a reserved metadata key');
+                if ($keyValue === MetadataResource::MISC_METADATA_KEY) {
+                    throw new \Exception(MetadataResource::MISC_METADATA_KEY . 'is a reserved metadata key');
                 }
                 $metadatas[$keyValue] = $metaValues[$key];
             }
@@ -345,8 +365,7 @@ class OwnerResourceService
 
         $metadata = array();
         /** @var OwnerResourceResource $or */
-        foreach ($ownerResources as $or)
-        {
+        foreach ($ownerResources as $or) {
             $metadata = array_merge($metadata, $or->getMetadata());
         }
 
