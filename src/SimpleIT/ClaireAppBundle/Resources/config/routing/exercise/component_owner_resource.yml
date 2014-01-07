@@ -1,22 +1,28 @@
-simple_it_claire_component_owner_resource_browser:
+simple_it_claire_component_exercise_owner_resource_edit:
+    pattern: /{ownerResourceId}/edit
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:editView }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_exercise_owner_resource_browser:
     pattern: /browser
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:browserView }
     requirements:
         _method: GET
 
-simple_it_claire_component_owner_resource_private_list:
+simple_it_claire_component_exercise_owner_resource_private_list:
     pattern: /private-list
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:privateList }
     requirements:
         _method: GET
 
-simple_it_claire_component_owner_resource_public_list:
+simple_it_claire_component_exercise_owner_resource_public_list:
     pattern: /public-list
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:publicList }
     requirements:
         _method: GET
 
-simple_it_claire_component_owner_resource_search_list:
+simple_it_claire_component_exercise_owner_resource_search_list:
     pattern: /search
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:searchList }
     requirements:
@@ -69,4 +75,11 @@ simple_it_claire_component_exercise_multiple_owner_resource_key_metadata_edit:
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:multipleKeyMetadataCreate }
     requirements:
         _method: POST
+
+simple_it_claire_component_exercise_owner_resource_delete:
+    pattern: /{ownerResourceId}/delete
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:delete }
+    requirements:
+        _method: GET
+        ownerResourceId: \d+
 

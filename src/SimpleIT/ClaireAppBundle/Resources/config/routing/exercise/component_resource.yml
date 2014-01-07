@@ -1,3 +1,27 @@
+simple_it_claire_component_exercise_resource_edit:
+    pattern: /{resourceId}/edit
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/Resource:editView }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_exercise_resource_create_view:
+    pattern: /create
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/Resource:createResourceView }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_exercise_resource_create:
+    pattern: /create
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/Resource:create }
+    requirements:
+        _method: POST
+
+simple_it_claire_component_exercise_resource_delete:
+    pattern: /{resourceId}/delete
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/Resource:delete }
+    requirements:
+        _method: GET
+
 simple_it_claire_component_exercise_resource_type_edit_view:
     pattern: /{resourceId}/type
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/Resource:editTypeView }
@@ -43,6 +67,12 @@ simple_it_claire_component_exercise_resource_required_resource_edit_view:
 simple_it_claire_component_exercise_resource_required_resource_edit:
     pattern: /{resourceId}/required-resources
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/RequiredResourceByResource:RequiredResourceEdit }
+    requirements:
+        _method: POST
+
+simple_it_claire_component_exercise_resource_add_to_perso:
+    pattern: /{resourceId}/add-to-perso
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResourceByResource:addToPerso }
     requirements:
         _method: POST
 

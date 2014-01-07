@@ -5,7 +5,7 @@
         <li>
             <div class="js-resource-item" data-drag-config="{{ { resources: ownerResource.id }|json_encode() }}">
                 {% if ownerResource.public == 1 %}
-                <a href="{{ path('simple_it_claire_exercise_owner_resource_edit',{ 'ownerResourceId': ownerResource.id}) }}">
+                <a href="{{ path('simple_it_claire_component_exercise_owner_resource_edit',{ 'ownerResourceId': ownerResource.id}) }}">
                     <span>
                         {{ ownerResource.id }}
                     </span>

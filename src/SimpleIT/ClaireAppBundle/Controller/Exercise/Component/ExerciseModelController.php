@@ -98,7 +98,7 @@ class ExerciseModelController extends AppController
 
         return $this->redirect(
             $this->generateUrl(
-                'simple_it_claire_exercise_exercise_model_edit',
+                'simple_it_claire_component_exercise_exercise_model_edit',
                 array('exerciseModelId' => $exerciseModel->getId())
             )
         );

@@ -56,7 +56,7 @@ class ResourceController extends AppController
 
         return $this->redirect(
             $this->generateUrl(
-                'simple_it_claire_exercise_resource_edit',
+                'simple_it_claire_component_exercise_resource_edit',
                 array('resourceId' => $resource->getId())
             )
         );

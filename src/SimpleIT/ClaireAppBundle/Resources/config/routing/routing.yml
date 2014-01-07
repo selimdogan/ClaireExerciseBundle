@@ -40,26 +40,6 @@ simple_it_claire_ui_kit:
         _controller: FrameworkBundle:Template:template
         template: 'SimpleITClaireAppBundle:Uikit:uikit.html.twig'
 
-simple_it_claire_exercise:
-    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/exercise.yml"
-    prefix:   /exercises
-
-simple_it_claire_exercise_model:
-    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/exercise_model.yml"
-    prefix:   /exercise-models
-
-simple_it_claire_resource:
-    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/resource.yml"
-    prefix:   /resources
-
-simple_it_claire_owner_resource:
-    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/owner_resource.yml"
-    prefix:   /owner-resources
-
-simple_it_claire_owner_exercise_model:
-    resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/owner_exercise_model.yml"
-    prefix:   /owner-exercise-models
-
 simple_it_claire_component_exercise_owner_exercise_model:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/exercise/component_owner_exercise_model.yml"
     prefix:   /components/owner-exercise-models

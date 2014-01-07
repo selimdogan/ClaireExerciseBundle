@@ -88,4 +88,14 @@ class OwnerResourceRepository extends AppRepository
     {
         return $this->insertResource($ownerResourceResource);
     }
+
+    /**
+     * Delete an owner resource
+     *
+     * @param $ownerResourceId
+     */
+    public function delete($ownerResourceId)
+    {
+        $this->deleteResource(array('ownerResourceId' => $ownerResourceId));
+    }
 }

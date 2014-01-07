@@ -1,7 +1,6 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Repository\Exercise\Attempt;
 
-use SimpleIT\ApiResourcesBundle\Exercise\AttemptResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;

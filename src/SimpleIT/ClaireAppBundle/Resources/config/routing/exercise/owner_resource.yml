@@ -1,6 +1,0 @@
-simple_it_claire_exercise_owner_resource_edit:
-    pattern: /{ownerResourceId}/edit
-    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResource:editView }
-    requirements:
-        _method: GET
-

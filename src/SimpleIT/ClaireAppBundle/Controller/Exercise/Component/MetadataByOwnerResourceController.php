@@ -49,7 +49,7 @@ class MetadataByOwnerResourceController extends AppController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function MetadataEditAction(Request $request, $ownerResourceId)
+    public function metadataEditAction(Request $request, $ownerResourceId)
     {
         $resourceData = $request->request->all();
         $requiredResources = $this->get('simple_it.claire.exercise.owner_resource')->saveMetadata(

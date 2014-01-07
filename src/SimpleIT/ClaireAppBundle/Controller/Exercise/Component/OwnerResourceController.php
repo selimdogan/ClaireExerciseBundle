@@ -56,13 +56,11 @@ class OwnerResourceController extends AppController
     /**
      * List and search
      *
-     * @param Request               $request               Request
      * @param CollectionInformation $collectionInformation Collection Information
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function searchListAction(
-        Request $request,
         CollectionInformation $collectionInformation
     )
     {
@@ -100,10 +98,10 @@ class OwnerResourceController extends AppController
                 'type'                  => $collectionInformation->getFilter('type'),
                 'collectionInformation' => $collectionInformation,
                 'privatePaginationUrl'  => $this->generateUrl(
-                    'simple_it_claire_component_owner_resource_private_list'
+                    'simple_it_claire_component_exercise_owner_resource_private_list'
                 ),
                 'publicPaginationUrl'   => $this->generateUrl(
-                    'simple_it_claire_component_owner_resource_public_list'
+                    'simple_it_claire_component_exercise_owner_resource_public_list'
                 )
             )
         );
@@ -279,7 +277,7 @@ class OwnerResourceController extends AppController
                 'content'    => $content,
                 'metadata'   => $or->getMetadata(),
                 'url'        => $this->generateUrl(
-                    'simple_it_claire_exercise_owner_resource_edit',
+                    'simple_it_claire_component_exercise_owner_resource_edit',
                     array(
                         'ownerResourceId' => $or->getId()
                     )
@@ -412,5 +410,19 @@ class OwnerResourceController extends AppController
         );
 
         return new JsonResponse($metaKey);
+    }
+
+    /**
+     * Delete an owner resource
+     *
+     * @param $ownerResourceId
+     *
+     * @return JsonResponse
+     */
+    public function deleteAction($ownerResourceId)
+    {
+        $this->get('simple_it.claire.exercise.owner_resource')->delete($ownerResourceId);
+
+        return new JsonResponse($ownerResourceId);
     }
 }

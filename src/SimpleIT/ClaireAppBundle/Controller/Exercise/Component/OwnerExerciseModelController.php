@@ -35,7 +35,7 @@ class OwnerExerciseModelController extends AppController
 
         return $this->redirect(
             $this->generateUrl(
-                'simple_it_claire_component_exercise_try',
+                'simple_it_claire_component_exercise_exercise_try',
                 array('exerciseId' => $exercise->getId())
             )
         );
@@ -221,7 +221,7 @@ class OwnerExerciseModelController extends AppController
                 'title'           => $oem->getTitle(),
                 'metadata'        => $oem->getMetadata(),
                 'url'             => $this->generateUrl(
-                    'simple_it_claire_exercise_owner_exercise_model_edit',
+                    'simple_it_claire_component_exercise_owner_exercise_model_edit',
                     array(
                         'ownerExerciseModelId' => $oem->getId()
                     )

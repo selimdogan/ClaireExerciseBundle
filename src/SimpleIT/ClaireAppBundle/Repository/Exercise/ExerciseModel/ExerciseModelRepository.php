@@ -107,6 +107,6 @@ class ExerciseModelRepository extends AppRepository
      */
     public function findAll($collectionInformation = null)
     {
-        return $this->findAllResources();
+        return $this->findAllResources(array(), $collectionInformation);
     }
 }

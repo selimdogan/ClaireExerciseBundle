@@ -10,12 +10,11 @@ use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\GroupItems\Group;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\GroupItems\Model as GroupItems;
 use
     SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\GroupItems\ObjectBlock as GroupItemsObjectBlock;
-
-use
-    SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\OrderItems\ObjectBlock as OrderItemsObjectBlock;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\MultipleChoice\Model as MultipleChoice;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\MultipleChoice\QuestionBlock;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\OrderItems\Model as OrderItems;
+use
+    SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\OrderItems\ObjectBlock as OrderItemsObjectBlock;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\OrderItems\SequenceBlock;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\PairItems\Model as PairItems;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\PairItems\PairBlock;
@@ -32,6 +31,7 @@ use
     SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModel\RequiredResourceByExerciseModelRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\HTTP;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * Class ExerciseModelService
@@ -138,6 +138,8 @@ class ExerciseModelService
                 return $this->createOrderItems($emArray);
             case CommonModel::PAIR_ITEMS:
                 return $this->createPairItems($emArray);
+            default:
+                throw new BadRequestHttpException('Unknown type of exercise');
         }
     }
 
@@ -511,14 +513,15 @@ class ExerciseModelService
      * @param array         $blockArray     The block array
      * @param array         $modelArray     The array of the model
      * @param int|string    $blockId        The id or name of the block
-     * @param string        $type
+     * @param string        $type           The type of resource
      * @param string        $resourcesName  The name of the field resources in the array
      * @param string        $keyName        The name of the field key in the array
      * @param string        $comparatorName The name of the field comparator in the array
      * @param string        $valuesName     The name of the field values in the array
      * @param string        $typeName       The name of the field type in the array
+     * @param string        $excludedName
      *
-     * @throws \Exception
+     * @throws \HttpException
      */
     private function setResourceOrigin(
         ResourceBlock &$block,

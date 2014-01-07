@@ -330,6 +330,45 @@ class OwnerResourceService
     }
 
     /**
+     * Add a resource to the personal space: create an owner resource
+     *
+     * @param $resourceId
+     *
+     * @return OwnerResourceResource
+     */
+    public function addToPerso($resourceId)
+    {
+        $collectionInformation = new CollectionInformation();
+        $collectionInformation->addFilter('public-except-user', 'true');
+
+        $ownerResources = $this->ownerResourceByResourceRepository->findAll($resourceId);
+
+        $metadata = array();
+        /** @var OwnerResourceResource $or */
+        foreach ($ownerResources as $or)
+        {
+            $metadata = array_merge($metadata, $or->getMetadata());
+        }
+
+        $or = new OwnerResourceResource();
+        $or->setResource($resourceId);
+        $or->setPublic(true);
+        $or->setMetadata($metadata);
+
+        return $this->add($or);
+    }
+
+    /**
+     * Delete an owner resource
+     *
+     * @param $ownerResourceId
+     */
+    public function delete($ownerResourceId)
+    {
+        $this->ownerResourceRepository->delete($ownerResourceId);
+    }
+
+    /**
      * Create a resource from an array
      *
      * @param array $array

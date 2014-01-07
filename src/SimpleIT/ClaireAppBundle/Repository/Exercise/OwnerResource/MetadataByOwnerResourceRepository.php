@@ -15,7 +15,7 @@ class MetadataByOwnerResourceRepository extends AppRepository
     /**
      * @var string
      */
-    protected $path = 'owner-resources/{ownerResourceId}/metadata/{metaKey}';
+    protected $path = 'owner-resources/{ownerResourceId}/metadatas/{metaKey}';
 
     /**
      * @var string

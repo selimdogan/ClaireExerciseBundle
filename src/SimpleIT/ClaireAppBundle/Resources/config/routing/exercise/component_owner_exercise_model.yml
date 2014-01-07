@@ -1,16 +1,22 @@
-simple_it_claire_component_owner_exercise_model_browser:
+simple_it_claire_component_exercise_owner_exercise_model_edit:
+    pattern: /{ownerExerciseModelId}/edit
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModel:editView }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_exercise_owner_exercise_model_browser:
     pattern: /browser
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModel:browserView }
     requirements:
         _method: GET
 
-simple_it_claire_component_owner_exercise_model_list:
+simple_it_claire_component_exercise_owner_exercise_model_list:
     pattern: /
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModel:list }
     requirements:
         _method: GET
 
-simple_it_claire_component_owner_exercise_model_search_list:
+simple_it_claire_component_exercise_owner_exercise_model_search_list:
     pattern: /search
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModel:searchList }
     requirements:
@@ -45,3 +51,4 @@ simple_it_claire_component_exercise_owner_exercise_model_try:
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModel:try }
     requirements:
         _method: GET
+
