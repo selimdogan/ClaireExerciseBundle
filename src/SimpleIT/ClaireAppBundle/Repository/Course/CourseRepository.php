@@ -1,6 +1,7 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
+use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseGateway;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
@@ -13,7 +14,7 @@ use SimpleIT\AppBundle\Annotation\CacheInvalidation;
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class CourseRepository extends AppRepository
+class CourseRepository extends AppRepository implements CourseGateway
 {
     /**
      * @var string
@@ -26,6 +27,11 @@ class CourseRepository extends AppRepository
     protected $resourceClass = 'SimpleIT\ApiResourcesBundle\Course\CourseResource';
 
     /**
+     * @var CourseStatusRepository
+     */
+    private $courseStatusRepository;
+
+    /**
      * Find a list of courses
      *
      * @param CollectionInformation $collectionInformation Collection information
@@ -35,6 +41,14 @@ class CourseRepository extends AppRepository
     public function findAll(CollectionInformation $collectionInformation = null)
     {
         return $this->findAllResources(array(), $collectionInformation);
+    }
+
+    /**
+     * @return CourseResource[]
+     */
+    public function findAllStatus($courseIdentifier)
+    {
+        return $this->courseStatusRepository->findAll($courseIdentifier);
     }
 
     /**
@@ -51,6 +65,39 @@ class CourseRepository extends AppRepository
         return $this->findResource(
             array('courseIdentifier' => $courseIdentifier),
             $parameters
+        );
+    }
+
+    /**
+     * @return CourseResource
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     */
+    public function findPublished($courseIdentifier)
+    {
+        return $this->findResource(
+            array('courseIdentifier' => $courseIdentifier)
+        );
+    }
+
+    /**
+     * @return CourseResource
+     */
+    public function findWaitingForPublication($courseIdentifier)
+    {
+        return $this->findResource(
+            array('courseIdentifier' => $courseIdentifier),
+            array(CourseResource::STATUS => CourseResource::STATUS_WAITING_FOR_PUBLICATION)
+        );
+    }
+
+    /**
+     * @return CourseResource
+     */
+    public function findDraft($courseIdentifier)
+    {
+        return $this->findResource(
+            array('courseIdentifier' => $courseIdentifier),
+            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT)
         );
     }
 
@@ -101,21 +148,38 @@ class CourseRepository extends AppRepository
     }
 
     /**
-     * Update a course status to published
-     *
-     * @param string         $courseIdentifier Course id | slug
-     * @param CourseResource $course           Course
-     * @param array          $parameters       Parameters
-     *
-     * @return CourseResource
      * @CacheInvalidation(namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
-    public function updateToPublished($courseIdentifier, CourseResource $course, array $parameters = array())
+    public function updateToWaitingForPublication($courseId)
     {
+        $course = new CourseResource();
+        $course->setStatus(CourseResource::STATUS_WAITING_FOR_PUBLICATION);
+
         return $this->updateResource(
             $course,
-            array('courseIdentifier' => $courseIdentifier,),
-            $parameters
+            array('courseIdentifier' => $courseId),
+            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT)
         );
+    }
+
+    /**
+     * @CacheInvalidation(namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
+     */
+    public function updateToPublished($courseId)
+    {
+        $course = new CourseResource();
+        $course->setStatus(CourseResource::STATUS_PUBLISHED);
+
+        return $this->updateResource(
+            $course,
+            array('courseIdentifier' => $courseId),
+            array(CourseResource::STATUS => CourseResource::STATUS_WAITING_FOR_PUBLICATION)
+
+        );
+    }
+
+    public function setCourseStatusRepository(CourseStatusRepository $courseStatusRepository)
+    {
+        $this->courseStatusRepository = $courseStatusRepository;
     }
 }
