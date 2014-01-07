@@ -122,7 +122,7 @@ class OwnerResourceController extends AppController
     {
         return $this->listResources(
             true,
-            'simple_it_claire_component_owner_resource_private_list',
+            'simple_it_claire_component_exercise_owner_resource_private_list',
             $collectionInformation,
             $request->isXmlHttpRequest()
         );
@@ -186,6 +186,7 @@ class OwnerResourceController extends AppController
                 'ownerResources'        => $ownerResources,
                 'collectionInformation' => $collectionInformation,
                 'paginationUrl'         => $this->generateUrl($action),
+                'public'                => !$private
             )
         );
     }

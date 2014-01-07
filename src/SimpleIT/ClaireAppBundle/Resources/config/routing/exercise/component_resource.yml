@@ -74,5 +74,5 @@ simple_it_claire_component_exercise_resource_add_to_perso:
     pattern: /{resourceId}/add-to-perso
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/OwnerResourceByResource:addToPerso }
     requirements:
-        _method: POST
+        _method: GET
 

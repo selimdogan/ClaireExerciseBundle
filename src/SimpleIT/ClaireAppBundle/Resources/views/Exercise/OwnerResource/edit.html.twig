@@ -1,4 +1,4 @@
-<h1>Edition de ressources possédée : {{ ownerResource.type }}</h1>
+<h1>Edition de ressource possédée</h1>
 
 <p>
     <a href="{{ path('simple_it_claire_component_exercise_resource_edit',
@@ -8,6 +8,31 @@
     (Possible uniquement si vous êtes l'auteur et que la ressource n'est pas encore utilisée par
     d'autres)
 </p>
+
+<ul>
+    <li>
+        OwnerResource Id : {{ ownerResource.id }}
+    </li>
+    <li>
+        Id de la ressource pointée : {{ ownerResource.resource }}
+    </li>
+    <li>
+        Type : {{ ownerResource.type }}
+    </li>
+    {% if ownerResource.content.source is defined %}
+        <li>
+            Source : {{ ownerResource.content.source }}
+        </li>
+    {% elseif ownerResource.content.sequenceType is defined %}
+        <li>
+            Type de séquence : {{ ownerResource.content.sequenceType }}
+        </li>
+    {% elseif ownerResource.content.question is defined %}
+        <li>
+            Question : {{ ownerResource.content.question }}
+        </li>
+    {% endif %}
+</ul>
 
 {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/OwnerResource:editPublicView',{ 'ownerResourceId': ownerResource.id })) }}
 {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/MetadataByOwnerResource:editMetadataView',{ 'ownerResourceId': ownerResource.id })) }}

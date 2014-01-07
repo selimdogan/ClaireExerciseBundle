@@ -4,18 +4,36 @@
     {% for ownerResource in ownerResources %}
         <li>
             <div class="js-resource-item" data-drag-config="{{ { resources: ownerResource.id }|json_encode() }}">
-                {% if ownerResource.public == 1 %}
-                <a href="{{ path('simple_it_claire_component_exercise_owner_resource_edit',{ 'ownerResourceId': ownerResource.id}) }}">
+                {% if public %}
+                    <a href="{{ path('simple_it_claire_component_exercise_resource_add_to_perso',{ 'resourceId': ownerResource.resource}) }}">
                     <span>
-                        {{ ownerResource.id }}
+                        Importer
                     </span>
-                </a>
+                    </a>
                 {% else %}
+                    <a href="{{ path('simple_it_claire_component_exercise_owner_resource_edit',{ 'ownerResourceId': ownerResource.id}) }}">
                     <span>
-                        {{ ownerResource.id }}
+                        Editer
                     </span>
+                    </a>
+                    /
+                    <a href="{{ path('simple_it_claire_component_exercise_owner_resource_delete',{ 'ownerResourceId': ownerResource.id}) }}">
+                    <span>
+                        Supprimer de l'espace perso
+                    </span>
+                    </a>
+
                 {% endif %}
                 <ul>
+                    <li>
+                        OwnerResource Id : {{ ownerResource.id }}
+                    </li>
+                    <li>
+                        Id de la ressource pointée : {{ ownerResource.resource }}
+                    </li>
+                    <li>
+                        Type : {{ ownerResource.type }}
+                    </li>
                     <li>
                         Public : {{ ownerResource.public }}
                     </li>
