@@ -52,7 +52,7 @@ simple_it_claire_component_course_status_waiting_for_publication:
     requirements :
         -method: POST
 
-simple_it_claire_component_course_difficulty:
+simple_it_claire_component_course_difficulty_edit:
     pattern: /{courseId}/difficulty
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/CourseDifficulty:edit }
     requirements:
