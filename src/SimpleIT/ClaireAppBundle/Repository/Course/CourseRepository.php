@@ -132,9 +132,9 @@ class CourseRepository extends AppRepository implements CourseGateway
     /**
      * Update a course
      *
-     * @param string         $courseIdentifier Course id | slug
-     * @param CourseResource $course           Course
-     * @param array          $parameters       Parameters
+     * @param string $courseIdentifier Course id | slug
+     * @param CourseResource $course   Course
+     * @param array $parameters        Parameters
      *
      * @return CourseResource
      */
@@ -152,13 +152,13 @@ class CourseRepository extends AppRepository implements CourseGateway
      */
     public function updateToWaitingForPublication($courseId)
     {
-        $course = new CourseResource();
-        $course->setStatus(CourseResource::STATUS_WAITING_FOR_PUBLICATION);
-
-        return $this->updateResource(
-            $course,
-            array('courseIdentifier' => $courseId),
-            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT)
+        $this->client->send(
+            $this->client->post(
+                array(
+                    $this->path . '/submit-to-publication',
+                    array('courseIdentifier' => $courseId)
+                )
+            )
         );
     }
 
@@ -167,14 +167,13 @@ class CourseRepository extends AppRepository implements CourseGateway
      */
     public function updateToPublished($courseId)
     {
-        $course = new CourseResource();
-        $course->setStatus(CourseResource::STATUS_PUBLISHED);
-
-        return $this->updateResource(
-            $course,
-            array('courseIdentifier' => $courseId),
-            array(CourseResource::STATUS => CourseResource::STATUS_WAITING_FOR_PUBLICATION)
-
+        $this->client->send(
+            $this->client->post(
+                array(
+                    $this->path . '/publish',
+                    array('courseIdentifier' => $courseId)
+                )
+            )
         );
     }
 
