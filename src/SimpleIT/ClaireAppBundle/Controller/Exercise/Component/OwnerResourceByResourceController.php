@@ -21,8 +21,12 @@ class OwnerResourceByResourceController extends AppController
      */
     public function addToPersoAction($resourceId)
     {
+        // TODO user
+        $userId = 1000001;
+
         $ownerResource = $this->get('simple_it.claire.exercise.owner_resource')->addToPerso(
-            $resourceId
+            $resourceId,
+            $userId
         );
 
         return new JsonResponse(array(

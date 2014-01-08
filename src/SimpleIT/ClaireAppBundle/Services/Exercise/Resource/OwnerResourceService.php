@@ -352,16 +352,20 @@ class OwnerResourceService
     /**
      * Add a resource to the personal space: create an owner resource
      *
-     * @param $resourceId
+     * @param int $resourceId
+     * @param int $userId
      *
      * @return OwnerResourceResource
      */
-    public function addToPerso($resourceId)
+    public function addToPerso($resourceId, $userId)
     {
         $collectionInformation = new CollectionInformation();
-        $collectionInformation->addFilter('public-except-user', 'true');
+        $collectionInformation->addFilter('public-except-user', $userId);
 
-        $ownerResources = $this->ownerResourceByResourceRepository->findAll($resourceId);
+        $ownerResources = $this->ownerResourceByResourceRepository->findAll(
+            $resourceId,
+            $collectionInformation
+        );
 
         $metadata = array();
         /** @var OwnerResourceResource $or */

@@ -5,7 +5,6 @@ namespace SimpleIT\ClaireAppBundle\Controller\Exercise\Component;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource;
 use SimpleIT\ApiResourcesBundle\Exercise\OwnerExerciseModelResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ResourceResource;
-use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\ClaireAppBundle\Form\Type\Exercise\OwnerExerciseModelPublicType;
 use SimpleIT\Utils\Collection\CollectionInformation;
@@ -18,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class OwnerExerciseModelController extends AppController
+class OwnerExerciseModelController extends AppMetadataController
 {
     /**
      * Try to answer an owner exercise model (generate an exercise and redirect to its resolution)
@@ -75,33 +74,6 @@ class OwnerExerciseModelController extends AppController
     }
 
     /**
-     * List ownerExerciseModels
-     *
-     * @param CollectionInformation $collectionInformation Collection Information
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function listAction(CollectionInformation $collectionInformation)
-    {
-        $metadataArray = $this->metadataToArray($collectionInformation);
-        $miscArray = $this->miscToArray($collectionInformation);
-
-        $ownerExerciseModels = $this->get('simple_it.claire.exercise.owner_exercise_model')->getAll
-            (
-                $metadataArray,
-                $miscArray
-            );
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Exercise/OwnerExerciseModel/Component:list.html.twig',
-            array(
-                'ownerExerciseModels'   => $ownerExerciseModels,
-                'collectionInformation' => $collectionInformation
-            )
-        );
-    }
-
-    /**
      * List and search
      *
      * @param Request               $request               Request
@@ -124,9 +96,9 @@ class OwnerExerciseModelController extends AppController
             (
                 $metadataArray,
                 $miscArray,
+                $collectionInformation,
                 $userId,
-                true,
-                $collectionInformation->getFilter('type')
+                true
             );
 
         $publicOwnerExerciseModels = $this->get(
@@ -135,9 +107,9 @@ class OwnerExerciseModelController extends AppController
             (
                 $metadataArray,
                 $miscArray,
+                $collectionInformation,
                 $userId,
-                false,
-                $collectionInformation->getFilter('type')
+                false
             );
 
         if ($request->isXmlHttpRequest()) {
@@ -151,53 +123,105 @@ class OwnerExerciseModelController extends AppController
                 'publicOwnerExerciseModels' => $publicOwnerExerciseModels,
                 'metadataArray'             => $metadataArray,
                 'miscArray'                 => $miscArray,
-                'type'                      => $collectionInformation->getFilter('type')
+                'type'                      => $collectionInformation->getFilter('type'),
+                'collectionInformation'     => $collectionInformation,
+                'privatePaginationUrl'      => $this->generateUrl(
+                    'simple_it_claire_component_exercise_owner_exercise_model_private_list'
+                ),
+                'publicPaginationUrl'       => $this->generateUrl(
+                    'simple_it_claire_component_exercise_owner_exercise_model_public_list'
+                )
             )
         );
     }
 
     /**
-     * Create an array of metadata
+     * List private exercise models
      *
-     * @param CollectionInformation $collectionInformation
+     * @param Request               $request               Request
+     * @param CollectionInformation $collectionInformation Collection Information
      *
-     * @return array
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    private function metadataToArray(CollectionInformation $collectionInformation)
+    public function privateListAction(
+        Request $request,
+        CollectionInformation $collectionInformation
+    )
     {
-        $filters = $collectionInformation->getFilters();
-
-        $metadata = array();
-        foreach ($filters as $key => $filter) {
-            $str = str_split($key, strlen('metaKey'));
-            if ($str[0] == 'metaKey' && is_numeric($str[1])) {
-                $metadata[$filter] = $filters['metaValue' . $str[1]];
-            }
-        }
-
-        return $metadata;
+        return $this->listExerciseModels(
+            true,
+            'simple_it_claire_component_exercise_owner_exercise_model_private_list',
+            $collectionInformation,
+            $request->isXmlHttpRequest()
+        );
     }
 
     /**
-     * Create an array of keywords from collection information
+     * List public exercise models
      *
-     * @param CollectionInformation $collectionInformation
+     * @param Request               $request               Request
+     * @param CollectionInformation $collectionInformation Collection Information
      *
-     * @return array
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    private function miscToArray(CollectionInformation $collectionInformation)
+    public function publicListAction(
+        Request $request,
+        CollectionInformation $collectionInformation
+    )
     {
-        $filters = $collectionInformation->getFilters();
+        return $this->listExerciseModels(
+            false,
+            'simple_it_claire_component_owner_exercise_model_public_list',
+            $collectionInformation,
+            $request->isXmlHttpRequest()
+        );
+    }
 
-        $misc = array();
-        foreach ($filters as $key => $filter) {
-            $str = str_split($key, strlen('misc'));
-            if ($str[0] == 'misc' && is_numeric($str[1])) {
-                $misc[] = $filter;
-            }
+    /**
+     * List the resources with pagination
+     *
+     * @param boolean               $private List private or public exercise models
+     * @param string                $action  The route to call in pagination
+     * @param CollectionInformation $collectionInformation
+     * @param boolean               $isXmlHttpRequest
+     *
+     * @return Response
+     */
+    private function listExerciseModels(
+        $private,
+        $action,
+        $collectionInformation,
+        $isXmlHttpRequest
+    )
+    {
+        $metadataArray = $this->metadataToArray($collectionInformation);
+        $miscArray = $this->miscToArray($collectionInformation);
+
+        // TODO User
+        $userId = 1000001;
+
+        $ownerExerciseModels = $this->get('simple_it.claire.exercise.owner_exercise_model')->getAll
+            (
+                $metadataArray,
+                $miscArray,
+                $collectionInformation,
+                $userId,
+                $private
+            );
+
+        if ($isXmlHttpRequest) {
+            return new Response($this->searchListJson($ownerExerciseModels));
         }
 
-        return $misc;
+        return $this->render(
+            'SimpleITClaireAppBundle:Exercise/OwnerExerciseModel/Component:list.html.twig',
+            array(
+                'ownerExerciseModels'        => $ownerExerciseModels,
+                'collectionInformation' => $collectionInformation,
+                'paginationUrl'         => $this->generateUrl($action),
+                'public'                => !$private
+            )
+        );
     }
 
     /**
@@ -276,5 +300,19 @@ class OwnerExerciseModelController extends AppController
         }
 
         return new JsonResponse($ownerExerciseModel->getPublic());
+    }
+
+    /**
+     * Delete an owner exercise model
+     *
+     * @param $ownerExerciseModelId
+     *
+     * @return JsonResponse
+     */
+    public function deleteAction($ownerExerciseModelId)
+    {
+        $this->get('simple_it.claire.exercise.owner_exercise_model')->delete($ownerExerciseModelId);
+
+        return new JsonResponse($ownerExerciseModelId);
     }
 }

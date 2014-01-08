@@ -88,4 +88,14 @@ class OwnerExerciseModelRepository extends AppRepository
     {
         return $this->insertResource($ownerExerciseModelResource);
     }
+
+    /**
+     * Delete an owner exercise model
+     *
+     * @param $ownerExerciseModelId
+     */
+    public function delete($ownerExerciseModelId)
+    {
+        $this->deleteResource(array('ownerExerciseModelId' => $ownerExerciseModelId));
+    }
 }

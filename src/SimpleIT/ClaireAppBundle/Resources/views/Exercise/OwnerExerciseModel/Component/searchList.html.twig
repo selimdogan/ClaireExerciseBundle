@@ -88,11 +88,13 @@
 </form>
 <h2>Espace personnel</h2>
 {% include 'SimpleITClaireAppBundle:Exercise/OwnerExerciseModel/Component:list.html.twig'
-with{'ownerExerciseModels':ownerExerciseModels} %}
+with{'ownerExerciseModels':ownerExerciseModels, 'collectionInformation':collectionInformation,
+'paginationUrl': privatePaginationUrl, 'public': false} %}
 
 <h2>Espace public</h2>
 {% include 'SimpleITClaireAppBundle:Exercise/OwnerExerciseModel/Component:list.html.twig'
-with{'ownerExerciseModels':publicOwnerExerciseModels} %}
+with{'ownerExerciseModels':publicOwnerExerciseModels, 'collectionInformation':collectionInformation,
+'paginationUrl': privatePaginationUrl, 'public': true} %}
 
 <script>
     function addFilter() {

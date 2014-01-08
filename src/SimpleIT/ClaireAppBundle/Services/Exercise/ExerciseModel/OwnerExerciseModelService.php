@@ -13,6 +13,7 @@ use
     SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\OwnerExerciseModelByOwnerRepository;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\OwnerExerciseModelRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\Utils\Collection\Page;
 use SimpleIT\Utils\Collection\PaginatedCollection;
 
 /**
@@ -22,6 +23,11 @@ use SimpleIT\Utils\Collection\PaginatedCollection;
  */
 class OwnerExerciseModelService
 {
+    /**
+     * @const ITEM_PER_PAGE = 20
+     */
+    const ITEM_PER_PAGE = 20;
+
     /**
      * @var OwnerExerciseModelRepository
      */
@@ -90,24 +96,33 @@ class OwnerExerciseModelService
      * Get all owner exercise models and if a user is specified, show only the public exercise
      * models except user's ones
      *
-     * @param array  $metadataArray
-     * @param array  $miscArray
-     * @param null   $userId
-     * @param bool   $personalExerciseModel
-     * @param string $type
+     * @param array                 $metadataArray
+     * @param array                 $miscArray
+     * @param CollectionInformation $inputCollectionInformation
+     * @param null                  $userId
+     * @param bool                  $personalExerciseModel
      *
      * @return PaginatedCollection
      */
     public function getAll(
         array $metadataArray,
         array $miscArray,
+        $inputCollectionInformation = null,
         $userId = null,
-        $personalExerciseModel = true,
-        $type = null
+        $personalExerciseModel = true
     )
     {
-
+        // FIXME Clean code for pagination and get (and not create) a clean Page object
         $collectionInformation = new CollectionInformation();
+        $pageNumber = 1;
+        if ($inputCollectionInformation !== null
+            && $inputCollectionInformation->getPage() !== null
+            && $inputCollectionInformation->getPage()->getPageNumber() !== null
+        ) {
+            $pageNumber = $inputCollectionInformation->getPage()->getPageNumber();
+        }
+        $page = new Page(self::ITEM_PER_PAGE, $pageNumber);
+        $collectionInformation->setPage($page);
 
         if (!empty ($metadataArray)) {
             // metadata
@@ -134,7 +149,8 @@ class OwnerExerciseModelService
             $collectionInformation->addFilter('keywords', $keywordFilter);
         }
 
-        if (!empty($type)) {
+        $type = $inputCollectionInformation->getFilter('type');
+        if ($type !== null) {
             $collectionInformation->addFilter('type', $type);
         }
 
@@ -264,7 +280,10 @@ class OwnerExerciseModelService
     {
         $metadatas = array();
         if (isset($resourceData['misc'])) {
-            $metadatas[MetadataResource::MISC_METADATA_KEY] = $miscString = implode(';', $resourceData['misc']);
+            $metadatas[MetadataResource::MISC_METADATA_KEY] = $miscString = implode(
+                ';',
+                $resourceData['misc']
+            );
         }
 
         if (isset($resourceData['metaKey'])) {
@@ -319,6 +338,37 @@ class OwnerExerciseModelService
     }
 
     /**
+     * Add an owner exercise model to the personal space: create an owner exercise model
+     *
+     * @param int $exerciseModelId
+     * @param int $userId
+     *
+     * @return OwnerExerciseModelResource
+     */
+    public function addToPerso($exerciseModelId, $userId)
+    {
+        $collectionInformation = new CollectionInformation();
+        $collectionInformation->addFilter('public-except-user', $userId);
+        $ownerResources = $this->ownerExerciseModelByExerciseModelRepository->findAll(
+            $exerciseModelId,
+            $collectionInformation
+        );
+
+        $metadata = array();
+        /** @var OwnerExerciseModelResource $oem */
+        foreach ($ownerResources as $oem) {
+            $metadata = array_merge($metadata, $oem->getMetadata());
+        }
+
+        $oem = new OwnerExerciseModelResource();
+        $oem->setExerciseModel($exerciseModelId);
+        $oem->setPublic(true);
+        $oem->setMetadata($metadata);
+
+        return $this->add($oem);
+    }
+
+    /**
      * Create an owner exercise model from an array
      *
      * @param array $array
@@ -354,5 +404,15 @@ class OwnerExerciseModelService
             $ownerExerciseModel,
             $parameters
         );
+    }
+
+    /**
+     * Delete an owner exercise model
+     *
+     * @param int $ownerExerciseModelId
+     */
+    public function delete($ownerExerciseModelId)
+    {
+        $this->ownerExerciseModelRepository->delete($ownerExerciseModelId);
     }
 }

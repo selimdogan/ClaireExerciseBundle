@@ -72,3 +72,12 @@ simple_it_claire_component_exercise_exercise_model_delete:
     requirements:
         _method: GET
         exerciseModelId: \d+
+
+simple_it_claire_component_exercise_exercise_model_add_to_perso:
+    pattern: /{exerciseModelId}/add-to-perso
+    defaults: { _controller:SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModelByExerciseModel:addToPerso }
+    requirements:
+        _method: GET
+        exerciseModelId: \d+
+
+

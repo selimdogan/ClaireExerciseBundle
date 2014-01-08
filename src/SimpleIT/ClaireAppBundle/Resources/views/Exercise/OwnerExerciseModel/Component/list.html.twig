@@ -1,13 +1,29 @@
+{% import 'SimpleITClaireAppBundle:Common:macros.html.twig' as macro %}
 <h3>Liste des modèles</h3>
 <ul>
     {% for ownerExerciseModel in ownerExerciseModels %}
         <li>
             {{ ownerExerciseModel.title }}
-            <a href="{{ path('simple_it_claire_component_exercise_owner_exercise_model_edit',{ 'ownerExerciseModelId': ownerExerciseModel.id}) }}">
-                <span>
-                    (Editer)
-                </span>
-            </a>
+            {% if public %}
+                <a href="{{ path('simple_it_claire_component_exercise_exercise_model_add_to_perso',{ 'exerciseModelId': ownerExerciseModel.exerciseModel}) }}">
+                    <span>
+                        Importer
+                    </span>
+                </a>
+            {% else %}
+                <a href="{{ path('simple_it_claire_component_exercise_owner_exercise_model_edit',{ 'ownerExerciseModelId': ownerExerciseModel.id}) }}">
+                    <span>
+                        Editer
+                    </span>
+                </a>
+                /
+                <a href="{{ path('simple_it_claire_component_exercise_owner_exercise_model_delete',{ 'ownerExerciseModelId': ownerExerciseModel.id}) }}">
+                    <span>
+                        Supprimer de l'espace perso
+                    </span>
+                </a>
+            {% endif %}
+            /
             <a href="{{ path('simple_it_claire_component_exercise_owner_exercise_model_try',{ 'ownerExerciseModelId': ownerExerciseModel.id}) }}">
                 <span>
                     (Répondre à un exercice)
@@ -55,3 +71,4 @@
         </li>
     {% endfor %}
 </ul>
+{{ macro.pagination(ownerExerciseModels, collectionInformation, paginationUrl) }}
