@@ -4,6 +4,7 @@ namespace SimpleIT\ClaireAppBundle\Repository\Course;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseGateway;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
+use SimpleIT\AppBundle\Services\CacheServiceInterface;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
 use SimpleIT\AppBundle\Annotation\Cache;
@@ -30,6 +31,11 @@ class CourseRepository extends AppRepository implements CourseGateway
      * @var CourseStatusRepository
      */
     private $courseStatusRepository;
+
+    /**
+     * @var CacheServiceInterface
+     */
+    private $cacheService;
 
     /**
      * Find a list of courses
@@ -147,9 +153,6 @@ class CourseRepository extends AppRepository implements CourseGateway
         );
     }
 
-    /**
-     * @CacheInvalidation(namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
-     */
     public function updateToWaitingForPublication($courseId)
     {
         $this->client->send(
@@ -167,6 +170,7 @@ class CourseRepository extends AppRepository implements CourseGateway
      */
     public function updateToPublished($courseId)
     {
+
         $this->client->send(
             $this->client->post(
                 array(
@@ -175,6 +179,12 @@ class CourseRepository extends AppRepository implements CourseGateway
                 )
             )
         );
+        $course = $this->find($courseId);
+        $annotation = new CacheInvalidation();
+        $annotation->namespacePrefix = 'claire_app_course_course';
+        $annotation->namespaceAttributeValue = $course->getSlug();
+
+        $this->cacheService->invalidateFromCacheInvalidationAnnotation($annotation);
     }
 
     public function updateDraft($courseId, CourseResource $course)
