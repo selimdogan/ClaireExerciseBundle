@@ -15,10 +15,9 @@ use OC\CLAIRE\BusinessRules\UseCases\Course\Course\DTO\GetDraftCourseRequestDTO;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use SimpleIT\AppBundle\Annotation\Cache;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class CourseContentController
- *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
 class CourseContentController extends AppController
@@ -31,10 +30,25 @@ class CourseContentController extends AppController
      * @return \Symfony\Component\HttpFoundation\Response
      * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
-    public function viewAction(Request $request, $courseIdentifier)
+    public function viewPublishedAction($courseIdentifier)
     {
-        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_PUBLISHED);
+        /** @var UseCaseFactory $useCaseFactory */
+        $useCaseFactory = $this->get('oc.claire.use_cases.use_case_factory');
 
+        $getContentResponse = $useCaseFactory
+            ->make('GetPublishedContent')
+            ->execute(new GetPublishedContentRequestDTO($courseIdentifier));
+
+        /** @var GetContentResponse $getContentResponse */
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
+            array('content' => $getContentResponse->getContent())
+        );
+    }
+
+    public function viewAction($courseId, $status)
+    {
         /** @var UseCaseFactory $useCaseFactory */
         $useCaseFactory = $this->get('oc.claire.use_cases.use_case_factory');
 
@@ -42,18 +56,15 @@ class CourseContentController extends AppController
             case CourseResource::STATUS_WAITING_FOR_PUBLICATION:
                 $getContentResponse = $useCaseFactory
                     ->make('GetWaitingForPublicationContent')
-                    ->execute(new GetWaitingForPublicationContentRequestDTO($courseIdentifier));
+                    ->execute(new GetWaitingForPublicationContentRequestDTO($courseId));
                 break;
             case CourseResource::STATUS_DRAFT:
                 $getContentResponse = $useCaseFactory
                     ->make('GetDraftContent')
-                    ->execute(new GetDraftContentRequestDTO($courseIdentifier));
+                    ->execute(new GetDraftContentRequestDTO($courseId));
                 break;
             default :
-                $getContentResponse = $useCaseFactory
-                    ->make('GetPublishedContent')
-                    ->execute(new GetPublishedContentRequestDTO($courseIdentifier));
-                break;
+                throw new NotFoundHttpException();
         }
 
         /** @var GetContentResponse $getContentResponse */
