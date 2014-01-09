@@ -18,6 +18,9 @@
             <call method="setCourseStatusRepository">
                 <argument type="service" id="simple_it.claire.course.repository.course_status"/>
             </call>
+            <call method="setCacheService">
+                <argument type="service" id="simple_it.cache.cache"/>
+            </call>
         </service>
 
         <service id="simple_it.claire.course.repository.course_status" class="%simple_it.claire.course.repository.course_status.class%">

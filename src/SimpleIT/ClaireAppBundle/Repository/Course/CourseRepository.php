@@ -200,4 +200,9 @@ class CourseRepository extends AppRepository implements CourseGateway
     {
         $this->courseStatusRepository = $courseStatusRepository;
     }
+
+    public function setCacheService(CacheServiceInterface $cacheService)
+    {
+        $this->cacheService = $cacheService;
+    }
 }
