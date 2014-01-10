@@ -25,6 +25,7 @@ class UseCaseFactoryTest extends \PHPUnit_Framework_TestCase
         'ChangeCourseToWaitingForPublication' => 'OC\CLAIRE\BusinessRules\UseCases\Course\Workflow\ChangeCourseToWaitingForPublication',
         'ChangeCourseToPublished'             => 'OC\CLAIRE\BusinessRules\UseCases\Course\Workflow\ChangeCourseToPublished',
         'GetDraftDisplayLevel'                => 'OC\CLAIRE\BusinessRules\UseCases\Course\DisplayLevel\GetDraftDisplayLevel',
+        'SaveDisplayLevel'                    => 'OC\CLAIRE\BusinessRules\UseCases\Course\DisplayLevel\SaveDisplayLevel',
         'GetDraftCourseDifficulty'            => 'OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\GetDraftCourseDifficulty',
         'SaveCourseDifficulty'                => 'OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\SaveCourseDifficulty',
         'AddElementToToc'                     => 'OC\CLAIRE\BusinessRules\UseCases\Course\Toc\AddElementToToc',

@@ -21,7 +21,8 @@
         <parameter key="oc.claire.use_cases.course.toc.add_element_to_toc.class">OC\CLAIRE\BusinessRules\UseCases\Course\Toc\AddElementToToc</parameter>
 
         <!--METADATA-->
-        <parameter key="oc.claire.use_cases.course.course.get_draft_display_level.class">OC\CLAIRE\BusinessRules\UseCases\Course\DisplayLevel\GetDraftDisplayLevel</parameter>
+        <parameter key="oc.claire.use_cases.course.display_level.get_draft_display_level.class">OC\CLAIRE\BusinessRules\UseCases\Course\DisplayLevel\GetDraftDisplayLevel</parameter>
+        <parameter key="oc.claire.use_cases.course.display_level.save_display_level.class">OC\CLAIRE\BusinessRules\UseCases\Course\DisplayLevel\SaveDisplayLevel</parameter>
         <parameter key="oc.claire.use_cases.course.difficulty.get_course_difficulty.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\GetDraftCourseDifficulty</parameter>
         <parameter key="oc.claire.use_cases.course.difficulty.save_course_difficulty.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\SaveCourseDifficulty</parameter>
     </parameters>
@@ -82,12 +83,22 @@
                 <argument type="service" id="simple_it.claire.course.repository.course"/>
             </call>
         </service>
-        <!--METADATA-->
-        <service id="oc.claire.use_cases.course.course.get_draft_display_level" class="%oc.claire.use_cases.course.course.get_draft_display_level.class%">
+
+        <!--DISPLAY LEVEL-->
+        <service id="oc.claire.use_cases.course.display_level.get_draft_display_level" class="%oc.claire.use_cases.course.display_level.get_draft_display_level.class%">
             <call method="setCourseGateway">
                 <argument type="service" id="simple_it.claire.course.repository.course"/>
             </call>
         </service>
+        <service id="oc.claire.use_cases.course.display_level.save_display_level" class="%oc.claire.use_cases.course.display_level.save_display_level.class%">
+            <call method="setCourseGateway">
+                <argument type="service" id="simple_it.claire.course.repository.course"/>
+            </call>
+            <call method="setCourseFactory">
+                <argument type="service" id="oc.claire.entity.course_factory"/>
+            </call>
+        </service>
+        <!--METADATA-->
         <service id="oc.claire.use_cases.course.difficulty.get_draft_course_difficulty" class="%oc.claire.use_cases.course.difficulty.get_course_difficulty.class%">
             <call method="setCourseGateway">
                 <argument type="service" id="simple_it.claire.course.repository.course"/>

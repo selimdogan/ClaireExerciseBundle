@@ -71,12 +71,18 @@ class UseCaseFactoryImpl implements UseCaseFactory
                     'oc.claire.use_cases.course.workflow.change_course_to_waiting_for_publication'
                 );
                 break;
-            // METADATA
+            // DISPLAY LEVEL
             case 'GetDraftDisplayLevel':
                 $useCase = $this->injector->get(
-                    'oc.claire.use_cases.course.course.get_draft_display_Level'
+                    'oc.claire.use_cases.course.display_level.get_draft_display_level'
                 );
                 break;
+            case 'SaveDisplayLevel':
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.display_level.save_display_level'
+                );
+                break;
+            // METADATA
             case 'GetDraftCourseDifficulty':
                 $useCase = $this->injector->get(
                     'oc.claire.use_cases.course.difficulty.get_draft_course_difficulty'
