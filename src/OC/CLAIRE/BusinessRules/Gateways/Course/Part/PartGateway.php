@@ -15,4 +15,4 @@ interface PartGateway
     public function findDraft($courseId, $partId);
 
     public function updateDraft($courseId, $partId, PartResource $part);
-} 
+}

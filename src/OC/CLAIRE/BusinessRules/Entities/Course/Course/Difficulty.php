@@ -1,11 +1,11 @@
 <?php
 
-namespace OC\CLAIRE\BusinessRules\Entities\Difficulty;
+namespace OC\CLAIRE\BusinessRules\Entities\Course\Course;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class Difficulty
+abstract class Difficulty
 {
     const EASY = 'facile';
 

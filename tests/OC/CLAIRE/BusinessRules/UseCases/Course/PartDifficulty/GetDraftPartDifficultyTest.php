@@ -2,7 +2,7 @@
 
 namespace OC\CLAIRE\BusinessRules\UseCases\Course\PartDifficulty;
 
-use OC\CLAIRE\BusinessRules\Entities\Difficulty\Difficulty;
+use OC\CLAIRE\BusinessRules\Entities\Course\Course\Difficulty;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Part\EmptyPartGatewayStub;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Part\PartGatewaySpy;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Part\PartNotFoundGatewayStub;

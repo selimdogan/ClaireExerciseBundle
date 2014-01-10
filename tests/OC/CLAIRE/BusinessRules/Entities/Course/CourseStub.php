@@ -26,11 +26,6 @@ abstract class CourseStub extends CourseResource
         return new \DateTime(self::COURSE_CREATED_AT);
     }
 
-    public function getDisplayLevel()
-    {
-        return self::COURSE_DISPLAY_LEVEL;
-    }
-
     public function getId()
     {
         return self::COURSE_ID;

@@ -2,7 +2,7 @@
 
 namespace OC\CLAIRE\BusinessRules\Gateways\Course\Course;
 
-use OC\CLAIRE\BusinessRules\Entities\Course\DraftCourseStub;
+use OC\CLAIRE\BusinessRules\Entities\Course\SmallEasyDraftCourseStub;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 
 /**
@@ -49,7 +49,7 @@ class CourseGatewaySpy implements CourseGateway
      */
     public function findDraft($courseId)
     {
-        return new DraftCourseStub();
+        return new SmallEasyDraftCourseStub();
     }
 
     public function updateToWaitingForPublication($courseId)

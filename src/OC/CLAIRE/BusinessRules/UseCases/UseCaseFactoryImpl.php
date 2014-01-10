@@ -35,7 +35,9 @@ class UseCaseFactoryImpl implements UseCaseFactory
                 );
                 break;
             case 'GetDraftCourse':
-                $useCase = $this->injector->get('oc.claire.use_cases.course.course.get_draft_course');
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.course.get_draft_course'
+                );
                 break;
             // CONTENT
             case 'GetPublishedContent':
@@ -70,6 +72,11 @@ class UseCaseFactoryImpl implements UseCaseFactory
                 );
                 break;
             // METADATA
+            case 'GetDraftDisplayLevel':
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.course.get_draft_display_Level'
+                );
+                break;
             case 'GetDraftCourseDifficulty':
                 $useCase = $this->injector->get(
                     'oc.claire.use_cases.course.difficulty.get_draft_course_difficulty'

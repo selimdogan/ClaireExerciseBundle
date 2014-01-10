@@ -11,4 +11,4 @@ interface GetDraftPartDifficultyResponse
      * @return string
      */
     public function getDifficulty();
-} 
+}

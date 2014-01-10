@@ -2,7 +2,7 @@
 
 namespace OC\CLAIRE\BusinessRules\Entities\Course\Part;
 
-use OC\CLAIRE\BusinessRules\Entities\Difficulty\Difficulty;
+use OC\CLAIRE\BusinessRules\Entities\Course\Course\Difficulty;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 
 /**

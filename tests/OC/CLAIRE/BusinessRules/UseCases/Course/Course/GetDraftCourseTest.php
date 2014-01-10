@@ -2,7 +2,7 @@
 
 namespace OC\CLAIRE\BusinessRules\UseCases\Course\Course;
 
-use OC\CLAIRE\BusinessRules\Entities\Course\DraftCourseStub;
+use OC\CLAIRE\BusinessRules\Entities\Course\SmallEasyDraftCourseStub;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseGatewayStub;
 use OC\CLAIRE\BusinessRules\UseCases\Course\Course\DTO\GetDraftCourseRequestDTO;
 
@@ -19,7 +19,7 @@ class GetDraftCourseTest extends GetCourseTest
         $this->executeUseCase();
         $this->assertCourse();
         $this->assertEquals(
-            DraftCourseStub::COURSE_STATUS,
+            SmallEasyDraftCourseStub::COURSE_STATUS,
             $this->response->getStatus()
         );
     }

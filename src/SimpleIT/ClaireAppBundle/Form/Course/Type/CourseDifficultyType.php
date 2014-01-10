@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Form\Course\Type;
 
-use OC\CLAIRE\BusinessRules\Entities\Difficulty\Difficulty;
+use OC\CLAIRE\BusinessRules\Entities\Course\Course\Difficulty;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;

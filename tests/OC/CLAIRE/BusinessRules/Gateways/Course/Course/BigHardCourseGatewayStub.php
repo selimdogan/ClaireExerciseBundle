@@ -2,26 +2,20 @@
 
 namespace OC\CLAIRE\BusinessRules\Gateways\Course\Course;
 
-use OC\CLAIRE\BusinessRules\Entities\Course\SmallEasyDraftCourseStub;
-use OC\CLAIRE\BusinessRules\Entities\Course\PublishedCourseStub;
-use OC\CLAIRE\BusinessRules\Entities\Course\WaitingForPublicationCourseStub;
+use OC\CLAIRE\BusinessRules\Entities\Course\BigHardDraftCourseStub;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class CourseGatewayStub implements CourseGateway
+class BigHardCourseGatewayStub implements CourseGateway
 {
     /**
      * @return CourseResource[]
      */
     public function findAllStatus($courseIdentifier)
     {
-        return array(
-            new PublishedCourseStub(),
-            new WaitingForPublicationCourseStub(),
-            new SmallEasyDraftCourseStub()
-        );
+        return null;
     }
 
     /**
@@ -29,7 +23,7 @@ class CourseGatewayStub implements CourseGateway
      */
     public function findPublished($courseIdentifier)
     {
-        return new PublishedCourseStub();
+        return null;
     }
 
     /**
@@ -37,7 +31,7 @@ class CourseGatewayStub implements CourseGateway
      */
     public function findWaitingForPublication($courseId)
     {
-        return new WaitingForPublicationCourseStub();
+        return null;
     }
 
     /**
@@ -45,7 +39,7 @@ class CourseGatewayStub implements CourseGateway
      */
     public function findDraft($courseId)
     {
-        return new SmallEasyDraftCourseStub();
+        return new BigHardDraftCourseStub();
     }
 
     public function updateToWaitingForPublication($courseId)
@@ -62,4 +56,5 @@ class CourseGatewayStub implements CourseGateway
     {
         return null;
     }
+
 }

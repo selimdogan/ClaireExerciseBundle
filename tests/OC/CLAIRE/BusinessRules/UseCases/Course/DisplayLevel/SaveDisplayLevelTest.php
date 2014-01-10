@@ -1,26 +1,25 @@
 <?php
 
-namespace OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty;
+namespace OC\CLAIRE\BusinessRules\UseCases\Course\DisplayLevel;
 
-use OC\CLAIRE\BusinessRules\Entities\Course\Course\Difficulty;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseGatewaySpy;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseNotFoundCourseGatewayStub;
-use OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\DTO\SaveCourseDifficultyRequestDTO;
+use OC\CLAIRE\BusinessRules\UseCases\Course\DisplayLevel\DTO\SaveDisplayLevelRequestDTO;
 use SimpleIT\ClaireAppBundle\Entity\Course\Course\CourseFactoryImpl;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class SaveCourseDifficultyTest extends \PHPUnit_Framework_TestCase
+class SaveDisplayLevelTest extends \PHPUnit_Framework_TestCase
 {
     const NON_EXISTING_COURSE_ID = 999;
 
     const COURSE_1_ID = 1;
 
-    const COURSE_1_DIFFICULTY = Difficulty::EASY;
+    const COURSE_1_DISPLAY_LEVEL = 1;
 
     /**
-     * @var SaveCourseDifficulty
+     * @var SaveDisplayLevel
      */
     private $useCase;
 
@@ -36,25 +35,18 @@ class SaveCourseDifficultyTest extends \PHPUnit_Framework_TestCase
     public function NonExistingCourse_ThrowException()
     {
         $this->useCase->setCourseGateway(new CourseNotFoundCourseGatewayStub());
-        $this->executeUseCase(
-            new SaveCourseDifficultyRequestDTO(self::NON_EXISTING_COURSE_ID, Difficulty::EASY)
-        );
-    }
-
-    private function executeUseCase($request)
-    {
-        $this->useCase->execute($request);
+        $this->useCase->execute(new SaveDisplayLevelRequestDTO(self::NON_EXISTING_COURSE_ID, null));
     }
 
     /**
      * @test
      */
-    public function SaveDifficulty()
+    public function SaveDisplayLevel()
     {
         $this->courseGateway = new CourseGatewaySpy();
         $this->useCase->setCourseGateway($this->courseGateway);
-        $this->executeUseCase(
-            new SaveCourseDifficultyRequestDTO(self::COURSE_1_ID, self::COURSE_1_DIFFICULTY)
+        $this->useCase->execute(
+            new SaveDisplayLevelRequestDTO(self::COURSE_1_ID, self::COURSE_1_DISPLAY_LEVEL)
         );
         $this->assertDifficulty();
     }
@@ -63,14 +55,14 @@ class SaveCourseDifficultyTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(self::COURSE_1_ID, $this->courseGateway->courseId);
         $this->assertEquals(
-            self::COURSE_1_DIFFICULTY,
-            $this->courseGateway->course->getDifficulty()
+            self::COURSE_1_DISPLAY_LEVEL,
+            $this->courseGateway->course->getDisplayLevel()
         );
     }
 
     protected function setup()
     {
-        $this->useCase = new SaveCourseDifficulty();
+        $this->useCase = new SaveDisplayLevel();
         $this->useCase->setCourseFactory(new CourseFactoryImpl());
     }
 }

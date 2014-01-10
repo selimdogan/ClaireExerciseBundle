@@ -36,7 +36,7 @@ simple_it_claire_component_course_course_edit:
 
 simple_it_claire_component_course_course_display_level_edit:
     pattern: /{courseId}/displayLevel
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course:displayLevelEdit }
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/DisplayLevel:edit }
     requirements:
         _method: POST
 

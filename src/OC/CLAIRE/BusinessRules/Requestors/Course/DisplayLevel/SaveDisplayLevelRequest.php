@@ -1,13 +1,13 @@
 <?php
 
-namespace OC\CLAIRE\BusinessRules\Requestors\Course\PartDifficulty;
+namespace OC\CLAIRE\BusinessRules\Requestors\Course\DisplayLevel;
 
 use OC\CLAIRE\BusinessRules\Requestors\UseCaseRequest;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-interface SavePartDifficultyRequest extends UseCaseRequest
+interface SaveDisplayLevelRequest extends UseCaseRequest
 {
     /**
      * @return int
@@ -15,13 +15,7 @@ interface SavePartDifficultyRequest extends UseCaseRequest
     public function getCourseId();
 
     /**
-     * @return string
-     */
-    public function getDifficulty();
-
-    /**
      * @return int
      */
-    public function getPartId();
-
+    public function getDisplayLevel();
 }

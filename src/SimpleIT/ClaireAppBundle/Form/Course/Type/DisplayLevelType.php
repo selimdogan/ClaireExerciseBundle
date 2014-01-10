@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Form\Course\Type;
 
-use OC\CLAIRE\BusinessRules\Entities\Course\Course\Difficulty;
+use OC\CLAIRE\BusinessRules\Entities\Course\Course\DisplayLevel;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -10,22 +10,23 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class PartDifficultyType extends AbstractType
+class DisplayLevelType extends AbstractType
 {
     /**
      * @inheritdoc
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $difficulties = array(Difficulty::EASY   => 'facile',
-                              Difficulty::MEDIUM => 'moyen',
-                              Difficulty::HARD   => 'difficile'
+        $displayLevels = array(
+            DisplayLevel::SMALL  => 'petit',
+            DisplayLevel::MEDIUM => 'moyen',
+            DisplayLevel::BIG    => 'grand'
         );
         $builder->add(
-            'difficulty',
+            'diplayLevel',
             'choice',
             array(
-                'choices'  => $difficulties,
+                'choices'  => $displayLevels,
                 'required' => true,
             )
         );
@@ -33,9 +34,11 @@ class PartDifficultyType extends AbstractType
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-                'data_class' => 'SimpleIT\ClaireAppBundle\Form\Course\Model\PartDifficultyModel',
-            ));
+        $resolver->setDefaults(
+            array(
+                'data_class' => 'SimpleIT\ClaireAppBundle\Form\Course\Model\DisplayLevelModel',
+            )
+        );
     }
 
     /**
@@ -43,6 +46,6 @@ class PartDifficultyType extends AbstractType
      */
     public function getName()
     {
-        return 'PartDifficulty';
+        return 'DisplayLevel';
     }
 }
