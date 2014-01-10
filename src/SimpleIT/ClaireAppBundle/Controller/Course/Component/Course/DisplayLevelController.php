@@ -37,7 +37,7 @@ class DisplayLevelController extends AppController
                 'SimpleITClaireAppBundle:Course/Course/Component:editDisplayLevel.html.twig',
                 array(
                     'actionUrl' => $this->generateUrl(
-                            'simple_it_claire_component_course_display_level_edit',
+                            'simple_it_claire_component_course_course_display_level_edit',
                             array('courseId' => $courseId)
                         ),
                     'form'      => $form->createView()
