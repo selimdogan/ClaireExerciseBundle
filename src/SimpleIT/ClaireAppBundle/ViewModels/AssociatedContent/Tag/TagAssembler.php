@@ -23,4 +23,4 @@ class TagAssembler
 
         return $tag;
     }
-} 
+}

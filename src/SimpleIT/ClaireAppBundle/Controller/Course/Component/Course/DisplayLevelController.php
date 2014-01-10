@@ -10,7 +10,6 @@ use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\Form\Course\Model\DisplayLevelModel;
 use SimpleIT\ClaireAppBundle\Form\Course\Type\DisplayLevelType;
 use SimpleIT\Utils\HTTP;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

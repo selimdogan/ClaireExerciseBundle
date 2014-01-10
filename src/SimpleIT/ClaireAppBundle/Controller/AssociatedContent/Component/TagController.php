@@ -79,7 +79,6 @@ class TagController extends AppController
         $assembler = new TagAssembler();
         $vm = $assembler->writeTag($tag, $category);
 
-
         return $this->render(
             'SimpleITClaireAppBundle:AssociatedContent/Tag/Component:view.html.twig',
             array('vm' => $vm)

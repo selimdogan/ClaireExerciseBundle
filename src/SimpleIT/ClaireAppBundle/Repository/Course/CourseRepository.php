@@ -138,9 +138,9 @@ class CourseRepository extends AppRepository implements CourseGateway
     /**
      * Update a course
      *
-     * @param string $courseIdentifier Course id | slug
-     * @param CourseResource $course   Course
-     * @param array $parameters        Parameters
+     * @param string         $courseIdentifier Course id | slug
+     * @param CourseResource $course           Course
+     * @param array          $parameters       Parameters
      *
      * @return CourseResource
      */
