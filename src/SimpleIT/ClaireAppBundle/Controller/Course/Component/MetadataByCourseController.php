@@ -79,32 +79,6 @@ class MetadataByCourseController extends AbstractMetadataController
         );
     }
 
-//    /**
-//     * View a course description
-//     *
-//     * @param int | string $courseIdentifier Course id | slug
-//     *
-//     * @return \Symfony\Component\HttpFoundation\Response
-//     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
-//     */
-//    public function viewDescriptionAction($courseIdentifier)
-//    {
-//        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourse(
-//            $courseIdentifier
-//        );
-//        $description = ArrayUtils::getValue(
-//            $metadatas,
-//            MetadataResource::COURSE_METADATA_DESCRIPTION
-//        );
-//
-//        return $this->render(
-//            'SimpleITClaireAppBundle:Course/Metadata/Component:viewDescription.html.twig',
-//            array(
-//                MetadataResource::COURSE_METADATA_DESCRIPTION => $description
-//            )
-//        );
-//    }
-
     /**
      * Edit a description (GET)
      *
