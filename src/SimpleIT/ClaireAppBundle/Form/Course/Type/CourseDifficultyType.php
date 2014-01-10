@@ -17,9 +17,9 @@ class CourseDifficultyType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $difficulties = array(Difficulty::EASY   => 'facile',
-                              Difficulty::MEDIUM => 'moyen',
-                              Difficulty::HARD   => 'difficile'
+        $difficulties = array(Difficulty::EASY   => 'Facile',
+                              Difficulty::MEDIUM => 'Moyen',
+                              Difficulty::HARD   => 'Difficile'
         );
         $builder->add(
             'difficulty',

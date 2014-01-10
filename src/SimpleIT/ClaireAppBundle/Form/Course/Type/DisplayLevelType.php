@@ -18,9 +18,9 @@ class DisplayLevelType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $displayLevels = array(
-            DisplayLevel::SMALL  => 'petit',
-            DisplayLevel::MEDIUM => 'moyen',
-            DisplayLevel::BIG    => 'grand'
+            DisplayLevel::SMALL  => 'Petit',
+            DisplayLevel::MEDIUM => 'Moyen',
+            DisplayLevel::BIG    => 'Grand'
         );
         $builder->add(
             'displayLevel',
