@@ -17,6 +17,4 @@ class ChangeCourseToWaitingForPublicationTest extends ChangeCourseStatusTest
         $this->useCase->setCourseGateway(new CourseGatewayDummy());
     }
 
-
-
 }
