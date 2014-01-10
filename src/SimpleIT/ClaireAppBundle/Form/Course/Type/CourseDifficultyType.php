@@ -17,9 +17,11 @@ class CourseDifficultyType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $difficulties = array(Difficulty::EASY   => 'Facile',
-                              Difficulty::MEDIUM => 'Moyen',
-                              Difficulty::HARD   => 'Difficile'
+        $difficulties = array(
+            'empty_value'      => '',
+            Difficulty::EASY   => 'Facile',
+            Difficulty::MEDIUM => 'Moyen',
+            Difficulty::HARD   => 'Difficile'
         );
         $builder->add(
             'difficulty',
@@ -33,9 +35,11 @@ class CourseDifficultyType extends AbstractType
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults(
+            array(
                 'data_class' => 'SimpleIT\ClaireAppBundle\Form\Course\Model\CourseDifficultyModel',
-            ));
+            )
+        );
     }
 
     /**
