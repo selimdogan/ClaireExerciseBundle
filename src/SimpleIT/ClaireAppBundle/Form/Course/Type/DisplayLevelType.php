@@ -23,7 +23,7 @@ class DisplayLevelType extends AbstractType
             DisplayLevel::BIG    => 'grand'
         );
         $builder->add(
-            'diplayLevel',
+            'displayLevel',
             'choice',
             array(
                 'choices'  => $displayLevels,
@@ -46,6 +46,6 @@ class DisplayLevelType extends AbstractType
      */
     public function getName()
     {
-        return 'DisplayLevel';
+        return 'CourseDisplayLevel';
     }
 }

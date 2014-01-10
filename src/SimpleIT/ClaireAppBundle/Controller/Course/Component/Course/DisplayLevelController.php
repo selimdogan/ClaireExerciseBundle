@@ -65,6 +65,11 @@ class DisplayLevelController extends AppController
             throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST, $form->getErrors());
         }
 
-        return new JsonResponse();
+        return $this->redirect(
+            $this->generateUrl(
+                'simple_it_claire_course_course_edit',
+                array('courseId' => $courseId)
+            )
+        );
     }
 }
