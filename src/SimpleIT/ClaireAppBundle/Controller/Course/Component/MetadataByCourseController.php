@@ -204,113 +204,113 @@ class MetadataByCourseController extends AbstractMetadataController
         );
     }
 
-    /**
-     * Edit a difficulty (GET)
-     *
-     * @param CollectionInformation $collectionInformation Collection information
-     * @param int                   $courseId              Course id
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function editDifficultyViewAction(
-        Request $request,
-        CollectionInformation $collectionInformation,
-        $courseId
-    )
-    {
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseByStatus(
-            $courseId,
-            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
-            $collectionInformation
-        );
-        $difficultyMetadata = new DifficultyMetadataResource(ArrayUtils::getValue(
-            $metadatas,
-            DifficultyMetadataResource::KEY
-        ));
-        $form = $this->createFormBuilder($difficultyMetadata)
-            ->add(
-                'value',
-                'choice',
-                array(
-                    'choices'     => array(
-                        'easy'   => 'facile',
-                        'medium' => 'moyen',
-                        'hard'   => 'difficile'
-                    ),
-                    'empty_value' => '',
-                    'required'    => true
-                )
-            )
-            ->getForm();
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/Metadata/Component:editDifficulty.html.twig',
-            array(
-                'courseId' => $courseId,
-                'form'     => $form->createView(),
-                'action'   =>
-                    $this->generateUrl(
-                        'simple_it_claire_component_course_course_metadata_difficulty_edit',
-                        array('courseId' => $courseId)
-                    )
-            )
-        );
-    }
-
-    /**
-     * Edit a course difficulty
-     *
-     * @param Request $request  Request
-     * @param int     $courseId Course id
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function editDifficultyAction(
-        Request $request,
-        CollectionInformation $collectionInformation,
-        $courseId
-    )
-    {
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseByStatus(
-            $courseId,
-            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
-            $collectionInformation
-        );
-        $difficultyMetadata = new DifficultyMetadataResource(ArrayUtils::getValue(
-            $metadatas,
-            DifficultyMetadataResource::KEY
-        ));
-        //FIXME trans
-        $form = $this->createFormBuilder($difficultyMetadata)
-            ->add(
-                'value',
-                'choice',
-                array(
-                    'choices'     => array(
-                        'easy'   => 'Facile',
-                        'medium' => 'Moyen',
-                        'hard'   => 'Difficile'
-                    ),
-                    'empty_value' => '',
-                    'required'    => true
-                )
-            )
-            ->getForm();
-
-        $form = $this->processCourseEdit(
-            $request,
-            $form,
-            $courseId
-        );
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/Metadata/Component:editDifficulty.html.twig',
-            array(
-                'courseId' => $courseId,
-                'form'     => $form->createView()
-            )
-        );
-    }
+//    /**
+//     * Edit a difficulty (GET)
+//     *
+//     * @param CollectionInformation $collectionInformation Collection information
+//     * @param int                   $courseId              Course id
+//     *
+//     * @return \Symfony\Component\HttpFoundation\Response
+//     */
+//    public function editDifficultyViewAction(
+//        Request $request,
+//        CollectionInformation $collectionInformation,
+//        $courseId
+//    )
+//    {
+//        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseByStatus(
+//            $courseId,
+//            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
+//            $collectionInformation
+//        );
+//        $difficultyMetadata = new DifficultyMetadataResource(ArrayUtils::getValue(
+//            $metadatas,
+//            DifficultyMetadataResource::KEY
+//        ));
+//        $form = $this->createFormBuilder($difficultyMetadata)
+//            ->add(
+//                'value',
+//                'choice',
+//                array(
+//                    'choices'     => array(
+//                        'easy'   => 'facile',
+//                        'medium' => 'moyen',
+//                        'hard'   => 'difficile'
+//                    ),
+//                    'empty_value' => '',
+//                    'required'    => true
+//                )
+//            )
+//            ->getForm();
+//
+//        return $this->render(
+//            'SimpleITClaireAppBundle:Course/Metadata/Component:editDifficulty.html.twig',
+//            array(
+//                'courseId' => $courseId,
+//                'form'     => $form->createView(),
+//                'action'   =>
+//                    $this->generateUrl(
+//                        'simple_it_claire_component_course_course_metadata_difficulty_edit',
+//                        array('courseId' => $courseId)
+//                    )
+//            )
+//        );
+//    }
+//
+//    /**
+//     * Edit a course difficulty
+//     *
+//     * @param Request $request  Request
+//     * @param int     $courseId Course id
+//     *
+//     * @return \Symfony\Component\HttpFoundation\Response
+//     */
+//    public function editDifficultyAction(
+//        Request $request,
+//        CollectionInformation $collectionInformation,
+//        $courseId
+//    )
+//    {
+//        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseByStatus(
+//            $courseId,
+//            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
+//            $collectionInformation
+//        );
+//        $difficultyMetadata = new DifficultyMetadataResource(ArrayUtils::getValue(
+//            $metadatas,
+//            DifficultyMetadataResource::KEY
+//        ));
+//        //FIXME trans
+//        $form = $this->createFormBuilder($difficultyMetadata)
+//            ->add(
+//                'value',
+//                'choice',
+//                array(
+//                    'choices'     => array(
+//                        'easy'   => 'Facile',
+//                        'medium' => 'Moyen',
+//                        'hard'   => 'Difficile'
+//                    ),
+//                    'empty_value' => '',
+//                    'required'    => true
+//                )
+//            )
+//            ->getForm();
+//
+//        $form = $this->processCourseEdit(
+//            $request,
+//            $form,
+//            $courseId
+//        );
+//
+//        return $this->render(
+//            'SimpleITClaireAppBundle:Course/Metadata/Component:editDifficulty.html.twig',
+//            array(
+//                'courseId' => $courseId,
+//                'form'     => $form->createView()
+//            )
+//        );
+//    }
 
     /**
      * View a course duration
