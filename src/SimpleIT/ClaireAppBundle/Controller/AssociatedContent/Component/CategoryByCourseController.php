@@ -10,7 +10,7 @@ use
     OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\CategoryByCourse\DTO\SaveCourseCategoryRequestDTO;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\Form\AssociatedContent\Model\CategoryByCourseModel;
-use SimpleIT\ClaireAppBundle\Form\Type\AssociatedContent\CategoryByCourseType;
+use SimpleIT\ClaireAppBundle\Form\AssociatedContent\Type\CategoryByCourseType;
 use SimpleIT\Utils\HTTP;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
