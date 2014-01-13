@@ -3,6 +3,8 @@
 namespace OC\CLAIRE\BusinessRules\UseCases;
 
 use OC\CLAIRE\BusinessRules\Requestors\UseCaseFactory;
+use OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\AssociatedContentUseCaseFactoryImpl;
+use OC\CLAIRE\BusinessRules\UseCases\Course\CourseUseCaseFactoryImpl;
 use OC\CLAIRE\BusinessRules\Util\KernelForTest;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Kernel;
@@ -14,7 +16,7 @@ class UseCaseFactoryTest extends \PHPUnit_Framework_TestCase
 {
     const INVALID_USE_CASE_NAME = 'Invalid use case name';
 
-    protected $CourseUseCases = array(
+    protected $courseUseCases = array(
         'GetPublishedCourse'                  => 'OC\CLAIRE\BusinessRules\UseCases\Course\Course\GetPublishedCourse',
         'GetWaitingForPublicationCourse'      => 'OC\CLAIRE\BusinessRules\UseCases\Course\Course\GetWaitingForPublicationCourse',
         'GetDraftCourse'                      => 'OC\CLAIRE\BusinessRules\UseCases\Course\Course\GetDraftCourse',
@@ -32,6 +34,13 @@ class UseCaseFactoryTest extends \PHPUnit_Framework_TestCase
         'GetDraftPartDifficulty'              => 'OC\CLAIRE\BusinessRules\UseCases\Course\PartDifficulty\GetDraftPartDifficulty'
     );
 
+    protected $associatedContentUseCases = array(
+        'GetDraftCourseCategory' => 'OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\CategoryByCourse\GetDraftCourseCategory',
+        'SaveCourseCategory'     => 'OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\CategoryByCourse\SaveCourseCategory'
+    );
+
+    private $container;
+
     /**
      * @var Kernel
      */
@@ -48,6 +57,10 @@ class UseCaseFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function InvalidUseCaseName_ThrowException()
     {
+        $this->useCaseFactory = new CourseUseCaseFactoryImpl();
+        $this->useCaseFactory->make(self::INVALID_USE_CASE_NAME);
+
+        $this->useCaseFactory = new AssociatedContentUseCaseFactoryImpl();
         $this->useCaseFactory->make(self::INVALID_USE_CASE_NAME);
     }
 
@@ -56,7 +69,9 @@ class UseCaseFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function Make_ReturnCourseUseCaseClass()
     {
-        foreach ($this->CourseUseCases as $useCaseName => $useCaseClass) {
+        $this->useCaseFactory = new CourseUseCaseFactoryImpl();
+        $this->useCaseFactory->setInjector($this->container);
+        foreach ($this->courseUseCases as $useCaseName => $useCaseClass) {
             $this->assertUseCase($useCaseName, $useCaseClass);
         }
 
@@ -68,6 +83,18 @@ class UseCaseFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($useCaseClass, get_class($useCase));
     }
 
+    /**
+     * @test
+     */
+    public function Make_ReturnAssociatedContentUseCaseClass()
+    {
+        $this->useCaseFactory = new AssociatedContentUseCaseFactoryImpl();
+        $this->useCaseFactory->setInjector($this->container);
+        foreach ($this->associatedContentUseCases as $useCaseName => $useCaseClass) {
+            $this->assertUseCase($useCaseName, $useCaseClass);
+        }
+    }
+
     protected function setup()
     {
         $fs = new Filesystem();
@@ -75,9 +102,7 @@ class UseCaseFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->kernel = new KernelForTest();
         $this->kernel->boot();
-        $container = $this->kernel->getContainer();
-        $this->useCaseFactory = new UseCaseFactoryImpl();
-        $this->useCaseFactory->setInjector($container);
+        $this->container = $this->kernel->getContainer();
     }
 
     protected function tearDown()

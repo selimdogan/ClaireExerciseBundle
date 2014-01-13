@@ -24,7 +24,7 @@ class CourseDifficultyController extends AppController
     {
         try {
             /** @var GetDraftCourseDifficultyResponse $ucResponse */
-            $ucResponse = $this->get('oc.claire.use_cases.use_case_factory')
+            $ucResponse = $this->get('oc.claire.use_cases.course_use_case_factory')
                 ->make('GetDraftCourseDifficulty')
                 ->execute(new GetDraftCourseDifficultyRequestDTO($courseId));
 
@@ -57,7 +57,7 @@ class CourseDifficultyController extends AppController
         );
         $form->bind($request);
         if ($form->isValid()) {
-            $this->get('oc.claire.use_cases.use_case_factory')
+            $this->get('oc.claire.use_cases.course_use_case_factory')
                 ->make('SaveCourseDifficulty')->execute(
                     new SaveCourseDifficultyRequestDTO($courseId, $difficulty->getDifficulty())
                 );

@@ -30,6 +30,18 @@
                 <source>course.license</source>
                 <target>Licence</target>
             </trans-unit>
+            <trans-unit id="8">
+                <source>course.difficulty.easy</source>
+                <target>Facile</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>course.difficulty.medium</source>
+                <target>Facile</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>course.difficulty.hard</source>
+                <target>Facile</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

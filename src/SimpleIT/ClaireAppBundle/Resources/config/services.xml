@@ -8,10 +8,12 @@
         <import resource="service/security.xml"/>
         <import resource="service/user.xml"/>
         <import resource="repository/course.xml"/>
+        <import resource="repository/category.xml"/>
         <import resource="factory/factory.xml"/>
         <import resource="useCase/useCaseFactory.xml"/>
-        <import resource="useCase/course.xml"/>
-        <import resource="useCase/part.xml"/>
+        <import resource="useCase/course/course.xml"/>
+        <import resource="useCase/course/part.xml"/>
+        <import resource="useCase/associatedContent/category.xml"/>
     </imports>
 
     <parameters>

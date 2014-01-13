@@ -1,6 +1,6 @@
 <?php
 
-namespace OC\CLAIRE\BusinessRules\UseCases;
+namespace OC\CLAIRE\BusinessRules\UseCases\Course;
 
 use OC\CLAIRE\BusinessRules\Requestors\InvalidUseCaseException;
 use OC\CLAIRE\BusinessRules\Requestors\UseCase;
@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class UseCaseFactoryImpl implements UseCaseFactory
+class CourseUseCaseFactoryImpl implements UseCaseFactory
 {
     /**
      * @var ContainerInterface

@@ -19,9 +19,9 @@ class CourseDifficultyType extends AbstractType
     {
         $difficulties = array(
             'empty_value'      => '',
-            Difficulty::EASY   => 'Facile',
-            Difficulty::MEDIUM => 'Moyen',
-            Difficulty::HARD   => 'Difficile'
+            Difficulty::EASY   => 'course.difficulty.easy',
+            Difficulty::MEDIUM => 'course.difficulty.medium',
+            Difficulty::HARD   => 'course.difficulty.hard'
         );
         $builder->add(
             'difficulty',
