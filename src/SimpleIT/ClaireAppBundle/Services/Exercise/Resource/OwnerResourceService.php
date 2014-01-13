@@ -146,7 +146,6 @@ class OwnerResourceService
 
         if (!empty($resourceType)) {
             $collectionInformation->addFilter('type', implode(',', $resourceType));
-//            throw new \Exception(print_r($collectionInformation));
         }
 
         if (!is_null($userId) && $personalResource === true) {

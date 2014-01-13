@@ -67,7 +67,6 @@ class AnswerService implements AnswerServiceInterface
         $item = $this->itemService->getByAttempt($attemptId, $itemId);
         $answerResource = $this->getResourceFromAnswer($answers, $item);
 
-//        throw new \Exception(print_r($answerResource,true));
         $answerResource = $this->answerByItemByAttemptRepository->insert(
             $attemptId,
             $itemId,

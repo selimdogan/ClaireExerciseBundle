@@ -78,8 +78,8 @@ class OwnerResourceController extends AppMetadataController
         $miscArray = $this->miscToArray($collectionInformation);
         $typeChoices = $this->getTypeChoicesFromExerciseType($collectionInformation);
         $resourceTypeArray = $this->resourceTypeToArray($collectionInformation, $typeChoices);
-//        throw new \Exception(print_r($collectionInformation, true));
-// TODO User
+
+        // TODO User
         $userId = 1000001;
 
         $ownerResources = $this->get('simple_it.claire.exercise.owner_resource')->getAll

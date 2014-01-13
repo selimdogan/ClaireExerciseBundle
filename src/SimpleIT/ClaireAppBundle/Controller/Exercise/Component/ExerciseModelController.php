@@ -240,7 +240,6 @@ class ExerciseModelController extends AppController
         }
 
         $exerciseModel = ContentVMAssembler::write($exerciseModel);
-//        throw new \Exception(print_r($exerciseModel, true));
 
         return $this->render($view, array('exerciseModel' => $exerciseModel));
     }
