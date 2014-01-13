@@ -10,7 +10,7 @@
     {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/RequiredResourceByExerciseModel:editRequiredResourcesView',{ 'exerciseModelId': exerciseModel.id })) }}
 
     <div id="resource-browser" class="half">
-        {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/OwnerResource:browserView')) }}
+        {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/OwnerResource:browserView',{ '_exerciseType': exerciseModel.type})) }}
     </div>
 
     <form action="{{ path('simple_it_claire_component_exercise_exercise_model_delete',{ 'exerciseModelId': exerciseModel.id}) }}" method="get">

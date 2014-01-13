@@ -1,6 +1,9 @@
 <h2>Recherche</h2>
-<form action="{{ path('simple_it_claire_component_exercise_owner_resource_search_list') }}" method="GET">
 
+<form action="{{ path('simple_it_claire_component_exercise_owner_resource_search_list') }}" method="GET">
+    {% if collectionInformation.filters['exercise-type'] is defined %}
+        <input type="hidden" name="exercise-type" value="{{ collectionInformation.filters['exercise-type'] }}">
+    {% endif %}
     <h3>Par clé/valeurs</h3>
     <input type="button" onclick="addFilter()" value="Ajouter"/>
     <table id="filters">
@@ -82,7 +85,12 @@
     </table>
 
     <h3>Type</h3>
-    <input type="text" name="type" {% if type is defined %}value="{{ type }}"{% endif %}/>
+    {% for label,typeName in availableTypes %}
+        <div><label>{{ label }}
+                <input type="checkbox" name="{{ typeName }}" value="1"
+                       {% if typeName in selectedTypes %}checked{% endif %}/>
+            </label></div>
+    {% endfor %}
 
     <input type="submit">
 </form>

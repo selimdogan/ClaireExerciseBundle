@@ -1,5 +1,4 @@
 <h1>Navigateur de ressources</h1>
-
 <p>
     <a href="{{ path('simple_it_claire_component_exercise_resource_create_view') }}">
         Créer une nouvelle ressource
@@ -8,6 +7,6 @@
 
 {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/OwnerResource:createMultipleMetadataView')) }}
 {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/OwnerResource:createMultipleKeyMetadataView')) }}
-{{ render(controller('SimpleITClaireAppBundle:Exercise/Component/OwnerResource:searchList')) }}
+{{ render(controller('SimpleITClaireAppBundle:Exercise/Component/OwnerResource:searchList',{'collectionInformation': collectionInformation})) }}
 
 

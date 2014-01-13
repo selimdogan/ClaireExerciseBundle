@@ -94,6 +94,7 @@ class OwnerResourceService
      * @param CollectionInformation $inputCollectionInformation
      * @param null                  $userId
      * @param bool                  $personalResource
+     * @param array                 $resourceType
      *
      * @return \SimpleIT\Utils\Collection\PaginatedCollection
      */
@@ -102,7 +103,8 @@ class OwnerResourceService
         array $miscArray,
         $inputCollectionInformation = null,
         $userId = null,
-        $personalResource = true
+        $personalResource = true,
+        $resourceType = null
     )
     {
         // FIXME Clean code for pagination and get (and not create) a clean Page object
@@ -142,9 +144,9 @@ class OwnerResourceService
             $collectionInformation->addFilter('keywords', $keywordFilter);
         }
 
-        $type = $inputCollectionInformation->getFilter('type');
-        if ($type !== null) {
-            $collectionInformation->addFilter('type', $type);
+        if (!empty($resourceType)) {
+            $collectionInformation->addFilter('type', implode(',', $resourceType));
+//            throw new \Exception(print_r($collectionInformation));
         }
 
         if (!is_null($userId) && $personalResource === true) {

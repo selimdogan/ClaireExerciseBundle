@@ -2,16 +2,18 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Exercise\Component;
 
+use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\Common\CommonModel;
+use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModelResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource;
 use SimpleIT\ApiResourcesBundle\Exercise\OwnerResourceResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ResourceResource;
-use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\ClaireAppBundle\Form\Type\Exercise\OwnerResourcePublicType;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource\CommonResource;
 
 /**
  * Class ResourceController
@@ -23,12 +25,20 @@ class OwnerResourceController extends AppMetadataController
     /**
      * Browser
      *
+     * @param string $_exerciseType
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function browserViewAction()
+    public function browserViewAction($_exerciseType = null)
     {
+        $collectionInformation = new CollectionInformation();
+        if (!is_null($_exerciseType)) {
+            $collectionInformation->addFilter('exercise-type', $_exerciseType);
+        }
+
         return $this->render(
-            'SimpleITClaireAppBundle:Exercise/OwnerResource:browser.html.twig'
+            'SimpleITClaireAppBundle:Exercise/OwnerResource:browser.html.twig',
+            array('collectionInformation' => $collectionInformation)
         );
     }
 
@@ -66,8 +76,10 @@ class OwnerResourceController extends AppMetadataController
     {
         $metadataArray = $this->metadataToArray($collectionInformation);
         $miscArray = $this->miscToArray($collectionInformation);
-
-        // TODO User
+        $typeChoices = $this->getTypeChoicesFromExerciseType($collectionInformation);
+        $resourceTypeArray = $this->resourceTypeToArray($collectionInformation, $typeChoices);
+//        throw new \Exception(print_r($collectionInformation, true));
+// TODO User
         $userId = 1000001;
 
         $ownerResources = $this->get('simple_it.claire.exercise.owner_resource')->getAll
@@ -76,7 +88,8 @@ class OwnerResourceController extends AppMetadataController
                 $miscArray,
                 $collectionInformation,
                 $userId,
-                true
+                true,
+                $resourceTypeArray
             );
 
         $publicOwnerResources = $this->get('simple_it.claire.exercise.owner_resource')->getAll
@@ -85,7 +98,8 @@ class OwnerResourceController extends AppMetadataController
                 $miscArray,
                 $collectionInformation,
                 $userId,
-                false
+                false,
+                $resourceTypeArray
             );
 
         return $this->render(
@@ -95,14 +109,15 @@ class OwnerResourceController extends AppMetadataController
                 'publicOwnerResources'  => $publicOwnerResources,
                 'metadataArray'         => $metadataArray,
                 'miscArray'             => $miscArray,
-                'type'                  => $collectionInformation->getFilter('type'),
                 'collectionInformation' => $collectionInformation,
                 'privatePaginationUrl'  => $this->generateUrl(
                     'simple_it_claire_component_exercise_owner_resource_private_list'
                 ),
                 'publicPaginationUrl'   => $this->generateUrl(
                     'simple_it_claire_component_exercise_owner_resource_public_list'
-                )
+                ),
+                'availableTypes'        => $typeChoices,
+                'selectedTypes'         => $resourceTypeArray
             )
         );
     }
@@ -159,10 +174,17 @@ class OwnerResourceController extends AppMetadataController
      *
      * @return Response
      */
-    private function listResources($private, $action, $collectionInformation, $isXmlHttpRequest)
+    private function listResources(
+        $private,
+        $action,
+        $collectionInformation,
+        $isXmlHttpRequest
+    )
     {
         $metadataArray = $this->metadataToArray($collectionInformation);
         $miscArray = $this->miscToArray($collectionInformation);
+        $typeChoices = $this->getTypeChoicesFromExerciseType($collectionInformation);
+        $resourceTypeArray = $this->resourceTypeToArray($collectionInformation, $typeChoices);
 
         // TODO User
         $userId = 1000001;
@@ -173,7 +195,8 @@ class OwnerResourceController extends AppMetadataController
                 $miscArray,
                 $collectionInformation,
                 $userId,
-                $private
+                $private,
+                $resourceTypeArray
             );
 
         if ($isXmlHttpRequest) {
@@ -377,5 +400,73 @@ class OwnerResourceController extends AppMetadataController
         $this->get('simple_it.claire.exercise.owner_resource')->delete($ownerResourceId);
 
         return new JsonResponse($ownerResourceId);
+    }
+
+    /**
+     * Get the list of type choices for resources depending on the type of exercise that is
+     * being authored
+     *
+     * @param CollectionInformation $collectionInformation
+     *
+     * @return array
+     */
+    private function getTypeChoicesFromExerciseType(CollectionInformation $collectionInformation)
+    {
+        switch ($collectionInformation->getFilter('exercise-type')) {
+            case CommonModel::MULTIPLE_CHOICE:
+                $choices = array(
+                    'Question de QCM' => CommonResource::MULTIPLE_CHOICE_QUESTION
+                );
+                break;
+            case CommonModel::GROUP_ITEMS:
+            case CommonModel::PAIR_ITEMS:
+                $choices = array(
+                    'Image' => CommonResource::PICTURE,
+                    'Texte' => CommonResource::TEXT
+                );
+                break;
+            case CommonModel::ORDER_ITEMS:
+                $choices = array(
+                    'Image'    => CommonResource::PICTURE,
+                    'Texte'    => CommonResource::TEXT,
+                    'Séquence' => CommonResource::SEQUENCE
+                );
+                break;
+            default:
+                $choices = array(
+                    'Image'           => CommonResource::PICTURE,
+                    'Texte'           => CommonResource::TEXT,
+                    'Question de QCM' => CommonResource::MULTIPLE_CHOICE_QUESTION,
+                    'Séquence'        => CommonResource::SEQUENCE
+                );
+        }
+        return $choices;
+    }
+
+    /**
+     * Get the selected types in the possible types
+     *
+     * @param CollectionInformation $collectionInformation
+     * @param array                 $typeChoices
+     *
+     * @return array
+     */
+    private function resourceTypeToArray(
+        CollectionInformation $collectionInformation,
+        array $typeChoices
+    )
+    {
+        $types = array();
+        foreach ($typeChoices as $type) {
+            if ($collectionInformation->getFilter($type) === "1") {
+                $types[] = $type;
+            }
+        }
+
+        if (empty($types)) {
+            return $typeChoices;
+        }
+
+        return $types;
     }
 }
