@@ -83,6 +83,16 @@ class CourseUseCaseFactoryImpl implements UseCaseFactory
                 );
                 break;
             // METADATA
+            case 'GetDraftCourseDescription':
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.description.get_draft_course_description'
+                );
+                break;
+            case 'SaveCourseDescription':
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.description.save_course_description'
+                );
+                break;
             case 'GetDraftCourseDifficulty':
                 $useCase = $this->injector->get(
                     'oc.claire.use_cases.course.difficulty.get_draft_course_difficulty'

@@ -1,18 +1,18 @@
 <?php
 
-namespace OC\CLAIRE\BusinessRules\Requestors\AssociatedContent\CategoryByCourse;
+namespace OC\CLAIRE\BusinessRules\Requestors\Course\CourseDescription;
 
 use OC\CLAIRE\BusinessRules\Requestors\UseCaseRequest;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-interface SaveCourseCategoryRequest extends UseCaseRequest
+interface SaveCourseDescriptionRequest extends UseCaseRequest
 {
     /**
-     * @return int
+     * @return string
      */
-    public function getCategoryId();
+    public function getCourseDescription();
 
     /**
      * @return int

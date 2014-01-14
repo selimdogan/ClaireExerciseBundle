@@ -7,5 +7,5 @@ namespace SimpleIT\ClaireAppBundle\Form\AssociatedContent\Type;
  */
 class CategoryByCourseType
 {
-    
+
 }

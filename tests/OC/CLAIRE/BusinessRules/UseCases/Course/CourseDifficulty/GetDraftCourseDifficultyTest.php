@@ -14,11 +14,11 @@ use OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\DTO\GetDraftCourseD
  */
 class GetDraftCourseDifficultyTest extends \PHPUnit_Framework_TestCase
 {
-    const WITHOUT_DIFFICULTY_COURSE_ID = 998;
-
     const EASY_COURSE_ID = 1;
 
     const NON_EXISTING_COURSE_ID = 999;
+
+    const WITHOUT_DIFFICULTY_COURSE_ID = 998;
 
     /**
      * @var GetDraftCourseDifficultyResponse

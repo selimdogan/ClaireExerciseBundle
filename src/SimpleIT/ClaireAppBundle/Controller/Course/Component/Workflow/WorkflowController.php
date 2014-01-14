@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
+namespace SimpleIT\ClaireAppBundle\Controller\Course\Component\Workflow;
 
 use SimpleIT\AppBundle\Controller\AppController;
 use OC\CLAIRE\BusinessRules\Exceptions\Course\Course\CourseNotFoundException;

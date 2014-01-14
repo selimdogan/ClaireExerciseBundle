@@ -2,9 +2,8 @@
 
 namespace OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\CategoryByCourse;
 
-use OC\CLAIRE\BusinessRules\Gateways\AssociatedContent\Category\CategoryByCourseGateway;
-use OC\CLAIRE\BusinessRules\Requestors\AssociatedContent\CategoryByCourse\GetDraftCourseCategoryRequest;
-use OC\CLAIRE\BusinessRules\Requestors\UseCase;
+use
+    OC\CLAIRE\BusinessRules\Requestors\AssociatedContent\CategoryByCourse\GetDraftCourseCategoryRequest;
 use OC\CLAIRE\BusinessRules\Requestors\UseCaseRequest;
 use OC\CLAIRE\BusinessRules\Responders\UseCaseResponse;
 use
@@ -13,12 +12,8 @@ use
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class GetDraftCourseCategory implements UseCase
+class GetDraftCourseCategory extends GetCourseCategory
 {
-    /**
-     * @var CategoryByCourseGateway
-     */
-    private $categoryByCourseGateway;
 
     /**
      * @return UseCaseResponse
@@ -29,10 +24,5 @@ class GetDraftCourseCategory implements UseCase
         $category = $this->categoryByCourseGateway->findDraft($useCaseRequest->getCourseId());
 
         return new GetDraftCourseCategoryResponseDTO($category->getId(), $category->getName());
-    }
-
-    public function setCategoryByCourseGateway(CategoryByCourseGateway $categoryByCourseGateway)
-    {
-        $this->categoryByCourseGateway = $categoryByCourseGateway;
     }
 }

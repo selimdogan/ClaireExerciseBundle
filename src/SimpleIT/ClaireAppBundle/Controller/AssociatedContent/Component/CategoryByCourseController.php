@@ -18,8 +18,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class CategoryByCourseController
- *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
 class CategoryByCourseController extends AppController
@@ -41,7 +39,7 @@ class CategoryByCourseController extends AppController
                 'SimpleITClaireAppBundle:AssociatedContent/Category/Component:editByCourse.html.twig',
                 array(
                     'actionUrl' => $this->generateUrl(
-                            'simple_it_claire_component_associated_content_category_category_by_course_edit',
+                            'simple_it_claire_associated_content_component_category_category_by_course_edit',
                             array('courseId' => $courseId)
                         ),
                     'form'      => $form->createView()

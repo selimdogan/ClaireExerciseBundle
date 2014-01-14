@@ -1,9 +1,3 @@
-simple_it_claire_component_course_course_metadata_description_edit:
-    pattern: /description
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editDescription }
-    requirements:
-        _method: POST
-
 simple_it_claire_component_course_course_metadata_time_required_edit:
     pattern: /description
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/MetadataByCourse:editTimeRequired }

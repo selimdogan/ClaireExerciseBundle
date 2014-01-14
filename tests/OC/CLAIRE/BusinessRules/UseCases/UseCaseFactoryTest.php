@@ -30,6 +30,8 @@ class UseCaseFactoryTest extends \PHPUnit_Framework_TestCase
         'SaveDisplayLevel'                    => 'OC\CLAIRE\BusinessRules\UseCases\Course\DisplayLevel\SaveDisplayLevel',
         'GetDraftCourseDifficulty'            => 'OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\GetDraftCourseDifficulty',
         'SaveCourseDifficulty'                => 'OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\SaveCourseDifficulty',
+        'GetDraftCourseDescription'           => 'OC\CLAIRE\BusinessRules\UseCases\Course\CourseDescription\GetDraftCourseDescription',
+        'SaveCourseDescription'               => 'OC\CLAIRE\BusinessRules\UseCases\Course\CourseDescription\SaveCourseDescription',
         'AddElementToToc'                     => 'OC\CLAIRE\BusinessRules\UseCases\Course\Toc\AddElementToToc',
         'GetDraftPartDifficulty'              => 'OC\CLAIRE\BusinessRules\UseCases\Course\PartDifficulty\GetDraftPartDifficulty'
     );
@@ -55,11 +57,18 @@ class UseCaseFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      * @expectedException \OC\CLAIRE\BusinessRules\Requestors\InvalidUseCaseException
      */
-    public function InvalidUseCaseName_ThrowException()
+    public function InvalidCourseUseCaseName_ThrowException()
     {
         $this->useCaseFactory = new CourseUseCaseFactoryImpl();
         $this->useCaseFactory->make(self::INVALID_USE_CASE_NAME);
+    }
 
+    /**
+     * @test
+     * @expectedException \OC\CLAIRE\BusinessRules\Requestors\InvalidUseCaseException
+     */
+    public function InvalidCategoryUseCaseName_ThrowException()
+    {
         $this->useCaseFactory = new AssociatedContentUseCaseFactoryImpl();
         $this->useCaseFactory->make(self::INVALID_USE_CASE_NAME);
     }

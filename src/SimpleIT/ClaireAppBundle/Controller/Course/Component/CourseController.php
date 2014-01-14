@@ -243,7 +243,7 @@ class CourseController extends AppController
                 'content' => $introduction,
                 'action'  =>
                     $this->generateUrl(
-                        'simple_it_claire_component_course_course_introduction_edit',
+                        'simple_it_claire_course_component_course_introduction_edit',
                         array('courseId' => $courseId)
                     )
             )

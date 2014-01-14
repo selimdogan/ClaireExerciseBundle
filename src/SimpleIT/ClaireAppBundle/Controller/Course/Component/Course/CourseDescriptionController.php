@@ -3,8 +3,9 @@
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component\Course;
 
 use OC\CLAIRE\BusinessRules\Exceptions\Course\Course\CourseNotFoundException;
-use OC\CLAIRE\BusinessRules\Responders\Course\CourseDifficulty\GetDraftCourseDifficultyResponse;
-use OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\DTO\GetDraftCourseDifficultyRequestDTO;
+use OC\CLAIRE\BusinessRules\Responders\Course\CourseDescription\GetDraftCourseDescriptionResponse;
+use
+    OC\CLAIRE\BusinessRules\UseCases\Course\CourseDescription\DTO\GetDraftCourseDescriptionRequestDTO;
 use OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\DTO\SaveCourseDifficultyRequestDTO;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\Form\Course\Model\CourseDifficultyModel;
@@ -18,19 +19,19 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class CourseDifficultyController extends AppController
+class CourseDescriptionController extends AppController
 {
     public function editViewAction($courseId)
     {
         try {
-            /** @var GetDraftCourseDifficultyResponse $ucResponse */
+            /** @var GetDraftCourseDescriptionResponse $ucResponse */
             $ucResponse = $this->get('oc.claire.use_cases.course_use_case_factory')
-                ->make('GetDraftCourseDifficulty')
-                ->execute(new GetDraftCourseDifficultyRequestDTO($courseId));
+                ->make('GetDraftCourseDescription')
+                ->execute(new GetDraftCourseDescriptionRequestDTO($courseId));
 
             $form = $this->createForm(
                 new CourseDifficultyType(),
-                new CourseDifficultyModel($ucResponse->getDifficulty())
+                new CourseDifficultyModel($ucResponse->getCourseDescription())
             );
 
             return $this->render(

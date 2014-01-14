@@ -13,17 +13,8 @@ use
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class GetDraftCourseCategoryTest extends \PHPUnit_Framework_TestCase
+class GetDraftCourseCategoryTest extends GetCourseCategoryTest
 {
-    const NON_EXISTING_COURSE_ID = 999;
-
-    const COURSE_ID = 1;
-
-    /**
-     * @var GetDraftCourseCategory
-     */
-    private $useCase;
-
     /**
      * @test
      * @expectedException \OC\CLAIRE\BusinessRules\Exceptions\Course\Course\CourseNotFoundException
@@ -39,7 +30,6 @@ class GetDraftCourseCategoryTest extends \PHPUnit_Framework_TestCase
      */
     public function ReturnCategory()
     {
-        $this->useCase->setCategoryByCourseGateway(new CategoryByCourseGatewaySpy());
         /** @var GetDraftCourseCategoryResponse $response */
         $response = $this->useCase->execute(new GetDraftCourseCategoryRequestDTO(self::COURSE_ID));
         $this->assertEquals(CategoryStub::ID, $response->getCategoryId());
@@ -50,5 +40,6 @@ class GetDraftCourseCategoryTest extends \PHPUnit_Framework_TestCase
     protected function setup()
     {
         $this->useCase = new GetDraftCourseCategory();
+        $this->useCase->setCategoryByCourseGateway(new CategoryByCourseGatewaySpy());
     }
 }

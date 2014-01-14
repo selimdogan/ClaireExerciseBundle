@@ -95,7 +95,7 @@ class CourseContentController extends AppController
                 'content' => $ucResponse->getContent(),
                 'action'  =>
                     $this->generateUrl(
-                        'simple_it_claire_component_course_course_content_edit',
+                        'simple_it_claire_course_component_course_content_edit',
                         array('courseId' => $courseId)
                     )
             )
