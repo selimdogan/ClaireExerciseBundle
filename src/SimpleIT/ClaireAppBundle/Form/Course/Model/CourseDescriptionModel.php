@@ -12,6 +12,11 @@ class CourseDescriptionModel
      */
     private $description;
 
+    public function __construct($description)
+    {
+        $this->description = $description;
+    }
+
     /**
      * @return string
      */

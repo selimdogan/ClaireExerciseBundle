@@ -10,13 +10,13 @@ simple_it_claire_course_component_course_search_list:
     requirements:
         _method: GET
 
-simple_it_claire_component_course_course_content_edit:
+simple_it_claire_course_component_course_content_edit:
     pattern: /{courseId}/content
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/CourseContent:edit }
     requirements:
         _method: POST
 
-simple_it_claire_component_course_course_introduction_edit:
+simple_it_claire_course_component_course_introduction_edit:
     pattern: /{courseId}/introduction
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course:editIntroduction }
     requirements:
@@ -34,7 +34,7 @@ simple_it_claire_component_course_course_edit:
     requirements:
             _method: GET|POST
 
-simple_it_claire_component_course_course_display_level_edit:
+simple_it_claire_course_component_course_display_level_edit:
     pattern: /{courseId}/displayLevel
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/DisplayLevel:edit }
     requirements:

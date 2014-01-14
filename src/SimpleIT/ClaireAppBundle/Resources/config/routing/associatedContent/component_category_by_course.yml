@@ -1,4 +1,4 @@
-simple_it_claire_component_associated_content_category_category_by_course_edit:
+simple_it_claire_associated_content_component_category_category_by_course_edit:
     pattern: /categories/
     defaults: { _controller: SimpleITClaireAppBundle:AssociatedContent/Component/CategoryByCourse:edit }
     requirements:
