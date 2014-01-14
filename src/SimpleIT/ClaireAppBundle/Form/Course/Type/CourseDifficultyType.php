@@ -29,6 +29,7 @@ class CourseDifficultyType extends AbstractType
             array(
                 'choices'  => $difficulties,
                 'required' => true,
+                'translation_domain' => 'course'
             )
         );
     }

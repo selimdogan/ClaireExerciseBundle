@@ -19,11 +19,10 @@ class GetDraftCourseCategoryResponseDTO implements GetDraftCourseCategoryRespons
      */
     public $categoryName;
 
-    public function __construct($categoryId, $categoryName)
-    {
-        $this->categoryId = $categoryId;
-        $this->categoryName = $categoryName;
-    }
+    /**
+     * @var string
+     */
+    public $categorySlug;
 
     /**
      * @return int
@@ -41,4 +40,11 @@ class GetDraftCourseCategoryResponseDTO implements GetDraftCourseCategoryRespons
         return $this->categoryName;
     }
 
+    /**
+     * @return string
+     */
+    public function getCategorySlug()
+    {
+        return $this->categorySlug;
+    }
 }

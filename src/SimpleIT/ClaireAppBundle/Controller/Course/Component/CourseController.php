@@ -2,6 +2,9 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
+use OC\CLAIRE\BusinessRules\Responders\AssociatedContent\Category\GetDraftCourseCategoryResponse;
+use
+    OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\CategoryByCourse\DTO\GetDraftCourseCategoryRequestDTO;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Annotation\Cache;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
@@ -478,10 +481,10 @@ class CourseController extends AppController
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
         );
 
-        $category = $this->get('simple_it.claire.associated_content.category')->getByCourseToEdit(
-            $course->getId(),
-            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
-        );
+        /** @var GetDraftCourseCategoryResponse $ucResponse */
+        $ucResponse = $this->get('oc.claire.use_cases.associated_content_use_case_factory')
+            ->make('GetDraftCourseCategory')
+            ->execute(new GetDraftCourseCategoryRequestDTO($courseId));
 
         $toc = $this->get('simple_it.claire.course.course')->getTocByStatus(
             $courseId,
@@ -494,7 +497,7 @@ class CourseController extends AppController
                 'toc'                => $toc,
                 'partIdentifier'     => $partId,
                 'course'             => $course,
-                'categoryIdentifier' => $category->getSlug()
+                'categoryIdentifier' => $ucResponse->getCategorySlug()
             )
         );
     }
