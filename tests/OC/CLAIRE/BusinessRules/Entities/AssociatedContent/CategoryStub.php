@@ -13,7 +13,11 @@ class CategoryStub extends Category
 
     const NAME = 'Informatique';
 
+    const SLUG = 'informatique-slug';
+
     protected $id = self::ID;
 
     protected $name = self::NAME;
+
+    protected $slug = self::SLUG;
 }

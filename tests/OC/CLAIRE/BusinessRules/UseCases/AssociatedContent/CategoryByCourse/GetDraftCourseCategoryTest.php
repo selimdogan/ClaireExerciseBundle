@@ -13,8 +13,17 @@ use
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class GetDraftCourseCategoryTest extends GetCourseCategoryTest
+class GetDraftCourseCategoryTest extends \PHPUnit_Framework_TestCase
 {
+    const COURSE_ID = 1;
+
+    const NON_EXISTING_COURSE_ID = 999;
+
+    /**
+     * @var GetDraftCourseCategory
+     */
+    protected $useCase;
+
     /**
      * @test
      * @expectedException \OC\CLAIRE\BusinessRules\Exceptions\Course\Course\CourseNotFoundException
@@ -34,6 +43,7 @@ class GetDraftCourseCategoryTest extends GetCourseCategoryTest
         $response = $this->useCase->execute(new GetDraftCourseCategoryRequestDTO(self::COURSE_ID));
         $this->assertEquals(CategoryStub::ID, $response->getCategoryId());
         $this->assertEquals(CategoryStub::NAME, $response->getCategoryName());
+        $this->assertEquals(CategoryStub::SLUG, $response->getCategorySlug());
 
     }
 
