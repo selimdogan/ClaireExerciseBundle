@@ -122,7 +122,7 @@ class TagService
         CollectionInformation $collectionInformation = null
     )
     {
-        if ($collectionInformation === null){
+        if ($collectionInformation === null) {
             $collectionInformation = new CollectionInformation();
         }
         $collectionInformation->addFilter(CourseResource::STATUS, $status);

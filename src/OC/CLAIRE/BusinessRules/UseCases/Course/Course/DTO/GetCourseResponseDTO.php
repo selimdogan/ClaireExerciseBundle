@@ -165,5 +165,4 @@ class GetCourseResponseDTO implements GetCourseResponse
         return $this->updatedAt;
     }
 
-
 }

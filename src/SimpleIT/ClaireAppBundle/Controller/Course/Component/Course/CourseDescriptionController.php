@@ -7,12 +7,9 @@ use OC\CLAIRE\BusinessRules\Responders\Course\CourseDescription\GetDraftCourseDe
 use
     OC\CLAIRE\BusinessRules\UseCases\Course\CourseDescription\DTO\GetDraftCourseDescriptionRequestDTO;
 use OC\CLAIRE\BusinessRules\UseCases\Course\CourseDescription\DTO\SaveCourseDescriptionRequestDTO;
-use OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\DTO\SaveCourseDifficultyRequestDTO;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\Form\Course\Model\CourseDescriptionModel;
-use SimpleIT\ClaireAppBundle\Form\Course\Model\CourseDifficultyModel;
 use SimpleIT\ClaireAppBundle\Form\Course\Type\CourseDescriptionType;
-use SimpleIT\ClaireAppBundle\Form\Course\Type\CourseDifficultyType;
 use SimpleIT\Utils\HTTP;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
