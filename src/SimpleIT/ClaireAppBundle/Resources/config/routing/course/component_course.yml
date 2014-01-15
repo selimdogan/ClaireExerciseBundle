@@ -28,12 +28,6 @@ simple_it_claire_component_course_toc_edit:
     requirements:
         _method: POST
 
-simple_it_claire_component_course_course_edit:
-    pattern: /{courseId}/edit
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course:edit }
-    requirements:
-            _method: GET|POST
-
 simple_it_claire_course_component_course_display_level_edit:
     pattern: /{courseId}/displayLevel
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/DisplayLevel:edit }
@@ -63,3 +57,9 @@ simple_it_claire_course_component_course_description_edit:
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/CourseDescription:edit }
     requirements:
         _method: POST
+
+simple_it_claire_course_component_course_title_edit:
+    pattern: /{courseId}/edit
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/CourseTitle:edit }
+    requirements:
+            _method: POST

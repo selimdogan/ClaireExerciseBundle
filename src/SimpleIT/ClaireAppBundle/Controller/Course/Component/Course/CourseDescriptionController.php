@@ -27,7 +27,6 @@ class CourseDescriptionController extends AppController
     public function editViewAction($courseId)
     {
         try {
-
             /** @var GetDraftCourseDescriptionResponse $ucResponse */
             $ucResponse = $this->get('oc.claire.use_cases.course_use_case_factory')
                 ->make('GetDraftCourseDescription')

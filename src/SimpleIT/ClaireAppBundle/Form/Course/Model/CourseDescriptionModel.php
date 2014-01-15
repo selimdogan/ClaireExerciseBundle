@@ -12,7 +12,7 @@ class CourseDescriptionModel
      */
     private $description;
 
-    public function __construct($description)
+    public function __construct($description = null)
     {
         $this->description = $description;
     }

@@ -5,6 +5,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 use OC\CLAIRE\BusinessRules\Responders\AssociatedContent\Category\GetDraftCourseCategoryResponse;
 use
     OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\CategoryByCourse\DTO\GetDraftCourseCategoryRequestDTO;
+use OC\CLAIRE\BusinessRules\UseCases\Course\Course\DTO\GetDraftCourseRequestDTO;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Annotation\Cache;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
@@ -113,68 +114,6 @@ class CourseController extends AppController
                 array('courseId' => $course->getId())
             )
         );
-    }
-
-    /**
-     * Edit a course
-     *
-     * @param Request $request  Request
-     * @param int     $courseId Course id
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function editViewAction(Request $request, $courseId)
-    {
-        $parameters[CourseResource::STATUS] = $request->get(
-            CourseResource::STATUS,
-            CourseResource::STATUS_DRAFT
-        );
-        $course = $this->get('simple_it.claire.course.course')->getToEdit(
-            $courseId,
-            $parameters
-        );
-
-        $form = $this->createFormBuilder($course)
-            ->add('title', 'text')
-            ->getForm();
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/Course/Component:edit.html.twig',
-            array(
-                'course' => $course,
-                'form'   => $form->createView()
-            )
-        );
-    }
-
-    /**
-     * Edit a course (POST)
-     *
-     * @param Request $request  Request
-     * @param int     $courseId Course id
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function editAction(Request $request, $courseId)
-    {
-        $course = new CourseResource();
-        $form = $this->createFormBuilder($course)
-            ->add('title', 'text')
-            ->getForm();
-        $form->bind($request);
-
-        if ($form->isValid()) {
-            $course = $this->get('simple_it.claire.course.course')->save(
-                $courseId,
-                $course,
-                $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
-            );
-
-            return new JsonResponse($course->getTitle());
-        } else {
-            throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST, $form->getErrors());
-        }
     }
 
     /* ************************ *

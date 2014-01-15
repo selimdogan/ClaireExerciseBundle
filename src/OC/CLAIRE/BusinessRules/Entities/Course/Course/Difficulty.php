@@ -7,9 +7,9 @@ namespace OC\CLAIRE\BusinessRules\Entities\Course\Course;
  */
 class Difficulty
 {
-    const EASY = 'facile';
+    const EASY = 'Facile';
 
-    const MEDIUM = 'moyen';
+    const MEDIUM = 'Moyenne';
 
-    const HARD = 'difficile';
+    const HARD = 'Difficile';
 }

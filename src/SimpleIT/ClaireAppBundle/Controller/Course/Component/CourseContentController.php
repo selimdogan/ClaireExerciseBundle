@@ -22,58 +22,58 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class CourseContentController extends AppController
 {
-    /**
-     * View content
-     *
-     * @param int|string $courseIdentifier Course id | slug
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
-     */
-    public function viewPublishedAction($courseIdentifier)
-    {
-        /** @var UseCaseFactory $useCaseFactory */
-        $useCaseFactory = $this->get('oc.claire.use_cases.course_use_case_factory');
-
-        $getContentResponse = $useCaseFactory
-            ->make('GetPublishedContent')
-            ->execute(new GetPublishedContentRequestDTO($courseIdentifier));
-
-        /** @var GetContentResponse $getContentResponse */
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
-            array('content' => $getContentResponse->getContent())
-        );
-    }
-
-    public function viewAction($courseId, $status)
-    {
-        /** @var UseCaseFactory $useCaseFactory */
-        $useCaseFactory = $this->get('oc.claire.use_cases.course_use_case_factory');
-
-        switch ($status) {
-            case CourseResource::STATUS_WAITING_FOR_PUBLICATION:
-                $getContentResponse = $useCaseFactory
-                    ->make('GetWaitingForPublicationContent')
-                    ->execute(new GetWaitingForPublicationContentRequestDTO($courseId));
-                break;
-            case CourseResource::STATUS_DRAFT:
-                $getContentResponse = $useCaseFactory
-                    ->make('GetDraftContent')
-                    ->execute(new GetDraftContentRequestDTO($courseId));
-                break;
-            default :
-                throw new NotFoundHttpException();
-        }
-
-        /** @var GetContentResponse $getContentResponse */
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
-            array('content' => $getContentResponse->getContent())
-        );
-    }
+//    /**
+//     * View content
+//     *
+//     * @param int|string $courseIdentifier Course id | slug
+//     *
+//     * @return \Symfony\Component\HttpFoundation\Response
+//     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+//     */
+//    public function viewPublishedAction($courseIdentifier)
+//    {
+//        /** @var UseCaseFactory $useCaseFactory */
+//        $useCaseFactory = $this->get('oc.claire.use_cases.course_use_case_factory');
+//
+//        $getContentResponse = $useCaseFactory
+//            ->make('GetPublishedContent')
+//            ->execute(new GetPublishedContentRequestDTO($courseIdentifier));
+//
+//        /** @var GetContentResponse $getContentResponse */
+//
+//        return $this->render(
+//            'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
+//            array('content' => $getContentResponse->getContent())
+//        );
+//    }
+//
+//    public function viewAction($courseId, $status)
+//    {
+//        /** @var UseCaseFactory $useCaseFactory */
+//        $useCaseFactory = $this->get('oc.claire.use_cases.course_use_case_factory');
+//
+//        switch ($status) {
+//            case CourseResource::STATUS_WAITING_FOR_PUBLICATION:
+//                $getContentResponse = $useCaseFactory
+//                    ->make('GetWaitingForPublicationContent')
+//                    ->execute(new GetWaitingForPublicationContentRequestDTO($courseId));
+//                break;
+//            case CourseResource::STATUS_DRAFT:
+//                $getContentResponse = $useCaseFactory
+//                    ->make('GetDraftContent')
+//                    ->execute(new GetDraftContentRequestDTO($courseId));
+//                break;
+//            default :
+//                throw new NotFoundHttpException();
+//        }
+//
+//        /** @var GetContentResponse $getContentResponse */
+//
+//        return $this->render(
+//            'SimpleITClaireAppBundle:Course/Course/Component:viewContent.html.twig',
+//            array('content' => $getContentResponse->getContent())
+//        );
+//    }
 
     /**
      * Edit course content (GET)
