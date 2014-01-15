@@ -58,6 +58,7 @@ class CourseTitleController extends AppController
         );
         $form->bind($request);
         if ($form->isValid()) {
+            // FIXME do usecase
 //            $this->get('oc.claire.use_cases.course_use_case_factory')
 //                ->make('SaveCourseTitle')->execute(
 //                    new SaveCourseTitleRequestDTO($courseId, $title->getTitle())

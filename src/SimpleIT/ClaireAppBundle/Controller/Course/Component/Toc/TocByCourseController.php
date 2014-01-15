@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
+namespace SimpleIT\ClaireAppBundle\Controller\Course\Component\Toc;
 
 use OC\CLAIRE\BusinessRules\Responders\Course\Toc\AddElementToTocResponse;
 use OC\CLAIRE\BusinessRules\UseCases\Course\Toc\DTO\AddElementToTocRequestDTO;
@@ -13,8 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class TocByCourseController
- *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
 class TocByCourseController extends AppController
@@ -43,14 +41,10 @@ class TocByCourseController extends AppController
      */
     public function editAction(Request $request, $courseId)
     {
-        $useCaseRequest = new AddElementToTocRequestDTO();
-        $useCaseRequest->courseId = $courseId;
-        $parentId = $request->get('parentId');
-        $useCaseRequest->parentId = $parentId;
         /** @var AddElementToTocResponse $useCaseResponse */
-        $useCaseResponse = $this->get('simple_it.claire.course.toc.add_element_to_toc')->execute(
-            $useCaseRequest
-        );
+        $useCaseResponse = $this->get('oc.claire.use_cases.course_use_case_factory')
+            ->make('AddElementToToc')
+            ->execute(new AddElementToTocRequestDTO($courseId, $request->get('parentId')));
 
         $newElement = $useCaseResponse->getNewElement();
         if ($newElement->getSubtype() == PartResource::TITLE_1) {
