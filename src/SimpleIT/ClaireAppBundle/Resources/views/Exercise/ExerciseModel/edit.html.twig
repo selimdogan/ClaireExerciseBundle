@@ -16,4 +16,11 @@
     <form action="{{ path('simple_it_claire_component_exercise_exercise_model_delete',{ 'exerciseModelId': exerciseModel.id}) }}" method="get">
         <input type="submit" value="Supprimer le modèle d'exercice">
     </form>
+
+    <form action="{{ path('simple_it_claire_component_exercise_exercise_model_try',
+    { 'exerciseModelId': exerciseModel.id}) }}"
+          method="get">
+        <input type="submit" value="Visualiser un exemple d'exercice"
+               {% if exerciseModel.complete != 1 %}disabled{% endif %}>
+    </form>
 {% endblock content %}

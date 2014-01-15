@@ -80,4 +80,11 @@ simple_it_claire_component_exercise_exercise_model_add_to_perso:
         _method: GET
         exerciseModelId: \d+
 
+simple_it_claire_component_exercise_exercise_model_try:
+    pattern: /{exerciseModelId}/try
+    defaults: { _controller:SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:try }
+    requirements:
+        _method: GET
+        exerciseModelId: \d+
+
 

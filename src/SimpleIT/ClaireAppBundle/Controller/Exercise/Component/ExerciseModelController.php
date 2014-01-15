@@ -4,6 +4,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\Exercise\Component;
 
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\Common\CommonModel;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModelResource;
+use SimpleIT\ApiResourcesBundle\Exercise\OwnerExerciseModelResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\Exception\InvalidModelException;
 use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ExerciseModelTitleType;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Class ExerciseModelController
@@ -34,6 +36,33 @@ class ExerciseModelController extends AppController
         return $this->render(
             '@SimpleITClaireApp/Exercise/ExerciseModel/Component/list.html.twig',
             array("exerciseModels" => $exerciseModels)
+        );
+    }
+
+    /**
+     * Try to answer an exercise model (look for the owner exercise model)
+     *
+     * @param $exerciseModelId
+     *
+     * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function tryAction($exerciseModelId)
+    {
+        $ownerExerciseModels = $this->get('simple_it.claire.exercise.owner_exercise_model')
+            ->getByExerciseModel($exerciseModelId);
+
+        if (count($ownerExerciseModels) == 0)
+        {
+            throw new ResourceNotFoundException('No owner exercise model for this model.');
+        }
+
+        /** @var OwnerExerciseModelResource $ownerExerciseModel */
+        $ownerExerciseModel = $ownerExerciseModels->get(0);
+
+        return $this->forward(
+            'SimpleITClaireAppBundle:Exercise/Component/OwnerExerciseModel:try',
+            array('ownerExerciseModelId' => $ownerExerciseModel->getId())
         );
     }
 
@@ -206,9 +235,12 @@ class ExerciseModelController extends AppController
 
         $exerciseModel = $this->get(
             'simple_it.claire.exercise.exercise_model'
-        )->saveExerciseModel($exerciseModelId, $exerciseModel);
+        )->save($exerciseModelId, $exerciseModel);
 
-        return new JsonResponse($exerciseModel->getId());
+        return new JsonResponse(array(
+            'id'       => $exerciseModel->getId(),
+            'complete' => $exerciseModel->getComplete()
+        ));
     }
 
     /**

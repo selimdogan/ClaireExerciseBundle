@@ -125,6 +125,7 @@ class ExerciseModelService
      *
      * @param array $emArray
      *
+     * @throws BadRequestHttpException
      * @return ExerciseModelResource
      */
     public function createExerciseModel(array $emArray)
@@ -278,20 +279,6 @@ class ExerciseModelService
         $exerciseModel->setType(CommonModel::PAIR_ITEMS);
 
         return $exerciseModel;
-    }
-
-    /**
-     * Save an exercise model
-     *
-     * @param                       $exerciseModelId
-     * @param ExerciseModelResource $exerciseModel
-     *
-     * @internal param array $mcArray
-     * @return ExerciseModelResource
-     */
-    public function saveExerciseModel($exerciseModelId, ExerciseModelResource $exerciseModel)
-    {
-        return $this->save($exerciseModelId, $exerciseModel);
     }
 
     /**
@@ -779,7 +766,7 @@ class ExerciseModelService
      */
     private function validateMultipleChoice(ExerciseModelResource $exerciseModel)
     {
-        $this->validateBlock($exerciseModel, $exerciseModel->getContent()->getQuestionBlocks());
+        $this->validateBlock($exerciseModel->getContent()->getQuestionBlocks());
     }
 
     /**
@@ -791,7 +778,7 @@ class ExerciseModelService
      */
     private function validateGroupItems(ExerciseModelResource $exerciseModel)
     {
-        $this->validateBlock($exerciseModel, $exerciseModel->getContent()->getObjectBlocks());
+        $this->validateBlock($exerciseModel->getContent()->getObjectBlocks());
     }
 
     /**
@@ -804,7 +791,7 @@ class ExerciseModelService
     private function validatePairItems($exerciseModel)
     {
         $pairBlocks = $exerciseModel->getContent()->getPairBlocks();
-        $this->validateBlock($exerciseModel, $pairBlocks);
+        $this->validateBlock($pairBlocks);
 
         /** @var PairBlock $pairBlock */
         foreach ($pairBlocks as $pairBlock) {
@@ -820,34 +807,16 @@ class ExerciseModelService
     /**
      * Validate that a block is not empty
      *
-     * @param ExerciseModelResource $exerciseModel
-     * @param array                 $blocks
+     * @param array $blocks
      *
      * @throws \SimpleIT\ClaireAppBundle\Exception\InvalidModelException
      */
-    private function validateBlock(ExerciseModelResource $exerciseModel, array $blocks)
+    private function validateBlock(array $blocks)
     {
-        if (empty ($blocks)) {
-            throw new InvalidModelException('Il faut au moins un block', $exerciseModel);
-        }
-
         /** @var ResourceBlock $block */
         foreach ($blocks as $block) {
             if (!($block->getNumberOfOccurences() > 0)) {
                 throw new InvalidModelException('Le nombre d\'occurences doit être positif');
-            }
-            if ($block->isList()) {
-                $resourceList = $block->getResources();
-                if (empty($resourceList)) {
-                    throw new InvalidModelException(
-                        'Au moins une ressource doit être spécifiée dans le bloc'
-                    );
-                }
-            } else {
-                $constraints = $block->getResourceConstraint();
-                if (empty($constraints)) {
-                    throw new InvalidModelException('Le block ne peut être totalement vide');
-                }
             }
         }
     }

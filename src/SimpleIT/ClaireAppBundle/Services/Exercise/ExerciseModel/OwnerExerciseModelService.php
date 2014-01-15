@@ -186,6 +186,23 @@ class OwnerExerciseModelService
     }
 
     /**
+     * Get all the owner exercise models by exercise model
+     *
+     * @param      $exerciseModelId
+     * @param null $collectionInformation
+     *
+     * @return PaginatedCollection
+     */
+    public function getByExerciseModel($exerciseModelId, $collectionInformation = null)
+    {
+        return $this->ownerExerciseModelByExerciseModelRepository->findAll
+            (
+                $exerciseModelId,
+                $collectionInformation
+            );
+    }
+
+    /**
      * Get an owner exercise model
      *
      * @param int   $ownerExerciseModelId
