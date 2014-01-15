@@ -56,4 +56,3 @@ class SaveCourseCategoryTest extends \PHPUnit_Framework_TestCase
         $this->useCase = new SaveCourseCategory();
     }
 }
-

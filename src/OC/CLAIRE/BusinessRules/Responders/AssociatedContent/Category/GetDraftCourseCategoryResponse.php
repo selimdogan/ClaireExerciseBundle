@@ -19,7 +19,6 @@ interface GetDraftCourseCategoryResponse extends UseCaseResponse
      */
     public function getCategoryName();
 
-
     /**
      * @return string
      */
