@@ -20,6 +20,14 @@ class AddElementToTocTest extends \PHPUnit_Framework_TestCase
 
     private $elementCount = 0;
 
+    const COURSE_ID = 1;
+
+    const CHAPTER_ID = 10;
+
+    const SUB_CHAPTER_ID = 100;
+
+    const NON_EXISTING_PART_ID = -1;
+
     /**
      * @var AddElementToTocResponse
      */
@@ -56,9 +64,7 @@ class AddElementToTocTest extends \PHPUnit_Framework_TestCase
 
     private function buildAddPartRequest()
     {
-        $this->request = new AddElementToTocRequestDTO();
-        $this->request->setParentId(1);
-        $this->request->setCourseId(1);
+        $this->request = new AddElementToTocRequestDTO(self::COURSE_ID, self::COURSE_ID);
     }
 
     private function executeUseCase()
@@ -133,9 +139,7 @@ class AddElementToTocTest extends \PHPUnit_Framework_TestCase
 
     private function buildAddChapterRequest()
     {
-        $this->request = new AddElementToTocRequestDTO();
-        $this->request->setParentId(10);
-        $this->request->setCourseId(1);
+        $this->request = new AddElementToTocRequestDTO(self::COURSE_ID, self::CHAPTER_ID);
     }
 
     /**
@@ -151,9 +155,7 @@ class AddElementToTocTest extends \PHPUnit_Framework_TestCase
 
     private function buildAddSubChapterRequest()
     {
-        $this->request = new AddElementToTocRequestDTO();
-        $this->request->setParentId(100);
-        $this->request->setCourseId(1);
+        $this->request = new AddElementToTocRequestDTO(self::COURSE_ID, self::SUB_CHAPTER_ID);
     }
 
     /**
@@ -162,9 +164,7 @@ class AddElementToTocTest extends \PHPUnit_Framework_TestCase
      */
     public function exceptionShouldBeThrownAfterAddingFromAParentThatDoesNotExist()
     {
-        $this->request = new AddElementToTocRequestDTO();
-        $this->request->setParentId(-1);
-        $this->request->setCourseId(1);
+        $this->request = new AddElementToTocRequestDTO(self::COURSE_ID, self::NON_EXISTING_PART_ID);
         $this->useCase = new AddElementToToc(new TocByCourseRepositoryStub());
         $this->response = $this->useCase->execute($this->request);
     }
