@@ -10,19 +10,19 @@ use OC\CLAIRE\BusinessRules\Responders\Course\Course\GetCourseResponse;
 class GetCourseResponseDTO implements GetCourseResponse
 {
     /**
-     * @var int
+     * @var \DateTime
      */
-    public $id;
-
-    /**
-     * string
-     */
-    public $slug;
+    public $createdAt;
 
     /**
      * @var string
      */
-    public $title;
+    public $description;
+
+    /**
+     * @var string
+     */
+    public $difficulty;
 
     /**
      * @var int
@@ -30,38 +30,44 @@ class GetCourseResponseDTO implements GetCourseResponse
     public $displayLevel;
 
     /**
+     * @var \DateInterval
+     */
+    public $duration;
+
+    /**
+     * @var int
+     */
+    public $id;
+
+    /**
+     * @var string
+     */
+    public $image;
+
+    /**
+     * @var string
+     */
+    public $license;
+
+    /**
+     * @var string
+     */
+    public $slug;
+
+    /**
      * @var string
      */
     public $status;
 
     /**
-     * @var \DateTime
+     * @var string
      */
-    public $createdAt;
+    public $title;
 
     /**
      * @var \DateTime
      */
     public $updatedAt;
-
-    public function __construct(
-        $id,
-        $slug,
-        $status,
-        $title,
-        $displayLevel,
-        $createdAt,
-        $updatedAt
-    )
-    {
-        $this->id = $id;
-        $this->status = $status;
-        $this->title = $title;
-        $this->createdAt = $createdAt;
-        $this->displayLevel = $displayLevel;
-        $this->updatedAt = $updatedAt;
-        $this->slug = $slug;
-    }
 
     /**
      * @return \DateTime
@@ -69,6 +75,22 @@ class GetCourseResponseDTO implements GetCourseResponse
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDifficulty()
+    {
+        return $this->difficulty;
     }
 
     /**
@@ -80,6 +102,14 @@ class GetCourseResponseDTO implements GetCourseResponse
     }
 
     /**
+     * @return \DateInterval
+     */
+    public function getDuration()
+    {
+        return $this->duration;
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -88,7 +118,23 @@ class GetCourseResponseDTO implements GetCourseResponse
     }
 
     /**
-     * @return mixed
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLicense()
+    {
+        return $this->license;
+    }
+
+    /**
+     * @return string
      */
     public function getSlug()
     {
@@ -118,4 +164,6 @@ class GetCourseResponseDTO implements GetCourseResponse
     {
         return $this->updatedAt;
     }
+
+
 }

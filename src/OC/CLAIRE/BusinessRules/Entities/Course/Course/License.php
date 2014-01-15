@@ -5,11 +5,7 @@ namespace OC\CLAIRE\BusinessRules\Entities\Course\Course;
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class Difficulty
+abstract class License
 {
-    const EASY = 'facile';
-
-    const MEDIUM = 'moyen';
-
-    const HARD = 'difficile';
+    const CC_BY_NC_SA = 'BY-NC-SA';
 }

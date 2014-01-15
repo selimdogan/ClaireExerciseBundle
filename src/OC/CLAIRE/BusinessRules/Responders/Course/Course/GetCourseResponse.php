@@ -10,19 +10,19 @@ use OC\CLAIRE\BusinessRules\Responders\UseCaseResponse;
 interface GetCourseResponse extends UseCaseResponse
 {
     /**
-     * @return int
+     * @return \DateTime
      */
-    public function getId();
+    public function getCreatedAt();
 
     /**
      * @return string
      */
-    public function getSlug();
+    public function getDescription();
 
     /**
      * @return string
      */
-    public function getTitle();
+    public function getDifficulty();
 
     /**
      * @return int
@@ -30,14 +30,39 @@ interface GetCourseResponse extends UseCaseResponse
     public function getDisplayLevel();
 
     /**
+     * @return \DateInterval
+     */
+    public function getDuration();
+
+    /**
+     * @return int
+     */
+    public function getId();
+
+    /**
+     * @return string
+     */
+    public function getImage();
+
+    /**
+     * @return string
+     */
+    public function getLicense();
+
+    /**
+     * @return mixed
+     */
+    public function getSlug();
+
+    /**
      * @return string
      */
     public function getStatus();
 
     /**
-     * @return \DateTime
+     * @return string
      */
-    public function getCreatedAt();
+    public function getTitle();
 
     /**
      * @return \DateTime

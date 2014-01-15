@@ -54,13 +54,17 @@ abstract class GetCourseTest extends \PHPUnit_Framework_TestCase
             new \DateTime(CourseStub::COURSE_CREATED_AT),
             $this->response->getCreatedAt()
         );
+        $this->assertEquals(CourseStub::COURSE_DESCRIPTION, $this->response->getDescription());
+        $this->assertEquals(CourseStub::COURSE_DIFFICULTY, $this->response->getDifficulty());
+        $this->assertEquals(CourseStub::COURSE_DISPLAY_LEVEL, $this->response->getDisplayLevel());
         $this->assertEquals(
-            CourseStub::COURSE_DISPLAY_LEVEL,
-            $this->response->getDisplayLevel()
+            new \DateInterval(CourseStub::COURSE_DURATION),
+            $this->response->getDuration()
         );
         $this->assertEquals(CourseStub::COURSE_ID, $this->response->getId());
-        $this->assertEquals(
-            CourseStub::COURSE_SLUG, $this->response->getSlug());
+        $this->assertEquals(CourseStub::COURSE_IMAGE, $this->response->getImage());
+        $this->assertEquals(CourseStub::COURSE_LICENSE, $this->response->getLicense());
+        $this->assertEquals(CourseStub::COURSE_SLUG, $this->response->getSlug());
         $this->assertEquals(CourseStub::COURSE_TITLE, $this->response->getTitle());
         $this->assertEquals(
             new \DateTime(CourseStub::COURSE_UPDATED_AT),

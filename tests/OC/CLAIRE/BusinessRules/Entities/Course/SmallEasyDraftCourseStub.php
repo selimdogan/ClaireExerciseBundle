@@ -17,14 +17,9 @@ class SmallEasyDraftCourseStub extends CourseStub
 
     const DIFFICULTY = Difficulty::EASY;
 
-    const DESCRIPTION = 'Course description';
-
     protected $status = self::COURSE_STATUS;
 
     protected $displayLevel = self::DISPLAY_LEVEL;
 
     protected $difficulty = self::DIFFICULTY;
-
-    protected $description = self::DESCRIPTION;
-
 }

@@ -47,7 +47,7 @@ class GetDraftCourseDescriptionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            SmallEasyDraftCourseStub::DESCRIPTION,
+            SmallEasyDraftCourseStub::COURSE_DESCRIPTION,
             $response->getCourseDescription()
         );
     }

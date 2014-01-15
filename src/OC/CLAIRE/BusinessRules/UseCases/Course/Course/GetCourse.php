@@ -28,15 +28,19 @@ abstract class GetCourse implements UseCase
      */
     protected function buildResponse(CourseResource $course)
     {
-        $response = new GetCourseResponseDTO(
-            $course->getId(),
-            $course->getSlug(),
-            $course->getStatus(),
-            $course->getTitle(),
-            $course->getDisplayLevel(),
-            $course->getCreatedAt(),
-            $course->getUpdatedAt()
-        );
+        $response = new GetCourseResponseDTO();
+        $response->createdAt = $course->getCreatedAt();
+        $response->description = $course->getDescription();
+        $response->difficulty = $course->getDifficulty();
+        $response->displayLevel = $course->getDisplayLevel();
+        $response->duration = $course->getDuration();
+        $response->id = $course->getId();
+        $response->image = $course->getImage();
+        $response->license = $course->getLicense();
+        $response->slug = $course->getSlug();
+        $response->status = $course->getStatus();
+        $response->title = $course->getTitle();
+        $response->updatedAt = $course->getUpdatedAt();
 
         return $response;
     }
