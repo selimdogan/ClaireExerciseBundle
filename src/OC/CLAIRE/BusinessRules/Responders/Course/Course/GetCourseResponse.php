@@ -50,6 +50,11 @@ interface GetCourseResponse extends UseCaseResponse
     public function getLicense();
 
     /**
+     * @return float
+     */
+    public function getRating();
+
+    /**
      * @return mixed
      */
     public function getSlug();

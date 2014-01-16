@@ -668,50 +668,50 @@ class CourseController extends AppController
         );
     }
 
-    /**
-     * Edit Dashboard
-     *
-     * @param Request $request  Request
-     * @param int     $courseId Course id
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function editDashboardAction(Request $request, $courseId)
-    {
-        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
-        $parameters[CourseResource::STATUS] = $status;
-        $collectionInformation = new CollectionInformation();
-        $collectionInformation->addFilter(CourseResource::STATUS, $status);
-
-        $course = $this->get('simple_it.claire.course.course')->getByStatus(
-            $courseId,
-            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
-        );
-
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseByStatus(
-            $course->getId(),
-            $status,
-            $collectionInformation
-        );
-
-        $authors = $this->get('simple_it.claire.user.author')->getAllByCourse(
-            $course->getId(),
-            $collectionInformation
-        );
-        $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourseToEdit(
-            $course->getId(),
-            $status,
-            $collectionInformation
-        );
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/Course/Component:editDashboard.html.twig',
-            array(
-                'course'    => $course,
-                'metadatas' => $metadatas,
-                'authors'   => $authors,
-                'tags'      => $tags
-            )
-        );
-    }
+//    /**
+//     * Edit Dashboard
+//     *
+//     * @param Request $request  Request
+//     * @param int     $courseId Course id
+//     *
+//     * @return \Symfony\Component\HttpFoundation\Response
+//     */
+//    public function editDashboardAction(Request $request, $courseId)
+//    {
+//        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
+//        $parameters[CourseResource::STATUS] = $status;
+//        $collectionInformation = new CollectionInformation();
+//        $collectionInformation->addFilter(CourseResource::STATUS, $status);
+//
+//        $course = $this->get('simple_it.claire.course.course')->getByStatus(
+//            $courseId,
+//            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+//        );
+//
+//        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseByStatus(
+//            $course->getId(),
+//            $status,
+//            $collectionInformation
+//        );
+//
+//        $authors = $this->get('simple_it.claire.user.author')->getAllByCourse(
+//            $course->getId(),
+//            $collectionInformation
+//        );
+//        $tags = $this->get('simple_it.claire.associated_content.tag')->getAllByCourseToEdit(
+//            $course->getId(),
+//            $status,
+//            $collectionInformation
+//        );
+//
+//        return $this->render(
+//            'SimpleITClaireAppBundle:Course/Course/Component:editDashboard.html.twig',
+//            array(
+//                'course'    => $course,
+//                'metadatas' => $metadatas,
+//                'authors'   => $authors,
+//                'tags'      => $tags
+//            )
+//        );
+//    }
 }

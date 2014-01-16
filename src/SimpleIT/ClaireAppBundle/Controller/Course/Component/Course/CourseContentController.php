@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
+namespace SimpleIT\ClaireAppBundle\Controller\Course\Component\Course;
 
 use OC\CLAIRE\BusinessRules\Requestors\UseCaseFactory;
 use OC\CLAIRE\BusinessRules\Responders\Course\Content\GetContentResponse;

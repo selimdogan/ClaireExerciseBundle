@@ -36,7 +36,7 @@ class CategoryByCourseController extends AppController
             );
 
             return $this->render(
-                'SimpleITClaireAppBundle:AssociatedContent/Category/Component:editByCourse.html.twig',
+                'SimpleITClaireAppBundle:AssociatedContent/Category/partial:editByCourse.html.twig',
                 array(
                     'actionUrl' => $this->generateUrl(
                             'simple_it_claire_associated_content_component_category_category_by_course_edit',

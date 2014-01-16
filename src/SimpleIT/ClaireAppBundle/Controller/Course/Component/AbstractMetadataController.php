@@ -63,39 +63,39 @@ abstract class AbstractMetadataController extends AppController
         return $form;
     }
 
-    /**
-     * Process edition of metadatas for a course
-     *
-     * @param Request $request  Request
-     * @param Form    $form     Form
-     * @param int     $courseId Course id
-     *
-     * @return \Symfony\Component\Form\Form
-     */
-    protected function processCourseEdit(
-        Request $request,
-        Form $form,
-        $courseId
-    )
-    {
-        if (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()) {
-            $form->bind($request);
-            if ($form->isValid()) {
-
-                /** @type MetadataResource $metadataResource */
-                $metadataResource = $form->getData();
-
-                $this->get('simple_it.claire.course.metadata')->saveFromCourse(
-                    $courseId,
-                    array($metadataResource->getKey() => $metadataResource->getValue())
-                );
-
-                return new AppResponse($metadataResource);
-            }
-        }
-
-        return $form;
-    }
+//    /**
+//     * Process edition of metadatas for a course
+//     *
+//     * @param Request $request  Request
+//     * @param Form    $form     Form
+//     * @param int     $courseId Course id
+//     *
+//     * @return \Symfony\Component\Form\Form
+//     */
+//    protected function processCourseEdit(
+//        Request $request,
+//        Form $form,
+//        $courseId
+//    )
+//    {
+//        if (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()) {
+//            $form->bind($request);
+//            if ($form->isValid()) {
+//
+//                /** @type MetadataResource $metadataResource */
+//                $metadataResource = $form->getData();
+//
+//                $this->get('simple_it.claire.course.metadata')->saveFromCourse(
+//                    $courseId,
+//                    array($metadataResource->getKey() => $metadataResource->getValue())
+//                );
+//
+//                return new AppResponse($metadataResource);
+//            }
+//        }
+//
+//        return $form;
+//    }
 
     /**
      * Set status to draft if not defined in collection information

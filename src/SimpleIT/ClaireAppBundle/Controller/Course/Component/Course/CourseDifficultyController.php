@@ -34,7 +34,7 @@ class CourseDifficultyController extends AppController
             );
 
             return $this->render(
-                'SimpleITClaireAppBundle:Course/Metadata/Component:editDifficulty.html.twig',
+                'SimpleITClaireAppBundle:Course/Course/partial:editDifficulty.html.twig',
                 array(
                     'actionUrl' => $this->generateUrl(
                             'simple_it_claire_course_component_course_difficulty_edit',

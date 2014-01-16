@@ -50,6 +50,11 @@ class GetCourseResponseDTO implements GetCourseResponse
     public $license;
 
     /**
+     * @var float
+     */
+    public $rating;
+
+    /**
      * @var string
      */
     public $slug;
@@ -131,6 +136,14 @@ class GetCourseResponseDTO implements GetCourseResponse
     public function getLicense()
     {
         return $this->license;
+    }
+
+    /**
+     * @return float
+     */
+    public function getRating()
+    {
+        return $this->rating;
     }
 
     /**

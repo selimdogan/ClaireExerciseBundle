@@ -33,7 +33,7 @@ class DisplayLevelController extends AppController
             );
 
             return $this->render(
-                'SimpleITClaireAppBundle:Course/Course/Component:editDisplayLevel.html.twig',
+                'SimpleITClaireAppBundle:Course/Course/partial:editDisplayLevel.html.twig',
                 array(
                     'actionUrl' => $this->generateUrl(
                             'simple_it_claire_course_component_course_display_level_edit',

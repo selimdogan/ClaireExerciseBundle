@@ -33,10 +33,13 @@ abstract class GetCourse implements UseCase
         $response->description = $course->getDescription();
         $response->difficulty = $course->getDifficulty();
         $response->displayLevel = $course->getDisplayLevel();
-        $response->duration = $course->getDuration();
+        if (null !== $duration = $course->getDuration()) {
+            $response->duration = new \DateInterval($duration);
+        }
         $response->id = $course->getId();
         $response->image = $course->getImage();
         $response->license = $course->getLicense();
+        $response->rating = $course->getRating();
         $response->slug = $course->getSlug();
         $response->status = $course->getStatus();
         $response->title = $course->getTitle();
