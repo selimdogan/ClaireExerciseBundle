@@ -604,6 +604,26 @@ class ExerciseModelService
     }
 
     /**
+     * Duplicate an exercise model in an owner exercise model
+     *
+     * @param int $ownerExerciseModelId
+     * @param int $exerciseModelId
+     *
+     * @return \SimpleIT\ApiResourcesBundle\Exercise\OwnerExerciseModelResource
+     */
+    public function duplicate($exerciseModelId)
+    {
+        $emOld = $this->get($exerciseModelId);
+        $emOld->setComplete(null);
+        $emOld->setAuthor(null);
+        $emOld->setId(null);
+
+        $emNew = $this->add($emOld);
+
+        return $this->ownerExerciseModelService->addBasicFromExerciseModel($emNew->getId());
+    }
+
+    /**
      * Create classification constraints from the arrays
      *
      * @param array $giArray

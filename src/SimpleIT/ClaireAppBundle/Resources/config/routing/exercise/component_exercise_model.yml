@@ -100,3 +100,11 @@ simple_it_claire_component_exercise_exercise_model_try:
         exerciseModelId: \d+
 
 
+simple_it_claire_component_exercise_exercise_model_duplicate:
+    pattern: /{exerciseModelId}/duplicate
+    defaults: { _controller:SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:duplicateExerciseModel }
+    requirements:
+        _method: GET
+        exerciseModelId: \d+
+
+

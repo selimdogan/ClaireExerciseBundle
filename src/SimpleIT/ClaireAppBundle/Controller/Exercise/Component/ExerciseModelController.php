@@ -286,7 +286,7 @@ class ExerciseModelController extends AppController
      *
      * @param Request $request         Request
      * @param int     $exerciseModelId Resource
-     * @param   bool    $locked
+     * @param   bool  $locked
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @return \Symfony\Component\HttpFoundation\JsonResponse
@@ -377,5 +377,24 @@ class ExerciseModelController extends AppController
         $this->get('simple_it.claire.exercise.exercise_model')->delete($exerciseModelId);
 
         return new JsonResponse(array('id' => $exerciseModelId));
+    }
+
+    /**
+     * Duplicate an exercise model in the same owner exercise model
+     *
+     * @param $exerciseModelId
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function duplicateExerciseModelAction($exerciseModelId)
+    {
+        $oem = $this->get('simple_it.claire.exercise.exercise_model')->duplicate($exerciseModelId);
+
+        return $this->redirect(
+            $this->generateUrl(
+                'simple_it_claire_component_exercise_exercise_model_edit',
+                array('exerciseModelId' => $oem->getExerciseModel())
+            )
+        );
     }
 }
