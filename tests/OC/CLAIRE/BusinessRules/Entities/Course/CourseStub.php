@@ -39,6 +39,8 @@ abstract class CourseStub extends CourseResource
 
     protected $displayLevel = self::COURSE_DISPLAY_LEVEL;
 
+    protected $duration = self::COURSE_DURATION;
+
     protected $id = self::COURSE_ID;
 
     protected $image = self::COURSE_IMAGE;
@@ -52,11 +54,6 @@ abstract class CourseStub extends CourseResource
     public function getCreatedAt()
     {
         return new \DateTime(self::COURSE_CREATED_AT);
-    }
-
-    public function getDuration()
-    {
-        return new \DateInterval(self::COURSE_DURATION);
     }
 
     public function getUpdatedAt()
