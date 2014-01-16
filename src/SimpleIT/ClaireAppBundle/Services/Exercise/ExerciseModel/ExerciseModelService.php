@@ -606,7 +606,6 @@ class ExerciseModelService
     /**
      * Duplicate an exercise model in an owner exercise model
      *
-     * @param int $ownerExerciseModelId
      * @param int $exerciseModelId
      *
      * @return \SimpleIT\ApiResourcesBundle\Exercise\OwnerExerciseModelResource
