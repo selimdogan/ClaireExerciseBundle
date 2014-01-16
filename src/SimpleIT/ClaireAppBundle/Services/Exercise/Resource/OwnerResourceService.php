@@ -12,6 +12,7 @@ use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\OwnerResourceByRe
 use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerResource\OwnerResourceRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\Page;
+use SimpleIT\Utils\Collection\PaginatedCollection;
 
 /**
  * Class OwnerResourceService
@@ -175,6 +176,23 @@ class OwnerResourceService
         }
 
         return $paginatedCollection;
+    }
+
+    /**
+     * Get all the owner resources by resource
+     *
+     * @param      $resourceId
+     * @param null $collectionInformation
+     *
+     * @return PaginatedCollection
+     */
+    public function getByResource($resourceId, $collectionInformation = null)
+    {
+        return $this->ownerResourceByResourceRepository->findAll
+            (
+                $resourceId,
+                $collectionInformation
+            );
     }
 
     /**

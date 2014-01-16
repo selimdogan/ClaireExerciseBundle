@@ -205,7 +205,7 @@ class ResourceService
      *
      * @return ResourceResource
      */
-    public function getToEdit($resourceId)
+    public function get($resourceId)
     {
         return $this->resourceRepository->findToEdit($resourceId);
     }
@@ -218,5 +218,23 @@ class ResourceService
     public function delete($resourceId)
     {
         $this->resourceRepository->delete($resourceId);
+    }
+
+    /**
+     * Duplicate a resource in a new owner resource
+     *
+     * @param int $resourceId
+     *
+     * @return \SimpleIT\ApiResourcesBundle\Exercise\OwnerResourceResource
+     */
+    public function duplicate($resourceId)
+    {
+        $resourceOld = $this->get($resourceId);
+        $resourceOld->setAuthor(null);
+        $resourceOld->setId(null);
+
+        $resourceNew = $this->add($resourceOld);
+
+        return $this->ownerResourceService->addBasicFromResource($resourceNew->getId());
     }
 }

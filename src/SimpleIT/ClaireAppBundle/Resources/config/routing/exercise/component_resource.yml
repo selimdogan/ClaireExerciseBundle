@@ -87,3 +87,9 @@ simple_it_claire_component_exercise_resource_add_to_perso:
         _method: GET
         resourceId: \d+
 
+simple_it_claire_component_exercise_resource_duplicate:
+    pattern: /{resourceId}/duplicate
+    defaults: { _controller:SimpleITClaireAppBundle:Exercise/Component/Resource:duplicate }
+    requirements:
+        _method: GET
+        resourceId: \d+

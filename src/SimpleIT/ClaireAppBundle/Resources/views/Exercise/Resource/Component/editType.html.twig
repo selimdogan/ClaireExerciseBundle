@@ -1,4 +1,5 @@
 <h2>Type de ressource</h2>
+{% if locked %}<div>Édition vérouillée</div>{% endif %}
 
 <form action="{{ path('simple_it_claire_component_exercise_resource_type_edit',
 { 'resourceId': resource.id}) }}" method="post" {{ form_enctype(form) }}>

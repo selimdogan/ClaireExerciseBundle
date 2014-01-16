@@ -1,10 +1,19 @@
 <h1>Edition de ressources : {{ resource.type }}</h1>
+{% if locked %}
+    <div>Édition vérouillée</div>
+{% endif %}
 
-{{ render(controller('SimpleITClaireAppBundle:Exercise/Component/Resource:editContentView',{ 'resourceId': resource.id })) }}
-{{ render(controller('SimpleITClaireAppBundle:Exercise/Component/RequiredResourceByResource:editRequiredResourcesView',{ 'resourceId': resource.id })) }}
+{{ render(controller('SimpleITClaireAppBundle:Exercise/Component/Resource:editContentView',{ 'resourceId': resource.id, 'locked':locked })) }}
+{{ render(controller('SimpleITClaireAppBundle:Exercise/Component/RequiredResourceByResource:editRequiredResourcesView',{ 'resourceId': resource.id, 'locked':locked })) }}
 
-<form action="{{ path('simple_it_claire_component_exercise_resource_delete',
-{ 'resourceId': resource.id}) }}" method="get" >
-    <input type="submit" value="Supprimer la ressource">
+<form action="{{ path('simple_it_claire_component_exercise_resource_duplicate',{ 'resourceId': resource.id}) }}" method="get">
+    <input type="submit" value="Dupliquer la ressource">
 </form>
+
+{% if not locked %}
+    <form action="{{ path('simple_it_claire_component_exercise_resource_delete',
+    { 'resourceId': resource.id}) }}" method="get">
+        <input type="submit" value="Supprimer la ressource">
+    </form>
+{% endif %}
 

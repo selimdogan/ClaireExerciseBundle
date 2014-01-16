@@ -20,11 +20,12 @@ class RequiredResourceByResourceController extends AppController
     /**
      * Edit the required resources (GET)
      *
-     * @param int $resourceId Resource id
+     * @param int  $resourceId Resource id
+     * @param bool $locked
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editRequiredResourcesViewAction($resourceId)
+    public function editRequiredResourcesViewAction($resourceId, $locked = false)
     {
         $resource = $this->get('simple_it.claire.exercise.resource')->getResourceToEdit(
             $resourceId
@@ -32,7 +33,7 @@ class RequiredResourceByResourceController extends AppController
 
         return $this->render(
             'SimpleITClaireAppBundle:Exercise/Resource/Component:editRequiredResources.html.twig',
-            array('resource' => $resource)
+            array('resource' => $resource, 'locked' => $locked)
         );
     }
 

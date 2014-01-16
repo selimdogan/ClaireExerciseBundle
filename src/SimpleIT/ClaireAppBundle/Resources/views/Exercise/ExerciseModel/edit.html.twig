@@ -17,11 +17,11 @@
         {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/OwnerResource:browserView',{ '_exerciseType': exerciseModel.type})) }}
     </div>
 
-    {% if locked %}
-        <form action="{{ path('simple_it_claire_component_exercise_exercise_model_duplicate',{ 'exerciseModelId': exerciseModel.id}) }}" method="get">
-            <input type="submit" value="Dupliquer le modèle d'exercice">
-        </form>
-    {% else %}
+    <form action="{{ path('simple_it_claire_component_exercise_exercise_model_duplicate',{ 'exerciseModelId': exerciseModel.id}) }}" method="get">
+        <input type="submit" value="Dupliquer le modèle d'exercice">
+    </form>
+
+    {% if not locked %}
         <form action="{{ path('simple_it_claire_component_exercise_exercise_model_delete',{ 'exerciseModelId': exerciseModel.id}) }}" method="get">
             <input type="submit" value="Supprimer le modèle d'exercice">
         </form>

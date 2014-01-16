@@ -3,6 +3,7 @@
 namespace SimpleIT\ClaireAppBundle\Controller\Exercise\Component;
 
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource;
+use SimpleIT\ApiResourcesBundle\Exercise\OwnerResourceResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ResourceResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
@@ -71,26 +72,61 @@ class ResourceController extends AppController
      */
     public function editViewAction($resourceId)
     {
-        $resource = $this->get('simple_it.claire.exercise.resource')->getToEdit(
+        // FIXME user
+        $user = 1000001;
+
+        $resource = $this->get('simple_it.claire.exercise.resource')->get(
             $resourceId
         );
+
+        $locked = $this->isLocked($resource, $user);
 
         return $this->render(
             'SimpleITClaireAppBundle:Exercise/Resource:edit.html.twig',
             array(
-                'resource' => $resource
+                'resource' => $resource,
+                'locked'   => $locked
             )
         );
     }
 
     /**
+     * Check is a resource is locked (used by others) or not
+     *
+     * @param ResourceResource $resource
+     * @param int              $user
+     *
+     * @return bool
+     */
+    private function isLocked(ResourceResource $resource, $user)
+    {
+        $locked = false;
+        if ($resource->getAuthor() !== $user) {
+            $locked = true;
+        }
+
+        $ownerResources = $this->get('simple_it.claire.exercise.owner_resource')
+            ->getByResource($resource->getId());
+
+        /** @var OwnerResourceResource $or */
+        foreach ($ownerResources as $or) {
+            if ($or->getOwner() !== $user) {
+                $locked = true;
+            }
+        }
+
+        return $locked;
+    }
+
+    /**
      * Edit a resource type (GET)
      *
-     * @param int $resourceId Resource id
+     * @param int  $resourceId Resource id
+     * @param bool $locked
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editTypeViewAction($resourceId)
+    public function editTypeViewAction($resourceId, $locked = false)
     {
         $resource = $this->get('simple_it.claire.exercise.resource')->getResourceToEdit(
             $resourceId
@@ -100,7 +136,7 @@ class ResourceController extends AppController
 
         return $this->render(
             'SimpleITClaireAppBundle:Exercise/Resource/Component:editType.html.twig',
-            array('resource' => $resource, 'form' => $form->createView())
+            array('resource' => $resource, 'form' => $form->createView(), 'locked' => $locked)
         );
     }
 
@@ -133,12 +169,13 @@ class ResourceController extends AppController
     /**
      * Edit a resource content (GET)
      *
-     * @param int $resourceId Resource id
+     * @param int  $resourceId Resource id
+     * @param bool $locked
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editContentViewAction($resourceId)
+    public function editContentViewAction($resourceId, $locked = false)
     {
         $resource = $this->get('simple_it.claire.exercise.resource')->getResourceToEdit(
             $resourceId
@@ -147,13 +184,13 @@ class ResourceController extends AppController
         $view = null;
         switch ($resource->getType()) {
             case ExerciseResource\CommonResource::PICTURE:
-                $view = $this->editPictureView($resource);
+                $view = $this->editPictureView($resource, $locked);
                 break;
             case ExerciseResource\CommonResource::TEXT:
-                $view = $this->editTextView($resource);
+                $view = $this->editTextView($resource, $locked);
                 break;
             case ExerciseResource\CommonResource::MULTIPLE_CHOICE_QUESTION:
-                $view = $this->editMCQuestionView($resource);
+                $view = $this->editMCQuestionView($resource, $locked);
                 break;
             default:
                 throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST);
@@ -166,16 +203,17 @@ class ResourceController extends AppController
      * View the edition component for a picture
      *
      * @param ResourceResource $resource
+     * @param bool             $locked
      *
      * @return Response
      */
-    private function editPictureView(ResourceResource $resource)
+    private function editPictureView(ResourceResource $resource, $locked)
     {
         $form = $this->createForm(new PictureType(), $resource->getContent());
 
         return $this->render(
             'SimpleITClaireAppBundle:Exercise/Resource/Component:editPictureContent.html.twig',
-            array('resource' => $resource, 'form' => $form->createView())
+            array('resource' => $resource, 'form' => $form->createView(), 'locked' => $locked)
         );
     }
 
@@ -183,16 +221,17 @@ class ResourceController extends AppController
      * View the edition component for a text
      *
      * @param ResourceResource $resource
+     * @param bool             $locked
      *
      * @return Response
      */
-    private function editTextView(ResourceResource $resource)
+    private function editTextView(ResourceResource $resource, $locked)
     {
         $form = $this->createForm(new TextType(), $resource->getContent());
 
         return $this->render(
             'SimpleITClaireAppBundle:Exercise/Resource/Component:editTextContent.html.twig',
-            array('resource' => $resource, 'form' => $form->createView())
+            array('resource' => $resource, 'form' => $form->createView(), 'locked' => $locked)
         );
     }
 
@@ -200,14 +239,15 @@ class ResourceController extends AppController
      * View the edition component for a MC question
      *
      * @param ResourceResource $resource
+     * @param bool             $locked
      *
      * @return Response
      */
-    private function editMCQuestionView(ResourceResource $resource)
+    private function editMCQuestionView(ResourceResource $resource, $locked)
     {
         return $this->render(
             'SimpleITClaireAppBundle:Exercise/Resource/Component:editMCQuestionContent.html.twig',
-            array('resource' => $resource)
+            array('resource' => $resource, 'locked' => $locked)
         );
     }
 
@@ -304,5 +344,26 @@ class ResourceController extends AppController
         $this->get('simple_it.claire.exercise.resource')->delete($resourceId);
 
         return new JsonResponse(array('id' => $resourceId));
+    }
+
+    /**
+     * Duplicate a resource in a new owner resource
+     *
+     * @param $resourceId
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function duplicateAction($resourceId)
+    {
+        $ownerResource = $this->get('simple_it.claire.exercise.resource')->duplicate(
+            $resourceId
+        );
+
+        return $this->redirect(
+            $this->generateUrl(
+                'simple_it_claire_component_exercise_resource_edit',
+                array('resourceId' => $ownerResource->getResource())
+            )
+        );
     }
 }

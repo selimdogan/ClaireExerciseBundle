@@ -1,4 +1,5 @@
 <h2>Edition de la question de QCM</h2>
+{% if locked %}<div>Édition vérouillée</div>{% endif %}
 
 <form action="{{ path('simple_it_claire_component_exercise_resource_mcquestion_content_edit',{ 'resourceId': resource.id}) }}" method="post">
     <table>

@@ -142,7 +142,6 @@ class ExerciseModelController extends AppController
      */
     public function editViewAction($exerciseModelId)
     {
-        $locked = false;
         // FIXME user
         $user = 1000001;
 
@@ -150,19 +149,7 @@ class ExerciseModelController extends AppController
             $exerciseModelId
         );
 
-        if ($exerciseModel->getAuthor() !== $user) {
-            $locked = true;
-        }
-
-        $ownerExerciseModels = $this->get('simple_it.claire.exercise.owner_exercise_model')
-            ->getByExerciseModel($exerciseModelId);
-
-        /** @var OwnerExerciseModelResource $oem */
-        foreach ($ownerExerciseModels as $oem) {
-            if ($oem->getOwner() !== $user) {
-                $locked = true;
-            }
-        }
+        $locked = $this->isLocked($exerciseModel, $user);
 
         return $this->render(
             'SimpleITClaireAppBundle:Exercise/ExerciseModel:edit.html.twig',
@@ -171,6 +158,35 @@ class ExerciseModelController extends AppController
                 'locked'        => $locked
             )
         );
+    }
+
+    /**
+     * Check if an owner exercise model is locked (used by others) or not
+     *
+     * @param ExerciseModelResource $exerciseModel
+     * @param int                   $user
+     *
+     * @return bool
+     */
+    private function isLocked(ExerciseModelResource $exerciseModel, $user)
+    {
+        $locked = false;
+
+        if ($exerciseModel->getAuthor() !== $user) {
+            $locked = true;
+        }
+
+        $ownerExerciseModels = $this->get('simple_it.claire.exercise.owner_exercise_model')
+            ->getByExerciseModel($exerciseModel->getId());
+
+        /** @var OwnerExerciseModelResource $oem */
+        foreach ($ownerExerciseModels as $oem) {
+            if ($oem->getOwner() !== $user) {
+                $locked = true;
+            }
+        }
+
+        return $locked;
     }
 
     /**
@@ -380,13 +396,13 @@ class ExerciseModelController extends AppController
     }
 
     /**
-     * Duplicate an exercise model in the same owner exercise model
+     * Duplicate an exercise model in a new owner exercise model
      *
      * @param $exerciseModelId
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function duplicateExerciseModelAction($exerciseModelId)
+    public function duplicateAction($exerciseModelId)
     {
         $oem = $this->get('simple_it.claire.exercise.exercise_model')->duplicate($exerciseModelId);
 
