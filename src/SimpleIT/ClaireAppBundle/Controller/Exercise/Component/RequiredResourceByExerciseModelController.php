@@ -17,11 +17,12 @@ class RequiredResourceByExerciseModelController extends AppController
     /**
      * Edit the required resources (GET)
      *
-     * @param int $exerciseModelId Resource id
+     * @param int  $exerciseModelId Resource id
+     * @param bool $locked
      *
      * @return Response
      */
-    public function editRequiredResourcesViewAction($exerciseModelId)
+    public function editRequiredResourcesViewAction($exerciseModelId, $locked = false)
     {
         $exerciseModel = $this->get(
             'simple_it.claire.exercise.exercise_model'
@@ -31,7 +32,7 @@ class RequiredResourceByExerciseModelController extends AppController
 
         return $this->render(
             'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:editRequiredResources.html.twig',
-            array('exerciseModel' => $exerciseModel)
+            array('exerciseModel' => $exerciseModel, 'locked' => $locked)
         );
     }
 

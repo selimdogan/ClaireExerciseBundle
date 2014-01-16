@@ -153,7 +153,6 @@ class OwnerExerciseModelService
         if ($type !== null) {
             $collectionInformation->addFilter('type', $type);
         }
-
         if (!is_null($userId) && $personalExerciseModel === true) {
             $paginatedCollection = $this->ownerExerciseModelByOwnerRepository->findAll
                 (

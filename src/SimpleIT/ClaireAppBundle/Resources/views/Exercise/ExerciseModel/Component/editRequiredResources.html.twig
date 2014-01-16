@@ -1,5 +1,5 @@
 <h2>Ressources requises</h2>
-
+{% if locked %}<div>Édition vérouillée</div>{% endif %}
 <form action="{{ path('simple_it_claire_component_exercise_exercise_model_required_resource_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
 
     <input type="button" onclick="addRequirement()" value="Ajouter"/>

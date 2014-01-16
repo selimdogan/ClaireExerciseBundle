@@ -142,14 +142,33 @@ class ExerciseModelController extends AppController
      */
     public function editViewAction($exerciseModelId)
     {
+        $locked = false;
+        // FIXME user
+        $user = 1000001;
+
         $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->getToEdit(
             $exerciseModelId
         );
 
+        if ($exerciseModel->getAuthor() !== $user) {
+            $locked = true;
+        }
+
+        $ownerExerciseModels = $this->get('simple_it.claire.exercise.owner_exercise_model')
+            ->getByExerciseModel($exerciseModelId);
+
+        /** @var OwnerExerciseModelResource $oem */
+        foreach ($ownerExerciseModels as $oem) {
+            if ($oem->getOwner() !== $user) {
+                $locked = true;
+            }
+        }
+
         return $this->render(
             'SimpleITClaireAppBundle:Exercise/ExerciseModel:edit.html.twig',
             array(
-                'exerciseModel' => $exerciseModel
+                'exerciseModel' => $exerciseModel,
+                'locked'        => $locked
             )
         );
     }
@@ -157,11 +176,12 @@ class ExerciseModelController extends AppController
     /**
      * Edit an exercise model title (GET)
      *
-     * @param int $exerciseModelId Exercise model id
+     * @param int  $exerciseModelId Exercise model id
+     * @param bool $locked
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editTitleViewAction($exerciseModelId)
+    public function editTitleViewAction($exerciseModelId, $locked = false)
     {
         $exerciseModel = $this->get(
             'simple_it.claire.exercise.exercise_model'
@@ -173,7 +193,11 @@ class ExerciseModelController extends AppController
 
         return $this->render(
             'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:editTitle.html.twig',
-            array('exerciseModel' => $exerciseModel, 'form' => $form->createView())
+            array(
+                'exerciseModel' => $exerciseModel,
+                'form'          => $form->createView(),
+                'locked'        => $locked
+            )
         );
     }
 
@@ -206,11 +230,12 @@ class ExerciseModelController extends AppController
     /**
      * Edit the draft status (GET)
      *
-     * @param int $exerciseModelId Exercise model id
+     * @param int  $exerciseModelId Exercise model id
+     * @param bool $locked
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editDraftViewAction($exerciseModelId)
+    public function editDraftViewAction($exerciseModelId, $locked = false)
     {
         $exerciseModel = $this->get(
             'simple_it.claire.exercise.exercise_model'
@@ -222,7 +247,11 @@ class ExerciseModelController extends AppController
 
         return $this->render(
             'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:editDraft.html.twig',
-            array('exerciseModel' => $exerciseModel, 'form' => $form->createView())
+            array(
+                'exerciseModel' => $exerciseModel,
+                'form'          => $form->createView(),
+                'locked'        => $locked
+            )
         );
     }
 
@@ -257,11 +286,12 @@ class ExerciseModelController extends AppController
      *
      * @param Request $request         Request
      * @param int     $exerciseModelId Resource
+     * @param   bool    $locked
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function contentEditAction(Request $request, $exerciseModelId)
+    public function contentEditAction(Request $request, $exerciseModelId, $locked = false)
     {
         if ($request->getMethod() === "GET") {
             $exerciseModel = $this->get(
@@ -270,7 +300,7 @@ class ExerciseModelController extends AppController
                     $exerciseModelId
                 );
 
-            return $this->viewContentEdit($exerciseModel);
+            return $this->viewContentEdit($exerciseModel, $locked);
         }
 
         $exerciseModel = $this->get(
@@ -299,11 +329,12 @@ class ExerciseModelController extends AppController
      * Render the edition view for exercise model content
      *
      * @param ExerciseModelResource $exerciseModel
+     * @param bool                  $locked
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @return Response
      */
-    private function viewContentEdit(ExerciseModelResource $exerciseModel)
+    private function viewContentEdit(ExerciseModelResource $exerciseModel, $locked)
     {
         $view = null;
         switch ($exerciseModel->getType()) {
@@ -325,7 +356,13 @@ class ExerciseModelController extends AppController
 
         $exerciseModel = ContentVMAssembler::write($exerciseModel);
 
-        return $this->render($view, array('exerciseModel' => $exerciseModel));
+        return $this->render(
+            $view,
+            array(
+                'exerciseModel' => $exerciseModel,
+                'locked'        => $locked
+            )
+        );
     }
 
     /**
