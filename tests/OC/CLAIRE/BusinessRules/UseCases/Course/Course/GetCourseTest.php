@@ -64,6 +64,7 @@ abstract class GetCourseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(CourseStub::COURSE_ID, $this->response->getId());
         $this->assertEquals(CourseStub::COURSE_IMAGE, $this->response->getImage());
         $this->assertEquals(CourseStub::COURSE_LICENSE, $this->response->getLicense());
+        $this->assertEquals(CourseStub::COURSE_RATING, $this->response->getRating());
         $this->assertEquals(CourseStub::COURSE_SLUG, $this->response->getSlug());
         $this->assertEquals(CourseStub::COURSE_TITLE, $this->response->getTitle());
         $this->assertEquals(

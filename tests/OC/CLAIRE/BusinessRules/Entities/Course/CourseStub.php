@@ -27,6 +27,8 @@ abstract class CourseStub extends CourseResource
 
     const COURSE_LICENSE = 'CC-BY-NC-SA';
 
+    const COURSE_RATING = 4.6;
+
     const COURSE_SLUG = 'course-title-1';
 
     const COURSE_TITLE = 'Course title 1';
@@ -46,6 +48,8 @@ abstract class CourseStub extends CourseResource
     protected $image = self::COURSE_IMAGE;
 
     protected $license = self::COURSE_LICENSE;
+
+    protected $rating = self::COURSE_RATING;
 
     protected $slug = self::COURSE_SLUG;
 
