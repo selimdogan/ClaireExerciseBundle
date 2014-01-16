@@ -7,6 +7,7 @@ use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModelResource;
 use SimpleIT\ApiResourcesBundle\Exercise\OwnerExerciseModelResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\Exception\InvalidModelException;
+use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ExerciseModelDraftType;
 use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ExerciseModelTitleType;
 use SimpleIT\ClaireAppBundle\Form\Type\Exercise\ExerciseModelTypeType;
 use SimpleIT\ClaireAppBundle\ViewModelAssembler\ExerciseModel\ContentVMAssembler;
@@ -52,8 +53,7 @@ class ExerciseModelController extends AppController
         $ownerExerciseModels = $this->get('simple_it.claire.exercise.owner_exercise_model')
             ->getByExerciseModel($exerciseModelId);
 
-        if (count($ownerExerciseModels) == 0)
-        {
+        if (count($ownerExerciseModels) == 0) {
             throw new ResourceNotFoundException('No owner exercise model for this model.');
         }
 
@@ -197,7 +197,59 @@ class ExerciseModelController extends AppController
             );
         }
 
-        return new JsonResponse($exerciseModel->getTitle());
+        return new JsonResponse(array(
+            'id'    => $exerciseModel->getId(),
+            'title' => $exerciseModel->getTitle()
+        ));
+    }
+
+    /**
+     * Edit the draft status (GET)
+     *
+     * @param int $exerciseModelId Exercise model id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editDraftViewAction($exerciseModelId)
+    {
+        $exerciseModel = $this->get(
+            'simple_it.claire.exercise.exercise_model'
+        )->getExerciseModelToEdit(
+                $exerciseModelId
+            );
+
+        $form = $this->createForm(new ExerciseModelDraftType(), $exerciseModel);
+
+        return $this->render(
+            'SimpleITClaireAppBundle:Exercise/ExerciseModel/Component:editDraft.html.twig',
+            array('exerciseModel' => $exerciseModel, 'form' => $form->createView())
+        );
+    }
+
+    /**
+     * Edit the draft status (POST)
+     *
+     * @param Request $request         Request
+     * @param int     $exerciseModelId Course id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function draftEditAction(Request $request, $exerciseModelId)
+    {
+        $exerciseModel = new ExerciseModelResource();
+        $form = $this->createForm(new ExerciseModelDraftType(), $exerciseModel);
+        $form->bind($request);
+        if ($this->get('validator')->validate($form, 'editDraft')) {
+            $exerciseModel = $this->get('simple_it.claire.exercise.exercise_model')->save(
+                $exerciseModelId,
+                $exerciseModel
+            );
+        }
+
+        return new JsonResponse(array(
+            'id'    => $exerciseModel->getId(),
+            'draft' => $exerciseModel->getDraft()
+        ));
     }
 
     /**
@@ -287,6 +339,6 @@ class ExerciseModelController extends AppController
     {
         $this->get('simple_it.claire.exercise.exercise_model')->delete($exerciseModelId);
 
-        return new JsonResponse($exerciseModelId);
+        return new JsonResponse(array('id' => $exerciseModelId));
     }
 }

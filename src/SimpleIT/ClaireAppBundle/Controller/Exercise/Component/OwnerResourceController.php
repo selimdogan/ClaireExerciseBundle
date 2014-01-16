@@ -305,7 +305,10 @@ class OwnerResourceController extends AppMetadataController
             );
         }
 
-        return new JsonResponse($ownerResource->getPublic());
+        return new JsonResponse(array(
+            'id'     => $ownerResource->getId(),
+            'public' => $ownerResource->getPublic()
+        ));
     }
 
     /**
@@ -346,7 +349,7 @@ class OwnerResourceController extends AppMetadataController
             $keyword
         );
 
-        return new JsonResponse($ownerResourceIds);
+        return new JsonResponse(array('ids' => $ownerResourceIds));
     }
 
     /**
@@ -385,7 +388,7 @@ class OwnerResourceController extends AppMetadataController
             $values
         );
 
-        return new JsonResponse($metaKey);
+        return new JsonResponse(array('key' => $metaKey, 'ids' => $ownerResourceIds));
     }
 
     /**
@@ -399,7 +402,7 @@ class OwnerResourceController extends AppMetadataController
     {
         $this->get('simple_it.claire.exercise.owner_resource')->delete($ownerResourceId);
 
-        return new JsonResponse($ownerResourceId);
+        return new JsonResponse(array('id' => $ownerResourceId));
     }
 
     /**

@@ -49,10 +49,10 @@ class RequiredResourceByExerciseModelController extends AppController
         $requiredResources = $this->get(
             'simple_it.claire.exercise.exercise_model'
         )->saveRequiredResource(
-            $exerciseModelId,
-            $resourceData
-        );
+                $exerciseModelId,
+                $resourceData
+            );
 
-        return new JsonResponse($requiredResources);
+        return new JsonResponse(array('requiredResources' => $requiredResources));
     }
 }

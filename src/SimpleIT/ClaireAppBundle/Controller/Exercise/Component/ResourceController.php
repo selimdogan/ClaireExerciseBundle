@@ -124,7 +124,10 @@ class ResourceController extends AppController
             );
         }
 
-        return new JsonResponse($resource->getType());
+        return new JsonResponse(array(
+            'id'   => $resource->getId(),
+            'type' => $resource->getType()
+        ));
     }
 
     /**
@@ -267,7 +270,7 @@ class ResourceController extends AppController
             );
         }
 
-        return new JsonResponse($resource->getId());
+        return new JsonResponse(array('id' => $resource->getId()));
     }
 
     /**
@@ -286,7 +289,7 @@ class ResourceController extends AppController
             $resourceData
         );
 
-        return new JsonResponse($resource->getId());
+        return new JsonResponse(array('id' => $resource->getId()));
     }
 
     /**
@@ -300,6 +303,6 @@ class ResourceController extends AppController
     {
         $this->get('simple_it.claire.exercise.resource')->delete($resourceId);
 
-        return new JsonResponse($resourceId);
+        return new JsonResponse(array('id' => $resourceId));
     }
 }

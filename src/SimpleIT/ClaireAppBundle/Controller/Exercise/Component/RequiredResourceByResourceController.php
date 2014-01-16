@@ -52,6 +52,6 @@ class RequiredResourceByResourceController extends AppController
             $resourceData
         );
 
-        return new JsonResponse($requiredResources);
+        return new JsonResponse(array('requiredResources' => $requiredResources));
     }
 }

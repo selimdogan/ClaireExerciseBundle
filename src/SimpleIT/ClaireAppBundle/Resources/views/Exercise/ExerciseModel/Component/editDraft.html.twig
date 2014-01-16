@@ -1,0 +1,11 @@
+<h2>Brouillon</h2>
+
+<form action="{{ path('simple_it_claire_component_exercise_exercise_model_draft_edit',
+{ 'exerciseModelId': exerciseModel.id}) }}" method="post" {{ form_enctype(form) }}>
+    {{ form_errors(form) }}
+    {{ form_errors(form.draft) }}
+    {{ form_widget(form.draft) }}
+    {{ form_rest(form) }}
+    <input type="submit">
+    {#Remove submit#}
+</form>

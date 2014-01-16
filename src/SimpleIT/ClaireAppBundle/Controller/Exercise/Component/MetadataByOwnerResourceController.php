@@ -33,7 +33,10 @@ class MetadataByOwnerResourceController extends AppController
 
         $misc = null;
         if (isset($ownerResource->getMetadata()[MetadataResource::MISC_METADATA_KEY])) {
-            $misc = explode(';', $ownerResource->getMetadata()[MetadataResource::MISC_METADATA_KEY]);
+            $misc = explode(
+                ';',
+                $ownerResource->getMetadata()[MetadataResource::MISC_METADATA_KEY]
+            );
         }
 
         return $this->render(
@@ -58,6 +61,6 @@ class MetadataByOwnerResourceController extends AppController
             $resourceData
         );
 
-        return new JsonResponse($requiredResources);
+        return new JsonResponse(array('requiredResources' => $requiredResources));
     }
 }

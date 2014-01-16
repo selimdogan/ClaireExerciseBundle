@@ -22,6 +22,18 @@ simple_it_claire_component_exercise_exercise_model_title_edit:
     requirements:
         _method: POST
 
+simple_it_claire_component_exercise_exercise_model_draft_edit_view:
+    pattern: /{exerciseModelId}/draft
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:editDraftView }
+    requirements:
+        _method: GET
+
+simple_it_claire_component_exercise_exercise_model_draft_edit:
+    pattern: /{exerciseModelId}/draft
+    defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:draftEdit }
+    requirements:
+        _method: POST
+
 simple_it_claire_component_exercise_exercise_model_content_edit_view:
     pattern: /{exerciseModelId}/content
     defaults: { _controller: SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:contentEdit }

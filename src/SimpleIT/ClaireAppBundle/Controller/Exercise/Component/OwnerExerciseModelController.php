@@ -216,7 +216,7 @@ class OwnerExerciseModelController extends AppMetadataController
         return $this->render(
             'SimpleITClaireAppBundle:Exercise/OwnerExerciseModel/Component:list.html.twig',
             array(
-                'ownerExerciseModels'        => $ownerExerciseModels,
+                'ownerExerciseModels'   => $ownerExerciseModels,
                 'collectionInformation' => $collectionInformation,
                 'paginationUrl'         => $this->generateUrl($action),
                 'public'                => !$private
@@ -299,7 +299,10 @@ class OwnerExerciseModelController extends AppMetadataController
                 );
         }
 
-        return new JsonResponse($ownerExerciseModel->getPublic());
+        return new JsonResponse(array(
+            'id'     => $ownerExerciseModel->getId(),
+            'public' => $ownerExerciseModel->getPublic()
+        ));
     }
 
     /**

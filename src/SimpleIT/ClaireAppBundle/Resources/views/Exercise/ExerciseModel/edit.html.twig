@@ -5,6 +5,7 @@
         <h1>Edition de modèle d'exercice : {{ exerciseModel.type }}</h1>
 
         {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:editTitleView',{ 'exerciseModelId': exerciseModel.id })) }}
+        {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:editDraftView',{ 'exerciseModelId': exerciseModel.id })) }}
         {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/ExerciseModel:contentEdit',{ 'exerciseModelId': exerciseModel.id })) }}
     </div>
     {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/RequiredResourceByExerciseModel:editRequiredResourcesView',{ 'exerciseModelId': exerciseModel.id })) }}
