@@ -163,23 +163,23 @@ class CourseService
         return $course;
     }
 
-//    /**
-//     * Save a course
-//     *
-//     * @param int            $courseId Course id
-//     * @param CourseResource $course   Course
-//     * @param string         $status   Status
-//     *
-//     * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
-//     */
-//    public function save($courseId, CourseResource $course, $status)
-//    {
-//        return $this->courseRepository->update(
-//            $courseId,
-//            $course,
-//            array(CourseResource::STATUS => $status)
-//        );
-//    }
+    /**
+     * Save a course
+     *
+     * @param int            $courseId Course id
+     * @param CourseResource $course   Course
+     * @param string         $status   Status
+     *
+     * @return \SimpleIT\ApiResourcesBundle\Course\CourseResource
+     */
+    public function save($courseId, CourseResource $course, $status)
+    {
+        return $this->courseRepository->update(
+            $courseId,
+            $course,
+            array(CourseResource::STATUS => $status)
+        );
+    }
 
     /* ************************ *
      *                          *

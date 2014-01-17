@@ -145,7 +145,6 @@ class CourseController extends AppController
      * @param int     $courseId Course id
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function viewIntroductionByStatusAction(Request $request, $courseId)
     {
