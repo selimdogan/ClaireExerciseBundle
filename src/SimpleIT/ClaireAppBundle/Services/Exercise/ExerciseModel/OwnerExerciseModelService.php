@@ -12,6 +12,7 @@ use
 use
     SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\OwnerExerciseModelByOwnerRepository;
 use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\OwnerExerciseModelRepository;
+use SimpleIT\ClaireAppBundle\Services\Exercise\Resource\OwnerResourceService;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\Page;
 use SimpleIT\Utils\Collection\PaginatedCollection;
@@ -47,6 +48,16 @@ class OwnerExerciseModelService
      * @var OwnerExerciseModelByExerciseModelRepository
      */
     private $ownerExerciseModelByExerciseModelRepository;
+
+    /**
+     * @var OwnerResourceService
+     */
+    private $ownerResourceService;
+
+    /**
+     * @var ExerciseModelService
+     */
+    private $exerciseModelService;
 
     /**
      * Set metadataByOwnerExerciseModelRepository
@@ -90,6 +101,26 @@ class OwnerExerciseModelService
     public function setOwnerExerciseModelRepository($ownerExerciseModelRepository)
     {
         $this->ownerExerciseModelRepository = $ownerExerciseModelRepository;
+    }
+
+    /**
+     * Set exerciseModelService
+     *
+     * @param \SimpleIT\ClaireAppBundle\Services\Exercise\ExerciseModel\ExerciseModelService $exerciseModelService
+     */
+    public function setExerciseModelService($exerciseModelService)
+    {
+        $this->exerciseModelService = $exerciseModelService;
+    }
+
+    /**
+     * Set ownerResourceService
+     *
+     * @param \SimpleIT\ClaireAppBundle\Services\Exercise\Resource\OwnerResourceService $ownerResourceService
+     */
+    public function setOwnerResourceService($ownerResourceService)
+    {
+        $this->ownerResourceService = $ownerResourceService;
     }
 
     /**
@@ -363,6 +394,13 @@ class OwnerExerciseModelService
      */
     public function addToPerso($exerciseModelId, $userId)
     {
+        // add the resources to perso
+        $exerciseModel = $this->exerciseModelService->get($exerciseModelId);
+        foreach ($exerciseModel->getRequiredExerciseResources() as $resource) {
+            $this->ownerResourceService->addToPerso($resource, $userId);
+        }
+
+// add the model to perso
         $collectionInformation = new CollectionInformation();
         $collectionInformation->addFilter('public-except-user', $userId);
         $ownerResources = $this->ownerExerciseModelByExerciseModelRepository->findAll(
@@ -431,4 +469,5 @@ class OwnerExerciseModelService
     {
         $this->ownerExerciseModelRepository->delete($ownerExerciseModelId);
     }
+
 }

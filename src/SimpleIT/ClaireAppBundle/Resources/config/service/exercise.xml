@@ -256,6 +256,12 @@
             <call method="setOwnerExerciseModelByOwnerRepository">
                 <argument type="service" id="simple_it.claire.exercise.repository.owner_exercise_model_by_owner"/>
             </call>
+            <call method="setExerciseModelService">
+                <argument type="service" id="simple_it.claire.exercise.exercise_model"/>
+            </call>
+            <call method="setOwnerResourceService">
+                <argument type="service" id="simple_it.claire.exercise.owner_resource"/>
+            </call>
         </service>
 
         <!-- Exercise -->

@@ -596,6 +596,7 @@ class ExerciseModelService
         $exerciseModel->setContent($content);
         $exerciseModel->setRequiredExerciseResources(array());
         $exerciseModel->setTitle('Titre du modèle d\'exercices');
+        $exerciseModel->setDraft(true);
         $exerciseModel = $this->add($exerciseModel);
 
         $this->ownerExerciseModelService->addBasicFromExerciseModel($exerciseModel->getId());

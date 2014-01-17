@@ -386,18 +386,22 @@ class OwnerResourceService
             $collectionInformation
         );
 
-        $metadata = array();
-        /** @var OwnerResourceResource $or */
-        foreach ($ownerResources as $or) {
-            $metadata = array_merge($metadata, $or->getMetadata());
+        if ($ownerResources->count() > 0) {
+            $metadata = array();
+            /** @var OwnerResourceResource $or */
+            foreach ($ownerResources as $or) {
+                $metadata = array_merge($metadata, $or->getMetadata());
+            }
+
+            $or = new OwnerResourceResource();
+            $or->setResource($resourceId);
+            $or->setPublic(true);
+            $or->setMetadata($metadata);
+
+            return $this->add($or);
+        } else {
+            return null;
         }
-
-        $or = new OwnerResourceResource();
-        $or->setResource($resourceId);
-        $or->setPublic(true);
-        $or->setMetadata($metadata);
-
-        return $this->add($or);
     }
 
     /**

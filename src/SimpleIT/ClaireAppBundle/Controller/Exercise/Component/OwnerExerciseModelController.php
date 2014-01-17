@@ -316,6 +316,6 @@ class OwnerExerciseModelController extends AppMetadataController
     {
         $this->get('simple_it.claire.exercise.owner_exercise_model')->delete($ownerExerciseModelId);
 
-        return new JsonResponse($ownerExerciseModelId);
+        return new JsonResponse(array('id'=>$ownerExerciseModelId));
     }
 }
