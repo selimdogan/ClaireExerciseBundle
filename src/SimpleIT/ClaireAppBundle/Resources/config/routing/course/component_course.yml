@@ -12,7 +12,7 @@ simple_it_claire_course_component_course_search_list:
 
 simple_it_claire_course_component_course_content_edit:
     pattern: /{courseId}/content
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/CourseContent:edit }
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/CourseContent:edit }
     requirements:
         _method: POST
 
