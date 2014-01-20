@@ -40,4 +40,29 @@ class TocByCourseRepositoryStub implements TocByCourseGateway
             }
         }
     }
+
+    /**
+     * @return PartResource
+     */
+    public function findDraft($courseId)
+    {
+        return null;
+    }
+
+    /**
+     * @return PartResource
+     */
+    public function findWaitingForPublication($courseId)
+    {
+        return null;
+    }
+
+    /**
+     * @return PartResource
+     */
+    public function findPublished($courseIdentifier)
+    {
+        return null;
+    }
+
 }

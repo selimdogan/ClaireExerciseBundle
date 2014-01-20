@@ -27,14 +27,19 @@ class AddElementToTocRequestDTO implements AddElementToTocRequest
         $this->parentId = $parentId;
     }
 
-    public function setCourseId($courseId)
+    /**
+     * @return string
+     */
+    public function getCourseId()
     {
-        $this->courseId = $courseId;
+        return $this->courseId;
     }
 
-    public function setParentId($parentId)
+    /**
+     * @return string
+     */
+    public function getParentId()
     {
-        $this->parentId = $parentId;
+        return $this->parentId;
     }
-
 }

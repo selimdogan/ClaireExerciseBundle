@@ -1,8 +1,6 @@
 <?php
 
-namespace OC\CLAIRE\BusinessRules\Entities\AssociatedContent;
-
-use OC\CLAIRE\BusinessRules\Entities\AssociatedContent\Category\Category;
+namespace OC\CLAIRE\BusinessRules\Entities\AssociatedContent\Category;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>

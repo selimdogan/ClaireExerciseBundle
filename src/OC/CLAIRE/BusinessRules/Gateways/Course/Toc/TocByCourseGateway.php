@@ -20,4 +20,19 @@ interface TocByCourseGateway
      * @return PartResource
      */
     public function update($courseId, PartResource $toc);
+
+    /**
+     * @return PartResource
+     */
+    public function findDraft($courseId);
+
+    /**
+     * @return PartResource
+     */
+    public function findWaitingForPublication($courseId);
+
+    /**
+     * @return PartResource
+     */
+    public function findPublished($courseIdentifier);
 }

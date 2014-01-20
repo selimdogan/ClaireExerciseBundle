@@ -3,7 +3,7 @@
 namespace OC\CLAIRE\BusinessRules\Gateways\AssociatedContent\Category;
 
 use OC\CLAIRE\BusinessRules\Entities\AssociatedContent\Category\Category;
-use OC\CLAIRE\BusinessRules\Entities\AssociatedContent\CategoryStub;
+use OC\CLAIRE\BusinessRules\Entities\AssociatedContent\Category\CategoryStub;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>

@@ -37,8 +37,11 @@ class UseCaseFactoryTest extends \PHPUnit_Framework_TestCase
     );
 
     protected $associatedContentUseCases = array(
-        'GetDraftCourseCategory' => 'OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\CategoryByCourse\GetDraftCourseCategory',
-        'SaveCourseCategory'     => 'OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\CategoryByCourse\SaveCourseCategory'
+        'GetDraftCourseCategory'             => 'OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\CategoryByCourse\GetDraftCourseCategory',
+        'SaveCourseCategory'                 => 'OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\CategoryByCourse\SaveCourseCategory',
+        'GetDraftCourseTags'                 => 'OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\TagByCourse\GetDraftCourseTags',
+        'GetWaitingForPublicationCourseTags' => 'OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\TagByCourse\GetWaitingForPublicationCourseTags',
+        'GetPublishedCourseTags'             => 'OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\TagByCourse\GetPublishedCourseTags',
     );
 
     private $container;

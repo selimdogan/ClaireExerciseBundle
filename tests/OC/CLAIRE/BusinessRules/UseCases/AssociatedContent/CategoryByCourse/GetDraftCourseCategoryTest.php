@@ -2,7 +2,7 @@
 
 namespace OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\CategoryByCourse;
 
-use OC\CLAIRE\BusinessRules\Entities\AssociatedContent\CategoryStub;
+use OC\CLAIRE\BusinessRules\Entities\AssociatedContent\Category\CategoryStub;
 use OC\CLAIRE\BusinessRules\Gateways\AssociatedContent\Category\CategoryByCourseGatewaySpy;
 use
     OC\CLAIRE\BusinessRules\Gateways\AssociatedContent\Category\CourseNotFoundCategoryByCourseGatewayStub;

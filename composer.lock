@@ -1022,7 +1022,7 @@
             "source": {
                 "type": "git",
                 "url": "https://simpleit-zbot-readonly:nWCWJe04ASZ9ZriSrzfp@github.com/simpleit/ApiResourcesBundle.git",
-                "reference": "5dcc668c29e7b8b347b8d3f3b0d30334e86d01a8"
+                "reference": "0eeb710ec993f11e0255fce46224ce3e60aef15a"
             },
             "require": {
                 "php": ">=5.3.3",
@@ -1050,7 +1050,7 @@
                 "api",
                 "resources"
             ],
-            "time": "2014-01-09 14:38:18"
+            "time": "2014-01-16 10:51:31"
         },
         {
             "name": "simpleit/app-bundle",

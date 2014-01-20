@@ -91,8 +91,8 @@ class AddElementToToc implements UseCase
     public function execute(UseCaseRequest $useCaseRequest)
     {
         /** @var AddElementToTocRequestDTO $useCaseRequest */
-        $this->parentId = $useCaseRequest->parentId;
-        $this->courseId = $useCaseRequest->courseId;
+        $this->parentId = $useCaseRequest->getParentId();
+        $this->courseId = $useCaseRequest->getCourseId();
 
         $this->toc = $this->tocByCourseGateway->findByStatus(
             $this->courseId,

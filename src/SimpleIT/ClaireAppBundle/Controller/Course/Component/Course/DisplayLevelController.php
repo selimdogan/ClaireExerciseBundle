@@ -19,6 +19,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class DisplayLevelController extends AppController
 {
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     public function editViewAction($courseId)
     {
         try {
@@ -48,6 +52,10 @@ class DisplayLevelController extends AppController
         }
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
     public function editAction(Request $request, $courseId)
     {
         $form = $this->createForm(

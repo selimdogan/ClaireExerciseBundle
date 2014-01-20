@@ -12,7 +12,6 @@ use OC\CLAIRE\BusinessRules\Responders\Course\Course\GetCourseResponse;
  */
 abstract class GetCourseTest extends \PHPUnit_Framework_TestCase
 {
-
     const COURSE_ID = 1;
 
     const COURSE_SLUG = 'course-title-1';
