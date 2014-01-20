@@ -41,7 +41,7 @@ abstract class GetCourseTags implements UseCase
     /**
      * @return TagResponseDTO
      */
-    private function buildTagResponse(Tag $tag)
+    private function buildTagResponse($tag)
     {
         $tagResponse = new TagResponseDTO();
         $tagResponse->id = $tag->getId();

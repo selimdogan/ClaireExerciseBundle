@@ -168,13 +168,19 @@ class PartController extends AppController
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
         );
 
+        $course = $this->get('simple_it.claire.course.course')->getByStatus(
+            $courseIdentifier,
+            $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
         return $this->render(
-            'SimpleITClaireAppBundle:Course/Course/Component:viewTocMedium.html.twig',
+            'SimpleITClaireAppBundle:Course/Course/Component:tocMediumEdit.html.twig',
             array(
                 'toc'                => $toc,
                 'courseIdentifier'   => $courseIdentifier,
                 'categoryIdentifier' => $categoryIdentifier,
-                'displayLevel'       => $displayLevel
+                'displayLevel'       => $displayLevel,
+                'course'=>$course
             )
         );
     }
