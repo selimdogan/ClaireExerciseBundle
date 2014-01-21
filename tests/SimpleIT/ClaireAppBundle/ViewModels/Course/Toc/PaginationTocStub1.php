@@ -5,11 +5,9 @@ namespace SimpleIT\ClaireAppBundle\ViewModels\Course\Toc;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 
 /**
- * Class TocStub1
- *
- * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
+ * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class TocStub1 extends PartResource
+class PaginationTocStub1 extends PartResource
 {
     const ID = 1;
 
@@ -17,9 +15,13 @@ class TocStub1 extends PartResource
 
     const TITLE = 'Course 1 title';
 
+    const SLUG = 'course-1-title';
+
     protected $id = self::ID;
 
     protected $title = self::TITLE;
+
+    protected $slug = self::SLUG;
 
     protected $subtype = self::SUBTYPE;
 
@@ -27,7 +29,7 @@ class TocStub1 extends PartResource
 
     public function __construct()
     {
-        $this->children = array(new TitleOneStub(), new TitleOneStub2(), new TitleOneWithNullChildrenStub());
+        $this->children = array(new TitleOneStub(), new TitleOneStub2(), new TitleOneStub3());
     }
 
     /**
@@ -53,5 +55,4 @@ class TocStub1 extends PartResource
     {
         return $this->subtype;
     }
-
 }

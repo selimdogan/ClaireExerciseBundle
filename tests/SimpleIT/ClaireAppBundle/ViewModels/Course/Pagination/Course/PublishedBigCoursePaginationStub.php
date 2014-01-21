@@ -1,7 +1,8 @@
 <?php
 
-namespace SimpleIT\ClaireAppBundle\ViewModels\Course\Pagination;
+namespace SimpleIT\ClaireAppBundle\ViewModels\Course\Pagination\Course;
 
+use SimpleIT\ClaireAppBundle\ViewModels\Course\Pagination\Pagination;
 use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TitleTwoStub;
 
 /**
