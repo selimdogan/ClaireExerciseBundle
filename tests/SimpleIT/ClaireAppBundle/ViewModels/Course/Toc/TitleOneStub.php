@@ -15,9 +15,17 @@ class TitleOneStub extends PartResource
 
     const SUBTYPE = self::TITLE_1;
 
+    const TITLE = 'TitleOne title 1';
+
+    const SLUG = 'titleone-title-1';
+
     protected $id = self::ID;
 
     protected $subtype = self::SUBTYPE;
+
+    protected $title = self::TITLE;
+
+    protected $slug = self::SLUG;
 
     public function __construct()
     {

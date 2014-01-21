@@ -13,9 +13,17 @@ class TitleTwoStub extends PartResource
 {
     const ID = 100;
 
+    const TITLE = 'TitleTwo title 1';
+
+    const SLUG = 'titletwo-title-1';
+
     const SUBTYPE = self::TITLE_2;
 
     protected $id = self::ID;
+
+    protected $title = self::TITLE;
+
+    protected $slug = self::SLUG;
 
     protected $subtype = self::SUBTYPE;
 

@@ -1,0 +1,5 @@
+simple_it_claire_course_part_view:
+    pattern: /{categoryIdentifier}/cours/{courseIdentifier}/{partIdentifier}
+#    defaults: { _controller: TutorialBundle:Course\Part:view }
+    requirements:
+        _method: GET
