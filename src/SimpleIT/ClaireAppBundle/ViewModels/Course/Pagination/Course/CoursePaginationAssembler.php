@@ -16,37 +16,41 @@ class CoursePaginationAssembler extends PaginationAssembler
     public function createFromToc(
         PartResource $toc,
         $displayLevel,
-        $courseIdentifier,
         $categoryIdentifier,
         $status
     )
     {
         $this->displayLevel = $displayLevel;
-        $this->courseIdentifier = $courseIdentifier;
         $this->categoryIdentifier = $categoryIdentifier;
         $this->status = $status;
+        $this->toc = $toc;
 
         $this->pagination = new Pagination();
-
-        switch ($displayLevel) {
-            case DisplayLevel::SMALL:
-                break;
-            case DisplayLevel::MEDIUM:
-                $this->buildMediumPagination($toc);
-                break;
-            case DisplayLevel::BIG:
-                $this->buildBigPagination($toc);
-                break;
-            default:
-                throw new InvalidDisplayLevelException();
-        }
+        $this->setCourseIdentifier();
+        $this->buildPagination();
 
         return $this->pagination;
     }
 
-    private function buildMediumPagination(PartResource $toc)
+    private function buildPagination()
     {
-        foreach ($toc->getChildren() as $child) {
+        switch ($this->displayLevel) {
+            case DisplayLevel::SMALL:
+                break;
+            case DisplayLevel::MEDIUM:
+                $this->buildMediumPagination();
+                break;
+            case DisplayLevel::BIG:
+                $this->buildBigPagination();
+                break;
+            default:
+                throw new InvalidDisplayLevelException();
+        }
+    }
+
+    private function buildMediumPagination()
+    {
+        foreach ($this->toc->getChildren() as $child) {
             if ('title-1' === $child->getSubtype()) {
                 $this->buildNext($child);
                 break;
@@ -54,10 +58,10 @@ class CoursePaginationAssembler extends PaginationAssembler
         }
     }
 
-    private function buildBigPagination(PartResource $toc)
+    private function buildBigPagination()
     {
         $find = false;
-        foreach ($toc->getChildren() as $child) {
+        foreach ($this->toc->getChildren() as $child) {
             foreach ($child->getChildren() as $subChild) {
                 if ('title-2' === $subChild->getSubtype()) {
                     $this->buildNext($subChild);

@@ -9,15 +9,15 @@ use SimpleIT\ApiResourcesBundle\Course\PartResource;
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class TitleOneStub extends PartResource
+class PaginationTitleOneStub3 extends PartResource
 {
-    const ID = 10;
+    const ID = 12;
 
     const SUBTYPE = self::TITLE_1;
 
-    const TITLE = 'TitleOne title 1';
+    const TITLE = 'Title One title 3';
 
-    const SLUG = 'titleone-title-1';
+    const SLUG = 'title-one-title-3';
 
     protected $id = self::ID;
 
@@ -29,7 +29,12 @@ class TitleOneStub extends PartResource
 
     public function __construct()
     {
-        $this->children = array(New TitleTwoStub(), new TitleTwoStub2(), new TitleTwoStub3());
+        $this->children = array(
+            new PaginationTitleTwoStub1(),
+            new PaginationTitleTwoStub2(),
+            new PaginationTitleTwoStub3(),
+            new PaginationTitleTwoStub4()
+        );
     }
 
 }

@@ -12,11 +12,11 @@ use Symfony\Component\Routing\RouterInterface;
  */
 abstract class PaginationAssemblerTest extends \PHPUnit_Framework_TestCase
 {
+    const INVALID_DISPLAY_LEVEL = 3;
+
+    const INVALID_STATUS = 'Invalid status';
+
     const COURSE_1_CATEGORY_SLUG = 'category-slug';
-
-    const COURSE_1_ID = 1;
-
-    const COURSE_1_SLUG = 'course-1-slug';
 
     const ROUTING_FILE = 'route.yml';
 
@@ -30,6 +30,11 @@ abstract class PaginationAssemblerTest extends \PHPUnit_Framework_TestCase
      */
     protected $router;
 
+    /**
+     * @var Pagination
+     */
+    protected $pagination;
+
     protected function setUp()
     {
         $this->router = new Router(
@@ -38,5 +43,13 @@ abstract class PaginationAssemblerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->paginationAssembler->setRouter($this->router);
+    }
+
+    protected function assertPagination(Pagination $expected)
+    {
+        $this->assertEquals($expected->previousTitle, $this->pagination->previousTitle);
+        $this->assertEquals($expected->previousUrl, $this->pagination->previousUrl);
+        $this->assertEquals($expected->nextTitle, $this->pagination->nextTitle);
+        $this->assertEquals($expected->nextUrl, $this->pagination->nextUrl);
     }
 }

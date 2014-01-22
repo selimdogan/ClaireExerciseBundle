@@ -29,7 +29,7 @@ class TitleOneStub3 extends PartResource
 
     public function __construct()
     {
-        $this->children = array(New TitleTwoStub(), new TitleTwoStub());
+        $this->children = array(New TitleTwoStub1(), new TitleTwoStub1());
     }
 
 }

@@ -24,6 +24,11 @@ abstract class PaginationAssembler
     protected $pagination;
 
     /**
+     * @var PartResource
+     */
+    protected $toc;
+
+    /**
      * @var int
      */
     protected $displayLevel;
@@ -86,7 +91,7 @@ abstract class PaginationAssembler
                 )
             );
         } else {
-            throw new \InvalidArgumentException();
+            throw new InvalidStatusException();
         }
 
         return $url;
@@ -101,5 +106,32 @@ abstract class PaginationAssembler
             $this->status,
             $this->categoryIdentifier
         );
+    }
+
+    protected function setCourseIdentifier()
+    {
+        if ($this->courseIsPublished()) {
+            $this->courseIdentifier = $this->toc->getSlug();
+        } elseif ($this->courseIsDraftOrWaitForPublication()) {
+            $this->courseIdentifier = $this->toc->getId();
+        } else {
+            throw new InvalidStatusException();
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    private function courseIsPublished()
+    {
+        return Status::PUBLISHED === $this->status;
+    }
+
+    /**
+     * @return bool
+     */
+    private function courseIsDraftOrWaitForPublication()
+    {
+        return Status::DRAFT === $this->status || Status::WAITING_FOR_PUBLICATION === $this->status;
     }
 }

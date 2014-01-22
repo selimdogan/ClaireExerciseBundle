@@ -29,7 +29,11 @@ class PaginationTocStub1 extends PartResource
 
     public function __construct()
     {
-        $this->children = array(new TitleOneStub(), new TitleOneStub2(), new TitleOneStub3());
+        $this->children = array(
+            new PaginationTitleOneStub1(),
+            new PaginationTitleOneStub2(),
+            new PaginationTitleOneStub3()
+        );
     }
 
     /**

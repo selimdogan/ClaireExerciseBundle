@@ -51,19 +51,19 @@ class PartPaginationAssembler extends PaginationAssembler
     public function createFromToc(
         PartResource $toc,
         $displayLevel,
-        $courseIdentifier,
         $categoryIdentifier,
         $status,
         $partIdentifier
     )
     {
         $this->displayLevel = $displayLevel;
-        $this->courseIdentifier = $courseIdentifier;
         $this->categoryIdentifier = $categoryIdentifier;
         $this->status = $status;
         $this->partIdentifier = $partIdentifier;
+        $this->toc = $toc;
 
         $this->pagination = new Pagination();
+        $this->setCourseIdentifier();
 
         $this->pagination->previousTitle = $toc->getTitle();
         $this->generateCourseUrl();

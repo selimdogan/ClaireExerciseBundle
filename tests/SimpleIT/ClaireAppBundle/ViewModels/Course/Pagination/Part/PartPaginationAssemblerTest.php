@@ -4,16 +4,15 @@ namespace SimpleIT\ClaireAppBundle\ViewModels\Course\Pagination\Part;
 
 use OC\CLAIRE\BusinessRules\Entities\Course\Course\DisplayLevel;
 use OC\CLAIRE\BusinessRules\Entities\Course\Course\Status;
-use SimpleIT\ClaireAppBundle\ViewModels\Course\Pagination\Pagination;
 use SimpleIT\ClaireAppBundle\ViewModels\Course\Pagination\PaginationAssemblerTest;
+use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\PaginationTitleOneStub1;
+use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\PaginationTitleOneStub2;
+use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\PaginationTitleOneStub3;
+use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\PaginationTitleTwoStub1;
+use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\PaginationTitleTwoStub2;
+use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\PaginationTitleTwoStub3;
+use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\PaginationTitleTwoStub4;
 use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\PaginationTocStub1;
-use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TitleOneStub;
-use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TitleOneStub2;
-use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TitleOneStub3;
-use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TitleTwoStub;
-use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TitleTwoStub2;
-use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TitleTwoStub3;
-use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\TocStub1;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
@@ -30,8 +29,6 @@ class PartPaginationAssemblerTest extends PaginationAssemblerTest
 
     const PART_1_SLUG = 'course-1-slug';
 
-    const ROUTING_FILE = 'route.yml';
-
     /**
      * @var PartPaginationAssembler
      */
@@ -43,14 +40,27 @@ class PartPaginationAssemblerTest extends PaginationAssemblerTest
      */
     public function InvalidDisplayLevel_ThrowException()
     {
-        $this->paginationAssembler->createFromToc(
+        $this->create(self::INVALID_DISPLAY_LEVEL, Status::PUBLISHED, 1);
+    }
+
+    private function create($displayLevel, $status, $partIdentifier)
+    {
+        $this->pagination = $this->paginationAssembler->createFromToc(
             new PaginationTocStub1(),
-            3,
-            self::COURSE_1_ID,
+            $displayLevel,
             self::COURSE_1_CATEGORY_SLUG,
-            Status::PUBLISHED,
-            self::PART_1_ID
+            $status,
+            $partIdentifier
         );
+    }
+
+    /**
+     * @test
+     * @expectedException \SimpleIT\ClaireAppBundle\ViewModels\Course\Pagination\InvalidStatusException
+     */
+    public function InvalidStatus_ThrowException()
+    {
+        $this->create(DisplayLevel::MEDIUM, self::INVALID_STATUS, 1);
     }
 
     /**
@@ -59,162 +69,133 @@ class PartPaginationAssemblerTest extends PaginationAssemblerTest
      */
     public function SmallCourse_ThrowException()
     {
-        $this->paginationAssembler->createFromToc(
-            new PaginationTocStub1(),
-            DisplayLevel::SMALL,
-            self::COURSE_1_ID,
-            self::COURSE_1_CATEGORY_SLUG,
-            Status::PUBLISHED,
-            self::PART_1_ID
-        );
+        $this->create(DisplayLevel::SMALL, Status::PUBLISHED, 1);
     }
 
     /**
      * @test
      */
-    public function MediumCourseFirstTitle1_ReturnPreviousCourseNextTitle1()
+    public function PublishedMediumCourseFirstTitle1_ReturnPreviousCourseNextTitle1()
     {
-        $pagination = $this->paginationAssembler->createFromToc(
-            new PaginationTocStub1(),
-            DisplayLevel::MEDIUM,
-            self::COURSE_1_ID,
-            self::COURSE_1_CATEGORY_SLUG,
-            Status::PUBLISHED,
-            TitleOneStub::ID
-        );
-
-        $this->assertEquals(TocStub1::TITLE, $pagination->previousTitle);
-        $this->assertEquals('/category-slug/cours/1', $pagination->previousUrl);
-        $this->assertEquals(TitleOneStub2::TITLE, $pagination->nextTitle);
-        $this->assertEquals(
-            '/category-slug/cours/' . self::COURSE_1_ID . '/' . TitleOneStub2::SLUG,
-            $pagination->nextUrl
-        );
+        $this->create(DisplayLevel::MEDIUM, Status::PUBLISHED, PaginationTitleOneStub1::SLUG);
+        $this->assertPagination(new PublishedMediumCourseFirstTitle1PaginationExpected());
     }
 
     /**
      * @test
      */
-    public function MediumCourseSecondTitle1_ReturnFirstTitle1NextTitle1()
+    public function PublishedMediumCourseSecondTitle1_ReturnFirstTitle1NextTitle1()
     {
-        /** @var Pagination $pagination */
-        $pagination = $this->paginationAssembler->createFromToc(
-            new PaginationTocStub1(),
-            DisplayLevel::MEDIUM,
-            self::COURSE_1_ID,
-            self::COURSE_1_CATEGORY_SLUG,
-            Status::PUBLISHED,
-            TitleOneStub2::ID
-        );
-
-        $this->assertEquals(TitleOneStub::TITLE, $pagination->previousTitle);
-        $this->assertEquals(
-            '/category-slug/cours/' . self::COURSE_1_ID . '/' . TitleOneStub::SLUG,
-            $pagination->previousUrl
-        );
-        $this->assertEquals(TitleOneStub3::TITLE, $pagination->nextTitle);
-        $this->assertEquals(
-            '/category-slug/cours/' . self::COURSE_1_ID . '/' . TitleOneStub3::SLUG,
-            $pagination->nextUrl
-        );
+        $this->create(DisplayLevel::MEDIUM, Status::PUBLISHED, PaginationTitleOneStub2::SLUG);
+        $this->assertPagination(new PublishedMediumCourseSecondTitle1PaginationExpected());
     }
 
     /**
      * @test
      */
-    public function MediumCourseLastTitle1_ReturnPreviousTitle1()
+    public function PublishedMediumCourseLastTitle1_ReturnPreviousTitle1()
     {
-        $pagination = $this->paginationAssembler->createFromToc(
-            new PaginationTocStub1(),
-            DisplayLevel::MEDIUM,
-            self::COURSE_1_ID,
-            self::COURSE_1_CATEGORY_SLUG,
-            Status::PUBLISHED,
-            TitleOneStub3::ID
-        );
-
-        $this->assertEquals(TitleOneStub2::TITLE, $pagination->previousTitle);
-        $this->assertEquals(
-            '/category-slug/cours/' . self::COURSE_1_ID . '/' . TitleOneStub2::SLUG,
-            $pagination->previousUrl
-        );
-        $this->assertNull($pagination->nextTitle);
-        $this->assertNull($pagination->nextUrl);
+        $this->create(DisplayLevel::MEDIUM, Status::PUBLISHED, PaginationTitleOneStub3::SLUG);
+        $this->assertPagination(new PublishedMediumCourseLastTitle1PaginationExpected());
     }
 
     /**
      * @test
      */
-    public function BigCourseFirstTitle2_ReturnPreviousCourseNextTitle2()
+    public function DraftMediumCourseFirstTitle1_ReturnPreviousCourseNextTitle1()
     {
-        $pagination = $this->paginationAssembler->createFromToc(
-            new PaginationTocStub1(),
-            DisplayLevel::BIG,
-            self::COURSE_1_ID,
-            self::COURSE_1_CATEGORY_SLUG,
-            Status::PUBLISHED,
-            TitleTwoStub::ID
-        );
-
-        $this->assertEquals(TocStub1::TITLE, $pagination->previousTitle);
-        $this->assertEquals('/category-slug/cours/1', $pagination->previousUrl);
-        $this->assertEquals(TitleTwoStub2::TITLE, $pagination->nextTitle);
-        $this->assertEquals(
-            '/category-slug/cours/' . self::COURSE_1_ID . '/' . TitleTwoStub2::SLUG,
-            $pagination->nextUrl
-        );
+        $this->create(DisplayLevel::MEDIUM, Status::DRAFT, PaginationTitleOneStub1::SLUG);
+        $this->assertPagination(new DraftMediumCourseFirstTitle1PaginationExpected());
     }
 
     /**
      * @test
      */
-    public function BigCourseSecondTitle2_ReturnPreviousTitle2NextTitle2()
+    public function DraftMediumCourseSecondTitle1_ReturnFirstTitle1NextTitle1()
     {
-        $pagination = $this->paginationAssembler->createFromToc(
-            new PaginationTocStub1(),
-            DisplayLevel::BIG,
-            self::COURSE_1_ID,
-            self::COURSE_1_CATEGORY_SLUG,
-            Status::PUBLISHED,
-            TitleTwoStub2::ID
-        );
-
-        $this->assertEquals(TitleTwoStub::TITLE, $pagination->previousTitle);
-        $this->assertEquals(
-            '/category-slug/cours/' . self::COURSE_1_ID . '/' . TitleTwoStub::SLUG,
-            $pagination->previousUrl
-        );
-        $this->assertEquals(TitleTwoStub3::TITLE, $pagination->nextTitle);
-        $this->assertEquals(
-            '/category-slug/cours/' . self::COURSE_1_ID . '/' . TitleTwoStub3::SLUG,
-            $pagination->nextUrl
-        );
+        $this->create(DisplayLevel::MEDIUM, Status::DRAFT, PaginationTitleOneStub2::SLUG);
+        $this->assertPagination(new DraftMediumCourseSecondTitle1PaginationExpected());
     }
 
     /**
      * @test
      */
-    public function BigCourseLastPartTitle2_ReturnPreviousTitle2NextPartFirstTitle2()
+    public function DraftMediumCourseLastTitle1_ReturnPreviousTitle1()
     {
-        $pagination = $this->paginationAssembler->createFromToc(
-            new PaginationTocStub1(),
-            DisplayLevel::BIG,
-            self::COURSE_1_ID,
-            self::COURSE_1_CATEGORY_SLUG,
-            Status::PUBLISHED,
-            TitleTwoStub3::ID
-        );
+        $this->create(DisplayLevel::MEDIUM, Status::DRAFT, PaginationTitleOneStub3::SLUG);
+        $this->assertPagination(new DraftMediumCourseLastTitle1PaginationExpected());
+    }
 
-        $this->assertEquals(TitleTwoStub2::TITLE, $pagination->previousTitle);
-        $this->assertEquals(
-            '/category-slug/cours/' . self::COURSE_1_ID . '/' . TitleTwoStub2::SLUG,
-            $pagination->previousUrl
-        );
-        $this->assertEquals(TitleTwoStub::TITLE, $pagination->nextTitle);
-        $this->assertEquals(
-            '/category-slug/cours/' . self::COURSE_1_ID . '/' . TitleTwoStub::SLUG,
-            $pagination->nextUrl
-        );
+    /**
+     * @test
+     */
+    public function PublishedBigCourseFirstTitle2_ReturnPreviousCourseNextTitle2()
+    {
+        $this->create(DisplayLevel::BIG, Status::PUBLISHED, PaginationTitleTwoStub1::SLUG);
+        $this->assertPagination(new PublishedBigCourseFirstTitle2PaginationExpected());
+    }
+
+    /**
+     * @test
+     */
+    public function PublishedBigCourseSecondTitle2_ReturnPreviousTitle2NextTitle2()
+    {
+        $this->create(DisplayLevel::BIG, Status::PUBLISHED, PaginationTitleTwoStub2::SLUG);
+        $this->assertPagination(new PublishedBigCourseSecondTitle2PaginationExpected());
+    }
+
+    /**
+     * @test
+     */
+    public function PublishedBigCourseLastPartTitle2_ReturnPreviousTitle2NextPartFirstTitle2()
+    {
+        $this->create(DisplayLevel::BIG, Status::PUBLISHED, PaginationTitleTwoStub3::SLUG);
+        $this->assertPagination(new PublishedBigCourseLastPartTitle2PaginationExpected());
+    }
+
+    /**
+     * @test
+     */
+    public function PublishedBigCourseLastTitle2_ReturnPreviousTitle2NextNull()
+    {
+        $this->create(DisplayLevel::BIG, Status::PUBLISHED, PaginationTitleTwoStub4::SLUG);
+        $this->assertPagination(new PublishedBigCourseLastTitle2PaginationExpected());
+    }
+
+    /**
+     * @test
+     */
+    public function DraftBigCourseFirstTitle2_ReturnPreviousCourseNextTitle2()
+    {
+        $this->create(DisplayLevel::BIG, Status::DRAFT, PaginationTitleTwoStub1::SLUG);
+        $this->assertPagination(new DraftBigCourseFirstTitle2PaginationExpected());
+    }
+
+    /**
+     * @test
+     */
+    public function DraftBigCourseSecondTitle2_ReturnPreviousTitle2NextTitle2()
+    {
+        $this->create(DisplayLevel::BIG, Status::DRAFT, PaginationTitleTwoStub2::SLUG);
+        $this->assertPagination(new DraftBigCourseSecondTitle2PaginationExpected());
+    }
+
+    /**
+     * @test
+     */
+    public function DraftBigCourseLastPartTitle2_ReturnPreviousTitle2NextPartFirstTitle2()
+    {
+        $this->create(DisplayLevel::BIG, Status::DRAFT, PaginationTitleTwoStub3::SLUG);
+        $this->assertPagination(new DraftBigCourseLastPartTitle2PaginationExpected());
+    }
+
+    /**
+     * @test
+     */
+    public function DraftBigCourseLastTitle2_ReturnPreviousTitle2NextNull()
+    {
+        $this->create(DisplayLevel::BIG, Status::DRAFT, PaginationTitleTwoStub4::SLUG);
+        $this->assertPagination(new DraftBigCourseLastTitle2PaginationExpected());
     }
 
     protected function setUp()

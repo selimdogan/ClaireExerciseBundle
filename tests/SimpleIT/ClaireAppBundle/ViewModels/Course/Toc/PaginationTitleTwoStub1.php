@@ -9,13 +9,13 @@ use SimpleIT\ApiResourcesBundle\Course\PartResource;
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class TitleTwoStub extends PartResource
+class PaginationTitleTwoStub1 extends PartResource
 {
     const ID = 100;
 
-    const TITLE = 'TitleTwo title 1';
+    const TITLE = 'Title Two title 1';
 
-    const SLUG = 'titletwo-title-1';
+    const SLUG = 'title-two-title-1';
 
     const SUBTYPE = self::TITLE_2;
 

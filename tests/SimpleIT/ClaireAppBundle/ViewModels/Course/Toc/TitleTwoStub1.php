@@ -5,31 +5,30 @@ namespace SimpleIT\ClaireAppBundle\ViewModels\Course\Toc;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 
 /**
- * Class TitleOneStub
+ * Class TitleTwoStub
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class TitleOneStub2 extends PartResource
+class TitleTwoStub1 extends PartResource
 {
-    const ID = 11;
+    const ID = 100;
 
-    const SUBTYPE = self::TITLE_1;
+    const TITLE = 'TitleTwo title 1';
 
-    const TITLE = 'TitleOne title 2';
+    const SLUG = 'titletwo-title-1';
 
-    const SLUG = 'titleone-title-2';
+    const SUBTYPE = self::TITLE_2;
 
     protected $id = self::ID;
-
-    protected $subtype = self::SUBTYPE;
 
     protected $title = self::TITLE;
 
     protected $slug = self::SLUG;
 
+    protected $subtype = self::SUBTYPE;
+
     public function __construct()
     {
-        $this->children = array(New TitleTwoStub1(), new TitleTwoStub1());
+        $this->children = array(new TitleTreeStub(), new TitleTreeStub());
     }
-
 }
