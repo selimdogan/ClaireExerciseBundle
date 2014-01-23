@@ -16,6 +16,7 @@
         <import resource="useCase/course/part.xml"/>
         <import resource="useCase/associatedContent/category.xml"/>
         <import resource="useCase/associatedContent/tag.xml"/>
+        <import resource="viewModel/viewModel.xml"/>
     </imports>
 
     <parameters>
