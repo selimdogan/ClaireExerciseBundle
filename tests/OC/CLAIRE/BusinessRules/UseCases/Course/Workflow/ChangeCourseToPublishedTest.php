@@ -12,7 +12,7 @@ class ChangeCourseToPublishedTest extends ChangeCourseStatusTest
 {
     public function setUp()
     {
-        $this->useCase = new ChangeCourseToPublished();
+        $this->useCase = new PublishWaitingForPublicationCourse();
         $this->request = new ChangeCourseStatusRequestDTO(1);
         $this->useCase->setCourseGateway(new CourseGatewayDummy());
     }

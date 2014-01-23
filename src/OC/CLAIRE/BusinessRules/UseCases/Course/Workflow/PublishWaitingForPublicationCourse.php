@@ -9,7 +9,7 @@ use OC\CLAIRE\BusinessRules\UseCases\Course\Workflow\DTO\ChangeCourseStatusRespo
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class ChangeCourseToPublished extends ChangeCourseStatus
+class PublishWaitingForPublicationCourse extends ChangeCourseStatus
 {
 
     public function execute(UseCaseRequest $useCaseRequest)

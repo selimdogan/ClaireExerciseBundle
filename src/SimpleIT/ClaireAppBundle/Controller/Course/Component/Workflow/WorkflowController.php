@@ -45,7 +45,7 @@ class WorkflowController extends AppController
         }
     }
 
-    public function changeCourseToPublishedAction($courseId)
+    public function PublishWaitingForPublicationCourseAction($courseId)
     {
         try {
             $this->get('oc.claire.use_cases.course_use_case_factory')
