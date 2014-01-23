@@ -28,7 +28,7 @@ class GetDraftCourseDuration implements UseCase
         $course = $this->courseGateway->findDraft($useCaseRequest->getCourseId());
 
         if (null !== $duration = $course->getDuration()) {
-            $duration = new \DateInterval($course->getDuration());
+            $duration = $course->getDuration();
         }
 
         return new GetDraftCourseDurationResponseDTO($duration);

@@ -10,7 +10,7 @@ use OC\CLAIRE\BusinessRules\Responders\Course\CourseDuration\GetDraftCourseDurat
 class GetDraftCourseDurationResponseDTO implements GetDraftCourseDurationResponse
 {
     /**
-     * @var \DateInterval
+     * @var string
      */
     public $courseDuration;
 
