@@ -157,7 +157,7 @@ class CourseRepository extends AppRepository implements CourseGateway
         $this->client->send(
             $this->client->post(
                 array(
-                    $this->path . '/publish?status=waiting-for-publication',
+                    $this->path . '/publish-waiting-for-publication',
                     array('courseIdentifier' => $courseId)
                 )
             )
@@ -201,7 +201,7 @@ class CourseRepository extends AppRepository implements CourseGateway
         $this->client->send(
             $this->client->post(
                 array(
-                    $this->path . '/publish?status=draft',
+                    $this->path . '/publish-draft',
                     array('courseIdentifier' => $courseId)
                 )
             )
