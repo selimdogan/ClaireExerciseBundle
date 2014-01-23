@@ -13,4 +13,4 @@ interface GetDraftCourseDurationResponse extends UseCaseResponse
      * @return \DateInterval
      */
     public function getCourseDuration();
-} 
+}

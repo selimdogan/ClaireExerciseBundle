@@ -2,15 +2,17 @@
 
 namespace OC\CLAIRE\BusinessRules\UseCases\Course\Workflow;
 
+use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseGatewaySpy;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseNotFoundCourseGatewayStub;
 use OC\CLAIRE\BusinessRules\Requestors\Course\Workflow\ChangeCourseStatusRequest;
+use OC\CLAIRE\BusinessRules\UseCases\Course\Workflow\DTO\ChangeCourseStatusRequestDTO;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
 abstract class ChangeCourseStatusTest extends \PHPUnit_Framework_TestCase
 {
-    protected $execute;
+    const COURSE_ID = 1;
 
     /**
      * @var ChangeCourseStatus
@@ -23,17 +25,22 @@ abstract class ChangeCourseStatusTest extends \PHPUnit_Framework_TestCase
     protected $request;
 
     /**
+     * @var CourseGatewaySpy
+     */
+    protected $courseGateway;
+
+    /**
      * @test
      */
     public function Execute()
     {
         $this->executeUseCase();
-        $this->assertNotNull($this->execute);
+        $this->assertEquals(self::COURSE_ID, $this->courseGateway->courseId);
     }
 
     protected function executeUseCase()
     {
-        $this->execute = $this->useCase->execute($this->request);
+        $this->useCase->execute($this->request);
     }
 
     /**
@@ -45,4 +52,12 @@ abstract class ChangeCourseStatusTest extends \PHPUnit_Framework_TestCase
         $this->useCase->setCourseGateway(new CourseNotFoundCourseGatewayStub());
         $this->executeUseCase();
     }
+
+    protected function setUp()
+    {
+        $this->courseGateway = new CourseGatewaySpy();
+        $this->useCase->setCourseGateway($this->courseGateway);
+        $this->request = new ChangeCourseStatusRequestDTO(self::COURSE_ID);
+    }
+
 }

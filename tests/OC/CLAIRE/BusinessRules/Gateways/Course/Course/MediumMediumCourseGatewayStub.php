@@ -47,7 +47,12 @@ class MediumMediumCourseGatewayStub implements CourseGateway
         return null;
     }
 
-    public function updateToPublished($courseId)
+    public function updateDraftToPublished($courseId)
+    {
+        return null;
+    }
+
+    public function updateWaitingForPublicationToPublished($courseId)
     {
         return null;
     }

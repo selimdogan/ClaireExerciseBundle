@@ -54,12 +54,17 @@ class CourseGatewaySpy implements CourseGateway
 
     public function updateToWaitingForPublication($courseId)
     {
-        return null;
+        $this->courseId = $courseId;
     }
 
-    public function updateToPublished($courseId)
+    public function updateDraftToPublished($courseId)
     {
-        return null;
+        $this->courseId = $courseId;
+    }
+
+    public function updateWaitingForPublicationToPublished($courseId)
+    {
+        $this->courseId = $courseId;
     }
 
     public function updateDraft($courseId, CourseResource $course)

@@ -67,7 +67,7 @@ class GetDraftCourseDurationTest extends \PHPUnit_Framework_TestCase
             new GetDraftCourseDurationRequestDTO(self::COURSE_1_ID)
         );
         $this->assertEquals(
-            new \DateInterval(SmallEasyDraftCourseStub::DURATION),
+            SmallEasyDraftCourseStub::DURATION,
             $this->response->getCourseDuration()
         );
 

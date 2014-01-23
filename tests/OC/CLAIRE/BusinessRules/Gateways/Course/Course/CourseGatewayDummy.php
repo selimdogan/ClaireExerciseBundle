@@ -45,7 +45,11 @@ class CourseGatewayDummy implements CourseGateway
     {
     }
 
-    public function updateToPublished($courseId)
+    public function updateDraftToPublished($courseId)
+    {
+    }
+
+    public function updateWaitingForPublicationToPublished($courseId)
     {
     }
 

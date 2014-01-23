@@ -45,34 +45,52 @@ class WorkflowController extends AppController
         }
     }
 
-    public function PublishWaitingForPublicationCourseAction($courseId)
+    public function publishWaitingForPublicationCourseAction($courseId)
     {
         try {
             $this->get('oc.claire.use_cases.course_use_case_factory')
-                ->make('ChangeCourseToPublished')
+                ->make('PublishWaitingForPublicationCourse')
                 ->execute(new ChangeCourseStatusRequestDTO($courseId));
 
-            /** @var GetCourseResponse $courseResponse */
-            $courseResponse = $this->get('oc.claire.use_cases.course_use_case_factory')
-                ->make('GetPublishedCourse')
-                ->execute(new GetPublishedCourseRequestDTO($courseId));
-
-            /** @var GetDraftCourseCategoryResponse $categoryResponse */
-            $categoryResponse = $this->get('oc.claire.use_cases.associated_content_use_case_factory')
-                ->make('GetDraftCourseCategory')
-                ->execute(new GetDraftCourseCategoryRequestDTO($courseId));
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'simple_it_claire_course_course_view',
-                    array(
-                        'courseIdentifier'   => $courseResponse->getSlug(),
-                        'categoryIdentifier' => $categoryResponse->getCategorySlug()
-                    )
-                )
-            );
+            return $this->redirectToPublishedCourse($courseId);
         } catch (CourseNotFoundException $cnfe) {
             throw new NotFoundHttpException();
         }
+    }
+
+    public function publishDraftCourseAction($courseId)
+    {
+        try {
+            $this->get('oc.claire.use_cases.course_use_case_factory')
+                ->make('PublishDraftCourse')
+                ->execute(new ChangeCourseStatusRequestDTO($courseId));
+
+            return $this->redirectToPublishedCourse($courseId);
+        } catch (CourseNotFoundException $cnfe) {
+            throw new NotFoundHttpException();
+        }
+    }
+
+    private function redirectToPublishedCourse($courseId)
+    {
+        /** @var GetCourseResponse $courseResponse */
+        $courseResponse = $this->get('oc.claire.use_cases.course_use_case_factory')
+            ->make('GetPublishedCourse')
+            ->execute(new GetPublishedCourseRequestDTO($courseId));
+
+        /** @var GetDraftCourseCategoryResponse $categoryResponse */
+        $categoryResponse = $this->get('oc.claire.use_cases.associated_content_use_case_factory')
+            ->make('GetDraftCourseCategory')
+            ->execute(new GetDraftCourseCategoryRequestDTO($courseId));
+
+        return $this->redirect(
+            $this->generateUrl(
+                'simple_it_claire_course_course_view',
+                array(
+                    'courseIdentifier'   => $courseResponse->getSlug(),
+                    'categoryIdentifier' => $categoryResponse->getCategorySlug()
+                )
+            )
+        );
     }
 }

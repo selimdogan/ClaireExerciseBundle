@@ -44,17 +44,18 @@ class BigHardCourseGatewayStub implements CourseGateway
 
     public function updateToWaitingForPublication($courseId)
     {
-        return null;
     }
 
-    public function updateToPublished($courseId)
+    public function updateDraftToPublished($courseId)
     {
-        return null;
+    }
+
+    public function updateWaitingForPublicationToPublished($courseId)
+    {
     }
 
     public function updateDraft($courseId, CourseResource $course)
     {
-        return null;
     }
 
 }

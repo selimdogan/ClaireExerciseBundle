@@ -53,7 +53,11 @@ class CourseGatewayStub implements CourseGateway
         return null;
     }
 
-    public function updateToPublished($courseId)
+    public function updateDraftToPublished($courseId)
+    {
+    }
+
+    public function updateWaitingForPublicationToPublished($courseId)
     {
         return null;
     }

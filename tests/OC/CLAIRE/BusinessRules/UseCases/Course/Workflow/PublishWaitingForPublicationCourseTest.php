@@ -1,16 +1,15 @@
 <?php
+
 namespace OC\CLAIRE\BusinessRules\UseCases\Course\Workflow;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class ChangeCourseToWaitingForPublicationTest extends ChangeCourseStatusTest
+class PublishWaitingForPublicationCourseTest extends ChangeCourseStatusTest
 {
-
-    protected function setUp()
+    public function setUp()
     {
-        $this->useCase = new ChangeCourseToWaitingForPublication();
+        $this->useCase = new PublishWaitingForPublicationCourse();
         parent::setUp();
     }
-
 }

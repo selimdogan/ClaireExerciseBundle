@@ -61,9 +61,14 @@ class CourseUseCaseFactoryImpl implements UseCaseFactory
                 );
                 break;
             // WORKFLOW
-            case 'ChangeCourseToPublished':
+            case 'PublishDraftCourse':
                 $useCase = $this->injector->get(
-                    'oc.claire.use_cases.course.workflow.change_course_to_published'
+                    'oc.claire.use_cases.course.workflow.publish_draft_course'
+                );
+                break;
+            case 'PublishWaitingForPublicationCourse':
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.workflow.publish_waiting_for_publication_course'
                 );
                 break;
             case 'ChangeCourseToWaitingForPublication':

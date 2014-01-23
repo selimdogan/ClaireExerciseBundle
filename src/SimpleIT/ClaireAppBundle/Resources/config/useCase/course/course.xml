@@ -14,7 +14,8 @@
         <parameter key="oc.claire.use_cases.course.edition.save_content.class">OC\CLAIRE\BusinessRules\UseCases\Course\Content\SaveContent</parameter>
 
         <!--WORKFLOW-->
-        <parameter key="oc.claire.use_cases.course.workflow.change_course_to_published.class">OC\CLAIRE\BusinessRules\UseCases\Course\Workflow\ChangeCourseToPublished</parameter>
+        <parameter key="oc.claire.use_cases.course.workflow.publish_draft_course.class">OC\CLAIRE\BusinessRules\UseCases\Course\Workflow\PublishDraftCourse</parameter>
+        <parameter key="oc.claire.use_cases.course.workflow.publish_waiting_for_publication_course.class">OC\CLAIRE\BusinessRules\UseCases\Course\Workflow\PublishWaitingForPublicationCourse</parameter>
         <parameter key="oc.claire.use_cases.course.workflow.change_course_to_waiting_for_publication.class">OC\CLAIRE\BusinessRules\UseCases\Course\Workflow\ChangeCourseToWaitingForPublication</parameter>
 
         <!--TOC-->
@@ -77,7 +78,12 @@
         </service>
 
         <!--WORKFLOW-->
-        <service id="oc.claire.use_cases.course.workflow.change_course_to_published" class="%oc.claire.use_cases.course.workflow.change_course_to_published.class%">
+        <service id="oc.claire.use_cases.course.workflow.publish_draft_course" class="%oc.claire.use_cases.course.workflow.publish_draft_course.class%">
+            <call method="setCourseGateway">
+                <argument type="service" id="simple_it.claire.course.repository.course"/>
+            </call>
+        </service>
+        <service id="oc.claire.use_cases.course.workflow.publish_waiting_for_publication_course" class="%oc.claire.use_cases.course.workflow.publish_waiting_for_publication_course.class%">
             <call method="setCourseGateway">
                 <argument type="service" id="simple_it.claire.course.repository.course"/>
             </call>

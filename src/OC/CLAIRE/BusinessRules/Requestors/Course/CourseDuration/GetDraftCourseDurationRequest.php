@@ -13,4 +13,4 @@ interface GetDraftCourseDurationRequest extends UseCaseRequest
      * @return int
      */
     public function getCourseId();
-} 
+}

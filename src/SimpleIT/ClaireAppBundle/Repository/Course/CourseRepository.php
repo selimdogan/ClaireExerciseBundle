@@ -58,23 +58,6 @@ class CourseRepository extends AppRepository implements CourseGateway
     }
 
     /**
-     * Find a course
-     *
-     * @param string $courseIdentifier Course id | slug
-     * @param array  $parameters       Parameters
-     *
-     * @return CourseResource
-     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
-     */
-    public function find($courseIdentifier, array $parameters = array())
-    {
-        return $this->findResource(
-            array('courseIdentifier' => $courseIdentifier),
-            $parameters
-        );
-    }
-
-    /**
      * @return CourseResource
      * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
@@ -168,23 +151,62 @@ class CourseRepository extends AppRepository implements CourseGateway
     /**
      * @CacheInvalidation(namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
      */
-    public function updateToPublished($courseId)
+    public function updateWaitingForPublicationToPublished($courseId)
     {
 
         $this->client->send(
             $this->client->post(
                 array(
-                    $this->path . '/publish',
+                    $this->path . '/publish?status=waiting-for-publication',
                     array('courseIdentifier' => $courseId)
                 )
             )
         );
+        $this->invalidateCourseCache($courseId);
+    }
+
+    private function invalidateCourseCache($courseId)
+    {
         $course = $this->find($courseId);
         $annotation = new CacheInvalidation();
         $annotation->namespacePrefix = 'claire_app_course_course';
         $annotation->namespaceAttributeValue = $course->getSlug();
 
         $this->cacheService->invalidateFromCacheInvalidationAnnotation($annotation);
+    }
+
+    /**
+     * Find a course
+     *
+     * @param string $courseIdentifier Course id | slug
+     * @param array  $parameters       Parameters
+     *
+     * @return CourseResource
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     */
+    public function find($courseIdentifier, array $parameters = array())
+    {
+        return $this->findResource(
+            array('courseIdentifier' => $courseIdentifier),
+            $parameters
+        );
+    }
+
+    /**
+     * @CacheInvalidation(namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier")
+     */
+    public function updateDraftToPublished($courseId)
+    {
+
+        $this->client->send(
+            $this->client->post(
+                array(
+                    $this->path . '/publish?status=draft',
+                    array('courseIdentifier' => $courseId)
+                )
+            )
+        );
+        $this->invalidateCourseCache($courseId);
     }
 
     public function updateDraft($courseId, CourseResource $course)
