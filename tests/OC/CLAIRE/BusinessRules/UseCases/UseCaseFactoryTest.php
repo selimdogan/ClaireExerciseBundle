@@ -30,10 +30,12 @@ class UseCaseFactoryTest extends \PHPUnit_Framework_TestCase
         'SaveDisplayLevel'                    => 'OC\CLAIRE\BusinessRules\UseCases\Course\DisplayLevel\SaveDisplayLevel',
         'GetDraftCourseDifficulty'            => 'OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\GetDraftCourseDifficulty',
         'SaveCourseDifficulty'                => 'OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\SaveCourseDifficulty',
+        'GetDraftCourseDuration'            => 'OC\CLAIRE\BusinessRules\UseCases\Course\CourseDuration\GetDraftCourseDuration',
+        'SaveCourseDuration'                => 'OC\CLAIRE\BusinessRules\UseCases\Course\CourseDuration\SaveCourseDuration',
         'GetDraftCourseDescription'           => 'OC\CLAIRE\BusinessRules\UseCases\Course\CourseDescription\GetDraftCourseDescription',
         'SaveCourseDescription'               => 'OC\CLAIRE\BusinessRules\UseCases\Course\CourseDescription\SaveCourseDescription',
+        'GetDraftPartDifficulty'              => 'OC\CLAIRE\BusinessRules\UseCases\Course\PartDifficulty\GetDraftPartDifficulty',
         'AddElementToToc'                     => 'OC\CLAIRE\BusinessRules\UseCases\Course\Toc\AddElementToToc',
-        'GetDraftPartDifficulty'              => 'OC\CLAIRE\BusinessRules\UseCases\Course\PartDifficulty\GetDraftPartDifficulty'
     );
 
     protected $associatedContentUseCases = array(

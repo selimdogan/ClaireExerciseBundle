@@ -109,6 +109,17 @@ class CourseUseCaseFactoryImpl implements UseCaseFactory
                     'oc.claire.use_cases.course.part_difficulty.get_draft_part_difficulty'
                 );
                 break;
+            // DURATION
+            case 'GetDraftCourseDuration':
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.duration.get_draft_course_duration'
+                );
+                break;
+            case 'SaveCourseDuration':
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.duration.save_course_duration'
+                );
+                break;
             case 'AddElementToToc':
                 $useCase = $this->injector->get(
                     'oc.claire.use_cases.course.toc.add_element_to_toc'

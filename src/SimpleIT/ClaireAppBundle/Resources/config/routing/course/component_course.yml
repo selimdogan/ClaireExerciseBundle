@@ -52,6 +52,13 @@ simple_it_claire_course_component_course_difficulty_edit:
     requirements:
         _method: POST
 
+
+simple_it_claire_course_component_course_duration_edit:
+    pattern: /{courseId}/duration
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/CourseDuration:edit }
+    requirements:
+        _method: POST
+
 simple_it_claire_course_component_course_description_edit:
     pattern: /{courseId}/description
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/CourseDescription:edit }

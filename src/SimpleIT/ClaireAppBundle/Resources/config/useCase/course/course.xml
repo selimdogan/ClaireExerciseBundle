@@ -25,6 +25,8 @@
         <parameter key="oc.claire.use_cases.course.display_level.save_display_level.class">OC\CLAIRE\BusinessRules\UseCases\Course\DisplayLevel\SaveDisplayLevel</parameter>
         <parameter key="oc.claire.use_cases.course.difficulty.get_course_difficulty.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\GetDraftCourseDifficulty</parameter>
         <parameter key="oc.claire.use_cases.course.difficulty.save_course_difficulty.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\SaveCourseDifficulty</parameter>
+        <parameter key="oc.claire.use_cases.course.duration.get_course_duration.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseDuration\GetDraftCourseDuration</parameter>
+        <parameter key="oc.claire.use_cases.course.duration.save_course_duration.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseDuration\SaveCourseDuration</parameter>
         <parameter key="oc.claire.use_cases.course.description.get_course_description.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseDescription\GetDraftCourseDescription</parameter>
         <parameter key="oc.claire.use_cases.course.description.save_course_description.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseDescription\SaveCourseDescription</parameter>
     </parameters>
@@ -107,6 +109,21 @@
             </call>
         </service>
         <service id="oc.claire.use_cases.course.difficulty.save_course_difficulty" class="%oc.claire.use_cases.course.difficulty.save_course_difficulty.class%">
+            <call method="setCourseGateway">
+                <argument type="service" id="simple_it.claire.course.repository.course"/>
+            </call>
+            <call method="setCourseFactory">
+                <argument type="service" id="oc.claire.entity.course_factory"/>
+            </call>
+        </service>
+
+        <!--DURATION-->
+        <service id="oc.claire.use_cases.course.duration.get_draft_course_duration" class="%oc.claire.use_cases.course.duration.get_course_duration.class%">
+            <call method="setCourseGateway">
+                <argument type="service" id="simple_it.claire.course.repository.course"/>
+            </call>
+        </service>
+        <service id="oc.claire.use_cases.course.duration.save_course_duration" class="%oc.claire.use_cases.course.duration.save_course_duration.class%">
             <call method="setCourseGateway">
                 <argument type="service" id="simple_it.claire.course.repository.course"/>
             </call>

@@ -42,6 +42,50 @@
                 <source>course.difficulty.hard</source>
                 <target>Difficile</target>
             </trans-unit>
+            <trans-unit id="11">
+                <source>course.duration.10minutes</source>
+                <target>10 minutes</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>course.duration.30minutes</source>
+                <target>30 minutes</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>course.duration.1hour</source>
+                <target>1 heure</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>course.duration.2hours</source>
+                <target>2 heures</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>course.duration.4hours</source>
+                <target>4 heures</target>
+            </trans-unit>
+            <trans-unit id="16">
+                <source>course.duration.1day</source>
+                <target>1 jour</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>course.duration.2days</source>
+                <target>2 jours</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>course.duration.1week</source>
+                <target>1 semaine</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>course.duration.2weeks</source>
+                <target>2 semaines</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>course.duration.1month</source>
+                <target>1 mois</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>course.duration.2months</source>
+                <target>2 mois</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
