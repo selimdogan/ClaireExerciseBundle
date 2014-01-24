@@ -24,7 +24,7 @@ class CourseContentController extends AppController
                 ->execute(new GetDraftCourseRequestDTO($courseId));
 
         return $this->render(
-            'SimpleITClaireAppBundle:Course/Course/partial:editContent.html.twig',
+            'SimpleITClaireAppBundle:Course/Common/partial:editContent.html.twig',
             array(
                 'content' => $ucResponse->getContent(),
                 'action'  =>
