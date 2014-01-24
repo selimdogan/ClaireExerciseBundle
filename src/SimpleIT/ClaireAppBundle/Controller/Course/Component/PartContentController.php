@@ -68,7 +68,7 @@ class PartContentController extends AppController
         );
 
         return $this->render(
-            'SimpleITClaireAppBundle:Course/Course/Component:editContent.html.twig',
+            'SimpleITClaireAppBundle:Course/Common/partial:editContent.html.twig',
             array(
                 'content' => $partContent,
                 'action'  =>

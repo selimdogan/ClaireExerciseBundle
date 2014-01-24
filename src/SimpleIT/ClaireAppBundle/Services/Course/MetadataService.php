@@ -303,21 +303,21 @@ class MetadataService
         return $information;
     }
 
-//    /**
-//     * Add metadatas to a course
-//     *
-//     * @param string $courseIdentifier Course id | slug
-//     * @param array  $metadatas        Metadatas (key => value)
-//     *
-//     * @return string
-//     */
-//    public function addToCourse($courseIdentifier, $metadatas)
-//    {
-//        return $this->metadataByCourseRepository->insert(
-//            $courseIdentifier,
-//            $metadatas
-//        );
-//    }
+    /**
+     * Add metadatas to a course
+     *
+     * @param string $courseIdentifier Course id | slug
+     * @param array  $metadatas        Metadatas (key => value)
+     *
+     * @return string
+     */
+    public function addToCourse($courseIdentifier, $metadatas)
+    {
+        return $this->metadataByCourseRepository->insert(
+            $courseIdentifier,
+            $metadatas
+        );
+    }
 //
 //    /**
 //     * Add metadatas to a part
