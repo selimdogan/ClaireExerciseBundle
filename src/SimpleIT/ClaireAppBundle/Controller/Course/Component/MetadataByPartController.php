@@ -6,7 +6,6 @@ use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\Utils\ArrayUtils;
 use Symfony\Component\HttpFoundation\Request;
-
 use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
