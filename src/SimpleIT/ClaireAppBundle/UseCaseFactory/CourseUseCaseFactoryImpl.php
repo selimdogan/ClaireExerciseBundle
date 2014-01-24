@@ -1,6 +1,6 @@
 <?php
 
-namespace OC\CLAIRE\BusinessRules\UseCases\Course;
+namespace SimpleIT\ClaireAppBundle\UseCaseFactory;
 
 use OC\CLAIRE\BusinessRules\Requestors\InvalidUseCaseException;
 use OC\CLAIRE\BusinessRules\Requestors\UseCase;
@@ -109,11 +109,6 @@ class CourseUseCaseFactoryImpl implements UseCaseFactory
                     'oc.claire.use_cases.course.difficulty.save_course_difficulty'
                 );
                 break;
-            case 'GetDraftPartDifficulty':
-                $useCase = $this->injector->get(
-                    'oc.claire.use_cases.course.part_difficulty.get_draft_part_difficulty'
-                );
-                break;
             // DURATION
             case 'GetDraftCourseDuration':
                 $useCase = $this->injector->get(
@@ -125,6 +120,7 @@ class CourseUseCaseFactoryImpl implements UseCaseFactory
                     'oc.claire.use_cases.course.duration.save_course_duration'
                 );
                 break;
+            // TOC
             case 'AddElementToToc':
                 $useCase = $this->injector->get(
                     'oc.claire.use_cases.course.toc.add_element_to_toc'

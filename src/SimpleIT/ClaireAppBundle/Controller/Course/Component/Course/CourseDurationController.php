@@ -24,9 +24,10 @@ class CourseDurationController extends AppController
     {
         try {
             /** @var GetDraftCourseDurationResponse $ucResponse */
-            $ucResponse = $this->get('oc.claire.use_cases.course_use_case_factory')
-                ->make('GetDraftCourseDuration')
-                ->execute(new GetDraftCourseDurationRequestDTO($courseId));
+            $ucResponse =
+                $this->get('oc.claire.use_cases.course_use_case_factory')
+                    ->make('GetDraftCourseDuration')
+                    ->execute(new GetDraftCourseDurationRequestDTO($courseId));
 
             $form = $this->createForm(
                 new CourseDurationType(),
@@ -34,7 +35,7 @@ class CourseDurationController extends AppController
             );
 
             return $this->render(
-                'SimpleITClaireAppBundle:Course/Course/partial:editDuration.html.twig',
+                'SimpleITClaireAppBundle:Course/Common/partial:editDuration.html.twig',
                 array(
                     'actionUrl' => $this->generateUrl(
                             'simple_it_claire_course_component_course_duration_edit',

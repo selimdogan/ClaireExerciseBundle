@@ -28,15 +28,9 @@ simple_it_claire_component_course_toc_edit:
     requirements:
         _method: POST
 
-simple_it_claire_course_component_course_display_level_edit:
-    pattern: /{courseId}/displayLevel
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/DisplayLevel:edit }
-    requirements:
-        _method: POST
-
-simple_it_claire_component_course_publish_waiting_for_publication:
-    pattern: /{courseId}/publish-waiting-for-publication
-    defaults: { _controller : SimpleITClaireAppBundle:Course/Component/Workflow/Workflow:publishWaitingForPublicationCourse }
+simple_it_claire_component_course_submit_to_publication:
+    pattern: /{courseId}/submitToPublication
+    defaults: { _controller : SimpleITClaireAppBundle:Course/Component/Workflow/Workflow:changeCourseToWaitingForPublication }
     requirements :
         _method: GET|POST
 
@@ -46,11 +40,23 @@ simple_it_claire_component_course_publish_draft:
     requirements :
         _method: GET|POST
 
-simple_it_claire_component_course_status_waiting_for_publication:
-    pattern: /{courseId}/submitToPublication
-    defaults: { _controller : SimpleITClaireAppBundle:Course/Component/Workflow/Workflow:changeCourseToWaitingForPublication }
+simple_it_claire_component_course_publish_waiting_for_publication:
+    pattern: /{courseId}/publish-waiting-for-publication
+    defaults: { _controller : SimpleITClaireAppBundle:Course/Component/Workflow/Workflow:publishWaitingForPublicationCourse }
     requirements :
         _method: GET|POST
+
+simple_it_claire_course_component_course_title_edit:
+    pattern: /{courseId}/edit
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/CourseTitle:edit }
+    requirements:
+            _method: POST
+
+simple_it_claire_course_component_course_display_level_edit:
+    pattern: /{courseId}/displayLevel
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/DisplayLevel:edit }
+    requirements:
+        _method: POST
 
 simple_it_claire_course_component_course_difficulty_edit:
     pattern: /{courseId}/difficulty
@@ -69,9 +75,3 @@ simple_it_claire_course_component_course_description_edit:
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/CourseDescription:edit }
     requirements:
         _method: POST
-
-simple_it_claire_course_component_course_title_edit:
-    pattern: /{courseId}/edit
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/CourseTitle:edit }
-    requirements:
-            _method: POST

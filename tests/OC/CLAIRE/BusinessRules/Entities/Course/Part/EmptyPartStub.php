@@ -9,8 +9,5 @@ use SimpleIT\ApiResourcesBundle\Course\PartResource;
  */
 class EmptyPartStub extends PartResource
 {
-    public function getDifficulty()
-    {
-        return null;
-    }
+
 }

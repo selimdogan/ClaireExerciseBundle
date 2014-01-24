@@ -24,7 +24,7 @@ class PartDifficultyController extends AppController
     {
         try {
             /** @var GetDraftPartDifficultyResponse $ucResponse */
-            $ucResponse = $this->get('oc.claire.use_cases.course_use_case_factory')
+            $ucResponse = $this->get('oc.claire.use_cases.part_use_case_factory')
                 ->make('GetDraftPartDifficulty')
                 ->execute(new GetDraftPartDifficultyRequestDTO($courseId, $partId));
 
@@ -34,7 +34,7 @@ class PartDifficultyController extends AppController
             );
 
             return $this->render(
-                'SimpleITClaireAppBundle:Course/Metadata/Component:editDifficulty.html.twig',
+                'SimpleITClaireAppBundle:Course/Common/partial:editDifficulty.html.twig',
                 array(
                     'actionUrl' => $this->generateUrl(
                             'simple_it_claire_component_course_course_metadata_difficulty_edit',
@@ -57,7 +57,7 @@ class PartDifficultyController extends AppController
         );
         $form->bind($request);
         if ($form->isValid()) {
-            $this->get('oc.claire.use_cases.course_use_case_factory')
+            $this->get('oc.claire.use_cases.part_use_case_factory')
                 ->make('SavePartDifficulty')->execute(
                     new SavePartDifficultyRequestDTO($courseId, $partId, $difficulty->getDifficulty(
                     ))

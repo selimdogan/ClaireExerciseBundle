@@ -24,9 +24,10 @@ class CourseDifficultyController extends AppController
     {
         try {
             /** @var GetDraftCourseDifficultyResponse $ucResponse */
-            $ucResponse = $this->get('oc.claire.use_cases.course_use_case_factory')
-                ->make('GetDraftCourseDifficulty')
-                ->execute(new GetDraftCourseDifficultyRequestDTO($courseId));
+            $ucResponse =
+                $this->get('oc.claire.use_cases.course_use_case_factory')
+                    ->make('GetDraftCourseDifficulty')
+                    ->execute(new GetDraftCourseDifficultyRequestDTO($courseId));
 
             $form = $this->createForm(
                 new CourseDifficultyType(),
@@ -34,7 +35,7 @@ class CourseDifficultyController extends AppController
             );
 
             return $this->render(
-                'SimpleITClaireAppBundle:Course/Course/partial:editDifficulty.html.twig',
+                'SimpleITClaireAppBundle:Course/Common/partial:editDifficulty.html.twig',
                 array(
                     'actionUrl' => $this->generateUrl(
                             'simple_it_claire_course_component_course_difficulty_edit',

@@ -12,9 +12,10 @@ class PartStub extends PartResource
 {
     const DIFFICULTY = Difficulty::EASY;
 
-    public function getDifficulty()
-    {
-        return self::DIFFICULTY;
-    }
+    const DESCRIPTION = 'Part 1 description';
+
+    protected $difficulty = self::DIFFICULTY;
+
+    protected $description = self::DESCRIPTION;
 
 }

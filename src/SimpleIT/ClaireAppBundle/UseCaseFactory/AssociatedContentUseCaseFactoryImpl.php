@@ -1,6 +1,6 @@
 <?php
 
-namespace OC\CLAIRE\BusinessRules\UseCases\AssociatedContent;
+namespace SimpleIT\ClaireAppBundle\UseCaseFactory;
 
 use OC\CLAIRE\BusinessRules\Requestors\InvalidUseCaseException;
 use OC\CLAIRE\BusinessRules\Requestors\UseCase;

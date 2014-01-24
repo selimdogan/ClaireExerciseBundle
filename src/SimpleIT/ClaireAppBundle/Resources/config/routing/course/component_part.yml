@@ -4,12 +4,24 @@ simple_it_claire_component_part_edit:
     requirements:
             _method: GET|POST
 
-simple_it_claire_component_part_metadata:
-    resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/component_part_metadata.yml"
-    prefix:   /{courseIdentifier}/parts/{partIdentifier}/metadatas/
+simple_it_claire_component_course_part_content_edit:
+    pattern: /{courseId}/parts/{partId}/content
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/PartContent:edit }
+    requirements:
+        _method: POST
 
 simple_it_claire_component_part_difficulty:
     pattern: /{courseId}/parts/{partId}/difficulty
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Part/PartDifficulty:edit }
     requirements:
         _method: POST
+
+simple_it_claire_component_part_description:
+    pattern: /{courseId}/parts/{partId}/description
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Part/PartDescription:edit }
+    requirements:
+        _method: POST
+
+simple_it_claire_component_part_metadata:
+    resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/component_part_metadata.yml"
+    prefix:   /{courseIdentifier}/parts/{partIdentifier}/metadatas/

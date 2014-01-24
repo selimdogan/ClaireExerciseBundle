@@ -21,15 +21,22 @@
         <!--TOC-->
         <parameter key="oc.claire.use_cases.course.toc.add_element_to_toc.class">OC\CLAIRE\BusinessRules\UseCases\Course\Toc\AddElementToToc</parameter>
 
-        <!--METADATA-->
+        <!--DISPLAY LEVEL-->
         <parameter key="oc.claire.use_cases.course.display_level.get_draft_display_level.class">OC\CLAIRE\BusinessRules\UseCases\Course\DisplayLevel\GetDraftDisplayLevel</parameter>
         <parameter key="oc.claire.use_cases.course.display_level.save_display_level.class">OC\CLAIRE\BusinessRules\UseCases\Course\DisplayLevel\SaveDisplayLevel</parameter>
+
+        <!--DIFFICULTY-->
         <parameter key="oc.claire.use_cases.course.difficulty.get_course_difficulty.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\GetDraftCourseDifficulty</parameter>
         <parameter key="oc.claire.use_cases.course.difficulty.save_course_difficulty.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseDifficulty\SaveCourseDifficulty</parameter>
+
+        <!--DURATION-->
         <parameter key="oc.claire.use_cases.course.duration.get_course_duration.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseDuration\GetDraftCourseDuration</parameter>
         <parameter key="oc.claire.use_cases.course.duration.save_course_duration.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseDuration\SaveCourseDuration</parameter>
+
+        <!--DESCRIPTION-->
         <parameter key="oc.claire.use_cases.course.description.get_course_description.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseDescription\GetDraftCourseDescription</parameter>
         <parameter key="oc.claire.use_cases.course.description.save_course_description.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseDescription\SaveCourseDescription</parameter>
+
     </parameters>
 
     <services>
@@ -105,7 +112,7 @@
                 <argument type="service" id="simple_it.claire.course.repository.course"/>
             </call>
             <call method="setCourseFactory">
-                <argument type="service" id="oc.claire.entity.course_factory"/>
+                <argument type="service" id="oc.claire.entity.course.course_factory"/>
             </call>
         </service>
         <!--DIFFICULTY-->
@@ -119,7 +126,7 @@
                 <argument type="service" id="simple_it.claire.course.repository.course"/>
             </call>
             <call method="setCourseFactory">
-                <argument type="service" id="oc.claire.entity.course_factory"/>
+                <argument type="service" id="oc.claire.entity.course.course_factory"/>
             </call>
         </service>
 
@@ -134,7 +141,7 @@
                 <argument type="service" id="simple_it.claire.course.repository.course"/>
             </call>
             <call method="setCourseFactory">
-                <argument type="service" id="oc.claire.entity.course_factory"/>
+                <argument type="service" id="oc.claire.entity.course.course_factory"/>
             </call>
         </service>
 
@@ -149,7 +156,7 @@
                 <argument type="service" id="simple_it.claire.course.repository.course"/>
             </call>
             <call method="setCourseFactory">
-                <argument type="service" id="oc.claire.entity.course_factory"/>
+                <argument type="service" id="oc.claire.entity.course.course_factory"/>
             </call>
         </service>
 

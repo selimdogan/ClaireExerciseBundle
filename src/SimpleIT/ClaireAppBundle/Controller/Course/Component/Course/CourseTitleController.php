@@ -35,7 +35,7 @@ class CourseTitleController extends AppController
             );
 
             return $this->render(
-                'SimpleITClaireAppBundle:Course/Course/partial:editTitle.html.twig',
+                'SimpleITClaireAppBundle:Course/Common/partial:editTitle.html.twig',
                 array(
                     'actionUrl' => $this->generateUrl(
                             'simple_it_claire_course_component_course_title_edit',

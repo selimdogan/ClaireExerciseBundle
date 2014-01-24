@@ -27,7 +27,8 @@ class DisplayLevelController extends AppController
     {
         try {
             /** @var GetDraftDisplayLevelResponse $ucResponse */
-            $ucResponse = $this->get('oc.claire.use_cases.course_use_case_factory')
+            $ucResponse =
+                $this->get('oc.claire.use_cases.course_use_case_factory')
                 ->make('GetDraftDisplayLevel')
                 ->execute(new GetDraftDisplayLevelRequestDTO($courseId));
 

@@ -4,8 +4,6 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\AppBundle\Annotation\Cache;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
-use SimpleIT\ApiResourcesBundle\Course\TimeRequiredMetadataResource;
-use SimpleIT\ApiResourcesBundle\Course\DifficultyMetadataResource;
 use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\Utils\ArrayUtils;
 use SimpleIT\Utils\Collection\CollectionInformation;
@@ -45,56 +43,56 @@ class MetadataByCourseController extends AbstractMetadataController
         );
     }
 
-    /**
-     * Edit a time required (GET)
-     *
-     * @param CollectionInformation $collectionInformation Collection information
-     * @param int                   $courseId              Course id
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function editTimeRequiredViewAction(
-        Request $request,
-        CollectionInformation $collectionInformation,
-        $courseId
-    )
-    {
-        $collectionInformation = $this->setStatusToDraftIfNotDefined($collectionInformation);
-
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseByStatus(
-            $courseId,
-            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
-            $collectionInformation
-        );
-        $timeRequiredMetadata = new DifficultyMetadataResource(ArrayUtils::getValue(
-            $metadatas,
-            TimeRequiredMetadataResource::KEY
-        ));
-        $form = $this->createFormBuilder($timeRequiredMetadata)
-            ->add(
-                'value',
-                'choice',
-                array(
-                    'choices'     => TimeRequiredMetadataResource::getTimeRequired(),
-                    'empty_value' => '',
-                    'required'    => true
-                )
-            )
-            ->getForm();
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/Metadata/Component:editTimeRequired.html.twig',
-            array(
-                'courseId' => $courseId,
-                'form'     => $form->createView(),
-                'action'   =>
-                    $this->generateUrl(
-                        'simple_it_claire_component_course_course_metadata_time_required_edit',
-                        array('courseId' => $courseId)
-                    )
-            )
-        );
-    }
+//    /**
+//     * Edit a time required (GET)
+//     *
+//     * @param CollectionInformation $collectionInformation Collection information
+//     * @param int                   $courseId              Course id
+//     *
+//     * @return \Symfony\Component\HttpFoundation\Response
+//     */
+//    public function editTimeRequiredViewAction(
+//        Request $request,
+//        CollectionInformation $collectionInformation,
+//        $courseId
+//    )
+//    {
+//        $collectionInformation = $this->setStatusToDraftIfNotDefined($collectionInformation);
+//
+//        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromCourseByStatus(
+//            $courseId,
+//            $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT),
+//            $collectionInformation
+//        );
+//        $timeRequiredMetadata = new DifficultyMetadataResource(ArrayUtils::getValue(
+//            $metadatas,
+//            TimeRequiredMetadataResource::KEY
+//        ));
+//        $form = $this->createFormBuilder($timeRequiredMetadata)
+//            ->add(
+//                'value',
+//                'choice',
+//                array(
+//                    'choices'     => TimeRequiredMetadataResource::getTimeRequired(),
+//                    'empty_value' => '',
+//                    'required'    => true
+//                )
+//            )
+//            ->getForm();
+//
+//        return $this->render(
+//            'SimpleITClaireAppBundle:Course/Metadata/Component:editTimeRequired.html.twig',
+//            array(
+//                'courseId' => $courseId,
+//                'form'     => $form->createView(),
+//                'action'   =>
+//                    $this->generateUrl(
+//                        'simple_it_claire_component_course_course_metadata_time_required_edit',
+//                        array('courseId' => $courseId)
+//                    )
+//            )
+//        );
+//    }
 
     /**
      * View a course licence

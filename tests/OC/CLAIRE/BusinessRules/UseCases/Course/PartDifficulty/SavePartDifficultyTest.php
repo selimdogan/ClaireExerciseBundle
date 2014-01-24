@@ -4,7 +4,7 @@ namespace OC\CLAIRE\BusinessRules\UseCases\Course\PartDifficulty;
 
 use OC\CLAIRE\BusinessRules\Entities\Course\Course\Difficulty;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Part\PartGatewaySpy;
-use OC\CLAIRE\BusinessRules\Gateways\Course\Part\PartNotFoundGatewayStub;
+use OC\CLAIRE\BusinessRules\Gateways\Course\Part\PartNotFoundPartGatewayStub;
 use OC\CLAIRE\BusinessRules\UseCases\Course\PartDifficulty\DTO\SavePartDifficultyRequestDTO;
 use SimpleIT\ClaireAppBundle\Entity\Course\Part\PartFactoryImpl;
 
@@ -39,7 +39,7 @@ class SavePartDifficultyTest extends \PHPUnit_Framework_TestCase
      */
     public function NonExistingPart_ThrowException()
     {
-        $this->useCase->setPartGateway(new PartNotFoundGatewayStub());
+        $this->useCase->setPartGateway(new PartNotFoundPartGatewayStub());
         $this->executeUseCase(
             new SavePartDifficultyRequestDTO(self::NON_EXISTING_COURSE_ID, self::NON_EXISTING_PART_ID, Difficulty::EASY)
         );
