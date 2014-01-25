@@ -40,22 +40,22 @@ class CourseUseCaseFactoryImpl implements UseCaseFactory
                 );
                 break;
             // CONTENT
-            case 'GetPublishedContent':
+            case 'GetPublishedCourseContent':
                 $useCase = $this->injector->get(
                     'oc.claire.use_cases.course.content.get_published_content'
                 );
                 break;
-            case 'GetWaitingForPublicationContent':
+            case 'GetWaitingForPublicationCourseContent':
                 $useCase = $this->injector->get(
                     'oc.claire.use_cases.course.content.get_waiting_for_publication_content'
                 );
                 break;
-            case 'GetDraftContent':
+            case 'GetDraftCourseContent':
                 $useCase = $this->injector->get(
                     'oc.claire.use_cases.course.content.get_draft_content'
                 );
                 break;
-            case 'SaveContent':
+            case 'SaveCourseContent':
                 $useCase = $this->injector->get(
                     'oc.claire.use_cases.course.edition.save_content'
                 );
@@ -127,7 +127,7 @@ class CourseUseCaseFactoryImpl implements UseCaseFactory
                 );
                 break;
             default:
-                throw new InvalidUseCaseException();
+                throw new InvalidUseCaseException($useCaseName);
         }
 
         return $useCase;

@@ -2,7 +2,7 @@
 
 namespace OC\CLAIRE\BusinessRules\Gateways\Course\Course;
 
-use OC\CLAIRE\BusinessRules\Entities\Course\MediumMediumDraftCourseStub;
+use OC\CLAIRE\BusinessRules\Entities\Course\Course\MediumMediumDraftCourseStub;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 
 /**

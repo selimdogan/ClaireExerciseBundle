@@ -18,6 +18,22 @@ class EmptyPartGatewayStub implements PartGateway
         return new EmptyPartStub();
     }
 
+    /**
+     * @return PartResource
+     */
+    public function findWaitingForPublication($courseId, $partId)
+    {
+        return new EmptyPartStub();
+    }
+
+    /**
+     * @return PartResource
+     */
+    public function findPublished($courseIdentifier, $partIdentifier)
+    {
+        return new EmptyPartStub();
+    }
+
     public function updateDraft($courseId, $partId, PartResource $part)
     {
         return null;

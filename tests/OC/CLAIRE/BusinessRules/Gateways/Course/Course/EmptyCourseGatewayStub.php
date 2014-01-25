@@ -2,7 +2,6 @@
 
 namespace OC\CLAIRE\BusinessRules\Gateways\Course\Course;
 
-use OC\CLAIRE\BusinessRules\Entities\Course\EmptyCourseStub;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 
 /**
@@ -39,7 +38,7 @@ class EmptyCourseGatewayStub implements CourseGateway
      */
     public function findDraft($courseId)
     {
-        return new EmptyCourseStub();
+        return new \OC\CLAIRE\BusinessRules\Entities\Course\Course\EmptyCourseStub();
     }
 
     public function updateToWaitingForPublication($courseId)

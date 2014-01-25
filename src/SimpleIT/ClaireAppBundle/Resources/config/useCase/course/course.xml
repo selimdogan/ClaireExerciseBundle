@@ -8,10 +8,10 @@
         <parameter key="oc.claire.use_cases.course.course.get_draft_course.class">OC\CLAIRE\BusinessRules\UseCases\Course\Course\GetDraftCourse</parameter>
 
         <!--CONTENT-->
-        <parameter key="oc.claire.use_cases.course.content.get_published_content.class">OC\CLAIRE\BusinessRules\UseCases\Course\Content\GetPublishedContent</parameter>
-        <parameter key="oc.claire.use_cases.course.content.get_waiting_for_publication_content.class">OC\CLAIRE\BusinessRules\UseCases\Course\Content\GetWaitingForPublicationContent</parameter>
-        <parameter key="oc.claire.use_cases.course.content.get_draft_content.class">OC\CLAIRE\BusinessRules\UseCases\Course\Content\GetDraftContent</parameter>
-        <parameter key="oc.claire.use_cases.course.edition.save_content.class">OC\CLAIRE\BusinessRules\UseCases\Course\Content\SaveContent</parameter>
+        <parameter key="oc.claire.use_cases.course.content.get_published_content.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseContent\GetPublishedCourseContent</parameter>
+        <parameter key="oc.claire.use_cases.course.content.get_waiting_for_publication_content.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseContent\GetWaitingForPublicationCourseContent</parameter>
+        <parameter key="oc.claire.use_cases.course.content.get_draft_content.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseContent\GetDraftCourseContent</parameter>
+        <parameter key="oc.claire.use_cases.course.edition.save_content.class">OC\CLAIRE\BusinessRules\UseCases\Course\CourseContent\SaveCourseContent</parameter>
 
         <!--WORKFLOW-->
         <parameter key="oc.claire.use_cases.course.workflow.publish_draft_course.class">OC\CLAIRE\BusinessRules\UseCases\Course\Workflow\PublishDraftCourse</parameter>

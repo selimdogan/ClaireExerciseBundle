@@ -14,5 +14,15 @@ interface PartGateway
      */
     public function findDraft($courseId, $partId);
 
+    /**
+     * @return PartResource
+     */
+    public function findWaitingForPublication($courseId, $partId);
+
+    /**
+     * @return PartResource
+     */
+    public function findPublished($courseIdentifier, $partIdentifier);
+
     public function updateDraft($courseId, $partId, PartResource $part);
 }

@@ -2,12 +2,12 @@
 
 namespace OC\CLAIRE\BusinessRules\UseCases\Course\Course\DTO;
 
-use OC\CLAIRE\BusinessRules\Requestors\Course\Content\GetDraftContentRequest;
+use OC\CLAIRE\BusinessRules\Requestors\Course\Course\GetDraftCourseRequest;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class GetDraftCourseRequestDTO implements GetDraftContentRequest
+class GetDraftCourseRequestDTO implements GetDraftCourseRequest
 {
     /**
      * @var int

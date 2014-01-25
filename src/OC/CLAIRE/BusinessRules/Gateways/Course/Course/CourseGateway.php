@@ -17,7 +17,7 @@ interface CourseGateway
     /**
      * @return CourseResource
      */
-    public function findPublished($courseIdentifier);
+    public function findDraft($courseId);
 
     /**
      * @return CourseResource
@@ -27,7 +27,7 @@ interface CourseGateway
     /**
      * @return CourseResource
      */
-    public function findDraft($courseId);
+    public function findPublished($courseIdentifier);
 
     public function updateToWaitingForPublication($courseId);
 

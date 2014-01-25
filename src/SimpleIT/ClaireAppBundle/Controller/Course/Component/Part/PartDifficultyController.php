@@ -4,8 +4,8 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component\Part;
 
 use OC\CLAIRE\BusinessRules\Exceptions\Course\Part\PartNotFoundException;
 use OC\CLAIRE\BusinessRules\Responders\Course\PartDifficulty\GetDraftPartDifficultyResponse;
+use OC\CLAIRE\BusinessRules\UseCases\Course\Part\DTO\SavePartRequestBuilderImpl;
 use OC\CLAIRE\BusinessRules\UseCases\Course\PartDifficulty\DTO\GetDraftPartDifficultyRequestDTO;
-use OC\CLAIRE\BusinessRules\UseCases\Course\PartDifficulty\DTO\SavePartDifficultyRequestDTO;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\Form\Course\Model\PartDifficultyModel;
 use SimpleIT\ClaireAppBundle\Form\Course\Type\PartDifficultyType;
@@ -37,7 +37,7 @@ class PartDifficultyController extends AppController
                 'SimpleITClaireAppBundle:Course/Common/partial:editDifficulty.html.twig',
                 array(
                     'actionUrl' => $this->generateUrl(
-                            'simple_it_claire_component_course_course_metadata_difficulty_edit',
+                            'simple_it_claire_component_part_description',
                             array('courseId' => $courseId, 'partId' => $partId)
                         ),
                     'form'      => $form->createView()
@@ -53,14 +53,18 @@ class PartDifficultyController extends AppController
     {
         $form = $this->createForm(
             new PartDifficultyType(),
-            $difficulty = new PartDifficultyModel()
+            $model = new PartDifficultyModel()
         );
         $form->bind($request);
         if ($form->isValid()) {
             $this->get('oc.claire.use_cases.part_use_case_factory')
-                ->make('SavePartDifficulty')->execute(
-                    new SavePartDifficultyRequestDTO($courseId, $partId, $difficulty->getDifficulty(
-                    ))
+                ->make('SavePart')
+                ->execute(
+                    SavePartRequestBuilderImpl::create()
+                        ->part($partId)
+                        ->fromCourse($courseId)
+                        ->withDifficulty($model->getDifficulty())
+                        ->build()
                 );
         } else {
             throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST, $form->getErrors());

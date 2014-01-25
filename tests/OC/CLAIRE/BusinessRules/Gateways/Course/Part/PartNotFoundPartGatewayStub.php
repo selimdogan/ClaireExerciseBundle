@@ -18,6 +18,22 @@ class PartNotFoundPartGatewayStub implements PartGateway
         throw new PartNotFoundException();
     }
 
+    /**
+     * @return PartResource
+     */
+    public function findWaitingForPublication($courseId, $partId)
+    {
+        throw new PartNotFoundException();
+    }
+
+    /**
+     * @return PartResource
+     */
+    public function findPublished($courseIdentifier, $partIdentifier)
+    {
+        throw new PartNotFoundException();
+    }
+
     public function updateDraft($courseId, $partId, PartResource $part)
     {
         throw new PartNotFoundException();

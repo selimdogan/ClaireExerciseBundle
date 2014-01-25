@@ -33,6 +33,22 @@ class PartGatewaySpy implements PartGateway
         return new PartStub();
     }
 
+    /**
+     * @return PartResource
+     */
+    public function findWaitingForPublication($courseId, $partId)
+    {
+        return new PartStub();
+    }
+
+    /**
+     * @return PartResource
+     */
+    public function findPublished($courseIdentifier, $partIdentifier)
+    {
+        return new PartStub();
+    }
+
     public function updateDraft($courseId, $partId, PartResource $part)
     {
         $this->courseId = $courseId;

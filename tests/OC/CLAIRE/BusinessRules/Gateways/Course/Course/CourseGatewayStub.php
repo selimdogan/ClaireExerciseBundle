@@ -2,9 +2,9 @@
 
 namespace OC\CLAIRE\BusinessRules\Gateways\Course\Course;
 
-use OC\CLAIRE\BusinessRules\Entities\Course\SmallEasyDraftCourseStub;
-use OC\CLAIRE\BusinessRules\Entities\Course\PublishedCourseStub;
-use OC\CLAIRE\BusinessRules\Entities\Course\WaitingForPublicationCourseStub;
+use OC\CLAIRE\BusinessRules\Entities\Course\Course\PublishedCourseStub;
+use OC\CLAIRE\BusinessRules\Entities\Course\Course\SmallEasyDraftCourseStub;
+use OC\CLAIRE\BusinessRules\Entities\Course\Course\WaitingForPublicationCourseStub;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 
 /**

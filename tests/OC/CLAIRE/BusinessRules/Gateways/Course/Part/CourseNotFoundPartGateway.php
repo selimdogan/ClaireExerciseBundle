@@ -18,6 +18,22 @@ class CourseNotFoundPartGateway implements PartGateway
         throw new CourseNotFoundException();
     }
 
+    /**
+     * @return PartResource
+     */
+    public function findWaitingForPublication($courseId, $partId)
+    {
+        throw new CourseNotFoundException();
+    }
+
+    /**
+     * @return PartResource
+     */
+    public function findPublished($courseIdentifier, $partIdentifier)
+    {
+        throw new CourseNotFoundException();
+    }
+
     public function updateDraft($courseId, $partId, PartResource $part)
     {
         throw new CourseNotFoundException();

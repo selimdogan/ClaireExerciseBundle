@@ -2,10 +2,10 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component\Course;
 
-use OC\CLAIRE\BusinessRules\Responders\Course\Content\GetContentResponse;
+use OC\CLAIRE\BusinessRules\Responders\Course\CourseContent\GetCourseContentResponse;
+use OC\CLAIRE\BusinessRules\Responders\Course\CourseContent\SaveCourseContentResponse;
+use OC\CLAIRE\BusinessRules\UseCases\Course\CourseContent\DTO\SaveCourseContentRequestDTO;
 use SimpleIT\AppBundle\Controller\AppController;
-use OC\CLAIRE\BusinessRules\Responders\Course\Content\SaveContentResponse;
-use OC\CLAIRE\BusinessRules\UseCases\Course\Content\DTO\SaveContentRequestDTO;
 use OC\CLAIRE\BusinessRules\UseCases\Course\Course\DTO\GetDraftCourseRequestDTO;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +17,7 @@ class CourseContentController extends AppController
 {
     public function editViewAction($courseId)
     {
-        /** @var GetContentResponse $ucResponse */
+        /** @var GetCourseContentResponse $ucResponse */
         $ucResponse =
             $this->get('oc.claire.use_cases.course_use_case_factory')
                 ->make('GetDraftContent')
@@ -38,12 +38,12 @@ class CourseContentController extends AppController
 
     public function editAction(Request $request, $courseId)
     {
-        /** @var SaveContentResponse $ucResponse */
+        /** @var SaveCourseContentResponse $ucResponse */
         $ucResponse =
             $this->get('oc.claire.use_cases.course_use_case_factory')
                 ->make('SaveContent')
                 ->execute(
-                    new SaveContentRequestDTO($courseId, $content = $request->get('content'))
+                    new SaveCourseContentRequestDTO($courseId, $content = $request->get('content'))
                 );
 
         return new Response($ucResponse->getContent());

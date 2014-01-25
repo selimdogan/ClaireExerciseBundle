@@ -2,7 +2,6 @@
 
 namespace OC\CLAIRE\BusinessRules\Gateways\Course\Course;
 
-use OC\CLAIRE\BusinessRules\Entities\Course\BigHardDraftCourseStub;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 
 /**
@@ -39,7 +38,7 @@ class BigHardCourseGatewayStub implements CourseGateway
      */
     public function findDraft($courseId)
     {
-        return new BigHardDraftCourseStub();
+        return new \OC\CLAIRE\BusinessRules\Entities\Course\Course\BigHardDraftCourseStub();
     }
 
     public function updateToWaitingForPublication($courseId)

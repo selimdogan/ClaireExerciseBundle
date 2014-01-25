@@ -2,7 +2,7 @@
 
 namespace OC\CLAIRE\BusinessRules\UseCases\Course\Course;
 
-use OC\CLAIRE\BusinessRules\Entities\Course\WaitingForPublicationCourseStub;
+use OC\CLAIRE\BusinessRules\Entities\Course\Course\WaitingForPublicationCourseStub;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseGatewayStub;
 use OC\CLAIRE\BusinessRules\UseCases\Course\Course\DTO\GetWaitingForPublicationCourseRequestDTO;
 

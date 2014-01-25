@@ -10,12 +10,16 @@ use SimpleIT\ApiResourcesBundle\Course\PartResource;
  */
 class PartStub extends PartResource
 {
+    const DESCRIPTION = 'Part 1 description';
+
     const DIFFICULTY = Difficulty::EASY;
 
-    const DESCRIPTION = 'Part 1 description';
+    const ID = 10;
+
+    protected $description = self::DESCRIPTION;
 
     protected $difficulty = self::DIFFICULTY;
 
-    protected $description = self::DESCRIPTION;
+    protected $id = self::ID;
 
 }

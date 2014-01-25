@@ -2,7 +2,7 @@
 
 namespace OC\CLAIRE\BusinessRules\UseCases\Course\Course;
 
-use OC\CLAIRE\BusinessRules\Entities\Course\CourseStub;
+use OC\CLAIRE\BusinessRules\Entities\Course\Course\CourseStub;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseNotFoundCourseGatewayStub;
 use OC\CLAIRE\BusinessRules\Requestors\Course\Course\GetCourseRequest;
 use OC\CLAIRE\BusinessRules\Responders\Course\Course\GetCourseResponse;
