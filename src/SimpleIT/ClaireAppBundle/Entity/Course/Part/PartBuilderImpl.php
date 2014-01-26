@@ -10,7 +10,7 @@ use SimpleIT\ApiResourcesBundle\Course\PartResource;
  */
 class PartBuilderImpl extends PartBuilder
 {
-    public function __construct()
+    private function __construct()
     {
         $this->part = new PartResource();
     }

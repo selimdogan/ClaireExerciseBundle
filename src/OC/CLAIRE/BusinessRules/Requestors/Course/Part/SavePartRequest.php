@@ -33,4 +33,9 @@ interface SavePartRequest extends UseCaseRequest
      * @return int
      */
     public function getPartId();
+
+    /**
+     * @return string
+     */
+    public function getPartTitle();
 }

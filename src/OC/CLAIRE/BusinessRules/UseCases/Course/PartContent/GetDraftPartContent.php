@@ -18,10 +18,11 @@ class GetDraftPartContent extends GetPartContent
     public function execute(UseCaseRequest $useCaseRequest)
     {
         /** @var GetDraftPartContentRequest $useCaseRequest */
-
-        return new GetPartContentResponseDTO($this->partContentGateway->findDraft(
+        $content = $this->partContentGateway->findDraft(
             $useCaseRequest->getCourseId(),
             $useCaseRequest->getPartId()
-        ));
+        );
+
+        return new GetPartContentResponseDTO($content);
     }
 }

@@ -9,7 +9,7 @@ class TocItemFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
-     * @expectedException SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\UnsupportedSubtypeException
+     * @expectedException \SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\UnsupportedSubtypeException
      */
     public function Make_WithUnsupportedType_ThrowException()
     {

@@ -35,6 +35,11 @@ class SavePartRequestDTO implements SavePartRequest
     public $partDuration;
 
     /**
+     * @var string
+     */
+    public $partTitle;
+
+    /**
      * @return int
      */
     public function getCourseId()
@@ -72,5 +77,13 @@ class SavePartRequestDTO implements SavePartRequest
     public function getPartId()
     {
         return $this->partId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPartTitle()
+    {
+        return $this->partTitle;
     }
 }

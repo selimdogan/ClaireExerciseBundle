@@ -7,7 +7,7 @@ use OC\CLAIRE\BusinessRules\Entities\Course\Course\Duration;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Part\CourseNotFoundPartGateway;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Part\PartGatewaySpy;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Part\PartNotFoundPartGatewayStub;
-use OC\CLAIRE\BusinessRules\UseCases\Course\Part\DTO\SavePartRequestBuilderImpl;
+use OC\CLAIRE\BusinessRules\UseCases\Course\Part\DTO\SavePartRequestBuilder;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 
 /**
@@ -27,6 +27,12 @@ class SavePartTest extends \PHPUnit_Framework_TestCase
 
     const PART_1_DESCRIPTION = 'Part 1 description';
 
+    const PART_1_DIFFICULTY = Difficulty::EASY;
+
+    const PART_1_DURATION = Duration::P1D;
+
+    const PART_1_TITLE = 'Part 1 title';
+
     /**
      * @var SavePart
      */
@@ -45,7 +51,7 @@ class SavePartTest extends \PHPUnit_Framework_TestCase
     {
         $this->useCase->setPartGateway(new CourseNotFoundPartGateway());
         $this->useCase->execute(
-            SavePartRequestBuilderImpl::create()
+            SavePartRequestBuilder::create()
                 ->part(self::NON_EXISTING_PART_ID)
                 ->fromCourse(self::NON_EXISTING_COURSE_ID)
                 ->build()
@@ -60,7 +66,7 @@ class SavePartTest extends \PHPUnit_Framework_TestCase
     {
         $this->useCase->setPartGateway(new PartNotFoundPartGatewayStub());
         $this->useCase->execute(
-            SavePartRequestBuilderImpl::create()
+            SavePartRequestBuilder::create()
                 ->part(self::NON_EXISTING_PART_ID)
                 ->fromCourse(self::COURSE_1_ID)
                 ->build()
@@ -73,7 +79,7 @@ class SavePartTest extends \PHPUnit_Framework_TestCase
     public function SavePartDescription()
     {
         $this->useCase->execute(
-            SavePartRequestBuilderImpl::create()
+            SavePartRequestBuilder::create()
                 ->part(self::PART_1_ID)
                 ->fromCourse(self::COURSE_1_ID)
                 ->withDescription(self::PART_1_DESCRIPTION)
@@ -97,14 +103,14 @@ class SavePartTest extends \PHPUnit_Framework_TestCase
     public function SavePartDifficulty()
     {
         $this->useCase->execute(
-            SavePartRequestBuilderImpl::create()
+            SavePartRequestBuilder::create()
                 ->part(self::PART_1_ID)
                 ->fromCourse(self::COURSE_1_ID)
-                ->withDifficulty(Difficulty::EASY)
+                ->withDifficulty(self::PART_1_DIFFICULTY)
                 ->build()
         );
         $expectedResource = new PartResource();
-        $expectedResource->setDifficulty(Difficulty::EASY);
+        $expectedResource->setDifficulty(self::PART_1_DIFFICULTY);
         $this->assertPart($expectedResource);
     }
 
@@ -114,14 +120,31 @@ class SavePartTest extends \PHPUnit_Framework_TestCase
     public function SavePartDuration()
     {
         $this->useCase->execute(
-            SavePartRequestBuilderImpl::create()
+            SavePartRequestBuilder::create()
                 ->part(self::PART_1_ID)
                 ->fromCourse(self::COURSE_1_ID)
-                ->withDuration(Duration::P1D)
+                ->withDuration(self::PART_1_DURATION)
                 ->build()
         );
         $expectedResource = new PartResource();
-        $expectedResource->setDuration(Duration::P1D);
+        $expectedResource->setDuration(self::PART_1_DURATION);
+        $this->assertPart($expectedResource);
+    }
+
+    /**
+     * @test
+     */
+    public function SavePartTitle()
+    {
+        $this->useCase->execute(
+            SavePartRequestBuilder::create()
+                ->part(self::PART_1_ID)
+                ->fromCourse(self::COURSE_1_ID)
+                ->withTitle(self::PART_1_TITLE)
+                ->build()
+        );
+        $expectedResource = new PartResource();
+        $expectedResource->setTitle(self::PART_1_TITLE);
         $this->assertPart($expectedResource);
     }
 

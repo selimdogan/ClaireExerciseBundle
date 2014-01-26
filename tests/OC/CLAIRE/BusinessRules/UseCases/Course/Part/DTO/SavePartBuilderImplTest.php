@@ -18,7 +18,7 @@ class SavePartBuilderImplTest extends \PHPUnit_Framework_TestCase
      */
     public function BuildWithoutPartId_ThrowException()
     {
-        SavePartRequestBuilderImpl::create()->fromCourse(self::COURSE_ID)->build();
+        SavePartRequestBuilder::create()->fromCourse(self::COURSE_ID)->build();
     }
 
     /**
@@ -28,7 +28,7 @@ class SavePartBuilderImplTest extends \PHPUnit_Framework_TestCase
      */
     public function BuildWithoutCourseId_ThrowException()
     {
-        SavePartRequestBuilderImpl::create()->part(self::PART_ID)->build();
+        SavePartRequestBuilder::create()->part(self::PART_ID)->build();
     }
 
     /**
@@ -38,7 +38,7 @@ class SavePartBuilderImplTest extends \PHPUnit_Framework_TestCase
      */
     public function BuildWithoutCourseIdAndPartId_ThrowException()
     {
-        SavePartRequestBuilderImpl::create()->build();
+        SavePartRequestBuilder::create()->build();
     }
 
 }

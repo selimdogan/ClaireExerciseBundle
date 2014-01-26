@@ -35,6 +35,13 @@ abstract class PartBuilder
         return $this;
     }
 
+    public function withTitle($title)
+    {
+        $this->part->setTitle($title);
+
+        return $this;
+    }
+
     public function build()
     {
         return $this->part;

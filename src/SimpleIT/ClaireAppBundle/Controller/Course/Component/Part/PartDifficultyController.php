@@ -4,7 +4,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component\Part;
 
 use OC\CLAIRE\BusinessRules\Exceptions\Course\Part\PartNotFoundException;
 use OC\CLAIRE\BusinessRules\Responders\Course\PartDifficulty\GetDraftPartDifficultyResponse;
-use OC\CLAIRE\BusinessRules\UseCases\Course\Part\DTO\SavePartRequestBuilderImpl;
+use OC\CLAIRE\BusinessRules\UseCases\Course\Part\DTO\SavePartRequestBuilder;
 use OC\CLAIRE\BusinessRules\UseCases\Course\PartDifficulty\DTO\GetDraftPartDifficultyRequestDTO;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\Form\Course\Model\PartDifficultyModel;
@@ -60,7 +60,7 @@ class PartDifficultyController extends AppController
             $this->get('oc.claire.use_cases.part_use_case_factory')
                 ->make('SavePart')
                 ->execute(
-                    SavePartRequestBuilderImpl::create()
+                    SavePartRequestBuilder::create()
                         ->part($partId)
                         ->fromCourse($courseId)
                         ->withDifficulty($model->getDifficulty())

@@ -18,11 +18,12 @@ class GetPublishedPartContent extends GetPartContent
     public function execute(UseCaseRequest $useCaseRequest)
     {
         /** @var GetPublishedPartContentRequest $useCaseRequest */
-
-        return new GetPartContentResponseDTO($this->partContentGateway->findDraft(
+        $content = $this->partContentGateway->findPublished(
             $useCaseRequest->getCourseIdentifier(),
             $useCaseRequest->getPartIdentifier()
-        ));
+        );
+
+        return new GetPartContentResponseDTO($content);
     }
 
 }

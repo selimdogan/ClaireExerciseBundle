@@ -67,11 +67,6 @@ abstract class GetPartTest extends \PHPUnit_Framework_TestCase
         $this->executeUseCase($this->request);
     }
 
-    protected function assertPart()
-    {
-        $this->assertEquals(PartStub::ID, $this->response->getId());
-    }
-
     /**
      * @test
      */
@@ -79,6 +74,20 @@ abstract class GetPartTest extends \PHPUnit_Framework_TestCase
     {
         $this->executeUseCase();
         $this->assertPart();
+    }
+
+    protected function assertPart()
+    {
+
+        $this->assertEquals(new \DateTime(PartStub::CREATED_AT), $this->response->getCreatedAt());
+        $this->assertEquals(PartStub::DESCRIPTION, $this->response->getDescription());
+        $this->assertEquals(PartStub::DIFFICULTY, $this->response->getDifficulty());
+        $this->assertEquals(PartStub::DURATION, $this->response->getDuration());
+        $this->assertEquals(PartStub::ID, $this->response->getId());
+        $this->assertEquals(PartStub::SLUG, $this->response->getSlug());
+        $this->assertEquals(PartStub::SUBTYPE, $this->response->getSubtype());
+        $this->assertEquals(PartStub::TITLE, $this->response->getTitle());
+        $this->assertEquals(new \DateTime(PartStub::UPDATED_AT), $this->response->getUpdatedAt());
     }
 
     protected function setUp()

@@ -30,6 +30,7 @@ class SavePart implements UseCase
                 ->withDescription($useCaseRequest->getPartDescription())
                 ->withDifficulty($useCaseRequest->getPartDifficulty())
                 ->withDuration($useCaseRequest->getPartDuration())
+                ->withTitle($useCaseRequest->getPartTitle())
                 ->build();
         $this->partGateway->updateDraft(
             $useCaseRequest->getCourseId(),

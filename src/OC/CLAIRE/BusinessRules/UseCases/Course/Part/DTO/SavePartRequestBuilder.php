@@ -8,12 +8,12 @@ use OC\CLAIRE\BusinessRules\Requestors\RequestBuilder;
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class SavePartRequestBuilderImpl implements RequestBuilder
+class SavePartRequestBuilder implements RequestBuilder
 {
     /**
      * @var SavePartRequestDTO
      */
-    private $savePartRequest;
+    protected $savePartRequest;
 
     private function __construct()
     {
@@ -22,7 +22,7 @@ class SavePartRequestBuilderImpl implements RequestBuilder
 
     public static function create()
     {
-        return new SavePartRequestBuilderImpl();
+        return new SavePartRequestBuilder();
     }
 
     public function part($partId)
@@ -56,6 +56,13 @@ class SavePartRequestBuilderImpl implements RequestBuilder
     public function withDuration($duration)
     {
         $this->savePartRequest->partDuration = $duration;
+
+        return $this;
+    }
+
+    public function withTitle($title)
+    {
+        $this->savePartRequest->partTitle = $title;
 
         return $this;
     }

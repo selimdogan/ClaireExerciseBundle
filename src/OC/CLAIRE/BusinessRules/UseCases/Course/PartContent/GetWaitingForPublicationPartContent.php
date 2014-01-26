@@ -19,10 +19,11 @@ class GetWaitingForPublicationPartContent extends GetPartContent
     public function execute(UseCaseRequest $useCaseRequest)
     {
         /** @var GetWaitingForPublicationPartContentRequest $useCaseRequest */
-
-        return new GetPartContentResponseDTO($this->partContentGateway->findWaitingForPublication(
+        $content = $this->partContentGateway->findWaitingForPublication(
             $useCaseRequest->getCourseId(),
             $useCaseRequest->getPartId()
-        ));
+        );
+
+        return new GetPartContentResponseDTO($content);
     }
 }

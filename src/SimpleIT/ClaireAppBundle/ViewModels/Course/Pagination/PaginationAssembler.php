@@ -71,16 +71,8 @@ abstract class PaginationAssembler
         $categoryIdentifier
     )
     {
-        if (Status::PUBLISHED === $status) {
-            $url = $this->router->generate(
-                self::VIEW_PART_ROUTE,
-                array(
-                    'categoryIdentifier' => $categoryIdentifier,
-                    'courseIdentifier'   => $courseIdentifier,
-                    'partIdentifier'     => $part->getSlug(),
-                )
-            );
-        } elseif (Status::DRAFT === $status || Status::WAITING_FOR_PUBLICATION) {
+
+        if (Status::DRAFT === $status || Status::WAITING_FOR_PUBLICATION === $status) {
             $url = $this->router->generate(
                 self::VIEW_PART_ROUTE,
                 array(
@@ -91,7 +83,14 @@ abstract class PaginationAssembler
                 )
             );
         } else {
-            throw new InvalidStatusException();
+            $url = $this->router->generate(
+                self::VIEW_PART_ROUTE,
+                array(
+                    'categoryIdentifier' => $categoryIdentifier,
+                    'courseIdentifier'   => $courseIdentifier,
+                    'partIdentifier'     => $part->getSlug(),
+                )
+            );
         }
 
         return $url;
