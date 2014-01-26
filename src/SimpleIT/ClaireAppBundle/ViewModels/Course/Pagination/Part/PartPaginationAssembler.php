@@ -162,8 +162,8 @@ class PartPaginationAssembler extends PaginationAssembler
     private function isCurrent()
     {
         return !$this->currentFind
-        && ($this->partIdentifier === $this->child->getSlug()
-            || $this->partIdentifier === $this->child->getId()
+        && ($this->partIdentifier == $this->child->getSlug()
+            || $this->partIdentifier == $this->child->getId()
         );
     }
 
@@ -180,6 +180,6 @@ class PartPaginationAssembler extends PaginationAssembler
      */
     private function isBigSubTypeAllowed()
     {
-        return 'title-2' === $this->child->getSubtype();
+        return 'title-2' === $this->child->getSubtype() || 'title-3' === $this->child->getSubtype();
     }
 }
