@@ -3,6 +3,9 @@
 namespace OC\CLAIRE\BusinessRules\Gateways\Course\Toc;
 
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
+use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\DraftTocStub1;
+use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\PublishedTocStub1;
+use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\WaitingForPublicationTocStub1;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
@@ -30,7 +33,7 @@ class TocByCourseGatewayStub implements TocByCourseGateway
      */
     public function findDraft($courseId)
     {
-        return null;
+        return new DraftTocStub1();
     }
 
     /**
@@ -38,7 +41,7 @@ class TocByCourseGatewayStub implements TocByCourseGateway
      */
     public function findWaitingForPublication($courseId)
     {
-        return null;
+        return new WaitingForPublicationTocStub1();
     }
 
     /**
@@ -46,6 +49,6 @@ class TocByCourseGatewayStub implements TocByCourseGateway
      */
     public function findPublished($courseIdentifier)
     {
-        return null;
+        return new PublishedTocStub1();
     }
 }

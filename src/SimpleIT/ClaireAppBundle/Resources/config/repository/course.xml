@@ -23,6 +23,15 @@
             </call>
         </service>
 
+        <service id="simple_it.claire.course.repository.course_content" class="%simple_it.claire.course.repository.course_content.class%">
+            <call method="setClient">
+                <argument type="service" id="simple_it.claire.http_client.authenticated"/>
+            </call>
+            <call method="setSerializer">
+                <argument type="service" id="simple_it.claire.serializer"/>
+            </call>
+        </service>
+
         <service id="simple_it.claire.course.repository.course_status" class="%simple_it.claire.course.repository.course_status.class%">
             <call method="setClient">
                 <argument type="service" id="simple_it.claire.http_client.authenticated"/>
@@ -32,13 +41,5 @@
             </call>
         </service>
 
-        <service id="simple_it.claire.course.repository.course_content" class="%simple_it.claire.course.repository.course_content.class%">
-            <call method="setClient">
-                <argument type="service" id="simple_it.claire.http_client.authenticated"/>
-            </call>
-            <call method="setSerializer">
-                <argument type="service" id="simple_it.claire.serializer"/>
-            </call>
-        </service>
     </services>
 </container>

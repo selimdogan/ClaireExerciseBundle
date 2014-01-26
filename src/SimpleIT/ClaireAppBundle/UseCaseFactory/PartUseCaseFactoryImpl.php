@@ -23,6 +23,48 @@ class PartUseCaseFactoryImpl implements UseCaseFactory
     public function make($useCaseName)
     {
         switch ($useCaseName) {
+            // COURSE
+            case 'GetPublishedPart':
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.part.get_published_part'
+                );
+                break;
+            case 'GetWaitingForPublicationPart':
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.part.get_waiting_for_publication_part'
+                );
+                break;
+            case 'GetDraftPart':
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.part.get_draft_part'
+                );
+                break;
+            case 'SavePart':
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.part.save_part'
+                );
+                break;
+            // CONTENT
+            case 'GetPublishedPartContent':
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.part.get_published_part_content'
+                );
+                break;
+            case 'GetWaitingForPublicationPartContent':
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.part.get_waiting_for_publication_part_content'
+                );
+                break;
+            case 'GetDraftPartContent':
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.part.get_draft_part_content'
+                );
+                break;
+            case 'SavePartContent':
+                $useCase = $this->injector->get(
+                    'oc.claire.use_cases.course.part.save_part_content'
+                );
+                break;
             // DESCRIPTION
             case 'GetDraftPartDescription':
                 $useCase = $this->injector->get(
@@ -41,7 +83,7 @@ class PartUseCaseFactoryImpl implements UseCaseFactory
                 );
                 break;
             default:
-                throw new InvalidUseCaseException();
+                throw new InvalidUseCaseException($useCaseName);
         }
 
         return $useCase;

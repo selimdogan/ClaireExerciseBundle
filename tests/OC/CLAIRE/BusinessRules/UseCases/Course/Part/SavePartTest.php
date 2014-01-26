@@ -90,7 +90,7 @@ class SavePartTest extends \PHPUnit_Framework_TestCase
         $this->assertPart($expectedResource);
     }
 
-    protected function assertPart($expectedResource)
+    private function assertPart($expectedResource)
     {
         $this->assertEquals(self::COURSE_1_ID, $this->partGatewaySpy->courseId);
         $this->assertEquals(self::PART_1_ID, $this->partGatewaySpy->partId);

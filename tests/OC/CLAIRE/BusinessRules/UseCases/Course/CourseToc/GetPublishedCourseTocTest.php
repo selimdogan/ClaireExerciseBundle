@@ -3,12 +3,12 @@
 namespace OC\CLAIRE\BusinessRules\UseCases\Course\CourseToc;
 
 use OC\CLAIRE\BusinessRules\Entities\Course\Course\Status;
-use OC\CLAIRE\BusinessRules\UseCases\Course\CourseToc\DTO\GetDraftCourseTocRequestDTO;
+use OC\CLAIRE\BusinessRules\UseCases\Course\CourseToc\DTO\GetPublishedCourseTocRequestDTO;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class GetDraftCourseTocTest extends GetCourseTocTest
+class GetPublishedCourseTocTest extends GetCourseTocTest
 {
     /**
      * @test
@@ -17,13 +17,14 @@ class GetDraftCourseTocTest extends GetCourseTocTest
     {
         $this->executeUseCase();
         $this->assertCourseToc();
-        $this->assertEquals(Status::DRAFT, $this->response->getCourseToc()->getStatus());
+        $this->assertEquals(Status::PUBLISHED, $this->response->getCourseToc()->getStatus());
     }
 
     protected function setUp()
     {
-        $this->useCase = new GetDraftCourseToc();
-        $this->request = new GetDraftCourseTocRequestDTO(self::COURSE_ID);
+        $this->useCase = new GetPublishedCourseToc();
+        $this->request = new GetPublishedCourseTocRequestDTO(self::COURSE_ID);
         parent::setUp();
     }
+    
 }

@@ -8,6 +8,7 @@
         <import resource="service/security.xml"/>
         <import resource="service/user.xml"/>
         <import resource="repository/course.xml"/>
+        <import resource="repository/course/part.xml"/>
         <import resource="repository/associatedContent/category.xml"/>
         <import resource="repository/associatedContent/tag.xml"/>
         <import resource="factory/factory.xml"/>
