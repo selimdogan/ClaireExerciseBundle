@@ -4,19 +4,25 @@ simple_it_claire_component_part_edit:
     requirements:
             _method: GET|POST
 
-simple_it_claire_component_course_part_content_edit:
-    pattern: /{courseId}/parts/{partId}/content
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/PartContent:edit }
+simple_it_claire_course_component_part_title_edit:
+    pattern: /{courseId}/parts/{partId}/title
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Part/PartTitle:edit }
     requirements:
         _method: POST
 
-simple_it_claire_component_part_difficulty:
+simple_it_claire_course_component_part_content_edit:
+    pattern: /{courseId}/parts/{partId}/content
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Part/PartContent:edit }
+    requirements:
+        _method: POST
+
+simple_it_claire_course_component_part_difficulty_edit:
     pattern: /{courseId}/parts/{partId}/difficulty
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Part/PartDifficulty:edit }
     requirements:
         _method: POST
 
-simple_it_claire_component_part_description:
+simple_it_course_claire_component_part_description_edit:
     pattern: /{courseId}/parts/{partId}/description
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Part/PartDescription:edit }
     requirements:

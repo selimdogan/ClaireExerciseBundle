@@ -26,5 +26,5 @@ class GetPublishedCourseTocTest extends GetCourseTocTest
         $this->request = new GetPublishedCourseTocRequestDTO(self::COURSE_ID);
         parent::setUp();
     }
-    
+
 }

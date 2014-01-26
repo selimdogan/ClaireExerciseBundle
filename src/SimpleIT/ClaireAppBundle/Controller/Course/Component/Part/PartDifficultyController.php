@@ -4,8 +4,8 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component\Part;
 
 use OC\CLAIRE\BusinessRules\Exceptions\Course\Part\PartNotFoundException;
 use OC\CLAIRE\BusinessRules\Responders\Course\PartDifficulty\GetDraftPartDifficultyResponse;
+use OC\CLAIRE\BusinessRules\UseCases\Course\Part\DTO\GetDraftPartRequestDTO;
 use OC\CLAIRE\BusinessRules\UseCases\Course\Part\DTO\SavePartRequestBuilder;
-use OC\CLAIRE\BusinessRules\UseCases\Course\PartDifficulty\DTO\GetDraftPartDifficultyRequestDTO;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\Form\Course\Model\PartDifficultyModel;
 use SimpleIT\ClaireAppBundle\Form\Course\Type\PartDifficultyType;
@@ -25,8 +25,8 @@ class PartDifficultyController extends AppController
         try {
             /** @var GetDraftPartDifficultyResponse $ucResponse */
             $ucResponse = $this->get('oc.claire.use_cases.part_use_case_factory')
-                ->make('GetDraftPartDifficulty')
-                ->execute(new GetDraftPartDifficultyRequestDTO($courseId, $partId));
+                ->make('GetDraftPart')
+                ->execute(new GetDraftPartRequestDTO($courseId, $partId));
 
             $form = $this->createForm(
                 new PartDifficultyType(),
@@ -37,7 +37,7 @@ class PartDifficultyController extends AppController
                 'SimpleITClaireAppBundle:Course/Common/partial:editDifficulty.html.twig',
                 array(
                     'actionUrl' => $this->generateUrl(
-                            'simple_it_claire_component_part_description',
+                            'simple_it_claire_course_component_part_difficulty_edit',
                             array('courseId' => $courseId, 'partId' => $partId)
                         ),
                     'form'      => $form->createView()

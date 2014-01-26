@@ -20,7 +20,7 @@ class CourseContentController extends AppController
         /** @var GetCourseContentResponse $ucResponse */
         $ucResponse =
             $this->get('oc.claire.use_cases.course_use_case_factory')
-                ->make('GetDraftContent')
+                ->make('GetDraftCourseContent')
                 ->execute(new GetDraftCourseRequestDTO($courseId));
 
         return $this->render(
@@ -41,7 +41,7 @@ class CourseContentController extends AppController
         /** @var SaveCourseContentResponse $ucResponse */
         $ucResponse =
             $this->get('oc.claire.use_cases.course_use_case_factory')
-                ->make('SaveContent')
+                ->make('SaveCourseContent')
                 ->execute(
                     new SaveCourseContentRequestDTO($courseId, $content = $request->get('content'))
                 );

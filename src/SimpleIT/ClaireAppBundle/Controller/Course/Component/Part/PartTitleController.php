@@ -8,8 +8,8 @@ use OC\CLAIRE\BusinessRules\Responders\Course\Part\GetPartResponse;
 use OC\CLAIRE\BusinessRules\UseCases\Course\Part\DTO\GetDraftPartRequestDTO;
 use OC\CLAIRE\BusinessRules\UseCases\Course\Part\DTO\SavePartRequestBuilder;
 use SimpleIT\AppBundle\Controller\AppController;
-use SimpleIT\ClaireAppBundle\Form\Course\Model\PartDescriptionModel;
-use SimpleIT\ClaireAppBundle\Form\Course\Type\PartDescriptionType;
+use SimpleIT\ClaireAppBundle\Form\Course\Model\PartTitleModel;
+use SimpleIT\ClaireAppBundle\Form\Course\Type\PartTitleType;
 use SimpleIT\Utils\HTTP;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class PartDescriptionController extends AppController
+class PartTitleController extends AppController
 {
     public function editViewAction($courseId, $partId)
     {
@@ -27,19 +27,19 @@ class PartDescriptionController extends AppController
             /** @var GetPartResponse $ucResponse */
             $ucResponse =
                 $this->get('oc.claire.use_cases.part_use_case_factory')
-                ->make('GetDraftPart')
-                ->execute(new GetDraftPartRequestDTO($courseId, $partId));
+                    ->make('GetDraftPart')
+                    ->execute(new GetDraftPartRequestDTO($courseId, $partId));
 
             $form = $this->createForm(
-                new PartDescriptionType(),
-                new PartDescriptionModel($ucResponse->getDescription())
+                new PartTitleType(),
+                new PartTitleModel($ucResponse->getTitle())
             );
 
             return $this->render(
-                'SimpleITClaireAppBundle:Course/Common/partial:editDescription.html.twig',
+                'SimpleITClaireAppBundle:Course/Common/partial:editTitle.html.twig',
                 array(
                     'actionUrl' => $this->generateUrl(
-                            'simple_it_claire_course_component_part_description_edit',
+                            'simple_it_claire_course_component_part_title_edit',
                             array('courseId' => $courseId, 'partId' => $partId)
                         ),
                     'form'      => $form->createView()
@@ -57,16 +57,17 @@ class PartDescriptionController extends AppController
     public function editAction(Request $request, $courseId, $partId)
     {
         $form = $this->createForm(
-            new PartDescriptionType(),
-            $model = new PartDescriptionModel()
+            new PartTitleType(),
+            $model = new PartTitleModel()
         );
         $form->bind($request);
         if ($form->isValid()) {
             $this->get('oc.claire.use_cases.part_use_case_factory')
-                ->make('SavePart')->execute(SavePartRequestBuilder::create()
+                ->make('SavePart')->execute(
+                    SavePartRequestBuilder::create()
                         ->part($partId)
                         ->fromCourse($courseId)
-                        ->withDifficulty($model->getDescription())
+                        ->withTitle($model->getTitle())
                         ->build()
                 );
         } else {
