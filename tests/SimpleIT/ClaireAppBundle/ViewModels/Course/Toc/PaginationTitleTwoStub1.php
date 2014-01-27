@@ -29,6 +29,6 @@ class PaginationTitleTwoStub1 extends PartResource
 
     public function __construct()
     {
-        $this->children = array(new TitleTreeStub(), new TitleTreeStub());
+        $this->children = array(new PaginationTitleThreeStub1(), new PaginationTitleThreeStub2());
     }
 }

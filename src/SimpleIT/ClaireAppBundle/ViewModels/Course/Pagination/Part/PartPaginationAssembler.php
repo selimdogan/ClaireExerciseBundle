@@ -109,7 +109,7 @@ class PartPaginationAssembler extends PaginationAssembler
     {
         foreach ($toc->getChildren() as $this->child) {
             if ($this->isMediumSubTypeAllowed()) {
-                if ($this->isCurrent()) {
+                if ($this->isCurrent($this->child)) {
                     $this->currentFind = true;
                 } elseif ($this->isNext()) {
                     $this->buildNext($this->child);
@@ -127,21 +127,7 @@ class PartPaginationAssembler extends PaginationAssembler
     private function buildBigPagination(PartResource $toc)
     {
         foreach ($toc->getChildren() as $partChild) {
-            foreach ($partChild->getChildren() as $this->child) {
-                if ($this->isBigSubTypeAllowed()) {
-                    if ($this->isCurrent()) {
-                        $this->currentFind = true;
-                    } elseif ($this->isNext()) {
-                        $this->buildNext($this->child);
-                        $this->nextFind = true;
-                    } else {
-                        $this->buildPrevious($this->child);
-                    }
-                    if ($this->nextFind) {
-                        break;
-                    }
-                }
-            }
+            $this->process($partChild);
             if ($this->nextFind) {
                 break;
             }
@@ -159,11 +145,11 @@ class PartPaginationAssembler extends PaginationAssembler
     /**
      * @return bool
      */
-    private function isCurrent()
+    private function isCurrent(PartResource $child)
     {
         return !$this->currentFind
-        && ($this->partIdentifier == $this->child->getSlug()
-            || $this->partIdentifier == $this->child->getId()
+        && ($this->partIdentifier == $child->getSlug()
+            || $this->partIdentifier == $child->getId()
         );
     }
 
@@ -175,11 +161,36 @@ class PartPaginationAssembler extends PaginationAssembler
         return $this->currentFind && !$this->nextFind;
     }
 
+    private function process(PartResource $parent)
+    {
+        foreach ($parent->getChildren() as $child) {
+            if ($this->nextFind) {
+                return;
+            }
+            $this->build($child);
+            $this->process($child);
+        }
+    }
+
+    private function build($child)
+    {
+        if ($this->isBigSubTypeAllowed($child)) {
+            if ($this->isCurrent($child)) {
+                $this->currentFind = true;
+            } elseif ($this->isNext()) {
+                $this->buildNext($child);
+                $this->nextFind = true;
+            } else {
+                $this->buildPrevious($child);
+            }
+        }
+    }
+
     /**
      * @return bool
      */
-    private function isBigSubTypeAllowed()
+    private function isBigSubTypeAllowed($child)
     {
-        return 'title-2' === $this->child->getSubtype() || 'title-3' === $this->child->getSubtype();
+        return 'title-2' === $child->getSubtype() || 'title-3' === $child->getSubtype();
     }
 }

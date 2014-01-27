@@ -3,7 +3,7 @@
 namespace SimpleIT\ClaireAppBundle\ViewModels\Course\Pagination\Part;
 
 use SimpleIT\ClaireAppBundle\ViewModels\Course\Pagination\Pagination;
-use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\PaginationTitleTwoStub2;
+use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\PaginationTitleThreeStub1;
 use SimpleIT\ClaireAppBundle\ViewModels\Course\Toc\PaginationTocStub1;
 
 /**
@@ -15,9 +15,9 @@ class DraftBigCourseFirstTitle2PaginationExpected extends Pagination
 
     const PREVIOUS_URL = '/category-slug/cours/1?status=draft';
 
-    const NEXT_TITLE = PaginationTitleTwoStub2::TITLE;
+    const NEXT_TITLE = PaginationTitleThreeStub1::TITLE;
 
-    const NEXT_URL = '/category-slug/cours/1/101?status=draft';
+    const NEXT_URL = '/category-slug/cours/1/1000?status=draft';
 
     public $previousTitle = self::PREVIOUS_TITLE;
 
