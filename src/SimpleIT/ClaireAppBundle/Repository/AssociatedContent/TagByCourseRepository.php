@@ -114,6 +114,7 @@ class TagByCourseRepository extends AppRepository implements TagByCourseGateway
 
     /**
      * @return Tag[]
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
      */
     public function findPublished($courseIdentifier)
     {
