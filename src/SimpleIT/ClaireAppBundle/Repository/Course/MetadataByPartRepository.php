@@ -1,11 +1,9 @@
 <?php
 
-
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\FormatUtils;
 use SimpleIT\AppBundle\Annotation\Cache;
 
 /**

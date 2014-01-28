@@ -1,6 +1,5 @@
 <?php
 
-
 namespace SimpleIT\ClaireAppBundle\Controller\AssociatedContent\Component;
 
 use SimpleIT\ApiResourcesBundle\AssociatedContent\TagResource;
@@ -79,7 +78,6 @@ class TagController extends AppController
 
         $assembler = new TagAssembler();
         $vm = $assembler->writeTag($tag, $category);
-
 
         return $this->render(
             'SimpleITClaireAppBundle:AssociatedContent/Tag/Component:view.html.twig',

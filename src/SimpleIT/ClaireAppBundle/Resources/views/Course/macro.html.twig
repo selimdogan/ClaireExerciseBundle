@@ -1,141 +1,137 @@
+{#{% macro processToc(mainClass, part, level, categoryIdentifier, courseIdentifier, displayLevel) %}#}
+    {#{% if level == 0 %}#}
+        {#<div class="{{ mainClass }}">#}
+        {#{% if mainClass != 'toc-medium' %}#}
+            {#<nav>#}
+            {#<ul class="level-0">#}
 
-{% macro processToc(mainClass, part, level, categoryIdentifier, courseIdentifier, displayLevel) %}
-    {% if level == 0 %}
-        <div class="{{ mainClass }}">
-        {% if mainClass != 'toc-medium' %}
-            <nav>
-            <ul class="level-0">
+            {#{% if mainClass == 'course-timeline'  %}#}
+                {#<a class="course-title course-title-0" data-claire-course-slug="{{ part.slug }}" href="{{ path ('simple_it_claire_course_course_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier})}}">#}
+                    {#{% if part.metadatas.image is defined %}#}
+                        {#<img class="course-icon" src="{{ part.metadatas.image }}" />#}
+                    {#{% endif %}#}
+                    {#<span>{{- part.title -}}</span>#}
+                {#</a>#}
+            {#{% endif %}#}
+            {#<li>#}
+        {#{% endif %}#}
+    {#{% endif %}#}
 
-            {% if mainClass == 'course-timeline'  %}
-                <a class="course-title course-title-0" data-claire-course-slug="{{ part.slug }}" href="{{ path ('simple_it_claire_course_course_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier})}}">
-                    {% if part.metadatas.image is defined %}
-                        <img class="course-icon" src="{{ part.metadatas.image }}" />
-                    {% endif %}
-                    <span>{{- part.title -}}</span>
-                </a>
-            {% endif %}
-            <li>
-        {% endif %}
-    {% endif %}
+    {#{% if part.children|length > 0 and (level < 1 or (displayLevel > 1 and mainClass != 'toc-medium')) %}#}
+        {#<ul class="level-{{ level + 1 }}">#}
+            {#{% set position = 1 %}#}
 
-    {% if part.children|length > 0 and (level < 1 or (displayLevel > 1 and mainClass != 'toc-medium')) %}
-        <ul class="level-{{ level + 1 }}">
-            {% set position = 1 %}
+            {#{% for child in part.children %}#}
+                {#<li{% if level == 1 and mainClass == 'toc-big' %} class="col4"{% endif %}>#}
+                    {#<a class="course-title course-title-{{ level + 1 }}" data-claire-course-slug="{{ child.slug }}" href="{{ path ('simple_it_claire_course_part_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier, 'partIdentifier': child.slug})}}">#}
+                        {#{% if child.metadatas.image is defined %}#}
+                            {#<img class="course-icon" src="{{ child.metadatas.image }}" />#}
+                        {#{% endif %}#}
+                        {#{% if displayLevel == 2 and mainClass != 'course-toc-side' and mainClass != 'toc-medium' %}#}
 
-            {% for child in part.children %}
-                <li{% if level == 1 and mainClass == 'toc-big' %} class="col4"{% endif %}>
-                    <a class="course-title course-title-{{ level + 1 }}" data-claire-course-slug="{{ child.slug }}" href="{{ path ('simple_it_claire_course_part_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier, 'partIdentifier': child.slug})}}">
-                        {% if child.metadatas.image is defined %}
-                            <img class="course-icon" src="{{ child.metadatas.image }}" />
-                        {% endif %}
-                        {% if displayLevel == 2 and mainClass != 'course-toc-side' and mainClass != 'toc-medium' %}
+                            {#{% if (level + 1) == 1 %}#}
+                                {#<span>Partie {{ position }} - {{ child.title -}}</span>#}
+                            {#{% elseif (level + 1) == 2 %}#}
+                                {#<span class="chapter">Chapitre {{ position }}</span>#}
+                                {#<span>{{- child.title -}}</span>#}
+                            {#{% else %}#}
+                                {#<span>{{- child.title -}}</span>#}
+                            {#{% endif %}#}
+                        {#{% else %}#}
+                            {#<span>{{- child.title -}}</span>#}
+                        {#{% endif %}#}
+                    {#</a>#}
+                    {#{% if level + 1 == 1  and displayLevel == 2 %}#}
+                    {#<section>#}
+                        {#{% endif %}#}
+                        {#{% if child.children|length > 0 %}#}
+                            {#{{ _self.processToc(mainClass, child, level + 1, categoryIdentifier, courseIdentifier, displayLevel) }}#}
+                        {#{% endif %}#}
+                        {#{% if level + 1 == 1  and displayLevel == 2 %}#}
+                    {#</section>#}
+                    {#{% endif %}#}
 
-                            {% if (level + 1) == 1 %}
-                                <span>Partie {{ position }} - {{ child.title -}}</span>
-                            {% elseif (level + 1) == 2 %}
-                                <span class="chapter">Chapitre {{ position }}</span>
-                                <span>{{- child.title -}}</span>
-                            {% else %}
-                                <span>{{- child.title -}}</span>
-                            {% endif %}
-                        {% else %}
-                            <span>{{- child.title -}}</span>
-                        {% endif %}
-                    </a>
-                    {% if level + 1 == 1  and displayLevel == 2 %}
-                    <section>
-                        {% endif %}
-                        {% if child.children|length > 0 %}
-                            {{ _self.processToc(mainClass, child, level + 1, categoryIdentifier, courseIdentifier, displayLevel) }}
-                        {% endif %}
-                        {% if level + 1 == 1  and displayLevel == 2 %}
-                    </section>
-                    {% endif %}
+                    {#{% set position = position + 1 %}#}
+                {#</li>#}
+            {#{% endfor %}#}
+        {#</ul>#}
+    {#{% endif %}#}
 
-                    {% set position = position + 1 %}
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    {#{% if level == 0 %}#}
+        {#{% if mainClass != 'toc-medium' %}#}
+            {#</li>#}
+            {#</ul>#}
+            {#</nav>#}
+        {#{% endif %}#}
+        {#</div>#}
+    {#{% endif %}#}
+{#{% endmacro %}#}
 
-    {% if level == 0 %}
-        {% if mainClass != 'toc-medium' %}
-            </li>
-            </ul>
-            </nav>
-        {% endif %}
-        </div>
-    {% endif %}
-{% endmacro %}
+{#{% macro processTocEdit(mainClass, part, level, categoryIdentifier, course) %}#}
+    {#{% if level == 0 %}#}
+        {#<div class="{{ mainClass }}">#}
+        {#{% if mainClass != 'toc-medium' %}#}
+            {#<nav>#}
+            {#<ul class="level-0">#}
 
-{% macro processTocEdit(mainClass, part, level, categoryIdentifier, course) %}
-    {% if level == 0 %}
-        <div class="{{ mainClass }}">
-        {% if mainClass != 'toc-medium' %}
-            <nav>
-            <ul class="level-0">
+            {#{% if mainClass == 'course-timeline'  %}#}
+                {#<a class="course-title course-title-0" data-claire-course-slug="{{ part.slug }}" href="{{ path ('simple_it_claire_course_course_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': course.id, 'status':course.status})}}">#}
+                    {#{% if part.metadatas.image is defined %}#}
+                        {#<img class="course-icon" src="{{ part.metadatas.image }}" />#}
+                    {#{% endif %}#}
+                    {#<span>{{- part.title -}}</span>#}
+                {#</a>#}
+            {#{% endif %}#}
+            {#<li>#}
+        {#{% endif %}#}
+    {#{% endif %}#}
 
-            {% if mainClass == 'course-timeline'  %}
-                <a class="course-title course-title-0" data-claire-course-slug="{{ part.slug }}" href="{{ path ('simple_it_claire_course_course_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': course.id, 'status':course.status})}}">
-                    {% if part.metadatas.image is defined %}
-                        <img class="course-icon" src="{{ part.metadatas.image }}" />
-                    {% endif %}
-                    <span>{{- part.title -}}</span>
-                </a>
-            {% endif %}
-            <li>
-        {% endif %}
-    {% endif %}
+    {#{% if part.children|length > 0 and (level < 1 or (course.displayLevel > 1 and mainClass != 'toc-medium')) %}#}
+        {#<ul class="level-{{ level + 1 }}">#}
+            {#{% set position = 1 %}#}
 
-    {% if part.children|length > 0 and (level < 1 or (course.displayLevel > 1 and mainClass != 'toc-medium')) %}
-        <ul class="level-{{ level + 1 }}">
-            {% set position = 1 %}
+            {#{% for child in part.children %}#}
+                {#<li{% if level == 1 and mainClass == 'toc-big' %} class="col4"{% endif %}>#}
+                    {#<a class="course-title course-title-{{ level + 1 }}" data-claire-course-slug="{{ child.slug }}" href="{{ path ('simple_it_claire_course_part_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier, 'partIdentifier': child.slug, 'status':course.status})}}">#}
+                        {#{% if child.metadatas.image is defined %}#}
+                            {#<img class="course-icon" src="{{ child.metadatas.image }}" />#}
+                        {#{% endif %}#}
+                        {#{% if course.displayLevel == 2 and mainClass != 'course-toc-side' and mainClass != 'toc-medium' %}#}
 
-            {% for child in part.children %}
-                <li{% if level == 1 and mainClass == 'toc-big' %} class="col4"{% endif %}>
-                    <a class="course-title course-title-{{ level + 1 }}" data-claire-course-slug="{{ child.slug }}" href="{{ path ('simple_it_claire_course_part_view', {'categoryIdentifier': categoryIdentifier,'courseIdentifier': courseIdentifier, 'partIdentifier': child.slug, 'status':course.status})}}">
-                        {% if child.metadatas.image is defined %}
-                            <img class="course-icon" src="{{ child.metadatas.image }}" />
-                        {% endif %}
-                        {% if course.displayLevel == 2 and mainClass != 'course-toc-side' and mainClass != 'toc-medium' %}
+                            {#{% if (level + 1) == 1 %}#}
+                                {#<span>Partie {{ position }} - {{ child.title -}}</span>#}
+                            {#{% elseif (level + 1) == 2 %}#}
+                                {#<span class="chapter">Chapitre {{ position }}</span>#}
+                                {#<span>{{- child.title -}}</span>#}
+                            {#{% else %}#}
+                                {#<span>{{- child.title -}}</span>#}
+                            {#{% endif %}#}
+                        {#{% else %}#}
+                            {#<span>{{- child.title -}}</span>#}
+                        {#{% endif %}#}
+                    {#</a>#}
+                    {#{% if level + 1 == 1  and course.displayLevel == 2 %}#}
+                    {#<section>#}
+                        {#{% endif %}#}
+                        {#{% if child.children|length > 0 %}#}
+                            {#{{ _self.processTocEdit(mainClass, child, level + 1, categoryIdentifier, course) }}#}
+                        {#{% endif %}#}
+                        {#{% if level + 1 == 1  and course.displayLevel == 2 %}#}
+                    {#</section>#}
+                    {#{% endif %}#}
 
-                            {% if (level + 1) == 1 %}
-                                <span>Partie {{ position }} - {{ child.title -}}</span>
-                            {% elseif (level + 1) == 2 %}
-                                <span class="chapter">Chapitre {{ position }}</span>
-                                <span>{{- child.title -}}</span>
-                            {% else %}
-                                <span>{{- child.title -}}</span>
-                            {% endif %}
-                        {% else %}
-                            <span>{{- child.title -}}</span>
-                        {% endif %}
-                    </a>
-                    {% if level + 1 == 1  and course.displayLevel == 2 %}
-                    <section>
-                        {% endif %}
-                        {% if child.children|length > 0 %}
-                            {{ _self.processTocEdit(mainClass, child, level + 1, categoryIdentifier, course) }}
-                        {% endif %}
-                        {% if level + 1 == 1  and course.displayLevel == 2 %}
-                    </section>
-                    {% endif %}
+                    {#{% set position = position + 1 %}#}
+                {#</li>#}
+            {#{% endfor %}#}
+        {#</ul>#}
+    {#{% endif %}#}
 
-                    {% set position = position + 1 %}
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-    {% if level == 0 %}
-        {% if mainClass != 'toc-medium' %}
-            </li>
-            </ul>
-            </nav>
-        {% endif %}
-        </div>
-    {% endif %}
-{% endmacro %}
-
-
-
+    {#{% if level == 0 %}#}
+        {#{% if mainClass != 'toc-medium' %}#}
+            {#</li>#}
+            {#</ul>#}
+            {#</nav>#}
+        {#{% endif %}#}
+        {#</div>#}
+    {#{% endif %}#}
+{#{% endmacro %}#}

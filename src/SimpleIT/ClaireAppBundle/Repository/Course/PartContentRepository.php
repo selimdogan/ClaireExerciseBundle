@@ -20,6 +20,9 @@
 
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
+use OC\CLAIRE\BusinessRules\Entities\Course\Course\Status;
+use OC\CLAIRE\BusinessRules\Gateways\Course\Part\PartContentGateway;
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\FormatUtils;
 use SimpleIT\AppBundle\Annotation\Cache;
@@ -29,7 +32,7 @@ use SimpleIT\AppBundle\Annotation\Cache;
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class PartContentRepository extends AppRepository
+class PartContentRepository extends AppRepository implements PartContentGateway
 {
 
     /**
@@ -43,16 +46,16 @@ class PartContentRepository extends AppRepository
     protected $resourceClass = '';
 
     /**
- * Get a part content
- *
- * @param string $courseIdentifier Course id | slug
- * @param string $partIdentifier   Part id | slug
- * @param array  $parameters       Parameters
- * @param string $format           Format
- *
- * @return mixed
- * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
- */
+     * Get a part content
+     *
+     * @param string $courseIdentifier Course id | slug
+     * @param string $partIdentifier   Part id | slug
+     * @param array  $parameters       Parameters
+     * @param string $format           Format
+     *
+     * @return mixed
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     */
     public function find(
         $courseIdentifier,
         $partIdentifier,
@@ -91,30 +94,80 @@ class PartContentRepository extends AppRepository
         );
     }
 
+//    /**
+//     * Update a part content
+//     *
+//     * @param string $courseIdentifier Course id | slug
+//     * @param string $partIdentifier   Part id | slug
+//     * @param string $partContent      Part content
+//     * @param array  $parameters       Parameters
+//     * @param string $format           Format
+//     *
+//     * @return string
+//     */
+//    public function update(
+//        $courseIdentifier,
+//        $partIdentifier,
+//        $partContent,
+//        $parameters = array(),
+//        $format = FormatUtils::HTML
+//    )
+//    {
+//        return parent::updateResource(
+//            $partContent,
+//            array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier),
+//            $parameters,
+//            $format
+//        );
+//    }
+
     /**
-     * Update a part content
-     *
-     * @param string $courseIdentifier Course id | slug
-     * @param string $partIdentifier   Part id | slug
-     * @param string $partContent      Part content
-     * @param array  $parameters       Parameters
-     * @param string $format           Format
-     *
      * @return string
      */
+    public function findDraft($courseId, $partId)
+    {
+        return parent::findResource(
+            array('courseIdentifier' => $courseId, 'partIdentifier' => $partId),
+            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT),
+            FormatUtils::HTML
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function findWaitingForPublication($courseId, $partId)
+    {
+        return parent::findResource(
+            array('courseIdentifier' => $courseId, 'partIdentifier' => $partId),
+            array(CourseResource::STATUS => Status::WAITING_FOR_PUBLICATION),
+            FormatUtils::HTML
+        );
+    }
+
+    /**
+     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+     */
+    public function findPublished($courseIdentifier, $partIdentifier)
+    {
+        return parent::findResource(
+            array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier),
+            array(),
+            FormatUtils::HTML
+        );
+    }
+
     public function update(
-        $courseIdentifier,
-        $partIdentifier,
-        $partContent,
-        $parameters = array(),
-        $format = FormatUtils::HTML
+        $courseId,
+        $partId,
+        $partContent
     )
     {
         return parent::updateResource(
             $partContent,
-            array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier),
-            $parameters,
-            $format
+            array('courseIdentifier' => $courseId, 'partIdentifier' => $partId),
+            array(CourseResource::STATUS => Status::DRAFT),
+            FormatUtils::HTML
         );
     }
 }

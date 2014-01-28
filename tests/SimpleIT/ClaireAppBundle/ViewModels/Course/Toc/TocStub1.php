@@ -15,7 +15,11 @@ class TocStub1 extends PartResource
 
     const SUBTYPE = 'course';
 
+    const TITLE = 'Course 1 title';
+
     protected $id = self::ID;
+
+    protected $title = self::TITLE;
 
     protected $subtype = self::SUBTYPE;
 
@@ -23,7 +27,7 @@ class TocStub1 extends PartResource
 
     public function __construct()
     {
-        $this->children = array(new TitleOneStub(), new TitleOneStub(), new TitleOneWithNullChildrenStub());
+        $this->children = array(new TitleOneStub1(), new TitleOneStub2(), new TitleOneWithNullChildrenStub());
     }
 
     /**

@@ -25,5 +25,4 @@ class Tag
      */
     public $description;
 
-
-} 
+}

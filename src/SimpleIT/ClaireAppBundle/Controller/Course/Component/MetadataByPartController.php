@@ -4,11 +4,8 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component;
 
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
-use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\Utils\ArrayUtils;
-use SimpleIT\Utils\DateUtils;
 use Symfony\Component\HttpFoundation\Request;
-
 use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
@@ -119,45 +116,45 @@ class MetadataByPartController extends AbstractMetadataController
         );
     }
 
-    /**
-     * Edit a part description
-     *
-     * @param Request          $request          Request
-     * @param integer | string $courseIdentifier Course id | slug
-     * @param integer | string $partIdentifier   Part id | slug
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function editDescriptionAction(Request $request, $courseIdentifier, $partIdentifier)
-    {
-        $metadataName = MetadataResource::COURSE_METADATA_DESCRIPTION;
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromPart(
-            $courseIdentifier,
-            $partIdentifier
-        );
-
-        $form = $this->createFormBuilder($metadatas)
-            ->add($metadataName, 'textarea')
-            ->getForm();
-
-        $form = $this->processPartEdit(
-            $request,
-            $form,
-            $courseIdentifier,
-            $partIdentifier,
-            $metadatas,
-            $metadataName
-        );
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/MetadataByPart/Component:editDescription.html.twig',
-            array(
-                'courseIdentifier' => $courseIdentifier,
-                'partIdentifier'   => $partIdentifier,
-                'form'             => $form->createView()
-            )
-        );
-    }
+//    /**
+//     * Edit a part description
+//     *
+//     * @param Request          $request          Request
+//     * @param integer | string $courseIdentifier Course id | slug
+//     * @param integer | string $partIdentifier   Part id | slug
+//     *
+//     * @return \Symfony\Component\HttpFoundation\Response
+//     */
+//    public function editDescriptionAction(Request $request, $courseIdentifier, $partIdentifier)
+//    {
+//        $metadataName = MetadataResource::COURSE_METADATA_DESCRIPTION;
+//        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromPart(
+//            $courseIdentifier,
+//            $partIdentifier
+//        );
+//
+//        $form = $this->createFormBuilder($metadatas)
+//            ->add($metadataName, 'textarea')
+//            ->getForm();
+//
+//        $form = $this->processPartEdit(
+//            $request,
+//            $form,
+//            $courseIdentifier,
+//            $partIdentifier,
+//            $metadatas,
+//            $metadataName
+//        );
+//
+//        return $this->render(
+//            'SimpleITClaireAppBundle:Course/MetadataByPart/Component:editDescription.html.twig',
+//            array(
+//                'courseIdentifier' => $courseIdentifier,
+//                'partIdentifier'   => $partIdentifier,
+//                'form'             => $form->createView()
+//            )
+//        );
+//    }
 
     /**
      * View a part image
@@ -187,45 +184,45 @@ class MetadataByPartController extends AbstractMetadataController
         );
     }
 
-    /**
-     * Edit a part image
-     *
-     * @param Request          $request          Request
-     * @param integer | string $courseIdentifier Course id | slug
-     * @param integer | string $partIdentifier   Part id | slug
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function editImageAction(Request $request, $courseId, $partId)
-    {
-        $metadataName = MetadataResource::COURSE_METADATA_IMAGE;
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromPart(
-            $courseId,
-            $partId
-        );
-
-        $form = $this->createFormBuilder($metadatas)
-            ->add($metadataName, 'url')
-            ->getForm();
-
-        $form = $this->processPartEdit(
-            $request,
-            $form,
-            $courseId,
-            $partId,
-            $metadatas,
-            $metadataName
-        );
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/MetadataByPart/Component:editImage.html.twig',
-            array(
-                'courseIdentifier' => $courseId,
-                'partIdentifier'   => $partId,
-                'form'             => $form->createView()
-            )
-        );
-    }
+//    /**
+//     * Edit a part image
+//     *
+//     * @param Request          $request          Request
+//     * @param integer | string $courseIdentifier Course id | slug
+//     * @param integer | string $partIdentifier   Part id | slug
+//     *
+//     * @return \Symfony\Component\HttpFoundation\Response
+//     */
+//    public function editImageAction(Request $request, $courseId, $partId)
+//    {
+//        $metadataName = MetadataResource::COURSE_METADATA_IMAGE;
+//        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromPart(
+//            $courseId,
+//            $partId
+//        );
+//
+//        $form = $this->createFormBuilder($metadatas)
+//            ->add($metadataName, 'url')
+//            ->getForm();
+//
+//        $form = $this->processPartEdit(
+//            $request,
+//            $form,
+//            $courseId,
+//            $partId,
+//            $metadatas,
+//            $metadataName
+//        );
+//
+//        return $this->render(
+//            'SimpleITClaireAppBundle:Course/MetadataByPart/Component:editImage.html.twig',
+//            array(
+//                'courseIdentifier' => $courseId,
+//                'partIdentifier'   => $partId,
+//                'form'             => $form->createView()
+//            )
+//        );
+//    }
 
     /**
      * View a course difficulty
@@ -307,69 +304,69 @@ class MetadataByPartController extends AbstractMetadataController
         );
     }
 
-    /**
-     * Edit a part duration
-     *
-     * @param Request          $request          Request
-     * @param integer | string $courseIdentifier Course id | slug
-     * @param integer | string $partIdentifier   Part id | slug
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function editDurationAction(Request $request, $courseIdentifier, $partIdentifier)
-    {
-        $metadataName = MetadataResource::COURSE_METADATA_TIME_REQUIRED;
-        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromPart(
-            $courseIdentifier,
-            $partIdentifier
-        );
-
-        if (isset($metadatas[$metadataName])) {
-            $currentDuration = new \DateInterval($metadatas[$metadataName]);
-            $durationUnits = array(
-                'days'    => $currentDuration->d,
-                'hours'   => $currentDuration->h,
-                'minutes' => $currentDuration->i
-            );
-        } else {
-            $currentDuration = new \DateInterval('P0D');
-            $durationUnits = array();
-        }
-
-        $form = $this->createFormBuilder($durationUnits)
-            ->add('days', null, array('required' => false))
-            ->add('hours', null, array('required' => false))
-            ->add('minutes', null, array('required' => false))
-            ->getForm();
-
-        if (RequestUtils::METHOD_POST == $request->getMethod()) {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $durationUnits = $form->getData();
-                $duration = new \DateInterval('P0D');
-                $duration->d = $durationUnits['days'];
-                $duration->m = $durationUnits['hours'];
-                $duration->i = $durationUnits['minutes'];
-
-                if ($duration != $currentDuration) {
-                    $this->get('simple_it.claire.course.metadata')->saveFromPart(
-                        $courseIdentifier,
-                        $partIdentifier,
-                        array($metadataName => DateUtils::DateIntervalToString($duration))
-                    );
-                }
-            }
-        }
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/MetadataByPart/Component:editDuration.html.twig',
-            array(
-                'courseIdentifier' => $courseIdentifier,
-                'partIdentifier'   => $partIdentifier,
-                'form'             => $form->createView()
-            )
-        );
-    }
+//    /**
+//     * Edit a part duration
+//     *
+//     * @param Request          $request          Request
+//     * @param integer | string $courseIdentifier Course id | slug
+//     * @param integer | string $partIdentifier   Part id | slug
+//     *
+//     * @return \Symfony\Component\HttpFoundation\Response
+//     */
+//    public function editDurationAction(Request $request, $courseIdentifier, $partIdentifier)
+//    {
+//        $metadataName = MetadataResource::COURSE_METADATA_TIME_REQUIRED;
+//        $metadatas = $this->get('simple_it.claire.course.metadata')->getAllFromPart(
+//            $courseIdentifier,
+//            $partIdentifier
+//        );
+//
+//        if (isset($metadatas[$metadataName])) {
+//            $currentDuration = new \DateInterval($metadatas[$metadataName]);
+//            $durationUnits = array(
+//                'days'    => $currentDuration->d,
+//                'hours'   => $currentDuration->h,
+//                'minutes' => $currentDuration->i
+//            );
+//        } else {
+//            $currentDuration = new \DateInterval('P0D');
+//            $durationUnits = array();
+//        }
+//
+//        $form = $this->createFormBuilder($durationUnits)
+//            ->add('days', null, array('required' => false))
+//            ->add('hours', null, array('required' => false))
+//            ->add('minutes', null, array('required' => false))
+//            ->getForm();
+//
+//        if (RequestUtils::METHOD_POST == $request->getMethod()) {
+//            $form->bind($request);
+//            if ($form->isValid()) {
+//                $durationUnits = $form->getData();
+//                $duration = new \DateInterval('P0D');
+//                $duration->d = $durationUnits['days'];
+//                $duration->m = $durationUnits['hours'];
+//                $duration->i = $durationUnits['minutes'];
+//
+//                if ($duration != $currentDuration) {
+//                    $this->get('simple_it.claire.course.metadata')->saveFromPart(
+//                        $courseIdentifier,
+//                        $partIdentifier,
+//                        array($metadataName => DateUtils::DateIntervalToString($duration))
+//                    );
+//                }
+//            }
+//        }
+//
+//        return $this->render(
+//            'SimpleITClaireAppBundle:Course/MetadataByPart/Component:editDuration.html.twig',
+//            array(
+//                'courseIdentifier' => $courseIdentifier,
+//                'partIdentifier'   => $partIdentifier,
+//                'form'             => $form->createView()
+//            )
+//        );
+//    }
 
     /**
      * View a course duration
