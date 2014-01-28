@@ -2,9 +2,15 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\AssociatedContent\Component;
 
+use OC\CLAIRE\BusinessRules\Exceptions\Course\Course\CourseNotFoundException;
+use OC\CLAIRE\BusinessRules\Responders\AssociatedContent\Category\GetDraftCourseCategoryResponse;
+use
+    OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\CategoryByCourse\DTO\GetDraftCourseCategoryRequestDTO;
+use
+    OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\CategoryByCourse\DTO\SaveCourseCategoryRequestDTO;
 use SimpleIT\AppBundle\Controller\AppController;
-use SimpleIT\ClaireAppBundle\Form\Type\AssociatedContent\CategoryByCourseType;
-use SimpleIT\ApiResourcesBundle\AssociatedContent\CategoryResource;
+use SimpleIT\ClaireAppBundle\Form\AssociatedContent\Model\CategoryByCourseModel;
+use SimpleIT\ClaireAppBundle\Form\AssociatedContent\Type\CategoryByCourseType;
 use SimpleIT\Utils\HTTP;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,68 +18,55 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class CategoryByCourseController
- *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
 class CategoryByCourseController extends AppController
 {
-    /**
-     * Add a category to a course (GET)
-     *
-     * @param int $courseId Course id
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function createViewAction($courseId)
+    public function editViewAction($courseId)
     {
         try {
-            $category = $this->get('simple_it.claire.associated_content.category')->getByCourse(
-                $courseId
+            /** @var GetDraftCourseCategoryResponse $ucResponse */
+            $ucResponse = $this->get('oc.claire.use_cases.associated_content_use_case_factory')
+                ->make('GetDraftCourseCategory')
+                ->execute(new GetDraftCourseCategoryRequestDTO($courseId));
+
+            $form = $this->createForm(
+                new CategoryByCourseType(),
+                new CategoryByCourseModel($ucResponse->getCategoryId())
             );
-        } catch (NotFoundHttpException $nfhe) {
-            $category = null;
+
+            return $this->render(
+                'SimpleITClaireAppBundle:AssociatedContent/Category/partial:editByCourse.html.twig',
+                array(
+                    'actionUrl' => $this->generateUrl(
+                            'simple_it_claire_associated_content_component_category_category_by_course_edit',
+                            array('courseId' => $courseId)
+                        ),
+                    'form'      => $form->createView()
+                )
+            );
+
+        } catch (CourseNotFoundException $cnfe) {
+            throw new NotFoundHttpException();
         }
-
-        $form = $this->createForm(new CategoryByCourseType(), $category);
-
-        return $this->render(
-            'SimpleITClaireAppBundle:AssociatedContent/Category/Component:editByCourse.html.twig',
-            array(
-                'courseId' => $courseId,
-                'form'     => $form->createView(),
-                'action'   =>
-                    $this->generateUrl(
-                        'simple_it_claire_component_associated_content_category_category_by_course_edit',
-                        array('courseId' => $courseId)
-                    )
-            )
-        );
     }
 
-    /**
-     * Add a category to a course
-     *
-     * @param Request $request  Request
-     * @param int     $courseId Course id
-     *
-     * @return JsonResponse
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     */
-    public function createAction(Request $request, $courseId)
+    public function editAction(Request $request, $courseId)
     {
-        $category = new CategoryResource();
-        $form = $this->createForm(new CategoryByCourseType(), $category);
+        $form = $this->createForm(
+            new CategoryByCourseType(),
+            $category = new CategoryByCourseModel()
+        );
         $form->bind($request);
-        if ($this->get('validator')->validate($form->getData())) {
-            $category = $this->get('simple_it.claire.associated_content.category')->addToCourse(
-                $category->getId(),
-                $courseId
-            );
-
-            return new JsonResponse($category);
+        if ($form->isValid()) {
+            $this->get('oc.claire.use_cases.associated_content_use_case_factory')
+                ->make('SaveCourseCategory')->execute(
+                    new SaveCourseCategoryRequestDTO($courseId, $category->getCategoryId())
+                );
         } else {
             throw new HttpException(HTTP::STATUS_CODE_BAD_REQUEST, $form->getErrors());
         }
+
+        return new JsonResponse();
     }
 }

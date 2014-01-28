@@ -1,5 +1,5 @@
 {% trans_default_domain "course" %}
-{% if license is defined %}
+{% if license is defined and license != 'Default' %}
     {{ 'course.license' | trans }}
 {{ license | license | raw }}
 {% endif %}

@@ -10,6 +10,7 @@ use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCategoryRepositor
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByCourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagByPartRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\TagRepository;
+use SimpleIT\ClaireAppBundle\Services\Course\CourseService;
 use SimpleIT\ClaireAppBundle\Services\Course\PartService;
 use SimpleIT\Utils\Collection\CollectionInformation;
 
@@ -21,7 +22,7 @@ use SimpleIT\Utils\Collection\CollectionInformation;
 class TagService
 {
     /**
-     * @var  TagRepository
+     * @var TagRepository
      */
     private $tagRepository;
 
@@ -31,7 +32,7 @@ class TagService
     private $tagByCategoryRepository;
 
     /**
-     * @var  TagByCourseRepository
+     * @var TagByCourseRepository
      */
     private $tagByCourseRepository;
 
@@ -49,6 +50,11 @@ class TagService
      * @var  TagByPartRepository
      */
     private $tagByPartRepository;
+
+    /**
+     * @var CourseService
+     */
+    private $courseService;
 
     /**
      * @var  PartService
@@ -70,35 +76,35 @@ class TagService
     }
 
     /**
-     * Get a list of tag of a category
-     *
-     * @param int | string          $categoryIdentifier    Category id | slug
-     * @param CollectionInformation $collectionInformation Collection information
-     *
-     * @return \SimpleIT\Utils\Collection\PaginatedCollection
+     * @deprecated
+     * @return array
      */
-    public function getAllByCategory(
-        $categoryIdentifier,
-        CollectionInformation $collectionInformation = null
-    )
+    public function getAllByCourseToAdd($courseId, $status)
     {
-        return $this->tagByCategoryRepository->findAll($categoryIdentifier, $collectionInformation);
-    }
+        $course = $this->courseService->getByStatus(
+            $courseId,
+            $status
+        );
+        $courseTags = $this->getAllByCourseToEdit(
+            $course->getId(),
+            $status,
+            new CollectionInformation()
+        );
 
-    /**
-     * Get all the tags of a course
-     *
-     * @param int | string          $courseIdentifier      Course id | slug
-     * @param CollectionInformation $collectionInformation Collection information
-     *
-     * @return \SimpleIT\Utils\Collection\PaginatedCollection
-     */
-    public function getAllByCourse(
-        $courseIdentifier,
-        CollectionInformation $collectionInformation = null
-    )
-    {
-        return $this->tagByCourseRepository->findAll($courseIdentifier, $collectionInformation);
+        $tags = $this->getAllByCategory($course->getCategory()->getId());
+
+        $outputCourseTags = array();
+        /** @var TagResource $tag */
+        foreach ($courseTags as $tag) {
+            $outputCourseTags[$tag->getId()] = $tag->getName();
+        }
+        $outputTags = array();
+        /** @var TagResource $tag */
+        foreach ($tags as $tag) {
+            $outputTags[$tag->getId()] = $tag->getName();
+        }
+
+        return array_diff($outputTags, $outputCourseTags);
     }
 
     /**
@@ -116,9 +122,40 @@ class TagService
         CollectionInformation $collectionInformation = null
     )
     {
+        if ($collectionInformation === null) {
+            $collectionInformation = new CollectionInformation();
+        }
         $collectionInformation->addFilter(CourseResource::STATUS, $status);
 
-        return $this->tagByCourseRepository->findAll($courseId, $collectionInformation);
+        return $this->tagByCourseRepository->findAllToEdit($courseId, $collectionInformation);
+    }
+
+    /**
+     * Get a list of tag of a category
+     *
+     * @param int | string          $categoryIdentifier    Category id | slug
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
+     */
+    public function getAllByCategory(
+        $categoryIdentifier,
+        CollectionInformation $collectionInformation = null
+    )
+    {
+        return $this->tagByCategoryRepository->findAll($categoryIdentifier, $collectionInformation);
+    }
+
+    /**
+     * Get a tag
+     *
+     * @param int | string $tagIdentifier Tag id | slug
+     *
+     * @return TagResource
+     */
+    public function get($tagIdentifier)
+    {
+        return $this->tagRepository->find($tagIdentifier);
     }
 
     /**
@@ -166,6 +203,22 @@ class TagService
     }
 
     /**
+     * Get all the tags of a course
+     *
+     * @param int | string          $courseIdentifier      Course id | slug
+     * @param CollectionInformation $collectionInformation Collection information
+     *
+     * @return \SimpleIT\Utils\Collection\PaginatedCollection
+     */
+    public function getAllByCourse(
+        $courseIdentifier,
+        CollectionInformation $collectionInformation = null
+    )
+    {
+        return $this->tagByCourseRepository->findAll($courseIdentifier, $collectionInformation);
+    }
+
+    /**
      * Return recommended courses
      *
      * @param int | string          $tagIdentifier         Tag id | slug
@@ -204,15 +257,23 @@ class TagService
     }
 
     /**
-     * Get a tag
+     * Add tags to a course
      *
-     * @param int | string $tagIdentifier Tag id | slug
+     * @param int   $courseId Course id
+     * @param array $tagIds   Tag ids
      *
-     * @return TagResource
+     * @return array
      */
-    public function get($tagIdentifier)
+    public function addTagsToCourse($courseId, array $tagIds)
     {
-        return $this->tagRepository->find($tagIdentifier);
+        $tags = $this->tagByCourseRepository->update($courseId, $tagIds);
+        $outputTags = array();
+        /** @var TagResource $tag */
+        foreach ($tags as $tag) {
+            $outputTags[$tag->getId()] = $tag->getName();
+        }
+
+        return $outputTags;
     }
 
     /**
@@ -284,4 +345,15 @@ class TagService
     {
         $this->partService = $partService;
     }
+
+    /**
+     * Set Course Service
+     *
+     * @param CourseService $courseService
+     */
+    public function setCourseService(CourseService $courseService)
+    {
+        $this->courseService = $courseService;
+    }
+
 }

@@ -82,7 +82,7 @@ class SecurityGroupBySecurityUserRepository extends AppRepository
     /**
      * Disassociate all group from an user
      *
-     * @param int $userId  User id
+     * @param int $userId User id
      */
     public function deleteAll($userId)
     {

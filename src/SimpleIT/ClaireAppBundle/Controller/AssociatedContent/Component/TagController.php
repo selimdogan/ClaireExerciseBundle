@@ -1,11 +1,15 @@
 <?php
 
-
 namespace SimpleIT\ClaireAppBundle\Controller\AssociatedContent\Component;
 
+use SimpleIT\ApiResourcesBundle\AssociatedContent\TagResource;
 use SimpleIT\AppBundle\Controller\AppController;
+use SimpleIT\ClaireAppBundle\ViewModels\AssociatedContent\Tag\TagAssembler;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\AppBundle\Annotation\Cache;
+use SimpleIT\Utils\FormatUtils;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class TagController
@@ -35,6 +39,26 @@ class TagController extends AppController
         );
     }
 
+    public function searchListAction(Request $request, CollectionInformation $collectionInformation)
+    {
+        $tags = $this->get('simple_it.claire.associated_content.tag')->getAll(
+            $collectionInformation
+        );
+        $formattedTags = array();
+        /** @var TagResource $tag */
+        foreach ($tags as $tag) {
+            $formattedTags[$tag->getId()] = $tag->getName();
+        }
+        if ($request->isXmlHttpRequest()) {
+            return new Response(
+                $this->get('serializer')->serialize(
+                    $formattedTags,
+                    FormatUtils::JSON
+                )
+            );
+        }
+    }
+
     /**
      * View a tag
      *
@@ -43,15 +67,21 @@ class TagController extends AppController
      * @return \Symfony\Component\HttpFoundation\Response
      * @cache
      */
-    public function viewAction($tagIdentifier)
+    public function viewAction($tagIdentifier, $categoryIdentifier)
     {
+        /** @var TagResource $tag */
         $tag = $this->get('simple_it.claire.associated_content.tag')->get(
             $tagIdentifier
         );
 
+        $category = $this->get('simple_it.claire.associated_content.category')->get($categoryIdentifier);
+
+        $assembler = new TagAssembler();
+        $vm = $assembler->writeTag($tag, $category);
+
         return $this->render(
             'SimpleITClaireAppBundle:AssociatedContent/Tag/Component:view.html.twig',
-            array('tag' => $tag)
+            array('vm' => $vm)
         );
     }
 
@@ -104,9 +134,9 @@ class TagController extends AppController
         return $this->render(
             'SimpleITClaireAppBundle:Course/Course/Component:searchList.html.twig',
             array(
-                'courses'               => $courses,
+                'courses' => $courses,
                 'collectionInformation' => $collectionInformation,
-                'paginationUrl'         => $paginationUrl
+                'paginationUrl' => $paginationUrl
             )
         );
     }

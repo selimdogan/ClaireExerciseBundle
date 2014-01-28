@@ -1,11 +1,9 @@
 <?php
 
-
 namespace SimpleIT\ClaireAppBundle\Twig;
 
 use SimpleIT\ApiResourcesBundle\Course\MetadataResource;
 use SimpleIT\Utils\ArrayUtils;
-use SimpleIT\Utils\StringUtils;
 
 /**
  * Class extension
@@ -79,6 +77,7 @@ class ClaireAppExtension extends \Twig_Extension
         if (!is_null($license)) {
             $content = '<i class="icon-cc" title="CC"></i>';
             $licenseArray = explode('-', $license);
+
             foreach ($licenseArray as $partLicense) {
                 switch ($partLicense) {
                     case MetadataResource::LICENSE_CC_BY:
@@ -88,7 +87,10 @@ class ClaireAppExtension extends \Twig_Extension
                         $content .= '<i class="icon-ccnc" title="NC"></i>';
                         break;
                     case MetadataResource::LICENSE_CC_SA:
-                        $content .= '<i class="icon-ccnd" title="SA"></i>';
+                        $content .= '<i class="icon-ccsa" title="SA"></i>';
+                        break;
+                    case MetadataResource::LICENSE_CC_ND:
+                        $content .= '<i class="icon-ccnd" title="ND"></i>';
                         break;
                     default:
                         break;

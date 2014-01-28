@@ -1,0 +1,5 @@
+simple_it_claire_associated_content_search_tag:
+    pattern: /search
+    defaults: {_controller: SimpleITClaireAppBundle:AssociatedContent/Component/Tag:searchList}
+    requirements:
+        _method: GET
