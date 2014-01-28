@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "760590e8deb107087c65962d7a193af5",
+    "hash": "3daddd553725daf32c43021e062b71bb",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1018,11 +1018,11 @@
         },
         {
             "name": "simpleit/api-resources-bundle",
-            "version": "dev-SDZ-858_Difficulty_RK",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://simpleit-zbot-readonly:nWCWJe04ASZ9ZriSrzfp@github.com/simpleit/ApiResourcesBundle.git",
-                "reference": "0eeb710ec993f11e0255fce46224ce3e60aef15a"
+                "reference": "a4281714005fbe267c558ee0b40bb3c39ca5f36e"
             },
             "require": {
                 "php": ">=5.3.3",
@@ -1050,7 +1050,7 @@
                 "api",
                 "resources"
             ],
-            "time": "2014-01-16 10:51:31"
+            "time": "2014-01-28 13:19:29"
         },
         {
             "name": "simpleit/app-bundle",

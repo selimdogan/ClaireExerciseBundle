@@ -22,7 +22,7 @@
         "symfony/form": "~2.1.13",
         "jms/serializer-bundle": "0.13.x-dev",
         "simpleit/php-utils": "1.1.x-dev",
-        "simpleit/api-resources-bundle": "dev-SDZ-858_Difficulty_RK@dev",
+        "simpleit/api-resources-bundle": "dev-master",
         "jms/security-extra-bundle": "1.5.*"
     },
     "require-dev": {
