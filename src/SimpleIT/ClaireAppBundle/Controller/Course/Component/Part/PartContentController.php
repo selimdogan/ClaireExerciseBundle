@@ -5,6 +5,7 @@ namespace SimpleIT\ClaireAppBundle\Controller\Course\Component\Part;
 use OC\CLAIRE\BusinessRules\Responders\Course\PartContent\GetPartContentResponse;
 use OC\CLAIRE\BusinessRules\Responders\Course\PartContent\SavePartContentResponse;
 use OC\CLAIRE\BusinessRules\UseCases\Course\Part\DTO\GetDraftPartRequestDTO;
+use OC\CLAIRE\BusinessRules\UseCases\Course\PartContent\DTO\GetPartContentResponseDTO;
 use OC\CLAIRE\BusinessRules\UseCases\Course\PartContent\DTO\SavePartContentRequestDTO;
 use SimpleIT\AppBundle\Controller\AppController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,11 +18,12 @@ class PartContentController extends AppController
 {
     public function editViewAction($courseId, $partId)
     {
-        /** @var GetPartContentResponse $ucResponse */
-        $ucResponse =
-            $this->get('oc.claire.use_cases.part_use_case_factory')
-                ->make('GetDraftPartContent')
-                ->execute(new GetDraftPartRequestDTO($courseId, $partId));
+        $ucResponse = new GetPartContentResponseDTO($this->get('simple_it.claire.course.repository.part_content')->findDraftForEdition($courseId, $partId));
+//        /** @var GetPartContentResponse $ucResponse */
+//        $ucResponse =
+//            $this->get('oc.claire.use_cases.part_use_case_factory')
+//                ->make('GetDraftPartContent')
+//                ->execute(new GetDraftPartRequestDTO($courseId, $partId));
 
         return $this->render(
             'SimpleITClaireAppBundle:Course/Common/partial:editContent.html.twig',
