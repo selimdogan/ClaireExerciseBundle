@@ -318,96 +318,96 @@ class MetadataService
             $metadatas
         );
     }
-
-    /**
-     * Add metadatas to a part
-     *
-     * @param string $courseIdentifier Course id | slug
-     * @param string $partIdentifier   Part id | slug
-     * @param array  $metadatas        Metadatas (key => value)
-     *
-     * @return string
-     */
-    public function addToPart($courseIdentifier, $partIdentifier, $metadatas)
-    {
-        return $this->metadataByPartRepository->insert(
-            $courseIdentifier,
-            $partIdentifier,
-            $metadatas
-        );
-    }
-
-    /**
-     * Save metadatas from a course
-     *
-     * @param string $courseIdentifier Course id | slug
-     * @param array  $metadatas        Metadatas (key => value)
-     *
-     * @return string
-     */
-    public function saveFromCourse(
-        $courseIdentifier,
-        $metadatas
-    )
-    {
-        $collectionInformation = new CollectionInformation();
-        $collectionInformation->addFilter(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
-        $metadatasToUpdate = $this->metadataByCourseRepository->findAll(
-            $courseIdentifier,
-            $collectionInformation
-        );
-        $parameters = array('status' => $collectionInformation->getFilter(CourseResource::STATUS));
-        foreach ($metadatas as $key => $value) {
-            if (array_key_exists($key, $metadatasToUpdate)) {
-                $metadatasToUpdate = $this->metadataByCourseRepository->update(
-                    $courseIdentifier,
-                    array($key => $value),
-                    $parameters
-                );
-            } else {
-                $metadatasToUpdate = $this->metadataByCourseRepository->insert(
-                    $courseIdentifier,
-                    array($key => $value),
-                    $parameters
-                );
-            }
-        }
-
-        return $metadatasToUpdate;
-    }
-
-    /**
-     * Save metadatas from a part
-     *
-     * @param string $courseIdentifier Course id | slug
-     * @param string $partIdentifier   Part id | slug
-     * @param array  $metadatas        Metadatas (key => value)
-     *
-     * @return string
-     */
-    public function saveFromPart($courseIdentifier, $partIdentifier, $metadatas)
-    {
-        $metadatasToUpdate = $this->metadataByPartRepository->findAll(
-            $courseIdentifier,
-            $partIdentifier
-        );
-        foreach ($metadatas as $key => $value) {
-            if (array_key_exists($key, $metadatasToUpdate)) {
-                $metadatasToUpdate = $this->metadataByPartRepository->update(
-                    $courseIdentifier,
-                    $partIdentifier,
-                    array($key => $value)
-                );
-            } else {
-                $metadatasToUpdate = $this->metadataByPartRepository->insert(
-                    $courseIdentifier,
-                    $partIdentifier,
-                    array($key => $value)
-                );
-            }
-        }
-
-        return $metadatasToUpdate;
-    }
+//
+//    /**
+//     * Add metadatas to a part
+//     *
+//     * @param string $courseIdentifier Course id | slug
+//     * @param string $partIdentifier   Part id | slug
+//     * @param array  $metadatas        Metadatas (key => value)
+//     *
+//     * @return string
+//     */
+//    public function addToPart($courseIdentifier, $partIdentifier, $metadatas)
+//    {
+//        return $this->metadataByPartRepository->insert(
+//            $courseIdentifier,
+//            $partIdentifier,
+//            $metadatas
+//        );
+//    }
+//
+//    /**
+//     * Save metadatas from a course
+//     *
+//     * @param string $courseIdentifier Course id | slug
+//     * @param array  $metadatas        Metadatas (key => value)
+//     *
+//     * @return string
+//     */
+//    public function saveFromCourse(
+//        $courseIdentifier,
+//        $metadatas
+//    )
+//    {
+//        $collectionInformation = new CollectionInformation();
+//        $collectionInformation->addFilter(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
+//        $metadatasToUpdate = $this->metadataByCourseRepository->findAll(
+//            $courseIdentifier,
+//            $collectionInformation
+//        );
+//        $parameters = array('status' => $collectionInformation->getFilter(CourseResource::STATUS));
+//        foreach ($metadatas as $key => $value) {
+//            if (array_key_exists($key, $metadatasToUpdate)) {
+//                $metadatasToUpdate = $this->metadataByCourseRepository->update(
+//                    $courseIdentifier,
+//                    array($key => $value),
+//                    $parameters
+//                );
+//            } else {
+//                $metadatasToUpdate = $this->metadataByCourseRepository->insert(
+//                    $courseIdentifier,
+//                    array($key => $value),
+//                    $parameters
+//                );
+//            }
+//        }
+//
+//        return $metadatasToUpdate;
+//    }
+//
+//    /**
+//     * Save metadatas from a part
+//     *
+//     * @param string $courseIdentifier Course id | slug
+//     * @param string $partIdentifier   Part id | slug
+//     * @param array  $metadatas        Metadatas (key => value)
+//     *
+//     * @return string
+//     */
+//    public function saveFromPart($courseIdentifier, $partIdentifier, $metadatas)
+//    {
+//        $metadatasToUpdate = $this->metadataByPartRepository->findAll(
+//            $courseIdentifier,
+//            $partIdentifier
+//        );
+//        foreach ($metadatas as $key => $value) {
+//            if (array_key_exists($key, $metadatasToUpdate)) {
+//                $metadatasToUpdate = $this->metadataByPartRepository->update(
+//                    $courseIdentifier,
+//                    $partIdentifier,
+//                    array($key => $value)
+//                );
+//            } else {
+//                $metadatasToUpdate = $this->metadataByPartRepository->insert(
+//                    $courseIdentifier,
+//                    $partIdentifier,
+//                    array($key => $value)
+//                );
+//            }
+//        }
+//
+//        return $metadatasToUpdate;
+//    }
 
 }

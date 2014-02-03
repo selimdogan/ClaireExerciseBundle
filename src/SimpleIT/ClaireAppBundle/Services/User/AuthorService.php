@@ -1,6 +1,5 @@
 <?php
 
-
 namespace SimpleIT\ClaireAppBundle\Services\User;
 
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
@@ -119,9 +118,10 @@ class AuthorService
     public function getAllByCourseToEdit(
         $courseId,
         $status,
-        CollectionInformation $collectionInformation
+        CollectionInformation $collectionInformation = null
     )
     {
+        $collectionInformation = new CollectionInformation();
         $collectionInformation->addFilter(CourseResource::STATUS, $status);
 
         return $this->authorByCourseRepository->findAllToEdit($courseId, $collectionInformation);

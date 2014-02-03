@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="oc.claire.use_cases.course_use_case_factory.class">SimpleIT\ClaireAppBundle\UseCaseFactory\CourseUseCaseFactoryImpl</parameter>
+        <parameter key="oc.claire.use_cases.part_use_case_factory.class">SimpleIT\ClaireAppBundle\UseCaseFactory\PartUseCaseFactoryImpl</parameter>
+        <parameter key="oc.claire.use_cases.associated_content_use_case_factory.class">SimpleIT\ClaireAppBundle\UseCaseFactory\AssociatedContentUseCaseFactoryImpl</parameter>
+    </parameters>
+    <services>
+        <service id="oc.claire.use_cases.course_use_case_factory" class="%oc.claire.use_cases.course_use_case_factory.class%">
+            <call method="setInjector">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+        <service id="oc.claire.use_cases.part_use_case_factory" class="%oc.claire.use_cases.part_use_case_factory.class%">
+            <call method="setInjector">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+        <service id="oc.claire.use_cases.associated_content_use_case_factory" class="%oc.claire.use_cases.associated_content_use_case_factory.class%">
+            <call method="setInjector">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+    </services>
+</container>

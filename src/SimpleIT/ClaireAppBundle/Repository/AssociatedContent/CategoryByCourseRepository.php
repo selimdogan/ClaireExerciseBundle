@@ -2,6 +2,8 @@
 
 namespace SimpleIT\ClaireAppBundle\Repository\AssociatedContent;
 
+use OC\CLAIRE\BusinessRules\Entities\AssociatedContent\Category\Category;
+use OC\CLAIRE\BusinessRules\Gateways\AssociatedContent\Category\CategoryByCourseGateway;
 use SimpleIT\ApiResourcesBundle\AssociatedContent\CategoryResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\AppBundle\Annotation\Cache;
@@ -11,7 +13,7 @@ use SimpleIT\AppBundle\Annotation\Cache;
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class CategoryByCourseRepository extends AppRepository
+class CategoryByCourseRepository extends AppRepository implements CategoryByCourseGateway
 {
     /**
      * @type string
@@ -64,4 +66,21 @@ class CategoryByCourseRepository extends AppRepository
             array('courseIdentifier' => $courseIdentifier)
         );
     }
+
+    /**
+     * @return Category
+     */
+    public function findDraft($courseId)
+    {
+        return parent::findResource(array('courseIdentifier' => $courseId));
+    }
+
+    public function update($categoryId, $courseId)
+    {
+        return parent::insertResource(
+            array($categoryId),
+            array('courseIdentifier' => $courseId)
+        );
+    }
+
 }

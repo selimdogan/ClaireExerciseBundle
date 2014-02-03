@@ -119,9 +119,12 @@ class TagService
     public function getAllByCourseToEdit(
         $courseId,
         $status,
-        CollectionInformation $collectionInformation
+        CollectionInformation $collectionInformation = null
     )
     {
+        if ($collectionInformation === null) {
+            $collectionInformation = new CollectionInformation();
+        }
         $collectionInformation->addFilter(CourseResource::STATUS, $status);
 
         return $this->tagByCourseRepository->findAllToEdit($courseId, $collectionInformation);
@@ -269,6 +272,7 @@ class TagService
         foreach ($tags as $tag) {
             $outputTags[$tag->getId()] = $tag->getName();
         }
+
         return $outputTags;
     }
 

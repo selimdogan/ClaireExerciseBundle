@@ -32,7 +32,7 @@ simple_it_claire_component_part_tag:
 
 simple_it_claire_component_part:
     resource: "@SimpleITClaireAppBundle/Resources/config/routing/course/component_part.yml"
-    prefix:   /
+    prefix:   /components/courses
 
 simple_it_claire_ui_kit:
     pattern: /claire/uikit

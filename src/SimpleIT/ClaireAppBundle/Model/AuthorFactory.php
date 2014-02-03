@@ -53,6 +53,7 @@ class AuthorFactory
             $author = self::create($authorResource);
             $authors[] = $author;
         }
+
         return $authors;
     }
 }

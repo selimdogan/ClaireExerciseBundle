@@ -165,7 +165,6 @@ class Tag
         $this->description = $description;
     }
 
-
     /**
      * Getter for $category
      *

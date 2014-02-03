@@ -37,77 +37,77 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PartController extends AppController
 {
-    /**
-     * @param int|string $courseIdentifier Course id | slug
-     * @param int|string $partIdentifier   Part id | slug
-     *
-     * @return Response
-     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
-     */
-    public function viewAction($courseIdentifier, $partIdentifier)
-    {
-        $part = $this->get('simple_it.claire.course.part')->get($courseIdentifier, $partIdentifier);
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/Part/Component:view.html.twig',
-            array('part' => $part)
-        );
-    }
-
-    /**
-     * Edit a part
-     *
-     * @param Request      $request          Request
-     * @param int | string $courseIdentifier Course id | slug
-     * @param int | string $partIdentifier   Part id | slug
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function editAction(Request $request, $courseId, $partId)
-    {
-        $part = new PartResource();
-        if (RequestUtils::METHOD_GET == $request->getMethod()) {
-            $part = $this->get('simple_it.claire.course.part')->getByStatus(
-                $courseId,
-                $partId,
-                CourseResource::STATUS_DRAFT
-            );
-        }
-
-        $form = $this->createFormBuilder(
-                        $part,
-                        array(
-                            'validation_groups' => array('edit')
-                        )
-        )
-            ->add('title')
-            ->getForm();
-
-        if (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()) {
-
-            $form->bind($request);
-            if ($form->isValid()) {
-                $part = $this->get('simple_it.claire.course.part')->save(
-                    $courseId,
-                    $partId,
-                    $part,
-                    $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
-                );
-            }
-
-            return new AppResponse($part);
-        }
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/Part/Component:edit.html.twig',
-            array(
-                'courseId' => $courseId,
-                'partId'   => $partId,
-                'part'     => $part,
-                'form'     => $form->createView()
-            )
-        );
-    }
+//    /**
+//     * @param int|string $courseIdentifier Course id | slug
+//     * @param int|string $partIdentifier   Part id | slug
+//     *
+//     * @return Response
+//     * @Cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
+//     */
+//    public function viewAction($courseIdentifier, $partIdentifier)
+//    {
+//        $part = $this->get('simple_it.claire.course.part')->get($courseIdentifier, $partIdentifier);
+//
+//        return $this->render(
+//            'SimpleITClaireAppBundle:Course/Part/Component:view.html.twig',
+//            array('part' => $part)
+//        );
+//    }
+//
+//    /**
+//     * Edit a part
+//     *
+//     * @param Request      $request          Request
+//     * @param int | string $courseIdentifier Course id | slug
+//     * @param int | string $partIdentifier   Part id | slug
+//     *
+//     * @return \Symfony\Component\HttpFoundation\Response
+//     */
+//    public function editAction(Request $request, $courseId, $partId)
+//    {
+//        $part = new PartResource();
+//        if (RequestUtils::METHOD_GET == $request->getMethod()) {
+//            $part = $this->get('simple_it.claire.course.part')->getByStatus(
+//                $courseId,
+//                $partId,
+//                CourseResource::STATUS_DRAFT
+//            );
+//        }
+//
+//        $form = $this->createFormBuilder(
+//                        $part,
+//                        array(
+//                            'validation_groups' => array('edit')
+//                        )
+//        )
+//            ->add('title')
+//            ->getForm();
+//
+//        if (RequestUtils::METHOD_POST == $request->getMethod() && $request->isXmlHttpRequest()) {
+//
+//            $form->bind($request);
+//            if ($form->isValid()) {
+//                $part = $this->get('simple_it.claire.course.part')->save(
+//                    $courseId,
+//                    $partId,
+//                    $part,
+//                    $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+//                );
+//            }
+//
+//            return new AppResponse($part);
+//        }
+//
+//        return $this->render(
+//            'SimpleITClaireAppBundle:Course/Part/Component:edit.html.twig',
+//            array(
+//                'courseId' => $courseId,
+//                'partId'   => $partId,
+//                'part'     => $part,
+//                'form'     => $form->createView()
+//            )
+//        );
+//    }
 
     /**
      * View table of content Medium
@@ -168,13 +168,19 @@ class PartController extends AppController
             $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
         );
 
+        $course = $this->get('simple_it.claire.course.course')->getByStatus(
+            $courseIdentifier,
+            $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+        );
+
         return $this->render(
-            'SimpleITClaireAppBundle:Course/Course/Component:viewTocMedium.html.twig',
+            'SimpleITClaireAppBundle:Course/Course/Component:tocMediumEdit.html.twig',
             array(
                 'toc'                => $toc,
                 'courseIdentifier'   => $courseIdentifier,
                 'categoryIdentifier' => $categoryIdentifier,
-                'displayLevel'       => $displayLevel
+                'displayLevel'       => $displayLevel,
+                'course'=>$course
             )
         );
     }
@@ -288,46 +294,46 @@ class PartController extends AppController
         );
     }
 
-    /**
-     * Edit Dashboard
-     *
-     * @param Request $request  Request
-     * @param int     $courseId Course id
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function editDashboardAction(Request $request, $courseId, $partId)
-    {
-        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
-        $parameters[CourseResource::STATUS] = $status;
-        $collectionInformation = new CollectionInformation();
-        $collectionInformation->addFilter(CourseResource::STATUS, $status);
-
-        $course = $this->get('simple_it.claire.course.course')->getByStatus(
-            $courseId,
-            $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
-        );
-
-        $part = $this->get('simple_it.claire.course.part')->getByStatus(
-            $courseId,
-            $partId,
-            $status
-        );
-
-        $authors = $this->get('simple_it.claire.user.author')->getAllByCourse(
-            $course->getId(),
-            $collectionInformation
-        );
-
-        return $this->render(
-            'SimpleITClaireAppBundle:Course/Part/Component:editDashboard.html.twig',
-            array(
-                'course'    => $course,
-                'part'      => $part,
-                'metadatas' => array(),
-                'authors'   => $authors,
-                'tags'      => array()
-            )
-        );
-    }
+//    /**
+//     * Edit Dashboard
+//     *
+//     * @param Request $request  Request
+//     * @param int     $courseId Course id
+//     *
+//     * @return \Symfony\Component\HttpFoundation\Response
+//     */
+//    public function editDashboardAction(Request $request, $courseId, $partId)
+//    {
+//        $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT);
+//        $parameters[CourseResource::STATUS] = $status;
+//        $collectionInformation = new CollectionInformation();
+//        $collectionInformation->addFilter(CourseResource::STATUS, $status);
+//
+//        $course = $this->get('simple_it.claire.course.course')->getByStatus(
+//            $courseId,
+//            $status = $request->get(CourseResource::STATUS, CourseResource::STATUS_DRAFT)
+//        );
+//
+//        $part = $this->get('simple_it.claire.course.part')->getByStatus(
+//            $courseId,
+//            $partId,
+//            $status
+//        );
+//
+//        $authors = $this->get('simple_it.claire.user.author')->getAllByCourse(
+//            $course->getId(),
+//            $collectionInformation
+//        );
+//
+//        return $this->render(
+//            'SimpleITClaireAppBundle:Course/Part/Component:editDashboard.html.twig',
+//            array(
+//                'course'    => $course,
+//                'part'      => $part,
+//                'metadatas' => array(),
+//                'authors'   => $authors,
+//                'tags'      => array()
+//            )
+//        );
+//    }
 }

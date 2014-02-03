@@ -1,0 +1,98 @@
+<?xml version="1.0" ?>
+
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <!--PART-->
+        <parameter key="oc.claire.use_cases.course.part.get_draft_part.class">OC\CLAIRE\BusinessRules\UseCases\Course\Part\GetDraftPart</parameter>
+        <parameter key="oc.claire.use_cases.course.part.get_waiting_for_publication_part.class">OC\CLAIRE\BusinessRules\UseCases\Course\Part\GetWaitingForPublicationPart</parameter>
+        <parameter key="oc.claire.use_cases.course.part.get_published_part.class">OC\CLAIRE\BusinessRules\UseCases\Course\Part\GetPublishedPart</parameter>
+        <parameter key="oc.claire.use_cases.course.part.save_part.class">OC\CLAIRE\BusinessRules\UseCases\Course\Part\SavePart</parameter>
+
+        <!--PART CONTENT-->
+        <parameter key="oc.claire.use_cases.course.part.get_draft_part_content.class">OC\CLAIRE\BusinessRules\UseCases\Course\PartContent\GetDraftPartContent</parameter>
+        <parameter key="oc.claire.use_cases.course.part.get_waiting_for_publication_part_content.class">OC\CLAIRE\BusinessRules\UseCases\Course\PartContent\GetWaitingForPublicationPartContent</parameter>
+        <parameter key="oc.claire.use_cases.course.part.get_published_part_content.class">OC\CLAIRE\BusinessRules\UseCases\Course\PartContent\GetPublishedPartContent</parameter>
+        <parameter key="oc.claire.use_cases.course.part.save_part_content.class">OC\CLAIRE\BusinessRules\UseCases\Course\PartContent\SavePartContent</parameter>
+
+        <!--DESCRIPTION-->
+        <parameter key="oc.claire.use_cases.course.part_description.get_draft_part_description.class">OC\CLAIRE\BusinessRules\UseCases\Course\PartDescription\GetDraftPartDescription</parameter>
+        <parameter key="oc.claire.use_cases.course.part_description.save_part_description.class">OC\CLAIRE\BusinessRules\UseCases\Course\PartDescription\SavePartDescription</parameter>
+        <!--DIFFICULTY-->
+        <parameter key="oc.claire.use_cases.course.part_difficulty.get_draft_part_difficulty.class">OC\CLAIRE\BusinessRules\UseCases\Course\PartDifficulty\GetDraftPartDifficulty</parameter>
+        <parameter key="oc.claire.use_cases.course.part_difficulty.save_part_difficulty.class">OC\CLAIRE\BusinessRules\UseCases\Course\PartDifficulty\SavePartDifficulty</parameter>
+    </parameters>
+    <services>
+        <!--PART-->
+        <service id="oc.claire.use_cases.course.part.get_draft_part" class="%oc.claire.use_cases.course.part.get_draft_part.class%">
+            <call method="setPartGateway">
+                <argument type="service" id="simple_it.claire.course.repository.part"/>
+            </call>
+        </service>
+        <service id="oc.claire.use_cases.course.part.get_waiting_for_publication_part" class="%oc.claire.use_cases.course.part.get_waiting_for_publication_part.class%">
+            <call method="setPartGateway">
+                <argument type="service" id="simple_it.claire.course.repository.part"/>
+            </call>
+        </service>
+        <service id="oc.claire.use_cases.course.part.get_published_part" class="%oc.claire.use_cases.course.part.get_published_part.class%">
+            <call method="setPartGateway">
+                <argument type="service" id="simple_it.claire.course.repository.part"/>
+            </call>
+        </service>
+        <service id="oc.claire.use_cases.course.part.save_part" class="%oc.claire.use_cases.course.part.save_part.class%">
+            <call method="setPartGateway">
+                <argument type="service" id="simple_it.claire.course.repository.part"/>
+            </call>
+        </service>
+
+        <!--PART CONTENT-->
+        <service id="oc.claire.use_cases.course.part.get_draft_part_content" class="%oc.claire.use_cases.course.part.get_draft_part_content.class%">
+            <call method="setPartContentGateway">
+                <argument type="service" id="simple_it.claire.course.repository.part_content"/>
+            </call>
+        </service>
+        <service id="oc.claire.use_cases.course.part.get_waiting_for_publication_part_content" class="%oc.claire.use_cases.course.part.get_waiting_for_publication_part_content.class%">
+            <call method="setPartContentGateway">
+                <argument type="service" id="simple_it.claire.course.repository.part_content"/>
+            </call>
+        </service>
+        <service id="oc.claire.use_cases.course.part.get_published_part_content" class="%oc.claire.use_cases.course.part.get_published_part_content.class%">
+            <call method="setPartContentGateway">
+                <argument type="service" id="simple_it.claire.course.repository.part_content"/>
+            </call>
+        </service>
+        <service id="oc.claire.use_cases.course.part.save_part_content" class="%oc.claire.use_cases.course.part.save_part_content.class%">
+            <call method="setPartContentGateway">
+                <argument type="service" id="simple_it.claire.course.repository.part_content"/>
+            </call>
+        </service>
+
+        <!--DESCRIPTION-->
+        <service id="oc.claire.use_cases.course.part_description.get_draft_part_description" class="%oc.claire.use_cases.course.part_description.get_draft_part_description.class%">
+            <call method="setPartGateway">
+                <argument type="service" id="simple_it.claire.course.repository.part"/>
+            </call>
+        </service>
+        <service id="oc.claire.use_cases.course.part_description.save_part_description" class="%oc.claire.use_cases.course.part_description.save_part_description.class%">
+            <call method="setPartGateway">
+                <argument type="service" id="simple_it.claire.course.repository.part"/>
+            </call>
+            <call method="setPartFactory">
+                <argument type="service" id="oc.claire.entity.course.part_factory"/>
+            </call>
+        </service>
+        <!--DIFFICULTY-->
+        <service id="oc.claire.use_cases.course.part_difficulty.get_draft_part_difficulty" class="%oc.claire.use_cases.course.part_difficulty.get_draft_part_difficulty.class%">
+            <call method="setPartGateway">
+                <argument type="service" id="simple_it.claire.course.repository.part"/>
+            </call>
+        </service>
+        <service id="oc.claire.use_cases.course.part_difficulty.save_part_difficulty" class="%oc.claire.use_cases.course.part_difficulty.save_part_difficulty.class%">
+            <call method="setPartGateway">
+                <argument type="service" id="simple_it.claire.course.repository.part"/>
+            </call>
+            <call method="setPartFactory">
+                <argument type="service" id="oc.claire.entity.course.part_factory"/>
+            </call>
+        </service>
+    </services>
+</container>

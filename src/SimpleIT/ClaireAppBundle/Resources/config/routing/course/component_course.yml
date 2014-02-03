@@ -10,13 +10,13 @@ simple_it_claire_course_component_course_search_list:
     requirements:
         _method: GET
 
-simple_it_claire_component_course_course_content_edit:
+simple_it_claire_course_component_course_content_edit:
     pattern: /{courseId}/content
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/CourseContent:edit }
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/CourseContent:edit }
     requirements:
         _method: POST
 
-simple_it_claire_component_course_course_introduction_edit:
+simple_it_claire_course_component_course_introduction_edit:
     pattern: /{courseId}/introduction
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course:editIntroduction }
     requirements:
@@ -24,30 +24,54 @@ simple_it_claire_component_course_course_introduction_edit:
 
 simple_it_claire_component_course_toc_edit:
     pattern: /{courseId}/toc
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/TocByCourse:edit }
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Toc/TocByCourse:edit }
     requirements:
         _method: POST
 
-simple_it_claire_component_course_course_edit:
-    pattern: /{courseId}/edit
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course:edit }
-    requirements:
-            _method: GET|POST
-
-simple_it_claire_component_course_course_display_level_edit:
-    pattern: /{courseId}/displayLevel
-    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course:displayLevelEdit }
-    requirements:
-        _method: POST
-
-simple_it_claire_component_course_status_published:
-    pattern: /{courseId}/publish
-    defaults: { _controller : SimpleITClaireAppBundle:Course/Component/Course:editStatusToPublished }
-    requirements :
-        -method: POST
-
-simple_it_claire_component_course_status_waiting_for_publication:
+simple_it_claire_component_course_submit_to_publication:
     pattern: /{courseId}/submitToPublication
-    defaults: { _controller : SimpleITClaireAppBundle:Course/Component/Course:editStatusToWaitingForPublication }
+    defaults: { _controller : SimpleITClaireAppBundle:Course/Component/Workflow/Workflow:changeCourseToWaitingForPublication }
     requirements :
-        -method: POST
+        _method: GET|POST
+
+simple_it_claire_component_course_publish_draft:
+    pattern: /{courseId}/publish-draft
+    defaults: { _controller : SimpleITClaireAppBundle:Course/Component/Workflow/Workflow:publishDraftCourse }
+    requirements :
+        _method: GET|POST
+
+simple_it_claire_component_course_publish_waiting_for_publication:
+    pattern: /{courseId}/publish-waiting-for-publication
+    defaults: { _controller : SimpleITClaireAppBundle:Course/Component/Workflow/Workflow:publishWaitingForPublicationCourse }
+    requirements :
+        _method: GET|POST
+
+simple_it_claire_course_component_course_title_edit:
+    pattern: /{courseId}/edit
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/CourseTitle:edit }
+    requirements:
+            _method: POST
+
+simple_it_claire_course_component_course_display_level_edit:
+    pattern: /{courseId}/displayLevel
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/DisplayLevel:edit }
+    requirements:
+        _method: POST
+
+simple_it_claire_course_component_course_difficulty_edit:
+    pattern: /{courseId}/difficulty
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/CourseDifficulty:edit }
+    requirements:
+        _method: POST
+
+simple_it_claire_course_component_course_duration_edit:
+    pattern: /{courseId}/duration
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/CourseDuration:edit }
+    requirements:
+        _method: POST
+
+simple_it_claire_course_component_course_description_edit:
+    pattern: /{courseId}/description
+    defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/CourseDescription:edit }
+    requirements:
+        _method: POST
