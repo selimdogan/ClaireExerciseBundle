@@ -135,6 +135,19 @@ class PartContentRepository extends AppRepository implements PartContentGateway
 
     /**
      * @return string
+     * FIXME to remove post view change
+     */
+    public function findDraftForEdition($courseId, $partId)
+    {
+        return parent::findResource(
+            array('courseIdentifier' => $courseId, 'partIdentifier' => $partId),
+            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT, 'edit' => true),
+            FormatUtils::HTML
+        );
+    }
+
+    /**
+     * @return string
      */
     public function findWaitingForPublication($courseId, $partId)
     {
