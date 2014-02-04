@@ -2,6 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Services\Course;
 
+use OC\CLAIRE\BusinessRules\Entities\Course\Course\DisplayLevel;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\ClaireAppBundle\Repository\Course\CourseContentRepository;
@@ -21,7 +22,8 @@ class CourseService
 {
     private static $allowedTypes = array(
         1 => array('course', 'title-1'),
-        2 => array('course', 'title-2', 'title-3')
+        2 => array('course', 'title-2'),
+//        2 => array('course', 'title-2', 'title-3')
     );
 
     /**
@@ -320,7 +322,11 @@ class CourseService
                 $course->getDisplayLevel()
             );
         } else {
-            $pagination = $this->buildPagination($toc, $partId, $course->getDisplayLevel());
+            $displayLevel = $course->getDisplayLevel();
+            if ($status == 'draft' && $displayLevel == DisplayLevel::BIG){
+                $displayLevel = DisplayLevel::BIG;
+            }
+            $pagination = $this->buildPagination($toc, $partId, $displayLevel);
         }
 
         return $pagination;
