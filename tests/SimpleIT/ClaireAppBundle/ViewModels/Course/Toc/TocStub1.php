@@ -2,14 +2,14 @@
 
 namespace SimpleIT\ClaireAppBundle\ViewModels\Course\Toc;
 
-use SimpleIT\ApiResourcesBundle\Course\CourseResource;
+use SimpleIT\ApiResourcesBundle\Course\PartResource;
 
 /**
  * Class TocStub1
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class TocStub1 extends CourseResource
+class TocStub1 extends PartResource
 {
     const ID = 1;
 
