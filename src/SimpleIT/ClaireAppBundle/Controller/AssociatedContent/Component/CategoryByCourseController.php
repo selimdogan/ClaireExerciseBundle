@@ -30,6 +30,8 @@ class CategoryByCourseController extends AppController
                 ->make('GetDraftCourseCategory')
                 ->execute(new GetDraftCourseCategoryRequestDTO($courseId));
 
+//            $courseUcResponse = $this->get()
+
             $form = $this->createForm(
                 new CategoryByCourseType(),
                 new CategoryByCourseModel($ucResponse->getCategoryId())

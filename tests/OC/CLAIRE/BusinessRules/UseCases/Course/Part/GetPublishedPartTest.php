@@ -7,7 +7,7 @@ use OC\CLAIRE\BusinessRules\UseCases\Course\Part\DTO\GetPublishedPartRequestDTO;
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class GetPublishedPartTest extends GetPartTest
+class GetPublishedPartTest extends AGetPartTest
 {
     protected function setUp()
     {
