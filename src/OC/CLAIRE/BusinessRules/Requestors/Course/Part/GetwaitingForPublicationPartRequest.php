@@ -5,7 +5,7 @@ namespace OC\CLAIRE\BusinessRules\Requestors\Course\Part;
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-interface GetwaitingForPublicationPartRequest extends GetPartRequest
+interface GetWaitingForPublicationPartRequest extends GetPartRequest
 {
     /**
      * @return int
