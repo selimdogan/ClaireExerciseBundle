@@ -28,16 +28,22 @@ class GetCourseStatusesResponseBuilderImpl
     public function withDraft(GetCourseResponse $course)
     {
         $this->getCourseStatusesResponse->courses[Status::DRAFT] = $course;
+
+        return $this;
     }
 
     public function withWaitingForPublication(GetCourseResponse $course)
     {
         $this->getCourseStatusesResponse->courses[Status::WAITING_FOR_PUBLICATION] = $course;
+
+        return $this;
     }
 
     public function withPublished(GetCourseResponse $course)
     {
         $this->getCourseStatusesResponse->courses[Status::PUBLISHED] = $course;
+
+        return $this;
     }
 
     public function build()
