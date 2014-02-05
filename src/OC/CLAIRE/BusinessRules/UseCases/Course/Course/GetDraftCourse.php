@@ -19,7 +19,7 @@ class GetDraftCourse extends GetCourse
         /** @var GetDraftCourseRequest $useCaseRequest */
         $course = $this->courseGateway->findDraft($useCaseRequest->getCourseId());
 
-        return $this->buildResponse($course);
+        return $this->buildCourseResponse($course);
     }
 
 }

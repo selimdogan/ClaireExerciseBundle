@@ -11,6 +11,7 @@ class CourseUseCaseFactoryImplTest extends UseCaseFactoryTest
         'GetDraftCourse'                        => 'OC\CLAIRE\BusinessRules\UseCases\Course\Course\GetDraftCourse',
         'GetWaitingForPublicationCourse'        => 'OC\CLAIRE\BusinessRules\UseCases\Course\Course\GetWaitingForPublicationCourse',
         'GetPublishedCourse'                    => 'OC\CLAIRE\BusinessRules\UseCases\Course\Course\GetPublishedCourse',
+        'GetCourseStatuses'                     => 'OC\CLAIRE\BusinessRules\UseCases\Course\Course\GetCourseStatuses',
         'SaveCourse'                            => 'OC\CLAIRE\BusinessRules\UseCases\Course\Course\SaveCourse',
         'GetDraftCourseContent'                 => 'OC\CLAIRE\BusinessRules\UseCases\Course\CourseContent\GetDraftCourseContent',
         'GetWaitingForPublicationCourseContent' => 'OC\CLAIRE\BusinessRules\UseCases\Course\CourseContent\GetWaitingForPublicationCourseContent',

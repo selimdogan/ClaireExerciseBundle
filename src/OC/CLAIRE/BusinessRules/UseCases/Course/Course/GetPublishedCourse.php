@@ -19,6 +19,6 @@ class GetPublishedCourse extends GetCourse
         /** @var GetPublishedCourseRequest $useCaseRequest */
         $course = $this->courseGateway->findPublished($useCaseRequest->getCourseIdentifier());
 
-        return $this->buildResponse($course);
+        return $this->buildCourseResponse($course);
     }
 }

@@ -19,7 +19,7 @@ class GetWaitingForPublicationCourse extends GetCourse
         /** @var GetWaitingForPublicationCourseRequest $useCaseRequest */
         $course = $this->courseGateway->findWaitingForPublication($useCaseRequest->getCourseId());
 
-        return $this->buildResponse($course);
+        return $this->buildCourseResponse($course);
     }
 
 }
