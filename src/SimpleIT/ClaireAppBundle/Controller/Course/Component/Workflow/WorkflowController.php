@@ -16,6 +16,8 @@ use OC\CLAIRE\BusinessRules\UseCases\Course\Workflow\DTO\ChangeCourseStatusReque
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use JMS\SecurityExtraBundle\Annotation\Secure;;
+
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
@@ -53,7 +55,7 @@ class WorkflowController extends AppController
     }
 
     /**
-     * @Security("has_role('ROLE_PUBLISH_ALL_COURSES')")
+     * @Secure(roles="ROLE_PUBLISH_ALL_COURSES")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
@@ -94,7 +96,7 @@ class WorkflowController extends AppController
     }
 
     /**
-     * @Security("has_role('ROLE_PUBLISH_ALL_COURSES')")
+     * @Secure(roles="ROLE_PUBLISH_ALL_COURSES")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
@@ -112,7 +114,7 @@ class WorkflowController extends AppController
     }
 
     /**
-     * @Security("has_role('ROLE_PUBLISH_ALL_COURSES')")
+     * @Secure(roles="ROLE_PUBLISH_ALL_COURSES")
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function dismissWaitingForPublicationCourseAction($courseId)
