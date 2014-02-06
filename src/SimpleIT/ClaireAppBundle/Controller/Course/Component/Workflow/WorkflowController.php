@@ -31,7 +31,7 @@ class WorkflowController extends AppController
     {
         try {
             $this->get('oc.claire.use_cases.course_use_case_factory')
-                ->make('ChangeCourseToWaitingForPublication')
+                ->make('ChangeCourseToWaitingForPublicationCourse')
                 ->execute(new ChangeCourseStatusRequestDTO($courseId));
 
             /** @var GetDraftCourseCategoryResponse $ucResponse */
