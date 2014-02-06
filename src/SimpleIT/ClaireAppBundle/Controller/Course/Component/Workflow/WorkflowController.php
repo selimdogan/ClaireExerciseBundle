@@ -115,7 +115,7 @@ class WorkflowController extends AppController
      * @Security("has_role('ROLE_PUBLISH_ALL_COURSES')")
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function dismissWaitingForPublicationCourse($courseId)
+    public function dismissWaitingForPublicationCourseAction($courseId)
     {
         try {
             $this->get('oc.claire.use_cases.course_use_case_factory')
