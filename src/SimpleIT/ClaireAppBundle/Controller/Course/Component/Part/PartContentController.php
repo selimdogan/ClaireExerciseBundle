@@ -24,7 +24,6 @@ class PartContentController extends AppController
 //            $this->get('oc.claire.use_cases.part_use_case_factory')
 //                ->make('GetDraftPartContent')
 //                ->execute(new GetDraftPartRequestDTO($courseId, $partId));
-
         return $this->render(
             'SimpleITClaireAppBundle:Course/Common/partial:editContent.html.twig',
             array(

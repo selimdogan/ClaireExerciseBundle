@@ -17,6 +17,7 @@
         <!--WORKFLOW-->
         <parameter key="oc.claire.use_cases.course.workflow.publish_draft_course.class">OC\CLAIRE\BusinessRules\UseCases\Course\Workflow\PublishDraftCourse</parameter>
         <parameter key="oc.claire.use_cases.course.workflow.publish_waiting_for_publication_course.class">OC\CLAIRE\BusinessRules\UseCases\Course\Workflow\PublishWaitingForPublicationCourse</parameter>
+        <parameter key="oc.claire.use_cases.course.workflow.dismiss_waiting_for_publication_course.class">OC\CLAIRE\BusinessRules\UseCases\Course\Workflow\DismissWaitingForPublicationCourse</parameter>
         <parameter key="oc.claire.use_cases.course.workflow.change_course_to_waiting_for_publication.class">OC\CLAIRE\BusinessRules\UseCases\Course\Workflow\ChangeCourseToWaitingForPublication</parameter>
 
         <!--TOC-->
@@ -95,6 +96,11 @@
             </call>
         </service>
         <service id="oc.claire.use_cases.course.workflow.publish_waiting_for_publication_course" class="%oc.claire.use_cases.course.workflow.publish_waiting_for_publication_course.class%">
+            <call method="setCourseGateway">
+                <argument type="service" id="simple_it.claire.course.repository.course"/>
+            </call>
+        </service>
+        <service id="oc.claire.use_cases.course.workflow.dismiss_waiting_for_publication_course" class="%oc.claire.use_cases.course.workflow.dismiss_waiting_for_publication_course.class%">
             <call method="setCourseGateway">
                 <argument type="service" id="simple_it.claire.course.repository.course"/>
             </call>

@@ -8,9 +8,12 @@ use OC\CLAIRE\BusinessRules\Responders\Course\Course\GetCourseResponse;
 use
     OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\CategoryByCourse\DTO\GetDraftCourseCategoryRequestDTO;
 use OC\CLAIRE\BusinessRules\UseCases\Course\Course\DTO\GetPublishedCourseRequestDTO;
+use
+    OC\CLAIRE\BusinessRules\UseCases\Course\Workflow\DTO\DismissWaitingForPublicationCourseRequestDTO;
 use SimpleIT\AppBundle\Controller\AppController;
 use OC\CLAIRE\BusinessRules\Exceptions\Course\Course\CourseNotFoundException;
 use OC\CLAIRE\BusinessRules\UseCases\Course\Workflow\DTO\ChangeCourseStatusRequestDTO;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -18,6 +21,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class WorkflowController extends AppController
 {
+    /**
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     public function changeCourseToWaitingForPublicationAction($courseId)
     {
         try {
@@ -45,24 +52,16 @@ class WorkflowController extends AppController
         }
     }
 
+    /**
+     * @Security("has_role('ROLE_PUBLISH_ALL_COURSES')")
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     public function publishWaitingForPublicationCourseAction($courseId)
     {
         try {
             $this->get('oc.claire.use_cases.course_use_case_factory')
                 ->make('PublishWaitingForPublicationCourse')
-                ->execute(new ChangeCourseStatusRequestDTO($courseId));
-
-            return $this->redirectToPublishedCourse($courseId);
-        } catch (CourseNotFoundException $cnfe) {
-            throw new NotFoundHttpException();
-        }
-    }
-
-    public function publishDraftCourseAction($courseId)
-    {
-        try {
-            $this->get('oc.claire.use_cases.course_use_case_factory')
-                ->make('PublishDraftCourse')
                 ->execute(new ChangeCourseStatusRequestDTO($courseId));
 
             return $this->redirectToPublishedCourse($courseId);
@@ -92,5 +91,40 @@ class WorkflowController extends AppController
                 )
             )
         );
+    }
+
+    /**
+     * @Security("has_role('ROLE_PUBLISH_ALL_COURSES')")
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function publishDraftCourseAction($courseId)
+    {
+        try {
+            $this->get('oc.claire.use_cases.course_use_case_factory')
+                ->make('PublishDraftCourse')
+                ->execute(new ChangeCourseStatusRequestDTO($courseId));
+
+            return $this->redirectToPublishedCourse($courseId);
+        } catch (CourseNotFoundException $cnfe) {
+            throw new NotFoundHttpException();
+        }
+    }
+
+    /**
+     * @Security("has_role('ROLE_PUBLISH_ALL_COURSES')")
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function dismissWaitingForPublicationCourse($courseId)
+    {
+        try {
+            $this->get('oc.claire.use_cases.course_use_case_factory')
+                ->make('DismissWaitingForPublication')
+                ->execute(new DismissWaitingForPublicationCourseRequestDTO($courseId));
+
+            return new Response();
+        } catch (CourseNotFoundException $cnfe) {
+            throw new NotFoundHttpException();
+        }
     }
 }
