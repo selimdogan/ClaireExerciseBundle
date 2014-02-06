@@ -31,7 +31,7 @@ class WorkflowController extends AppController
     {
         try {
             $this->get('oc.claire.use_cases.course_use_case_factory')
-                ->make('ChangeCourseToWaitingForPublicationCourse')
+                ->make('ChangeCourseToWaitingForPublication')
                 ->execute(new ChangeCourseStatusRequestDTO($courseId));
 
             /** @var GetDraftCourseCategoryResponse $ucResponse */
@@ -121,7 +121,7 @@ class WorkflowController extends AppController
     {
         try {
             $this->get('oc.claire.use_cases.course_use_case_factory')
-                ->make('DismissWaitingForPublication')
+                ->make('DismissWaitingForPublicationCourse')
                 ->execute(new DismissWaitingForPublicationCourseRequestDTO($courseId));
 
             return new Response();
