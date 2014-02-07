@@ -13,7 +13,6 @@ use
 use SimpleIT\AppBundle\Controller\AppController;
 use OC\CLAIRE\BusinessRules\Exceptions\Course\Course\CourseNotFoundException;
 use OC\CLAIRE\BusinessRules\UseCases\Course\Workflow\DTO\ChangeCourseStatusRequestDTO;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use JMS\SecurityExtraBundle\Annotation\Secure;;
@@ -124,7 +123,7 @@ class WorkflowController extends AppController
                 ->make('DismissWaitingForPublicationCourse')
                 ->execute(new DismissWaitingForPublicationCourseRequestDTO($courseId));
 
-            return new Response();
+            return $this->redirect($this->generateUrl('simple_it_claire_course_waiting_for_publication_list'));
         } catch (CourseNotFoundException $cnfe) {
             throw new NotFoundHttpException();
         }
