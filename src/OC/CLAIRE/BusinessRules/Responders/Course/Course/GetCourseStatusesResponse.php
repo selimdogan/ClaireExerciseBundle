@@ -13,4 +13,22 @@ interface GetCourseStatusesResponse extends UseCaseResponse
      * @return GetCourseResponse[]
      */
     public function getCourses();
+
+    /**
+     * @return GetCourseResponse
+     * @throws \OC\CLAIRE\BusinessRules\Exceptions\Course\Course\CourseNotFoundException
+     */
+    public function getDraftCourse();
+
+    /**
+     * @return GetCourseResponse
+     * @throws \OC\CLAIRE\BusinessRules\Exceptions\Course\Course\CourseNotFoundException
+     */
+    public function getWaitingFoPublicationCourse();
+
+    /**
+     * @return GetCourseResponse
+     * @throws \OC\CLAIRE\BusinessRules\Exceptions\Course\Course\CourseNotFoundException
+     */
+    public function getPublishedCourse();
 }
