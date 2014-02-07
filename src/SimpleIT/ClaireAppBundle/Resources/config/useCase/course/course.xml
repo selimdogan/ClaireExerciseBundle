@@ -6,6 +6,7 @@
         <parameter key="oc.claire.use_cases.course.course.get_draft_course.class">OC\CLAIRE\BusinessRules\UseCases\Course\Course\GetDraftCourse</parameter>
         <parameter key="oc.claire.use_cases.course.course.get_waiting_for_publication_course.class">OC\CLAIRE\BusinessRules\UseCases\Course\Course\GetWaitingForPublicationCourse</parameter>
         <parameter key="oc.claire.use_cases.course.course.get_published_course.class">OC\CLAIRE\BusinessRules\UseCases\Course\Course\GetPublishedCourse</parameter>
+        <parameter key="oc.claire.use_cases.course.course.get_course_statuses.class">OC\CLAIRE\BusinessRules\UseCases\Course\Course\GetCourseStatuses</parameter>
         <parameter key="oc.claire.use_cases.course.course.save_course.class">OC\CLAIRE\BusinessRules\UseCases\Course\Course\SaveCourse</parameter>
 
         <!--CONTENT-->
@@ -53,6 +54,11 @@
             </call>
         </service>
         <service id="oc.claire.use_cases.course.course.get_published_course" class="%oc.claire.use_cases.course.course.get_published_course.class%">
+            <call method="setCourseGateway">
+                <argument type="service" id="simple_it.claire.course.repository.course"/>
+            </call>
+        </service>
+        <service id="oc.claire.use_cases.course.course.get_course_statuses" class="%oc.claire.use_cases.course.course.get_course_statuses.class%">
             <call method="setCourseGateway">
                 <argument type="service" id="simple_it.claire.course.repository.course"/>
             </call>

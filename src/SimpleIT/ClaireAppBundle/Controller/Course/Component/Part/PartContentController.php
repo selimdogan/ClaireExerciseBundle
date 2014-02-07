@@ -2,9 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component\Part;
 
-use OC\CLAIRE\BusinessRules\Responders\Course\PartContent\GetPartContentResponse;
 use OC\CLAIRE\BusinessRules\Responders\Course\PartContent\SavePartContentResponse;
-use OC\CLAIRE\BusinessRules\UseCases\Course\Part\DTO\GetDraftPartRequestDTO;
 use OC\CLAIRE\BusinessRules\UseCases\Course\PartContent\DTO\GetPartContentResponseDTO;
 use OC\CLAIRE\BusinessRules\UseCases\Course\PartContent\DTO\SavePartContentRequestDTO;
 use SimpleIT\AppBundle\Controller\AppController;
@@ -24,7 +22,6 @@ class PartContentController extends AppController
 //            $this->get('oc.claire.use_cases.part_use_case_factory')
 //                ->make('GetDraftPartContent')
 //                ->execute(new GetDraftPartRequestDTO($courseId, $partId));
-
         return $this->render(
             'SimpleITClaireAppBundle:Course/Common/partial:editContent.html.twig',
             array(
