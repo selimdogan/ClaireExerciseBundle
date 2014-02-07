@@ -2,9 +2,7 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\Course\Component\Part;
 
-use OC\CLAIRE\BusinessRules\Responders\Course\PartContent\GetPartContentResponse;
 use OC\CLAIRE\BusinessRules\Responders\Course\PartContent\SavePartContentResponse;
-use OC\CLAIRE\BusinessRules\UseCases\Course\Part\DTO\GetDraftPartRequestDTO;
 use OC\CLAIRE\BusinessRules\UseCases\Course\PartContent\DTO\GetPartContentResponseDTO;
 use OC\CLAIRE\BusinessRules\UseCases\Course\PartContent\DTO\SavePartContentRequestDTO;
 use SimpleIT\AppBundle\Controller\AppController;

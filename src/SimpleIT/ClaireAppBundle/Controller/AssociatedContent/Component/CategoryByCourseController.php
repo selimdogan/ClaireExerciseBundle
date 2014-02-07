@@ -2,12 +2,15 @@
 
 namespace SimpleIT\ClaireAppBundle\Controller\AssociatedContent\Component;
 
+use OC\CLAIRE\BusinessRules\Entities\Course\Course\Status;
 use OC\CLAIRE\BusinessRules\Exceptions\Course\Course\CourseNotFoundException;
 use OC\CLAIRE\BusinessRules\Responders\AssociatedContent\Category\GetDraftCourseCategoryResponse;
+use OC\CLAIRE\BusinessRules\Responders\Course\Course\GetCourseStatusesResponse;
 use
     OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\CategoryByCourse\DTO\GetDraftCourseCategoryRequestDTO;
 use
     OC\CLAIRE\BusinessRules\UseCases\AssociatedContent\CategoryByCourse\DTO\SaveCourseCategoryRequestDTO;
+use OC\CLAIRE\BusinessRules\UseCases\Course\Course\DTO\GetCourseStatusesRequestDTO;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireAppBundle\Form\AssociatedContent\Model\CategoryByCourseModel;
 use SimpleIT\ClaireAppBundle\Form\AssociatedContent\Type\CategoryByCourseType;
@@ -29,10 +32,12 @@ class CategoryByCourseController extends AppController
             $ucResponse = $this->get('oc.claire.use_cases.associated_content_use_case_factory')
                 ->make('GetDraftCourseCategory')
                 ->execute(new GetDraftCourseCategoryRequestDTO($courseId));
+            $alreadyPublished = $this->isAlreadyPublished($courseId);
 
             $form = $this->createForm(
                 new CategoryByCourseType(),
-                new CategoryByCourseModel($ucResponse->getCategoryId())
+                new CategoryByCourseModel($ucResponse->getCategoryId()),
+                array('disabled' => $alreadyPublished)
             );
 
             return $this->render(
@@ -49,6 +54,25 @@ class CategoryByCourseController extends AppController
         } catch (CourseNotFoundException $cnfe) {
             throw new NotFoundHttpException();
         }
+    }
+
+    /**
+     * @return bool
+     */
+    private function isAlreadyPublished($courseId)
+    {
+        /** @var GetCourseStatusesResponse $courseUcResponse */
+        $courseUcResponse = $this->get('oc.claire.use_cases.course_use_case_factory')
+            ->make('GetCourseStatuses')
+            ->execute(new GetCourseStatusesRequestDTO($courseId));
+
+        $alreadyPublished = false;
+        $courses = $courseUcResponse->getCourses();
+        if (isset($courses[Status::PUBLISHED])) {
+            $alreadyPublished = true;
+        }
+
+        return $alreadyPublished;
     }
 
     public function editAction(Request $request, $courseId)
