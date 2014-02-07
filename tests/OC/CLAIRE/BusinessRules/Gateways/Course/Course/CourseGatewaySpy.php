@@ -73,4 +73,9 @@ class CourseGatewaySpy implements CourseGateway
         $this->course = $course;
     }
 
+    public function deleteWaitingForPublication($courseId)
+    {
+        $this->courseId = $courseId;
+    }
+
 }

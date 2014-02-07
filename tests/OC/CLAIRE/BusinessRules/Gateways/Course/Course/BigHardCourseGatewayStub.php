@@ -57,4 +57,8 @@ class BigHardCourseGatewayStub implements CourseGateway
     {
     }
 
+    public function deleteWaitingForPublication($courseId)
+    {
+        return null;
+    }
 }
