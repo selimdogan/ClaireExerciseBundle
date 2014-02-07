@@ -11,4 +11,4 @@ cache:
 
 before_script:
   - composer self-update
-  - composer install --no-scripts --no-interaction
+  - composer install --no-scripts --no-interaction --dev
