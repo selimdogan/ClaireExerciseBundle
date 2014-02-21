@@ -91,6 +91,7 @@ class PartContentRepository extends AppRepository
         );
     }
 
+<<<<<<< HEAD
     /**
      * Update a part content
      *
@@ -112,7 +113,17 @@ class PartContentRepository extends AppRepository
         );
     }
 
+=======
+>>>>>>> parent of 8462489... Merge remote-tracking branch 'composer/1.1' into 1.1_Exercises
     /**
+     * Update a part content
+     *
+     * @param string $courseIdentifier Course id | slug
+     * @param string $partIdentifier   Part id | slug
+     * @param string $partContent      Part content
+     * @param array  $parameters       Parameters
+     * @param string $format           Format
+     *
      * @return string
      */
     public function update(
