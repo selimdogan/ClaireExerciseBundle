@@ -61,10 +61,4 @@ class CourseNotFoundCourseGatewayStub implements CourseGateway
     {
         throw new CourseNotFoundException();
     }
-
-    public function deleteWaitingForPublication($courseId)
-    {
-        throw new CourseNotFoundException();
-    }
-
 }

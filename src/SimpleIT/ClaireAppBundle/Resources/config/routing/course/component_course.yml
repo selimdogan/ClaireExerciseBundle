@@ -46,12 +46,6 @@ simple_it_claire_component_course_publish_waiting_for_publication:
     requirements :
         _method: GET|POST
 
-simple_it_claire_component_course_dismiss_waiting_for_publication:
-    pattern: /{courseId}/dismiss-waiting-for-publication
-    defaults: { _controller : SimpleITClaireAppBundle:Course/Component/Workflow/Workflow:dismissWaitingForPublicationCourse }
-    requirements :
-        _method: GET|POST
-
 simple_it_claire_course_component_course_title_edit:
     pattern: /{courseId}/edit
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Course/CourseTitle:edit }

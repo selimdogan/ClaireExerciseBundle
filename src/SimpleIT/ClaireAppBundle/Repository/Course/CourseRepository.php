@@ -1,7 +1,6 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
-use OC\CLAIRE\BusinessRules\Entities\Course\Course\Status;
 use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseGateway;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
@@ -214,7 +213,7 @@ class CourseRepository extends AppRepository implements CourseGateway
     {
         return $this->updateResource(
             $course,
-            array('courseIdentifier' => $courseId),
+            array('courseIdentifier' => $courseId,),
             array(CourseResource::STATUS => CourseResource::STATUS_DRAFT)
         );
     }
@@ -228,12 +227,4 @@ class CourseRepository extends AppRepository implements CourseGateway
     {
         $this->cacheService = $cacheService;
     }
-
-    public function deleteWaitingForPublication($courseId)
-    {
-        $request = $this->client->delete(array($this->path, array('courseIdentifier' => $courseId)));
-        $request->getQuery()->set(CourseResource::STATUS, Status::WAITING_FOR_PUBLICATION);
-        $request->send();
-    }
-
 }

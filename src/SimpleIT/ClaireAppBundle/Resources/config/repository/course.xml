@@ -5,7 +5,6 @@
         <parameter key="simple_it.claire.course.repository.course.class">SimpleIT\ClaireAppBundle\Repository\Course\CourseRepository</parameter>
         <parameter key="simple_it.claire.course.repository.course_content.class">SimpleIT\ClaireAppBundle\Repository\Course\CourseContentRepository</parameter>
         <parameter key="simple_it.claire.course.repository.course_status.class">SimpleIT\ClaireAppBundle\Repository\Course\CourseStatusRepository</parameter>
-        <parameter key="simple_it.claire.course.repository.toc_by_course.class">SimpleIT\ClaireAppBundle\Repository\Course\TocByCourseRepository</parameter>
     </parameters>
 
     <services>
@@ -42,13 +41,5 @@
             </call>
         </service>
 
-        <service id="simple_it.claire.course.repository.toc_by_course" class="%simple_it.claire.course.repository.toc_by_course.class%">
-            <call method="setClient">
-                <argument type="service" id="simple_it.claire.http_client.authenticated"/>
-            </call>
-            <call method="setSerializer">
-                <argument type="service" id="simple_it.claire.serializer"/>
-            </call>
-        </service>
     </services>
 </container>

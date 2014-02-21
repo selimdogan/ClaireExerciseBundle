@@ -218,6 +218,7 @@ class PartPaginationAssemblerTest extends PaginationAssemblerTest
 //        $this->assertPagination(new DraftBigCourseLastTitle2PaginationExpected());
 //    }
 
+
     protected function setUp()
     {
         $this->paginationAssembler = new PartPaginationAssembler();

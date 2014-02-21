@@ -62,8 +62,4 @@ class MediumMediumCourseGatewayStub implements CourseGateway
         return null;
     }
 
-    public function deleteWaitingForPublication($courseId)
-    {
-        return null;
-    }
 }

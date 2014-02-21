@@ -9,7 +9,6 @@ use SimpleIT\AppBundle\Annotation\Cache;
 
 /**
  * Class CourseTocRepository
- * @deprecated
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */

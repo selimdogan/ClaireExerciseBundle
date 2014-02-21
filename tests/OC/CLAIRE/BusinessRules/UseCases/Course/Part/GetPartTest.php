@@ -12,7 +12,7 @@ use OC\CLAIRE\BusinessRules\Responders\Course\Part\GetPartResponse;
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-abstract class AGetPartTest extends \PHPUnit_Framework_TestCase
+abstract class GetPartTest extends \PHPUnit_Framework_TestCase
 {
     const NON_EXISTING_COURSE_ID = 9;
 

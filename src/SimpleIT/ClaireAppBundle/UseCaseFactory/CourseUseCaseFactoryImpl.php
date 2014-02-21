@@ -39,11 +39,6 @@ class CourseUseCaseFactoryImpl implements UseCaseFactory
                     'oc.claire.use_cases.course.course.get_draft_course'
                 );
                 break;
-            case 'GetCourseStatuses':
-                $useCase = $this->injector->get(
-                    'oc.claire.use_cases.course.course.get_course_statuses'
-                );
-                break;
             case 'SaveCourse':
                 $useCase = $this->injector->get(
                     'oc.claire.use_cases.course.course.save_course'
@@ -79,11 +74,6 @@ class CourseUseCaseFactoryImpl implements UseCaseFactory
             case 'PublishWaitingForPublicationCourse':
                 $useCase = $this->injector->get(
                     'oc.claire.use_cases.course.workflow.publish_waiting_for_publication_course'
-                );
-                break;
-            case 'DismissWaitingForPublicationCourse':
-                $useCase = $this->injector->get(
-                    'oc.claire.use_cases.course.workflow.dismiss_waiting_for_publication_course'
                 );
                 break;
             case 'ChangeCourseToWaitingForPublication':

@@ -12,9 +12,6 @@
             </call>
         </service>
         <service id="oc.claire.use_cases.associated_content.category_by_course.save_course_category" class="%oc.claire.use_cases.associated_content.category_by_course.save_course_category.class%">
-            <call method="setGetCourseStatuses">
-                <argument type="service" id="oc.claire.use_cases.course.course.get_course_statuses"/>
-            </call>
             <call method="setCategoryByCourseGateway">
                 <argument type="service" id="oc.claire.associated_content.repository.category_by_course"/>
             </call>

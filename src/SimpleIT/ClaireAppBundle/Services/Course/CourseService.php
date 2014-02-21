@@ -323,7 +323,7 @@ class CourseService
             );
         } else {
             $displayLevel = $course->getDisplayLevel();
-            if ($status == 'draft' && $displayLevel == DisplayLevel::BIG) {
+            if ($status == 'draft' && $displayLevel == DisplayLevel::BIG){
                 $displayLevel = DisplayLevel::BIG;
             }
             $pagination = $this->buildPagination($toc, $partId, $displayLevel);

@@ -7,7 +7,7 @@ use OC\CLAIRE\BusinessRules\UseCases\Course\Part\DTO\GetWaitingForPublicationPar
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class GetWaitingForPublicationPartTest extends AGetPartTest
+class GetWaitingForPublicationPartTest extends GetPartTest
 {
     protected function setUp()
     {

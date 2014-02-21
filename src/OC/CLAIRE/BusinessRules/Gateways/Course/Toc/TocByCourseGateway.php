@@ -2,7 +2,6 @@
 
 namespace OC\CLAIRE\BusinessRules\Gateways\Course\Toc;
 
-use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 
 /**
@@ -23,7 +22,7 @@ interface TocByCourseGateway
     public function update($courseId, PartResource $toc);
 
     /**
-     * @return CourseResource
+     * @return PartResource
      */
     public function findDraft($courseId);
 
