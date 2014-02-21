@@ -1,0 +1,18 @@
+<div class="duration">
+    <span class="icon"></span>
+    <div>
+        <strong>Durée</strong>
+        <form class="js-course-duration" action="{{ path('simple_it_claire_component_part_metadata_edit_duration', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post" {{ form_enctype(form) }}>
+            {{ form_errors(form) }}
+            {{ form_errors(form.days) }}
+            {{ form_widget(form.days) }}
+            <span>J</span>{{ form_errors(form.hours) }}
+            {{ form_widget(form.hours) }}
+            <span>H</span>{{ form_errors(form.minutes) }}
+            {{ form_widget(form.minutes) }}
+            <span>M</span>{{ form_rest(form) }}
+            <input type="submit">
+        </form>
+    </div>
+</div>
+

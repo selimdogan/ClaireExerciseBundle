@@ -1,0 +1,8 @@
+<form action="{{ path('simple_it_claire_component_course_course_edit', { 'courseId': course.id}) }}" method="post" {{ form_enctype(form) }}>
+    {{ form_errors(form) }}
+    {{ form_errors(form.title) }}
+    {{ form_widget(form.title) }}
+    {{ form_rest(form) }}
+    <input type="submit">
+    {#Remove submit#}
+</form>

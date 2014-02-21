@@ -37,7 +37,6 @@ class PartFactory
         if (isset($partRessource['updatedAt'])) {
             $part->setUpdatedAt(new \DateTime($partRessource['updatedAt']));
         }
-
         return $part;
     }
 }

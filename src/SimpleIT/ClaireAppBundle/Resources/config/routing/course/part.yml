@@ -3,3 +3,4 @@ simple_it_claire_course_part_edit:
     defaults: { _controller: SimpleITClaireAppBundle:Course/Component/Part:edit }
     requirements:
             _method: GET
+

@@ -2,9 +2,6 @@
 
 namespace SimpleIT\ClaireAppBundle\Repository\AssociatedContent;
 
-use OC\CLAIRE\BusinessRules\Entities\AssociatedContent\Tag\Tag;
-use OC\CLAIRE\BusinessRules\Entities\Course\Course\Status;
-use OC\CLAIRE\BusinessRules\Gateways\AssociatedContent\Tag\TagByCourseGateway;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatedCollection;
@@ -15,7 +12,7 @@ use SimpleIT\AppBundle\Annotation\Cache;
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class TagByCourseRepository extends AppRepository implements TagByCourseGateway
+class TagByCourseRepository extends AppRepository
 {
     /**
      * @var string
@@ -79,54 +76,4 @@ class TagByCourseRepository extends AppRepository implements TagByCourseGateway
             )
         );
     }
-
-    /**
-     * @return Tag[]
-     */
-    public function findDraft($courseId)
-    {
-        $collectionInformation = new CollectionInformation();
-        $collectionInformation->addFilter('status', Status::DRAFT);
-
-        return parent::findAllResources(
-            array(
-                'courseIdentifier' => $courseId
-            ),
-            $collectionInformation
-        );
-    }
-
-    /**
-     * @return Tag[]
-     */
-    public function findWaitingForPublication($courseId)
-    {
-        $collectionInformation = new CollectionInformation();
-        $collectionInformation->addFilter('status', Status::WAITING_FOR_PUBLICATION);
-
-        return parent::findAllResources(
-            array(
-                'courseIdentifier' => $courseId
-            ),
-            $collectionInformation
-        );
-    }
-
-    /**
-     * @return Tag[]
-     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
-     */
-    public function findPublished($courseIdentifier)
-    {
-        $collectionInformation = new CollectionInformation();
-        $collectionInformation->addFilter('status', Status::PUBLISHED);
-
-        return parent::findAllResources(
-            array(
-                'courseIdentifier' => $courseIdentifier
-            ),
-            $collectionInformation
-        );
-    }
-
 }

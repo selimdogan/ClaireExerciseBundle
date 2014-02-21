@@ -1,42 +1,41 @@
-{#FIXME REMOVE USE IN PART VISUALIZATION ONLY#}
-{#{% trans_default_domain "course" %}#}
-{#<ul class="informations">#}
-    {#{% if informations.difficulty is not empty %}#}
-        {#<li class="difficulty">#}
-            {#<span class="icon"></span>#}
+{% trans_default_domain "course" %}
+<ul class="informations">
+    {% if informations.difficulty is not empty %}
+        <li class="difficulty">
+            <span class="icon"></span>
 
-            {#<div>#}
-                {#<strong>{{ 'course.difficulty' | trans }}</strong>#}
+            <div>
+                <strong>{{ 'course.difficulty' | trans }}</strong>
 
-                {#<p itemprop="difficulty">{{ informations.difficulty }}</p>#}
-            {#</div>#}
-        {#</li>#}
-    {#{% endif %}#}
-    {#<li class="grade">#}
-        {#<span class="icon"></span>#}
+                <p itemprop="difficulty">{{ informations.difficulty }}</p>
+            </div>
+        </li>
+    {% endif %}
+    <li class="grade">
+        <span class="icon"></span>
 
-        {#<div>#}
-            {#<strong>{{ 'course.rate' | trans }}</strong>#}
+        <div>
+            <strong>{{ 'course.rate' | trans }}</strong>
 
-            {#<p itemprop="aggregateRating" class="star">#}
-                {#{% if informations.aggregateRating is not defined %}#}
-                    {#{% set aggregateRating = 0 %}#}
-                {#{% else %}#}
-                    {#{% set aggregateRating = informations.aggregateRating %}#}
-                {#{% endif %}#}
-                {#{% include "SimpleITClaireAppBundle:Common:rating.html.twig" with { 'note' : aggregateRating } %}#}
-            {#</p>#}
-        {#</div>#}
-    {#</li>#}
-    {#{% if informations.timeRequired is not null %}#}
-        {#<li class="duration">#}
-            {#<span class="icon"></span>#}
+            <p itemprop="aggregateRating" class="star">
+                {% if informations.aggregateRating is not defined %}
+                    {% set aggregateRating = 0 %}
+                {% else %}
+                    {% set aggregateRating = informations.aggregateRating %}
+                {% endif %}
+                {% include "SimpleITClaireAppBundle:Common:rating.html.twig" with { 'note' : aggregateRating } %}
+            </p>
+        </div>
+    </li>
+    {% if informations.timeRequired is not null %}
+        <li class="duration">
+            <span class="icon"></span>
 
-            {#<div>#}
-                {#<strong>{{ 'course.duration' | trans }}</strong>#}
+            <div>
+                <strong>{{ 'course.duration' | trans }}</strong>
 
-                {#<p itemprop="duration"> {{ informations.timeRequired | dateInterval }}</p>#}
-            {#</div>#}
-        {#</li>#}
-    {#{% endif %}#}
-{#</ul>#}
+                <p itemprop="duration"> {{ informations.timeRequired | dateInterval }}</p>
+            </div>
+        </li>
+    {% endif %}
+</ul>

@@ -1,10 +1,10 @@
 <?php
 
+
 namespace SimpleIT\ClaireAppBundle\Controller\AssociatedContent\Component;
 
 use SimpleIT\ApiResourcesBundle\AssociatedContent\TagResource;
 use SimpleIT\AppBundle\Controller\AppController;
-use SimpleIT\ClaireAppBundle\ViewModels\AssociatedContent\Tag\TagAssembler;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\AppBundle\Annotation\Cache;
 use SimpleIT\Utils\FormatUtils;
@@ -67,21 +67,15 @@ class TagController extends AppController
      * @return \Symfony\Component\HttpFoundation\Response
      * @cache
      */
-    public function viewAction($tagIdentifier, $categoryIdentifier)
+    public function viewAction($tagIdentifier)
     {
-        /** @var TagResource $tag */
         $tag = $this->get('simple_it.claire.associated_content.tag')->get(
             $tagIdentifier
         );
 
-        $category = $this->get('simple_it.claire.associated_content.category')->get($categoryIdentifier);
-
-        $assembler = new TagAssembler();
-        $vm = $assembler->writeTag($tag, $category);
-
         return $this->render(
             'SimpleITClaireAppBundle:AssociatedContent/Tag/Component:view.html.twig',
-            array('vm' => $vm)
+            array('tag' => $tag)
         );
     }
 

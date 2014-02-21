@@ -1,0 +1,10 @@
+<form class="claire-part-description js-course-description" action="{{ path('simple_it_claire_component_part_metadata_edit_description', { 'courseIdentifier': courseIdentifier, 'partIdentifier': partIdentifier}) }}" method="post" {{ form_enctype(form) }}>
+    <label>Informations du cours <br />Description de cette page</label>
+
+    {{ form_errors(form) }}
+    {{ form_errors(form.description) }}
+    {{ form_widget(form.description) }}
+    {{ form_rest(form) }}
+    <input type="submit">
+    {#Remove submit#}
+</form>

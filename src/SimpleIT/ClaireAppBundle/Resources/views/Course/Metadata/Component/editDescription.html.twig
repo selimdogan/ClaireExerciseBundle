@@ -1,0 +1,8 @@
+<form action="{{ action }}" method="post" {{ form_enctype(form) }}>
+    {{ form_errors(form) }}
+    {{ form_errors(form.value) }}
+    {{ form_widget(form.value) }}
+    {{ form_rest(form) }}
+    <input type="submit">
+    {#Remove submit#}
+</form>

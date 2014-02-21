@@ -3,6 +3,7 @@
 namespace SimpleIT\ClaireAppBundle\Services\AssociatedContent;
 
 use SimpleIT\ApiResourcesBundle\AssociatedContent\CategoryResource;
+use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\CategoryByCourseRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\CategoryRepository;
 use SimpleIT\ClaireAppBundle\Repository\AssociatedContent\CourseByCategoryRepository;
@@ -101,6 +102,22 @@ class CategoryService
     public function getByCourse($courseIdentifier)
     {
         return $this->categoryByCourseRepository->find($courseIdentifier);
+    }
+
+    /**
+     * Get a category by course
+     *
+     * @param int    $courseId Course id
+     * @param string $status   Status
+     *
+     * @return CategoryResource
+     */
+    public function getByCourseToEdit($courseId, $status)
+    {
+        return $this->categoryByCourseRepository->find(
+            $courseId,
+            array(CourseResource::STATUS => $status)
+        );
     }
 
     /**

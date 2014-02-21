@@ -48,7 +48,6 @@ class TagFactory
             $headlineCourse = CourseFactory::create($tagResource['headlineCourse']);
             $tag->setHeadlineCourse($headlineCourse);
         }
-
         return $tag;
     }
 
@@ -66,7 +65,6 @@ class TagFactory
             $tag = self::create($tagResource);
             $tags[] = $tag;
         }
-
         return $tags;
     }
 }

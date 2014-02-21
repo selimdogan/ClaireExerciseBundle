@@ -20,20 +20,18 @@
 
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
-use OC\CLAIRE\BusinessRules\Gateways\Course\Course\CourseContentGateway;
-use SimpleIT\ApiResourcesBundle\Course\CourseResource;
+use SimpleIT\AppBundle\Annotation\Cache;
 use SimpleIT\AppBundle\Repository\AppRepository;
 use SimpleIT\Utils\FormatUtils;
-use SimpleIT\AppBundle\Annotation\Cache;
+
 
 /**
  * Class CourseContentRepository
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class CourseContentRepository extends AppRepository implements CourseContentGateway
+class CourseContentRepository extends AppRepository
 {
-    const FORMAT_HTML = 'html';
 
     /**
      * @var string
@@ -92,53 +90,27 @@ class CourseContentRepository extends AppRepository implements CourseContentGate
     }
 
     /**
+     * Update a course content
+     *
+     * @param string $courseIdentifier Course id | slug
+     * @param string $courseContent    Course content
+     * @param array  $parameters       Parameters
+     * @param string $format           Format
+     *
      * @return string
      */
-    public function update($courseId, $content)
+    public function update(
+        $courseIdentifier,
+        $courseContent,
+        $parameters = array(),
+        $format = FormatUtils::HTML
+    )
     {
         return parent::updateResource(
-            $content,
-            array('courseIdentifier' => $courseId),
-            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT),
-            FormatUtils::HTML
-        );
-    }
-
-    /**
-     * @return string
-     *
-     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
-     */
-    public function findPublished($courseIdentifier)
-    {
-        return parent::findResource(
+            $courseContent,
             array('courseIdentifier' => $courseIdentifier),
-            array(),
-            self::FORMAT_HTML
-        );
-    }
-
-    /**
-     * @return string
-     */
-    public function findWaitingForPublication($courseId)
-    {
-        return parent::findResource(
-            array('courseIdentifier' => $courseId),
-            array(CourseResource::STATUS => CourseResource::STATUS_WAITING_FOR_PUBLICATION),
-            self::FORMAT_HTML
-        );
-    }
-
-    /**
-     * @return string
-     */
-    public function findDraft($courseId)
-    {
-        return parent::findResource(
-            array('courseIdentifier' => $courseId),
-            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT),
-            self::FORMAT_HTML
+            $parameters,
+            $format
         );
     }
 }

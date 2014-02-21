@@ -1,8 +1,6 @@
 <?php
 namespace SimpleIT\ClaireAppBundle\Repository\Course;
 
-use OC\CLAIRE\BusinessRules\Entities\Course\Course\Status;
-use OC\CLAIRE\BusinessRules\Gateways\Course\Part\PartGateway;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 use SimpleIT\ApiResourcesBundle\Course\PartResource;
 use SimpleIT\AppBundle\Repository\AppRepository;
@@ -13,7 +11,7 @@ use SimpleIT\AppBundle\Annotation\Cache;
  *
  * @author Romain Kuzniak <romain.kuzniak@simple-it.fr>
  */
-class PartRepository extends AppRepository implements PartGateway
+class PartRepository extends AppRepository
 {
     /**
      * @var string
@@ -85,63 +83,11 @@ class PartRepository extends AppRepository implements PartGateway
         $status
     )
     {
+
         return $this->updateResource(
             $part,
             array('courseIdentifier' => $courseIdentifier, 'partIdentifier' => $partIdentifier),
             array(CourseResource::STATUS => $status)
         );
     }
-
-    /**
-     * @return PartResource
-     */
-    public function findDraft($courseId, $partId)
-    {
-        return $this->findResource(
-            array(
-                'courseIdentifier' => $courseId,
-                'partIdentifier'   => $partId
-            ),
-            array(CourseResource::STATUS => Status::DRAFT)
-        );
-    }
-
-    /**
-     * @return PartResource
-     */
-    public function findWaitingForPublication($courseId, $partId)
-    {
-        return $this->findResource(
-            array(
-                'courseIdentifier' => $courseId,
-                'partIdentifier'   => $partId
-            ),
-            array(CourseResource::STATUS => Status::WAITING_FOR_PUBLICATION)
-        );
-    }
-
-    /**
-     * @return PartResource
-     * @cache (namespacePrefix="claire_app_course_course", namespaceAttribute="courseIdentifier", lifetime=0)
-     */
-    public function findPublished($courseIdentifier, $partIdentifier)
-    {
-        return $this->findResource(
-            array(
-                'courseIdentifier' => $courseIdentifier,
-                'partIdentifier'   => $partIdentifier
-            ),
-            array(CourseResource::STATUS => Status::PUBLISHED)
-        );
-    }
-
-    public function updateDraft($courseId, $partId, PartResource $part)
-    {
-        return $this->updateResource(
-            $part,
-            array('courseIdentifier' => $courseId, 'partIdentifier' => $partId),
-            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT)
-        );
-    }
-
 }

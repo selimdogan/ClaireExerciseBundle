@@ -1,0 +1,15 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    {% autoescape false %}
+    {{ course.content }}
+    {% endautoescape %}
+
+    <hr>
+
+    <p>
+       <a href="{{ path('course_list') }}">List of courses</a> |
+       <a href="{{ path('course_create') }}">Create a new course</a> |
+       <a href="{{ path('course_edit', {'slug': course.reference.slug}) }}">Edit this course</a>
+    </p>
+{% endblock %}

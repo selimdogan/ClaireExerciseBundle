@@ -26,8 +26,8 @@ class AuthorByPartRepository extends AppRepository
     /**
      * Find a list of authors
      *
-     * @param int | string          $courseIdentifier      Course id | slug
-     * @param int | string          $partIdentifier        Part id | slug
+     * @param int | string          $courseIdentifier Course id | slug
+     * @param int | string          $partIdentifier   Part id | slug
      * @param CollectionInformation $collectionInformation
      *
      * @return mixed
