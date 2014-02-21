@@ -2,27 +2,29 @@
 
 namespace OC\CLAIRE\BusinessRules\Gateways\Course\Course;
 
+use OC\CLAIRE\BusinessRules\Entities\Course\Course\DraftCourseStub;
+use OC\CLAIRE\BusinessRules\Exceptions\Course\Course\CourseNotFoundException;
 use SimpleIT\ApiResourcesBundle\Course\CourseResource;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class BigHardCourseGatewayStub implements CourseGateway
+class OnlyDraftCourseGatewayStub implements CourseGateway
 {
     /**
      * @return CourseResource[]
      */
     public function findAllStatus($courseIdentifier)
     {
-        return null;
+        return array(new DraftCourseStub());
     }
 
     /**
      * @return CourseResource
      */
-    public function findPublished($courseIdentifier)
+    public function findDraft($courseId)
     {
-        return null;
+        return new DraftCourseStub();
     }
 
     /**
@@ -36,29 +38,34 @@ class BigHardCourseGatewayStub implements CourseGateway
     /**
      * @return CourseResource
      */
-    public function findDraft($courseId)
+    public function findPublished($courseIdentifier)
     {
-        return new \OC\CLAIRE\BusinessRules\Entities\Course\Course\BigHardDraftCourseStub();
+        return null;
     }
 
     public function updateToWaitingForPublication($courseId)
     {
-    }
-
-    public function updateDraftToPublished($courseId)
-    {
+        return null;
     }
 
     public function updateWaitingForPublicationToPublished($courseId)
     {
+        return null;
+    }
+
+    public function updateDraftToPublished($courseId)
+    {
+        return null;
     }
 
     public function updateDraft($courseId, CourseResource $course)
     {
+        return null;
     }
 
     public function deleteWaitingForPublication($courseId)
     {
-        return null;
+        throw new CourseNotFoundException();
     }
+
 }

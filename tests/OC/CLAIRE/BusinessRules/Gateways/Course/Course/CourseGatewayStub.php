@@ -66,4 +66,9 @@ class CourseGatewayStub implements CourseGateway
     {
         return null;
     }
+
+    public function deleteWaitingForPublication($courseId)
+    {
+        return null;
+    }
 }

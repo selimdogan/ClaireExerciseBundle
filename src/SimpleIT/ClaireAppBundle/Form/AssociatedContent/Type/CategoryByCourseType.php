@@ -23,7 +23,8 @@ class CategoryByCourseType extends AbstractType
             'choice',
             array(
                 'choices'  => $categories,
-                'required' => true
+                'required' => true,
+                'disabled' => $options['disabled']
             )
         );
     }
@@ -33,6 +34,7 @@ class CategoryByCourseType extends AbstractType
         $resolver->setDefaults(
             array(
                 'data_class' => 'SimpleIT\ClaireAppBundle\Form\AssociatedContent\Model\CategoryByCourseModel',
+                'disabled'   => false
             )
         );
     }
