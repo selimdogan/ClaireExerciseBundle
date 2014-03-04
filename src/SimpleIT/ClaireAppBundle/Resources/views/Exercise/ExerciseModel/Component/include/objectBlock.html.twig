@@ -1,11 +1,11 @@
 {% set _isList = (block.resourceConstraint.metadataConstraints[0].key|length == 0) %}
 
 
-{% if onlyOneOccurence is not defined or onlyOneOccurence != true %}
+{% if onlyOneOccurrence is not defined or onlyOneOccurrence != true %}
     <div>
         <label>Nombre de {{ objectName }} :
-            <input type="text" required size="20" name="{{ blocksName }}[{{ _cptBlock }}][numberOfOccurences]"
-                   {% if block != NULL %}value="{{ block.numberOfOccurences }}{% endif %}"/>
+            <input type="text" required size="20" name="{{ blocksName }}[{{ _cptBlock }}][numberOfOccurrences]"
+                   {% if block != NULL %}value="{{ block.numberOfOccurrences }}{% endif %}"/>
         </label>
     </div>
 {% endif %}

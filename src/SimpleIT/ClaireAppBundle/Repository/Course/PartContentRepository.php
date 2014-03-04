@@ -91,30 +91,6 @@ class PartContentRepository extends AppRepository
         );
     }
 
-<<<<<<< HEAD
-    /**
-     * Update a part content
-     *
-     * @param string $courseIdentifier Course id | slug
-     * @param string $partIdentifier   Part id | slug
-     * @param string $partContent      Part content
-     * @param array  $parameters       Parameters
-     * @param string $format           Format
-     *
-     * @return string
-     * FIXME to remove post view change
-     */
-    public function findDraftForEdition($courseId, $partId)
-    {
-        return parent::findResource(
-            array('courseIdentifier' => $courseId, 'partIdentifier' => $partId),
-            array(CourseResource::STATUS => CourseResource::STATUS_DRAFT, 'edit' => true),
-            FormatUtils::HTML
-        );
-    }
-
-=======
->>>>>>> parent of 8462489... Merge remote-tracking branch 'composer/1.1' into 1.1_Exercises
     /**
      * Update a part content
      *

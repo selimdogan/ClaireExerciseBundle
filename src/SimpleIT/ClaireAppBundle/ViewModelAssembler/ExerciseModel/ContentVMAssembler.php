@@ -223,7 +223,7 @@ class ContentVMAssembler
      *
      * @return Group
      */
-    private function fillGroup(Group $group)
+    private static function fillGroup(Group $group)
     {
         $group->setMDConstraints(self::fillMetadataConstraints($group->getMDConstraints()));
 

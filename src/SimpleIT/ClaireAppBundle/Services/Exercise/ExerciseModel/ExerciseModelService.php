@@ -385,7 +385,7 @@ class ExerciseModelService
 
         foreach ($modelArray['blocks'] as $key => $blockArray) {
             $block = new QuestionBlock(
-                $blockArray['numberOfOccurences'],
+                $blockArray['numberOfOccurrences'],
                 $blockArray['maxNumberOfPropositions'],
                 $blockArray['maxNumberOfRightPropositions']
             );
@@ -416,7 +416,7 @@ class ExerciseModelService
         $objectBlocks = array();
 
         foreach ($modelArray['blocks'] as $blockId => $blockArray) {
-            $block = new GroupItemsObjectBlock($blockArray['numberOfOccurences']);
+            $block = new GroupItemsObjectBlock($blockArray['numberOfOccurrences']);
 
             if ($localGroups) {
                 $block->setClassifConstr($this->createClassifConstraints($modelArray, $blockId));
@@ -447,7 +447,7 @@ class ExerciseModelService
 
         foreach ($modelArray['blocks'] as $blockId => $blockArray) {
             $block = new PairBlock(
-                $blockArray['numberOfOccurences'],
+                $blockArray['numberOfOccurrences'],
                 $blockArray['metaKey']
             );
 
@@ -476,7 +476,7 @@ class ExerciseModelService
 
         foreach ($modelArray['blocks'] as $blockId => $blockArray) {
             $block = new OrderItemsObjectBlock(
-                $blockArray['numberOfOccurences'],
+                $blockArray['numberOfOccurrences'],
                 $blockArray['metaKey']
             );
 
@@ -835,8 +835,8 @@ class ExerciseModelService
     {
         /** @var ResourceBlock $block */
         foreach ($blocks as $block) {
-            if (!($block->getNumberOfOccurences() > 0)) {
-                throw new InvalidModelException('Le nombre d\'occurences doit être positif');
+            if (!($block->getNumberOfOccurrences() > 0)) {
+                throw new InvalidModelException('Le nombre d\'occurrences doit être positif');
             }
         }
     }
