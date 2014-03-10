@@ -1,26 +1,24 @@
 <h2>Edition de groupement d'objets</h2>
-{% if locked %}<div>Édition vérouillée</div>{% endif %}
+{% if locked %}
+    <div>Édition vérouillée</div>{% endif %}
 <form action="{{ path('simple_it_claire_component_exercise_exercise_model_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
     <input type="hidden" name="model-type" value="group-items">
 
-    <table>
-        <tr>
-            <td><label for="wording">Consigne :</label></td>
-            <td>
-                <input type="text" size="200" name="wording" id="wording" value="{{ exerciseModel.content.wording }}"/>
-            </td>
-        </tr>
-        <tr>
-            <td><label for="displayGroupNames">Afficher le nom des groupes :</label></td>
-            <td>
-                <select name="displayGroupNames" id="displayGroupNames">
-                    <option value="show" {% if exerciseModel.content.displayGroupNames %}selected{% endif %}>montrer</option>
-                    <option value="hide" {% if not exerciseModel.content.displayGroupNames %}selected{% endif %}>cacher</option>
-                    <option value="ask" {% if not exerciseModel.content.displayGroupNames %}selected{% endif %}>demander</option>
-                </select>
-            </td>
-        </tr>
-    </table>
+    <div>
+        <label>Consigne :
+            <input type="text" size="200" name="wording" id="wording" value="{{ exerciseModel.content.wording }}"/>
+        </label>
+    </div>
+
+    <div>
+        <label>Afficher le nom des groupes :
+            <select name="displayGroupNames" id="displayGroupNames">
+                <option value="show" {% if exerciseModel.content.displayGroupNames %}selected{% endif %}>montrer</option>
+                <option value="hide" {% if not exerciseModel.content.displayGroupNames %}selected{% endif %}>cacher</option>
+                <option value="ask" {% if not exerciseModel.content.displayGroupNames %}selected{% endif %}>demander</option>
+            </select>
+        </label>
+    </div>
 
     {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/documents.html.twig'
     with {'documents' : exerciseModel.content.documents} %}
@@ -29,108 +27,82 @@
     with {'classifConstr' : exerciseModel.content.classifConstr, 'blockId' : 'root'} %}
 
 
-    <table id="blocks" border="1">
-        <tr>
-            <td>
-                <!--TODO-->
-                <input type="button" value="Ajouter bloc"/>
-            </td>
-        </tr>
+    <div id="blocks">
+        <div>
+            <!--TODO-->
+            <input type="button" value="Ajouter bloc"/>
+        </div>
         {% set _cptBlock = 0 %}
         {% if exerciseModel.content.objectBlocks |length > 0 %}
             {% for block in exerciseModel.content.objectBlocks %}
-                <tr>
-                    <td>
+                <div class="block">
+                    <div>
                         <button type="button" class="js-remove-block">Supprimer bloc</button>
-                    </td>
-                    <td>
-                        <table>
-                            <tr>
-                                <td><h3>Bloc n° {{ _cptBlock + 1 }}</h3></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/groupingCriteria.html.twig'
-                                    with {'classifConstr' : block.classifConstr,
-                                    'blockId' : _cptBlock} %}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h3>Ressources du bloc</h3>
-                                </td>
-                            </tr>
-                            {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
-                            'objectName' : 'objets',
-                            'resourcesName' : 'resources',
-                            'blocksName' : 'blocks',
-                            'keyName' : 'key',
-                            'comparatorName' : 'comparator',
-                            'valuesName' : 'values',
-                            'excludedName' : 'excluded',
-                            'typeName' : 'type',
-                            '_cptBlock' : _cptBlock,
-                            'block' : block,
-                            'askType' : true
-                            } %}
-                        </table>
-                    </td>
-                </tr>
-                {% set _cptBlock = _cptBlock + 1 %}
+                    </div>
+
+                    <h3>Bloc n° {{ _cptBlock + 1 }}</h3>
+
+                    <h3>Critères de groupement</h3>
+                    {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/groupingCriteria.html.twig'
+                    with {'classifConstr' : block.classifConstr,
+                    'blockId' : _cptBlock} %}
+
+                    <h3>Ressources du bloc</h3>
+                    {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
+                    'objectName' : 'objets',
+                    'resourcesName' : 'resources',
+                    'blocksName' : 'blocks',
+                    'keyName' : 'key',
+                    'comparatorName' : 'comparator',
+                    'valuesName' : 'values',
+                    'excludedName' : 'excluded',
+                    'typeName' : 'type',
+                    '_cptBlock' : _cptBlock,
+                    'block' : block,
+                    'askType' : true
+                    } %}
+                    {% set _cptBlock = _cptBlock + 1 %}
+                </div>
             {% endfor %}
         {% else %}
-            <tr>
-                <td>
+            <div class="block">
+                <div>
                     <button type="button" class="js-remove-block">Supprimer bloc</button>
-                </td>
-                <td>
-                    <table>
-                        <tr>
-                            <td><h3>Bloc n°1</h3></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h3>Critères de groupement</h3>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/groupingCriteria.html.twig'
-                                with {'classifConstr' : NULL,
-                                'blockId' : 0} %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h3>Ressources du bloc</h3>
-                            </td>
-                        </tr>
-                        {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
-                        'objectName' : 'objets',
-                        'resourcesName' : 'resources',
-                        'blocksName' : 'blocks',
-                        'keyName' : 'key',
-                        'comparatorName' : 'comparator',
-                        'valuesName' : 'values',
-                        'excludedName' : 'excluded',
-                        'typeName' : 'type',
-                        '_cptBlock' : 0,
-                        'block' : NULL,
-                        'askType' : true
-                        } %}
-                    </table>
-                </td>
-            </tr>
+                </div>
+                <div>
+                    <h3>Bloc n°1</h3>
+
+                    <h3>Critères de groupement</h3>
+                    {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/groupingCriteria.html.twig'
+                    with {'classifConstr' : NULL,
+                    'blockId' : 0} %}
+
+                    <h3>Ressources du bloc</h3>
+                    {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
+                    'objectName' : 'objets',
+                    'resourcesName' : 'resources',
+                    'blocksName' : 'blocks',
+                    'keyName' : 'key',
+                    'comparatorName' : 'comparator',
+                    'valuesName' : 'values',
+                    'excludedName' : 'excluded',
+                    'typeName' : 'type',
+                    '_cptBlock' : 0,
+                    'block' : NULL,
+                    'askType' : true
+                    } %}
+                </div>
+            </div>
         {% endif %}
-    </table>
+    </div>
 
     <input type="submit"/>
 </form>
 
 <script>
     $(function () {
-        $('table').on('click', '.js-remove-block', function (event) {
-            $(event.target).closest('tr').remove();
+        $('.block').on('click', '.js-remove-block', function (event) {
+            $(event.target).closest('.block').remove();
         })
     });
 

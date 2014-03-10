@@ -1,132 +1,116 @@
 <h2>Edition de questionnaire à choix multiples</h2>
-{% if locked %}<div>Édition vérouillée</div>{% endif %}
+{% if locked %}
+    <div>Édition vérouillée</div>{% endif %}
 <form action="{{ path('simple_it_claire_component_exercise_exercise_model_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
-<input type="hidden" name="model-type" value="multiple-choice">
+    <input type="hidden" name="model-type" value="multiple-choice">
 
-    <table>
-        <tr>
-            <td><label for="wording">Consigne :</label></td>
-            <td>
-                <input type="text" size="200" name="wording" id="wording" value="{{ exerciseModel.content.wording }}"/>
-            </td>
-        </tr>
-        <tr>
-            <td><label for="shuffle">Mélanger ordre :</label></td>
-            <td>
-                <select name="shuffle" id="shuffle">
-                    <option value="1" {% if exerciseModel.content.shuffleQuestionsOrder %}selected{% endif %}>Mélanger</option>
-                    <option value="0" {% if not exerciseModel.content.shuffleQuestionsOrder %}selected{% endif %}>Ne pas mélanger</option>
-                </select>
-            </td>
-        </tr>
-    </table>
+    <div>
+        <label>Consigne :
+            <input type="text" size="200" name="wording" id="wording" value="{{ exerciseModel.content.wording }}"/>
+        </label>
+    </div>
+
+    <div>
+        <label>Mélanger ordre :
+            <select name="shuffle" id="shuffle">
+                <option value="1" {% if exerciseModel.content.shuffleQuestionsOrder %}selected{% endif %}>Mélanger</option>
+                <option value="0" {% if not exerciseModel.content.shuffleQuestionsOrder %}selected{% endif %}>Ne pas mélanger</option>
+            </select>
+        </label>
+    </div>
+
 
     {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/documents.html.twig'
     with {'documents' : exerciseModel.content.documents} %}
 
-    <table id="blocks" border="1">
-        <tr>
-            <td>
-                <!--TODO-->
-                <input type="button" value="Ajouter bloc"/>
-            </td>
-        </tr>
+    <div id="blocks">
+        <div>
+            <!--TODO-->
+            <input type="button" value="Ajouter bloc"/>
+        </div>
+
         {% set _cptBlock = 0 %}
         {% if exerciseModel.content.questionBlocks |length > 0 %}
-            {% for block in exerciseModel.content.questionBlocks %}
-                <tr>
-                    <td>
-                        <button type="button" class="js-remove-block">Supprimer bloc</button>
-                    </td>
-                    <td>
-                        <table>
-                            <tr>
-                                <td><h3>Bloc n° {{ _cptBlock + 1 }}</h3></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label>Nombre maximal de propositions :
-                                        <input class="refId" type="text" size="20" name="blocks[{{ _cptBlock }}][maxNumberOfPropositions]"
-                                               value="{{ block.maxNumberOfPropositions }}"/>
-                                    </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label>Nombre maximal de propositions justes :
-                                        <input type="text" size="20" name="blocks[{{ _cptBlock }}][maxNumberOfRightPropositions]"
-                                               value="{{ block.maxNumberOfRightPropositions }}"/>
-                                    </label>
-                                </td>
-                            </tr>
-                            {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
-                            'objectName' : 'questions',
-                            'resourcesName' : 'resources',
-                            'blocksName' : 'blocks',
-                            'keyName' : 'key',
-                            'comparatorName' : 'comparator',
-                            'valuesName' : 'values',
-                            'excludedName' : 'excluded',
-                            'typeName' : 'type',
-                            '_cptBlock' : _cptBlock,
-                            'block' : block,
-                            'askType' : false
-                            } %}
-                        </table>
-                    </td>
-                </tr>
-                {% set _cptBlock = _cptBlock + 1 %}
-            {% endfor %}
-        {% else %}
-            <tr>
-                <td>
-                    <button type="button" class="js-remove-tr">Supprimer bloc</button>
-                </td>
-                <td>
-                    <table>
-                        <tr>
-                            <td><h3>Bloc n°1</h3></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label>Nombre maximal de propositions :
-                                    <input type="text" size="20" name="blocks[0][maxNumberOfPropositions]"/>
-                                </label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label>Nombre maximal de propositions justes :
-                                    <input type="text" size="20" name="blocks[0][maxNumberOfRightPropositions]"/>
-                                </label>
-                            </td>
-                        </tr>
-                        {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
-                        'objectName' : 'questions',
-                        'resourcesName' : 'resources',
-                        'blocksName' : 'blocks',
-                        'keyName' : 'key',
-                        'comparatorName' : 'comparator',
-                        'valuesName' : 'values',
-                        'excludedName' : 'excluded',
-                        'typeName' : 'type',
-                        '_cptBlock' : 0,
-                        'block' : NULL,
-                        'askType' : false
-                        } %}
-                    </table>
-                </td>
-            </tr>
-        {% endif %}
-    </table>
+        {% for block in exerciseModel.content.questionBlocks %}
+        <div class="block">
+            <div>
+                <button type="button" class="js-remove-block">Supprimer bloc</button>
+            </div>
+            <div>
+                <h3>Bloc n° {{ _cptBlock + 1 }}</h3>
 
-    <input type="submit"/>
+                <div>
+                    <label>Nombre maximal de propositions :
+                        <input class="refId" type="text" size="20" name="blocks[{{ _cptBlock }}][maxNumberOfPropositions]"
+                               value="{{ block.maxNumberOfPropositions }}"/>
+                    </label>
+                </div>
+                <div>
+                    <label>Nombre maximal de propositions justes :
+                        <input type="text" size="20" name="blocks[{{ _cptBlock }}][maxNumberOfRightPropositions]"
+                               value="{{ block.maxNumberOfRightPropositions }}"/>
+                    </label>
+                </div>
+
+                {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
+                'objectName' : 'questions',
+                'resourcesName' : 'resources',
+                'blocksName' : 'blocks',
+                'keyName' : 'key',
+                'comparatorName' : 'comparator',
+                'valuesName' : 'values',
+                'excludedName' : 'excluded',
+                'typeName' : 'type',
+                '_cptBlock' : _cptBlock,
+                'block' : block,
+                'askType' : false
+                } %}
+            </div>
+
+            {% set _cptBlock = _cptBlock + 1 %}
+            {% endfor %}
+            {% else %}
+            <div class="block">
+                <div>
+                    <button type="button" class="js-remove-tr">Supprimer bloc</button>
+                </div>
+                <h3>Bloc n°1</h3>
+
+                <div>
+                    <label>Nombre maximal de propositions :
+                        <input type="text" size="20" name="blocks[0][maxNumberOfPropositions]"/>
+                    </label>
+                </div>
+                <div>
+                    <label>Nombre maximal de propositions justes :
+                        <input type="text" size="20" name="blocks[0][maxNumberOfRightPropositions]"/>
+                    </label>
+                </div>
+
+                {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
+                'objectName' : 'questions',
+                'resourcesName' : 'resources',
+                'blocksName' : 'blocks',
+                'keyName' : 'key',
+                'comparatorName' : 'comparator',
+                'valuesName' : 'values',
+                'excludedName' : 'excluded',
+                'typeName' : 'type',
+                '_cptBlock' : 0,
+                'block' : NULL,
+                'askType' : false
+                } %}
+                {% endif %}
+            </div>
+        </div>
+
+        <input type="submit"/>
 </form>
 
 <script>
     $(function () {
-        $('table').on('click', '.js-remove-block', function (event) {
-            $(event.target).closest('tr').remove();
+        $('.block').on('click', '.js-remove-block', function (event) {
+            $(event.target).closest('.block').remove();
         })
     });
 

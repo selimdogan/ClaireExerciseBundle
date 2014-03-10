@@ -3,7 +3,7 @@
 <ul class="simple-list">
     {% for ownerResource in ownerResources %}
         <li>
-            <div class="js-resource-item" data-drag-config="{{ { resources: ownerResource.id }|json_encode() }}">
+            <div class="js-resource-item" data-drag-config="{{ { resources: ownerResource.resource }|json_encode() }}">
                 {% if public %}
                     <a href="{{ path('simple_it_claire_component_exercise_resource_add_to_perso',{ 'resourceId': ownerResource.resource}) }}">
                     <span>

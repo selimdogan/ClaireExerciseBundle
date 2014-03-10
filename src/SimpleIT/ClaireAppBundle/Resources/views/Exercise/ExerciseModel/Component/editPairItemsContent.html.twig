@@ -57,8 +57,8 @@
 
 <script>
     $(function () {
-        $('table').on('click', '.js-remove-block', function (event) {
-            $(event.target).closest('tr').remove();
+        $('.block').on('click', '.js-remove-block', function (event) {
+            $(event.target).closest('.block').remove();
         })
     });
 

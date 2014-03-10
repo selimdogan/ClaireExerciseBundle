@@ -1,3 +1,6 @@
+{% extends "SimpleITClaireAppBundle:Exercise:layout.html.twig" %}
+
+{% block content %}
 <h1>Edition de ressource possédée</h1>
 
 <p>
@@ -37,4 +40,5 @@
 {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/OwnerResource:editPublicView',{ 'ownerResourceId': ownerResource.id })) }}
 {{ render(controller('SimpleITClaireAppBundle:Exercise/Component/MetadataByOwnerResource:editMetadataView',{ 'ownerResourceId': ownerResource.id })) }}
 
+{% endblock content %}
 

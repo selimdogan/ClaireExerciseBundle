@@ -1,3 +1,8 @@
+{% extends "SimpleITClaireAppBundle:Exercise:layout.html.twig" %}
+
+{% block content %}
+
+
 <h1>Edition de ressources : {{ resource.type }}</h1>
 {% if locked %}
     <div>Édition vérouillée</div>
@@ -16,4 +21,6 @@
         <input type="submit" value="Supprimer la ressource">
     </form>
 {% endif %}
+
+{% endblock content %}
 
