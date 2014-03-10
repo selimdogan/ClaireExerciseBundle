@@ -31,45 +31,46 @@
 
         {% set _cptBlock = 0 %}
         {% if exerciseModel.content.questionBlocks |length > 0 %}
-        {% for block in exerciseModel.content.questionBlocks %}
-        <div class="block">
-            <div>
-                <button type="button" class="js-remove-block">Supprimer bloc</button>
-            </div>
-            <div>
-                <h3>Bloc n° {{ _cptBlock + 1 }}</h3>
+            {% for block in exerciseModel.content.questionBlocks %}
+                <div class="block">
+                    <div>
+                        <button type="button" class="js-remove-block">Supprimer bloc</button>
+                    </div>
+                    <div>
+                        <h3>Bloc n° {{ _cptBlock + 1 }}</h3>
 
-                <div>
-                    <label>Nombre maximal de propositions :
-                        <input class="refId" type="text" size="20" name="blocks[{{ _cptBlock }}][maxNumberOfPropositions]"
-                               value="{{ block.maxNumberOfPropositions }}"/>
-                    </label>
+                        <div>
+                            <label>Nombre maximal de propositions :
+                                <input class="refId" type="text" size="20" name="blocks[{{ _cptBlock }}][maxNumberOfPropositions]"
+                                       value="{{ block.maxNumberOfPropositions }}"/>
+                            </label>
+                        </div>
+                        <div>
+                            <label>Nombre maximal de propositions justes :
+                                <input type="text" size="20" name="blocks[{{ _cptBlock }}][maxNumberOfRightPropositions]"
+                                       value="{{ block.maxNumberOfRightPropositions }}"/>
+                            </label>
+                        </div>
+
+                        {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
+                        'objectName' : 'questions',
+                        'resourcesName' : 'resources',
+                        'blocksName' : 'blocks',
+                        'keyName' : 'key',
+                        'comparatorName' : 'comparator',
+                        'valuesName' : 'values',
+                        'excludedName' : 'excluded',
+                        'typeName' : 'type',
+                        '_cptBlock' : _cptBlock,
+                        'block' : block,
+                        'askType' : false
+                        } %}
+                    </div>
                 </div>
-                <div>
-                    <label>Nombre maximal de propositions justes :
-                        <input type="text" size="20" name="blocks[{{ _cptBlock }}][maxNumberOfRightPropositions]"
-                               value="{{ block.maxNumberOfRightPropositions }}"/>
-                    </label>
-                </div>
 
-                {% include '@SimpleITClaireApp/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
-                'objectName' : 'questions',
-                'resourcesName' : 'resources',
-                'blocksName' : 'blocks',
-                'keyName' : 'key',
-                'comparatorName' : 'comparator',
-                'valuesName' : 'values',
-                'excludedName' : 'excluded',
-                'typeName' : 'type',
-                '_cptBlock' : _cptBlock,
-                'block' : block,
-                'askType' : false
-                } %}
-            </div>
-
-            {% set _cptBlock = _cptBlock + 1 %}
+                {% set _cptBlock = _cptBlock + 1 %}
             {% endfor %}
-            {% else %}
+        {% else %}
             <div class="block">
                 <div>
                     <button type="button" class="js-remove-tr">Supprimer bloc</button>
@@ -100,11 +101,11 @@
                 'block' : NULL,
                 'askType' : false
                 } %}
-                {% endif %}
             </div>
-        </div>
+        {% endif %}
 
-        <input type="submit"/>
+    </div>
+    <input type="submit"/>
 </form>
 
 <script>
