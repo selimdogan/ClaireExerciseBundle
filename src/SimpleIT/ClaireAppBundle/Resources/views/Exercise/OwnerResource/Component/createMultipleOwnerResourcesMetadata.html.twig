@@ -1,8 +1,8 @@
 <h2>Outil d'ajout multiple de métadonnées</h2>
 
 <form action="{{ path('simple_it_claire_component_exercise_multiple_owner_resource_metadata_edit') }}" method="post">
-    <input type="button" onclick="addMD()" value="Ajouter"/>
-    <table id="metadataList">
+    <input type="button" onclick="addMORMMD()" value="Ajouter"/>
+    <table id="metadataListMORM">
         <tr>
             <td>
                 Clé :
@@ -22,8 +22,8 @@
         </tr>
     </table>
 
-    <input type="button" onclick="addKW()" value="Ajouter"/>
-    <table id="keywords">
+    <input type="button" onclick="addMORMKW()" value="Ajouter"/>
+    <table id="keywordsMORM">
         <tr>
             <td>
                 Mot-clé :
@@ -37,9 +37,9 @@
         </tr>
     </table>
 
-    <input type="button" onclick="addResourceId()" value="Ajouter"/>
+    <input type="button" onclick="addMORMResourceId()" value="Ajouter"/>
 
-    <table id="ownerResourceList">
+    <table id="ownerResourceListMORM">
         <tr><th>Id de ressource</th></tr>
         <tr>
             <td>
@@ -55,8 +55,8 @@
 </form>
 
 <script>
-    function addMD() {
-        var $table = $('#metadataList'),
+    function addMORMMD() {
+        var $table = $('#metadataListMORM'),
                 $lines = $('tr', $table),
                 $last = $lines.last(),
                 $inputText = $last.find('input[type=text]'),
@@ -81,8 +81,8 @@
         $clone.appendTo($table);
     }
 
-    function addKW() {
-        var $table = $('#keywords'),
+    function addMORMKW() {
+        var $table = $('#keywordsMORM'),
                 $lines = $('tr', $table),
                 $last = $lines.last(),
                 $clone = $last.clone();
@@ -96,9 +96,9 @@
         $clone.appendTo($table);
     }
 
-    function addResourceId() {
+    function addMORMResourceId() {
         var
-                $table = $('#ownerResourceList'),
+                $table = $('#ownerResourceListMORM'),
                 $lines = $('tr', $table),
                 $last = $lines.last(),
                 $clone = $last.clone();

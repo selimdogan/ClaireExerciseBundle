@@ -12,9 +12,9 @@
         </tr>
     </table>
 
-    <input type="button" onclick="addResourceId()" value="Ajouter"/>
+    <input type="button" onclick="addMORKMResourceId()" value="Ajouter"/>
 
-    <table id="ownerResourceList">
+    <table id="ownerResourceListMORKM">
         <tr>
             <th>
                 Id de la ressource
@@ -43,9 +43,9 @@
 </form>
 
 <script>
-    function addResourceId() {
+    function addMORKMResourceId() {
         var
-                $table = $('#ownerResourceList'),
+                $table = $('#ownerResourceListMORKM'),
                 $lines = $('tr', $table),
                 $last = $lines.last(),
                 $inputText = $last.find('input[type=text]'),

@@ -237,23 +237,34 @@ class OwnerResourceService
      */
     public function addMultipleMetadata($ownerResourceIds, $metaKey, $metaValue, $keywords)
     {
-        if (count(preg_grep('/;/', $keywords)) > 0) {
+        if (!empty($keywords) && count(preg_grep('/;/', $keywords)) > 0) {
             throw new \Exception('Keywords must not contain ";"', 400);
         }
 
-        if (count(preg_grep('/^_/', $metaKey)) > 0) {
-            throw new \Exception('Metadata keys cannot start with "_"', 400);
+        $metadata = array();
+        if (!empty($metaKey)) {
+            if (count(preg_grep('/^_/', $metaKey)) > 0) {
+                throw new \Exception('Metadata keys cannot start with "_"', 400);
+            }
+            foreach ($metaKey as $index => $key) {
+                if (!empty($key) && !empty($metaValue[$index])) {
+                    $metadata[$key] = $metaValue[$index];
+                }
+            }
         }
-        $metadata = array_combine($metaKey, $metaValue);
-
         foreach ($ownerResourceIds as $id) {
             $or = $this->ownerResourceRepository->find($id);
             $ormd = $or->getMetadata();
-            $metadata = array_merge($ormd, $metadata);
+
+            $metadata = array_merge((array)$ormd, $metadata);
 
             if (isset($ormd[MetadataResource::MISC_METADATA_KEY])) {
                 $orkw = explode(';', $ormd[MetadataResource::MISC_METADATA_KEY]);
-                $keywords = array_merge($keywords, $orkw);
+                $keywords = array_unique(array_merge($keywords, $orkw));
+                sort($keywords, SORT_NATURAL | SORT_FLAG_CASE);
+                while ($keywords[0] == null || $keywords[0] == '') {
+                    array_shift($keywords);
+                }
             }
             if (!empty($keywords)) {
                 $metadata[MetadataResource::MISC_METADATA_KEY] = implode(';', $keywords);

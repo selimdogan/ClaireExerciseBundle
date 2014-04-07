@@ -395,7 +395,7 @@ class ExerciseModelService
                 $blockArray,
                 $modelArray,
                 $key,
-                CommonModel::MULTIPLE_CHOICE
+                CommonResource::MULTIPLE_CHOICE_QUESTION
             );
 
             $questionBlocks[] = $block;
@@ -534,7 +534,7 @@ class ExerciseModelService
             $block->setResources($resourceList);
         } elseif ($blockArray['resourceOrigin'] === "constraints") {
             $objConstraint = new ObjectConstraints();
-            if ($type === null) {
+            if ($type === null && !empty($modelArray[$typeName][$blockId])) {
                 $type = $modelArray[$typeName][$blockId];
             }
             $objConstraint->setType($type);
@@ -554,9 +554,11 @@ class ExerciseModelService
 
             $excludedList = array();
             foreach ($modelArray[$excludedName][$blockId] as $excluded) {
-                $excObj = new ObjectId();
-                $excObj->setId($excluded);
-                $excludedList[] = $excObj;
+                if ($excluded === "0" || !empty($excluded)) {
+                    $excObj = new ObjectId();
+                    $excObj->setId($excluded);
+                    $excludedList[] = $excObj;
+                }
             }
             $objConstraint->setExcluded($excludedList);
 
