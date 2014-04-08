@@ -62,8 +62,12 @@ class AnswerService implements AnswerServiceInterface
      *
      * @return AnswerResource
      */
-    public function add($attemptId, $itemId, array $answers)
+    public function add($attemptId, $itemId, $answers)
     {
+        if (is_null($answers)) {
+            $answers = array();
+        }
+
         $item = $this->itemService->getByAttempt($attemptId, $itemId);
         $answerResource = $this->getResourceFromAnswer($answers, $item);
 

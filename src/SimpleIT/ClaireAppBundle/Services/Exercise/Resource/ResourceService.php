@@ -105,6 +105,10 @@ class ResourceService
         $question->setMaxNumberOfPropositions($resourceContentArray['maxProp']);
         $question->setMaxNumberOfRightPropositions($resourceContentArray['maxRightProp']);
         $question->setComment($resourceContentArray['comment']);
+        $question->setDoNotShuffle(
+            isset($resourceContentArray['doNotShuffle']) &&
+            $resourceContentArray['doNotShuffle'] = 1
+        );
 
         $propositions = array();
         foreach ($resourceContentArray['propositionText'] as $key => $propText) {
@@ -113,6 +117,10 @@ class ResourceService
             $prop->setRight(
                 isset ($resourceContentArray['propositionRight'][$key]) &&
                 $resourceContentArray['propositionRight'][$key] == 1
+            );
+            $prop->setForceUse(
+                isset ($resourceContentArray['propositionForceUse'][$key]) &&
+                $resourceContentArray['propositionForceUse'][$key] == 1
             );
             $propositions[] = $prop;
         }

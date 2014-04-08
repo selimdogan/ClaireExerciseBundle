@@ -1,5 +1,6 @@
 <h2>Edition de la question de QCM</h2>
-{% if locked %}<div>Édition vérouillée</div>{% endif %}
+{% if locked %}
+    <div>Édition vérouillée</div>{% endif %}
 
 <form action="{{ path('simple_it_claire_component_exercise_resource_mcquestion_content_edit',{ 'resourceId': resource.id}) }}" method="post">
     <table>
@@ -24,6 +25,13 @@
                 <input type="text" size="3" name="maxRightProp" id="maxRightProp" value="{{ resource.content.maxNumberOfRightPropositions }}"/>
             </td>
         </tr>
+        <tr>
+            <td><label for="doNotShuffle">Ne pas mélanger l'ordre des propositions :</label></td>
+            <td>
+                <input type="checkbox" id="doNotShuffle" name="doNotShuffle"
+                       {% if resource.content.doNotShuffle %}checked{% endif %} value="1"/>
+            </td>
+        </tr>
     </table>
 
     <input type="button" onclick="addProposition()" value="Ajouter"/>
@@ -41,8 +49,16 @@
                                value="{{ proposition.text }}"/>
                     </td>
                     <td>
-                        <input type="checkbox" name="propositionRight[{{ _cptProp }}]"
-                               {% if proposition.right %}checked{% endif %} value="1"/>
+                        <label> Vraie :
+                            <input type="checkbox" name="propositionRight[{{ _cptProp }}]"
+                                   {% if proposition.right %}checked{% endif %} value="1"/>
+                        </label>
+                    </td>
+                    <td>
+                        <label> Forcer :
+                            <input type="checkbox" name="propositionForceUse[{{ _cptProp }}]"
+                                   {% if proposition.forceUse %}checked{% endif %} value="1"/>
+                        </label>
                     </td>
                     <td>
                         <button type="button" class="js-remove">-</button>
@@ -67,7 +83,6 @@
             </tr>
         {% endif %}
     </table>
-
 
     <table>
         <tr>

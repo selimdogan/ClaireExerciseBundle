@@ -21,5 +21,5 @@ interface AnswerServiceInterface
      * @internal param int $itemId
      * @return AnswerResource
      */
-    public function add($attemptId, $itemId, array $answers);
+    public function add($attemptId, $itemId, $answers);
 }
