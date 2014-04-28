@@ -1,5 +1,5 @@
 <?php
-namespace SimpleIT\ExerciseBundle\Feature\ExerciseResource;
+namespace SimpleIT\ClaireExerciseBundle\Feature\ExerciseResource;
 
 use SimpleIT\ApiBundle\Model\ApiResponse;
 use OC\Tester\ApiFeatureTest;

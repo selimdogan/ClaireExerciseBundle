@@ -1,0 +1,98 @@
+<div>
+    <h3>Critères de groupement</h3>
+
+    <div>
+        Que faire des objets ne rentrant dans aucun groupe prévu:
+        <div>
+            <label><input type="radio" name="other[{{ blockId }}]" value="own"
+                          {% if classifConstr != NULL and classifConstr.other == "own" %}checked{% endif %}/>
+                Créer son propre groupe</label>
+        </div>
+        <div>
+            <label><input type="radio" name="other[{{ blockId }}]" value="misc"
+                          {% if classifConstr != NULL and classifConstr.other == "misc" %}checked={% endif %}/>
+                Mettre dans un groupe intitulé "Divers"</label>
+        </div>
+        <div>
+            <label><input type="radio" name="other[{{ blockId }}]" value="reject"
+                          {% if classifConstr != NULL and classifConstr.other == "reject" %}checked={% endif %}/>
+                Ne pas utiliser pour l'exercice (peut réduire le nombre d'objets
+                présentés à l'apprenant si vous sélectionnez de tels objets)</label>
+        </div>
+    </div>
+
+    <table border="1" class="grouping-criteria">
+        <tr>
+            <td>
+                <button type="button" class="js-add-group">+</button>
+            </td>
+        </tr>
+        {% if classifConstr != NULL and classifConstr.groups|length > 0 %}
+            {% set _groupId = 0 %}
+            {% for group in classifConstr.groups %}
+                <tr class="grouping-group">
+                    <td class="group-header">
+                        <button type="button" class="js-remove-group">-</button>
+                    </td>
+                    <td>
+                        <table class="constrBloc">
+                            <tr>
+                                <td>
+                                    <label>Nom du groupe :
+                                        <input type="text" size="40" name="group[{{ blockId }}][{{ _groupId }}]"
+                                               class="group-name" value="{{ group.name }}"/>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button type="button" class="js-add-classifConstraint">+</button>
+                                </td>
+                            </tr>
+                            {% set _cptMdc = 0 %}
+                            {% for mdc in group.mDConstraints %}
+                                {% include '@SimpleITClaireExercise/Exercise/ExerciseModel/Component/include/classificationConstraints.html.twig'
+                                with {'mdc' : mdc,
+                                'keyName' : 'classifKey',
+                                'comparatorName' : 'classifComparator',
+                                'valuesName' : 'classifValues',
+                                'cptBlock' : blockId ~ '][' ~ _groupId,
+                                'cptMdc' : _cptMdc} %}
+
+                                {% set _cptMdc = _cptMdc + 1 %}
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+                {% set _groupId = _groupId + 1 %}
+            {% endfor %}
+        {% else %}
+            <tr class="grouping-group">
+                <td>Groupe 1</td>
+                <td>
+                    <table class="constrBloc">
+                        <tr>
+                            <td>
+                                <label>Nom du groupe :
+                                    <input type="text" size="40" name="group[{{ blockId }}][0]"
+                                           class="group-name"/>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button type="button" class="js-add-classifConstraint">+</button>
+                            </td>
+                        </tr>
+                        {% include '@SimpleITClaireExercise/Exercise/ExerciseModel/Component/include/classificationConstraints.html.twig'
+                        with {'mdc' : NULL,
+                        'keyName' : 'classifKey',
+                        'comparatorName' : 'classifComparator',
+                        'valuesName' : 'classifValues',
+                        'cptBlock' : blockId ~ '][0',
+                        'cptMdc' : 0} %}
+                    </table>
+                </td>
+            </tr>
+        {% endif %}
+    </table>

@@ -1,0 +1,6 @@
+web_exercise_try:
+    pattern: /{exerciseId}/try
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/Exercise:try }
+    requirements:
+        _method: GET
+

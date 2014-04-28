@@ -1,0 +1,32 @@
+{% extends 'SimpleITClaireExerciseBundle:Exercise/Exercise/MultipleChoice/Component:container.html.twig' %}
+
+{% block question %}
+
+    <form action="{{ path('simple_it_claire_component_exercise_item_by_attempt_answer',
+    { 'attemptId': attemptId,'itemId': itemId }) }}" method="post">
+
+        {% set _cptAnswer = 0 %}
+
+        <p>{{ item.question }}</p>
+        <table>
+            <tbody>
+            {% for proposition in item.propositions %}
+                <tr>
+                    <td><input id="answer{{ _cptAnswer }}"
+                               type="checkbox"
+                               name="answers[{{ _cptAnswer }}]"
+                                /></td>
+                    <td><label for="answer{{ _cptAnswer }}">
+                            {{ proposition.text }}
+                        </label></td>
+                </tr>
+
+                {% set _cptAnswer = _cptAnswer + 1 %}
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+        <input type="submit" value="Envoyer" class="submit-button"/>
+    </form>
+{% endblock %}

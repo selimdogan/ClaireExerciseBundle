@@ -1,0 +1,38 @@
+{% extends 'SimpleITClaireExerciseBundle:Exercise/Exercise/MultipleChoice/Component:container.html.twig' %}
+
+{% block question %}
+
+
+    {% set _cptAnswer = 1 %}
+
+    <p>{{ item.question }}</p>
+
+    {% for proposition in item.propositions %}
+
+        <p>
+            {% if proposition.ticked %}
+            1
+        {% else %}
+            0
+            {% endif %},
+            {% if proposition.right %}
+            1
+        {% else %}
+            0
+            {% endif %},
+            {{ proposition.text }}
+        </p>
+
+        {% set _cptAnswer = _cptAnswer + 1 %}
+
+    {% endfor %}
+
+    <p>Votre score : {{ item.mark }} %</p>
+
+    {% if item.comment is defined %}
+        <p> {{ item.comment }} </p>
+    {% endif %}
+
+    <script src="{{ asset("bundles/simpleitclaireapp/js/Exercise/parse-mc.js") }}"></script>
+{% endblock %}
+

@@ -1,0 +1,59 @@
+{% extends 'SimpleITClaireExerciseBundle:Exercise/Exercise/GroupItems/Component:container.html.twig' %}
+
+{% block question %}
+
+    <form action="{{ path('simple_it_claire_component_exercise_item_by_attempt_answer',
+    { 'attemptId': attemptId,'itemId': itemId }) }}" method="post">
+
+        {% set _cptGroup = 0 %}
+        <table cellpadding="10">
+            <tbody>
+            {% for group in item.groups %}
+                <tr>
+                    <td>
+                        {% if item.displayGroupNames == 'ask' %}
+                            {{ _cptGroup }} -
+                            <input id="group{{ _cptGroup }}"
+                                   type="text"
+                                   name="answers[gr][{{ _cptGroup }}]"
+                                    />
+                        {% elseif item.displayGroupNames == 'hide' %}
+                            {{ _cptGroup }}
+                        {% else %}
+                            {{ _cptGroup }} - {{ group }}
+                        {% endif %}
+                    </td>
+                </tr>
+
+                {% set _cptGroup = _cptGroup + 1 %}
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% set _cptObj = 0 %}
+        <table cellpadding="10">
+            <tbody>
+            {% for obj in item.objects %}
+                <tr>
+                    {% if obj.source is defined %}
+                        <td>
+                            <img src="{{ asset("bundles/simpleitclaireapp/img/exercise/") }}{{ obj.source }}"
+                                 alt="{{ obj.source }}." align="center"/></td>
+                    {% elseif obj.text is defined %}
+                        <td>{{ obj.text }}</td>
+                    {% endif %}
+                    <td><input id="answer{{ _cptObj }}"
+                               type="text"
+                               size="1"
+                               name="answers[obj][{{ _cptObj }}]"
+                                /></td>
+                </tr>
+
+                {% set _cptObj = _cptObj + 1 %}
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <input type="submit" value="Envoyer" class="submit-button"/>
+    </form>
+{% endblock %}

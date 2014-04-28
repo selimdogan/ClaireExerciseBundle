@@ -1,0 +1,364 @@
+<h2>Edition d'ordonnancement d'objets</h2>
+{% if locked %}<div>Édition vérouillée</div>{% endif %}
+
+{% set content = exerciseModel.content %}
+
+<form action="{{ path('simple_it_claire_component_exercise_exercise_model_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
+<input type="hidden" name="model-type" value="order-items">
+
+<table>
+    <tr>
+        <td>
+            <label>Consigne :
+                <input type="text" size="200" name="wording" id="wording" value="{{ exerciseModel.content.wording }}"/>
+            </label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label>Révéler le premier :
+                <input type="checkbox" name="give-first" value="1"
+                       {% if content.giveFirst %}checked{% endif %}/>
+            </label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label>Révéler le dernier :
+                <input type="checkbox" name="give-last" value="1"
+                       {% if content.giveLast %}checked{% endif %}/>
+            </label>
+        </td>
+    </tr>
+</table>
+
+{% include '@SimpleITClaireExercise/Exercise/ExerciseModel/Component/include/documents.html.twig'
+with {'documents' : content.documents} %}
+
+<h3>
+    <label>
+        <input type="radio" name="sequence-origin"
+               value="sequence-resource"
+               {% if content.sequenceBlock != NULL %}checked{% endif %}/>
+
+        Séquence depuis une ressource "séquence" existante
+    </label>
+</h3>
+<table border="1">
+    <tr>
+        <td>
+            <label>Nombre de parties à remettre dans l'ordre
+                <input type="text" size="20" name="number-of-parts"
+                        {% if content.sequenceBlock != NULL %}
+                    value="{{ content.sequenceBlock.numberOfParts }}"
+                        {% endif %}/>
+            </label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label>
+                <input type="radio" name="keepAll"
+                       value="1"
+                       {% if content.sequenceBlock != NULL and content.sequenceBlock.keepAll %}checked{% endif %}/>
+
+                Conserver l'intégralité des éléments d'origine (recommandé)
+            </label>
+            <label>
+                <input type="radio" name="keepAll"
+                       value="0"
+                       {% if content.sequenceBlock != NULL and not content.sequenceBlock.keepAll %}checked{% endif %}/>
+
+                Extraire le bon nombre de parties (d'autres seront inutilisées)
+            </label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label>Forcer l'utilisation du premier (utile uniquement si extraction de parties) :
+                <input type="checkbox" name="use-first" value="1"
+                       {% if content.sequenceBlock != NULL and content.sequenceBlock.useFirst %}checked{% endif %}/>
+            </label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label>Forcer l'utilisation du dernier (utile uniquement si extraction de parties) :
+                <input type="checkbox" name="use-last" value="1"
+                       {% if content.sequenceBlock != NULL and content.sequenceBlock.useLast %}checked{% endif %}/>
+            </label>
+        </td>
+    </tr>
+    {% include '@SimpleITClaireExercise/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
+    'blocksName' : 'sequence-blocks',
+    'resourcesName' : 'sequence-resources',
+    'keyName' : 'sequence-key',
+    'comparatorName' : 'sequence-comparator',
+    'valuesName' : 'sequence-values',
+    'excludedName' : 'sequence-excluded',
+    '_cptBlock' : 0,
+    'block' : content.sequenceBlock,
+    'askType' : false,
+    'onlyOneOccurrence' : true
+    } %}
+</table>
+
+<h3>
+    <label>
+        <input type="radio" name="sequence-origin"
+               value="resource-list"
+               {% if content.objectBlocks|length > 0 %}checked{% endif %}/>
+
+        Séquence depuis une liste de ressources
+    </label>
+</h3>
+<table>
+    <tr>
+        <td>
+            Ordre (uniquement si liste de ressources) :
+            <label>
+                <input type="radio" name="order"
+                       value="asc"
+                       {% if content.order == 'asc' %}checked{% endif %}/>
+                Ascendant
+            </label>
+            <label>
+                <input type="radio" name="order"
+                       value="desc"
+                       {% if content.order == 'desc' %}checked{% endif %}/>
+                Descendant
+            </label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label>Montrer les valeurs après la correction (uniquement si liste de ressources)
+                <input type="checkbox" name="show-values" value="1"
+                       {% if content.showValues %}checked{% endif %}/>
+            </label>
+        </td>
+    </tr>
+</table>
+<table id="blocks" border="1">
+    <tr>
+        <td>
+            <!--TODO-->
+            <input type="button" value="Ajouter bloc"/>
+        </td>
+    </tr>
+    {% set _cptBlock = 0 %}
+    {% if exerciseModel.content.objectBlocks |length > 0 %}
+        {% for block in exerciseModel.content.objectBlocks %}
+            <tr>
+                <td>
+                    <button type="button" class="js-remove-block">Supprimer bloc</button>
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td><h3>Bloc n° {{ _cptBlock + 1 }}</h3></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Clé de la métadonnée utilisée pour le tri
+                                    <input type="text" size="20" name="blocks[{{ _cptBlock }}][metaKey]"
+                                           value="{{ block.metaKey }}"/>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h3>Ressources du bloc</h3>
+                            </td>
+                        </tr>
+                        {% include '@SimpleITClaireExercise/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
+                        'objectName' : 'ressource',
+                        'resourcesName' : 'resources',
+                        'blocksName' : 'blocks',
+                        'keyName' : 'key',
+                        'excludedName' : 'excluded',
+                        'typeName' : 'type',
+                        'comparatorName' : 'comparator',
+                        'valuesName' : 'values',
+                        '_cptBlock' : _cptBlock,
+                        'block' : block,
+                        'askType' : true
+                        } %}
+                    </table>
+                </td>
+            </tr>
+            {% set _cptBlock = _cptBlock + 1 %}
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td>
+                <button type="button" class="js-remove-block">Supprimer bloc</button>
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <td><h3>Bloc n° 1</h3></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Clé de la métadonnée utilisée pour le tri
+                                <input type="text" size="20" name="blocks[0][metaKey]"/>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h3>Ressources du bloc</h3>
+                        </td>
+                    </tr>
+                    {% include '@SimpleITClaireExercise/Exercise/ExerciseModel/Component/include/objectBlock.html.twig' with {
+                    'objectName' : 'ressource',
+                    'resourcesName' : 'resources',
+                    'blocksName' : 'blocks',
+                    'keyName' : 'key',
+                    'comparatorName' : 'comparator',
+                    'valuesName' : 'values',
+                    'excludedName' : 'excluded',
+                    'typeName' : 'type',
+                    '_cptBlock' : 0,
+                    'block' : NULL,
+                    'askType' : true
+                    } %}
+                </table>
+            </td>
+        </tr>
+    {% endif %}
+</table>
+
+<input type="submit"/>
+</form>
+
+<script>
+    $(function () {
+        $('table').on('click', '.js-remove-block', function (event) {
+            $(event.target).closest('tr').remove();
+        })
+    });
+
+    $(function () {
+        $('.resourceList').on('click', '.js-add-resource', function (event) {
+            var $table = $(event.target).closest('table'),
+                    $lines = $('tr', $table),
+                    $last = $lines.last(),
+                    $clone = $last.clone();
+
+            $clone
+                    .find('input[type=text]')
+                    .val('');
+
+            $clone.appendTo($table);
+        })
+    });
+
+    $(function () {
+        $('.resourceList').on('click', '.js-remove-resource', function (event) {
+            $(event.target).closest('tr').remove();
+        })
+    });
+
+
+    $(function () {
+        $('.constrBloc').on('click', '.js-add-value', function (event) {
+            var $line = $(event.target).closest('tr'),
+                    $tds = $('td', $line),
+                    $last = $tds.last(),
+                    $clone = $last.clone();
+
+            $clone
+                    .find('input[type=text]')
+                    .val('');
+
+            $clone.appendTo($line);
+        })
+    });
+
+    $(function () {
+        $('.constrBloc').on('click', '.js-remove-value', function (event) {
+            $(event.target).closest('td').remove();
+        })
+    });
+
+    $(function () {
+        $('.constrBloc').on('click', '.js-add-constraint', function (event) {
+            var $table = $(event.target).closest('table'),
+                    $lines = $('tr', $table),
+                    $last = $lines.last(),
+                    $inputText = $last.find('input[type=text]'),
+                    $clone = $last.clone(),
+                    blockId = ($inputText.length > 0) ? ($inputText.attr('name').match(/\[([0-9]+)\]\[/))[1] : 0,
+                    prevId = ($inputText.length > 0) ? ($inputText.attr('name').match(/\[([0-9]+)\]$/))[1] : 0;
+
+
+            prevId = parseInt(prevId, 0);
+            blockId = parseInt(blockId, 0);
+
+            // key
+            $clone
+                    .find('input[class=key]')
+                    .attr('name', 'key[' + blockId + '][' + (prevId + 1) + ']')
+                    .val('');
+
+            // comparator
+            $clone
+                    .find('select[class=comparator]')
+                    .attr('name', 'comparator[' + blockId + '][' + (prevId + 1) + ']')
+                    .val('');
+
+            // values
+            $clone
+                    .find('input[class=values]')
+                    .attr('name', 'values[' + blockId + '][' + (prevId + 1) + '][]')
+                    .val('');
+
+            $clone.appendTo($table);
+        })
+    });
+
+    $(function () {
+        $('.constrBloc').on('click', '.js-remove-constraint', function (event) {
+            $(event.target).closest('tr').remove();
+        })
+    });
+
+
+    $(function () {
+        $('.constrBloc').on('click', '.js-add-classifConstraint', function (event) {
+            var $table = $(event.target).closest('table'),
+                    $lines = $('tr', $table),
+                    $last = $lines.last(),
+                    $inputText = $last.find('input[class=key]'),
+                    $clone = $last.clone(),
+                    blockId = ($inputText.length > 0) ? ($inputText.attr('name').match(/y\[(.+)\]\[[0-9]+\]\[[0-9]+\]/))[1] : 0,
+                    groupId = ($inputText.length > 0) ? ($inputText.attr('name').match(/\]\[([0-9]+)\]\[/))[1] : 0,
+                    prevId = ($inputText.length > 0) ? ($inputText.attr('name').match(/\[([0-9]+)\]$/))[1] : 0;
+
+
+            prevId = parseInt(prevId, 0);
+
+            // key
+            $clone
+                    .find('input[class=key]')
+                    .attr('name', 'classifKey[' + blockId + '][' + groupId + '][' + (prevId + 1) + ']')
+                    .val('');
+
+            // comparator
+            $clone
+                    .find('select[class=comparator]')
+                    .attr('name', 'classifComparator[' + blockId + '][' + groupId + '][' + (prevId + 1) + ']')
+                    .val('');
+
+            // values
+            $clone
+                    .find('input[class=values]')
+                    .attr('name', 'classifValues[' + blockId + '][' + groupId + '][' + (prevId + 1) + '][]')
+                    .val('');
+
+            $clone.appendTo($table);
+        })
+    });
+</script>

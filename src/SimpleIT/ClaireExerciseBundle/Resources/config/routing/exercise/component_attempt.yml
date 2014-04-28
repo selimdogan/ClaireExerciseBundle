@@ -1,0 +1,17 @@
+web_attempt_view:
+    pattern: /{attemptId}/view
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/Attempt:view }
+    requirements:
+        _method: GET
+
+web_item_by_attempt_view:
+    pattern: /{attemptId}/item/{itemId}
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/ItemByAttempt:view }
+    requirements:
+        _method: GET
+
+web_item_by_attempt_answer:
+    pattern: /{attemptId}/item/{itemId}
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/ItemByAttempt:answer }
+    requirements:
+        _method: POST

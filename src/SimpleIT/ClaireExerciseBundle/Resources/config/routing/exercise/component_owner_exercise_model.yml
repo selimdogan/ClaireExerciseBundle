@@ -1,0 +1,66 @@
+web_owner_exercise_model_edit:
+    pattern: /{ownerExerciseModelId}/edit
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerExerciseModel:editView }
+    requirements:
+        _method: GET
+
+web_owner_exercise_model_browser:
+    pattern: /browser
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerExerciseModel:browserView }
+    requirements:
+        _method: GET
+
+web_owner_exercise_model_private_list:
+    pattern: /private-list
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerExerciseModel:privateList }
+    requirements:
+        _method: GET
+
+web_owner_exercise_model_public_list:
+    pattern: /public-list
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerExerciseModel:publicList }
+    requirements:
+        _method: GET
+
+web_owner_exercise_model_search_list:
+    pattern: /search
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerExerciseModel:searchList }
+    requirements:
+        _method: GET
+
+web_owner_exercise_model_public_edit_view:
+    pattern: /{ownerExerciseModelId}/public
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerExerciseModel:editPublicView }
+    requirements:
+        _method: GET
+
+web_owner_exercise_model_public_edit:
+    pattern: /{ownerExerciseModelId}/public
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerExerciseModel:publicEdit }
+    requirements:
+        _method: POST
+
+web_owner_exercise_model_metadata_edit_view:
+    pattern: /{ownerExerciseModelId}/metadatas
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/MetadataByOwnerExerciseModel:editMetadataView }
+    requirements:
+        _method: GET
+
+web_owner_exercise_model_metadata_edit:
+    pattern: /{ownerExerciseModelId}/metadatas
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/MetadataByOwnerExerciseModel:metadataEdit }
+    requirements:
+        _method: POST
+
+web_owner_exercise_model_try:
+    pattern: /{ownerExerciseModelId}/try
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerExerciseModel:try }
+    requirements:
+        _method: GET
+
+web_owner_exercise_model_delete:
+    pattern: /{ownerExerciseModelId}/delete
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerExerciseModel:delete }
+    requirements:
+        _method: GET
+        ownerExerciseModelId: \d+

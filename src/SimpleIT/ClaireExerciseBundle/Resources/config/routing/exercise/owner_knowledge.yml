@@ -1,0 +1,80 @@
+api_owner_knowledge_list:
+    pattern:  /
+    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/OwnerKnowledge:list }
+    methods: [GET]
+    requirements:
+        _format: json
+
+api_owner_knowledge_view:
+    pattern:  /{ownerKnowledgeId}
+    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/OwnerKnowledge:view }
+    methods: [GET]
+    requirements:
+        _format: json
+        ownerKnowledgeId: \d+
+
+api_owner_knowledge_edit:
+    pattern:  /{ownerKnowledgeId}
+    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/OwnerKnowledge:edit }
+    methods: [PUT]
+    requirements:
+        _format: json
+        ownerKnowledgeId: \d+
+
+
+api_owner_knowledge_delete:
+    pattern:  /{ownerKnowledgeId}
+    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/OwnerKnowledge:delete }
+    methods: [DELETE]
+    requirements:
+        _format: json
+        ownerKnowledgeId: \d+
+
+api_metadata_list_by_owner_knowledge:
+    pattern:  /{ownerKnowledgeId}/metadatas/
+    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/MetadataByOwnerKnowledge:list }
+    methods: [GET]
+    requirements:
+        _format: json
+        ownerKnowledgeId: \d+
+
+api_metadata_edit_all_by_owner_knowledge:
+    pattern:  /{ownerKnowledgeId}/metadatas/
+    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/MetadataByOwnerKnowledge:editAll }
+    methods: [PUT]
+    requirements:
+        _format: json
+        ownerKnowledgeId: \d+
+
+api_metadata_view_by_owner_knowledge:
+    pattern:  /{ownerKnowledgeId}/metadatas/{metadataKey}
+    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/MetadataByOwnerKnowledge:view }
+    methods: [GET]
+    requirements:
+        _format: json
+        ownerKnowledgeId: \d+
+
+api_metadata_create_by_owner_knowledge:
+    pattern:  /{ownerKnowledgeId}/metadatas/
+    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/MetadataByOwnerKnowledge:create }
+    methods: [POST]
+    requirements:
+        _format: json
+        ownerKnowledgeId: \d+
+
+api_metadata_update_by_owner_knowledge:
+    pattern:  /{ownerKnowledgeId}/metadatas/{metadataKey}
+    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/MetadataByOwnerKnowledge:edit }
+    methods: [PUT]
+    requirements:
+        _format: json
+        ownerKnowledgeId: \d+
+
+api_metadata_delete_by_owner_knowledge:
+    pattern:  /{ownerKnowledgeId}/metadatas/{metadataKey}
+    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/MetadataByOwnerKnowledge:delete }
+    methods: [DELETE]
+    requirements:
+        _format: json
+        ownerKnowledgeId: \d+
+

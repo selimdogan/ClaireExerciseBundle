@@ -1,0 +1,85 @@
+web_owner_resource_edit:
+    pattern: /{ownerResourceId}/edit
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerResource:editView }
+    requirements:
+        _method: GET
+
+web_owner_resource_browser:
+    pattern: /browser
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerResource:browserView }
+    requirements:
+        _method: GET
+
+web_owner_resource_private_list:
+    pattern: /private-list
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerResource:privateList }
+    requirements:
+        _method: GET
+
+web_owner_resource_public_list:
+    pattern: /public-list
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerResource:publicList }
+    requirements:
+        _method: GET
+
+web_owner_resource_search_list:
+    pattern: /search
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerResource:searchList }
+    requirements:
+        _method: GET
+
+web_owner_resource_public_edit_view:
+    pattern: /{ownerResourceId}/public
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerResource:editPublicView }
+    requirements:
+        _method: GET
+
+web_owner_resource_public_edit:
+    pattern: /{ownerResourceId}/public
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerResource:publicEdit }
+    requirements:
+        _method: POST
+
+web_owner_resource_metadata_edit_view:
+    pattern: /{ownerResourceId}/metadatas
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/MetadataByOwnerResource:editMetadataView }
+    requirements:
+        _method: GET
+
+web_owner_resource_metadata_edit:
+    pattern: /{ownerResourceId}/metadatas
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/MetadataByOwnerResource:metadataEdit }
+    requirements:
+        _method: POST
+
+web_multiple_owner_resource_metadata_edit_view:
+    pattern: /multiple-metadatas-create
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerResource:createMultipleMetadataView }
+    requirements:
+        _method: GET
+
+web_multiple_owner_resource_metadata_edit:
+    pattern: /multiple-metadatas-create
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerResource:multipleMetadataCreate }
+    requirements:
+        _method: POST
+
+web_multiple_owner_resource_key_metadata_edit_view:
+    pattern: /multiple-key-create
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerResource:createMultipleKeyMetadataView }
+    requirements:
+        _method: GET
+
+web_multiple_owner_resource_key_metadata_edit:
+    pattern: /multiple-key-create
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerResource:multipleKeyMetadataCreate }
+    requirements:
+        _method: POST
+
+web_owner_resource_delete:
+    pattern: /{ownerResourceId}/delete
+    defaults: { _controller: SimpleITClaireExerciseBundle:Exercise/Component/OwnerResource:delete }
+    requirements:
+        _method: GET
+        ownerResourceId: \d+
+
