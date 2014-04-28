@@ -1,0 +1,30 @@
+test_attempt_list:
+    pattern:  /
+    defaults: { _controller: SimpleITExerciseBundle:Test/TestAttempt:list }
+    methods: [GET]
+    requirements:
+        _format: json
+
+test_attempt_view:
+    pattern:  /{testAttemptId}
+    defaults: { _controller: SimpleITExerciseBundle:Test/TestAttempt:view }
+    methods: [GET]
+    requirements:
+        _format: json
+        testAttemptId: \d+
+
+exercise_list_by_test_attempt:
+    pattern:  /{testAttemptId}/exercises/
+    defaults: { _controller: SimpleITExerciseBundle:CreatedExercise\ExerciseByTestAttempt:list }
+    methods: [GET]
+    requirements:
+        _format: json
+        testAttemptId: \d+
+
+attempt_list_by_test_attempt:
+    pattern:  /{testAttemptId}/attempts/
+    defaults: { _controller: SimpleITExerciseBundle:CreatedExercise\AttemptByTestAttempt:list }
+    methods: [GET]
+    requirements:
+        _format: json
+        testAttemptId: \d+

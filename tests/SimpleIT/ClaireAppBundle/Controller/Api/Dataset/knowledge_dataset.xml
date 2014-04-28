@@ -1,0 +1,83 @@
+<?xml version="1.0" ?>
+<dataset>
+    <table name="claire_exercise_knowledge">
+        <column>id</column>
+        <column>type</column>
+        <column>content</column>
+        <column>author_id</column>
+        <row>
+            <value>1</value>
+            <value>formula</value>
+            <value>{"equation":"$U = $R * $I","variables":[{"name":"R","type":"float","digits_after_point":2,"interval":{"min":"1","max":"2","step":"0.02"}},{"name":"I","type":"float","digits_after_point":1,"interval":{"min":"10","max":"20","step":"0.5"}}],"unknown":{"name":"U","type":"float","digits_after_point":2},"object_type":"formula"}</value>
+            <value>1000001</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>formula</value>
+            <value>{"equation":"$U = $R * $I","variables":[{"name":"R","type":"integer","interval":{"min":"1","max":"20","step":"1"}},{"name":"I","type":"integer","interval":{"min":"10","max":"20","step":"1"}}],"unknown":{"name":"U","type":"int"},"object_type":"formula"}</value>
+            <value>1000001</value>
+        </row>
+    </table>
+    <table name="claire_exercise_owner_knowledge">
+        <column>id</column>
+        <column>knowledge_id</column>
+        <column>owner_id</column>
+        <column>public</column>
+        <row>
+            <value>101</value>
+            <value>1</value>
+            <value>1000001</value>
+            <value>TRUE</value>
+        </row>
+        <row>
+            <value>102</value>
+            <value>2</value>
+            <value>1000001</value>
+            <value>TRUE</value>
+        </row>
+    </table>
+    <table name="claire_exercise_knowledge_metadata">
+        <column>meta_key</column>
+        <column>owner_knowledge_id</column>
+        <column>meta_value</column>
+        <row>
+            <value>_misc</value>
+            <value>101</value>
+            <value>Ohm;resistance;intensity</value>
+        </row>
+        <row>
+            <value>law</value>
+            <value>101</value>
+            <value>Ohm</value>
+        </row>
+        <row>
+            <value>domain</value>
+            <value>101</value>
+            <value>Physics</value>
+        </row>
+        <row>
+            <value>_misc</value>
+            <value>102</value>
+            <value>Ohm;resistance;intensity</value>
+        </row>
+        <row>
+            <value>law</value>
+            <value>102</value>
+            <value>Ohm</value>
+        </row>
+        <row>
+            <value>domain</value>
+            <value>102</value>
+            <value>Physics</value>
+        </row>
+    </table>
+    <table name="claire_exercise_knowledge_knowledge_requirement">
+        <column>knowledge_id</column>
+        <column>required_id</column>
+        <row>
+            <value>1</value>
+            <value>2</value>
+        </row>
+    </table>
+</dataset>
+

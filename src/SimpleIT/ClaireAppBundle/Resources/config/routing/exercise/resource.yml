@@ -1,0 +1,98 @@
+exercise_resource_list:
+    pattern:  /
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseResource/Resource:list }
+    methods: [GET]
+    requirements:
+        _format: json
+
+exercise_resource_create:
+    pattern:  /
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseResource/Resource:create }
+    methods: [POST]
+    requirements:
+        _format: json
+
+exercise_resource_view:
+    pattern:  /{resourceId}
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseResource/Resource:view }
+    methods: [GET]
+    requirements:
+        _format: json
+        resourceId: \d+
+
+exercise_resource_edit:
+    pattern:  /{resourceId}
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseResource/Resource:edit }
+    methods: [PUT]
+    requirements:
+        _format: json
+        resourceId: \d+
+
+exercise_resource_delete:
+    pattern:  /{resourceId}
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseResource/Resource:delete }
+    methods: [DELETE]
+    requirements:
+        _format: json
+        resourceId: \d+
+
+exercise_resource_add_requirement:
+    pattern:  /{resourceId}/required-resources/{reqResId}
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseResource/RequiredResourceByResource:add }
+    methods: [POST]
+    requirements:
+        _format: json
+        resourceId: \d+
+        reqResId: \d+
+
+exercise_resource_delete_requirement:
+    pattern:  /{resourceId}/required-resources/{reqResId}
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseResource/RequiredResourceByResource:delete }
+    methods: [DELETE]
+    requirements:
+        _format: json
+        resourceId: \d+
+        reqResId: \d+
+
+exercise_resource_update_required-resource:
+    pattern:  /{resourceId}/required-resources/
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseResource/RequiredResourceByResource:edit }
+    methods: [PUT]
+    requirements:
+        _format: json
+        resourceId: \d+
+        reqResId: \d+
+
+owner_resource_create_by_resource:
+    pattern:  /{resourceId}/owner-resources/
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseResource/OwnerResourceByResource:create }
+    methods: [POST]
+    requirements:
+        _format: json
+        resourceId: \d+
+
+owner_resource_edit_by_resource:
+    pattern:  /{resourceId}/owner-resources/{ownerResourceId}
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseResource/OwnerResourceByResource:edit }
+    methods: [PUT]
+    requirements:
+        _format: json
+        resourceId: \d+
+        ownerResourceId: \d+
+
+owner_resource_list_by_resource:
+    pattern:  /{resourceId}/owner-resources/
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseResource/OwnerResourceByResource:list }
+    methods: [GET]
+    requirements:
+        _format: json
+        resourceId: \d+
+
+owner_resource_view_by_resource:
+    pattern:  /{resourceId}/owner-resources/{ownerResourceId}
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseResource/OwnerResourceByResource:view }
+    methods: [GET]
+    requirements:
+        _format: json
+        ownerResourceId: \d+
+        resourceId: \d+

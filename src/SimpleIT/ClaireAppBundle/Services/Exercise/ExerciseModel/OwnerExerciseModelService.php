@@ -1,102 +1,53 @@
 <?php
 
-namespace SimpleIT\ClaireAppBundle\Services\Exercise\ExerciseModel;
+namespace SimpleIT\ExerciseBundle\Service\ExerciseModel;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use SimpleIT\ApiResourcesBundle\Exercise\MetadataResource;
+use Doctrine\Common\Collections\Collection;
 use SimpleIT\ApiResourcesBundle\Exercise\OwnerExerciseModelResource;
-use
-    SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\MetadataByOwnerExerciseModelRepository;
-use
-    SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\OwnerExerciseModelByExerciseModelRepository;
-use
-    SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\OwnerExerciseModelByOwnerRepository;
-use SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\OwnerExerciseModelRepository;
-use SimpleIT\ClaireAppBundle\Services\Exercise\Resource\OwnerResourceService;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
+use SimpleIT\CoreBundle\Services\TransactionalService;
+use SimpleIT\ExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel;
+use SimpleIT\ExerciseBundle\Entity\ExerciseModelMetadataFactory;
+use SimpleIT\ExerciseBundle\Entity\OwnerExerciseModelFactory;
+use SimpleIT\ExerciseBundle\Model\Resources\OwnerExerciseModelResourceFactory;
+use SimpleIT\ExerciseBundle\Repository\ExerciseModel\OwnerExerciseModelRepository;
+use SimpleIT\UserBundle\Service\UserServiceInterface;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\Page;
-use SimpleIT\Utils\Collection\PaginatedCollection;
+use SimpleIT\Utils\Collection\PaginatorInterface;
+use SimpleIT\CoreBundle\Annotation\Transactional;
 
 /**
  * Class OwnerExerciseModelService
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class OwnerExerciseModelService
+class OwnerExerciseModelService extends TransactionalService implements OwnerExerciseModelServiceInterface
 {
-    /**
-     * @const ITEM_PER_PAGE = 20
-     */
-    const ITEM_PER_PAGE = 20;
-
     /**
      * @var OwnerExerciseModelRepository
      */
     private $ownerExerciseModelRepository;
 
     /**
-     * @var MetadataByOwnerExerciseModelRepository
+     * @var UserServiceInterface
      */
-    private $metadataByOwnerExerciseModelRepository;
+    private $userService;
 
     /**
-     * @var OwnerExerciseModelByOwnerRepository
-     */
-    private $ownerExerciseModelByOwnerRepository;
-
-    /**
-     * @var OwnerExerciseModelByExerciseModelRepository
-     */
-    private $ownerExerciseModelByExerciseModelRepository;
-
-    /**
-     * @var OwnerResourceService
-     */
-    private $ownerResourceService;
-
-    /**
-     * @var ExerciseModelService
+     * @var ExerciseModelServiceInterface
      */
     private $exerciseModelService;
 
     /**
-     * Set metadataByOwnerExerciseModelRepository
-     *
-     * @param \SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\MetadataByOwnerExerciseModelRepository $metadataByOwnerExerciseModelRepository
+     * @var MetadataServiceInterface
      */
-    public function setMetadataByOwnerExerciseModelRepository(
-        $metadataByOwnerExerciseModelRepository
-    )
-    {
-        $this->metadataByOwnerExerciseModelRepository = $metadataByOwnerExerciseModelRepository;
-    }
-
-    /**
-     * Set ownerExerciseModelByExerciseModelRepository
-     *
-     * @param \SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\OwnerExerciseModelByExerciseModelRepository $ownerExerciseModelByExerciseModelRepository
-     */
-    public function setOwnerExerciseModelByExerciseModelRepository(
-        $ownerExerciseModelByExerciseModelRepository
-    )
-    {
-        $this->ownerExerciseModelByExerciseModelRepository = $ownerExerciseModelByExerciseModelRepository;
-    }
-
-    /**
-     * Set ownerExerciseModelByOwnerRepository
-     *
-     * @param \SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\OwnerExerciseModelByOwnerRepository $ownerExerciseModelByOwnerRepository
-     */
-    public function setOwnerExerciseModelByOwnerRepository($ownerExerciseModelByOwnerRepository)
-    {
-        $this->ownerExerciseModelByOwnerRepository = $ownerExerciseModelByOwnerRepository;
-    }
+    private $metadataService;
 
     /**
      * Set ownerExerciseModelRepository
      *
-     * @param \SimpleIT\ClaireAppBundle\Repository\Exercise\OwnerExerciseModel\OwnerExerciseModelRepository $ownerExerciseModelRepository
+     * @param OwnerExerciseModelRepository $ownerExerciseModelRepository
      */
     public function setOwnerExerciseModelRepository($ownerExerciseModelRepository)
     {
@@ -106,7 +57,7 @@ class OwnerExerciseModelService
     /**
      * Set exerciseModelService
      *
-     * @param \SimpleIT\ClaireAppBundle\Services\Exercise\ExerciseModel\ExerciseModelService $exerciseModelService
+     * @param ExerciseModelServiceInterface $exerciseModelService
      */
     public function setExerciseModelService($exerciseModelService)
     {
@@ -114,360 +65,235 @@ class OwnerExerciseModelService
     }
 
     /**
-     * Set ownerResourceService
+     * Set userService
      *
-     * @param \SimpleIT\ClaireAppBundle\Services\Exercise\Resource\OwnerResourceService $ownerResourceService
+     * @param UserServiceInterface $userService
      */
-    public function setOwnerResourceService($ownerResourceService)
+    public function setUserService($userService)
     {
-        $this->ownerResourceService = $ownerResourceService;
+        $this->userService = $userService;
     }
 
     /**
-     * Get all owner exercise models and if a user is specified, show only the public exercise
-     * models except user's ones
+     * Set metadataService
      *
-     * @param array                 $metadataArray
-     * @param array                 $miscArray
-     * @param CollectionInformation $inputCollectionInformation
-     * @param null                  $userId
-     * @param bool                  $personalExerciseModel
+     * @param MetadataServiceInterface $metadataService
+     */
+    public function setMetadataService($metadataService)
+    {
+        $this->metadataService = $metadataService;
+    }
+
+    /**
+     * Get an Owner Exercise Model entity
      *
-     * @return PaginatedCollection
+     * @param int $ownerExerciseModelId
+     *
+     * @return OwnerExerciseModel
+     * @throws NonExistingObjectException
+     */
+    public function get($ownerExerciseModelId)
+    {
+        return $this->ownerExerciseModelRepository->find($ownerExerciseModelId);
+    }
+
+    /**
+     * Get a list of Owner Exercise Models
+     *
+     * @param CollectionInformation $collectionInformation The collection information
+     * @param int                   $ownerId
+     * @param int                   $exerciseModelId
+     *
+     * @return PaginatorInterface
      */
     public function getAll(
-        array $metadataArray,
-        array $miscArray,
-        $inputCollectionInformation = null,
-        $userId = null,
-        $personalExerciseModel = true
+        CollectionInformation $collectionInformation = null,
+        $ownerId = null,
+        $exerciseModelId = null
     )
     {
-        // FIXME Clean code for pagination and get (and not create) a clean Page object
-        $collectionInformation = new CollectionInformation();
-        $pageNumber = 1;
-        if ($inputCollectionInformation !== null
-            && $inputCollectionInformation->getPage() !== null
-            && $inputCollectionInformation->getPage()->getPageNumber() !== null
-        ) {
-            $pageNumber = $inputCollectionInformation->getPage()->getPageNumber();
-        }
-        $page = new Page(self::ITEM_PER_PAGE, $pageNumber);
-        $collectionInformation->setPage($page);
-
-        if (!empty ($metadataArray)) {
-            // metadata
-            $mdFilter = '';
-            foreach ($metadataArray as $key => $value) {
-                if ($mdFilter !== '') {
-                    $mdFilter .= ',';
-                }
-                $mdFilter .= $key . ':' . $value;
-            }
-
-            $collectionInformation->addFilter('metadata', $mdFilter);
-        }
-        if (!empty ($miscArray)) {
-            // keywords
-            $keywordFilter = '';
-            foreach ($miscArray as $value) {
-                if ($keywordFilter !== '') {
-                    $keywordFilter .= ',';
-                }
-                $keywordFilter .= $value;
-            }
-
-            $collectionInformation->addFilter('keywords', $keywordFilter);
+        $model = null;
+        if (!is_null($exerciseModelId)) {
+            $model = $this->exerciseModelService->get($exerciseModelId);
         }
 
-        $type = $inputCollectionInformation->getFilter('type');
-        if ($type !== null) {
-            $collectionInformation->addFilter('type', $type);
-        }
-        if (!is_null($userId) && $personalExerciseModel === true) {
-            $paginatedCollection = $this->ownerExerciseModelByOwnerRepository->findAll
-                (
-                    $userId,
-                    $collectionInformation
-                );
-        } else {
-            if (!is_null($userId) && $personalExerciseModel === false) {
-                $collectionInformation->addFilter('public-except-user', $userId);
-            }
-            $paginatedCollection = $this->ownerExerciseModelRepository->findAll(
-                $collectionInformation
-            );
+        $owner = null;
+        if (!is_null($ownerId)) {
+            $owner = $this->userService->get($ownerId);
         }
 
-        foreach ($paginatedCollection as &$ownerExerciseModel) {
-            /** @var OwnerExerciseModelResource $ownerExerciseModel */
-            $metadata = array();
-            foreach ($ownerExerciseModel->getMetadata() as $mkey => $value) {
-                if ($mkey === MetadataResource::MISC_METADATA_KEY) {
-                    $metadata[$mkey] = explode(';', $value);
-                } else {
-                    $metadata[$mkey] = $value;
-                }
-            }
-            $ownerExerciseModel->setMetadata($metadata);
-        }
-
-        return $paginatedCollection;
+        return $this->ownerExerciseModelRepository->findAll($collectionInformation, $owner, $model);
     }
 
     /**
-     * Get all the owner exercise models by exercise model
+     * Get an OwnerExerciseModel by id and by model
      *
-     * @param      $exerciseModelId
-     * @param null $collectionInformation
+     * @param int $ownerExerciseModelId
+     * @param int $exerciseModelId
      *
-     * @return PaginatedCollection
+     * @return OwnerExerciseModel
      */
-    public function getByExerciseModel($exerciseModelId, $collectionInformation = null)
+    public function getByIdAndModel($ownerExerciseModelId, $exerciseModelId)
     {
-        return $this->ownerExerciseModelByExerciseModelRepository->findAll
-            (
-                $exerciseModelId,
-                $collectionInformation
-            );
-    }
+        $exerciseModel = $this->exerciseModelService->get($exerciseModelId);
 
-    /**
-     * Get an owner exercise model
-     *
-     * @param int   $ownerExerciseModelId
-     * @param array $parameters
-     *
-     * @return OwnerExerciseModelResource
-     */
-    public function get($ownerExerciseModelId, array $parameters = array())
-    {
-        return $this->ownerExerciseModelRepository->find($ownerExerciseModelId, $parameters);
-    }
-
-    /**
-     * Save a part content
-     *
-     * @param        $ownerExerciseModelId
-     * @param array  $ownerExerciseModel
-     *
-     * @return mixed
-     */
-    public function saveContent($ownerExerciseModelId, array $ownerExerciseModel)
-    {
-        return $this->ownerExerciseModelRepository->update(
+        return $this->ownerExerciseModelRepository->findByIdAndModel(
             $ownerExerciseModelId,
-            $this->createExerciseModelFromArray($ownerExerciseModel)
+            $exerciseModel
         );
     }
 
     /**
-     * Add a key/value metadata to a set of owner exercise model
-     *
-     * @param $ownerExerciseModelIds
-     * @param $metaKey
-     * @param $metaValue
-     *
-     * @return ArrayCollection
-     */
-    public function addMultipleMetadata($ownerExerciseModelIds, $metaKey, $metaValue)
-    {
-        $metadata = new ArrayCollection(array($metaKey => $metaValue));
-
-        foreach ($ownerExerciseModelIds as $id) {
-            $this->metadataByOwnerExerciseModelRepository->insert($id, $metadata);
-        }
-
-        return $metadata;
-    }
-
-    /**
-     * Add a key to several values (creates new key/values) and remove the value from misc if
-     * existing
-     *
-     * @param $metaKey
-     * @param $ownerExerciseModelIds
-     * @param $values
-     *
-     * @throws \Exception
-     */
-    public function addMultipleKeyMetadata($metaKey, $ownerExerciseModelIds, $values)
-    {
-        foreach ($ownerExerciseModelIds as $key => $id) {
-            $orMd = $this->get($id)->getMetadata();
-            if (isset($orMd[MetadataResource::MISC_METADATA_KEY])) {
-                $misc = explode(';', $orMd[MetadataResource::MISC_METADATA_KEY]);
-                if (($delKey = array_search($values[$key], $misc)) !== false) {
-                    unset($misc[$delKey]);
-                }
-                $orMd[MetadataResource::MISC_METADATA_KEY] = implode(';', $misc);
-            }
-
-            if (isset($orMd[$metaKey])) {
-                throw new \Exception ('impossible to add this key to resource ' . $id .
-                'because metadata key already in use : ' . $metaKey . ':' . $orMd[$metaKey]);
-            }
-
-            $orMd[$metaKey] = $values[$key];
-
-            $this->metadataByOwnerExerciseModelRepository->update($id, new ArrayCollection($orMd));
-        }
-    }
-
-    /**
-     * Save all the metadata for an owner exercise model
-     *
-     * @param $ownerExerciseModelId
-     * @param $resourceData
-     *
-     * @return mixed
-     * @throws \Exception
-     */
-    public function saveMetadata($ownerExerciseModelId, $resourceData)
-    {
-        $metadatas = array();
-        if (isset($resourceData['misc'])) {
-            $metadatas[MetadataResource::MISC_METADATA_KEY] = $miscString = implode(
-                ';',
-                $resourceData['misc']
-            );
-        }
-
-        if (isset($resourceData['metaKey'])) {
-            $metaValues = $resourceData['metaValue'];
-            foreach ($resourceData['metaKey'] as $key => $keyValue) {
-                if ($keyValue === MetadataResource::MISC_METADATA_KEY) {
-                    throw new \Exception(MetadataResource::MISC_METADATA_KEY . 'is a reserved metadata key');
-                }
-                $metadatas[$keyValue] = $metaValues[$key];
-            }
-        }
-
-        return $this->metadataByOwnerExerciseModelRepository->update(
-            $ownerExerciseModelId,
-            new ArrayCollection($metadatas)
-        );
-    }
-
-    /**
-     * Insert a new owner exercise model
+     * Create and add an ownerExerciseModel from an ownerExerciseModelResource
      *
      * @param OwnerExerciseModelResource $ownerExerciseModelResource
+     * @param int                        $modelId
+     * @param int                        $ownerId
      *
-     * @return OwnerExerciseModelResource
+     * @return OwnerExerciseModel
      */
-    public function add(OwnerExerciseModelResource $ownerExerciseModelResource)
+    public function createAndAdd(
+        OwnerExerciseModelResource $ownerExerciseModelResource,
+        $modelId,
+        $ownerId
+    )
     {
-        $exerciseModelId = $ownerExerciseModelResource->getExerciseModel();
-        $ownerExerciseModelResource->setExerciseModel(null);
-
-        return $this->ownerExerciseModelByExerciseModelRepository->insert(
-            $ownerExerciseModelResource,
-            $exerciseModelId
+        $ownerExerciseModel = OwnerExerciseModelFactory::createFromResource(
+            $ownerExerciseModelResource
         );
-    }
-
-    /**
-     * Insert a basic owner exercise model with an exercise model
-     *
-     * @param $exerciseModelId
-     *
-     * @return OwnerExerciseModelResource
-     */
-    public function addBasicFromExerciseModel($exerciseModelId)
-    {
-        $ownerExerciseModelResource = new OwnerExerciseModelResource();
-        $ownerExerciseModelResource->setExerciseModel($exerciseModelId);
-        $ownerExerciseModelResource->setMetadata(array());
-        $ownerExerciseModelResource->setPublic(false);
-
-        return $this->add($ownerExerciseModelResource);
-    }
-
-    /**
-     * Add an owner exercise model to the personal space: create an owner exercise model
-     *
-     * @param int $exerciseModelId
-     * @param int $userId
-     *
-     * @return OwnerExerciseModelResource
-     */
-    public function addToPerso($exerciseModelId, $userId)
-    {
-        // add the resources to perso
-        $exerciseModel = $this->exerciseModelService->get($exerciseModelId);
-        foreach ($exerciseModel->getRequiredExerciseResources() as $resource) {
-            $this->ownerResourceService->addToPerso($resource, $userId);
-        }
-
-// add the model to perso
-        $collectionInformation = new CollectionInformation();
-        $collectionInformation->addFilter('public-except-user', $userId);
-        $ownerResources = $this->ownerExerciseModelByExerciseModelRepository->findAll(
-            $exerciseModelId,
-            $collectionInformation
-        );
+        $ownerExerciseModel->setOwner($this->userService->get($ownerId));
+        $ownerExerciseModel->setExerciseModel($this->exerciseModelService->get($modelId));
 
         $metadata = array();
-        /** @var OwnerExerciseModelResource $oem */
-        foreach ($ownerResources as $oem) {
-            $metadata = array_merge($metadata, $oem->getMetadata());
+        foreach ($ownerExerciseModelResource->getMetadata() as $key => $value) {
+            $md = ExerciseModelMetadataFactory::create($key, $value);
+            $md->setOwnerExerciseModel($ownerExerciseModel);
+            $metadata[] = $md;
         }
+        $ownerExerciseModel->setMetadata(new ArrayCollection($metadata));
 
-        $oem = new OwnerExerciseModelResource();
-        $oem->setExerciseModel($exerciseModelId);
-        $oem->setPublic(true);
-        $oem->setMetadata($metadata);
-
-        return $this->add($oem);
+        return $this->add($ownerExerciseModel);
     }
 
     /**
-     * Create an owner exercise model from an array
+     * Add an ownerExerciseModel
      *
-     * @param array $array
+     * @param OwnerExerciseModel $ownerExerciseModel
      *
-     * @return OwnerExerciseModelResource
+     * @return OwnerExerciseModel
+     * @Transactional
      */
-    private function createExerciseModelFromArray(array $array)
+    public function add(OwnerExerciseModel $ownerExerciseModel)
     {
-        $ownerExerciseModel = new OwnerExerciseModelResource();
-        $ownerExerciseModel->setMetadata($array['metadata']);
-        $ownerExerciseModel->setPublic($array['public']);
+        $this->ownerExerciseModelRepository->insert($ownerExerciseModel);
 
         return $ownerExerciseModel;
     }
 
     /**
-     * Save an owner exercise model
+     * Save an owner exercise model given in form of an OwnerExerciseModelResource
      *
-     * @param int                        $ownerExerciseModelId ownerExerciseModel id
-     * @param OwnerExerciseModelResource $ownerExerciseModel
-     * @param array                      $parameters
+     * @param OwnerExerciseModelResource $ownerExerciseModelResource
+     * @param int                        $ownerExerciseModelId
+     * @param int                        $modelId
      *
-     * @return OwnerExerciseModelResource
+     * @return OwnerExerciseModel
      */
-    public function save(
+    public function edit(
+        OwnerExerciseModelResource $ownerExerciseModelResource,
         $ownerExerciseModelId,
-        OwnerExerciseModelResource $ownerExerciseModel,
-        array $parameters = array()
+        $modelId = null
     )
     {
-        return $this->ownerExerciseModelRepository->update(
-            $ownerExerciseModelId,
-            $ownerExerciseModel,
-            $parameters
-        );
+        $model = null;
+        if (!is_null($modelId)) {
+            $model = $this->exerciseModelService->get($modelId);
+        }
+
+        $ownerExerciseModel = $this->get($ownerExerciseModelId, $model);
+
+        if (!is_null($ownerExerciseModelResource->getPublic())) {
+            $ownerExerciseModel->setPublic($ownerExerciseModelResource->getPublic());
+        }
+
+        if (!is_null($ownerExerciseModelResource->getExerciseModel())) {
+            $newModel = $this->exerciseModelService->get(
+                $ownerExerciseModelResource->getExerciseModel()
+            );
+            $ownerExerciseModel->setExerciseModel($newModel);
+        }
+
+        return $this->save($ownerExerciseModel);
+    }
+
+    /**
+     * Save an owner exercise model
+     *
+     * @param OwnerExerciseModel $ownerExerciseModel
+     *
+     * @return OwnerExerciseModel
+     * @Transactional
+     */
+    public function save(OwnerExerciseModel $ownerExerciseModel)
+    {
+        return $this->ownerExerciseModelRepository->update($ownerExerciseModel);
     }
 
     /**
      * Delete an owner exercise model
      *
-     * @param int $ownerExerciseModelId
+     * @param $ownerExerciseModelId
+     *
+     * @Transactional
      */
-    public function delete($ownerExerciseModelId)
+    public function remove($ownerExerciseModelId)
     {
-        $this->ownerExerciseModelRepository->delete($ownerExerciseModelId);
+        $ownerExerciseModel = $this->ownerExerciseModelRepository->find($ownerExerciseModelId);
+        $this->ownerExerciseModelRepository->delete($ownerExerciseModel);
     }
 
+    /**
+     * Edit all the metadata of an owner exercise model
+     *
+     * @param int             $ownerExerciseModelId
+     * @param ArrayCollection $metadatas
+     *
+     * @return Collection
+     * @Transactional
+     */
+    public function editMetadata($ownerExerciseModelId, ArrayCollection $metadatas)
+    {
+        $ownerExerciseModel = $this->ownerExerciseModelRepository->find($ownerExerciseModelId);
+
+        $this->metadataService->deleteAllByOwnerExerciseModel($ownerExerciseModelId);
+
+        $metadataCollection = array();
+        foreach ($metadatas as $key => $value) {
+            $md = ExerciseModelMetadataFactory::create($key, $value);
+            $md->setOwnerExerciseModel($ownerExerciseModel);
+            $metadataCollection[] = $md;
+        }
+        $ownerExerciseModel->setMetadata(new ArrayCollection($metadataCollection));
+
+        return $this->save($ownerExerciseModel)->getMetadata();
+    }
+
+    /**
+     * Get an OwnerExerciseModel by id and by owner
+     *
+     * @param int $ownerExerciseModelId
+     * @param int $ownerId
+     *
+     * @return OwnerExerciseModel
+     */
+    public function getByIdAndOwner($ownerExerciseModelId, $ownerId)
+    {
+        $owner = $this->userService->get($ownerId);
+
+        return $this->ownerExerciseModelRepository->findByIdAndOwner
+            (
+                $ownerExerciseModelId,
+                $owner
+            );
+    }
 }

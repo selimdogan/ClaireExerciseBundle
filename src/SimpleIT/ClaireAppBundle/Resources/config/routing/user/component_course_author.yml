@@ -1,5 +1,0 @@
-simple_it_claire_component_course_author_list_edit:
-    pattern: /edit
-    defaults: { _controller: SimpleITClaireAppBundle:User/AuthorByCourse:editList }
-    requirements:
-        _method: GET|POST

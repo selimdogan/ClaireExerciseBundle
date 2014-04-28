@@ -1,9 +1,9 @@
 {
-    "name": "simpleit/claire-app-bundle",
+    "name": "openclassrooms/claire-exercise-bundle",
     "type": "symfony-bundle",
-    "description": "Simple IT ClaireAppBundle",
+    "description": "OpenClassrooms - LIRIS Claire Exercise Bundle",
     "keywords": ["claire","api","app"],
-    "homepage": "https://github.com/simpleit/ClaireAppBundle",
+    "homepage": "https://github.com/openclassrooms/ClaireExerciseBundle",
     "authors": [
         {
             "name": "Simple IT",
@@ -19,9 +19,10 @@
     "require": {
         "php": ">=5.3.3",
         "simpleit/app-bundle": "1.1.x-dev",
-        "jms/serializer-bundle": "0.13.x-dev",
+        "simpleit/core-bundle": "1.1.x-dev",
         "simpleit/php-utils": "1.1.x-dev",
         "simpleit/api-resources-bundle": "dev-1.1_Exercises",
+        "jms/serializer-bundle": "0.13.x-dev",
         "jms/security-extra-bundle": "1.5.*"
     },
     "require-dev": {

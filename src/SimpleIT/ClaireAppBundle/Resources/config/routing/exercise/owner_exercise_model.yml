@@ -1,0 +1,94 @@
+owner_exercise_model_list:
+    pattern:  /
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseModel\OwnerExerciseModel:list }
+    methods: [GET]
+    requirements:
+        _format: json
+
+owner_exercise_model_view:
+    pattern:  /{ownerExerciseModelId}
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseModel\OwnerExerciseModel:view }
+    methods: [GET]
+    requirements:
+        _format: json
+        ownerExerciseModelId: \d+
+
+owner_exercise_model_delete:
+    pattern:  /{ownerExerciseModelId}
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseModel\OwnerExerciseModel:delete }
+    methods: [DELETE]
+    requirements:
+        _format: json
+        ownerExerciseModelId: \d+
+
+exercise_generate_by_owner_exercise_model:
+    pattern:  /{ownerExerciseModelId}/exercises/
+    defaults: { _controller: SimpleITExerciseBundle:CreatedExercise/ExerciseByOwnerExerciseModel:create }
+    methods: [POST]
+    requirements:
+        _format: json
+        ownerExerciseModelId: \d+
+
+exercise_list_by_owner_exercise_model:
+    pattern:  /{ownerExerciseModelId}/exercises/
+    defaults: { _controller: SimpleITExerciseBundle:CreatedExercise/ExerciseByOwnerExerciseModel:list }
+    methods: [GET]
+    requirements:
+        _format: json
+        ownerExerciseModelId: \d+
+
+metadata_list_by_owner_exercise_model:
+    pattern:  /{ownerExerciseModelId}/metadatas/
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseModel/MetadataByOwnerExerciseModel:list }
+    methods: [GET]
+    requirements:
+        _format: json
+        ownerExerciseModelId: \d+
+
+metadata_edit_all_by_owner_exercise_model:
+    pattern:  /{ownerExerciseModelId}/metadatas/
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseModel/MetadataByOwnerExerciseModel:editAll }
+    methods: [PUT]
+    requirements:
+        _format: json
+        ownerExerciseModelId: \d+
+
+metadata_view_by_owner_exercise_model:
+    pattern:  /{ownerExerciseModelId}/metadatas/{metadataKey}
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseModel/MetadataByOwnerExerciseModel:view }
+    methods: [GET]
+    requirements:
+        _format: json
+        ownerExerciseModelId: \d+
+
+metadata_create_by_owner_exercise_model:
+    pattern:  /{ownerExerciseModelId}/metadatas/
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseModel/MetadataByOwnerExerciseModel:create }
+    methods: [POST]
+    requirements:
+        _format: json
+        ownerExerciseModelId: \d+
+
+metadata_update_by_owner_exercise_model:
+    pattern:  /{ownerExerciseModelId}/metadatas/{metadataKey}
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseModel/MetadataByOwnerExerciseModel:edit }
+    methods: [PUT]
+    requirements:
+        _format: json
+        ownerExerciseModelId: \d+
+
+metadata_delete_by_owner_exercise_model:
+    pattern:  /{ownerExerciseModelId}/metadatas/{metadataKey}
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseModel/MetadataByOwnerExerciseModel:delete }
+    methods: [DELETE]
+    requirements:
+        _format: json
+        ownerExerciseModelId: \d+
+
+owner_exercise_model_edit:
+    pattern:  /{ownerExerciseModelId}
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseModel/OwnerExerciseModel:edit }
+    methods: [PUT]
+    requirements:
+        _format: json
+        ownerExerciseModelId: \d+

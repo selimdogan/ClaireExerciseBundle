@@ -1,0 +1,80 @@
+owner_knowledge_list:
+    pattern:  /
+    defaults: { _controller: SimpleITExerciseBundle:DomainKnowledge/OwnerKnowledge:list }
+    methods: [GET]
+    requirements:
+        _format: json
+
+owner_knowledge_view:
+    pattern:  /{ownerKnowledgeId}
+    defaults: { _controller: SimpleITExerciseBundle:DomainKnowledge/OwnerKnowledge:view }
+    methods: [GET]
+    requirements:
+        _format: json
+        ownerKnowledgeId: \d+
+
+owner_knowledge_edit:
+    pattern:  /{ownerKnowledgeId}
+    defaults: { _controller: SimpleITExerciseBundle:DomainKnowledge/OwnerKnowledge:edit }
+    methods: [PUT]
+    requirements:
+        _format: json
+        ownerKnowledgeId: \d+
+
+
+owner_knowledge_delete:
+    pattern:  /{ownerKnowledgeId}
+    defaults: { _controller: SimpleITExerciseBundle:DomainKnowledge/OwnerKnowledge:delete }
+    methods: [DELETE]
+    requirements:
+        _format: json
+        ownerKnowledgeId: \d+
+
+metadata_list_by_owner_knowledge:
+    pattern:  /{ownerKnowledgeId}/metadatas/
+    defaults: { _controller: SimpleITExerciseBundle:DomainKnowledge/MetadataByOwnerKnowledge:list }
+    methods: [GET]
+    requirements:
+        _format: json
+        ownerKnowledgeId: \d+
+
+metadata_edit_all_by_owner_knowledge:
+    pattern:  /{ownerKnowledgeId}/metadatas/
+    defaults: { _controller: SimpleITExerciseBundle:DomainKnowledge/MetadataByOwnerKnowledge:editAll }
+    methods: [PUT]
+    requirements:
+        _format: json
+        ownerKnowledgeId: \d+
+
+metadata_view_by_owner_knowledge:
+    pattern:  /{ownerKnowledgeId}/metadatas/{metadataKey}
+    defaults: { _controller: SimpleITExerciseBundle:DomainKnowledge/MetadataByOwnerKnowledge:view }
+    methods: [GET]
+    requirements:
+        _format: json
+        ownerKnowledgeId: \d+
+
+metadata_create_by_owner_knowledge:
+    pattern:  /{ownerKnowledgeId}/metadatas/
+    defaults: { _controller: SimpleITExerciseBundle:DomainKnowledge/MetadataByOwnerKnowledge:create }
+    methods: [POST]
+    requirements:
+        _format: json
+        ownerKnowledgeId: \d+
+
+metadata_update_by_owner_knowledge:
+    pattern:  /{ownerKnowledgeId}/metadatas/{metadataKey}
+    defaults: { _controller: SimpleITExerciseBundle:DomainKnowledge/MetadataByOwnerKnowledge:edit }
+    methods: [PUT]
+    requirements:
+        _format: json
+        ownerKnowledgeId: \d+
+
+metadata_delete_by_owner_knowledge:
+    pattern:  /{ownerKnowledgeId}/metadatas/{metadataKey}
+    defaults: { _controller: SimpleITExerciseBundle:DomainKnowledge/MetadataByOwnerKnowledge:delete }
+    methods: [DELETE]
+    requirements:
+        _format: json
+        ownerKnowledgeId: \d+
+

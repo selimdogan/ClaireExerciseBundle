@@ -1,0 +1,38 @@
+exercise_list:
+    pattern:  /
+    defaults: { _controller: SimpleITExerciseBundle:CreatedExercise/Exercise:list }
+    methods: [GET]
+    requirements:
+        _format: json
+
+exercise_view:
+    pattern:  /{exerciseId}
+    defaults: { _controller: SimpleITExerciseBundle:CreatedExercise/Exercise:view }
+    methods: [GET]
+    requirements:
+        _format: json
+        exerciseId: \d+
+
+item_list_by_exercise:
+    pattern:  /{exerciseId}/items/
+    defaults: { _controller: SimpleITExerciseBundle:CreatedExercise/ItemByExercise:list }
+    methods: [GET]
+    requirements:
+        _format: json
+        exerciseId: \d+
+
+attempts_list_by_exercise:
+    pattern:  /{exerciseId}/attempts/
+    defaults: { _controller: SimpleITExerciseBundle:CreatedExercise/AttemptByExercise:list }
+    methods: [GET]
+    requirements:
+        _format: json
+        exerciseId: \d+
+
+attempts_create_by_exercise:
+    pattern:  /{exerciseId}/attempts/
+    defaults: { _controller: SimpleITExerciseBundle:CreatedExercise/AttemptByExercise:create }
+    methods: [POST]
+    requirements:
+        _format: json
+        exerciseId: \d+

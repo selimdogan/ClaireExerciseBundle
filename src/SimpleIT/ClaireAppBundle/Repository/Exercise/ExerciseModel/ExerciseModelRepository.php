@@ -1,112 +1,157 @@
 <?php
-namespace SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModel;
 
-use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModelResource;
-use SimpleIT\AppBundle\Repository\AppRepository;
+namespace SimpleIT\ExerciseBundle\Repository\ExerciseModel;
+
+use Doctrine\DBAL\DBALException;
+use Doctrine\ORM\QueryBuilder;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
+use SimpleIT\CoreBundle\Model\Paginator;
+use SimpleIT\CoreBundle\Repository\BaseRepository;
+use SimpleIT\ExerciseBundle\Entity\ExerciseModel\ExerciseModel;
+use SimpleIT\ExerciseBundle\Entity\ExerciseResource\ExerciseResource;
+use SimpleIT\ExerciseBundle\Exception\EntityAlreadyExistsException;
+use SimpleIT\ExerciseBundle\Exception\EntityDeletionException;
+use SimpleIT\ExerciseBundle\Exception\FilterException;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\Utils\Collection\Sort;
 
 /**
- * Class ExerciseModelRepository
+ * ExerciseModel repository
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseModelRepository extends AppRepository
+class ExerciseModelRepository extends BaseRepository
 {
     /**
-     * @var string
-     */
-    protected $path = 'exercise-models/{exerciseModelId}';
-
-    /**
-     * @var string
-     */
-    protected $resourceClass = 'SimpleIT\ApiResourcesBundle\Exercise\ExerciseModelResource';
-
-    /**
-     * Find an exercise model to edit
+     * Find a model by id
      *
-     * @param string $exerciseModelId       Exercise model id
-     * @param array  $parameters            Parameters
+     * @param mixed $exerciseModelId
      *
-     * @return ExerciseModelResource
+     * @return ExerciseModel
+     * @throws NonExistingObjectException
      */
-    public function findToEdit($exerciseModelId, array $parameters = array())
+    public function find($exerciseModelId)
     {
-        return $this->findResource(
-            array('exerciseModelId' => $exerciseModelId),
-            $parameters
-        );
+        $exerciseModel = parent::find($exerciseModelId);
+        if ($exerciseModel === null) {
+            throw new NonExistingObjectException();
+        }
+
+        return $exerciseModel;
     }
 
     /**
-     * Find an exercise model
-     *
-     * @param string $exerciseModelId       Exercise model id
-     * @param array  $parameters            Parameters
-     *
-     * @return ExerciseModelResource
-     */
-    public function find($exerciseModelId, array $parameters = array())
-    {
-        return $this->findResource(
-            array('exerciseModelId' => $exerciseModelId),
-            $parameters
-        );
-    }
-
-    /**
-     * Update an exercise model
-     *
-     * @param string                $exerciseModelId               Exercise model id
-     * @param ExerciseModelResource $exerciseModel                 Exercise model
-     * @param array                 $parameters                    Parameters
-     *
-     * @return ExerciseModelResource
-     */
-    public function update(
-        $exerciseModelId,
-        ExerciseModelResource $exerciseModel,
-        array $parameters = array()
-    )
-    {
-        return $this->updateResource(
-            $exerciseModel,
-            array('exerciseModelId' => $exerciseModelId),
-            $parameters
-        );
-    }
-
-    /**
-     * Insert an exercise model
-     *
-     * @param ExerciseModelResource $exerciseModel
-     *
-     * @return ExerciseModelResource
-     */
-    public function insert(ExerciseModelResource $exerciseModel)
-    {
-        return $this->insertResource($exerciseModel);
-    }
-
-    /**
-     * Delete an exercise resource
-     *
-     * @param $exerciseModelId
-     */
-    public function delete($exerciseModelId)
-    {
-        $this->deleteResource(array('exerciseModelId' => $exerciseModelId));
-    }
-
-    /**
-     * Find all the exercise models
+     * Find a list of exercise models according to a type an to metadata contained in a
+     * collection information
      *
      * @param CollectionInformation $collectionInformation
      *
-     * @return \SimpleIT\Utils\Collection\PaginatedCollection
+     * @throws FilterException
+     * @return array
      */
-    public function findAll($collectionInformation = null)
+    public function findAll(CollectionInformation $collectionInformation = null)
     {
-        return $this->findAllResources(array(), $collectionInformation);
+        $qb = $this->createQueryBuilder('em')
+            ->select();
+
+        if ($collectionInformation !== null) {
+
+            $filters = $collectionInformation->getFilters();
+            foreach ($filters as $filter => $value) {
+                switch ($filter) {
+                    case ('type'):
+                        $qb->where($qb->expr()->eq('em.type', "'" . $value . "'"));
+                        break;
+                    case ('authorId'):
+                        $qb->where($qb->expr()->eq('em.author', "'" . $value . "'"));
+                        break;
+                    case ('draft'):
+                        if ($value !== "true" && $value !== "false") {
+                            throw new FilterException('draft filter must be true or false');
+                        }
+                        $qb->where($qb->expr()->eq('em.draft', "'" . $value . "'"));
+                        break;
+                    case ('complete'):
+                        if ($value !== "true" && $value !== "false") {
+                            throw new FilterException('complete filter must be true or false');
+                        }
+                        $qb->where($qb->expr()->eq('em.complete', "'" . $value . "'"));
+                        break;
+                }
+            }
+
+            $sorts = $collectionInformation->getSorts();
+
+            if (!empty($sorts)) {
+                foreach ($sorts as $sort) {
+                    /** @var Sort $sort */
+                    switch ($sort->getProperty()) {
+                        case 'title':
+                            $qb->addOrderBy('em.title', $sort->getOrder());
+                            break;
+                        case 'id':
+                            $qb->addOrderBy('em.id', $sort->getOrder());
+                            break;
+                    }
+                }
+                $qb = $this->setRange($qb, $collectionInformation);
+            } else {
+                $qb->addOrderBy('em.id');
+            }
+        }
+
+        return new Paginator($qb);
+    }
+
+    /**
+     * Add a required resource to an exercise model
+     *
+     * @param int              $exerciseModelId
+     * @param ExerciseResource $requiredResource
+     *
+     * @throws EntityAlreadyExistsException
+     */
+    public function addRequiredResource($exerciseModelId, ExerciseResource $requiredResource)
+    {
+        $sql = 'INSERT INTO claire_exercise_model_resource_requirement VALUES (:exerciseModelId,:requiredId)';
+
+        $connection = $this->_em->getConnection();
+        try {
+            $connection->executeQuery(
+                $sql,
+                array(
+                    'exerciseModelId' => $exerciseModelId,
+                    'requiredId'      => $requiredResource->getId(),
+                )
+            );
+        } catch (DBALException $e) {
+            throw new EntityAlreadyExistsException("Required resource");
+        }
+    }
+
+    /**
+     * Delete a requires resource
+     *
+     * @param int              $exerciseModelId
+     * @param ExerciseResource $requiredResource
+     *
+     * @throws EntityDeletionException
+     */
+    public function deleteRequiredResource($exerciseModelId, ExerciseResource $requiredResource)
+    {
+        $sql = 'DELETE FROM claire_exercise_model_resource_requirement AS emrq WHERE emrq.model_id = :exerciseModelId AND emrq.required_resource_id = :requiredId';
+
+        $connection = $this->_em->getConnection();
+        $stmt = $connection->executeQuery(
+            $sql,
+            array(
+                'exerciseModelId' => $exerciseModelId,
+                'requiredId'      => $requiredResource->getId(),
+            )
+        );
+
+        if ($stmt->rowCount() != 1) {
+            throw new EntityDeletionException();
+        }
     }
 }

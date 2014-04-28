@@ -1,5 +1,0 @@
-simple_it_claire_component_part_tag_list_edit:
-    pattern: /edit
-    defaults: { _controller: SimpleITClaireAppBundle:AssociatedContent/Component/TagByPart:editList }
-    requirements:
-        _method: GET|POST

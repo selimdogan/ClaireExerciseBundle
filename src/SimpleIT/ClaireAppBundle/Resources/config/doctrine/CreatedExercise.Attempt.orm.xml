@@ -1,0 +1,28 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                                      http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="SimpleIT\ExerciseBundle\Entity\CreatedExercise\Attempt" table="claire_exercise_attempt" repository-class="SimpleIT\ExerciseBundle\Repository\CreatedExercise\AttemptRepository">
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="createdAt" column="created_at" type="datetime" nullable="false">
+            <gedmo:timestampable on="update"/>
+        </field>
+
+        <field name="position" column="position" type="integer" nullable="true"/>
+
+        <many-to-one target-entity="SimpleIT\ExerciseBundle\Entity\CreatedExercise\StoredExercise" field="exercise">
+            <join-column name="exercise_id" referenced-column-name="id" on-delete="CASCADE"/>
+        </many-to-one>
+
+        <many-to-one target-entity="SimpleIT\CommonBundle\Entity\User" field="user">
+            <join-column name="user_id" referenced-column-name="id" on-delete="CASCADE"/>
+        </many-to-one>
+
+        <many-to-one target-entity="SimpleIT\ExerciseBundle\Entity\Test\TestAttempt" field="testAttempt">
+            <join-column name="test_attempt_id" referenced-column-name="id" on-delete="CASCADE"/>
+        </many-to-one>
+
+    </entity>
+</doctrine-mapping>

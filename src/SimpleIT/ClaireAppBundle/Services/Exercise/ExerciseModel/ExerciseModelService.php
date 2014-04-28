@@ -1,59 +1,81 @@
 <?php
 
-namespace SimpleIT\ClaireAppBundle\Services\Exercise\ExerciseModel;
+namespace SimpleIT\ExerciseBundle\Service\ExerciseModel;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\SerializationContext;
+use JMS\Serializer\SerializerInterface;
+use SimpleIT\ApiResourcesBundle\Exercise\Exercise\Common\CommonExercise;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\Common\CommonModel;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\Common\ResourceBlock;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\GroupItems\ClassificationConstraints;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\GroupItems\Group;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\GroupItems\Model as GroupItems;
-use
-    SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\GroupItems\ObjectBlock as GroupItemsObjectBlock;
+use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\GroupItems\ObjectBlock as GIObjectBlock;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\MultipleChoice\Model as MultipleChoice;
-use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\MultipleChoice\QuestionBlock;
-use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\OrderItems\Model as OrderItems;
 use
-    SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\OrderItems\ObjectBlock as OrderItemsObjectBlock;
-use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\OrderItems\SequenceBlock;
+    SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\MultipleChoice\QuestionBlock as MCQuestionBlock;
+use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\OpenEndedQuestion\Model as OpenEnded;
+use
+    SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\OpenEndedQuestion\QuestionBlock as OEQuestionBlock;
+use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\OrderItems\Model as OrderItems;
+use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\OrderItems\ObjectBlock as OIObjectBlock;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\PairItems\Model as PairItems;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\PairItems\PairBlock;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseModelResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource\CommonResource;
 use SimpleIT\ApiResourcesBundle\Exercise\ModelObject\MetadataConstraint;
-use SimpleIT\ApiResourcesBundle\Exercise\ModelObject\ModelDocument;
 use SimpleIT\ApiResourcesBundle\Exercise\ModelObject\ObjectConstraints;
 use SimpleIT\ApiResourcesBundle\Exercise\ModelObject\ObjectId;
-use SimpleIT\ApiResourcesBundle\Exercise\ResourceResource;
-use SimpleIT\ClaireAppBundle\Exception\InvalidModelException;
-use SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModel\ExerciseModelRepository;
-use
-    SimpleIT\ClaireAppBundle\Repository\Exercise\ExerciseModel\RequiredResourceByExerciseModelRepository;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
+use SimpleIT\CoreBundle\Services\TransactionalService;
+use SimpleIT\ExerciseBundle\Entity\ExerciseModel\ExerciseModel;
+use SimpleIT\ExerciseBundle\Entity\ExerciseModelFactory;
+use SimpleIT\ExerciseBundle\Exception\InvalidTypeException;
+use SimpleIT\ExerciseBundle\Exception\NoAuthorException;
+use SimpleIT\ExerciseBundle\Repository\ExerciseModel\ExerciseModelRepository;
+use SimpleIT\ExerciseBundle\Service\ExerciseResource\ExerciseResourceServiceInterface;
+use SimpleIT\UserBundle\Service\UserService;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\HTTP;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use SimpleIT\Utils\Collection\PaginatorInterface;
+use SimpleIT\CoreBundle\Annotation\Transactional;
 
 /**
- * Class ExerciseModelService
+ * Service which manages the exercise generation
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseModelService
+class ExerciseModelService extends TransactionalService implements ExerciseModelServiceInterface
 {
     /**
-     * @var  ExerciseModelRepository
+     * @var ExerciseModelRepository $exerciseModelRepository
      */
     private $exerciseModelRepository;
 
     /**
-     * @var RequiredResourceByExerciseModelRepository
+     * @var SerializerInterface
      */
-    private $requiredResourceByExerciseModelRepository;
+    protected $serializer;
 
     /**
-     * @var OwnerExerciseModelService
+     * @var UserService
      */
-    private $ownerExerciseModelService;
+    private $userService;
+
+    /**
+     * @var ExerciseResourceServiceInterface
+     */
+    private $exerciseResourceService;
+
+    /**
+     * Set serializer
+     *
+     * @param SerializerInterface $serializer
+     */
+    public function setSerializer($serializer)
+    {
+        $this->serializer = $serializer;
+    }
 
     /**
      * Set exerciseModelRepository
@@ -66,780 +88,769 @@ class ExerciseModelService
     }
 
     /**
-     * Set ownerExerciseModelService
+     * Set userService
      *
-     * @param OwnerExerciseModelService $ownerExerciseModelService
+     * @param UserService $userService
      */
-    public function setOwnerExerciseModelService($ownerExerciseModelService)
+    public function setUserService($userService)
     {
-        $this->ownerExerciseModelService = $ownerExerciseModelService;
+        $this->userService = $userService;
     }
 
     /**
-     * Set requiredResourceByExerciseModelRepository
+     * Set exerciseResourceService
      *
-     * @param RequiredResourceByExerciseModelRepository $requiredResourceByExerciseModelRepository
+     * @param ExerciseResourceServiceInterface $exerciseResourceService
      */
-    public function setRequiredResourceByExerciseModelRepository(
-        $requiredResourceByExerciseModelRepository
-    )
+    public function setExerciseResourceService($exerciseResourceService)
     {
-        $this->requiredResourceByExerciseModelRepository = $requiredResourceByExerciseModelRepository;
+        $this->exerciseResourceService = $exerciseResourceService;
     }
 
     /**
-     * @param int   $exerciseModelId   Exercise model id
-     * @param array $parameters        Parameters
-     *
-     * @return ExerciseModelResource
-     */
-    public function getExerciseModelToEdit($exerciseModelId, array $parameters = array())
-    {
-        return $this->exerciseModelRepository->findToEdit($exerciseModelId, $parameters);
-    }
-
-    /**
-     * Save an exercise model
-     *
-     * @param int                   $exerciseModelId Exercise model id
-     * @param ExerciseModelResource $exerciseModel
-     * @param array                 $parameters
-     *
-     * @return ExerciseModelResource
-     */
-    public function save(
-        $exerciseModelId,
-        ExerciseModelResource $exerciseModel,
-        array $parameters = array()
-    )
-    {
-        return $this->exerciseModelRepository->update(
-            $exerciseModelId,
-            $exerciseModel,
-            $parameters
-        );
-    }
-
-    /**
-     * Create an exercise model resource from an array (from a form)
-     *
-     * @param array $emArray
-     *
-     * @throws BadRequestHttpException
-     * @return ExerciseModelResource
-     */
-    public function createExerciseModel(array $emArray)
-    {
-        switch ($emArray['model-type']) {
-            case CommonModel::GROUP_ITEMS:
-                return $this->createGroupItems($emArray);
-            case CommonModel::MULTIPLE_CHOICE:
-                return $this->createMultipleChoice($emArray);
-            case CommonModel::ORDER_ITEMS:
-                return $this->createOrderItems($emArray);
-            case CommonModel::PAIR_ITEMS:
-                return $this->createPairItems($emArray);
-            default:
-                throw new BadRequestHttpException('Unknown type of exercise');
-        }
-    }
-
-    /**
-     * Create a multiple choice
-     *
-     * @param array $mcArray
-     *
-     * @internal param $exerciseModelId
-     * @return ExerciseModelResource
-     */
-    private function createMultipleChoice(array $mcArray)
-    {
-        $multipleChoice = new MultipleChoice();
-        $this->setWordingAndDocuments($mcArray, $multipleChoice);
-        $multipleChoice->setShuffleQuestionsOrder($mcArray['shuffle']);
-        $this->addMultipleChoiceQuestionBlocksFromArray($mcArray, $multipleChoice);
-
-        $exerciseModel = new ExerciseModelResource();
-        $exerciseModel->setType(CommonModel::MULTIPLE_CHOICE);
-        $exerciseModel->setContent($multipleChoice);
-        $exerciseModel->setType(CommonModel::MULTIPLE_CHOICE);
-
-        return $exerciseModel;
-    }
-
-    /**
-     * Create a group items
-     *
-     * @param array $giArray
-     *
-     * @throws \Exception
-     * @return ExerciseModelResource
-     */
-    private function createGroupItems(array $giArray)
-    {
-        $groupItems = new GroupItems();
-        $this->setWordingAndDocuments($giArray, $groupItems);
-        switch ($giArray['displayGroupNames']) {
-            case "ask":
-            case "show":
-            case "hide":
-                $groupItems->setDisplayGroupNames($giArray['displayGroupNames']);
-                break;
-            default:
-                throw new \Exception('Invalid display group names value');
-        }
-
-        $localGroups = true;
-        if (isset($giArray['group']['root']) && !empty($giArray['group']['root'][0])) {
-            $localGroups = false;
-            $groupItems->setClassifConstr($this->createClassifConstraints($giArray, 'root'));
-        }
-
-        $this->addGroupItemsObjectBlocksFromArray($giArray, $groupItems, $localGroups);
-
-        $exerciseModel = new ExerciseModelResource();
-        $exerciseModel->setType(CommonModel::GROUP_ITEMS);
-        $exerciseModel->setContent($groupItems);
-
-        return $exerciseModel;
-    }
-
-    /**
-     * Create an order items
-     *
-     * @param array $oiArray
-     *
-     * @throws \Exception
-     * @return ExerciseModelResource
-     */
-    private function createOrderItems(array $oiArray)
-    {
-        $orderItems = new OrderItems();
-        $this->setWordingAndDocuments($oiArray, $orderItems);
-
-        $orderItems->setGiveFirst(isset($oiArray['give-first']) && $oiArray['give-first'] === "1");
-        $orderItems->setGiveLast(isset($oiArray['give-last']) && $oiArray['give-last'] === "1");
-
-        if ($oiArray['sequence-origin'] == 'sequence-resource') {
-            $sequenceBlock = new SequenceBlock();
-            $sequenceBlock->setKeepAll($oiArray['keepAll']);
-            $sequenceBlock->setNumberOfParts($oiArray['number-of-parts']);
-            $sequenceBlock->setUseFirst($oiArray['use-first'] === "1");
-            $sequenceBlock->setUseLast($oiArray['use-last'] === "1");
-            $this->setResourceOrigin(
-                $sequenceBlock,
-                $oiArray['sequence-blocks'][0],
-                $oiArray,
-                0,
-                CommonResource::SEQUENCE,
-                'sequence-resources',
-                'sequence-key',
-                'sequence-comparator',
-                'sequence-values'
-            );
-            $orderItems->setSequenceBlock($sequenceBlock);
-        } elseif ($oiArray['sequence-origin'] == 'resource-list') {
-            if ($oiArray['order'] == "desc") {
-                $orderItems->setOrder(OrderItems::DESCENDENT);
-            } else {
-                $orderItems->setOrder(OrderItems::ASCENDENT);
-            }
-            $orderItems->setShowValues(
-                isset($oiArray['show-values']) && $oiArray['show-values'] === "1"
-            );
-            $this->addOrderItemsObjectBlocksFromArray($oiArray, $orderItems);
-        } else {
-            throw new \Exception('order items: a content must be chosen');
-        }
-
-        $exerciseModel = new ExerciseModelResource();
-        $exerciseModel->setContent($orderItems);
-        $exerciseModel->setType(CommonModel::ORDER_ITEMS);
-
-        return $exerciseModel;
-    }
-
-    /**
-     * Create an order items
-     *
-     * @param array $piArray
-     *
-     * @throws \Exception
-     * @return ExerciseModelResource
-     */
-    private function createPairItems(array $piArray)
-    {
-        $orderItems = new PairItems();
-        $this->setWordingAndDocuments($piArray, $orderItems);
-
-        $this->addPairItemsObjectBlocksFromArray($piArray, $orderItems);
-
-        $exerciseModel = new ExerciseModelResource();
-        $exerciseModel->setContent($orderItems);
-        $exerciseModel->setType(CommonModel::PAIR_ITEMS);
-
-        return $exerciseModel;
-    }
-
-    /**
-     * Save required resources
-     *
-     * @param       $exerciseModelId
-     * @param array $resourceArray
-     *
-     * @return ExerciseModelResource
-     */
-    public function saveRequiredResource($exerciseModelId, array $resourceArray)
-    {
-        $requiredResources = array();
-        if (isset($resourceArray['requirement'])) {
-            foreach ($resourceArray['requirement'] as $requirement) {
-                $requiredResources[] = $requirement;
-            }
-        }
-
-        return $this->requiredResourceByExerciseModelRepository->update(
-            $exerciseModelId,
-            new ArrayCollection($requiredResources)
-        );
-    }
-
-    /**
-     * Insert a new exercise model
-     *
-     * @param ExerciseModelResource $exerciseModel
-     *
-     * @return ExerciseModelResource
-     */
-    public function add(ExerciseModelResource $exerciseModel)
-    {
-        return $this->exerciseModelRepository->insert($exerciseModel);
-    }
-
-    /**
-     * Get an exercise model
-     *
-     * @param int $exerciseModelId Resource id
-     *
-     * @return ExerciseModelResource
-     */
-    public function getToEdit($exerciseModelId)
-    {
-        return $this->exerciseModelRepository->findToEdit($exerciseModelId);
-    }
-
-    /**
-     * Get an exercise model
-     *
-     * @param int $exerciseModelId Resource id
-     *
-     * @return ExerciseModelResource
-     */
-    public function get($exerciseModelId)
-    {
-        return $this->exerciseModelRepository->find($exerciseModelId);
-    }
-
-    /**
-     * Delete an exercise model
-     *
-     * @param $exerciseModelId
-     */
-    public function delete($exerciseModelId)
-    {
-        $this->exerciseModelRepository->delete($exerciseModelId);
-    }
-
-    /**
-     * Set the documents and the wording of a model of exercise
-     *
-     * @param array       $modelArray
-     * @param CommonModel $model
-     */
-    private function setWordingAndDocuments(array $modelArray, CommonModel &$model)
-    {
-        $model->setWording($modelArray['wording']);
-
-        $documents = array();
-        foreach ($modelArray['documents'] as $docId) {
-            if (!empty($docId)) {
-                $document = new ModelDocument();
-                $document->setId($docId);
-                $documents[] = $document;
-            }
-        }
-        $model->setDocuments($documents);
-    }
-
-    /**
-     * Create the question blocks from the modelArray
-     *
-     * @param array          $modelArray
-     * @param MultipleChoice $model
-     *
-     * @throws \Exception
-     */
-    private function addMultipleChoiceQuestionBlocksFromArray(array $modelArray, &$model)
-    {
-        $questionBlocks = array();
-
-        foreach ($modelArray['blocks'] as $key => $blockArray) {
-            $block = new QuestionBlock(
-                $blockArray['numberOfOccurrences'],
-                $blockArray['maxNumberOfPropositions'],
-                $blockArray['maxNumberOfRightPropositions']
-            );
-
-            $this->setResourceOrigin(
-                $block,
-                $blockArray,
-                $modelArray,
-                $key,
-                CommonResource::MULTIPLE_CHOICE_QUESTION
-            );
-
-            $questionBlocks[] = $block;
-        }
-
-        $model->setQuestionBlocks($questionBlocks);
-    }
-
-    /**
-     * Create the object blocks from the modelArray
-     *
-     * @param array      $modelArray
-     * @param GroupItems $model
-     * @param boolean    $localGroups
-     */
-    private function addGroupItemsObjectBlocksFromArray(array $modelArray, &$model, $localGroups)
-    {
-        $objectBlocks = array();
-
-        foreach ($modelArray['blocks'] as $blockId => $blockArray) {
-            $block = new GroupItemsObjectBlock($blockArray['numberOfOccurrences']);
-
-            if ($localGroups) {
-                $block->setClassifConstr($this->createClassifConstraints($modelArray, $blockId));
-            }
-
-            $this->setResourceOrigin(
-                $block,
-                $blockArray,
-                $modelArray,
-                $blockId
-            );
-
-            $objectBlocks[] = $block;
-        }
-
-        $model->setObjectBlocks($objectBlocks);
-    }
-
-    /**
-     * Create the object blocks from the modelArray
-     *
-     * @param array     $modelArray
-     * @param PairItems $model
-     */
-    private function addPairItemsObjectBlocksFromArray(array $modelArray, &$model)
-    {
-        $objectBlocks = array();
-
-        foreach ($modelArray['blocks'] as $blockId => $blockArray) {
-            $block = new PairBlock(
-                $blockArray['numberOfOccurrences'],
-                $blockArray['metaKey']
-            );
-
-            $this->setResourceOrigin(
-                $block,
-                $blockArray,
-                $modelArray,
-                $blockId
-            );
-
-            $objectBlocks[] = $block;
-        }
-
-        $model->setPairBlocks($objectBlocks);
-    }
-
-    /**
-     * Create the object blocks from the modelArray
-     *
-     * @param array      $modelArray
-     * @param OrderItems $model
-     */
-    private function addOrderItemsObjectBlocksFromArray(array $modelArray, &$model)
-    {
-        $objectBlocks = array();
-
-        foreach ($modelArray['blocks'] as $blockId => $blockArray) {
-            $block = new OrderItemsObjectBlock(
-                $blockArray['numberOfOccurrences'],
-                $blockArray['metaKey']
-            );
-
-            $this->setResourceOrigin(
-                $block,
-                $blockArray,
-                $modelArray,
-                $blockId
-            );
-
-            $objectBlocks[] = $block;
-        }
-
-        $model->setObjectBlocks($objectBlocks);
-    }
-
-    /**
-     * Set the resource list or resource constraints in a resource block
-     *
-     * @param ResourceBlock $block          The block object
-     * @param array         $blockArray     The block array
-     * @param array         $modelArray     The array of the model
-     * @param int|string    $blockId        The id or name of the block
-     * @param string        $type           The type of resource
-     * @param string        $resourcesName  The name of the field resources in the array
-     * @param string        $keyName        The name of the field key in the array
-     * @param string        $comparatorName The name of the field comparator in the array
-     * @param string        $valuesName     The name of the field values in the array
-     * @param string        $typeName       The name of the field type in the array
-     * @param string        $excludedName
-     *
-     * @throws \HttpException
-     */
-    private function setResourceOrigin(
-        ResourceBlock &$block,
-        array $blockArray,
-        array $modelArray,
-        $blockId,
-        $type = null,
-        $resourcesName = 'resources',
-        $keyName = 'key',
-        $comparatorName = 'comparator',
-        $valuesName = 'values',
-        $typeName = 'type',
-        $excludedName = 'excluded'
-    )
-    {
-        if ($blockArray['resourceOrigin'] === "list") {
-            $resourceList = array();
-            foreach ($modelArray[$resourcesName][$blockId] as $resId) {
-                $resource = new ObjectId();
-                $resource->setId($resId);
-                $resourceList[] = $resource;
-            }
-            $block->setResources($resourceList);
-        } elseif ($blockArray['resourceOrigin'] === "constraints") {
-            $objConstraint = new ObjectConstraints();
-            if ($type === null && !empty($modelArray[$typeName][$blockId])) {
-                $type = $modelArray[$typeName][$blockId];
-            }
-            $objConstraint->setType($type);
-
-            $mdConstraints = array();
-            foreach ($modelArray[$keyName][$blockId] as $constrKey => $metaKey) {
-                if (!isset($modelArray[$valuesName][$blockId][$constrKey])) {
-                    $modelArray[$valuesName][$blockId][$constrKey] = array();
-                }
-                $mdConstraints[] = $this->createMdConstraint(
-                    $metaKey,
-                    $modelArray[$comparatorName][$blockId][$constrKey],
-                    $modelArray[$valuesName][$blockId][$constrKey]
-                );
-            }
-            $objConstraint->setMetadataConstraints($mdConstraints);
-
-            $excludedList = array();
-            foreach ($modelArray[$excludedName][$blockId] as $excluded) {
-                if ($excluded === "0" || !empty($excluded)) {
-                    $excObj = new ObjectId();
-                    $excObj->setId($excluded);
-                    $excludedList[] = $excObj;
-                }
-            }
-            $objConstraint->setExcluded($excludedList);
-
-            $block->setResourceConstraint($objConstraint);
-        } else {
-            throw new \HttpException(HTTP::STATUS_CODE_BAD_REQUEST, 'Invalid request: resource origin');
-        }
-    }
-
-    /**
-     * Add an exercise model
-     *
-     * @param ExerciseModelResource $exerciseModel
-     *
-     * @return ExerciseModelResource
-     */
-    public function addFromType(ExerciseModelResource $exerciseModel)
-    {
-        $content = null;
-        switch ($exerciseModel->getType()) {
-            case CommonModel::MULTIPLE_CHOICE:
-                $content = new MultipleChoice();
-                break;
-            case CommonModel::GROUP_ITEMS:
-                $content = new GroupItems();
-                break;
-            case CommonModel::ORDER_ITEMS:
-                $content = new OrderItems();
-                break;
-            case CommonModel::PAIR_ITEMS:
-                $content = new PairItems();
-                break;
-        }
-
-        $content->setWording("Consigne");
-
-        $exerciseModel->setContent($content);
-        $exerciseModel->setRequiredExerciseResources(array());
-        $exerciseModel->setTitle('Titre du modèle d\'exercices');
-        $exerciseModel->setDraft(true);
-        $exerciseModel = $this->add($exerciseModel);
-
-        $this->ownerExerciseModelService->addBasicFromExerciseModel($exerciseModel->getId());
-
-        return $exerciseModel;
-    }
-
-    /**
-     * Duplicate an exercise model in an owner exercise model
+     * Get an Exercise Model entity
      *
      * @param int $exerciseModelId
      *
-     * @return \SimpleIT\ApiResourcesBundle\Exercise\OwnerExerciseModelResource
+     * @return ExerciseModel
+     * @throws NonExistingObjectException
      */
-    public function duplicate($exerciseModelId)
+    public function get($exerciseModelId)
     {
-        $emOld = $this->get($exerciseModelId);
-        $emOld->setComplete(null);
-        $emOld->setAuthor(null);
-        $emOld->setId(null);
+        $exerciseModel = $this->exerciseModelRepository->find($exerciseModelId);
+        if (is_null($exerciseModel)) {
+            throw new NonExistingObjectException();
+        }
 
-        $emNew = $this->add($emOld);
-
-        return $this->ownerExerciseModelService->addBasicFromExerciseModel($emNew->getId());
+        return $exerciseModel;
     }
 
     /**
-     * Create classification constraints from the arrays
+     * Get an exercise Model (business object, no entity)
      *
-     * @param array $giArray
-     * @param       $blockId
+     * @param int $exerciseModelId
      *
-     * @return ClassificationConstraints
-     * @throws \Exception
+     * @return object
+     * @throws \LogicException
      */
-    private function createClassifConstraints(array $giArray, $blockId)
+    public function getModel($exerciseModelId)
     {
-        $classificationConstraints = new ClassificationConstraints();
-        switch ($giArray['other'][$blockId]) {
-            case 'own':
-            case 'reject':
-            case 'misc':
-                $classificationConstraints->setOther($giArray['other'][$blockId]);
+        $entity = $this->get($exerciseModelId);
+
+        return $this->getModelFromEntity($entity);
+
+    }
+
+    /**
+     * Get an exercise model from an entity
+     *
+     * @param ExerciseModel $entity
+     *
+     * @return CommonModel
+     * @throws \LogicException
+     */
+    public function getModelFromEntity(ExerciseModel $entity)
+    {
+        // deserialize to get an object
+        switch ($entity->getType()) {
+            case CommonExercise::MULTIPLE_CHOICE:
+                $class = ExerciseModelResource::MULTIPLE_CHOICE_MODEL_CLASS;
+                break;
+            case CommonExercise::GROUP_ITEMS:
+                $class = ExerciseModelResource::GROUP_ITEMS_MODEL_CLASS;
+                break;
+            case CommonExercise::ORDER_ITEMS:
+                $class = ExerciseModelResource::ORDER_ITEMS_MODEL_CLASS;
+                break;
+            case CommonExercise::PAIR_ITEMS:
+                $class = ExerciseModelResource::PAIR_ITEMS_MODEL_CLASS;
+                break;
+            case CommonExercise::OPEN_ENDED_QUESTION:
+                $class = ExerciseModelResource::OPEN_ENDED_QUESTION_CLASS;
                 break;
             default:
-                throw new \Exception('Invalid other value');
+                throw new \LogicException('Unknown type of model');
         }
 
-        $groups = array();
-        $metaKeys = array();
-        foreach ($giArray['group'][$blockId] as $groupId => $groupName) {
-            $group = new Group();
-            $group->setName($groupName);
-            $mdConstraints = array();
-            foreach ($giArray['classifKey'][$blockId][$groupId] as $constraintId => $key) {
-                if (isset($giArray['classifValues'][$blockId][$groupId][$constraintId])) {
-                    $classificationValues =
-                        $giArray['classifValues'][$blockId][$groupId][$constraintId];
-                } else {
-                    $classificationValues = array();
-                }
-
-                $mdConstraints[] = $this->createMdConstraint(
-                    $key,
-                    $giArray['classifComparator'][$blockId][$groupId][$constraintId],
-                    $classificationValues
-                );
-                $group->setMDConstraints($mdConstraints);
-
-                if (array_search($key, $metaKeys, true) === false) {
-                    $metaKeys[] = $key;
-                }
-            }
-            $groups[] = $group;
-        }
-
-        $classificationConstraints->setGroups($groups);
-        $classificationConstraints->setMetaKeys($metaKeys);
-
-        return $classificationConstraints;
+        return $this->serializer->deserialize($entity->getContent(), $class, 'json');
     }
 
     /**
-     * Create a mdConstraint object from arrays
+     * Get a list of Exercise Model
      *
-     * @param $metaKey
-     * @param $comparator
-     * @param $values
+     * @param CollectionInformation $collectionInformation The collection information
      *
-     * @return MetadataConstraint
-     * @throws \Exception
+     * @return PaginatorInterface
      */
-    private function createMdConstraint($metaKey, $comparator, $values)
-    {
-        $mdConstraint = new MetadataConstraint();
-        $mdConstraint->setKey($metaKey);
-        switch ($comparator) {
-            case MetadataConstraint::IN:
-                if (count($values) == 0) {
-                    throw new \Exception('Invalid value list');
-                }
-                $mdConstraint->setValueIn($values);
-                break;
-            case MetadataConstraint::BETWEEN:
-                if (count($values) != 2) {
-                    throw new \Exception('Invalid value list');
-                }
-                $keys = array_keys($values);
-                $mdConstraint->setBetween
-                    (
-                        $values[$keys[0]],
-                        $values[$keys[1]]
-                    );
-                break;
-            case MetadataConstraint::GREATER_THAN:
-            case MetadataConstraint::GREATER_THAN_OR_EQUALS:
-            case MetadataConstraint::LOWER_THAN:
-            case MetadataConstraint::LOWER_THAN_OR_EQUALS:
-                if (count($values) != 1) {
-                    throw new \Exception('Invalid value list');
-                }
-                $keys = array_keys($values);
-                $mdConstraint->setComparison
-                    (
-                        $comparator,
-                        $values[$keys[0]]
-                    );
-                break;
-            case MetadataConstraint::EXISTS:
-                if (count($values) > 0) {
-                    throw new \Exception('Invalid value list');
-                }
-                $mdConstraint->setExists();
-                break;
-            default :
-                throw new \Exception('Invalid comparator');
-        }
-
-        return $mdConstraint;
-    }
-
-    /**
-     * Get all the exercise models
-     *
-     * @param CollectionInformation $collectionInformation
-     *
-     * @return \SimpleIT\Utils\Collection\PaginatedCollection
-     */
-    public function getAll($collectionInformation = null)
+    public function getAll(CollectionInformation $collectionInformation = null)
     {
         return $this->exerciseModelRepository->findAll($collectionInformation);
     }
 
     /**
-     * Validate an exercise model
+     * Create an ExerciseModel entity from a resource
      *
-     * @param ExerciseModelResource $exerciseModel
+     * @param ExerciseModelResource $modelResource
+     * @param int                   $authorId
      *
-     * @throws InvalidModelException
+     * @throws NoAuthorException
+     * @return ExerciseModel
      */
-    public function validateExerciseModel(ExerciseModelResource $exerciseModel)
+    public function createFromResource(ExerciseModelResource $modelResource, $authorId = null)
     {
-        $wording = $exerciseModel->getContent()->getWording();
-        if (empty ($wording)) {
-            throw new InvalidModelException('Il faut saisir une consigne');
+        $modelResource->setComplete(
+            $this->checkModelComplete(
+                $modelResource->getType(),
+                $modelResource->getContent()
+            )
+        );
+
+        $model = ExerciseModelFactory::createFromResource($modelResource);
+
+        if (!is_null($modelResource->getAuthor())) {
+            $authorId = $modelResource->getAuthor();
+        }
+        if (is_null($authorId)) {
+            throw new NoAuthorException();
+        }
+        $model->setAuthor(
+            $this->userService->get($authorId)
+        );
+
+        $reqResources = array();
+        foreach ($modelResource->getRequiredExerciseResources() as $reqRes) {
+            $reqResources[] = $this->exerciseResourceService->get($reqRes);
+        }
+        $model->setRequiredExerciseResources(new ArrayCollection($reqResources));
+
+        return $model;
+    }
+
+    /**
+     * Create and add an exercise model from a resource
+     *
+     * @param ExerciseModelResource $modelResource
+     * @param int                   $authorId
+     *
+     * @return ExerciseModel
+     */
+    public function createAndAdd(ExerciseModelResource $modelResource, $authorId)
+    {
+        $model = $this->createFromResource($modelResource, $authorId);
+
+        return $this->add($model);
+    }
+
+    /**
+     * Add a model from a Resource
+     *
+     * @param ExerciseModel $model
+     *
+     * @return ExerciseModel
+     * @Transactional
+     */
+    public function add(ExerciseModel $model)
+    {
+        $this->exerciseModelRepository->insert($model);
+
+        return $model;
+    }
+
+    /**
+     * Update an ExerciseResource object from a ResourceResource
+     *
+     * @param ExerciseModelResource $modelResource
+     * @param ExerciseModel         $model
+     *
+     * @throws NoAuthorException
+     * @return ExerciseModel
+     */
+    public function updateFromResource(ExerciseModelResource $modelResource, $model)
+    {
+        if (!is_null($modelResource->getRequiredExerciseResources())) {
+            $reqResources = array();
+            foreach ($modelResource->getRequiredExerciseResources() as $reqRes) {
+                $reqResources[] = $this->exerciseResourceService->get($reqRes);
+            }
+
+            $model->setRequiredExerciseResources(new ArrayCollection($reqResources));
         }
 
-        switch (get_class($exerciseModel->getContent())) {
-            case ExerciseModelResource::MULTIPLE_CHOICE_MODEL_CLASS:
-                $this->validateMultipleChoice($exerciseModel);
+        if (!is_null($modelResource->getTitle())) {
+            $model->setTitle($modelResource->getTitle());
+        }
+
+        if (!is_null($modelResource->getType())) {
+            $model->setType($modelResource->getType());
+        }
+
+        if (!is_null($modelResource->getDraft())) {
+            $model->setDraft($modelResource->getDraft());
+        }
+
+        if (!is_null($modelResource->getComplete())) {
+            $model->setComplete($modelResource->getComplete());
+        }
+
+        $content = $modelResource->getContent();
+        if (!is_null($content)) {
+            $this->validateType($content, $model->getType());
+            $context = SerializationContext::create();
+            $context->setGroups(array('exercise_model_storage', 'Default'));
+            $model->setContent(
+                $this->serializer->serialize($content, 'json', $context)
+            );
+
+            // Check if the model is complete with the new content
+            $model->setComplete($this->checkModelComplete($model->getType(), $content));
+        }
+
+        return $model;
+    }
+
+    /**
+     * Save a resource given in form of a ResourceResource
+     *
+     * @param ExerciseModelResource $modelResource
+     * @param int                   $modelId
+     *
+     * @return ExerciseModel
+     */
+    public function edit(ExerciseModelResource $modelResource, $modelId)
+    {
+        $model = $this->get($modelId);
+        $model = $this->updateFromResource(
+            $modelResource,
+            $model
+        );
+
+        return $this->save($model);
+    }
+
+    /**
+     * Save a resource
+     *
+     * @param ExerciseModel $model
+     *
+     * @return ExerciseModel
+     * @Transactional
+     */
+    public function save(ExerciseModel $model)
+    {
+        return $this->exerciseModelRepository->update($model);
+    }
+
+    /**
+     * Delete a resource
+     *
+     * @param $modelId
+     *
+     * @Transactional
+     */
+    public function remove($modelId)
+    {
+        $resource = $this->exerciseModelRepository->find($modelId);
+        $this->exerciseModelRepository->delete($resource);
+    }
+
+    /**
+     * Add a requiredResource to an exercise model
+     *
+     * @param $exerciseModelId
+     * @param $reqResId
+     *
+     * @return ExerciseModel
+     */
+    public function addRequiredResource(
+        $exerciseModelId,
+        $reqResId
+    )
+    {
+        $reqRes = $this->exerciseResourceService->get($reqResId);
+        $this->exerciseModelRepository->addRequiredResource($exerciseModelId, $reqRes);
+
+        return $this->get($exerciseModelId);
+    }
+
+    /**
+     * Delete a required resource
+     *
+     * @param $exerciseModelId
+     * @param $reqResId
+     *
+     * @return ExerciseModel
+     */
+    public function deleteRequiredResource(
+        $exerciseModelId,
+        $reqResId
+    )
+    {
+        $reqRes = $this->exerciseResourceService->get($reqResId);
+        $this->exerciseModelRepository->deleteRequiredResource($exerciseModelId, $reqRes);
+    }
+
+    /**
+     * Edit the required resources
+     *
+     * @param int             $exerciseModelId
+     * @param ArrayCollection $requiredResources
+     *
+     * @return ExerciseModel
+     */
+    public function editRequiredResource($exerciseModelId, ArrayCollection $requiredResources)
+    {
+        $exerciseModel = $this->exerciseModelRepository->find($exerciseModelId);
+
+        $resourcesCollection = array();
+        foreach ($requiredResources as $rr) {
+            $resourcesCollection[] = $this->exerciseResourceService->get($rr);
+        }
+        $exerciseModel->setRequiredExerciseResources(new ArrayCollection($resourcesCollection));
+
+        return $this->save($exerciseModel)->getRequiredExerciseResources();
+    }
+
+    /**
+     * Check if the content of an exercise model is sufficient to generate exercises.
+     *
+     * @param string      $type
+     * @param CommonModel $content
+     *
+     * @return boolean True if the model is complete
+     * @throws \LogicException
+     */
+    private function checkModelComplete($type, CommonModel $content)
+    {
+        switch ($type) {
+            case CommonModel::MULTIPLE_CHOICE:
+                /** @var MultipleChoice $content */
+                return $this->checkMCComplete($content);
                 break;
-            case ExerciseModelResource::GROUP_ITEMS_MODEL_CLASS:
-                $this->validateGroupItems($exerciseModel);
+            case CommonModel::PAIR_ITEMS:
+                /** @var PairItems $content */
+                return $this->checkPIComplete($content);
                 break;
-            case ExerciseModelResource::PAIR_ITEMS_MODEL_CLASS:
-                $this->validatePairItems($exerciseModel);
+            case CommonModel::GROUP_ITEMS:
+                /** @var GroupItems $content */
+                return $this->checkGIComplete($content);
                 break;
+            case CommonModel::ORDER_ITEMS:
+                /** @var OrderItems $content */
+                return $this->checkOIComplete($content);
+                break;
+            case CommonModel::OPEN_ENDED_QUESTION:
+                /** @var OpenEnded $content */
+                return $this->checkOEQComplete($content);
+                break;
+            default:
+                throw new \LogicException('Invalid type');
         }
     }
 
     /**
-     * Validate the content of a multiple choice model
+     * Check if a multiple choice content is complete
      *
-     * @param ExerciseModelResource $exerciseModel
+     * @param MultipleChoice $content
      *
-     * @throws InvalidModelException
+     * @return boolean
      */
-    private function validateMultipleChoice(ExerciseModelResource $exerciseModel)
+    private function checkMCComplete(MultipleChoice $content)
     {
-        $this->validateBlock($exerciseModel->getContent()->getQuestionBlocks());
+        if (is_null($content->isShuffleQuestionsOrder())) {
+            return false;
+        }
+        $questionBlocks = $content->getQuestionBlocks();
+        if (!count($questionBlocks) > 0) {
+            return false;
+        }
+        /** @var MCQuestionBlock $questionBlock */
+        foreach ($questionBlocks as $questionBlock) {
+            if (!($questionBlock->getMaxNumberOfPropositions() >= 0
+                && $questionBlock->getMaxNumberOfRightPropositions() >= 0)
+            ) {
+                return false;
+            }
+
+            if (!$this->checkBlockComplete(
+                $questionBlock,
+                array(CommonResource::MULTIPLE_CHOICE_QUESTION)
+            )
+            ) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
-     * Validate the content of a group items model
+     * Check if a pair items content is complete
      *
-     * @param ExerciseModelResource $exerciseModel
+     * @param PairItems $content
      *
-     * @throws InvalidModelException
+     * @return bool
      */
-    private function validateGroupItems(ExerciseModelResource $exerciseModel)
+    private function checkPIComplete(PairItems $content)
     {
-        $this->validateBlock($exerciseModel->getContent()->getObjectBlocks());
-    }
-
-    /**
-     * Validate the content of an order items model
-     *
-     * @param ExerciseModelResource $exerciseModel
-     *
-     * @throws InvalidModelException
-     */
-    private function validatePairItems($exerciseModel)
-    {
-        $pairBlocks = $exerciseModel->getContent()->getPairBlocks();
-        $this->validateBlock($pairBlocks);
+        $pairBlocks = $content->getPairBlocks();
+        if (!count($pairBlocks) > 0) {
+            return false;
+        }
 
         /** @var PairBlock $pairBlock */
         foreach ($pairBlocks as $pairBlock) {
-            $mk = $pairBlock->getPairMetaKey();
-            if (empty($mk)) {
-                throw new InvalidModelException(
-                    'Il faut préciser une clé de métadonnée pour former les paires'
-                );
+            if ($pairBlock->getPairMetaKey() == null) {
+                return false;
+            }
+
+            if (!$this->checkBlockComplete(
+                $pairBlock,
+                array(
+                    CommonResource::PICTURE,
+                    CommonResource::TEXT
+                )
+            )
+            ) {
+                return false;
             }
         }
+
+        return true;
     }
 
     /**
-     * Validate that a block is not empty
+     * Check if a group items model is complete
      *
-     * @param array $blocks
+     * @param GroupItems $content
      *
-     * @throws \SimpleIT\ClaireAppBundle\Exception\InvalidModelException
+     * @return bool
      */
-    private function validateBlock(array $blocks)
+    private function checkGIComplete(GroupItems $content)
     {
-        /** @var ResourceBlock $block */
-        foreach ($blocks as $block) {
-            if (!($block->getNumberOfOccurrences() > 0)) {
-                throw new InvalidModelException('Le nombre d\'occurrences doit être positif');
+        if ($content->getDisplayGroupNames() != GroupItems::ASK
+            && $content->getDisplayGroupNames() != GroupItems::HIDE
+            && $content->getDisplayGroupNames() != GroupItems::SHOW
+        ) {
+            return false;
+        }
+
+        $globalClassification = false;
+        if ($content->getClassifConstr() != null) {
+            if (!$this->checkClassifConstr($content->getClassifConstr())) {
+                return false;
             }
+            $globalClassification = true;
+        }
+
+        $objectBlocks = $content->getObjectBlocks();
+        if (!count($objectBlocks) > 0) {
+            return false;
+        }
+
+        /** @var GIObjectBlock $objectBlock */
+        foreach ($objectBlocks as $objectBlock) {
+            if (!$globalClassification &&
+                (
+                    $objectBlock->getClassifConstr() == null
+                    || !$this->checkClassifConstr($objectBlock->getClassifConstr())
+                )
+            ) {
+                return false;
+            }
+
+            if (!$this->checkBlockComplete(
+                $objectBlock,
+                array(
+                    CommonResource::TEXT,
+                    CommonResource::PICTURE
+                )
+            )
+            ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if an order items model is complete
+     *
+     * @param OrderItems $content
+     *
+     * @return bool
+     */
+    private function checkOIComplete(OrderItems $content)
+    {
+        if ($content->isGiveFirst() === null || $content->isGiveLast() === null) {
+            return false;
+        }
+
+        $sequenceBlock = $content->getSequenceBlock();
+        $objectBlocks = $content->getObjectBlocks();
+        // both cannot be empty or filled
+        if (empty($sequenceBlock) == empty($objectBlocks)) {
+            return false;
+        }
+
+        if ($sequenceBlock !== null) {
+            if ($sequenceBlock->isKeepAll() === null) {
+                return false;
+            }
+
+            if (!$sequenceBlock->isKeepAll() &&
+                ($sequenceBlock->isUseFirst() === null || $sequenceBlock->isUseLast() === null)
+            ) {
+                return false;
+            }
+
+            if (!$this->checkBlockComplete($sequenceBlock, array(CommonResource::SEQUENCE))) {
+                return false;
+            }
+        } else {
+            if ($content->getOrder() != OrderItems::ASCENDENT
+                && $content->getOrder() != OrderItems::DESCENDENT
+            ) {
+                return false;
+            }
+
+            if (is_null($content->getShowValues())) {
+                return false;
+            }
+
+            /** @var OIObjectBlock $objectBlock */
+            foreach ($objectBlocks as $objectBlock) {
+                if ($objectBlock->getMetaKey() === null) {
+                    return false;
+                }
+
+                if (
+                !$this->checkBlockComplete(
+                    $objectBlock,
+                    array(
+                        CommonResource::PICTURE,
+                        CommonResource::TEXT
+                    )
+                )
+                ) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if an open ended question model is complete
+     *
+     * @param OpenEnded $content
+     *
+     * @return bool
+     */
+    private function checkOEQComplete(OpenEnded $content)
+    {
+        if (is_null($content->isShuffleQuestionsOrder())) {
+            return false;
+        }
+        $questionBlocks = $content->getQuestionBlocks();
+        if (!count($questionBlocks) > 0) {
+            return false;
+        }
+
+        /** @var OEQuestionBlock $questionBlock */
+        foreach ($questionBlocks as $questionBlock) {
+            if (!$this->checkBlockComplete(
+                $questionBlock,
+                array(CommonResource::OPEN_ENDED_QUESTION)
+            )
+            ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if a resource block is complete
+     *
+     * @param ResourceBlock $block
+     * @param array         $resourceTypes
+     *
+     * @return boolean
+     */
+    private function checkBlockComplete(ResourceBlock $block, array $resourceTypes)
+    {
+        if (!($block->getNumberOfOccurrences() >= 0)) {
+            return false;
+        }
+
+        if (count($block->getResources()) == 0 && $block->getResourceConstraint() === null) {
+            return false;
+        }
+
+        /** @var ObjectId $resource */
+        foreach ($block->getResources() as $resource) {
+            if (!$this->checkObjectId($resource, $resourceTypes)) {
+                return false;
+            }
+        }
+
+        if ($block->getResourceConstraint() !== null
+            && !$this->checkConstraintsComplete($block->getResourceConstraint(), $resourceTypes)
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if and object constraints object is complete
+     *
+     * @param ObjectConstraints $resourceConstraints
+     * @param array             $resourceTypes
+     *
+     * @return boolean
+     */
+    private function checkConstraintsComplete(
+        ObjectConstraints $resourceConstraints,
+        array $resourceTypes = array()
+    )
+    {
+        if (!empty($resourceTypes) && !is_null($resourceConstraints->getType()) &&
+            !in_array($resourceConstraints->getType(), $resourceTypes)
+        ) {
+            return false;
+        }
+        if (count($resourceConstraints->getMetadataConstraints()) == 0) {
+            return false;
+        }
+
+        /** @var MetadataConstraint $mdc */
+        foreach ($resourceConstraints->getMetadataConstraints() as $mdc) {
+            if (!$this->checkMetadataConstraintComplete($mdc)) {
+                return false;
+            }
+        }
+
+        /** @var ObjectId $excluded */
+        foreach ($resourceConstraints->getExcluded() as $excluded) {
+            if (!$this->checkObjectId($excluded)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if an obect Id is valid (and exists)
+     *
+     * @param ObjectId $objectId
+     * @param array    $resourceTypes
+     *
+     * @return bool
+     */
+    private function checkObjectId(ObjectId $objectId, array $resourceTypes = array())
+    {
+        if (is_null($objectId->getId())) {
+            return false;
+        }
+        try {
+            $resource = $this->exerciseResourceService->get($objectId->getId());
+        } catch (NonExistingObjectException $neoe) {
+            return false;
+        }
+
+        if (!empty($resourceTypes) && !in_array($resource->getType(), $resourceTypes)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if a metadata constraint is complete
+     *
+     * @param MetadataConstraint $mdc
+     *
+     * @return bool
+     */
+    private function checkMetadataConstraintComplete(MetadataConstraint $mdc)
+    {
+        if ($mdc->getKey() == null || $mdc->getComparator() == null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if a classification constraint is complete
+     *
+     * @param ClassificationConstraints $classifConstr
+     *
+     * @return bool
+     */
+    private function checkClassifConstr(ClassificationConstraints $classifConstr)
+    {
+        if ($classifConstr->getOther() != ClassificationConstraints::MISC
+            && $classifConstr->getOther() != ClassificationConstraints::OWN
+            && $classifConstr->getOther() != ClassificationConstraints::REJECT
+        ) {
+            return false;
+        }
+
+        if (count($classifConstr->getMetaKeys()) == 0) {
+            return false;
+        }
+
+        /** @var Group $group */
+        foreach ($classifConstr->getGroups() as $group) {
+            $name = $group->getName();
+            if (empty($name)) {
+                return false;
+            }
+
+            if (count($group->getMDConstraints()) == 0) {
+                return false;
+            }
+
+            /** @var MetadataConstraint $mdc */
+            foreach ($group->getMDConstraints() as $mdc) {
+                if (!$this->checkMetadataConstraintComplete($mdc)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Throws an exception if the content does not match the type
+     *
+     * @param $content
+     * @param $type
+     *
+     * @throws \SimpleIT\ExerciseBundle\Exception\InvalidTypeException
+     */
+    private function validateType($content, $type)
+    {
+        if (($type === CommonModel::MULTIPLE_CHOICE &&
+                get_class($content) !== ExerciseModelResource::MULTIPLE_CHOICE_MODEL_CLASS)
+            || ($type === CommonModel::GROUP_ITEMS
+                && get_class($content) !== ExerciseModelResource::GROUP_ITEMS_MODEL_CLASS)
+            || ($type === CommonModel::ORDER_ITEMS &&
+                get_class($content) !== ExerciseModelResource::ORDER_ITEMS_MODEL_CLASS)
+            || ($type === CommonModel::PAIR_ITEMS &&
+                get_class($content) !== ExerciseModelResource::PAIR_ITEMS_MODEL_CLASS)
+            || ($type === CommonModel::OPEN_ENDED_QUESTION &&
+                get_class($content) !== ExerciseModelResource::OPEN_ENDED_QUESTION_CLASS)
+        ) {
+            throw new InvalidTypeException('Content does not match exercise model type');
         }
     }
 }

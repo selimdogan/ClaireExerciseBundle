@@ -1,0 +1,27 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                                      http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="SimpleIT\ExerciseBundle\Entity\ExerciseResource\OwnerResource" table="claire_exercise_owner_resource" repository-class="SimpleIT\ExerciseBundle\Repository\ExerciseResource\OwnerResourceRepository">
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="public" column="public" type="boolean" nullable="false"/>
+
+        <one-to-many target-entity="SimpleIT\ExerciseBundle\Entity\ExerciseResource\Metadata" mapped-by="ownerResource" field="metadata">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+
+        <many-to-one target-entity="SimpleIT\ExerciseBundle\Entity\ExerciseResource\ExerciseResource" field="resource">
+            <join-column name="resource_id" referenced-column-name="id" on-delete="CASCADE"/>
+        </many-to-one>
+
+        <many-to-one target-entity="SimpleIT\CommonBundle\Entity\User" field="owner">
+            <join-column name="owner_id" referenced-column-name="id" on-delete="CASCADE"/>
+        </many-to-one>
+
+    </entity>
+</doctrine-mapping>

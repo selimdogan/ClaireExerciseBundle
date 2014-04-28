@@ -1,0 +1,50 @@
+owner_resource_list_by_user:
+    pattern:  /{ownerId}/owner-resources/
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseResource/OwnerResourceByUser:list }
+    methods: [GET]
+    requirements:
+        _format: json
+        ownerId: \d+
+
+owner_resource_view_by_user:
+    pattern:  /{ownerId}/owner-resources/{ownerResourceId}
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseResource/OwnerResourceByUser:view }
+    methods: [GET]
+    requirements:
+        _format: json
+        ownerResourceId: \d+
+        ownerId: \d+
+
+owner_exercise_model_list_by_user:
+    pattern:  /{ownerId}/owner-exercise-models/
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseModel\OwnerExerciseModelByUser:list }
+    methods: [GET]
+    requirements:
+        _format: json
+        ownerId: \d+
+
+owner_exercise_model_resource_view_by_user:
+    pattern:  /{ownerId}/owner-exercise-models/{ownerExerciseModelId}
+    defaults: { _controller: SimpleITExerciseBundle:ExerciseModel\OwnerExerciseModelByUser:view }
+    methods: [GET]
+    requirements:
+        _format: json
+        ownerExerciseModelId: \d+
+        ownerId: \d+
+
+owner_knowledge_list_by_user:
+    pattern:  /{ownerId}/owner-knowledges/
+    defaults: { _controller: SimpleITExerciseBundle:DomainKnowledge/OwnerKnowledgeByUser:list }
+    methods: [GET]
+    requirements:
+        _format: json
+        ownerId: \d+
+
+owner_knowledge_view_by_user:
+    pattern:  /{ownerId}/owner-knowledges/{ownerKnowledgeId}
+    defaults: { _controller: SimpleITExerciseBundle:DomainKnowledge/OwnerKnowledgeByUser:view }
+    methods: [GET]
+    requirements:
+        _format: json
+        ownerResourceId: \d+
+        ownerId: \d+
