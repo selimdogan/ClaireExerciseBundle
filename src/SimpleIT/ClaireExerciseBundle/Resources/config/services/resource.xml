@@ -3,15 +3,15 @@
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="simple_it.exercise.exercise_resource.class">SimpleIT\ClaireExerciseBundle\Service\ExerciseResource\ExerciseResourceService</parameter>
+        <parameter key="simple_it.exercise.exercise_resource.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\ExerciseResourceService</parameter>
         <parameter key="simple_it.exercise.entity.exercise_resource.class">SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource</parameter>
         <parameter key="simple_it.exercise.repository.exercise_resource.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource\ExerciseResourceRepository</parameter>
 
-        <parameter key="simple_it.exercise.owner_resource.class">SimpleIT\ClaireExerciseBundle\Service\ExerciseResource\OwnerResourceService</parameter>
+        <parameter key="simple_it.exercise.owner_resource.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\OwnerResourceService</parameter>
         <parameter key="simple_it.exercise.entity.owner_resource.class">SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\OwnerResource</parameter>
         <parameter key="simple_it.exercise.repository.owner_resource.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource\OwnerResourceRepository</parameter>
 
-        <parameter key="simple_it.exercise.resource_metadata.class">SimpleIT\ClaireExerciseBundle\Service\ExerciseResource\MetadataService</parameter>
+        <parameter key="simple_it.exercise.resource_metadata.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\MetadataService</parameter>
         <parameter key="simple_it.exercise.entity.resource_metadata.class">SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata</parameter>
         <parameter key="simple_it.exercise.repository.resource_metadata.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource\MetadataRepository</parameter>
     </parameters>

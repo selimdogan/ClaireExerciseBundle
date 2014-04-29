@@ -3,17 +3,17 @@
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="simple_it.exercise.knowledge.class">SimpleIT\ClaireExerciseBundle\Service\DomainKnowledge\KnowledgeService</parameter>
+        <parameter key="simple_it.exercise.knowledge.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\KnowledgeService</parameter>
         <parameter key="simple_it.exercise.entity.knowledge.class">SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge</parameter>
         <parameter key="simple_it.exercise.repository.knowledge.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\DomainKnowledge\KnowledgeRepository</parameter>
 
-        <parameter key="simple_it.exercise.knowledge.formula.class">SimpleIT\ClaireExerciseBundle\Service\DomainKnowledge\FormulaService</parameter>
+        <parameter key="simple_it.exercise.knowledge.formula.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\FormulaService</parameter>
 
-        <parameter key="simple_it.exercise.owner_knowledge.class">SimpleIT\ClaireExerciseBundle\Service\DomainKnowledge\OwnerKnowledgeService</parameter>
+        <parameter key="simple_it.exercise.owner_knowledge.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\OwnerKnowledgeService</parameter>
         <parameter key="simple_it.exercise.entity.owner_knowledge.class">SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\OwnerKnowledge</parameter>
         <parameter key="simple_it.exercise.repository.owner_knowledge.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\DomainKnowledge\OwnerKnowledgeRepository</parameter>
 
-        <parameter key="simple_it.exercise.knowledge_metadata.class">SimpleIT\ClaireExerciseBundle\Service\DomainKnowledge\MetadataService</parameter>
+        <parameter key="simple_it.exercise.knowledge_metadata.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\MetadataService</parameter>
         <parameter key="simple_it.exercise.entity.knowledge_metadata.class">SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Metadata</parameter>
         <parameter key="simple_it.exercise.repository.knowledge_metadata.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\DomainKnowledge\MetadataRepository</parameter>
     </parameters>
