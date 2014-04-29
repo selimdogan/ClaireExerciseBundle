@@ -20,14 +20,14 @@ class AbstractClassForExerciseHandler implements SubscribingHandlerInterface
     {
         $methods = array();
         foreach (array(
-                     'SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource\CommonResource',
-                     'SimpleIT\ApiResourcesBundle\Exercise\Exercise\Common\CommonExercise',
-                     'SimpleIT\ApiResourcesBundle\Exercise\Exercise\Common\CommonItem',
-                     'SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\Common\CommonModel',
-                     'SimpleIT\ApiResourcesBundle\Exercise\ExerciseModel\Common\ResourceBlock',
-                     'SimpleIT\ApiResourcesBundle\Exercise\ExerciseObject\ExerciseObject',
-                     'SimpleIT\ApiResourcesBundle\Exercise\ExerciseResource\Sequence\SequenceElement',
-                     'SimpleIT\ApiResourcesBundle\Exercise\DomainKnowledge\CommonKnowledge',
+                     'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource',
+                     'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise',
+                     'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonItem',
+                     'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel',
+                     'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\ResourceBlock',
+                     'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject',
+                     'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\SequenceElement',
+                     'SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge',
                  ) as $class) {
             $methods[] = array(
                 'direction' => GraphNavigator::DIRECTION_SERIALIZATION,
