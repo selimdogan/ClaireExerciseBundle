@@ -1,7 +1,7 @@
 <?php
 
 
-namespace SimpleIT\ClaireExerciseBundle\Services;
+namespace SimpleIT\ClaireExerciseBundle\Service;
 
 use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\SerializationContext;

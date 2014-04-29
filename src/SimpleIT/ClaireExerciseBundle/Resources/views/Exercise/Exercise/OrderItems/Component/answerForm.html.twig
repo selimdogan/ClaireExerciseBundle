@@ -2,7 +2,7 @@
 
 {% block question %}
 
-    <form action="{{ path('simple_it_claire_component_exercise_item_by_attempt_answer',
+    <form action="{{ path('web_item_by_attempt_answer',
     { 'attemptId': attemptId,'itemId': itemId }) }}" method="post">
 
         {% set _cptObj = 0 %}

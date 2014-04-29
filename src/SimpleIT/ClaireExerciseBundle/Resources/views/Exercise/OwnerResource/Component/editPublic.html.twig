@@ -1,4 +1,4 @@
-<form action="{{ path('simple_it_claire_component_exercise_owner_resource_public_edit',{ 'ownerResourceId': ownerResource.id}) }}" method="post" {{ form_enctype(form) }}>
+<form action="{{ path('web_owner_resource_public_edit',{ 'ownerResourceId': ownerResource.id}) }}" method="post" {{ form_enctype(form) }}>
     {{ form_errors(form) }}
     {{ form_errors(form.public) }}
     {{ form_widget(form.public) }}

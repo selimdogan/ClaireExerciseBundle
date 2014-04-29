@@ -1,7 +1,7 @@
 <h2>Edition d'appariement d'objets</h2>
 {% if locked %}<div>Édition vérouillée</div>{% endif %}
 
-<form class="js-ajax-form" action="{{ path('simple_it_claire_component_exercise_exercise_model_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
+<form class="js-ajax-form" action="{{ path('web_exercise_model_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
     <input type="hidden" name="model-type" value="pair-items">
 
     <div>

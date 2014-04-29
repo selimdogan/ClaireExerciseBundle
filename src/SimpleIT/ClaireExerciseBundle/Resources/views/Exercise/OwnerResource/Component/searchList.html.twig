@@ -1,6 +1,6 @@
 <h2>Recherche</h2>
 
-<form action="{{ path('simple_it_claire_component_exercise_owner_resource_search_list') }}" method="GET">
+<form action="{{ path('web_owner_resource_search_list') }}" method="GET">
     {% if collectionInformation.filters['exercise-type'] is defined %}
         <input type="hidden" name="exercise-type" value="{{ collectionInformation.filters['exercise-type'] }}">
     {% endif %}

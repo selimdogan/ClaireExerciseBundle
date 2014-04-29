@@ -11,12 +11,12 @@
 {{ render(controller('SimpleITClaireExerciseBundle:Exercise/Component/Resource:editContentView',{ 'resourceId': resource.id, 'locked':locked })) }}
 {{ render(controller('SimpleITClaireExerciseBundle:Exercise/Component/RequiredResourceByResource:editRequiredResourcesView',{ 'resourceId': resource.id, 'locked':locked })) }}
 
-<form action="{{ path('simple_it_claire_component_exercise_resource_duplicate',{ 'resourceId': resource.id}) }}" method="get">
+<form action="{{ path('web_resource_duplicate',{ 'resourceId': resource.id}) }}" method="get">
     <input type="submit" value="Dupliquer la ressource">
 </form>
 
 {% if not locked %}
-    <form action="{{ path('simple_it_claire_component_exercise_resource_delete',
+    <form action="{{ path('web_resource_delete',
     { 'resourceId': resource.id}) }}" method="get">
         <input type="submit" value="Supprimer la ressource">
     </form>

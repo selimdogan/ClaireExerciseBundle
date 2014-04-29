@@ -50,7 +50,7 @@
         <parameter key="simple_it.exercise.entity.resource_metadata.class">SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata</parameter>
         <parameter key="simple_it.exercise.repository.resource_metadata.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource\MetadataRepository</parameter>
 
-        <parameter key="simple_it.exercise.serializer.class">SimpleIT\ClaireExerciseBundle\Services\Serializer</parameter>
+        <parameter key="simple_it.exercise.serializer.class">SimpleIT\ClaireExerciseBundle\Service\Serializer</parameter>
     </parameters>
 
     <services>

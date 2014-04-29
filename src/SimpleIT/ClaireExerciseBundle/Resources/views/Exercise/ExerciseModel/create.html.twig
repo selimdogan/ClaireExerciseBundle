@@ -2,7 +2,7 @@
 
 <h2>Choix du type</h2>
 
-<form action="{{ path('simple_it_claire_component_exercise_exercise_model_create') }}" method="post" {{ form_enctype(form) }}>
+<form action="{{ path('web_exercise_model_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_errors(form) }}
     {{ form_errors(form.type) }}
     {{ form_widget(form.type) }}

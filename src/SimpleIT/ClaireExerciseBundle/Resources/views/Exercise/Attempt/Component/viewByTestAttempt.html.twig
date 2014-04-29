@@ -5,7 +5,7 @@
         {% if attempt.position == position %}
             {{ attempt.position + 1 }}
         {% else %}
-            <a href="{{ path('simple_it_claire_component_exercise_attempt_by_test_attempt_view',
+            <a href="{{ path('web_attempt_by_test_attempt_view',
             {'testAttemptId':testAttemptId, 'position': attempt.position} ) }}">{{ attempt.position + 1 }}</a>
         {% endif %}
     </p>

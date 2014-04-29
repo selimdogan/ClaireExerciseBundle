@@ -3,7 +3,7 @@
 
 {% set content = exerciseModel.content %}
 
-<form action="{{ path('simple_it_claire_component_exercise_exercise_model_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
+<form action="{{ path('web_exercise_model_content_edit',{ 'exerciseModelId': exerciseModel.id}) }}" method="post">
 <input type="hidden" name="model-type" value="order-items">
 
 <table>

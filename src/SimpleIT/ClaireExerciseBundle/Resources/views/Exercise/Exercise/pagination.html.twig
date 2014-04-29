@@ -11,7 +11,7 @@
                     {% set _currentItemNumber = _cptItem %}
 
                 {% else %}
-                    <td><a href="{{ path('simple_it_claire_component_exercise_item_by_attempt_view',
+                    <td><a href="{{ path('web_item_by_attempt_view',
                         {'attemptId': attemptId,
                         'itemId': paginationItemId }) }}">
                             {{ _cptItem }}
