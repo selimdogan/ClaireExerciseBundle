@@ -18,3 +18,5 @@ atlassian-ide-plugin.xml
 
 # composer
 composer.phar
+
+composer.lock
