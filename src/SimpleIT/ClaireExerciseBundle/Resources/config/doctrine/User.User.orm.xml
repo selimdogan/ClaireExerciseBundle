@@ -10,6 +10,8 @@
         <field name="username" column="username" type="string" length="255" nullable="false" unique="true"/>
         <field name="firstname" column="firstname" type="string" length="255" nullable="true"/>
         <field name="lastname" column="lastname" type="string" length="255" nullable="true"/>
+        <field name="salt" column="salt" type="string" length="32" nullable="false"/>
+        <field name="password" column="password" type="string" length="40" nullable="false"/>
         <field name="email" column="email" type="string" length="255" nullable="true"/>
         <field name="createdAt" column="created_at" type="datetime" nullable="false">
             <gedmo:timestampable on="create"/>
@@ -19,7 +21,6 @@
             <gedmo:timestampable on="update"/>
         </field>
 
-        <field name="lastConnectedAt" column="last_connected_at" type="datetime" nullable="true"/>
-
+        <field name="isActive" column="is_active" type="boolean" nullable="false"/>
     </entity>
 </doctrine-mapping>

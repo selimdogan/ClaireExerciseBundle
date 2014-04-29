@@ -2,12 +2,14 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity\User;
 
+use Symfony\Component\Security\Core\User\UserInterface;
+
 /**
  * Class User
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class User
+class User implements UserInterface, \Serializable
 {
     /**
      * @const ID = 'id';
@@ -78,6 +80,20 @@ class User
      * @var \DateTime
      */
     private $lastConnectedAt;
+
+    /**
+     * @var boolean
+     */
+    private $isActive;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->isActive = true;
+        $this->salt = md5(uniqid(null, true));
+    }
 
     /**
      * Get email
@@ -262,4 +278,72 @@ class User
         $this->updatedAt = $updatedAt;
     }
 
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials()
+    {
+    }
+
+    /**
+     * @see \Serializable::serialize()
+     */
+    public function serialize()
+    {
+        return serialize(
+            array(
+                $this->id,
+            )
+        );
+    }
+
+    /**
+     * @see \Serializable::unserialize()
+     */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            ) = unserialize($serialized);
+    }
+
+    /**
+     * Comparison test
+     *
+     * @param UserInterface $user
+     *
+     * @return bool
+     */
+    public function isEqualTo(UserInterface $user)
+    {
+        return $this->username === $user->getUsername();
+    }
 }
