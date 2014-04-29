@@ -326,7 +326,7 @@
         </service>
 
         <!-- Other services simple_it.api.serializer-->
-        <service id="simple_it.api.serializer" class="%simple_it.exercise.serializer%"/>
+        <service id="simple_it.api.serializer" class="%simple_it.exercise.serializer.class%"/>
     </services>
 
 </container>
