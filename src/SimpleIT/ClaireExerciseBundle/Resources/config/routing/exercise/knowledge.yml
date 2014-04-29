@@ -1,20 +1,20 @@
 api_knowledge_list:
     pattern:  /
-    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/Knowledge:list }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/Knowledge:list }
     methods: [GET]
     requirements:
         _format: json
 
 api_knowledge_create:
     pattern:  /
-    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/Knowledge:create }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/Knowledge:create }
     methods: [POST]
     requirements:
         _format: json
 
 api_knowledge_view:
     pattern:  /{knowledgeId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/Knowledge:view }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/Knowledge:view }
     methods: [GET]
     requirements:
         _format: json
@@ -22,7 +22,7 @@ api_knowledge_view:
 
 api_knowledge_edit:
     pattern:  /{knowledgeId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/Knowledge:edit }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/Knowledge:edit }
     methods: [PUT]
     requirements:
         _format: json
@@ -30,7 +30,7 @@ api_knowledge_edit:
 
 api_knowledge_delete:
     pattern:  /{knowledgeId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/Knowledge:delete }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/Knowledge:delete }
     methods: [DELETE]
     requirements:
         _format: json
@@ -38,7 +38,7 @@ api_knowledge_delete:
 
 api_knowledge_add_requirement:
     pattern:  /{knowledgeId}/required-knowledges/{reqKnoId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/RequiredKnowledgeByKnowledge:add }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/RequiredKnowledgeByKnowledge:add }
     methods: [POST]
     requirements:
         _format: json
@@ -47,7 +47,7 @@ api_knowledge_add_requirement:
 
 api_knowledge_delete_requirement:
     pattern:  /{knowledgeId}/required-knowledges/{reqKnoId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/RequiredKnowledgeByKnowledge:delete }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/RequiredKnowledgeByKnowledge:delete }
     methods: [DELETE]
     requirements:
         _format: json
@@ -56,7 +56,7 @@ api_knowledge_delete_requirement:
 
 api_knowledge_update_required_knowledge:
     pattern:  /{knowledgeId}/required-knowledges/
-    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/RequiredKnowledgeByKnowledge:edit }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/RequiredKnowledgeByKnowledge:edit }
     methods: [PUT]
     requirements:
         _format: json
@@ -65,7 +65,7 @@ api_knowledge_update_required_knowledge:
 
 api_owner_knowledge_create_by_knowledge:
     pattern:  /{knowledgeId}/owner-knowledges/
-    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/OwnerKnowledgeByKnowledge:create }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/OwnerKnowledgeByKnowledge:create }
     methods: [POST]
     requirements:
         _format: json
@@ -73,7 +73,7 @@ api_owner_knowledge_create_by_knowledge:
 
 api_owner_knowledge_edit_by_knowledge:
     pattern:  /{knowledgeId}/owner-knowledges/{ownerKnowledgeId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/OwnerKnowledgeByKnowledge:edit }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/OwnerKnowledgeByKnowledge:edit }
     methods: [PUT]
     requirements:
         _format: json
@@ -82,7 +82,7 @@ api_owner_knowledge_edit_by_knowledge:
 
 api_owner_knowledge_list_by_knowledge:
     pattern:  /{knowledgeId}/owner-knowledges/
-    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/OwnerKnowledgeByKnowledge:list }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/OwnerKnowledgeByKnowledge:list }
     methods: [GET]
     requirements:
         _format: json
@@ -90,7 +90,7 @@ api_owner_knowledge_list_by_knowledge:
 
 api_owner_knowledge_view_by_knowledge:
     pattern:  /{knowledgeId}/owner-knowledges/{ownerKnowledgeId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:DomainKnowledge/OwnerKnowledgeByKnowledge:view }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/OwnerKnowledgeByKnowledge:view }
     methods: [GET]
     requirements:
         _format: json

@@ -1,20 +1,20 @@
 api_exercise_resource_list:
     pattern:  /
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/Resource:list }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/Resource:list }
     methods: [GET]
     requirements:
         _format: json
 
 api_exercise_resource_create:
     pattern:  /
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/Resource:create }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/Resource:create }
     methods: [POST]
     requirements:
         _format: json
 
 api_exercise_resource_view:
     pattern:  /{resourceId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/Resource:view }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/Resource:view }
     methods: [GET]
     requirements:
         _format: json
@@ -22,7 +22,7 @@ api_exercise_resource_view:
 
 api_exercise_resource_edit:
     pattern:  /{resourceId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/Resource:edit }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/Resource:edit }
     methods: [PUT]
     requirements:
         _format: json
@@ -30,7 +30,7 @@ api_exercise_resource_edit:
 
 api_exercise_resource_delete:
     pattern:  /{resourceId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/Resource:delete }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/Resource:delete }
     methods: [DELETE]
     requirements:
         _format: json
@@ -38,7 +38,7 @@ api_exercise_resource_delete:
 
 api_exercise_resource_add_requirement:
     pattern:  /{resourceId}/required-resources/{reqResId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/RequiredResourceByResource:add }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/RequiredResourceByResource:add }
     methods: [POST]
     requirements:
         _format: json
@@ -47,7 +47,7 @@ api_exercise_resource_add_requirement:
 
 api_exercise_resource_delete_requirement:
     pattern:  /{resourceId}/required-resources/{reqResId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/RequiredResourceByResource:delete }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/RequiredResourceByResource:delete }
     methods: [DELETE]
     requirements:
         _format: json
@@ -56,7 +56,7 @@ api_exercise_resource_delete_requirement:
 
 exercise_resource_update_required-resource:
     pattern:  /{resourceId}/required-resources/
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/RequiredResourceByResource:edit }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/RequiredResourceByResource:edit }
     methods: [PUT]
     requirements:
         _format: json
@@ -65,7 +65,7 @@ exercise_resource_update_required-resource:
 
 api_owner_resource_create_by_resource:
     pattern:  /{resourceId}/owner-resources/
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/OwnerResourceByResource:create }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/OwnerResourceByResource:create }
     methods: [POST]
     requirements:
         _format: json
@@ -73,7 +73,7 @@ api_owner_resource_create_by_resource:
 
 api_owner_resource_edit_by_resource:
     pattern:  /{resourceId}/owner-resources/{ownerResourceId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/OwnerResourceByResource:edit }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/OwnerResourceByResource:edit }
     methods: [PUT]
     requirements:
         _format: json
@@ -82,7 +82,7 @@ api_owner_resource_edit_by_resource:
 
 api_owner_resource_list_by_resource:
     pattern:  /{resourceId}/owner-resources/
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/OwnerResourceByResource:list }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/OwnerResourceByResource:list }
     methods: [GET]
     requirements:
         _format: json
@@ -90,7 +90,7 @@ api_owner_resource_list_by_resource:
 
 api_owner_resource_view_by_resource:
     pattern:  /{resourceId}/owner-resources/{ownerResourceId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/OwnerResourceByResource:view }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/OwnerResourceByResource:view }
     methods: [GET]
     requirements:
         _format: json

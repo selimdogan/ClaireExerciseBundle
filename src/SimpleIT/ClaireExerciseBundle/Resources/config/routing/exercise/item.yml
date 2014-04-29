@@ -1,13 +1,13 @@
 api_item_list:
     pattern:  /
-    defaults: { _controller: SimpleITClaireExerciseBundle:CreatedExercise/Item:list }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/Item:list }
     methods: [GET]
     requirements:
         _format: json
 
 api_item_view:
     pattern:  /{itemId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:CreatedExercise/Item:view }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/Item:view }
     methods: [GET]
     requirements:
         _format: json
@@ -15,7 +15,7 @@ api_item_view:
 
 api_item_add_answer:
     pattern:  /{itemId}/answers/
-    defaults: { _controller: SimpleITClaireExerciseBundle:CreatedExercise/AnswerByItem:create }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/AnswerByItem:create }
     methods: [POST]
     requirements:
         _format: json
@@ -23,7 +23,7 @@ api_item_add_answer:
 
 api_answer_list_by_item:
     pattern:  /{itemId}/answers/
-    defaults: { _controller: SimpleITClaireExerciseBundle:CreatedExercise/AnswerByItem:list }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/AnswerByItem:list }
     methods: [GET]
     requirements:
         _format: json
@@ -31,7 +31,7 @@ api_answer_list_by_item:
 
 api_answer_by_item_view:
     pattern:  /{itemId}/answers/{answerId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:CreatedExercise/AnswerByItem:view }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/AnswerByItem:view }
     methods: [GET]
     requirements:
         _format: json

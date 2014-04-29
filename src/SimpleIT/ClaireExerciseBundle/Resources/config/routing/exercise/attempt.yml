@@ -1,13 +1,13 @@
 api_attempt_list:
     pattern:  /
-    defaults: { _controller: SimpleITClaireExerciseBundle:CreatedExercise/Attempt:list }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/Attempt:list }
     methods: [GET]
     requirements:
         _format: json
 
 api_attempt_view:
     pattern:  /{attemptId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:CreatedExercise/Attempt:view }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/Attempt:view }
     methods: [GET]
     requirements:
         _format: json
@@ -15,7 +15,7 @@ api_attempt_view:
 
 api_item_list_by_attempt:
     pattern:  /{attemptId}/items/
-    defaults: { _controller: SimpleITClaireExerciseBundle:CreatedExercise/ItemByAttempt:list }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/ItemByAttempt:list }
     methods: [GET]
     requirements:
         _format: json
@@ -23,7 +23,7 @@ api_item_list_by_attempt:
 
 api_item_view_by_attempt:
     pattern:  /{attemptId}/items/{itemId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:CreatedExercise/ItemByAttempt:view }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/ItemByAttempt:view }
     methods: [GET]
     requirements:
         _format: json
@@ -31,7 +31,7 @@ api_item_view_by_attempt:
 
 api_answer_list_by_item_by_attempt:
     pattern:  /{attemptId}/items/{itemId}/answers/
-    defaults: { _controller: SimpleITClaireExerciseBundle:CreatedExercise/AnswerByItemByAttempt:list }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/AnswerByItemByAttempt:list }
     methods: [GET]
     requirements:
         _format: json
@@ -40,7 +40,7 @@ api_answer_list_by_item_by_attempt:
 
 api_answer_create_by_item_by_attempt:
     pattern:  /{attemptId}/items/{itemId}/answers/
-    defaults: { _controller: SimpleITClaireExerciseBundle:CreatedExercise/AnswerByItemByAttempt:create }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/AnswerByItemByAttempt:create }
     methods: [POST]
     requirements:
         _format: json

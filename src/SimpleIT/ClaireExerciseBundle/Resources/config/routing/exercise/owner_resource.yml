@@ -1,13 +1,13 @@
 api_owner_resource_list:
     pattern:  /
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/OwnerResource:list }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/OwnerResource:list }
     methods: [GET]
     requirements:
         _format: json
 
 api_owner_resource_view:
     pattern:  /{ownerResourceId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/OwnerResource:view }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/OwnerResource:view }
     methods: [GET]
     requirements:
         _format: json
@@ -15,7 +15,7 @@ api_owner_resource_view:
 
 api_owner_resource_edit:
     pattern:  /{ownerResourceId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/OwnerResource:edit }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/OwnerResource:edit }
     methods: [PUT]
     requirements:
         _format: json
@@ -24,7 +24,7 @@ api_owner_resource_edit:
 
 api_owner_resource_delete:
     pattern:  /{ownerResourceId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/OwnerResource:delete }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/OwnerResource:delete }
     methods: [DELETE]
     requirements:
         _format: json
@@ -32,7 +32,7 @@ api_owner_resource_delete:
 
 api_metadata_list_by_owner_resource:
     pattern:  /{ownerResourceId}/metadatas/
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/MetadataByOwnerResource:list }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/MetadataByOwnerResource:list }
     methods: [GET]
     requirements:
         _format: json
@@ -40,7 +40,7 @@ api_metadata_list_by_owner_resource:
 
 api_metadata_edit_all_by_owner_resource:
     pattern:  /{ownerResourceId}/metadatas/
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/MetadataByOwnerResource:editAll }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/MetadataByOwnerResource:editAll }
     methods: [PUT]
     requirements:
         _format: json
@@ -48,7 +48,7 @@ api_metadata_edit_all_by_owner_resource:
 
 api_metadata_view_by_owner_resource:
     pattern:  /{ownerResourceId}/metadatas/{metadataKey}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/MetadataByOwnerResource:view }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/MetadataByOwnerResource:view }
     methods: [GET]
     requirements:
         _format: json
@@ -56,7 +56,7 @@ api_metadata_view_by_owner_resource:
 
 api_metadata_create_by_owner_resource:
     pattern:  /{ownerResourceId}/metadatas/
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/MetadataByOwnerResource:create }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/MetadataByOwnerResource:create }
     methods: [POST]
     requirements:
         _format: json
@@ -64,7 +64,7 @@ api_metadata_create_by_owner_resource:
 
 api_metadata_update_by_owner_resource:
     pattern:  /{ownerResourceId}/metadatas/{metadataKey}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/MetadataByOwnerResource:edit }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/MetadataByOwnerResource:edit }
     methods: [PUT]
     requirements:
         _format: json
@@ -72,7 +72,7 @@ api_metadata_update_by_owner_resource:
 
 api_metadata_delete_by_owner_resource:
     pattern:  /{ownerResourceId}/metadatas/{metadataKey}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseResource/MetadataByOwnerResource:delete }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/MetadataByOwnerResource:delete }
     methods: [DELETE]
     requirements:
         _format: json

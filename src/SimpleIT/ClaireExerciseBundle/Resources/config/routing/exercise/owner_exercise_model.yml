@@ -1,13 +1,13 @@
 api_owner_exercise_model_list:
     pattern:  /
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseModel\OwnerExerciseModel:list }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/OwnerExerciseModel:list }
     methods: [GET]
     requirements:
         _format: json
 
 api_owner_exercise_model_view:
     pattern:  /{ownerExerciseModelId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseModel\OwnerExerciseModel:view }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/OwnerExerciseModel:view }
     methods: [GET]
     requirements:
         _format: json
@@ -15,7 +15,7 @@ api_owner_exercise_model_view:
 
 api_owner_exercise_model_delete:
     pattern:  /{ownerExerciseModelId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseModel\OwnerExerciseModel:delete }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/OwnerExerciseModel:delete }
     methods: [DELETE]
     requirements:
         _format: json
@@ -23,7 +23,7 @@ api_owner_exercise_model_delete:
 
 api_exercise_generate_by_owner_exercise_model:
     pattern:  /{ownerExerciseModelId}/exercises/
-    defaults: { _controller: SimpleITClaireExerciseBundle:CreatedExercise/ExerciseByOwnerExerciseModel:create }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/ExerciseByOwnerExerciseModel:create }
     methods: [POST]
     requirements:
         _format: json
@@ -31,7 +31,7 @@ api_exercise_generate_by_owner_exercise_model:
 
 api_exercise_list_by_owner_exercise_model:
     pattern:  /{ownerExerciseModelId}/exercises/
-    defaults: { _controller: SimpleITClaireExerciseBundle:CreatedExercise/ExerciseByOwnerExerciseModel:list }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/ExerciseByOwnerExerciseModel:list }
     methods: [GET]
     requirements:
         _format: json
@@ -39,7 +39,7 @@ api_exercise_list_by_owner_exercise_model:
 
 api_metadata_list_by_owner_exercise_model:
     pattern:  /{ownerExerciseModelId}/metadatas/
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseModel/MetadataByOwnerExerciseModel:list }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/MetadataByOwnerExerciseModel:list }
     methods: [GET]
     requirements:
         _format: json
@@ -47,7 +47,7 @@ api_metadata_list_by_owner_exercise_model:
 
 api_metadata_edit_all_by_owner_exercise_model:
     pattern:  /{ownerExerciseModelId}/metadatas/
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseModel/MetadataByOwnerExerciseModel:editAll }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/MetadataByOwnerExerciseModel:editAll }
     methods: [PUT]
     requirements:
         _format: json
@@ -55,7 +55,7 @@ api_metadata_edit_all_by_owner_exercise_model:
 
 api_metadata_view_by_owner_exercise_model:
     pattern:  /{ownerExerciseModelId}/metadatas/{metadataKey}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseModel/MetadataByOwnerExerciseModel:view }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/MetadataByOwnerExerciseModel:view }
     methods: [GET]
     requirements:
         _format: json
@@ -63,7 +63,7 @@ api_metadata_view_by_owner_exercise_model:
 
 api_metadata_create_by_owner_exercise_model:
     pattern:  /{ownerExerciseModelId}/metadatas/
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseModel/MetadataByOwnerExerciseModel:create }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/MetadataByOwnerExerciseModel:create }
     methods: [POST]
     requirements:
         _format: json
@@ -71,7 +71,7 @@ api_metadata_create_by_owner_exercise_model:
 
 api_metadata_update_by_owner_exercise_model:
     pattern:  /{ownerExerciseModelId}/metadatas/{metadataKey}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseModel/MetadataByOwnerExerciseModel:edit }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/MetadataByOwnerExerciseModel:edit }
     methods: [PUT]
     requirements:
         _format: json
@@ -79,7 +79,7 @@ api_metadata_update_by_owner_exercise_model:
 
 api_metadata_delete_by_owner_exercise_model:
     pattern:  /{ownerExerciseModelId}/metadatas/{metadataKey}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseModel/MetadataByOwnerExerciseModel:delete }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/MetadataByOwnerExerciseModel:delete }
     methods: [DELETE]
     requirements:
         _format: json
@@ -87,7 +87,7 @@ api_metadata_delete_by_owner_exercise_model:
 
 api_owner_exercise_model_edit:
     pattern:  /{ownerExerciseModelId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:ExerciseModel/OwnerExerciseModel:edit }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/OwnerExerciseModel:edit }
     methods: [PUT]
     requirements:
         _format: json

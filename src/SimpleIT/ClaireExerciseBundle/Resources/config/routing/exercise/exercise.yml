@@ -1,13 +1,13 @@
 api_exercise_list:
     pattern:  /
-    defaults: { _controller: SimpleITClaireExerciseBundle:CreatedExercise/Exercise:list }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/Exercise:list }
     methods: [GET]
     requirements:
         _format: json
 
 api_exercise_view:
     pattern:  /{exerciseId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:CreatedExercise/Exercise:view }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/Exercise:view }
     methods: [GET]
     requirements:
         _format: json
@@ -15,7 +15,7 @@ api_exercise_view:
 
 api_item_list_by_exercise:
     pattern:  /{exerciseId}/items/
-    defaults: { _controller: SimpleITClaireExerciseBundle:CreatedExercise/ItemByExercise:list }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/ItemByExercise:list }
     methods: [GET]
     requirements:
         _format: json
@@ -23,7 +23,7 @@ api_item_list_by_exercise:
 
 api_attempts_list_by_exercise:
     pattern:  /{exerciseId}/attempts/
-    defaults: { _controller: SimpleITClaireExerciseBundle:CreatedExercise/AttemptByExercise:list }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/AttemptByExercise:list }
     methods: [GET]
     requirements:
         _format: json
@@ -31,7 +31,7 @@ api_attempts_list_by_exercise:
 
 api_attempts_create_by_exercise:
     pattern:  /{exerciseId}/attempts/
-    defaults: { _controller: SimpleITClaireExerciseBundle:CreatedExercise/AttemptByExercise:create }
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/AttemptByExercise:create }
     methods: [POST]
     requirements:
         _format: json
