@@ -2,16 +2,16 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Exercise\Component;
 
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerExerciseModelResource;
-use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidModelException;
 use SimpleIT\ClaireExerciseBundle\Form\Type\Exercise\ExerciseModelDraftType;
 use SimpleIT\ClaireExerciseBundle\Form\Type\Exercise\ExerciseModelTitleType;
 use SimpleIT\ClaireExerciseBundle\Form\Type\Exercise\ExerciseModelTypeType;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerExerciseModelResource;
 use SimpleIT\ClaireExerciseBundle\ViewModelAssembler\ExerciseModel\ContentVMAssembler;
 use SimpleIT\Utils\HTTP;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseModelController extends AppController
+class ExerciseModelController extends Controller
 {
     /**
      * List exercise models (TODO dev)

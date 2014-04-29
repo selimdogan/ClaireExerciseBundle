@@ -2,11 +2,11 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Exercise\Component;
 
+use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
-use SimpleIT\AppBundle\Controller\AppController;
-use SimpleIT\AppBundle\Util\RequestUtils;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class MetadataByOwnerResourceController extends AppController
+class MetadataByOwnerResourceController extends Controller
 {
     /**
      * Edit the metadata (GET)

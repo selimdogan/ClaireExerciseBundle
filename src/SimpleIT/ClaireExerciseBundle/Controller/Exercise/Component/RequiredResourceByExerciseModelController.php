@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Exercise\Component;
 
-use SimpleIT\AppBundle\Controller\AppController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class RequiredResourceByExerciseModelController extends AppController
+class RequiredResourceByExerciseModelController extends Controller
 {
     /**
      * Edit the required resources (GET)

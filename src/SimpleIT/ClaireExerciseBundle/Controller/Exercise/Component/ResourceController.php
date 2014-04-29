@@ -2,15 +2,15 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Exercise\Component;
 
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerResourceResource;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
-use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\ClaireExerciseBundle\Form\Type\Exercise\ResourceContent\PictureType;
 use SimpleIT\ClaireExerciseBundle\Form\Type\Exercise\ResourceContent\TextType;
 use SimpleIT\ClaireExerciseBundle\Form\Type\Exercise\ResourceTypeType;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerResourceResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\Utils\HTTP;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +22,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ResourceController extends AppController
+class ResourceController extends Controller
 {
     /**
      * Create a resource: select the type (GET)

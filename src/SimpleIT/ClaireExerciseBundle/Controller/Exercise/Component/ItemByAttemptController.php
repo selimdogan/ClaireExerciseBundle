@@ -4,7 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Controller\Exercise\Component;
 
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
-use SimpleIT\AppBundle\Controller\AppController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ItemByAttemptController extends AppController
+class ItemByAttemptController extends Controller
 {
     /**
      * View an exercise item. The answer form is shown if the exercise has not yet been answered

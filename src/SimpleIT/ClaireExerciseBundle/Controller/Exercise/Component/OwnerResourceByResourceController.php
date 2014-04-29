@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Exercise\Component;
 
-use SimpleIT\AppBundle\Controller\AppController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class OwnerResourceByResourceController extends AppController
+class OwnerResourceByResourceController extends Controller
 {
     /**
      * Add a resource to the personal space: create an owner resource

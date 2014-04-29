@@ -2,15 +2,15 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Exercise\Component;
 
-use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Class ResourceController
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-abstract class AppMetadataController extends AppController
+abstract class AppMetadataController extends Controller
 {
     /**
      * Create an array of metadata

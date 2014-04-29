@@ -3,7 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Controller\Exercise\Component;
 
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
-use SimpleIT\AppBundle\Controller\AppController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class AttemptController extends AppController
+class AttemptController extends Controller
 {
     /**
      * View an attempt. Redirects to the first item of the attempt
