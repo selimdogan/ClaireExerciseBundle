@@ -273,7 +273,7 @@
                 <argument type="service" id="simple_it.exercise.test_attempt"/>
             </call>
             <call method="setUserService">
-                <argument type="service" id="simple_it.user.user"/>
+                <argument type="service" id="simple_it.exercise.user"/>
             </call>
         </service>
 
@@ -301,7 +301,7 @@
                 <argument type="service" id="simple_it.exercise.repository.test_model"/>
             </call>
             <call method="setUserService">
-                <argument type="service" id="simple_it.user.user"/>
+                <argument type="service" id="simple_it.exercise.user"/>
             </call>
             <call method="setOwnerExerciseModelService">
                 <argument type="service" id="simple_it.exercise.owner_exercise_model"/>
@@ -322,7 +322,7 @@
                 <argument type="service" id="simple_it.exercise.test"/>
             </call>
             <call method="setUserService">
-                <argument type="service" id="simple_it.user.user"/>
+                <argument type="service" id="simple_it.exercise.user"/>
             </call>
         </service>
 
