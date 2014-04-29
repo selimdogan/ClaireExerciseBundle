@@ -8,6 +8,10 @@
         {
             "name": "Simple IT",
             "email": "technique@simple-it.fr"
+        },
+        {
+            "name": "LIRIS",
+            "email": "marie.lefevre@liris.cnrs.fr"
         }
     ],
     "repositories": [
@@ -18,6 +22,8 @@
     ],
     "require": {
         "php": ">=5.3.3",
+        "doctrine/orm": "~2.2,>=2.2.3",
+        "doctrine/doctrine-bundle": "1.2.*",
         "symfony/symfony": "2.2.*",
         "simpleit/app-bundle": "1.1.x-dev",
         "simpleit/core-bundle": "1.1.x-dev",

@@ -105,12 +105,10 @@ class OwnerExerciseModelByExerciseModelController extends ApiController
     )
     {
         try {
-            $userId = null;
-            if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                $userId = $this->get('security.context')->getToken()->getUser()->getId();
-            } else {
+            if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
                 throw new ApiBadRequestException('Owner must be authenticated to create a resource');
             }
+            $userId = $this->get('security.context')->getToken()->getUser()->getId();
 
             $this->validateResource($ownerExerciseModelResource, array('create'));
 
