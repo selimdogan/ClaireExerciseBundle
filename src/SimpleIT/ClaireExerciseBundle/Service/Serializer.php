@@ -33,10 +33,8 @@ class Serializer implements SerializerInterface
     /**
      * Constructor
      *
-     * @param \JMS\Serializer\SerializerInterface $serializer    Serializer
-     * @param string                              $defaultFormat Default format
      */
-    public function __construct($serializer, $defaultFormat = 'json')
+    public function __construct()
     {
         $this->serializer = SerializerBuilder::create()
             ->addDefaultHandlers()
@@ -48,7 +46,7 @@ class Serializer implements SerializerInterface
             ->build();
         $this->serializationContext = SerializationContext::create();
         $this->serializationContext->enableMaxDepthChecks();
-        $this->defaultFormat = $defaultFormat;
+        $this->defaultFormat = 'json';
     }
 
     /**
