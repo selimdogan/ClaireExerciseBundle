@@ -20,35 +20,35 @@
 
         <parameter key="simple_it.exercise.stored_exercise.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise\StoredExerciseService</parameter>
         <parameter key="simple_it.exercise.entity.stored_exercise.class">SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise</parameter>
-        <parameter key="simple_it.exercise.repository.stored_exercise.class">SimpleIT\ClaireExerciseBundle\Repository\CreatedExercise\AnswerRepository</parameter>
+        <parameter key="simple_it.exercise.repository.stored_exercise.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\AnswerRepository</parameter>
 
         <parameter key="simple_it.exercise.answer.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise\AnswerService</parameter>
         <parameter key="simple_it.exercise.entity.answer.class">SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer</parameter>
-        <parameter key="simple_it.exercise.repository.answer.class">SimpleIT\ClaireExerciseBundle\Repository\CreatedExercise\AnswerRepository</parameter>
+        <parameter key="simple_it.exercise.repository.answer.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\AnswerRepository</parameter>
 
         <parameter key="simple_it.exercise.attempt.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise\AttemptService</parameter>
         <parameter key="simple_it.exercise.entity.attempt.class">SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt</parameter>
-        <parameter key="simple_it.exercise.repository.attempt.class">SimpleIT\ClaireExerciseBundle\Repository\CreatedExercise\AttemptRepository</parameter>
+        <parameter key="simple_it.exercise.repository.attempt.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\AttemptRepository</parameter>
 
         <parameter key="simple_it.exercise.item.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise\ItemService</parameter>
         <parameter key="simple_it.exercise.entity.item.class">SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item</parameter>
-        <parameter key="simple_it.exercise.repository.item.class">SimpleIT\ClaireExerciseBundle\Repository\CreatedExercise\ItemRepository</parameter>
+        <parameter key="simple_it.exercise.repository.item.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\ItemRepository</parameter>
 
         <parameter key="simple_it.exercise.test.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\Test\TestService</parameter>
         <parameter key="simple_it.exercise.entity.test.class">SimpleIT\ClaireExerciseBundle\Entity\Test\Test</parameter>
-        <parameter key="simple_it.exercise.repository.test.class">SimpleIT\ClaireExerciseBundle\Repository\Test\TestRepository</parameter>
+        <parameter key="simple_it.exercise.repository.test.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestRepository</parameter>
 
         <parameter key="simple_it.exercise.test_model.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\Test\TestModelService</parameter>
         <parameter key="simple_it.exercise.entity.test_model.class">SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel</parameter>
-        <parameter key="simple_it.exercise.repository.test_model.class">SimpleIT\ClaireExerciseBundle\Repository\Test\TestModelRepository</parameter>
+        <parameter key="simple_it.exercise.repository.test_model.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestModelRepository</parameter>
 
         <parameter key="simple_it.exercise.test_attempt.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\Test\TestAttemptService</parameter>
         <parameter key="simple_it.exercise.entity.test_attempt.class">SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt</parameter>
-        <parameter key="simple_it.exercise.repository.test_attempt.class">SimpleIT\ClaireExerciseBundle\Repository\Test\TestAttemptRepository</parameter>
+        <parameter key="simple_it.exercise.repository.test_attempt.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestAttemptRepository</parameter>
 
         <parameter key="simple_it.exercise.resource_metadata.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\MetadataService</parameter>
         <parameter key="simple_it.exercise.entity.resource_metadata.class">SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata</parameter>
-        <parameter key="simple_it.exercise.repository.resource_metadata.class">SimpleIT\ClaireExerciseBundle\Repository\ExerciseResource\MetadataRepository</parameter>
+        <parameter key="simple_it.exercise.repository.resource_metadata.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource\MetadataRepository</parameter>
 
         <parameter key="simple_it.exercise.serializer.class">SimpleIT\ClaireExerciseBundle\Services\Serializer</parameter>
     </parameters>
