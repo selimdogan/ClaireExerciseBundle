@@ -6,6 +6,7 @@
         <import resource="services/exercise_model.xml"/>
         <import resource="services/resource.xml"/>
         <import resource="services/knowledge.xml"/>
+        <import resource="services/user.xml"/>
     </imports>
 
     <parameters>
