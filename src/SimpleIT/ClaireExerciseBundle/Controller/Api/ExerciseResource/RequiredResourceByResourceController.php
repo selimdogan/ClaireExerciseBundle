@@ -11,7 +11,7 @@ use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
 use SimpleIT\ApiBundle\Model\ApiDeletedResponse;
 use SimpleIT\ApiBundle\Model\ApiEditedResponse;
 use SimpleIT\ApiBundle\Model\ApiResponse;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ResourceResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\CoreBundle\Exception\ExistingObjectException;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityAlreadyExistsException;

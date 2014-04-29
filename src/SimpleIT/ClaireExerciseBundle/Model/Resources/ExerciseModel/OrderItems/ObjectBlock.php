@@ -1,9 +1,9 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OrderItems;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common\ResourceBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\ResourceBlock;
 
 /**
  * Class ObjectBlock

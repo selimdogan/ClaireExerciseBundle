@@ -4,10 +4,10 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseObject;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\ObjectConstraints;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\ObjectId;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ResourceResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;

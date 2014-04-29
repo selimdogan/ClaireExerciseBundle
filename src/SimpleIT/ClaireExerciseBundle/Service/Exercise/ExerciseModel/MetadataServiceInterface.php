@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\MetadataResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata;
 use SimpleIT\Utils\Collection\CollectionInformation;
 

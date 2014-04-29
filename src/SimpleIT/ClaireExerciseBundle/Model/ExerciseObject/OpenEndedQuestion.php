@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Model\ExerciseObject;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
 
 /**
  * Class OpenEndedQuestion

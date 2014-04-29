@@ -2,15 +2,15 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Model\ExerciseObject;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseSequenceObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseSequenceObject;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidExerciseResourceException;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\Sequence\ResourceId;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\Sequence\SequenceBlock;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\Sequence\SequenceElement;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\Sequence\Text;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\Sequence\TextFragment;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\SequenceResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\TextResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\ResourceId;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\SequenceBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\SequenceElement;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\Text;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\TextFragment;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\SequenceResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\TextResource;
 
 /**
  * Factory to create ExerciseSequenceObject

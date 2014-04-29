@@ -4,8 +4,8 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\ObjectConstraints;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\OwnerResourceResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerResourceResource;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;

@@ -5,9 +5,9 @@ use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\SerializerBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
 use SimpleIT\ClaireExerciseBundle\Serializer\Handler\AbstractClassForExerciseHandler;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ItemResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\Utils\Collection\PaginatorInterface;
 
 /**

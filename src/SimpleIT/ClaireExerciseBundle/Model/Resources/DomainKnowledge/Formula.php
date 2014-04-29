@@ -1,10 +1,10 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge;
 
 use JMS\Serializer\Annotation as Serializer;
 use SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\Unknown;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Unknown;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -24,7 +24,7 @@ class Formula extends CommonKnowledge
 
     /**
      * @var array $variables
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\Variable>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Variable>")
      * @Serializer\Groups({"details", "knowledge_storage"})
      * @Assert\NotBlank(groups={"create"})
      * @Assert\Valid
@@ -33,7 +33,7 @@ class Formula extends CommonKnowledge
 
     /**
      * @var Unknown $unknown
-     * @Serializer\Type("SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\Unknown")
+     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Unknown")
      * @Serializer\Groups({"details", "knowledge_storage"})
      * @Assert\NotBlank(groups={"create"})
      * @Assert\Valid
@@ -83,7 +83,7 @@ class Formula extends CommonKnowledge
     /**
      * Set unknown
      *
-     * @param \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\Unknown $unknown
+     * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Unknown $unknown
      */
     public function setUnknown($unknown)
     {
@@ -93,7 +93,7 @@ class Formula extends CommonKnowledge
     /**
      * Get unknown
      *
-     * @return \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\Unknown
+     * @return \SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Unknown
      */
     public function getUnknown()
     {

@@ -1,9 +1,9 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OrderItems;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common\CommonModel;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 
 /**
  * Model of a OrderItems exercise.
@@ -24,14 +24,14 @@ class Model extends CommonModel
 
     /**
      * @var SequenceBlock $sequenceBlock
-     * @Serializer\Type("SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OrderItems\SequenceBlock")
+     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\SequenceBlock")
      * @Serializer\Groups({"details", "exercise_model_storage"})
      */
     private $sequenceBlock = null;
 
     /**
      * @var array $objectBlocks An array of ObjectBlock
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OrderItems\ObjectBlock>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\ObjectBlock>")
      * @Serializer\Groups({"details", "exercise_model_storage"})
      */
     private $objectBlocks = array();

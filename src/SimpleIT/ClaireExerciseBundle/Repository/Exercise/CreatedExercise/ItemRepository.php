@@ -4,8 +4,8 @@ namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise;
 
 use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ItemResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\CoreBundle\Model\Paginator;
 use SimpleIT\CoreBundle\Repository\BaseRepository;

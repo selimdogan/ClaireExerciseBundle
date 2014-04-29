@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Model\ModelObject;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\MetadataConstraint;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\MetadataConstraint;
 
 /**
  * Factory that manages the creation of MetadataConstraint

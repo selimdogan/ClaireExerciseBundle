@@ -2,8 +2,8 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Model\ExerciseCreation\OrderItems;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OrderItems\Model;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OrderItems\ObjectBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\Model;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\ObjectBlock;
 use SimpleIT\ClaireExerciseBundle\Model\ExerciseCreation\Common\CommonModelFactory;
 
 /**

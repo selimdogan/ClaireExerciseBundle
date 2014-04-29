@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula;
 
 use JMS\Serializer\Annotation as Serializer;
 
@@ -27,14 +27,14 @@ class LocalFormula
 
     /**
      * @var array $variables
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\Variable>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Variable>")
      * @Serializer\Groups({"details", "knowledge_storage", "resource_storage", "exercise_model_storage"})
      */
     private $variables = array();
 
     /**
      * @var Unknown $unknown
-     * @Serializer\Type("SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\Unknown")
+     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Unknown")
      * @Serializer\Groups({"details", "knowledge_storage"})
      */
     private $unknown;
@@ -102,7 +102,7 @@ class LocalFormula
     /**
      * Set unknown
      *
-     * @param \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\Unknown $unknown
+     * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Unknown $unknown
      */
     public function setUnknown($unknown)
     {
@@ -112,7 +112,7 @@ class LocalFormula
     /**
      * Get unknown
      *
-     * @return \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\Unknown
+     * @return \SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Unknown
      */
     public function getUnknown()
     {

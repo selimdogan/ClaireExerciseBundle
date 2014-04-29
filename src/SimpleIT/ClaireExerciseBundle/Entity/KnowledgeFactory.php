@@ -6,7 +6,7 @@ use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerBuilder;
 use SimpleIT\ClaireExerciseBundle\Serializer\Handler\AbstractClassForExerciseHandler;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\KnowledgeResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 
 /**

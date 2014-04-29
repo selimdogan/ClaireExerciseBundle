@@ -2,8 +2,8 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Model\ExerciseCreation\PairItems;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\PairItems\Model;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\PairItems\PairBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\Model;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\PairBlock;
 use SimpleIT\ClaireExerciseBundle\Model\ExerciseCreation\Common\CommonModelFactory;
 
 /**

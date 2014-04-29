@@ -1,9 +1,9 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\MultipleChoice;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\CommonExercise;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise;
 
 /**
  * The exercise (final) version of the multiple choice with the final questions

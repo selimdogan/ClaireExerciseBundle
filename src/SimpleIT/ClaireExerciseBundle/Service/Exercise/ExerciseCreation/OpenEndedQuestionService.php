@@ -2,12 +2,12 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\OpenEndedQuestion\Exercise;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\OpenEndedQuestion\Question;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common\CommonModel;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\Model;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\QuestionBlock;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OpenEndedQuestion\Exercise;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OpenEndedQuestion\Question;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\Model;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\QuestionBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;

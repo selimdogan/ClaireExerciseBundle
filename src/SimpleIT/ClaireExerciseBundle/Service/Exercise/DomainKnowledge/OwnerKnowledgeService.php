@@ -4,7 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\OwnerKnowledgeResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerKnowledgeResource;
 use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\OwnerKnowledge;

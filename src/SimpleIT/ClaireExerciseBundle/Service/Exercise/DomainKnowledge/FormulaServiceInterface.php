@@ -2,9 +2,9 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\Unknown;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\Variable as ResourceVariable;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Unknown;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Variable as ResourceVariable;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula;
 use SimpleIT\ClaireExerciseBundle\Exception\NotEvaluableException;
 use SimpleIT\ClaireExerciseBundle\Model\DomainKnowledge\Formula\Addition;
 use SimpleIT\ClaireExerciseBundle\Model\DomainKnowledge\Formula\Cos;
@@ -66,7 +66,7 @@ interface FormulaServiceInterface
      * Resolve a formula and returns values of the variables in an array
      *
      * @param string                                                                   $formula
-     * @param \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\Variable[] $variables
+     * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Variable[] $variables
      * @param Unknown                                                                  $unknown
      *
      * @throws \SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException

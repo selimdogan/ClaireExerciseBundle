@@ -2,18 +2,18 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Exercise\Component;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common\CommonModel;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModelResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\OwnerResourceResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ResourceResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerResourceResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\ClaireExerciseBundle\Form\Type\Exercise\OwnerResourcePublicType;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\CommonResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 
 /**
  * Class ResourceController

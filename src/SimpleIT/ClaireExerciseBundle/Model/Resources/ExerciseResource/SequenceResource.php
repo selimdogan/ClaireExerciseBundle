@@ -1,10 +1,10 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
 
 use JMS\Serializer\Annotation as Serializer;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidExerciseResourceException;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\Sequence\SequenceBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\SequenceBlock;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -46,7 +46,7 @@ class SequenceResource extends CommonResource
 
     /**
      * @var SequenceBlock
-     * @Serializer\Type("SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\Sequence\SequenceBlock")
+     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\SequenceBlock")
      * @Serializer\Groups({"details", "resource_storage", "resource_storage"})
      * @Assert\NotBlank(groups={"create"})
      * @Assert\Valid
@@ -56,7 +56,7 @@ class SequenceResource extends CommonResource
     /**
      * Set mainBlock
      *
-     * @param \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\Sequence\SequenceBlock $mainBlock
+     * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\SequenceBlock $mainBlock
      */
     public function setMainBlock($mainBlock)
     {
@@ -66,7 +66,7 @@ class SequenceResource extends CommonResource
     /**
      * Get mainBlock
      *
-     * @return \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\Sequence\SequenceBlock
+     * @return \SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\SequenceBlock
      */
     public function getMainBlock()
     {

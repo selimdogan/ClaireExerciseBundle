@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject;
 
 use JMS\Serializer\Annotation as Serializer;
 

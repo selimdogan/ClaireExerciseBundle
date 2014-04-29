@@ -1,7 +1,7 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\AttemptResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\AttemptResource;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
 use SimpleIT\Utils\Collection\PaginatorInterface;
 

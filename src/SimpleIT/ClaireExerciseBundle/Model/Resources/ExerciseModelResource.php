@@ -1,9 +1,9 @@
 <?php
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\CommonExercise;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common\CommonModel;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -19,29 +19,29 @@ class ExerciseModelResource
     const RESOURCE_NAME = 'Exercise Model';
 
     /**
-     * @const MULTIPLE_CHOICE_MODEL_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\MultipleChoice\Model'
+     * @const MULTIPLE_CHOICE_MODEL_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\Model'
      */
-    const MULTIPLE_CHOICE_MODEL_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\MultipleChoice\Model';
+    const MULTIPLE_CHOICE_MODEL_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\Model';
 
     /**
-     * @const GROUP_ITEMS_MODEL_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\GroupItems\Model'
+     * @const GROUP_ITEMS_MODEL_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\Model'
      */
-    const GROUP_ITEMS_MODEL_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\GroupItems\Model';
+    const GROUP_ITEMS_MODEL_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\Model';
 
     /**
-     * @const ORDER_ITEMS_MODEL_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OrderItems\Model'
+     * @const ORDER_ITEMS_MODEL_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\Model'
      */
-    const ORDER_ITEMS_MODEL_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OrderItems\Model';
+    const ORDER_ITEMS_MODEL_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\Model';
 
     /**
-     * @const PAIR_ITEMS_MODEL_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\PairItems\Model'
+     * @const PAIR_ITEMS_MODEL_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\Model'
      */
-    const PAIR_ITEMS_MODEL_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\PairItems\Model';
+    const PAIR_ITEMS_MODEL_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\Model';
 
     /**
-     * @const OPEN_ENDED_QUESTION_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\Model'
+     * @const OPEN_ENDED_QUESTION_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\Model'
      */
-    const OPEN_ENDED_QUESTION_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\Model';
+    const OPEN_ENDED_QUESTION_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\Model';
 
     /**
      * @var int $id Id of exercise model
@@ -72,7 +72,7 @@ class ExerciseModelResource
     /**
      * @var CommonModel $content
      * @Serializer\Groups({"details"})
-     * @Serializer\Type("SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common\CommonModel")
+     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel")
      * @Assert\NotBlank(groups={"create","editContent"})
      * @Assert\Blank(groups={"editType", "editTitle", "appCreate","editDraft"})
      * @Assert\Valid
@@ -117,7 +117,7 @@ class ExerciseModelResource
     /**
      * Set content
      *
-     * @param \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common\CommonModel $content
+     * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel $content
      */
     public function setContent($content)
     {
@@ -127,7 +127,7 @@ class ExerciseModelResource
     /**
      * Get content
      *
-     * @return \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common\CommonModel
+     * @return \SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel
      */
     public function getContent()
     {

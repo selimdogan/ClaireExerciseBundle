@@ -2,9 +2,9 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Exercise\Component;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\OwnerExerciseModelResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ResourceResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerExerciseModelResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\AppBundle\Util\RequestUtils;
 use SimpleIT\ClaireExerciseBundle\Form\Type\Exercise\OwnerExerciseModelPublicType;
 use SimpleIT\Utils\Collection\CollectionInformation;

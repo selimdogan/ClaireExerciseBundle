@@ -1,8 +1,8 @@
 <?php
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\CommonResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -18,29 +18,29 @@ class ResourceResource
     const RESOURCE_NAME = 'Exercise Resource';
 
     /**
-     * @const MULTIPLE_CHOICE_QUESTION = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource'
+     * @const MULTIPLE_CHOICE_QUESTION = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource'
      */
-    const MULTIPLE_CHOICE_QUESTION_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource';
+    const MULTIPLE_CHOICE_QUESTION_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource';
 
     /**
-     * @const PICTURE = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\PictureResource'
+     * @const PICTURE = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\PictureResource'
      */
-    const PICTURE_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\PictureResource';
+    const PICTURE_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\PictureResource';
 
     /**
-     * @const SEQUENCE = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\SequenceResource'
+     * @const SEQUENCE = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\SequenceResource'
      */
-    const SEQUENCE_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\SequenceResource';
+    const SEQUENCE_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\SequenceResource';
 
     /**
-     * @const OPEN_ENDED_QUESTION = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource'
+     * @const OPEN_ENDED_QUESTION = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource'
      */
-    const OPEN_ENDED_QUESTION = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource';
+    const OPEN_ENDED_QUESTION = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource';
 
     /**
-     * @const TEXT = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\TextResource'
+     * @const TEXT = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\TextResource'
      */
-    const TEXT_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\TextResource';
+    const TEXT_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\TextResource';
 
     /**
      * @var int $id Id of resource
@@ -61,7 +61,7 @@ class ResourceResource
 
     /**
      * @var CommonResource $content
-     * @Serializer\Type("SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\CommonResource")
+     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource")
      * @Serializer\Groups({"details", "resource_list"})
      * @Assert\NotBlank(groups={"create","editContent"})
      * @Assert\Blank(groups={"appCreate"})
@@ -89,7 +89,7 @@ class ResourceResource
     /**
      * Set content
      *
-     * @param \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\CommonResource $content
+     * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource $content
      */
     public function setContent($content)
     {
@@ -99,7 +99,7 @@ class ResourceResource
     /**
      * Get content
      *
-     * @return \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\CommonResource
+     * @return \SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource
      */
     public function getContent()
     {

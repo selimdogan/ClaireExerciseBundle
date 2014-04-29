@@ -1,10 +1,10 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\PairItems;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\CommonItem;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\Markable;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonItem;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\Markable;
 
 /**
  * Class Exercise
@@ -15,14 +15,14 @@ class Item extends CommonItem implements Markable
 {
     /**
      * @var array $fixParts An array of ExerciseObject (text, picture, ...)
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseObject>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject>")
      * @Serializer\Groups({"details", "corrected", "not_corrected", "item_storage"})
      */
     private $fixParts = array();
 
     /**
      * @var array $mobileParts An array of ExerciseObject (text, picture, ...)
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseObject>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject>")
      * @Serializer\Groups({"details", "corrected", "not_corrected", "item_storage"})
      */
     private $mobileParts = array();

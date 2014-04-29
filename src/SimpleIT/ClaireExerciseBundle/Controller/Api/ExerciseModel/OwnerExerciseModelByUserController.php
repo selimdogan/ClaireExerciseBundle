@@ -6,7 +6,7 @@ use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\OwnerExerciseModelResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerExerciseModelResource;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Exception\FilterException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerExerciseModelResourceFactory;

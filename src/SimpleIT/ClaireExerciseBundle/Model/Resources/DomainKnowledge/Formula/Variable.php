@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula;
 
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -14,7 +14,7 @@ class Variable extends Unknown
 {
     /**
      * @var Interval $interval
-     * @Serializer\Type("SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\Interval")
+     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Interval")
      * @Serializer\Groups({"details", "knowledge_storage", "resource_storage", "exercise_model_storage"})
      */
     private $interval;
@@ -70,7 +70,7 @@ class Variable extends Unknown
     /**
      * Set interval
      *
-     * @param \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\Interval $interval
+     * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Interval $interval
      */
     public function setInterval($interval)
     {
@@ -80,7 +80,7 @@ class Variable extends Unknown
     /**
      * Get interval
      *
-     * @return \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\Interval
+     * @return \SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Interval
      */
     public function getInterval()
     {

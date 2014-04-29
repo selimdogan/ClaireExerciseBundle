@@ -1,8 +1,8 @@
 <?php
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\CommonResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -73,7 +73,7 @@ class OwnerResourceResource
 
     /**
      * @var CommonResource $content
-     * @Serializer\Type("SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\CommonResource")
+     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource")
      * @Serializer\Groups({"details", "owner_resource_list"})
      * @Assert\Blank()
      * @Assert\Valid
@@ -183,7 +183,7 @@ class OwnerResourceResource
     /**
      * Set content
      *
-     * @param \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\CommonResource $content
+     * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource $content
      */
     public function setContent($content)
     {
@@ -193,7 +193,7 @@ class OwnerResourceResource
     /**
      * Get content
      *
-     * @return \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\CommonResource
+     * @return \SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource
      */
     public function getContent()
     {

@@ -1,5 +1,5 @@
 <?php
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
 use JMS\Serializer\Annotation as Serializer;
 
@@ -24,7 +24,7 @@ class TestResource
 
     /**
      * @var TestModelResource $testModel
-     * @Serializer\Type("SimpleIT\ClaireExerciseResourceBundle\Model\Resources\TestModelResource")
+     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\TestModelResource")
      * @Serializer\Groups({"details", "test"})
      */
     private $testModel;

@@ -1,22 +1,22 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\ViewModelAssembler\ExerciseModel;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common\CommonModel;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\GroupItems\ClassificationConstraints;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\GroupItems\Group;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\GroupItems\Model as GroupItems;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\GroupItems\ObjectBlock;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\MultipleChoice\Model as MultipleChoice;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\MultipleChoice\QuestionBlock;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OrderItems\Model as OrderItems;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OrderItems\SequenceBlock;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\PairItems\Model as PairItems;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\PairItems\PairBlock;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModelResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\MetadataConstraint;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\ModelDocument;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\ObjectConstraints;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\ObjectId;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ClassificationConstraints;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\Group;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\Model as GroupItems;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ObjectBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\Model as MultipleChoice;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\QuestionBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\Model as OrderItems;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\SequenceBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\Model as PairItems;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\PairBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\MetadataConstraint;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ModelDocument;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId;
 
 /**
  * Class ExerciseModelVMAssembler
@@ -75,10 +75,10 @@ class ContentVMAssembler
         if (empty($objectBlocks)) {
             $objectBlocks = array(
                 new
-                \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OrderItems\ObjectBlock(0, '')
+                \SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\ObjectBlock(0, '')
             );
         }
-        /** @var \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OrderItems\ObjectBlock $block */
+        /** @var \SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\ObjectBlock $block */
         foreach ($objectBlocks as &$block) {
             $block->setResources(self::fillResourceList($block->getResources()));
             $block->setResourceConstraint(

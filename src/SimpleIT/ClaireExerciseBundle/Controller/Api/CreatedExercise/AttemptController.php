@@ -7,7 +7,7 @@ use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
 use SimpleIT\ApiBundle\Model\ApiResponse;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\AttemptResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\AttemptResource;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AttemptResourceFactory;
 use SimpleIT\Utils\Collection\CollectionInformation;

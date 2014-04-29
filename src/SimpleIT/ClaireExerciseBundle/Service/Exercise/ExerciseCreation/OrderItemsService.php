@@ -2,15 +2,15 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\OrderItems\Exercise;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\OrderItems\Item as ResItem;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common\CommonModel;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OrderItems\Model;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OrderItems\ObjectBlock;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OrderItems\SequenceBlock;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseObject;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseSequenceObject;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseTextObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OrderItems\Exercise;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OrderItems\Item as ResItem;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\Model;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\ObjectBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\SequenceBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseSequenceObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseTextObject;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
@@ -68,7 +68,7 @@ class OrderItemsService extends ExerciseCreationService
      */
     public function correct(Item $entityItem, Answer $answer)
     {
-        $exClass = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\OrderItems\Exercise';
+        $exClass = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OrderItems\Exercise';
         /** @var ResItem $item */
         $item = $this->getItemFromEntity($entityItem, $exClass);
 
@@ -542,10 +542,10 @@ class OrderItemsService extends ExerciseCreationService
         if (
             get_class(
                 $obj1
-            ) === 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseTextObject' &&
+            ) === 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseTextObject' &&
             get_class(
                 $obj2
-            ) === 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseTextObject'
+            ) === 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseTextObject'
         ) {
             return ExerciseTextFactory::createFromTwoObjects($obj1, $obj2);
         } else {

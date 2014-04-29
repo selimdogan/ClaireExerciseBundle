@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\MultipleChoice;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoice;
 
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;

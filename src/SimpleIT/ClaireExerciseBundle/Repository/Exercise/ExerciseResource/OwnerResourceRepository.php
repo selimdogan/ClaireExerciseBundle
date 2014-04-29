@@ -3,9 +3,9 @@
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource;
 
 use Doctrine\ORM\QueryBuilder;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\MetadataConstraint;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\ObjectConstraints;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\ObjectId;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\MetadataConstraint;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\CoreBundle\Model\Paginator;

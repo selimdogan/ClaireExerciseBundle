@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\AnswerResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Exception\AnswerAlreadyExistsException;
 use SimpleIT\Utils\Collection\PaginatorInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common;
 
 /**
  * Interface Markable

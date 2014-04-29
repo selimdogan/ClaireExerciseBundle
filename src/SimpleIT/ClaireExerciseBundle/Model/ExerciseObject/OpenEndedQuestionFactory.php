@@ -2,8 +2,8 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Model\ExerciseObject;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\CommonResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource;
 
 /**
  * This class manages the creation of instances of OpenEndedQuestion.

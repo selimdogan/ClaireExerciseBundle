@@ -1,9 +1,9 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\GroupItems;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\MetadataConstraint;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\MetadataConstraint;
 
 /**
 
@@ -25,7 +25,7 @@ class Group
 
     /**
      * @var array $mDConstraints An array of MetadataConstraint
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\MetadataConstraint>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\MetadataConstraint>")
      * @Serializer\Groups({"details", "exercise_model_storage"})
      * @Serializer\SerializedName("metadata_constraints")
      */

@@ -1,10 +1,10 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ItemResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\TestResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\TestResource;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\Test;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestPosition;
 use SimpleIT\Utils\Collection\PaginatorInterface;

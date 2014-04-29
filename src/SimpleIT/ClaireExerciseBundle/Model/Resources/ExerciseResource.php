@@ -1,8 +1,8 @@
 <?php
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\CommonExercise;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise;
 
 /**
  * Class ExerciseModelResource
@@ -17,29 +17,29 @@ class ExerciseResource
     const RESOURCE_NAME = 'Exercise';
 
     /**
-     * @const MULTIPLE_CHOICE_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\MultipleChoice\Exercise'
+     * @const MULTIPLE_CHOICE_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice\Exercise'
      */
-    const MULTIPLE_CHOICE_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\MultipleChoice\Exercise';
+    const MULTIPLE_CHOICE_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice\Exercise';
 
     /**
-     * @const GROUP_ITEMS_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\GroupItems\Exercise'
+     * @const GROUP_ITEMS_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\GroupItems\Exercise'
      */
-    const GROUP_ITEMS_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\GroupItems\Exercise';
+    const GROUP_ITEMS_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\GroupItems\Exercise';
 
     /**
-     * @const GROUP_ITEMS_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\GroupItems\Exercise'
+     * @const GROUP_ITEMS_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\GroupItems\Exercise'
      */
-    const ORDER_ITEMS_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\OrderItems\Exercise';
+    const ORDER_ITEMS_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OrderItems\Exercise';
 
     /**
-     * @const PAIR_ITEMS_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\PairItems\Exercise'
+     * @const PAIR_ITEMS_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems\Exercise'
      */
-    const PAIR_ITEMS_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\PairItems\Exercise';
+    const PAIR_ITEMS_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems\Exercise';
 
     /**
-     * @const OPEN_ENDED_QUESTION_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\OpenEndedQuestion\Exercise'
+     * @const OPEN_ENDED_QUESTION_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OpenEndedQuestion\Exercise'
      */
-    const OPEN_ENDED_QUESTION_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\OpenEndedQuestion\Exercise';
+    const OPEN_ENDED_QUESTION_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OpenEndedQuestion\Exercise';
 
     /**
      * @var int $id Id of exercise
@@ -57,7 +57,7 @@ class ExerciseResource
 
     /**
      * @var CommonExercise $content
-     * @Serializer\Type("SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\CommonExercise")
+     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise")
      * @Serializer\Groups({"details", "exercise"})
      */
     private $content;
@@ -65,7 +65,7 @@ class ExerciseResource
     /**
      * Set content
      *
-     * @param \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\CommonExercise $content
+     * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise $content
      */
     public function setContent($content)
     {
@@ -75,7 +75,7 @@ class ExerciseResource
     /**
      * Get content
      *
-     * @return \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\CommonExercise
+     * @return \SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise
      */
     public function getContent()
     {

@@ -5,7 +5,7 @@ use SimpleIT\ApiBundle\Controller\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\OwnerResourceResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerResourceResource;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerResourceResourceFactory;
 use SimpleIT\Utils\Collection\CollectionInformation;

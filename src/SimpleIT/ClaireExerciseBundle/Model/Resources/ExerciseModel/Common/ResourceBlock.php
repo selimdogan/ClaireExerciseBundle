@@ -1,10 +1,10 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\ObjectConstraints;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\ObjectId;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId;
 
 /**
  * Block of resources in a model
@@ -22,7 +22,7 @@ abstract class ResourceBlock
 
     /**
      * @var array $resources An array of ObjectId
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\ObjectId>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId>")
      * @Serializer\Groups({"details", "exercise_model_storage"})
      */
     protected $resources = array();
@@ -32,7 +32,7 @@ abstract class ResourceBlock
      * list of ObjectId
      *
      * @var ObjectConstraints $resourceConstraint
-     * @Serializer\Type("SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\ObjectConstraints")
+     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints")
      * @Serializer\Groups({"details", "exercise_model_storage"})
      */
     protected $resourceConstraint = null;

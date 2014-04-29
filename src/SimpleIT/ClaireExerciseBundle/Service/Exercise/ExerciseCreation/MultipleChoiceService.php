@@ -2,12 +2,12 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\MultipleChoice\Exercise;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\MultipleChoice\Proposition;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\MultipleChoice\Question;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common\CommonModel;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\MultipleChoice\Model;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\MultipleChoice\QuestionBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice\Exercise;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice\Proposition;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice\Question;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\Model;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\QuestionBlock;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;

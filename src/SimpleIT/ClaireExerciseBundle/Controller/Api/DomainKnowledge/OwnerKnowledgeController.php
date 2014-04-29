@@ -11,7 +11,7 @@ use SimpleIT\ApiBundle\Model\ApiEditedResponse;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
 use SimpleIT\ApiBundle\Model\ApiResponse;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\OwnerKnowledgeResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerKnowledgeResource;
 use SimpleIT\CoreBundle\Exception\ExistingObjectException;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;

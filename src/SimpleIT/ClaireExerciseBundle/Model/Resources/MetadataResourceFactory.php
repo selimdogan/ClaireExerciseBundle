@@ -1,7 +1,7 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\MetadataResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata as ResMD;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata as ModMD;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Metadata as KnoMD;

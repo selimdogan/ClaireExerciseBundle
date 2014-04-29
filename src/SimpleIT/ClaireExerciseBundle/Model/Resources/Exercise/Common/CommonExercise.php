@@ -1,20 +1,20 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
 
 /**
  * Abstract class for the exercises in their final form.
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  * @Serializer\Discriminator(field = "exercise_type", map = {
- *    "group-items": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\GroupItems\Exercise",
- *    "pair-items": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\PairItems\Exercise",
- *    "order-items": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\OrderItems\Exercise",
- *    "multiple-choice": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\MultipleChoice\Exercise",
- *    "open-ended-question": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\OpenEndedQuestion\Exercise"
+ *    "group-items": "SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\GroupItems\Exercise",
+ *    "pair-items": "SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems\Exercise",
+ *    "order-items": "SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OrderItems\Exercise",
+ *    "multiple-choice": "SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice\Exercise",
+ *    "open-ended-question": "SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OpenEndedQuestion\Exercise"
  * })
  */
 abstract class CommonExercise
@@ -53,7 +53,7 @@ abstract class CommonExercise
 
     /**
      * @var array $documents An array of ExerciseObject
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseTextObject>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseTextObject>")
      * @Serializer\Groups({"details", "exercise", "exercise_storage"})
      */
     protected $documents = array();

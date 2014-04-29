@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\GroupItems;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems;
 
 use JMS\Serializer\Annotation as Serializer;
 
@@ -56,7 +56,7 @@ class ClassificationConstraints
 
     /**
      * @var array $groups An array of Group
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\GroupItems\Group>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\Group>")
      * @Serializer\Groups({"details", "exercise_model_storage"})
      */
     private $groups = array();

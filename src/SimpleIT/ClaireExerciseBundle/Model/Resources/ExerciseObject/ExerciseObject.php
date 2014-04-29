@@ -1,18 +1,18 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula;
 
 /**
  * Abstract class for exercise objects (pictures, texts, ...)
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  * @Serializer\Discriminator(field = "object_type", map = {
- *    "picture": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExercisePictureObject",
- *    "text": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseTextObject",
- *    "sequence": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseSequenceObject"
+ *    "picture": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExercisePictureObject",
+ *    "text": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseTextObject",
+ *    "sequence": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseSequenceObject"
  * })
  */
 abstract class ExerciseObject
@@ -35,7 +35,7 @@ abstract class ExerciseObject
 
     /**
      * @var LocalFormula A LocalFormula
-     * @Serializer\Type("SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula")
+     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula")
      * @Serializer\Groups({"details", "exercise_model_storage"})
      */
     protected $formula;
@@ -106,7 +106,7 @@ abstract class ExerciseObject
     /**
      * Set formula
      *
-     * @param \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula $formula
+     * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula $formula
      */
     public function setFormula($formula)
     {
@@ -116,7 +116,7 @@ abstract class ExerciseObject
     /**
      * Get formula
      *
-     * @return \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula
+     * @return \SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula
      */
     public function getFormula()
     {

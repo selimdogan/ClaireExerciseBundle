@@ -1,17 +1,17 @@
 <?php
 
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Validable;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Validable;
 
 /**
  * Class CommonKnowledge
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  * @Serializer\Discriminator(field = "object_type", map = {
- *    "formula": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula"
+ *    "formula": "SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula"
  * })
  */
 abstract class CommonKnowledge implements Validable

@@ -4,8 +4,8 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\AnswerResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ItemResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\AnswerFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;

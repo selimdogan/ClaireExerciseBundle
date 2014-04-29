@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject;
 
 use JMS\Serializer\Annotation as Serializer;
 
@@ -13,14 +13,14 @@ class ObjectConstraints
 {
     /**
      * @var array $metadataConstraints An array of MatadataConstraint that must all be satisfied
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\MetadataConstraint>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\MetadataConstraint>")
      * @Serializer\Groups({"details", "exercise_model_storage"})
      */
     private $metadataConstraints = array();
 
     /**
      * @var array $excluded An array of ObjectId that should not be retrieved
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\ObjectId>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId>")
      * @Serializer\Groups({"details", "exercise_model_storage"})
      */
     private $excluded = array();

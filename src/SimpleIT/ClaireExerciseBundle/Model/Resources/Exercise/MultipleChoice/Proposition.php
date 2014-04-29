@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\MultipleChoice;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice;
 
 use JMS\Serializer\Annotation as Serializer;
 

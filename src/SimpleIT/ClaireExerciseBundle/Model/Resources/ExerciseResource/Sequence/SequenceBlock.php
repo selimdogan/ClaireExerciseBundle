@@ -1,7 +1,7 @@
 <?php
 
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\Sequence;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence;
 
 use JMS\Serializer\Annotation as Serializer;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidExerciseResourceException;
@@ -34,7 +34,7 @@ class SequenceBlock extends SequenceElement
 
     /**
      * @var array $elements The content of this block
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\Sequence\SequenceElement>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\SequenceElement>")
      * @Serializer\Groups({"details", "resource_storage"})
      * @Assert\NotBlank(groups={"create"})
      */

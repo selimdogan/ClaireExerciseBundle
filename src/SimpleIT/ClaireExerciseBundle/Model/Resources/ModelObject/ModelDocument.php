@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject;
 
 /**
  * A document (additional resource for an exercise) in a model.

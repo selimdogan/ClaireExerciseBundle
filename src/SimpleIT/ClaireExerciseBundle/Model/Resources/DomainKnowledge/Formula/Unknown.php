@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula;
 
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;

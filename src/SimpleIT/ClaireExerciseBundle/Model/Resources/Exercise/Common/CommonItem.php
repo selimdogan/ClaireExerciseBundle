@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common;
 
 use JMS\Serializer\Annotation as Serializer;
 
@@ -9,11 +9,11 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  * @Serializer\Discriminator(field = "item_type", map = {
- *    "group-items": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\GroupItems\Item",
- *    "pair-items": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\PairItems\Item",
- *    "order-items": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\OrderItems\Item",
- *    "multiple-choice-question": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\MultipleChoice\Question",
- *    "open-ended-question": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\OpenEndedQuestion\Question"
+ *    "group-items": "SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\GroupItems\Item",
+ *    "pair-items": "SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems\Item",
+ *    "order-items": "SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OrderItems\Item",
+ *    "multiple-choice-question": "SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice\Question",
+ *    "open-ended-question": "SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OpenEndedQuestion\Question"
  * })
  */
 abstract class CommonItem

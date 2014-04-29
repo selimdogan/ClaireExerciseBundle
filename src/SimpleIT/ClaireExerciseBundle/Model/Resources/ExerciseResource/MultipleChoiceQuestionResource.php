@@ -1,10 +1,10 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
 
 use JMS\Serializer\Annotation as Serializer;
 use
-    SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\MultipleChoice\MultipleChoicePropositionResource;
+    SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoice\MultipleChoicePropositionResource;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -24,7 +24,7 @@ class MultipleChoiceQuestionResource extends CommonResource
 
     /**
      * @var array $propositions An array of Proposition
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\MultipleChoice\MultipleChoicePropositionResource>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoice\MultipleChoicePropositionResource>")
      * @Serializer\Groups({"details", "resource_storage"})
      * @Assert\NotBlank(groups={"create"})
      */

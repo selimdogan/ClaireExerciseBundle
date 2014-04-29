@@ -1,7 +1,7 @@
 <?php
 
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
 /**
  * Interface Validable

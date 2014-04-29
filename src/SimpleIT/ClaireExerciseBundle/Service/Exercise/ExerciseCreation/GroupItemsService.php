@@ -2,15 +2,15 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\GroupItems\Exercise;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\GroupItems\Item as ResItem;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common\CommonModel;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\GroupItems\ClassificationConstraints;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\GroupItems\Group;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\GroupItems\Model;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\GroupItems\ObjectBlock;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseObject;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\MetadataConstraint;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\GroupItems\Exercise;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\GroupItems\Item as ResItem;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ClassificationConstraints;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\Group;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\Model;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ObjectBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\MetadataConstraint;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;

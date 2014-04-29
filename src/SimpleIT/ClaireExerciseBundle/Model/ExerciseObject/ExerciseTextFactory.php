@@ -2,8 +2,8 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Model\ExerciseObject;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseTextObject;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\TextResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseTextObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\TextResource;
 
 /**
  * Factory to create a text object for an exercise.

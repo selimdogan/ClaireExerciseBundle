@@ -2,8 +2,8 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Exercise\Component;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\CommonExercise;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

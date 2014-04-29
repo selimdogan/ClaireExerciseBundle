@@ -2,9 +2,9 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Exercise\Component;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common\CommonModel;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModelResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\OwnerExerciseModelResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerExerciseModelResource;
 use SimpleIT\AppBundle\Controller\AppController;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidModelException;
 use SimpleIT\ClaireExerciseBundle\Form\Type\Exercise\ExerciseModelDraftType;

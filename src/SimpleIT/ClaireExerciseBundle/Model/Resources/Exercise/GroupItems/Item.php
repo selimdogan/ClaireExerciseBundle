@@ -1,11 +1,11 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\GroupItems;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\GroupItems;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\CommonItem;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\Markable;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonItem;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\Markable;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
 
 /**
  * Class Exercise
@@ -40,7 +40,7 @@ class Item extends CommonItem implements Markable
 
     /**
      * @var array $objects An array of ExerciseObject
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseObject>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject>")
      * @Serializer\Groups({"details", "corrected", "not_corrected", "item_storage"})
      */
     private $objects = array();

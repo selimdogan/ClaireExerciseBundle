@@ -2,10 +2,10 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Model\ExerciseObject;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\CommonResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use
-    SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\MultipleChoice\MultipleChoicePropositionResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource;
+    SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoice\MultipleChoicePropositionResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource;
 
 /**
  * This class manages the creation of instances of MultipleChoiceQuestion.

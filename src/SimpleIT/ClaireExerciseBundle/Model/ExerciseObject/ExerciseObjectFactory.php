@@ -3,14 +3,14 @@
 namespace SimpleIT\ClaireExerciseBundle\Model\ExerciseObject;
 
 use Doctrine\Common\Collections\Collection;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseObject;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\CommonResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\PictureResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\SequenceResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\TextResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ResourceResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\PictureResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\SequenceResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\TextResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\MultipleChoiceQuestionFactory;

@@ -4,8 +4,8 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModelResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\OwnerExerciseModelResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerExerciseModelResource;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel;
 use SimpleIT\Utils\Collection\CollectionInformation;

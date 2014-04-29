@@ -4,7 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\SerializerBuilder;
 use SimpleIT\ClaireExerciseBundle\Serializer\Handler\AbstractClassForExerciseHandler;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\AnswerResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\Utils\Collection\PaginatorInterface;
 
@@ -42,7 +42,7 @@ abstract class AnswerResourceFactory
      */
     public static function create(Answer $answer)
     {
-        $class = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\AnswerResource';
+        $class = 'SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource';
         $serializer = SerializerBuilder::create()
             ->addDefaultHandlers()
             ->configureHandlers(

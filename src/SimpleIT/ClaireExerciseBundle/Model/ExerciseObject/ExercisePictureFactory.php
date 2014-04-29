@@ -2,8 +2,8 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Model\ExerciseObject;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExercisePictureObject;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\PictureResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExercisePictureObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\PictureResource;
 
 /**
  * Factory to create ExercisePicture

@@ -1,9 +1,9 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OpenEndedQuestion;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common\CommonModel;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 
 /**
  * A short answer question model. It contains blocks of questions and a parameter to
@@ -16,7 +16,7 @@ class Model extends CommonModel
 {
     /**
      * @var array $questionBlocks An array of QuestionBlock
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\QuestionBlock>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\QuestionBlock>")
      * @Serializer\Groups({"details", "exercise_model_storage"})
      */
     private $questionBlocks = array();

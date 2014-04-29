@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\MetadataResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata;
 
 /**

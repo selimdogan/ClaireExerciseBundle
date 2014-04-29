@@ -1,9 +1,9 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\GroupItems;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common\CommonModel;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 
 /**
  * A Group Items exercises model. It containts one or more blocks of objects.
@@ -31,7 +31,7 @@ class Model extends CommonModel
 
     /**
      * @var array $objectBlocks An array of ObjectBlock
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\GroupItems\ObjectBlock>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ObjectBlock>")
      * @Serializer\Groups({"details", "exercise_model_storage"})
      */
     private $objectBlocks = array();
@@ -45,7 +45,7 @@ class Model extends CommonModel
 
     /**
      * @var ClassificationConstraints $classifConstr
-     * @Serializer\Type("SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\GroupItems\ClassificationConstraints")
+     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ClassificationConstraints")
      * @Serializer\Groups({"details", "exercise_model_storage"})
      */
     private $classifConstr = null;

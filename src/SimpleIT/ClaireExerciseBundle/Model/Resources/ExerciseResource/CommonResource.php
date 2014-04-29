@@ -1,22 +1,22 @@
 <?php
 
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Validable;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Validable;
 
 /**
  * Class ResourceResource
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  * @Serializer\Discriminator(field = "object_type", map = {
- *    "picture": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\PictureResource",
- *    "text": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\TextResource",
- *    "sequence": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\SequenceResource",
- *    "multiple_choice_question": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource",
- *    "open_ended_question": "SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource"
+ *    "picture": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\PictureResource",
+ *    "text": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\TextResource",
+ *    "sequence": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\SequenceResource",
+ *    "multiple_choice_question": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource",
+ *    "open_ended_question": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource"
  * })
  */
 abstract class CommonResource implements Validable
@@ -48,7 +48,7 @@ abstract class CommonResource implements Validable
 
     /**
      * @var LocalFormula A LocalFormula
-     * @Serializer\Type("SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula")
+     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula")
      * @Serializer\Groups({"details", "exercise_model_storage"})
      */
     protected $formula;

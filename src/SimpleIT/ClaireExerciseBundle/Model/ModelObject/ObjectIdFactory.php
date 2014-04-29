@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Model\ModelObject;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ModelObject\ObjectId;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId;
 
 /**
  * Factory that manages the creation of ObjectId

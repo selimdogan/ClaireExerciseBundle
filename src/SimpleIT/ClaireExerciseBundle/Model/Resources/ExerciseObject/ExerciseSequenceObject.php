@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject;
 
 use JMS\Serializer\Annotation as Serializer;
 
@@ -13,7 +13,7 @@ class ExerciseSequenceObject extends ExerciseObject
 {
     /**
      * @var array $objects An array of ExerciseObject of the same type
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseObject>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject>")
      * @Serializer\Groups({"details", "corrected", "not_corrected", "item_storage"})
      */
     private $objects;

@@ -1,8 +1,8 @@
 <?php
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -73,7 +73,7 @@ class OwnerKnowledgeResource
 
     /**
      * @var CommonKnowledge $content
-     * @Serializer\Type("SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\CommonKnowledge")
+     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge")
      * @Serializer\Groups({"details", "owner_knowledge_list"})
      * @Assert\Blank()
      * @Assert\Valid
@@ -83,7 +83,7 @@ class OwnerKnowledgeResource
     /**
      * Set content
      *
-     * @param \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\CommonKnowledge $content
+     * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge $content
      */
     public function setContent($content)
     {
@@ -93,7 +93,7 @@ class OwnerKnowledgeResource
     /**
      * Get content
      *
-     * @return \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\DomainKnowledge\CommonKnowledge
+     * @return \SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge
      */
     public function getContent()
     {

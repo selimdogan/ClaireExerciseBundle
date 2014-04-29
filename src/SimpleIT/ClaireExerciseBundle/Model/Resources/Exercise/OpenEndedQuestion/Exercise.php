@@ -1,9 +1,9 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\OpenEndedQuestion;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OpenEndedQuestion;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\CommonExercise;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise;
 
 /**
  * The exercise (final) version of the exercise with the final questions in the final order.

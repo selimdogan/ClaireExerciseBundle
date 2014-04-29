@@ -12,7 +12,7 @@ use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
 use SimpleIT\ApiBundle\Model\ApiResponse;
 use SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\KnowledgeResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 use SimpleIT\CoreBundle\Exception\ExistingObjectException;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;

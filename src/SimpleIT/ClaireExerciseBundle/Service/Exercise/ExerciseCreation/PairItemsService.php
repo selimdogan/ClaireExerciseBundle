@@ -2,13 +2,13 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\PairItems\Exercise;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\PairItems\Item as ResItem;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common\CommonModel;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\PairItems\Model;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\PairItems\PairBlock;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseObject\ExerciseObject;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\OwnerResourceResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems\Exercise;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems\Item as ResItem;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\Model;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\PairBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerResourceResource;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
@@ -89,7 +89,7 @@ class PairItemsService extends ExerciseCreationService
      */
     public function correct(Item $entityItem, Answer $answer)
     {
-        $exClass = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\PairItems\Exercise';
+        $exClass = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems\Exercise';
         /** @var ResItem $item */
         $item = $this->getItemFromEntity($entityItem, $exClass);
 

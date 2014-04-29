@@ -1,10 +1,10 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\Sequence;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence;
 
 use JMS\Serializer\Annotation as Serializer;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidExerciseResourceException;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseResource\SequenceResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\SequenceResource;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**

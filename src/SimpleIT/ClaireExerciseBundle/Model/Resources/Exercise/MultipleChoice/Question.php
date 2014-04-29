@@ -1,10 +1,10 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\MultipleChoice;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\CommonItem;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\Markable;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonItem;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\Markable;
 
 /**
  * An ExerciseQuestion is a question of multiple choice in its final version,
@@ -25,7 +25,7 @@ class Question extends CommonItem implements Markable
 
     /**
      * @var array $propositions An array of Proposition
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\MultipleChoice\Proposition>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice\Proposition>")
      * @Serializer\Groups({"details", "corrected", "not_corrected", "item_storage"})
      */
     private $propositions = array();

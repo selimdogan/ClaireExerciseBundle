@@ -1,9 +1,9 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\GroupItems;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\GroupItems;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\CommonExercise;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise;
 
 /**
  * Class Exercise
@@ -21,7 +21,7 @@ class Exercise extends CommonExercise
     /**
      * Set item
      *
-     * @param \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\GroupItems\Item $item
+     * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\GroupItems\Item $item
      */
     public function setItem($item)
     {
@@ -31,7 +31,7 @@ class Exercise extends CommonExercise
     /**
      * Get item
      *
-     * @return \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\GroupItems\Item
+     * @return \SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\GroupItems\Item
      */
     public function getItem()
     {

@@ -3,7 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\Test;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\TestModelResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\TestModelResource;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel;

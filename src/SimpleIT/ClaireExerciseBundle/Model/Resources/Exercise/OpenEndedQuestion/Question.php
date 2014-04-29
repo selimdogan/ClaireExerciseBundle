@@ -1,10 +1,10 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\OpenEndedQuestion;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OpenEndedQuestion;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\CommonItem;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\Markable;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonItem;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\Markable;
 
 /**
  * An ExerciseQuestion is a question of openEndedQuestion exercise in its final version,

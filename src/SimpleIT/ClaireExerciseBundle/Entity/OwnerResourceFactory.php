@@ -3,8 +3,8 @@
 namespace SimpleIT\ClaireExerciseBundle\Entity;
 
 use JMS\Serializer\SerializationContext;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\OwnerResourceResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ResourceResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerResourceResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\OwnerResource;
 
 /**

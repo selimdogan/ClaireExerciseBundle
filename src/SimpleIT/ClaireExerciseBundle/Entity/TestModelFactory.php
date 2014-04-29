@@ -3,8 +3,8 @@
 namespace SimpleIT\ClaireExerciseBundle\Entity;
 
 use JMS\Serializer\SerializationContext;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModelResource;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\TestModelResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\TestModelResource;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel;
 

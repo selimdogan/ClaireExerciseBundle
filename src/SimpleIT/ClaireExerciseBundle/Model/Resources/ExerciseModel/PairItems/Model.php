@@ -1,9 +1,9 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\PairItems;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common\CommonModel;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 
 /**
 
@@ -16,7 +16,7 @@ class Model extends CommonModel
 {
     /**
      * @var array $pairBlocks An array of PairBlock
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\PairItems\PairBlock>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\PairBlock>")
      * @Serializer\Groups({"details", "exercise_model_storage"})
      */
     private $pairBlocks = array();

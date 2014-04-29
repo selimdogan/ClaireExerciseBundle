@@ -1,9 +1,9 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\GroupItems;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\Common\ResourceBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\ResourceBlock;
 
 /**
 
@@ -24,7 +24,7 @@ class ObjectBlock extends ResourceBlock
 
     /**
      * @var ClassificationConstraints $classifConstr
-     * @Serializer\Type("SimpleIT\ClaireExerciseResourceBundle\Model\Resources\ExerciseModel\GroupItems\ClassificationConstraints")
+     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ClassificationConstraints")
      * @Serializer\Groups({"details", "exercise_model_storage"})
      */
     private $classifConstr = null;

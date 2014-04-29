@@ -1,9 +1,9 @@
 <?php
-namespace SimpleIT\ClaireExerciseResourceBundle\Model\Resources;
+namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\CommonExercise;
-use SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\CommonItem;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonItem;
 
 /**
  * Class ExerciseModelResource
@@ -18,29 +18,29 @@ class ItemResource
     const RESOURCE_NAME = 'Item';
 
     /**
-     * @const MULTIPLE_CHOICE_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\MultipleChoice\Question'
+     * @const MULTIPLE_CHOICE_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice\Question'
      */
-    const MULTIPLE_CHOICE_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\MultipleChoice\Question';
+    const MULTIPLE_CHOICE_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice\Question';
 
     /**
-     * @const OPEN_ENDED_QUESTION_CLASS ='SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\OpenEndedQuestion\Question'
+     * @const OPEN_ENDED_QUESTION_CLASS ='SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OpenEndedQuestion\Question'
      */
-    const OPEN_ENDED_QUESTION_CLASS ='SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\OpenEndedQuestion\Question';
+    const OPEN_ENDED_QUESTION_CLASS ='SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OpenEndedQuestion\Question';
 
     /**
-     * @const GROUP_ITEMS_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\GroupItems\Item'
+     * @const GROUP_ITEMS_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\GroupItems\Item'
      */
-    const GROUP_ITEMS_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\GroupItems\Item';
+    const GROUP_ITEMS_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\GroupItems\Item';
 
     /**
-     * @const GROUP_ITEMS_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\GroupItems\Item'
+     * @const GROUP_ITEMS_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\GroupItems\Item'
      */
-    const ORDER_ITEMS_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\OrderItems\Item';
+    const ORDER_ITEMS_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OrderItems\Item';
 
     /**
-     * @const PAIR_ITEMS_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\PairItems\Item'
+     * @const PAIR_ITEMS_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems\Item'
      */
-    const PAIR_ITEMS_CLASS = 'SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\PairItems\Item';
+    const PAIR_ITEMS_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems\Item';
 
     /**
      * @var int $itemId Id of item
@@ -65,7 +65,7 @@ class ItemResource
 
     /**
      * @var CommonItem $content
-     * @Serializer\Type("SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\CommonItem")
+     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonItem")
      * @Serializer\Groups({"details", "corrected", "not_corrected"})
      */
     private $content;
@@ -73,7 +73,7 @@ class ItemResource
     /**
      * Set content
      *
-     * @param \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\CommonItem $content
+     * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonItem $content
      */
     public function setContent($content)
     {
@@ -83,7 +83,7 @@ class ItemResource
     /**
      * Get content
      *
-     * @return \SimpleIT\ClaireExerciseResourceBundle\Model\Resources\Exercise\Common\CommonItem
+     * @return \SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonItem
      */
     public function getContent()
     {
