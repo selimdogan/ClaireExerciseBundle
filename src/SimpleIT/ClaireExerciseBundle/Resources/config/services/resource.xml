@@ -39,7 +39,7 @@
                 <argument type="service" id="simple_it.exercise.repository.exercise_resource"/>
             </call>
             <call method="setSerializer">
-                <argument type="service" id="simple_it.api.serializer"/>
+                <argument type="service" id="jms_serializer"/>
             </call>
             <call method="setOwnerResourceService">
                 <argument type="service" id="simple_it.exercise.owner_resource"/>
