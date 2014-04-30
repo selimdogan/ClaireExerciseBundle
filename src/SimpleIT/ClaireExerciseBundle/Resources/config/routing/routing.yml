@@ -1,79 +1,79 @@
 web_owner_exercise_model:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/component_owner_exercise_model.yml"
-    prefix:   /components/owner-exercise-models
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/web/component_owner_exercise_model.yml"
+    prefix:   /web/components/owner-exercise-models
 
 web_exercise_model:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/component_exercise_model.yml"
-    prefix:   /components/exercise-models
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/web/component_exercise_model.yml"
+    prefix:   /web/components/exercise-models
 
 web_owner_resources:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/component_owner_resource.yml"
-    prefix:   /components/owner-resources
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/web/component_owner_resource.yml"
+    prefix:   /web/components/owner-resources
 
 web_resources:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/component_resource.yml"
-    prefix:   /components/resources
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/web/component_resource.yml"
+    prefix:   /web/components/resources
 
 web_attempts:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/component_attempt.yml"
-    prefix:   /components/attempts
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/web/component_attempt.yml"
+    prefix:   /web/components/attempts
 
 web_test_attempts:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/component_test_attempt.yml"
-    prefix:   /components/test-attempts
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/web/component_test_attempt.yml"
+    prefix:   /web/components/test-attempts
 
 web_exercises:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/component_exercise.yml"
-    prefix:   /components/exercises
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/web/component_exercise.yml"
+    prefix:   /web/components/exercises
 
 api_exercise_models:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/exercise_model.yml"
-    prefix:   /exercise-models/
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/exercise_model.yml"
+    prefix:   /api/exercise-models/
 
 api_owner_exercise_models:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/owner_exercise_model.yml"
-    prefix:   /owner-exercise-models/
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/owner_exercise_model.yml"
+    prefix:   /api/owner-exercise-models/
 
 api_exercises:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/exercise.yml"
-    prefix:   /exercises/
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/exercise.yml"
+    prefix:   /api/exercises/
 
 api_items:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/item.yml"
-    prefix:   /items/
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/item.yml"
+    prefix:   /api/items/
 
 api_resources:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/resource.yml"
-    prefix:   /resources/
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/resource.yml"
+    prefix:   /api/resources/
 
 api_test_models:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/test_model.yml"
-    prefix:   /test-models/
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/test_model.yml"
+    prefix:   /api/test-models/
 
 api_tests:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/test.yml"
-    prefix:   /tests/
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/test.yml"
+    prefix:   /api/tests/
 
 api_test_attempts:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/test_attempt.yml"
-    prefix:   /test-attempts/
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/test_attempt.yml"
+    prefix:   /api/test-attempts/
 
 api_attempts:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/attempt.yml"
-    prefix:   /attempts/
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/attempt.yml"
+    prefix:   /api/attempts/
 
 api_owner_resources:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/owner_resource.yml"
-    prefix:   /owner-resources/
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/owner_resource.yml"
+    prefix:   /api/owner-resources/
 
 api_exercise_users:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/user.yml"
-    prefix:   /users/
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/user.yml"
+    prefix:   /api/users/
 
 api_domain_knowledges:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/knowledge.yml"
-    prefix:   /knowledges/
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/knowledge.yml"
+    prefix:   /api/knowledges/
 
 api_owner_domain_knowledges:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/exercise/owner_knowledge.yml"
-    prefix:   /owner-knowledges/
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/owner_knowledge.yml"
+    prefix:   /api/owner-knowledges/

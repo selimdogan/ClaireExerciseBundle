@@ -54,7 +54,7 @@ api_exercise_resource_delete_requirement:
         resourceId: \d+
         reqResId: \d+
 
-exercise_resource_update_required-resource:
+api_exercise_resource_update_required-resource:
     pattern:  /{resourceId}/required-resources/
     defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/RequiredResourceByResource:edit }
     methods: [PUT]
