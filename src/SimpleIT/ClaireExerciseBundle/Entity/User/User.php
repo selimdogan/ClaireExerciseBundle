@@ -2,6 +2,8 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity\User;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -9,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class User implements UserInterface, \Serializable
+class User implements AdvancedUserInterface, \Serializable
 {
     /**
      * @const ID = 'id';
@@ -87,12 +89,18 @@ class User implements UserInterface, \Serializable
     private $isActive;
 
     /**
+     * @var ArrayCollection
+     */
+    private $groups;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->isActive = true;
         $this->salt = md5(uniqid(null, true));
+        $this->groups = new ArrayCollection();
     }
 
     /**
@@ -303,7 +311,27 @@ class User implements UserInterface, \Serializable
      */
     public function getRoles()
     {
-        return array('ROLE_USER');
+        return $this->groups->toArray();
+    }
+
+    /**
+     * Set groups
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $groups
+     */
+    public function setGroups($groups)
+    {
+        $this->groups = $groups;
+    }
+
+    /**
+     * Get groups
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getGroups()
+    {
+        return $this->groups;
     }
 
     /**
@@ -345,5 +373,37 @@ class User implements UserInterface, \Serializable
     public function isEqualTo(UserInterface $user)
     {
         return $this->username === $user->getUsername();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isEnabled()
+    {
+        return $this->isActive;
     }
 }

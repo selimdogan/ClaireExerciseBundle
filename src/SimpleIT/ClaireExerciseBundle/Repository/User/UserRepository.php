@@ -24,13 +24,14 @@ class UserRepository extends BaseRepository implements UserProviderInterface
     {
         $q = $this
             ->createQueryBuilder('u')
-            ->where('u.username = :username')
+            ->select('u, g')
+            ->leftJoin('u.groups', 'g')
+            ->where('u.username = :username OR u.email = :email')
             ->setParameter('username', $username)
+            ->setParameter('email', $username)
             ->getQuery();
 
         try {
-            // La méthode Query::getSingleResult() lance une exception
-            // s'il n'y a pas d'entrée correspondante aux critères
             $user = $q->getSingleResult();
         } catch (NoResultException $e) {
             throw new UsernameNotFoundException(sprintf('Unable to find an active admin AcmeUserBundle:User object identified by "%s".', $username), 0, $e);
