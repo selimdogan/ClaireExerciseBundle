@@ -12,7 +12,7 @@
 
         <field name="position" column="position" type="integer" nullable="true"/>
 
-        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise" field="exercise">
+        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise" field="exercise" inversed-by="attempts">
             <join-column name="exercise_id" referenced-column-name="id" on-delete="CASCADE"/>
         </many-to-one>
 

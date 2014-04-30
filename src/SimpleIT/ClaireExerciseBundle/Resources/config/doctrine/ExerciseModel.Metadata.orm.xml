@@ -6,7 +6,7 @@
         <id name="key" type="string" column="meta_key"/>
         <field name="value" column="meta_value" type="string" nullable="false"/>
 
-        <many-to-one target-entity="OwnerExerciseModel" field="ownerExerciseModel">
+        <many-to-one target-entity="OwnerExerciseModel" field="ownerExerciseModel" inversed-by="metadata">
             <join-column name="owner_exercise_model_id" referenced-column-name="id"/>
         </many-to-one>
 

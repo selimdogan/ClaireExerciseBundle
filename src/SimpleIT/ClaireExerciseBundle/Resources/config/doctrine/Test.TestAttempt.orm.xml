@@ -10,7 +10,7 @@
             <gedmo:timestampable on="update"/>
         </field>
 
-        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\Test\Test" field="test">
+        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\Test\Test" field="test" inversed-by="testAttempts">
             <join-column name="test_id" referenced-column-name="id"/>
         </many-to-one>
 

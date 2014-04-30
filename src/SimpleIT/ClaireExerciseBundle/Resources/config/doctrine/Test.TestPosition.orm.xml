@@ -7,11 +7,11 @@
 
         <field name="position" column="position" type="integer" nullable="false"/>
 
-        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\Test\Test" field="test">
+        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\Test\Test" field="test" inversed-by="testPositions">
             <join-column name="test_id" referenced-column-name="id" on-delete="CASCADE"/>
         </many-to-one>
 
-        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise" field="exercise">
+        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise" field="exercise" inversed-by="testPositions">
             <join-column name="exercise_id" referenced-column-name="id" on-delete="CASCADE"/>
         </many-to-one>
 

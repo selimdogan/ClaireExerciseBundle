@@ -9,7 +9,7 @@
         <field name="type" column="type" type="string" nullable="false"/>
         <field name="content" column="content" type="text" nullable="false"/>
 
-        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise" field="storedExercise">
+        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise" field="storedExercise" inversed-by="items">
             <join-column name="exercise_id" referenced-column-name="id" on-delete="CASCADE"/>
         </many-to-one>
 

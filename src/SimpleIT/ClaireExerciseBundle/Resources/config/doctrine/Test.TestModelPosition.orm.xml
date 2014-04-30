@@ -7,7 +7,7 @@
 
         <field name="position" column="position" type="integer" nullable="false"/>
 
-        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel" field="testModel">
+        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel" field="testModel" inversed-by="testModelPositions">
             <join-column name="test_model_id" referenced-column-name="id" on-delete="CASCADE"/>
         </many-to-one>
 

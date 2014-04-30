@@ -8,7 +8,7 @@
 
         <field name="content" column="content" type="text" nullable="false"/>
 
-        <one-to-many target-entity="SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item" mapped-by="exercise" field="items">
+        <one-to-many target-entity="SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item" mapped-by="storedExercise" field="items">
             <cascade>
                 <cascade-persist/>
                 <cascade-remove/>

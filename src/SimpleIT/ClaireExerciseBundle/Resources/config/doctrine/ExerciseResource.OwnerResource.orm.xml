@@ -15,7 +15,7 @@
             </cascade>
         </one-to-many>
 
-        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource" field="resource">
+        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource" field="resource" inversed-by="ownerResources">
             <join-column name="resource_id" referenced-column-name="id" on-delete="CASCADE"/>
         </many-to-one>
 
