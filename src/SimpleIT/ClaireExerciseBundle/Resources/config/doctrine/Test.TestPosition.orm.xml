@@ -1,5 +1,4 @@
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
-                                      http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping">
     <entity name="SimpleIT\ClaireExerciseBundle\Entity\Test\TestPosition" table="claire_exercise_test_position" repository-class="SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestPositionRepository">
 
         <id name="test" association-key="true"/>
