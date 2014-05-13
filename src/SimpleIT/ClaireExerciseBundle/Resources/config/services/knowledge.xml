@@ -44,7 +44,7 @@
                 <argument type="service" id="simple_it.exercise.knowledge.formula"/>
             </call>
             <call method="setSerializer">
-                <argument type="service" id="jms_serializer"/>
+                <argument type="service" id="simple_it.api.serializer"/>
             </call>
             <call method="setUserService">
                 <argument type="service" id="simple_it.exercise.user"/>

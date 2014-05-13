@@ -4,7 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\SerializationContext;
-use JMS\Serializer\SerializerInterface;
+use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\ResourceBlock;
@@ -172,7 +172,7 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
                 throw new \LogicException('Unknown type of model');
         }
 
-        return $this->serializer->deserialize($entity->getContent(), $class, 'json');
+        return $this->serializer->jmsDeserialize($entity->getContent(), $class, 'json');
     }
 
     /**
@@ -298,7 +298,7 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
             $context = SerializationContext::create();
             $context->setGroups(array('exercise_model_storage', 'Default'));
             $model->setContent(
-                $this->serializer->serialize($content, 'json', $context)
+                $this->serializer->jmsSerialize($content, 'json', $context)
             );
 
             // Check if the model is complete with the new content

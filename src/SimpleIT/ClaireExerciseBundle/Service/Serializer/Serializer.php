@@ -1,8 +1,9 @@
 <?php
 
 
-namespace SimpleIT\ClaireExerciseBundle\Service;
+namespace SimpleIT\ClaireExerciseBundle\Service\Serializer;
 
+use JMS\Serializer\DeserializationContext;
 use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerBuilder;
@@ -33,7 +34,7 @@ class Serializer implements SerializerInterface
 
     /**
      * Constructor
-     *
+
      */
     public function __construct()
     {
@@ -104,6 +105,35 @@ class Serializer implements SerializerInterface
         }
 
         return $this->serializer->deserialize($data, $type, $format);
+    }
+
+    /**
+     * Serializes the given data to the specified output format.
+     *
+     * @param object|array         $data
+     * @param string               $format
+     * @param SerializationContext $context
+     *
+     * @return string
+     */
+    public function jmsSerialize($data, $format, SerializationContext $context = null)
+    {
+        return $this->serializer->serialize($data, $format, $context);
+    }
+
+    /**
+     * Deserializes the given data to the specified type.
+     *
+     * @param string                 $data
+     * @param string                 $type
+     * @param string                 $format
+     * @param DeserializationContext $context
+     *
+     * @return object|array
+     */
+    public function jmsDeserialize($data, $type, $format, DeserializationContext $context = null)
+    {
+        return $this->serializer->deserialize($data, $type, $format, $context);
     }
 
     /**

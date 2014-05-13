@@ -3,7 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
 use JMS\Serializer\SerializationContext;
-use JMS\Serializer\SerializerInterface;
+use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula;
@@ -301,7 +301,7 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
     {
         $context = SerializationContext::create();
         $context->setGroups(array("exercise_storage", 'Default'));
-        $exContent = $this->serializer->serialize(
+        $exContent = $this->serializer->jmsSerialize(
             $exercise,
             'json',
             $context
@@ -331,7 +331,7 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
         $context = SerializationContext::create();
         $context->setGroups(array('item_storage', 'Default'));
 
-        $itemContent = $this->serializer->serialize(
+        $itemContent = $this->serializer->jmsSerialize(
             $item,
             'json',
             $context
@@ -353,7 +353,7 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
         $context = SerializationContext::create();
         $context->setGroups(array('corrected', 'Default'));
 
-        $itemContent = $this->serializer->serialize(
+        $itemContent = $this->serializer->jmsSerialize(
             $item,
             'json',
             $context
@@ -374,7 +374,7 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
         $content = $entityItem->getContent();
         $class = ItemResource::getClass($entityItem->getType());
 
-        return $this->serializer->deserialize($content, $class, 'json');
+        return $this->serializer->jmsDeserialize($content, $class, 'json');
     }
 
     /**

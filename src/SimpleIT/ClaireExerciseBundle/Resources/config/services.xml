@@ -50,7 +50,7 @@
         <parameter key="simple_it.exercise.entity.resource_metadata.class">SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata</parameter>
         <parameter key="simple_it.exercise.repository.resource_metadata.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource\MetadataRepository</parameter>
 
-        <parameter key="simple_it.exercise.serializer.class">SimpleIT\ClaireExerciseBundle\Service\Serializer</parameter>
+        <parameter key="simple_it.exercise.serializer.class">SimpleIT\ClaireExerciseBundle\Service\Serializer\Serializer</parameter>
     </parameters>
 
     <services>
@@ -128,7 +128,7 @@
                 <argument type="service" id="simple_it.exercise.owner_knowledge"/>
             </call>
             <call method="setSerializer">
-                <argument type="service" id="jms_serializer"/>
+                <argument type="service" id="simple_it.api.serializer"/>
             </call>
         </service>
 
@@ -143,7 +143,7 @@
                 <argument type="service" id="simple_it.exercise.owner_knowledge"/>
             </call>
             <call method="setSerializer">
-                <argument type="service" id="jms_serializer"/>
+                <argument type="service" id="simple_it.api.serializer"/>
             </call>
         </service>
 
@@ -158,7 +158,7 @@
                 <argument type="service" id="simple_it.exercise.owner_knowledge"/>
             </call>
             <call method="setSerializer">
-                <argument type="service" id="jms_serializer"/>
+                <argument type="service" id="simple_it.api.serializer"/>
             </call>
         </service>
 
@@ -173,7 +173,7 @@
                 <argument type="service" id="simple_it.exercise.owner_knowledge"/>
             </call>
             <call method="setSerializer">
-                <argument type="service" id="jms_serializer"/>
+                <argument type="service" id="simple_it.api.serializer"/>
             </call>
         </service>
 
@@ -188,7 +188,7 @@
                 <argument type="service" id="simple_it.exercise.owner_knowledge"/>
             </call>
             <call method="setSerializer">
-                <argument type="service" id="jms_serializer"/>
+                <argument type="service" id="simple_it.api.serializer"/>
             </call>
         </service>
 
@@ -255,7 +255,7 @@
                 <argument type="service" id="simple_it.exercise.repository.answer"/>
             </call>
             <call method="setSerializer">
-                <argument type="service" id="jms_serializer"/>
+                <argument type="service" id="simple_it.api.serializer"/>
             </call>
         </service>
 

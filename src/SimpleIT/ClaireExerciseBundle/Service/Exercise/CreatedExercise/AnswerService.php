@@ -3,7 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
 use JMS\Serializer\SerializationContext;
-use JMS\Serializer\SerializerInterface;
+use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\CoreBundle\Services\TransactionalService;
@@ -128,7 +128,7 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
 
         $context = SerializationContext::create();
         $context->setGroups(array("answer_storage", 'Default'));
-        $content = $this->serializer->serialize(
+        $content = $this->serializer->jmsSerialize(
             $answerResource,
             'json',
             $context

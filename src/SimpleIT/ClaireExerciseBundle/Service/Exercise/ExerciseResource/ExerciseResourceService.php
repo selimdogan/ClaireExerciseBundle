@@ -4,7 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\SerializationContext;
-use JMS\Serializer\SerializerInterface;
+use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
@@ -251,7 +251,7 @@ class ExerciseResourceService extends TransactionalService implements ExerciseRe
             $context = SerializationContext::create();
             $context->setGroups(array('resource_storage', 'Default'));
             $exerciseResource->setContent(
-                $this->serializer->serialize($resourceResource->getContent(), 'json', $context)
+                $this->serializer->jmsSerialize($resourceResource->getContent(), 'json', $context)
             );
         }
 
@@ -376,7 +376,7 @@ class ExerciseResourceService extends TransactionalService implements ExerciseRe
     {
         $class = ResourceResource::getClass($res->getType());
 
-        return $this->serializer->deserialize($res->getContent(), $class, 'json');
+        return $this->serializer->jmsDeserialize($res->getContent(), $class, 'json');
     }
 
     /**

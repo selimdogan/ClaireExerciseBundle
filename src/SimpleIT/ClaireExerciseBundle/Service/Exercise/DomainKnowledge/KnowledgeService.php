@@ -4,7 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\SerializationContext;
-use JMS\Serializer\SerializerInterface;
+use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
@@ -183,7 +183,7 @@ class KnowledgeService extends TransactionalService implements KnowledgeServiceI
             $context = SerializationContext::create();
             $context->setGroups(array('knowledge_storage', 'Default'));
             $knowledge->setContent(
-                $this->serializer->serialize($knowledgeResource->getContent(), 'json', $context)
+                $this->serializer->jmsSerialize($knowledgeResource->getContent(), 'json', $context)
             );
         }
 
