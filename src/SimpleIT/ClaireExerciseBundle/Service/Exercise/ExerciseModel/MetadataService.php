@@ -23,9 +23,9 @@ class MetadataService extends TransactionalService implements MetadataServiceInt
     private $metadataRepository;
 
     /**
-     * @var OwnerExerciseModelServiceInterface
+     * @var ExerciseModelServiceInterface
      */
-    private $ownerExerciseModelService;
+    private $exerciseModelService;
 
     /**
      * Set metadataRepository
@@ -38,28 +38,28 @@ class MetadataService extends TransactionalService implements MetadataServiceInt
     }
 
     /**
-     * Set ownerExerciseModelService
+     * Set exerciseModelService
      *
-     * @param OwnerExerciseModelServiceInterface $ownerExerciseModelService
+     * @param ExerciseModelServiceInterface $exerciseModelService
      */
-    public function setOwnerExerciseModelService($ownerExerciseModelService)
+    public function setExerciseModelService($exerciseModelService)
     {
-        $this->ownerExerciseModelService = $ownerExerciseModelService;
+        $this->exerciseModelService = $exerciseModelService;
     }
 
     /**
      * Find a metadata by resourceId and metakey
      *
-     * @param int $ownerExerciseModelId
+     * @param int $exerciseModelId
      * @param int $metakey
      *
      * @return Metadata
      */
-    public function getByOwnerExerciseModel($ownerExerciseModelId, $metakey)
+    public function getByExerciseModel($exerciseModelId, $metakey)
     {
         return $this->metadataRepository->find(
             array(
-                'ownerExerciseModel' => $ownerExerciseModelId,
+                'exerciseModel' => $exerciseModelId,
                 'key'                => $metakey
             )
         );
@@ -69,60 +69,60 @@ class MetadataService extends TransactionalService implements MetadataServiceInt
      * Get all the metadata
      *
      * @param CollectionInformation $collectionInformation
-     * @param int                   $ownerExerciseModelId
+     * @param int                   $exerciseModelId
      *
      * @return array
      */
     public function getAll(
         $collectionInformation = null,
-        $ownerExerciseModelId = null
+        $exerciseModelId = null
     )
     {
-        $ownerExerciseModel = null;
-        if (!is_null($ownerExerciseModelId)) {
-            $ownerExerciseModel = $this->ownerExerciseModelService->get($ownerExerciseModelId);
+        $exerciseModel = null;
+        if (!is_null($exerciseModelId)) {
+            $exerciseModel = $this->exerciseModelService->get($exerciseModelId);
         }
 
         return $this->metadataRepository->findAllBy(
             $collectionInformation,
-            $ownerExerciseModel
+            $exerciseModel
         );
     }
 
     /**
      * Add a metadata to an owner Resource
      *
-     * @param mixed    $ownerExerciseModelId
+     * @param mixed    $exerciseModelId
      * @param Metadata $metadata
      *
      * @return Metadata
      * @Transactional
      */
-    public function addToOwnerExerciseModel($ownerExerciseModelId, Metadata $metadata)
+    public function addToExerciseModel($exerciseModelId, Metadata $metadata)
     {
-        $ownerExerciseModel = $this->ownerExerciseModelService->get($ownerExerciseModelId);
-        $metadata->setOwnerExerciseModel($ownerExerciseModel);
+        $exerciseModel = $this->exerciseModelService->get($exerciseModelId);
+        $metadata->setExerciseModel($exerciseModel);
 
         return $this->metadataRepository->insert($metadata);
     }
 
     /**
-     * Save a metadata from an ownerExerciseModel
+     * Save a metadata from an exerciseModel
      *
-     * @param mixed            $ownerExerciseModelId
+     * @param mixed            $exerciseModelId
      * @param MetadataResource $metadata
      * @param string           $metadataKey
      *
      * @return Metadata
      * @Transactional
      */
-    public function saveFromOwnerExerciseModel(
-        $ownerExerciseModelId,
+    public function saveFromExerciseModel(
+        $exerciseModelId,
         MetadataResource $metadata,
         $metadataKey
     )
     {
-        $mdToUpdate = $this->getByOwnerExerciseModel($ownerExerciseModelId, $metadataKey);
+        $mdToUpdate = $this->getByExerciseModel($exerciseModelId, $metadataKey);
         $mdToUpdate->setValue($metadata->getValue());
 
         return $this->metadataRepository->update($mdToUpdate);
@@ -131,14 +131,14 @@ class MetadataService extends TransactionalService implements MetadataServiceInt
     /**
      * Remove a metadata from an owner exercise model
      *
-     * @param mixed $ownerExerciseModelId
+     * @param mixed $exerciseModelId
      * @param mixed $metadataKey
      *
      * @Transactional
      */
-    public function removeFromOwnerExerciseModel($ownerExerciseModelId, $metadataKey)
+    public function removeFromExerciseModel($exerciseModelId, $metadataKey)
     {
-        $metadata = $this->getByOwnerExerciseModel($ownerExerciseModelId, $metadataKey);
+        $metadata = $this->getByExerciseModel($exerciseModelId, $metadataKey);
 
         $this->metadataRepository->delete($metadata);
     }
@@ -146,10 +146,10 @@ class MetadataService extends TransactionalService implements MetadataServiceInt
     /**
      * Delete all the metadata for an owner resource
      *
-     * @param int $ownerExerciseModelId
+     * @param int $exerciseModelId
      */
-    public function deleteAllByOwnerExerciseModel($ownerExerciseModelId)
+    public function deleteAllByExerciseModel($exerciseModelId)
     {
-        $this->metadataRepository->deleteAllByOwnerExerciseModel($ownerExerciseModelId);
+        $this->metadataRepository->deleteAllByExerciseModel($exerciseModelId);
     }
 }

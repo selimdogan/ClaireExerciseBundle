@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity;
 
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModelPosition;
 
@@ -16,17 +16,17 @@ abstract class TestModelPositionFactory
     /**
      * Create a new TestModelPosition
      *
-     * @param OwnerExerciseModel $oem
-     * @param TestModel          $testModel
-     * @param int                $position
+     * @param ExerciseModel $em
+     * @param TestModel     $testModel
+     * @param int           $position
      *
      * @return TestModelPosition
      */
-    public static function create(OwnerExerciseModel $oem, TestModel $testModel, $position)
+    public static function create(ExerciseModel $em, TestModel $testModel, $position)
     {
         $testModelPosition = new TestModelPosition();
         $testModelPosition->setPosition($position);
-        $testModelPosition->setOwnerExerciseModel($oem);
+        $testModelPosition->setExerciseModel($em);
         $testModelPosition->setTestModel($testModel);
 
         return $testModelPosition;

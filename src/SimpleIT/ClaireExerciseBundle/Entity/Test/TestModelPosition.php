@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity\Test;
 
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 
 /**
  * Class TestModelPosition
@@ -12,9 +12,9 @@ use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel;
 class TestModelPosition
 {
     /**
-     * @var OwnerExerciseModel
+     * @var ExerciseModel
      */
-    private $ownerExerciseModel;
+    private $exerciseModel;
 
     /**
      * @var TestModel
@@ -25,26 +25,6 @@ class TestModelPosition
      * @var int
      */
     private $position;
-
-    /**
-     * Set ownerExerciseModel
-     *
-     * @param OwnerExerciseModel $ownerExerciseModel
-     */
-    public function setOwnerExerciseModel($ownerExerciseModel)
-    {
-        $this->ownerExerciseModel = $ownerExerciseModel;
-    }
-
-    /**
-     * Get ownerExerciseModel
-     *
-     * @return OwnerExerciseModel
-     */
-    public function getOwnerExerciseModel()
-    {
-        return $this->ownerExerciseModel;
-    }
 
     /**
      * Set position
@@ -85,4 +65,25 @@ class TestModelPosition
     {
         return $this->testModel;
     }
+
+    /**
+     * Set exerciseModel
+     *
+     * @param \SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel $exerciseModel
+     */
+    public function setExerciseModel($exerciseModel)
+    {
+        $this->exerciseModel = $exerciseModel;
+    }
+
+    /**
+     * Get exerciseModel
+     *
+     * @return \SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel
+     */
+    public function getExerciseModel()
+    {
+        return $this->exerciseModel;
+    }
+
 }

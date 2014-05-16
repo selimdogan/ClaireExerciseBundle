@@ -49,7 +49,9 @@ abstract class ExerciseModelFactory
         $model->setTitle($modelResource->getTitle());
         $model->setDraft($modelResource->getDraft());
         $model->setComplete($modelResource->getComplete());
+        $model->setPublic($modelResource->getPublic());
 
+        // content
         $serializer = SerializerBuilder::create()
             ->addDefaultHandlers()
             ->configureHandlers(

@@ -4,7 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 
 /**
  * Claire stored exercise entity
@@ -24,9 +24,9 @@ class StoredExercise
     private $content;
 
     /**
-     * @var OwnerExerciseModel
+     * @var ExerciseModel
      */
-    private $ownerExerciseModel;
+    private $exerciseModel;
 
     /**
      * @var Collection $items
@@ -49,16 +49,27 @@ class StoredExercise
     public function __construct()
     {
         $this->items = new ArrayCollection();
+        $this->attempts = new ArrayCollection();
     }
 
     /**
-     * Get content
+     * Set attempts
      *
-     * @return string
+     * @param \Doctrine\Common\Collections\Collection $attempts
      */
-    public function getContent()
+    public function setAttempts($attempts)
     {
-        return $this->content;
+        $this->attempts = $attempts;
+    }
+
+    /**
+     * Get attempts
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAttempts()
+    {
+        return $this->attempts;
     }
 
     /**
@@ -72,33 +83,33 @@ class StoredExercise
     }
 
     /**
-     * Set ownerExerciseModel
+     * Get content
      *
-     * @param OwnerExerciseModel $ownerExerciseModel
+     * @return string
      */
-    public function setOwnerExerciseModel($ownerExerciseModel)
+    public function getContent()
     {
-        $this->ownerExerciseModel = $ownerExerciseModel;
+        return $this->content;
     }
 
     /**
-     * Get ownerExerciseModel
+     * Set exerciseModel
      *
-     * @return OwnerExerciseModel
+     * @param \SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel $exerciseModel
      */
-    public function getOwnerExerciseModel()
+    public function setExerciseModel($exerciseModel)
     {
-        return $this->ownerExerciseModel;
+        $this->exerciseModel = $exerciseModel;
     }
 
     /**
-     * Get id
+     * Get exerciseModel
      *
-     * @return int
+     * @return \SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel
      */
-    public function getId()
+    public function getExerciseModel()
     {
-        return $this->id;
+        return $this->exerciseModel;
     }
 
     /**
@@ -112,19 +123,19 @@ class StoredExercise
     }
 
     /**
-     * Get items
+     * Get id
      *
-     * @return Collection
+     * @return int
      */
-    public function getItems()
+    public function getId()
     {
-        return $this->items;
+        return $this->id;
     }
 
     /**
      * Set items
      *
-     * @param Collection $items
+     * @param \Doctrine\Common\Collections\Collection $items
      */
     public function setItems($items)
     {
@@ -132,29 +143,19 @@ class StoredExercise
     }
 
     /**
-     * Add an item
+     * Get items
      *
-     * @param Item $item Item
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function addItem(Item $item)
+    public function getItems()
     {
-        $this->items->add($item);
-    }
-
-    /**
-     * Remove an item
-     *
-     * @param Item $item Item
-     */
-    public function removeItem(Item $item)
-    {
-        $this->items->removeElement($item);
+        return $this->items;
     }
 
     /**
      * Set testPositions
      *
-     * @param Collection $testPositions
+     * @param \Doctrine\Common\Collections\Collection $testPositions
      */
     public function setTestPositions($testPositions)
     {
@@ -164,30 +165,12 @@ class StoredExercise
     /**
      * Get testPositions
      *
-     * @return Collection
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTestPositions()
     {
         return $this->testPositions;
     }
 
-    /**
-     * Set attempts
-     *
-     * @param Collection $attempts
-     */
-    public function setAttempts($attempts)
-    {
-        $this->attempts = $attempts;
-    }
 
-    /**
-     * Get attempts
-     *
-     * @return Collection
-     */
-    public function getAttempts()
-    {
-        return $this->attempts;
-    }
 }

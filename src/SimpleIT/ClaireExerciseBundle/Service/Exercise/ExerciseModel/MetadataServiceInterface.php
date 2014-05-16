@@ -16,47 +16,47 @@ interface MetadataServiceInterface
     /**
      * Find a metadata by resourceId and metakey
      *
-     * @param int $ownerExerciseModelId
+     * @param int $exerciseModelId
      * @param int $metakey
      *
      * @return Metadata
      */
-    public function getByOwnerExerciseModel($ownerExerciseModelId, $metakey);
+    public function getByExerciseModel($exerciseModelId, $metakey);
 
     /**
      * Get all the attempts
      *
      * @param CollectionInformation $collectionInformation
-     * @param int                   $ownerExerciseModelId
+     * @param int                   $exerciseModelId
      *
      * @return array
      */
     public function getAll(
         $collectionInformation = null,
-        $ownerExerciseModelId = null
+        $exerciseModelId = null
     );
 
     /**
      * Add a metadata to an owner Resource
      *
-     * @param mixed    $ownerExerciseModelId
+     * @param mixed    $exerciseModelId
      * @param Metadata $metadata
      *
      * @return Metadata
      */
-    public function addToOwnerExerciseModel($ownerExerciseModelId, Metadata $metadata);
+    public function addToExerciseModel($exerciseModelId, Metadata $metadata);
 
     /**
-     * Save a metadata from an ownerExerciseModel
+     * Save a metadata from an exerciseModel
      *
-     * @param mixed            $ownerExerciseModelId
+     * @param mixed            $exerciseModelId
      * @param MetadataResource $metadata
      * @param string           $metadataKey
      *
      * @return Metadata
      */
-    public function saveFromOwnerExerciseModel(
-        $ownerExerciseModelId,
+    public function saveFromExerciseModel(
+        $exerciseModelId,
         MetadataResource $metadata,
         $metadataKey
     );
@@ -64,15 +64,15 @@ interface MetadataServiceInterface
     /**
      * Remove a metadata from a course
      *
-     * @param mixed $ownerExerciseModelId
+     * @param mixed $exerciseModelId
      * @param mixed $metadataKey
      */
-    public function removeFromOwnerExerciseModel($ownerExerciseModelId, $metadataKey);
+    public function removeFromExerciseModel($exerciseModelId, $metadataKey);
 
     /**
      * Delete all the metadata for an owner resource
      *
-     * @param int $ownerExerciseModelId
+     * @param int $exerciseModelId
      */
-    public function deleteAllByOwnerExerciseModel($ownerExerciseModelId);
+    public function deleteAllByExerciseModel($exerciseModelId);
 }

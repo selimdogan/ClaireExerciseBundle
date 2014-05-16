@@ -46,7 +46,7 @@ class ExerciseModelResource
     /**
      * @var int $id Id of exercise model
      * @Serializer\Type("integer")
-     * @Serializer\Groups({"details", "list", "exercise", "oem"})
+     * @Serializer\Groups({"details", "list", "exercise"})
      * @Assert\Blank(groups={"create", "editType","edit","editContent", "editTitle", "appCreate","editDraft"})
      */
     private $id;
@@ -54,7 +54,7 @@ class ExerciseModelResource
     /**
      * @var string $type
      * @Serializer\Type("string")
-     * @Serializer\Groups({"details", "list", "exercise", "oem"})
+     * @Serializer\Groups({"details", "list", "exercise"})
      * @Assert\NotBlank(groups={"create", "editType", "appCreate"})
      * @Assert\Blank(groups={"editContent", "editTitle", "editDraft"})
      */
@@ -63,7 +63,7 @@ class ExerciseModelResource
     /**
      * @var string $title
      * @Serializer\Type("string")
-     * @Serializer\Groups({"details", "list", "exercise", "oem"})
+     * @Serializer\Groups({"details", "list", "exercise"})
      * @Assert\NotBlank(groups={"create", "editTitle"})
      * @Assert\Blank(groups={"editContent", "editType", "appCreate","editDraft"})
      */
@@ -113,6 +113,52 @@ class ExerciseModelResource
      * @Assert\Blank(groups={"editType","editContent", "editTitle", "appCreate","editDraft"})
      */
     private $requiredExerciseResources;
+
+    /**
+     * @var int $owner
+     * @Serializer\Type("integer")
+     * @Serializer\Groups({"details", "list"})
+     * @Assert\Blank(groups={"create", "edit", "editPublic"})
+     */
+    private $owner;
+
+    /**
+     * @var bool $public
+     * @Serializer\Type("boolean")
+     * @Serializer\Groups({"details","list"})
+     * @Assert\NotNull(groups={"create", "editPublic"})
+     */
+    private $public;
+
+    /**
+     * @var array
+     * @Serializer\Type("array")
+     * @Serializer\Groups({"details"})
+     * @Assert\NotNull(groups={"create"})
+     * @Assert\Null(groups={"edit"})
+     */
+    private $metadata;
+
+    /**
+     * @var int
+     * @Serializer\Type("integer")
+     * @Serializer\Groups({"details"})
+     */
+    private $parent;
+
+    /**
+     * @var int
+     * @Serializer\Type("integer")
+     * @Serializer\Groups({"details"})
+     */
+    private $forkFrom;
+
+    /**
+     * @var array
+     * @Serializer\Type("array<ExerciseModelResource>")
+     * @Serializer\Groups({"details"})
+     */
+    private $children;
 
     /**
      * Set content
@@ -275,6 +321,126 @@ class ExerciseModelResource
     }
 
     /**
+     * Set metadata
+     *
+     * @param array $metadata
+     */
+    public function setMetadata($metadata)
+    {
+        $this->metadata = $metadata;
+    }
+
+    /**
+     * Get metadata
+     *
+     * @return array
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * Set owner
+     *
+     * @param int $owner
+     */
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return int
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * Set public
+     *
+     * @param boolean $public
+     */
+    public function setPublic($public)
+    {
+        $this->public = $public;
+    }
+
+    /**
+     * Get public
+     *
+     * @return boolean
+     */
+    public function getPublic()
+    {
+        return $this->public;
+    }
+
+    /**
+     * Set children
+     *
+     * @param array $children
+     */
+    public function setChildren($children)
+    {
+        $this->children = $children;
+    }
+
+    /**
+     * Get children
+     *
+     * @return array
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param int $parent
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return int
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Set forkFrom
+     *
+     * @param int $forkFrom
+     */
+    public function setForkFrom($forkFrom)
+    {
+        $this->forkFrom = $forkFrom;
+    }
+
+    /**
+     * Get forkFrom
+     *
+     * @return int
+     */
+    public function getForkFrom()
+    {
+        return $this->forkFrom;
+    }
+
+    /**
      * Return the item serialization class corresponding to the type
      *
      * @param string $type
@@ -306,5 +472,4 @@ class ExerciseModelResource
 
         return $class;
     }
-
 }

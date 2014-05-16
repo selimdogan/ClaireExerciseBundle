@@ -3,7 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Entity;
 
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 
 /**
  * Class to manage the creation of StoredExercise
@@ -16,15 +16,15 @@ abstract class StoredExerciseFactory
      * Create a new StoredExercise object
      *
      * @param string             $content Content
-     * @param OwnerExerciseModel $ownerExerciseModel
+     * @param ExerciseModel $exerciseModel
      *
      * @return StoredExercise
      */
-    public static function create($content, OwnerExerciseModel $ownerExerciseModel)
+    public static function create($content, ExerciseModel $exerciseModel)
     {
         $storedExercise = new StoredExercise();
         $storedExercise->setContent($content);
-        $storedExercise->setOwnerExerciseModel($ownerExerciseModel);
+        $storedExercise->setExerciseModel($exerciseModel);
 
         return $storedExercise;
     }

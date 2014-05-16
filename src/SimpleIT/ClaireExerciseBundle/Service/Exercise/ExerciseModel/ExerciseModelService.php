@@ -3,23 +3,31 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\SerializationContext;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModelMetadataFactory;
+use SimpleIT\ClaireExerciseBundle\Exception\InvalidModelException;
 use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\ResourceBlock;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ClassificationConstraints;
+use
+    SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ClassificationConstraints;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\Group;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\Model as GroupItems;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ObjectBlock as GIObjectBlock;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\Model as MultipleChoice;
+use
+    SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ObjectBlock as GIObjectBlock;
+use
+    SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\Model as MultipleChoice;
 use
     SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\QuestionBlock as MCQuestionBlock;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\Model as OpenEnded;
+use
+    SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\Model as OpenEnded;
 use
     SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\QuestionBlock as OEQuestionBlock;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\Model as OrderItems;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\ObjectBlock as OIObjectBlock;
+use
+    SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\ObjectBlock as OIObjectBlock;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\Model as PairItems;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\PairBlock;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
@@ -34,7 +42,8 @@ use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModelFactory;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseModel\ExerciseModelRepository;
-use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\ExerciseResourceServiceInterface;
+use
+    SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\ExerciseResourceServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\User\UserService;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatorInterface;
@@ -66,6 +75,11 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      * @var ExerciseResourceServiceInterface
      */
     private $exerciseResourceService;
+
+    /**
+     * @var MetadataService
+     */
+    private $metadataService;
 
     /**
      * Set serializer
@@ -105,6 +119,16 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
     public function setExerciseResourceService($exerciseResourceService)
     {
         $this->exerciseResourceService = $exerciseResourceService;
+    }
+
+    /**
+     * Set metadataService
+     *
+     * @param \SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\MetadataService $metadataService
+     */
+    public function setMetadataService($metadataService)
+    {
+        $this->metadataService = $metadataService;
     }
 
     /**
@@ -179,12 +203,54 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      * Get a list of Exercise Model
      *
      * @param CollectionInformation $collectionInformation The collection information
+     * @param int                   $ownerId
+     * @param int                   $authorId
+     * @param int                   $parentModelId
+     * @param int                   $forkFromModelId
+     * @param boolean               $isRoot
+     * @param boolean               $isPointer
      *
      * @return PaginatorInterface
      */
-    public function getAll($collectionInformation = null)
+    public function getAll(
+        $collectionInformation = null,
+        $ownerId = null,
+        $authorId = null,
+        $parentModelId = null,
+        $forkFromModelId = null,
+        $isRoot = null,
+        $isPointer = null
+    )
     {
-        return $this->exerciseModelRepository->findAll($collectionInformation);
+        $owner = null;
+        if (!is_null($ownerId)) {
+            $owner = $this->userService->get($ownerId);
+        }
+
+        $author = null;
+        if (!is_null($authorId)) {
+            $author = $this->userService->get($authorId);
+        }
+
+        $parentModel = null;
+        if (!is_null($parentModelId)) {
+            $parentModel = $this->get($parentModelId);
+        }
+
+        $forkFromModel = null;
+        if (!is_null($forkFromModelId)) {
+            $forkFromModel = $this->get($forkFromModelId);
+        }
+
+        return $this->exerciseModelRepository->findAll(
+            $collectionInformation,
+            $owner,
+            $author,
+            $parentModel,
+            $forkFromModel,
+            $isRoot,
+            $isPointer
+        );
     }
 
     /**
@@ -192,21 +258,28 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      *
      * @param ExerciseModelResource $modelResource
      * @param int                   $authorId
+     * @param int                   $ownerId
      *
-     * @throws NoAuthorException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException
      * @return ExerciseModel
      */
-    public function createFromResource(ExerciseModelResource $modelResource, $authorId = null)
+    public function createFromResource(
+        ExerciseModelResource $modelResource,
+        $authorId = null,
+        $ownerId = null
+    )
     {
         $modelResource->setComplete(
             $this->checkModelComplete(
                 $modelResource->getType(),
+                $modelResource->getParent(),
                 $modelResource->getContent()
             )
         );
 
         $model = ExerciseModelFactory::createFromResource($modelResource);
 
+        // author
         if (!is_null($modelResource->getAuthor())) {
             $authorId = $modelResource->getAuthor();
         }
@@ -217,11 +290,46 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
             $this->userService->get($authorId)
         );
 
+        // owner
+        if (!is_null($modelResource->getOwner())) {
+            $ownerId = $modelResource->getOwner();
+        }
+        if (is_null($ownerId)) {
+            throw new NoAuthorException('No owner for this model...');
+        }
+        $model->setOwner(
+            $this->userService->get($ownerId)
+        );
+
+        // parent model
+        if (!is_null($modelResource->getParent())) {
+            $model->setParent(
+                $this->get($modelResource->getParent())
+            );
+        }
+
+        // fork from
+        if (!is_null($modelResource->getForkFrom())) {
+            $model->setForkFrom(
+                $this->get($modelResource->getForkFrom())
+            );
+        }
+
+        // required resources
         $reqResources = array();
         foreach ($modelResource->getRequiredExerciseResources() as $reqRes) {
             $reqResources[] = $this->exerciseResourceService->get($reqRes);
         }
         $model->setRequiredExerciseResources(new ArrayCollection($reqResources));
+
+        // metadata
+        $metadata = array();
+        foreach ($modelResource->getMetadata() as $key => $value) {
+            $md = ExerciseModelMetadataFactory::create($key, $value);
+            $md->setExerciseModel($model);
+            $metadata[] = $md;
+        }
+        $model->setMetadata(new ArrayCollection($metadata));
 
         return $model;
     }
@@ -234,7 +342,10 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      *
      * @return ExerciseModel
      */
-    public function createAndAdd(ExerciseModelResource $modelResource, $authorId)
+    public function createAndAdd(
+        ExerciseModelResource $modelResource,
+        $authorId
+    )
     {
         $model = $this->createFromResource($modelResource, $authorId);
 
@@ -249,7 +360,9 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      * @return ExerciseModel
      * @Transactional
      */
-    public function add(ExerciseModel $model)
+    public function add(
+        ExerciseModel $model
+    )
     {
         $this->exerciseModelRepository->insert($model);
 
@@ -265,7 +378,10 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      * @throws NoAuthorException
      * @return ExerciseModel
      */
-    public function updateFromResource(ExerciseModelResource $modelResource, $model)
+    public function updateFromResource(
+        ExerciseModelResource $modelResource,
+        $model
+    )
     {
         if (!is_null($modelResource->getRequiredExerciseResources())) {
             $reqResources = array();
@@ -292,6 +408,10 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
             $model->setComplete($modelResource->getComplete());
         }
 
+        if (!is_null($modelResource->getPublic())) {
+            $model->setPublic($modelResource->getPublic());
+        }
+
         $content = $modelResource->getContent();
         if (!is_null($content)) {
             $this->validateType($content, $model->getType());
@@ -302,7 +422,13 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
             );
 
             // Check if the model is complete with the new content
-            $model->setComplete($this->checkModelComplete($model->getType(), $content));
+            $model->setComplete(
+                $this->checkModelComplete(
+                    $model->getType(),
+                    $model->getParent()->getId(),
+                    $content
+                )
+            );
         }
 
         return $model;
@@ -316,7 +442,10 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      *
      * @return ExerciseModel
      */
-    public function edit(ExerciseModelResource $modelResource, $modelId)
+    public function edit(
+        ExerciseModelResource $modelResource,
+        $modelId
+    )
     {
         $model = $this->get($modelId);
         $model = $this->updateFromResource(
@@ -335,7 +464,9 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      * @return ExerciseModel
      * @Transactional
      */
-    public function save(ExerciseModel $model)
+    public function save(
+        ExerciseModel $model
+    )
     {
         return $this->exerciseModelRepository->update($model);
     }
@@ -347,10 +478,38 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      *
      * @Transactional
      */
-    public function remove($modelId)
+    public function remove(
+        $modelId
+    )
     {
         $resource = $this->exerciseModelRepository->find($modelId);
         $this->exerciseModelRepository->delete($resource);
+    }
+
+    /**
+     * Edit all the metadata of an owner exercise model
+     *
+     * @param int             $exerciseModelId
+     * @param ArrayCollection $metadatas
+     *
+     * @return Collection
+     * @Transactional
+     */
+    public function editMetadata($exerciseModelId, ArrayCollection $metadatas)
+    {
+        $ownerExerciseModel = $this->exerciseModelRepository->find($exerciseModelId);
+
+        $this->metadataService->deleteAllByExerciseModel($exerciseModelId);
+
+        $metadataCollection = array();
+        foreach ($metadatas as $key => $value) {
+            $md = ExerciseModelMetadataFactory::create($key, $value);
+            $md->setExerciseModel($ownerExerciseModel);
+            $metadataCollection[] = $md;
+        }
+        $ownerExerciseModel->setMetadata(new ArrayCollection($metadataCollection));
+
+        return $this->save($ownerExerciseModel)->getMetadata();
     }
 
     /**
@@ -397,7 +556,10 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      *
      * @return ExerciseModel
      */
-    public function editRequiredResource($exerciseModelId, ArrayCollection $requiredResources)
+    public function editRequiredResource(
+        $exerciseModelId,
+        ArrayCollection $requiredResources
+    )
     {
         $exerciseModel = $this->exerciseModelRepository->find($exerciseModelId);
 
@@ -414,36 +576,56 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      * Check if the content of an exercise model is sufficient to generate exercises.
      *
      * @param string      $type
+     * @param int         $parentModelId
      * @param CommonModel $content
      *
-     * @return boolean True if the model is complete
      * @throws \LogicException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\InvalidModelException
+     * @return boolean True if the model is complete
      */
-    private function checkModelComplete($type, CommonModel $content)
+    private function checkModelComplete(
+        $type,
+        $parentModelId,
+        $content
+    )
     {
-        switch ($type) {
-            case CommonModel::MULTIPLE_CHOICE:
-                /** @var MultipleChoice $content */
-                return $this->checkMCComplete($content);
-                break;
-            case CommonModel::PAIR_ITEMS:
-                /** @var PairItems $content */
-                return $this->checkPIComplete($content);
-                break;
-            case CommonModel::GROUP_ITEMS:
-                /** @var GroupItems $content */
-                return $this->checkGIComplete($content);
-                break;
-            case CommonModel::ORDER_ITEMS:
-                /** @var OrderItems $content */
-                return $this->checkOIComplete($content);
-                break;
-            case CommonModel::OPEN_ENDED_QUESTION:
-                /** @var OpenEnded $content */
-                return $this->checkOEQComplete($content);
-                break;
-            default:
-                throw new \LogicException('Invalid type');
+        if ($parentModelId === null) {
+            switch ($type) {
+                case CommonModel::MULTIPLE_CHOICE:
+                    /** @var MultipleChoice $content */
+                    return $this->checkMCComplete($content);
+                    break;
+                case CommonModel::PAIR_ITEMS:
+                    /** @var PairItems $content */
+                    return $this->checkPIComplete($content);
+                    break;
+                case CommonModel::GROUP_ITEMS:
+                    /** @var GroupItems $content */
+                    return $this->checkGIComplete($content);
+                    break;
+                case CommonModel::ORDER_ITEMS:
+                    /** @var OrderItems $content */
+                    return $this->checkOIComplete($content);
+                    break;
+                case CommonModel::OPEN_ENDED_QUESTION:
+                    /** @var OpenEnded $content */
+                    return $this->checkOEQComplete($content);
+                    break;
+                default:
+                    throw new \LogicException('Invalid type');
+            }
+        } else {
+            if ($content !== null) {
+                throw new InvalidModelException('A model must be a pointer OR have a content');
+            }
+            try {
+
+                $parentModel = $this->get($parentModelId);
+            } catch (NonExistingObjectException $neoe) {
+                throw new InvalidModelException('The parent model cannot be found.');
+            }
+
+            return $parentModel->getPublic();
         }
     }
 
@@ -454,7 +636,9 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      *
      * @return boolean
      */
-    private function checkMCComplete(MultipleChoice $content)
+    private function checkMCComplete(
+        MultipleChoice $content
+    )
     {
         if (is_null($content->isShuffleQuestionsOrder())) {
             return false;
@@ -490,7 +674,9 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      *
      * @return bool
      */
-    private function checkPIComplete(PairItems $content)
+    private function checkPIComplete(
+        PairItems $content
+    )
     {
         $pairBlocks = $content->getPairBlocks();
         if (!count($pairBlocks) > 0) {
@@ -525,7 +711,9 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      *
      * @return bool
      */
-    private function checkGIComplete(GroupItems $content)
+    private function checkGIComplete(
+        GroupItems $content
+    )
     {
         if ($content->getDisplayGroupNames() != GroupItems::ASK
             && $content->getDisplayGroupNames() != GroupItems::HIDE
@@ -580,7 +768,9 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      *
      * @return bool
      */
-    private function checkOIComplete(OrderItems $content)
+    private function checkOIComplete(
+        OrderItems $content
+    )
     {
         if ($content->isGiveFirst() === null || $content->isGiveLast() === null) {
             return false;
@@ -648,7 +838,9 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      *
      * @return bool
      */
-    private function checkOEQComplete(OpenEnded $content)
+    private function checkOEQComplete(
+        OpenEnded $content
+    )
     {
         if (is_null($content->isShuffleQuestionsOrder())) {
             return false;
@@ -680,7 +872,10 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      *
      * @return boolean
      */
-    private function checkBlockComplete(ResourceBlock $block, array $resourceTypes)
+    private function checkBlockComplete(
+        ResourceBlock $block,
+        array $resourceTypes
+    )
     {
         if (!($block->getNumberOfOccurrences() >= 0)) {
             return false;
@@ -753,7 +948,10 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      *
      * @return bool
      */
-    private function checkObjectId(ObjectId $objectId, array $resourceTypes = array())
+    private function checkObjectId(
+        ObjectId $objectId,
+        array $resourceTypes = array()
+    )
     {
         if (is_null($objectId->getId())) {
             return false;
@@ -778,7 +976,9 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      *
      * @return bool
      */
-    private function checkMetadataConstraintComplete(MetadataConstraint $mdc)
+    private function checkMetadataConstraintComplete(
+        MetadataConstraint $mdc
+    )
     {
         if ($mdc->getKey() == null || $mdc->getComparator() == null) {
             return false;
@@ -794,7 +994,9 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      *
      * @return bool
      */
-    private function checkClassifConstr(ClassificationConstraints $classifConstr)
+    private function checkClassifConstr(
+        ClassificationConstraints $classifConstr
+    )
     {
         if ($classifConstr->getOther() != ClassificationConstraints::MISC
             && $classifConstr->getOther() != ClassificationConstraints::OWN
@@ -837,7 +1039,10 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException
      */
-    private function validateType($content, $type)
+    private function validateType(
+        $content,
+        $type
+    )
     {
         if (($type === CommonModel::MULTIPLE_CHOICE &&
                 get_class($content) !== ExerciseModelResource::MULTIPLE_CHOICE_MODEL_CLASS)

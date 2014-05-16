@@ -94,8 +94,7 @@ class ItemByAttemptController extends Controller
      * @return string
      * @throws \LogicException
      */
-    private
-    function selectCorrectedView(
+    private function selectCorrectedView(
         $exercise
     )
     {
@@ -127,8 +126,7 @@ class ItemByAttemptController extends Controller
      * @return string
      * @throws \LogicException
      */
-    private
-    function selectNotCorrectedView(
+    private function selectNotCorrectedView(
         $exercise
     )
     {

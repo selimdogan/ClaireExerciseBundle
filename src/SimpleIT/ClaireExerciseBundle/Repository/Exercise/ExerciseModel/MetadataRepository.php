@@ -3,10 +3,10 @@
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseModel;
 
 use Doctrine\ORM\QueryBuilder;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\CoreBundle\Repository\BaseRepository;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatorInterface;
 use SimpleIT\Utils\Collection\Sort;
@@ -40,22 +40,22 @@ class MetadataRepository extends BaseRepository
      * Return all the metadata
      *
      * @param CollectionInformation $collectionInformation
-     * @param OwnerExerciseModel    $ownerExerciseModel
+     * @param ExerciseModel    $exerciseModel
      *
      * @return PaginatorInterface
      */
     public function findAllBy(
         $collectionInformation = null,
-        $ownerExerciseModel = null
+        $exerciseModel = null
     )
     {
         $queryBuilder = $this->createQueryBuilder('m');
 
-        if (!is_null($ownerExerciseModel)) {
+        if (!is_null($exerciseModel)) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(
-                    'm.ownerExerciseModel',
-                    $ownerExerciseModel->getId()
+                    'm.exerciseModel',
+                    $exerciseModel->getId()
                 )
             );
         }
@@ -67,8 +67,8 @@ class MetadataRepository extends BaseRepository
             foreach ($sorts as $sort) {
                 /** @var Sort $sort */
                 switch ($sort->getProperty()) {
-                    case 'ownerExerciseModelId':
-                        $queryBuilder->addOrderBy('m.ownerExerciseModel', $sort->getOrder());
+                    case 'exerciseModelId':
+                        $queryBuilder->addOrderBy('m.exerciseModel', $sort->getOrder());
                         break;
                     case 'key':
                         $queryBuilder->addOrderBy('m.key', $sort->getOrder());
@@ -77,7 +77,7 @@ class MetadataRepository extends BaseRepository
             }
             $queryBuilder = $this->setRange($queryBuilder, $collectionInformation);
         } else {
-            $queryBuilder->addOrderBy('m.ownerExerciseModel', 'ASC');
+            $queryBuilder->addOrderBy('m.exerciseModel', 'ASC');
             $queryBuilder->addOrderBy('m.key', 'ASC');
         }
 
@@ -85,18 +85,18 @@ class MetadataRepository extends BaseRepository
     }
 
     /**
-     * Delete all the metadata for an owner exercise model
+     * Delete all the metadata for an exercise model
      *
-     * @param int $ownerExerciseModelId
+     * @param int $exerciseModelId
      */
-    public function deleteAllByOwnerExerciseModel($ownerExerciseModelId)
+    public function deleteAllByExerciseModel($exerciseModelId)
     {
-        $sql = 'DELETE FROM claire_exercise_model_metadata AS emm WHERE emm.owner_exercise_model_id = :ownerExerciseModelId';
+        $sql = 'DELETE FROM claire_exercise_model_metadata AS emm WHERE emm.exercise_model_id = :exerciseModelId';
 
         $connection = $this->_em->getConnection();
         $connection->executeQuery(
             $sql,
-            array('ownerExerciseModelId' => $ownerExerciseModelId)
+            array('exerciseModelId' => $exerciseModelId)
         );
     }
 }

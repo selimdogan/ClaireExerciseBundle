@@ -10,9 +10,9 @@ namespace SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel;
 class Metadata
 {
     /**
-     * @var OwnerExerciseModel
+     * @var ExerciseModel
      */
-    private $ownerExerciseModel;
+    private $exerciseModel;
 
     /**
      * @var string
@@ -25,16 +25,6 @@ class Metadata
     private $value;
 
     /**
-     * Get key
-     *
-     * @return string
-     */
-    public function getKey()
-    {
-        return $this->key;
-    }
-
-    /**
      * Set key
      *
      * @param string $key
@@ -45,13 +35,13 @@ class Metadata
     }
 
     /**
-     * Get value
+     * Get key
      *
      * @return string
      */
-    public function getValue()
+    public function getKey()
     {
-        return $this->value;
+        return $this->key;
     }
 
     /**
@@ -65,22 +55,32 @@ class Metadata
     }
 
     /**
-     * Set ownerExerciseModel
+     * Get value
      *
-     * @param OwnerExerciseModel $ownerExerciseModel
+     * @return string
      */
-    public function setOwnerExerciseModel($ownerExerciseModel)
+    public function getValue()
     {
-        $this->ownerExerciseModel = $ownerExerciseModel;
+        return $this->value;
     }
 
     /**
-     * Get ownerExerciseModel
+     * Set exerciseModel
      *
-     * @return OwnerExerciseModel
+     * @param \SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel $exerciseModel
      */
-    public function getOwnerExerciseModel()
+    public function setExerciseModel($exerciseModel)
     {
-        return $this->ownerExerciseModel;
+        $this->exerciseModel = $exerciseModel;
+    }
+
+    /**
+     * Get exerciseModel
+     *
+     * @return \SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel
+     */
+    public function getExerciseModel()
+    {
+        return $this->exerciseModel;
     }
 }
