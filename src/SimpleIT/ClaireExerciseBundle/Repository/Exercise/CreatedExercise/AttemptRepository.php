@@ -29,10 +29,10 @@ class AttemptRepository extends BaseRepository
      * @return PaginatorInterface
      */
     public function findAllBy(
-        CollectionInformation $collectionInformation,
-        $userId,
-        $exercise,
-        $testAttempt
+        $collectionInformation = null,
+        $userId = null,
+        $exercise = null,
+        $testAttempt = null
     )
     {
         $queryBuilder = $this->createQueryBuilder('a');

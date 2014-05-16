@@ -42,7 +42,7 @@ class TestModelRepository extends BaseRepository
      *
      * @return Paginator
      */
-    public function findAllBy(CollectionInformation $collectionInformation = null)
+    public function findAllBy($collectionInformation = null)
     {
         $queryBuilder = $this->createQueryBuilder('tm');
 

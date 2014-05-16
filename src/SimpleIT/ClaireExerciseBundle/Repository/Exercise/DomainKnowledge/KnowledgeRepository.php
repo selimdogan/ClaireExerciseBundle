@@ -49,8 +49,8 @@ class KnowledgeRepository extends BaseRepository
      * @return PaginatorInterface
      */
     public function findAllBy(
-        $collectionInformation,
-        $author
+        $collectionInformation = null,
+        $author = null
     )
     {
         $queryBuilder = $this->createQueryBuilder('dk');

@@ -123,7 +123,7 @@ class TestService extends TransactionalService implements TestServiceInterface
      *
      * @return PaginatorInterface
      */
-    public function getAll(CollectionInformation $collectionInformation, $testModelId = null)
+    public function getAll($collectionInformation = null, $testModelId = null)
     {
         $testModel = null;
 

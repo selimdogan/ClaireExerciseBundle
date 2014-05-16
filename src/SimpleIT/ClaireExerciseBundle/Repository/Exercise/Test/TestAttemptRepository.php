@@ -28,7 +28,7 @@ class TestAttemptRepository extends BaseRepository
      * @return PaginatorInterface
      */
     public function findAllBy(
-        CollectionInformation $collectionInformation,
+        $collectionInformation = null,
         $userId = null,
         $test = null
     )

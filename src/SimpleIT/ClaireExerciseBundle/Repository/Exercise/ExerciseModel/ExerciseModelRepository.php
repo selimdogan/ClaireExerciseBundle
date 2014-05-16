@@ -49,7 +49,7 @@ class ExerciseModelRepository extends BaseRepository
      * @throws FilterException
      * @return array
      */
-    public function findAll(CollectionInformation $collectionInformation = null)
+    public function findAll($collectionInformation = null)
     {
         $qb = $this->createQueryBuilder('em')
             ->select();

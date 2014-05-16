@@ -151,7 +151,7 @@ interface KnowledgeServiceInterface
      * @return PaginatorInterface
      */
     public function getAll(
-        CollectionInformation $collectionInformation = null,
+        $collectionInformation = null,
         $authorId = null
     );
 }

@@ -37,7 +37,7 @@ interface MetadataServiceInterface
      * @return array
      */
     public function getAll(
-        CollectionInformation $collectionInformation,
+        $collectionInformation = null,
         $ownerResourceId = null
     );
 

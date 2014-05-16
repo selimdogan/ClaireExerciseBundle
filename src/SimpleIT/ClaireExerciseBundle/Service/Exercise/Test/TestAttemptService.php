@@ -141,7 +141,7 @@ class TestAttemptService extends TransactionalService implements TestAttemptServ
      * @return PaginatorInterface
      */
     public function getAll(
-        CollectionInformation $collectionInformation,
+        $collectionInformation = null,
         $userId = null,
         $testId = null
     )

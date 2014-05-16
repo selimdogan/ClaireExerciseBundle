@@ -118,7 +118,7 @@ class OwnerResourceService extends TransactionalService implements OwnerResource
      * @return PaginatorInterface
      */
     public function getAll(
-        CollectionInformation $collectionInformation = null,
+        $collectionInformation = null,
         $ownerId = null,
         $resourceId = null
     )

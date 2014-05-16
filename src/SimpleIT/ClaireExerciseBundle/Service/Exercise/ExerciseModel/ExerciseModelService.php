@@ -182,7 +182,7 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      *
      * @return PaginatorInterface
      */
-    public function getAll(CollectionInformation $collectionInformation = null)
+    public function getAll($collectionInformation = null)
     {
         return $this->exerciseModelRepository->findAll($collectionInformation);
     }

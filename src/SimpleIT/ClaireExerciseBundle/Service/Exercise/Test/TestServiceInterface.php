@@ -41,5 +41,5 @@ interface TestServiceInterface
      *
      * @return PaginatorInterface
      */
-    public function getAll(CollectionInformation $collectionInformation, $testModelId = null);
+    public function getAll($collectionInformation = null, $testModelId = null);
 }

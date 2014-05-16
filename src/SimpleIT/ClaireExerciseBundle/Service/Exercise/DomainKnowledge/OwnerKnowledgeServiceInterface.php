@@ -37,7 +37,7 @@ interface OwnerKnowledgeServiceInterface
      * @return PaginatorInterface
      */
     public function getAll(
-        CollectionInformation $collectionInformation = null,
+        $collectionInformation = null,
         $ownerId = null,
         $knowledgeId = null
     );

@@ -46,7 +46,7 @@ interface AttemptServiceInterface
      * @return PaginatorInterface
      */
     public function getAll(
-        CollectionInformation $collectionInformation,
+        $collectionInformation = null,
         $userId = null,
         $exerciseId = null,
         $testAttemptId = null

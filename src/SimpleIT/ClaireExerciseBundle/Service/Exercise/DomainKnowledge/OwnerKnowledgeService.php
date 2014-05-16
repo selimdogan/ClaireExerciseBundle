@@ -116,7 +116,7 @@ class OwnerKnowledgeService extends TransactionalService implements OwnerKnowled
      * @return PaginatorInterface
      */
     public function getAll(
-        CollectionInformation $collectionInformation = null,
+        $collectionInformation = null,
         $ownerId = null,
         $knowledgeId = null
     )

@@ -33,7 +33,7 @@ interface StoredExerciseServiceInterface
      * @return PaginatorInterface
      */
     public function getAll(
-        CollectionInformation $collectionInformation,
+        $collectionInformation = null,
         $ownerExerciseModelId = null
     );
 

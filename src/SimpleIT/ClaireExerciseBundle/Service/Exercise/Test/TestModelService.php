@@ -94,7 +94,7 @@ class TestModelService extends TransactionalService implements TestModelServiceI
      *
      * @return PaginatorInterface
      */
-    public function getAll(CollectionInformation $collectionInformation = null)
+    public function getAll($collectionInformation = null)
     {
         return $this->testModelRepository->findAllBy($collectionInformation);
     }

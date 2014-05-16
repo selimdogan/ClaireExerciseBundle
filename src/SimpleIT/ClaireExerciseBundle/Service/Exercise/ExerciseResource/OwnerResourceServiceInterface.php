@@ -40,7 +40,7 @@ interface OwnerResourceServiceInterface
      * @return PaginatorInterface
      */
     public function getAll(
-        CollectionInformation $collectionInformation = null,
+        $collectionInformation = null,
         $ownerId = null,
         $resourceId = null
     );

@@ -141,7 +141,7 @@ class StoredExerciseService extends TransactionalService implements StoredExerci
      * @return PaginatorInterface
      */
     public function getAll(
-        CollectionInformation $collectionInformation,
+        $collectionInformation = null,
         $ownerExerciseModelId = null
     )
     {

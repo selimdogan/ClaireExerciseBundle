@@ -50,7 +50,7 @@ class OwnerKnowledgeRepository extends BaseRepository
      * @return array
      */
     public function findAll(
-        CollectionInformation $collectionInformation = null,
+        $collectionInformation = null,
         $owner = null,
         $knowledge = null
     )

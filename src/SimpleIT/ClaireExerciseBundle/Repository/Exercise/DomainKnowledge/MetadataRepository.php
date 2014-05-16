@@ -45,8 +45,8 @@ class MetadataRepository extends BaseRepository
      * @return PaginatorInterface
      */
     public function findAllBy(
-        CollectionInformation $collectionInformation,
-        $ownerKnowledge
+        $collectionInformation = null,
+        $ownerKnowledge = null
     )
     {
         $queryBuilder = $this->createQueryBuilder('m');

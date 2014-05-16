@@ -75,7 +75,7 @@ class MetadataService extends TransactionalService implements MetadataServiceInt
      * @return array
      */
     public function getAll(
-        CollectionInformation $collectionInformation,
+        $collectionInformation = null,
         $ownerResourceId = null
     )
     {

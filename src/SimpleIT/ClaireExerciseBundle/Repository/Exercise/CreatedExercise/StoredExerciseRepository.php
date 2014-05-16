@@ -27,7 +27,7 @@ class StoredExerciseRepository extends BaseRepository
      * @return PaginatorInterface
      */
     public function findAllBy(
-        CollectionInformation $collectionInformation,
+        $collectionInformation = null,
         $ownerExerciseModel = null
     )
     {

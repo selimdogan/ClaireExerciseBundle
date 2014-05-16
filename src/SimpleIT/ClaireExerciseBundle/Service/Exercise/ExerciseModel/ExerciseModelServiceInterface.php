@@ -54,7 +54,7 @@ interface ExerciseModelServiceInterface
      *
      * @return PaginatorInterface
      */
-    public function getAll(CollectionInformation $collectionInformation = null);
+    public function getAll($collectionInformation = null);
 
     /**
      * Create an ExerciseModel entity from a resource

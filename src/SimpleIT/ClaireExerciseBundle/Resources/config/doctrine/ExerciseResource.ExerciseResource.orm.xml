@@ -1,4 +1,5 @@
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping">
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          http://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource" table="claire_exercise_resource" repository-class="SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource\ExerciseResourceRepository">
 
         <id name="id" type="integer" column="id">
@@ -20,6 +21,10 @@
         </many-to-one>
 
         <many-to-many target-entity="SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge" field="requiredKnowledges">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
             <join-table name="claire_exercise_resource_knowledge_requirement">
                 <join-columns>
                     <join-column name="resource_id" referenced-column-name="id"/>
@@ -31,6 +36,10 @@
         </many-to-many>
 
         <many-to-many target-entity="ExerciseResource" field="requiredExerciseResources">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
             <join-table name="claire_exercise_resource_resource_requirement">
                 <join-columns>
                     <join-column name="resource_id" referenced-column-name="id"/>
@@ -40,5 +49,6 @@
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
+
     </entity>
 </doctrine-mapping>
