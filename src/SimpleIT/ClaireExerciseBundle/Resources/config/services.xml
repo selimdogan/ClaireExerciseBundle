@@ -212,9 +212,6 @@
             <call method="setTestAttemptService">
                 <argument type="service" id="simple_it.exercise.test_attempt"/>
             </call>
-            <call method="setOwnerExerciseModelService">
-                <argument type="service" id="simple_it.exercise.owner_exercise_model"/>
-            </call>
         </service>
 
         <service id="simple_it.exercise.item" class="%simple_it.exercise.item.class%">
@@ -303,7 +300,7 @@
             <call method="setUserService">
                 <argument type="service" id="simple_it.exercise.user"/>
             </call>
-            <call method="setOwnerExerciseModelService">
+            <call method="setExerciseModelService">
                 <argument type="service" id="simple_it.exercise.owner_exercise_model"/>
             </call>
         </service>

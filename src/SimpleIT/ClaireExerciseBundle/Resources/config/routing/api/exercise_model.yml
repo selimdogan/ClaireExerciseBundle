@@ -36,14 +36,6 @@ api_exercise_model_delete:
         _format: json
         exerciseModelId: \d+
 
-api_owner_exercise_model_create_by_exercise_model:
-    pattern:  /{exerciseModelId}/owner-exercise-models/
-    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/OwnerExerciseModelByExerciseModel:create }
-    methods: [POST]
-    requirements:
-        _format: json
-        exerciseModelId: \d+
-
 api_owner_exercise_model_edit_by_exercise_model:
     pattern:  /{exerciseModelId}/owner-exercise-models/{ownerExerciseModelId}
     defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/OwnerExerciseModelByExerciseModel:edit }

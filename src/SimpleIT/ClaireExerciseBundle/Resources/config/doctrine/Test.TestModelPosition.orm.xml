@@ -3,7 +3,7 @@
     <entity name="SimpleIT\ClaireExerciseBundle\Entity\Test\TestModelPosition" table="claire_exercise_test_model_position" repository-class="SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestModelPositionRepository">
 
         <id name="testModel" association-key="true"/>
-        <id name="ownerExerciseModel" association-key="true"/>
+        <id name="exerciseModel" association-key="true"/>
 
         <field name="position" column="position" type="integer" nullable="false"/>
 

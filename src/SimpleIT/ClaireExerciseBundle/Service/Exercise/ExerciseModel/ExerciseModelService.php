@@ -487,7 +487,7 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
     }
 
     /**
-     * Edit all the metadata of an owner exercise model
+     * Edit all the metadata of an exercise model
      *
      * @param int             $exerciseModelId
      * @param ArrayCollection $metadatas
@@ -497,19 +497,19 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      */
     public function editMetadata($exerciseModelId, ArrayCollection $metadatas)
     {
-        $ownerExerciseModel = $this->exerciseModelRepository->find($exerciseModelId);
+        $exerciseModel = $this->exerciseModelRepository->find($exerciseModelId);
 
         $this->metadataService->deleteAllByExerciseModel($exerciseModelId);
 
         $metadataCollection = array();
         foreach ($metadatas as $key => $value) {
             $md = ExerciseModelMetadataFactory::create($key, $value);
-            $md->setExerciseModel($ownerExerciseModel);
+            $md->setExerciseModel($exerciseModel);
             $metadataCollection[] = $md;
         }
-        $ownerExerciseModel->setMetadata(new ArrayCollection($metadataCollection));
+        $exerciseModel->setMetadata(new ArrayCollection($metadataCollection));
 
-        return $this->save($ownerExerciseModel)->getMetadata();
+        return $this->save($exerciseModel)->getMetadata();
     }
 
     /**

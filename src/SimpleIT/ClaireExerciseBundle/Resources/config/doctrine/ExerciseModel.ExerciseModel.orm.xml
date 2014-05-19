@@ -8,7 +8,7 @@
 
         <field name="type" column="type" type="string" nullable="false"/>
         <field name="title" column="title" type="string" nullable="false"/>
-        <field name="content" column="content" type="text" nullable="false"/>
+        <field name="content" column="content" type="text" nullable="true"/>
         <field name="draft" column="draft" type="boolean" nullable="false"/>
         <field name="complete" column="complete" type="boolean" nullable="false"/>
         <field name="public" column="public" type="boolean" nullable="false"/>
@@ -16,7 +16,7 @@
         <one-to-many field="children" target-entity="ExerciseModel" mapped-by="parent"/>
         <one-to-many field="forkedBy" target-entity="ExerciseModel" mapped-by="forkFrom"/>
 
-        <one-to-many target-entity="SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata" mapped-by="ownerExerciseModel" field="metadata">
+        <one-to-many target-entity="SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata" mapped-by="exerciseModel" field="metadata">
             <cascade>
                 <cascade-persist/>
                 <cascade-remove/>
@@ -31,12 +31,13 @@
             <join-column name="fork_from_id" referenced-column-name="id"/>
         </many-to-one>
 
-        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\User\User" field="author">
-            <join-column name="author_id" referenced-column-name="id"/>
+        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\User\User"
+                     field="author">
+            <join-column name="author_id" referenced-column-name="id" nullable="false"/>
         </many-to-one>
 
         <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\User\User" field="owner">
-            <join-column name="owner_id" referenced-column-name="id" on-delete="CASCADE"/>
+            <join-column name="owner_id" referenced-column-name="id" nullable="false"/>
         </many-to-one>
 
         <many-to-many target-entity="SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource" field="requiredExerciseResources">
