@@ -2,13 +2,13 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonItem;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel;
 
 /**
  * Interface for the services which manages the specific exercise
@@ -19,18 +19,17 @@ use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel;
 interface ExerciseCreationServiceInterface
 {
     /**
-     * Generate an instance of exercise according to the input
-     * exercise model entity.
+     * Generate an instance of exercise according to the input exercise model entity.
      *
-     * @param OwnerExerciseModel $oem The exercise model entity
-     * @param CommonModel        $exerciseModel
-     * @param User               $owner
+     * @param ExerciseModel $exerciseModel
+     * @param CommonModel   $commonModel
+     * @param User          $owner
      *
      * @return StoredExercise The instance of exercise
      */
     public function generateExerciseFromExerciseModel(
-        OwnerExerciseModel $oem,
-        CommonModel $exerciseModel,
+        ExerciseModel $exerciseModel,
+        CommonModel $commonModel,
         User $owner
     );
 

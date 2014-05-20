@@ -100,8 +100,8 @@ class TestService extends TransactionalService implements TestServiceInterface
         $testPositions = array();
         foreach ($testModel->getTestModelPositions() as $modelPosition) {
             /** @var TestModelPosition $modelPosition */
-            $oemId = $modelPosition->getOwnerExerciseModel()->getId();
-            $exercise = $this->storedExerciseService->addByOwnerExerciseModel($oemId);
+            $oemId = $modelPosition->getExerciseModel()->getId();
+            $exercise = $this->storedExerciseService->addByExerciseModel($oemId);
             $testPositions[] = TestPositionFactory::create(
                 $exercise,
                 $modelPosition->getPosition()

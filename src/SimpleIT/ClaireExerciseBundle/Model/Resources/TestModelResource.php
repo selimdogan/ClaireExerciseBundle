@@ -41,31 +41,31 @@ class TestModelResource
     private $author;
 
     /**
-     * @var array $ownerExerciseModels
+     * @var array $exerciseModels
      * @Serializer\Type("array")
      * @Serializer\Groups({"details", "test_model"})
      * @Assert\NotBlank(groups={"create"})
      */
-    private $ownerExerciseModels;
+    private $exerciseModels;
 
     /**
-     * Set ownerExerciseModels
+     * Set exerciseModels
      *
-     * @param array $ownerExerciseModels
+     * @param array $exerciseModels
      */
-    public function setOwnerExerciseModels($ownerExerciseModels)
+    public function setExerciseModels($exerciseModels)
     {
-        $this->ownerExerciseModels = $ownerExerciseModels;
+        $this->exerciseModels = $exerciseModels;
     }
 
     /**
-     * Get ownerExerciseModels
+     * Get exerciseModels
      *
      * @return array
      */
-    public function getOwnerExerciseModels()
+    public function getExerciseModels()
     {
-        return $this->ownerExerciseModels;
+        return $this->exerciseModels;
     }
 
     /**

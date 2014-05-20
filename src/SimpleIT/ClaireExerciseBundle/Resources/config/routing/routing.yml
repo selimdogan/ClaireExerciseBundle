@@ -1,38 +1,6 @@
-web_owner_exercise_model:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/web/component_owner_exercise_model.yml"
-    prefix:   /web/components/owner-exercise-models
-
-web_exercise_model:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/web/component_exercise_model.yml"
-    prefix:   /web/components/exercise-models
-
-web_owner_resources:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/web/component_owner_resource.yml"
-    prefix:   /web/components/owner-resources
-
-web_resources:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/web/component_resource.yml"
-    prefix:   /web/components/resources
-
-web_attempts:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/web/component_attempt.yml"
-    prefix:   /web/components/attempts
-
-web_test_attempts:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/web/component_test_attempt.yml"
-    prefix:   /web/components/test-attempts
-
-web_exercises:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/web/component_exercise.yml"
-    prefix:   /web/components/exercises
-
 api_exercise_models:
     resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/exercise_model.yml"
     prefix:   /api/exercise-models/
-
-api_owner_exercise_models:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/owner_exercise_model.yml"
-    prefix:   /api/owner-exercise-models/
 
 api_exercises:
     resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/exercise.yml"

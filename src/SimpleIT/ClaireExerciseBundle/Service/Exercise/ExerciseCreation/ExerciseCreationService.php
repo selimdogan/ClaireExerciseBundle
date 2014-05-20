@@ -3,6 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
 use JMS\Serializer\SerializationContext;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
@@ -19,14 +20,14 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ModelDocument;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Entity\ItemFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\StoredExerciseFactory;
 use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\ExerciseTextFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\FormulaServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\OwnerKnowledgeServiceInterface;
-use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\ExerciseResourceServiceInterface;
+use
+    SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\ExerciseResourceServiceInterface;
 
 /**
  * Abstract class for the services which manages the specific exercise
@@ -285,16 +286,16 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
      * Convert an exercise and its items into one StoredExercise entity and
      * Item entities. Schemas of the exercise and of the items are required.
      *
-     * @param CommonExercise     $exercise
-     * @param OwnerExerciseModel $oem
-     * @param string             $typeOfItem
-     * @param null               $items
+     * @param CommonExercise $exercise
+     * @param ExerciseModel  $exerciseModel
+     * @param string         $typeOfItem
+     * @param null           $items
      *
      * @return StoredExercise
      */
     protected function toStoredExercise(
         CommonExercise $exercise,
-        OwnerExerciseModel $oem,
+        ExerciseModel $exerciseModel,
         $typeOfItem,
         $items = null
     )
@@ -306,7 +307,7 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
             'json',
             $context
         );
-        $exerciseEntity = StoredExerciseFactory::create($exContent, $oem);
+        $exerciseEntity = StoredExerciseFactory::create($exContent, $exerciseModel);
 
         // transform and add the items
         foreach ($items as $item) {

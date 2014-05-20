@@ -15,21 +15,21 @@ api_owner_resource_view_by_user:
         ownerResourceId: \d+
         ownerId: \d+
 
-api_owner_exercise_model_list_by_user:
-    pattern:  /{ownerId}/owner-exercise-models/
-    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/OwnerExerciseModelByUser:list }
+api_exercise_model_list_by_user:
+    pattern:  /{ownerId}/exercise-models/
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/ExerciseModelByUser:list }
     methods: [GET]
     requirements:
         _format: json
         ownerId: \d+
 
-api_owner_exercise_model_resource_view_by_user:
-    pattern:  /{ownerId}/owner-exercise-models/{ownerExerciseModelId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/OwnerExerciseModelByUser:view }
+api_exercise_model_view_by_user:
+    pattern:  /{ownerId}/exercise-models/{exerciseModelId}
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/ExerciseModelByUser:view }
     methods: [GET]
     requirements:
         _format: json
-        ownerExerciseModelId: \d+
+        exerciseModelId: \d+
         ownerId: \d+
 
 api_owner_knowledge_list_by_user:

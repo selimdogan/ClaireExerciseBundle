@@ -4,6 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\Test;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestModelResource;
+use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\ExerciseModelService;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel;
@@ -11,7 +12,6 @@ use SimpleIT\ClaireExerciseBundle\Entity\TestModelFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\TestModelPositionFactory;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestModelRepository;
-use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\OwnerExerciseModelService;
 use SimpleIT\ClaireExerciseBundle\Service\User\UserService;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatorInterface;
@@ -35,9 +35,9 @@ class TestModelService extends TransactionalService implements TestModelServiceI
     private $userService;
 
     /**
-     * @var OwnerExerciseModelService
+     * @var ExerciseModelService
      */
-    private $ownerExerciseModelService;
+    private $exerciseModelService;
 
     /**
      * Set testModelRepository
@@ -60,13 +60,13 @@ class TestModelService extends TransactionalService implements TestModelServiceI
     }
 
     /**
-     * Set ownerExerciseModelService
+     * Set exerciseModelService
      *
-     * @param \SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\OwnerExerciseModelService $ownerExerciseModelService
+     * @param \SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\ExerciseModelService $exerciseModelService
      */
-    public function setOwnerExerciseModelService($ownerExerciseModelService)
+    public function setExerciseModelService($exerciseModelService)
     {
-        $this->ownerExerciseModelService = $ownerExerciseModelService;
+        $this->exerciseModelService = $exerciseModelService;
     }
 
     /**
@@ -138,10 +138,10 @@ class TestModelService extends TransactionalService implements TestModelServiceI
         );
 
         $testModelPositions = array();
-        foreach ($testModelResource->getOwnerExerciseModels() as $position => $oemId) {
-            $ownerExerciseModel = $this->ownerExerciseModelService->get($oemId);
+        foreach ($testModelResource->getExerciseModels() as $position => $oemId) {
+            $exerciseModel = $this->exerciseModelService->get($oemId);
             $testModelPositions[] = TestModelPositionFactory::create(
-                $ownerExerciseModel,
+                $exerciseModel,
                 $testModel,
                 $position
             );
@@ -177,12 +177,12 @@ class TestModelService extends TransactionalService implements TestModelServiceI
      */
     public function updateFromResource(TestModelResource $testModelResource, $testModel)
     {
-        if (!is_null($testModelResource->getOwnerExerciseModels())) {
+        if (!is_null($testModelResource->getExerciseModels())) {
             $testModelPositions = array();
-            foreach ($testModelResource->getOwnerExerciseModels() as $position => $oemId) {
-                $ownerExerciseModel = $this->ownerExerciseModelService->get($oemId);
+            foreach ($testModelResource->getExerciseModels() as $position => $oemId) {
+                $exerciseModel = $this->exerciseModelService->get($oemId);
                 $testModelPositions[] = TestModelPositionFactory::create(
-                    $ownerExerciseModel,
+                    $exerciseModel,
                     $testModel,
                     $position
                 );

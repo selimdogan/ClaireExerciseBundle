@@ -143,6 +143,16 @@ class StoredExercise
     }
 
     /**
+     * Add item
+     *
+     * @param Item $item
+     */
+    public function addItem(Item $item)
+    {
+        $this->items[] = $item;
+    }
+
+    /**
      * Get items
      *
      * @return \Doctrine\Common\Collections\Collection

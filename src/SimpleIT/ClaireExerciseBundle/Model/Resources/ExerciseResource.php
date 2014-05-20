@@ -49,11 +49,11 @@ class ExerciseResource
     private $id;
 
     /**
-     * @var int $ownerExerciseModel
+     * @var int $exerciseModel
      * @Serializer\Type("integer")
      * @Serializer\Groups({"details", "exercise", "list"})
      */
-    private $ownerExerciseModel;
+    private $exerciseModel;
 
     /**
      * @var CommonExercise $content
@@ -103,23 +103,23 @@ class ExerciseResource
     }
 
     /**
-     * Set ownerExerciseModel
+     * Set exerciseModel
      *
-     * @param int $ownerExerciseModel
+     * @param int $exerciseModel
      */
-    public function setOwnerExerciseModel($ownerExerciseModel)
+    public function setExerciseModel($exerciseModel)
     {
-        $this->ownerExerciseModel = $ownerExerciseModel;
+        $this->exerciseModel = $exerciseModel;
     }
 
     /**
-     * Get ownerExerciseModel
+     * Get exerciseModel
      *
      * @return int
      */
-    public function getOwnerExerciseModel()
+    public function getExerciseModel()
     {
-        return $this->ownerExerciseModel;
+        return $this->exerciseModel;
     }
 
     /**

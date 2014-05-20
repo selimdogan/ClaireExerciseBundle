@@ -46,7 +46,7 @@ abstract class ExerciseResourceFactory
     {
         $exerciseResource = new ExerciseResource();
         $exerciseResource->setId($exercise->getId());
-        $exerciseResource->setOwnerExerciseModel($exercise->getOwnerExerciseModel()->getId());
+        $exerciseResource->setExerciseModel($exercise->getExerciseModel()->getId());
 
         $serializer = SerializerBuilder::create()
             ->addDefaultHandlers()
@@ -58,10 +58,7 @@ abstract class ExerciseResourceFactory
             ->build();
         $content = $serializer->deserialize(
             $exercise->getContent(),
-            ExerciseResource::getClass(
-                $exercise->getOwnerExerciseModel()->getExerciseModel()
-                    ->getType()
-            ),
+            ExerciseResource::getClass($exercise->getExerciseModel()->getType()),
             'json'
         );
 

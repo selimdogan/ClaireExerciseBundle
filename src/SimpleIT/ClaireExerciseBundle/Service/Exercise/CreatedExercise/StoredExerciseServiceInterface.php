@@ -28,13 +28,13 @@ interface StoredExerciseServiceInterface
      * Get all the stored exercises corresponding to an exercise model (if specified)
      *
      * @param CollectionInformation $collectionInformation
-     * @param int                   $ownerExerciseModelId
+     * @param int                   $exerciseModelId
      *
      * @return PaginatorInterface
      */
     public function getAll(
         $collectionInformation = null,
-        $ownerExerciseModelId = null
+        $exerciseModelId = null
     );
 
     /**
@@ -53,5 +53,5 @@ interface StoredExerciseServiceInterface
      *
      * @return StoredExercise
      */
-    public function addByOwnerExerciseModel($oemId);
+    public function addByExerciseModel($oemId);
 }

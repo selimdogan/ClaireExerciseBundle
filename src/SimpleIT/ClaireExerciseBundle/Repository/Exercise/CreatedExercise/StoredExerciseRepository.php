@@ -3,9 +3,9 @@
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise;
 
 use Doctrine\ORM\QueryBuilder;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\CoreBundle\Model\Paginator;
 use SimpleIT\CoreBundle\Repository\BaseRepository;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatorInterface;
@@ -22,22 +22,22 @@ class StoredExerciseRepository extends BaseRepository
      * Return all the stored exercises corresponding to an exercise model (if specified)
      *
      * @param CollectionInformation $collectionInformation
-     * @param OwnerExerciseModel    $ownerExerciseModel
+     * @param ExerciseModel    $exerciseModel
      *
      * @return PaginatorInterface
      */
     public function findAllBy(
         $collectionInformation = null,
-        $ownerExerciseModel = null
+        $exerciseModel = null
     )
     {
         $queryBuilder = $this->createQueryBuilder('se');
 
-        if (!is_null($ownerExerciseModel)) {
+        if (!is_null($exerciseModel)) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(
-                    'se.ownerExerciseModel',
-                    $ownerExerciseModel->getId()
+                    'se.exerciseModel',
+                    $exerciseModel->getId()
                 )
             );
         }

@@ -50,7 +50,7 @@ abstract class TestModelResourceFactory
         $exerciseModels = array();
         foreach ($testModel->getTestModelPositions() as $position) {
             /** @var TestModelPosition $position */
-            $exerciseModels[$position->getPosition()] = $position->getOwnerExerciseModel()->getId();
+            $exerciseModels[$position->getPosition()] = $position->getExerciseModel()->getId();
         }
 
         // order the model ids in a sequential array
@@ -58,7 +58,7 @@ abstract class TestModelResourceFactory
         for ($i = 0; $i < count($exerciseModels); $i++) {
             $em[] = $exerciseModels[$i];
         }
-        $testModelResource->setOwnerExerciseModels($em);
+        $testModelResource->setExerciseModels($em);
 
         return $testModelResource;
     }

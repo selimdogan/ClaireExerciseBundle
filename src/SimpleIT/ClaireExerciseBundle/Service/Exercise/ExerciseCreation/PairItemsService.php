@@ -2,6 +2,14 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
+use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
+use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use SimpleIT\ClaireExerciseBundle\Exception\InvalidAnswerException;
+use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\ExerciseTextFactory;
+use SimpleIT\ClaireExerciseBundle\Model\ModelObject\ObjectIdFactory;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems\Exercise;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems\Item as ResItem;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
@@ -9,15 +17,6 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\Model;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\PairBlock;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerResourceResource;
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
-use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
-use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
-use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel;
-use SimpleIT\ClaireExerciseBundle\Exception\InvalidAnswerException;
-use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\ExerciseTextFactory;
-use SimpleIT\ClaireExerciseBundle\Model\ModelObject\ObjectIdFactory;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
 
 /**
  * Service which manages Pair Items Exercises.
@@ -27,29 +26,22 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
 class PairItemsService extends ExerciseCreationService
 {
     /**
-     * Generate an instance of pair items exercise according to the input
-     * exercise model entity.
-     *
-     * @param OwnerExerciseModel $oem The exercise model entity
-     * @param CommonModel        $exerciseModel
-     * @param User               $owner
-     *
-     * @return StoredExercise The pair items exercise
+     * @inheritdoc
      */
     public function generateExerciseFromExerciseModel(
-        OwnerExerciseModel $oem,
-        CommonModel $exerciseModel,
+        ExerciseModel $exerciseModel,
+        CommonModel $commonModel,
         User $owner
     )
     {
-        /** @var Model $exerciseModel */
+        /** @var Model $commonModel */
         // Generation of the exercise with the model
-        $exercise = $this->generatePIExercise($exerciseModel, $owner);
+        $exercise = $this->generatePIExercise($commonModel, $owner);
 
         // Transformation of the exercise into entities (StoredExercise and Items)
         return $this->toStoredExercise(
             $exercise,
-            $oem,
+            $exerciseModel,
             "pair-items",
             array($exercise->getItem())
         );

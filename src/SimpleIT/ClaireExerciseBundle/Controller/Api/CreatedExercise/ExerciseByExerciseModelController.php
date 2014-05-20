@@ -17,21 +17,21 @@ use SimpleIT\Utils\Collection\CollectionInformation;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseByOwnerExerciseModelController extends ApiController
+class ExerciseByExerciseModelController extends ApiController
 {
     /**
-     * Generate an exercise from the owner model id
+     * Generate an exercise from the model id
      *
-     * @param int $ownerExerciseModelId Exercise Model Id
+     * @param int $exerciseModelId Exercise Model Id
      *
      * @throws ApiNotFoundException
      * @return ApiCreatedResponse
      */
-    public function createAction($ownerExerciseModelId)
+    public function createAction($exerciseModelId)
     {
         try {
-            $exercise = $this->get('simple_it.exercise.stored_exercise')->addByOwnerExerciseModel(
-                $ownerExerciseModelId
+            $exercise = $this->get('simple_it.exercise.stored_exercise')->addByExerciseModel(
+                $exerciseModelId
             );
             $exerciseResource = ExerciseResourceFactory::create($exercise);
 
@@ -46,18 +46,18 @@ class ExerciseByOwnerExerciseModelController extends ApiController
      * List the stored exercises of this model
      *
      * @param CollectionInformation $collectionInformation
-     * @param int                   $ownerExerciseModelId
+     * @param int                   $exerciseModelId
      *
      * @throws ApiNotFoundException
      * @return ApiPaginatedResponse
      */
-    public function listAction(CollectionInformation $collectionInformation, $ownerExerciseModelId)
+    public function listAction(CollectionInformation $collectionInformation, $exerciseModelId)
     {
         try {
             $exercises = $this->get('simple_it.exercise.stored_exercise')->getAll
                 (
                     $collectionInformation,
-                    $ownerExerciseModelId
+                    $exerciseModelId
                 );
 
             $exerciseResources = ExerciseResourceFactory::createCollection($exercises);

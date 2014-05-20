@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 class OwnerResourceByUserController extends ApiController
 {
     /**
-     * Get a specific OwnerExerciseModel resource
+     * Get a specific Owner Resource resource
      *
      * @param int $ownerResourceId
      * @param int $ownerId

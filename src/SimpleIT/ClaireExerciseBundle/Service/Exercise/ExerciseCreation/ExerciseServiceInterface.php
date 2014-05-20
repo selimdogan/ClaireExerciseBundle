@@ -6,7 +6,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 
 /**
  * Service which manages the exercise generation
@@ -28,11 +28,11 @@ interface ExerciseServiceInterface
     /**
      * Generate an exercise from the id of the model
      *
-     * @param OwnerExerciseModel $ownerExerciseModel
+     * @param ExerciseModel $exerciseModel
      *
      * @return CommonExercise The generated exercise
      */
-    public function generateExercise($ownerExerciseModel);
+    public function generateExercise($exerciseModel);
 
     /**
      * Validate learner's answer format

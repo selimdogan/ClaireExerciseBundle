@@ -7,7 +7,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise
 use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\ExerciseModelServiceInterface;
 
 /**
@@ -130,23 +130,20 @@ class ExerciseService extends TransactionalService implements ExerciseServiceInt
     /**
      * Generate an exercise from the id of the model
      *
-     * @param OwnerExerciseModel $ownerExerciseModel
+     * @param ExerciseModel $exerciseModel
      *
      * @return CommonExercise The generated exercise
      */
-    public function generateExercise($ownerExerciseModel)
+    public function generateExercise($exerciseModel)
     {
-        $emEntity = $this->exerciseModelService->get(
-            $ownerExerciseModel->getExerciseModel()->getId()
-        );
-        $exerciseModel = $this->exerciseModelService->getModelFromEntity($emEntity);
+        $commonModel = $this->exerciseModelService->getModelFromEntity($exerciseModel);
 
-        $service = $this->getServiceFromType($emEntity->getType());
+        $service = $this->getServiceFromType($exerciseModel->getType());
 
         return $service->generateExerciseFromExerciseModel(
-            $ownerExerciseModel,
             $exerciseModel,
-            $ownerExerciseModel->getOwner()
+            $commonModel,
+            $exerciseModel->getOwner()
         );
     }
 

@@ -2,20 +2,19 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
+use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
+use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use SimpleIT\ClaireExerciseBundle\Exception\InvalidAnswerException;
+use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\MultipleChoiceQuestion;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice\Exercise;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice\Proposition;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice\Question;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\Model;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\QuestionBlock;
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
-use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
-use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
-use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel;
-use SimpleIT\ClaireExerciseBundle\Exception\InvalidAnswerException;
-use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\MultipleChoiceQuestion;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
 
 /**
  * Service which manages Multiple Choice Exercises.
@@ -25,28 +24,22 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
 class MultipleChoiceService extends ExerciseCreationService
 {
     /**
-     * Generate an instance of multiple choice exercise according to the input model.
-     *
-     * @param OwnerExerciseModel $oem
-     * @param CommonModel        $exerciseModel
-     * @param User               $owner
-     *
-     * @return StoredExercise
+     * @inheritdoc
      */
     public function generateExerciseFromExerciseModel(
-        OwnerExerciseModel $oem,
-        CommonModel $exerciseModel,
+        ExerciseModel $exerciseModel,
+        CommonModel $commonModel,
         User $owner
     )
     {
-        /** @var Model $exerciseModel */
+        /** @var Model $commonModel */
         // Generation of the exercise with the model
-        $exercise = $this->generateMCExercise($exerciseModel, $owner);
+        $exercise = $this->generateMCExercise($commonModel, $owner);
 
         // Transformation of the exercise into entities (StoredExercise and Items)
         return $this->toStoredExercise(
             $exercise,
-            $oem,
+            $exerciseModel,
             "multiple-choice",
             $exercise->getQuestions()
         );

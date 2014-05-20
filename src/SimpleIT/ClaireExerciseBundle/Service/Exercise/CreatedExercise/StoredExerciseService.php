@@ -10,7 +10,6 @@ use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\ItemReposi
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\StoredExerciseRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation\ExerciseServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\ExerciseModelServiceInterface;
-use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\OwnerExerciseModelServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\Test\TestAttemptServiceInterface;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\CoreBundle\Annotation\Transactional;
@@ -48,11 +47,6 @@ class StoredExerciseService extends TransactionalService implements StoredExerci
      * @var ExerciseModelServiceInterface
      */
     private $exerciseModelService;
-
-    /**
-     * @var OwnerExerciseModelServiceInterface
-     */
-    private $ownerExerciseModelService;
 
     /**
      * Set itemRepository
@@ -105,16 +99,6 @@ class StoredExerciseService extends TransactionalService implements StoredExerci
     }
 
     /**
-     * Set ownerExerciseModelService
-     *
-     * @param OwnerExerciseModelServiceInterface $ownerExerciseModelService
-     */
-    public function setOwnerExerciseModelService($ownerExerciseModelService)
-    {
-        $this->ownerExerciseModelService = $ownerExerciseModelService;
-    }
-
-    /**
      * Find a storedExercise by its id
      *
      * @param int $storedExerciseId Stored Exercise Id
@@ -136,24 +120,24 @@ class StoredExerciseService extends TransactionalService implements StoredExerci
      * Get all the stored exercises corresponding to an exercise model (if specified)
      *
      * @param CollectionInformation $collectionInformation
-     * @param int                   $ownerExerciseModelId
+     * @param int                   $exerciseModelId
      *
      * @return PaginatorInterface
      */
     public function getAll(
         $collectionInformation = null,
-        $ownerExerciseModelId = null
+        $exerciseModelId = null
     )
     {
-        $ownerExerciseModel = null;
+        $exerciseModel = null;
 
-        if (!is_null($ownerExerciseModelId)) {
-            $ownerExerciseModel = $this->ownerExerciseModelService->get($ownerExerciseModelId);
+        if (!is_null($exerciseModelId)) {
+            $exerciseModel = $this->exerciseModelService->get($exerciseModelId);
         }
 
         return $this->storedExerciseRepository->findAllBy(
             $collectionInformation,
-            $ownerExerciseModel
+            $exerciseModel
         );
     }
 
@@ -177,14 +161,14 @@ class StoredExerciseService extends TransactionalService implements StoredExerci
     /**
      * Add a new exercise model by owner exercise model id
      *
-     * @param $oemId
+     * @param $emId
      *
      * @return StoredExercise
      * @Transactional
      */
-    public function addByOwnerExerciseModel($oemId)
+    public function addByExerciseModel($emId)
     {
-        $oem = $this->ownerExerciseModelService->get($oemId);
+        $oem = $this->exerciseModelService->get($emId);
 
         $exercise = $this->exerciseService->generateExercise($oem);
         $exercise = $this->storedExerciseRepository->insert($exercise);

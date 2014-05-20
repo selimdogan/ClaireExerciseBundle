@@ -110,3 +110,21 @@ api_metadata_delete_by_exercise_model:
     requirements:
         _format: json
         exerciseModelId: \d+
+
+
+api_exercise_generate_by_exercise_model:
+    pattern:  /{exerciseModelId}/exercises/
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/ExerciseByExerciseModel:create }
+    methods: [POST]
+    requirements:
+        _format: json
+        exerciseModelId: \d+
+
+api_exercise_list_by_exercise_model:
+    pattern:  /{exerciseModelId}/exercises/
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/CreatedExercise/ExerciseByExerciseModel:list }
+    methods: [GET]
+    requirements:
+        _format: json
+        exerciseModelId: \d+
+

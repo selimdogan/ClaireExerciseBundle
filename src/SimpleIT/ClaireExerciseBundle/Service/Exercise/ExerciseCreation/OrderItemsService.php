@@ -2,6 +2,13 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
+use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
+use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use SimpleIT\ClaireExerciseBundle\Exception\InvalidAnswerException;
+use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\ExerciseTextFactory;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OrderItems\Exercise;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OrderItems\Item as ResItem;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
@@ -11,14 +18,6 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\Seque
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseSequenceObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseTextObject;
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
-use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
-use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
-use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel;
-use SimpleIT\ClaireExerciseBundle\Exception\InvalidAnswerException;
-use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\ExerciseTextFactory;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
 
 /**
  * Service which manages Order Items Exercises.
@@ -29,29 +28,22 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
 class OrderItemsService extends ExerciseCreationService
 {
     /**
-     * Generate an instance of order items exercise according to the input
-     * exercise model entity.
-     *
-     * @param OwnerExerciseModel $oem The exercise model entity
-     * @param CommonModel        $exerciseModel
-     * @param User               $owner
-     *
-     * @return StoredExercise The order items exercise
+     * @inheritdoc
      */
     public function generateExerciseFromExerciseModel(
-        OwnerExerciseModel $oem,
-        CommonModel $exerciseModel,
+        ExerciseModel $exerciseModel,
+        CommonModel $commonModel,
         User $owner
     )
     {
-        /** @var Model $exerciseModel */
+        /** @var Model $commonModel */
         // Generation of the exercise with the model
-        $exercise = $this->generateOIExercise($exerciseModel, $owner);
+        $exercise = $this->generateOIExercise($commonModel, $owner);
 
         // Transformation of the exercise into entities (StoredExercise and Items)
         return $this->toStoredExercise(
             $exercise,
-            $oem,
+            $exerciseModel,
             "order-items",
             array($exercise->getItem())
         );

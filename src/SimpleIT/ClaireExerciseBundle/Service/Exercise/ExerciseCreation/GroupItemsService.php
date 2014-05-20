@@ -2,22 +2,22 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
+use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
+use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use SimpleIT\ClaireExerciseBundle\Exception\InvalidAnswerException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\GroupItems\Exercise;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\GroupItems\Item as ResItem;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ClassificationConstraints;
+use
+    SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ClassificationConstraints;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\Group;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\Model;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ObjectBlock;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\MetadataConstraint;
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
-use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
-use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
-use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel;
-use SimpleIT\ClaireExerciseBundle\Exception\InvalidAnswerException;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
 
 /**
  * Service which manages Group Items Exercises.
@@ -39,29 +39,22 @@ class GroupItemsService extends ExerciseCreationService
     const MISC_NAME = "Autre";
 
     /**
-     * Generate an instance of group items exercise according to the input
-     * exercise model entity.
-     *
-     * @param OwnerExerciseModel $oem The exercise model entity
-     * @param CommonModel        $exerciseModel
-     * @param User               $owner
-     *
-     * @return StoredExercise The group items exercise
+     * @inheritdoc
      */
     public function generateExerciseFromExerciseModel(
-        OwnerExerciseModel $oem,
-        CommonModel $exerciseModel,
+        ExerciseModel $exerciseModel,
+        CommonModel $commonModel,
         User $owner
     )
     {
-        /** @var Model $exerciseModel */
+        /** @var Model $commonModel */
         // Generation of the exercise with the model
-        $exercise = $this->generateGIExercise($exerciseModel, $owner);
+        $exercise = $this->generateGIExercise($commonModel, $owner);
 
         // Transformation of the exercise into entities (StoredExercise and Items)
         $exerciseEntity = $this->toStoredExercise(
             $exercise,
-            $oem,
+            $exerciseModel,
             "group-items",
             array($exercise->getItem())
         );
