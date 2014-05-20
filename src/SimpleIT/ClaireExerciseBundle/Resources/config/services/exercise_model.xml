@@ -7,10 +7,6 @@
         <parameter key="simple_it.exercise.entity.exercise_model.class">SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel</parameter>
         <parameter key="simple_it.exercise.repository.exercise_model.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseModel\ExerciseModelRepository</parameter>
 
-        <parameter key="simple_it.exercise.owner_exercise_model.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\OwnerExerciseModelService</parameter>
-        <parameter key="simple_it.exercise.entity.owner_exercise_model.class">SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\OwnerExerciseModel</parameter>
-        <parameter key="simple_it.exercise.repository.owner_exercise_model.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseModel\OwnerExerciseModelRepository</parameter>
-
         <parameter key="simple_it.exercise.exercise_model_metadata.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\MetadataService</parameter>
         <parameter key="simple_it.exercise.entity.exercise_model_metadata.class">SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata</parameter>
         <parameter key="simple_it.exercise.repository.exercise_model_metadata.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseModel\MetadataRepository</parameter>
@@ -20,10 +16,6 @@
         <!-- Repositories -->
         <service id="simple_it.exercise.repository.exercise_model" factory-service="doctrine.orm.entity_manager" factory-method="getRepository" class="%simple_it.exercise.repository.exercise_model.class%">
             <argument>%simple_it.exercise.entity.exercise_model.class%</argument>
-        </service>
-
-        <service id="simple_it.exercise.repository.owner_exercise_model" factory-service="doctrine.orm.entity_manager" factory-method="getRepository" class="%simple_it.exercise.repository.owner_exercise_model.class%">
-            <argument>%simple_it.exercise.entity.owner_exercise_model.class%</argument>
         </service>
 
         <service id="simple_it.exercise.repository.exercise_model_metadata" factory-service="doctrine.orm.entity_manager" factory-method="getRepository" class="%simple_it.exercise.repository.exercise_model_metadata.class%">
@@ -47,21 +39,6 @@
             <call method="setExerciseResourceService">
                 <argument type="service" id="simple_it.exercise.exercise_resource"/>
             </call>
-        </service>
-
-        <service id="simple_it.exercise.owner_exercise_model" class="%simple_it.exercise.owner_exercise_model.class%">
-            <call method="setEntityManager">
-                <argument type="service" id="doctrine.orm.entity_manager"/>
-            </call>
-            <call method="setOwnerExerciseModelRepository">
-                <argument type="service" id="simple_it.exercise.repository.owner_exercise_model"/>
-            </call>
-            <call method="setUserService">
-                <argument type="service" id="simple_it.exercise.user"/>
-            </call>
-            <call method="setExerciseModelService">
-                <argument type="service" id="simple_it.exercise.exercise_model"/>
-            </call>
             <call method="setMetadataService">
                 <argument type="service" id="simple_it.exercise.exercise_model_metadata"/>
             </call>
@@ -74,8 +51,8 @@
             <call method="setMetadataRepository">
                 <argument type="service" id="simple_it.exercise.repository.exercise_model_metadata"/>
             </call>
-            <call method="setOwnerExerciseModelService">
-                <argument type="service" id="simple_it.exercise.owner_exercise_model"/>
+            <call method="setExerciseModelService">
+                <argument type="service" id="simple_it.exercise.exercise_model"/>
             </call>
         </service>
     </services>

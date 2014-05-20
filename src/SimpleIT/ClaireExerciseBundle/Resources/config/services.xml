@@ -301,7 +301,7 @@
                 <argument type="service" id="simple_it.exercise.user"/>
             </call>
             <call method="setExerciseModelService">
-                <argument type="service" id="simple_it.exercise.owner_exercise_model"/>
+                <argument type="service" id="simple_it.exercise.exercise_model"/>
             </call>
         </service>
 
