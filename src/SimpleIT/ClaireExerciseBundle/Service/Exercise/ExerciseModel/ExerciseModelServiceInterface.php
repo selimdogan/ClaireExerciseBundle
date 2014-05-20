@@ -60,22 +60,20 @@ interface ExerciseModelServiceInterface
      * Create an ExerciseModel entity from a resource
      *
      * @param ExerciseModelResource $modelResource
-     * @param int                   $authorId
      *
      * @throws NoAuthorException
      * @return ExerciseModel
      */
-    public function createFromResource(ExerciseModelResource $modelResource, $authorId = null);
+    public function createFromResource(ExerciseModelResource $modelResource);
 
     /**
      * Create and add an exercise model from a resource
      *
      * @param ExerciseModelResource $modelResource
-     * @param int                   $authorId
      *
      * @return ExerciseModel
      */
-    public function createAndAdd(ExerciseModelResource $modelResource, $authorId);
+    public function createAndAdd(ExerciseModelResource $modelResource);
 
     /**
      * Add a model from a Resource

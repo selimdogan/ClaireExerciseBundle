@@ -20,30 +20,30 @@ use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * API MetadataByOwnerExerciseModel Controller
+ * API MetadataByExerciseModel Controller
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class MetadataByOwnerExerciseModelController extends ApiController
+class MetadataByExerciseModelController extends ApiController
 {
     /**
      * Get all metadata
      *
-     * @param mixed                 $ownerExerciseModelId
+     * @param mixed                 $exerciseModelId
      * @param CollectionInformation $collectionInformation
      *
      * @throws ApiNotFoundException
      * @return ApiGotResponse
      */
     public function listAction(
-        $ownerExerciseModelId,
+        $exerciseModelId,
         CollectionInformation $collectionInformation
     )
     {
         try {
             $metadatas = $this->get('simple_it.exercise.exercise_model_metadata')->getAll(
                 $collectionInformation,
-                $ownerExerciseModelId
+                $exerciseModelId
             );
 
             $metadataResources = MetadataResourceFactory::createCollection($metadatas);
@@ -57,18 +57,18 @@ class MetadataByOwnerExerciseModelController extends ApiController
     /**
      * Get a metadata
      *
-     * @param mixed $ownerExerciseModelId
+     * @param mixed $exerciseModelId
      * @param mixed $metadataKey
      *
      * @throws ApiNotFoundException
      * @return ApiGotResponse
      */
-    public function viewAction($ownerExerciseModelId, $metadataKey)
+    public function viewAction($exerciseModelId, $metadataKey)
     {
         try {
             $metadata = $this->get('simple_it.exercise.exercise_model_metadata')
-                ->getByOwnerExerciseModel(
-                    $ownerExerciseModelId,
+                ->getByExerciseModel(
+                    $exerciseModelId,
                     $metadataKey
                 );
 
@@ -85,7 +85,7 @@ class MetadataByOwnerExerciseModelController extends ApiController
      * Create a metadata
      *
      * @param Request $request
-     * @param mixed   $ownerExerciseModelId
+     * @param mixed   $exerciseModelId
      *
      * @throws ApiNotFoundException
      * @throws ApiConflictException;
@@ -93,7 +93,7 @@ class MetadataByOwnerExerciseModelController extends ApiController
      */
     public function createAction(
         Request $request,
-        $ownerExerciseModelId
+        $exerciseModelId
     )
     {
         try {
@@ -101,8 +101,8 @@ class MetadataByOwnerExerciseModelController extends ApiController
 
             $metadata = $this->get(
                 'simple_it.exercise.exercise_model_metadata'
-            )->addToOwnerExerciseModel(
-                    $ownerExerciseModelId,
+            )->addToExerciseModel(
+                    $exerciseModelId,
                     $metadata
                 );
 
@@ -121,7 +121,7 @@ class MetadataByOwnerExerciseModelController extends ApiController
      * Edit a metadata
      *
      * @param MetadataResource $metadata
-     * @param mixed            $ownerExerciseModelId
+     * @param mixed            $exerciseModelId
      * @param string           $metadataKey
      *
      * @throws ApiBadRequestException
@@ -130,7 +130,7 @@ class MetadataByOwnerExerciseModelController extends ApiController
      */
     public function editAction(
         MetadataResource $metadata,
-        $ownerExerciseModelId,
+        $exerciseModelId,
         $metadataKey
     )
     {
@@ -139,8 +139,8 @@ class MetadataByOwnerExerciseModelController extends ApiController
 
             $metadata = $this->get(
                 'simple_it.exercise.exercise_model_metadata'
-            )->saveFromOwnerExerciseModel(
-                    $ownerExerciseModelId,
+            )->saveFromExerciseModel(
+                    $exerciseModelId,
                     $metadata,
                     $metadataKey
                 );
@@ -157,17 +157,17 @@ class MetadataByOwnerExerciseModelController extends ApiController
     /**
      * Delete a metadata
      *
-     * @param mixed $ownerExerciseModelId
+     * @param mixed $exerciseModelId
      * @param mixed $metadataKey
      *
      * @throws ApiNotFoundException
      * @return ApiDeletedResponse
      */
-    public function deleteAction($ownerExerciseModelId, $metadataKey)
+    public function deleteAction($exerciseModelId, $metadataKey)
     {
         try {
-            $this->get('simple_it.exercise.exercise_model_metadata')->removeFromOwnerExerciseModel(
-                $ownerExerciseModelId,
+            $this->get('simple_it.exercise.exercise_model_metadata')->removeFromExerciseModel(
+                $exerciseModelId,
                 $metadataKey
             );
 
@@ -179,22 +179,22 @@ class MetadataByOwnerExerciseModelController extends ApiController
     }
 
     /**
-     * Edit the list of metadata for this owner resource
+     * Edit the list of metadata for this exercise model
      *
      * @param ArrayCollection $metadatas
-     * @param int             $ownerExerciseModelId
+     * @param int             $exerciseModelId
      *
      * @return ApiEditedResponse
      * @throws ApiNotFoundException
      * @throws ApiConflictException
      */
-    public function editAllAction(ArrayCollection $metadatas, $ownerExerciseModelId)
+    public function editAllAction(ArrayCollection $metadatas, $exerciseModelId)
     {
         try {
-            $resources = $this->get('simple_it.exercise.owner_exercise_model')
+            $resources = $this->get('simple_it.exercise.exercise_model')
                 ->editMetadata
                 (
-                    $ownerExerciseModelId,
+                    $exerciseModelId,
                     $metadatas
                 );
 

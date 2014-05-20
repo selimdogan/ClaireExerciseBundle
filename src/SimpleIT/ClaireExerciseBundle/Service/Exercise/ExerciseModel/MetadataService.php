@@ -48,7 +48,7 @@ class MetadataService extends TransactionalService implements MetadataServiceInt
     }
 
     /**
-     * Find a metadata by resourceId and metakey
+     * Find a metadata by exerciseModelId and metakey
      *
      * @param int $exerciseModelId
      * @param int $metakey
@@ -90,7 +90,7 @@ class MetadataService extends TransactionalService implements MetadataServiceInt
     }
 
     /**
-     * Add a metadata to an owner Resource
+     * Add a metadata to an exercise model
      *
      * @param mixed    $exerciseModelId
      * @param Metadata $metadata

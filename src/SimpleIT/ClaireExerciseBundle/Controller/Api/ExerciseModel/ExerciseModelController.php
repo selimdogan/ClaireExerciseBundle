@@ -100,10 +100,13 @@ class ExerciseModelController extends ApiController
 
             $this->validateResource($modelResource, array('create', 'Default'));
 
+            $modelResource->setAuthor($userId);
+            $modelResource->setOwner($userId);
+            $modelResource->setArchived(false);
+
             $model = $this->get('simple_it.exercise.exercise_model')->createAndAdd
                 (
-                    $modelResource,
-                    $userId
+                    $modelResource
                 );
 
             $modelResource = ExerciseModelResourceFactory::create($model);

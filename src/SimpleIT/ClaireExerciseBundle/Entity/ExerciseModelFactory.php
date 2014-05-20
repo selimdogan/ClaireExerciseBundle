@@ -28,6 +28,8 @@ abstract class ExerciseModelFactory
         $exerciseModel = new ExerciseModel();
         $exerciseModel->setContent($content);
         $exerciseModel->setComplete(false);
+        $exerciseModel->setPublic(false);
+        $exerciseModel->setArchived(false);
 
         return $exerciseModel;
     }
@@ -50,6 +52,7 @@ abstract class ExerciseModelFactory
         $model->setDraft($modelResource->getDraft());
         $model->setComplete($modelResource->getComplete());
         $model->setPublic($modelResource->getPublic());
+        $model->setArchived($modelResource->getArchived());
 
         // content
         $serializer = SerializerBuilder::create()

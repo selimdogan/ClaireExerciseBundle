@@ -131,11 +131,17 @@ class ExerciseModelResource
     private $public;
 
     /**
+     * @var bool $archived
+     * @Serializer\Type("boolean")
+     * @Serializer\Groups({"details","list"})
+     * @Assert\Null(groups={"create", "editPublic"})
+     */
+    private $archived;
+
+    /**
      * @var array
      * @Serializer\Type("array")
      * @Serializer\Groups({"details"})
-     * @Assert\NotNull(groups={"create"})
-     * @Assert\Null(groups={"edit"})
      */
     private $metadata;
 
@@ -438,6 +444,26 @@ class ExerciseModelResource
     public function getForkFrom()
     {
         return $this->forkFrom;
+    }
+
+    /**
+     * Set archived
+     *
+     * @param boolean $archived
+     */
+    public function setArchived($archived)
+    {
+        $this->archived = $archived;
+    }
+
+    /**
+     * Get archived
+     *
+     * @return boolean
+     */
+    public function getArchived()
+    {
+        return $this->archived;
     }
 
     /**

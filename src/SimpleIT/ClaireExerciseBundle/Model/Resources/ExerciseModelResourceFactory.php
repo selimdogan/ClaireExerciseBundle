@@ -51,6 +51,7 @@ abstract class ExerciseModelResourceFactory
         $exerciseModelResource->setDraft($exerciseModel->getDraft());
         $exerciseModelResource->setComplete($exerciseModel->getComplete());
         $exerciseModelResource->setPublic($exerciseModel->getPublic());
+        $exerciseModelResource->setArchived($exerciseModel->getArchived());
         $exerciseModelResource->setOwner($exerciseModel->getOwner()->getId());
 
         // Parent and fork from

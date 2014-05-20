@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class MetadataByOwnerExerciseModelController
+ * Class MetadataByExerciseModelController
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */

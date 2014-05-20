@@ -39,6 +39,11 @@ class ExerciseModel
     private $draft;
 
     /**
+     * @var boolean $archived
+     */
+    private $archived;
+
+    /**
      * @var boolean $complete
      */
     private $complete;
@@ -422,5 +427,25 @@ class ExerciseModel
     public function getForkedBy()
     {
         return $this->forkedBy;
+    }
+
+    /**
+     * Set archived
+     *
+     * @param boolean $archived
+     */
+    public function setArchived($archived)
+    {
+        $this->archived = $archived;
+    }
+
+    /**
+     * Get archived
+     *
+     * @return boolean
+     */
+    public function getArchived()
+    {
+        return $this->archived;
     }
 }

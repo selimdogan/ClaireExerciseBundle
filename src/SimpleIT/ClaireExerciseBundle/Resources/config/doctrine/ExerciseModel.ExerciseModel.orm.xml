@@ -12,6 +12,7 @@
         <field name="draft" column="draft" type="boolean" nullable="false"/>
         <field name="complete" column="complete" type="boolean" nullable="false"/>
         <field name="public" column="public" type="boolean" nullable="false"/>
+        <field name="archived" column="archived" type="boolean" nullable="true"/>
 
         <one-to-many field="children" target-entity="ExerciseModel" mapped-by="parent"/>
         <one-to-many field="forkedBy" target-entity="ExerciseModel" mapped-by="forkFrom"/>
@@ -43,7 +44,6 @@
         <many-to-many target-entity="SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource" field="requiredExerciseResources">
             <cascade>
                 <cascade-persist/>
-                <cascade-remove/>
             </cascade>
             <join-table name="claire_exercise_model_resource_requirement">
                 <join-columns>
@@ -58,7 +58,6 @@
         <many-to-many target-entity="SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge" field="requiredKnowledges">
             <cascade>
                 <cascade-persist/>
-                <cascade-remove/>
             </cascade>
             <join-table name="claire_exercise_model_knowledge_requirement">
                 <join-columns>

@@ -257,16 +257,12 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      * Create an ExerciseModel entity from a resource
      *
      * @param ExerciseModelResource $modelResource
-     * @param int                   $authorId
-     * @param int                   $ownerId
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException
      * @return ExerciseModel
      */
     public function createFromResource(
-        ExerciseModelResource $modelResource,
-        $authorId = null,
-        $ownerId = null
+        ExerciseModelResource $modelResource
     )
     {
         $modelResource->setComplete(
@@ -280,22 +276,20 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
         $model = ExerciseModelFactory::createFromResource($modelResource);
 
         // author
-        if (!is_null($modelResource->getAuthor())) {
-            $authorId = $modelResource->getAuthor();
-        }
-        if (is_null($authorId)) {
+        if (is_null($modelResource->getAuthor())) {
             throw new NoAuthorException();
+        } else {
+            $authorId = $modelResource->getAuthor();
         }
         $model->setAuthor(
             $this->userService->get($authorId)
         );
 
         // owner
-        if (!is_null($modelResource->getOwner())) {
-            $ownerId = $modelResource->getOwner();
-        }
-        if (is_null($ownerId)) {
+        if (is_null($modelResource->getOwner())) {
             throw new NoAuthorException('No owner for this model...');
+        } else {
+            $ownerId = $modelResource->getOwner();
         }
         $model->setOwner(
             $this->userService->get($ownerId)
@@ -324,10 +318,13 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
 
         // metadata
         $metadata = array();
-        foreach ($modelResource->getMetadata() as $key => $value) {
-            $md = ExerciseModelMetadataFactory::create($key, $value);
-            $md->setExerciseModel($model);
-            $metadata[] = $md;
+        $resMetadata = $modelResource->getMetadata();
+        if (!empty($resMetadata)) {
+            foreach ($resMetadata as $key => $value) {
+                $md = ExerciseModelMetadataFactory::create($key, $value);
+                $md->setExerciseModel($model);
+                $metadata[] = $md;
+            }
         }
         $model->setMetadata(new ArrayCollection($metadata));
 
@@ -338,16 +335,14 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      * Create and add an exercise model from a resource
      *
      * @param ExerciseModelResource $modelResource
-     * @param int                   $authorId
      *
      * @return ExerciseModel
      */
     public function createAndAdd(
-        ExerciseModelResource $modelResource,
-        $authorId
+        ExerciseModelResource $modelResource
     )
     {
-        $model = $this->createFromResource($modelResource, $authorId);
+        $model = $this->createFromResource($modelResource);
 
         return $this->add($model);
     }
@@ -421,11 +416,17 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
                 $this->serializer->jmsSerialize($content, 'json', $context)
             );
 
+            if ($model->getParent() === null)
+            {
+                $parentId = null;
+            } else {
+                $parentId = $model->getParent()->getId();
+            }
             // Check if the model is complete with the new content
             $model->setComplete(
                 $this->checkModelComplete(
                     $model->getType(),
-                    $model->getParent()->getId(),
+                    $parentId,
                     $content
                 )
             );
