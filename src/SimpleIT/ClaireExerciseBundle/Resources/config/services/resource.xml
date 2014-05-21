@@ -7,10 +7,6 @@
         <parameter key="simple_it.exercise.entity.exercise_resource.class">SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource</parameter>
         <parameter key="simple_it.exercise.repository.exercise_resource.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource\ExerciseResourceRepository</parameter>
 
-        <parameter key="simple_it.exercise.owner_resource.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\OwnerResourceService</parameter>
-        <parameter key="simple_it.exercise.entity.owner_resource.class">SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\OwnerResource</parameter>
-        <parameter key="simple_it.exercise.repository.owner_resource.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource\OwnerResourceRepository</parameter>
-
         <parameter key="simple_it.exercise.resource_metadata.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\MetadataService</parameter>
         <parameter key="simple_it.exercise.entity.resource_metadata.class">SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata</parameter>
         <parameter key="simple_it.exercise.repository.resource_metadata.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource\MetadataRepository</parameter>
@@ -20,10 +16,6 @@
         <!-- Repositories -->
         <service id="simple_it.exercise.repository.exercise_resource" factory-service="doctrine.orm.entity_manager" factory-method="getRepository" class="%simple_it.exercise.repository.exercise_resource.class%">
             <argument>%simple_it.exercise.entity.exercise_resource.class%</argument>
-        </service>
-
-        <service id="simple_it.exercise.repository.owner_resource" factory-service="doctrine.orm.entity_manager" factory-method="getRepository" class="%simple_it.exercise.repository.owner_resource.class%">
-            <argument>%simple_it.exercise.entity.owner_resource.class%</argument>
         </service>
 
         <service id="simple_it.exercise.repository.resource_metadata" factory-service="doctrine.orm.entity_manager" factory-method="getRepository" class="%simple_it.exercise.repository.resource_metadata.class%">
@@ -41,29 +33,14 @@
             <call method="setSerializer">
                 <argument type="service" id="simple_it.api.serializer"/>
             </call>
-            <call method="setOwnerResourceService">
-                <argument type="service" id="simple_it.exercise.owner_resource"/>
-            </call>
             <call method="setUserService">
                 <argument type="service" id="simple_it.exercise.user"/>
             </call>
-        </service>
-
-        <service id="simple_it.exercise.owner_resource" class="%simple_it.exercise.owner_resource.class%">
-            <call method="setEntityManager">
-                <argument type="service" id="doctrine.orm.entity_manager"/>
-            </call>
-            <call method="setOwnerResourceRepository">
-                <argument type="service" id="simple_it.exercise.repository.owner_resource"/>
+            <call method="setKnowledgeService">
+                <argument type="service" id="simple_it.exercise.knowledge"/>
             </call>
             <call method="setMetadataService">
                 <argument type="service" id="simple_it.exercise.resource_metadata"/>
-            </call>
-            <call method="setUserService">
-                <argument type="service" id="simple_it.exercise.user"/>
-            </call>
-            <call method="setExerciseResourceService">
-                <argument type="service" id="simple_it.exercise.exercise_resource"/>
             </call>
         </service>
 
@@ -74,8 +51,8 @@
             <call method="setMetadataRepository">
                 <argument type="service" id="simple_it.exercise.repository.resource_metadata"/>
             </call>
-            <call method="setOwnerResourceService">
-                <argument type="service" id="simple_it.exercise.owner_resource"/>
+            <call method="setResourceService">
+                <argument type="service" id="simple_it.exercise.exercise_resource"/>
             </call>
         </service>
     </services>

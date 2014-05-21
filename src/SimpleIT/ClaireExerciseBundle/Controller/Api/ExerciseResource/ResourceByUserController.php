@@ -5,46 +5,46 @@ use SimpleIT\ApiBundle\Controller\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerResourceResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerResourceResourceFactory;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResourceFactory;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * API OwnerResource Controller
+ * API Resource by user Controller
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class OwnerResourceByUserController extends ApiController
+class ResourceByUserController extends ApiController
 {
     /**
-     * Get a specific Owner Resource resource
+     * Get a specific Resource resource
      *
-     * @param int $ownerResourceId
+     * @param int $resourceId
      * @param int $ownerId
      *
      * @throws ApiNotFoundException
      * @return ApiGotResponse
      */
-    public function viewAction($ownerResourceId, $ownerId)
+    public function viewAction($resourceId, $ownerId)
     {
         try {
-            $ownerResource = $this->get('simple_it.exercise.owner_resource')->getByIdAndOwner(
-                $ownerResourceId,
+            $resource = $this->get('simple_it.exercise.exercise_resource')->getByIdAndOwner(
+                $resourceId,
                 $ownerId
             );
-            $ownerResourceResource = OwnerResourceResourceFactory::create($ownerResource);
+            $resourceResource = ResourceResourceFactory::create($resource);
 
-            return new ApiGotResponse($ownerResourceResource, array("owner_resource", 'Default'));
+            return new ApiGotResponse($resourceResource, array("details", 'Default'));
 
         } catch (NonExistingObjectException $neoe) {
-            throw new ApiNotFoundException(OwnerResourceResource::RESOURCE_NAME);
+            throw new ApiNotFoundException(ResourceResource::RESOURCE_NAME);
         }
     }
 
     /**
-     * Get the list of owner resources
+     * Get the list of resources
      *
      * @param CollectionInformation $collectionInformation
      * @param int                   $ownerId
@@ -58,15 +58,15 @@ class OwnerResourceByUserController extends ApiController
     )
     {
         try {
-            $ownerResources = $this->get('simple_it.exercise.owner_resource')->getAll(
+            $resources = $this->get('simple_it.exercise.exercise_resource')->getAll(
                 $collectionInformation,
                 $ownerId
             );
 
-            $oemResources = OwnerResourceResourceFactory::createCollection($ownerResources);
+            $oemResources = ResourceResourceFactory::createCollection($resources);
 
-            return new ApiPaginatedResponse($oemResources, $ownerResources, array(
-                'owner_resource_list',
+            return new ApiPaginatedResponse($oemResources, $resources, array(
+                'resource_list',
                 'Default'
             ));
         } catch (NonExistingObjectException $neoe) {

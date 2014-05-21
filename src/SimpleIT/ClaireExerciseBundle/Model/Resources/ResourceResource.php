@@ -46,7 +46,7 @@ class ResourceResource
      * @var int $id Id of resource
      * @Serializer\Type("integer")
      * @Serializer\Groups({"details", "list", "resource_list"})
-     * @Assert\Blank(groups={"create","editContent","edit", "appCreate"})
+     * @Assert\Blank(groups={"create","edit"})
      */
     private $id;
 
@@ -54,17 +54,16 @@ class ResourceResource
      * @var string $type
      * @Serializer\Type("string")
      * @Serializer\Groups({"details", "list", "resource_list"})
-     * @Assert\NotBlank(groups={"create", "appCreate"})
-     * @Assert\Blank(groups={"editContent", "edit"})
+     * @Assert\NotBlank(groups={"create"})
+     * @Assert\Blank(groups={"edit"})
      */
     private $type;
 
     /**
      * @var CommonResource $content
      * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource")
-     * @Serializer\Groups({"details", "resource_list"})
-     * @Assert\NotBlank(groups={"create","editContent"})
-     * @Assert\Blank(groups={"appCreate"})
+     * @Serializer\Groups({"details"})
+     * @Assert\NotBlank(groups={"create"})
      * @Assert\Valid
      */
     private $content;
@@ -74,17 +73,69 @@ class ResourceResource
      * @Serializer\Type("array")
      * @Serializer\Groups({"details"})
      * @Assert\NotNull(groups={"create"})
-     * @Assert\Blank(groups={"editContent", "appCreate"})
      */
     private $requiredExerciseResources;
+
+    /**
+     * @var array $requiredKnowledges
+     * @Serializer\Type("array")
+     * @Serializer\Groups({"details"})
+     * @Assert\NotNull(groups={"create"})
+     */
+    private $requiredKnowledges;
 
     /**
      * @var int
      * @Serializer\Type("integer")
      * @Serializer\Groups({"details", "list", "resource_list"})
-     * @Assert\Blank(groups={"create", "edit","editContent", "appCreate"})
+     * @Assert\Blank(groups={"create", "edit"})
      */
     private $author;
+
+    /**
+     * @var int $owner
+     * @Serializer\Type("integer")
+     * @Serializer\Groups({"details", "list", "resource_list"})
+     * @Assert\Blank(groups={"create", "edit"})
+     */
+    private $owner;
+
+    /**
+     * @var bool $public
+     * @Serializer\Type("boolean")
+     * @Serializer\Groups({"details","list", "resource_list"})
+     * @Assert\NotNull(groups={"create"})
+     */
+    private $public;
+
+    /**
+     * @var bool $archived
+     * @Serializer\Type("boolean")
+     * @Serializer\Groups({"details","list", "resource_list"})
+     * @Assert\Null(groups={"create"})
+     */
+    private $archived;
+
+    /**
+     * @var array
+     * @Serializer\Type("array")
+     * @Serializer\Groups({"details"})
+     */
+    private $metadata;
+
+    /**
+     * @var int
+     * @Serializer\Type("integer")
+     * @Serializer\Groups({"details"})
+     */
+    private $parent;
+
+    /**
+     * @var int
+     * @Serializer\Type("integer")
+     * @Serializer\Groups({"details", "resource_list"})
+     */
+    private $forkFrom;
 
     /**
      * Set content
@@ -184,6 +235,146 @@ class ResourceResource
     public function getAuthor()
     {
         return $this->author;
+    }
+
+    /**
+     * Set archived
+     *
+     * @param boolean $archived
+     */
+    public function setArchived($archived)
+    {
+        $this->archived = $archived;
+    }
+
+    /**
+     * Get archived
+     *
+     * @return boolean
+     */
+    public function getArchived()
+    {
+        return $this->archived;
+    }
+
+    /**
+     * Set forkFrom
+     *
+     * @param int $forkFrom
+     */
+    public function setForkFrom($forkFrom)
+    {
+        $this->forkFrom = $forkFrom;
+    }
+
+    /**
+     * Get forkFrom
+     *
+     * @return int
+     */
+    public function getForkFrom()
+    {
+        return $this->forkFrom;
+    }
+
+    /**
+     * Set metadata
+     *
+     * @param array $metadata
+     */
+    public function setMetadata($metadata)
+    {
+        $this->metadata = $metadata;
+    }
+
+    /**
+     * Get metadata
+     *
+     * @return array
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * Set owner
+     *
+     * @param int $owner
+     */
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return int
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param int $parent
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return int
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Set public
+     *
+     * @param boolean $public
+     */
+    public function setPublic($public)
+    {
+        $this->public = $public;
+    }
+
+    /**
+     * Get public
+     *
+     * @return boolean
+     */
+    public function getPublic()
+    {
+        return $this->public;
+    }
+
+    /**
+     * Set requiredKnowledges
+     *
+     * @param array $requiredKnowledges
+     */
+    public function setRequiredKnowledges($requiredKnowledges)
+    {
+        $this->requiredKnowledges = $requiredKnowledges;
+    }
+
+    /**
+     * Get requiredKnowledges
+     *
+     * @return array
+     */
+    public function getRequiredKnowledges()
+    {
+        return $this->requiredKnowledges;
     }
 
     /**

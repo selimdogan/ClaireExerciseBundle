@@ -47,7 +47,7 @@ class ExerciseModelResource
      * @var int $id Id of exercise model
      * @Serializer\Type("integer")
      * @Serializer\Groups({"details", "list", "exercise"})
-     * @Assert\Blank(groups={"create", "editType","edit","editContent", "editTitle", "appCreate","editDraft"})
+     * @Assert\Blank(groups={"create"})
      */
     private $id;
 
@@ -55,8 +55,7 @@ class ExerciseModelResource
      * @var string $type
      * @Serializer\Type("string")
      * @Serializer\Groups({"details", "list", "exercise"})
-     * @Assert\NotBlank(groups={"create", "editType", "appCreate"})
-     * @Assert\Blank(groups={"editContent", "editTitle", "editDraft"})
+     * @Assert\NotBlank(groups={"create"})
      */
     private $type;
 
@@ -64,8 +63,7 @@ class ExerciseModelResource
      * @var string $title
      * @Serializer\Type("string")
      * @Serializer\Groups({"details", "list", "exercise"})
-     * @Assert\NotBlank(groups={"create", "editTitle"})
-     * @Assert\Blank(groups={"editContent", "editType", "appCreate","editDraft"})
+     * @Assert\NotBlank(groups={"create"})
      */
     private $title;
 
@@ -73,8 +71,7 @@ class ExerciseModelResource
      * @var CommonModel $content
      * @Serializer\Groups({"details"})
      * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel")
-     * @Assert\NotBlank(groups={"create","editContent"})
-     * @Assert\Blank(groups={"editType", "editTitle", "appCreate","editDraft"})
+     * @Assert\NotBlank(groups={"create"})
      * @Assert\Valid
      */
     private $content;
@@ -83,8 +80,7 @@ class ExerciseModelResource
      * @var boolean $draft
      * @Serializer\Groups({"details", "list"})
      * @Serializer\Type("boolean")
-     * @Assert\NotNull(groups={"create","editDraft"})
-     * @Assert\Null(groups={"editType", "editTitle", "appCreate","editContent"})
+     * @Assert\NotNull(groups={"create"})
      */
     private $draft;
 
@@ -92,8 +88,7 @@ class ExerciseModelResource
      * @var boolean $complete
      * @Serializer\Groups({"details", "list"})
      * @Serializer\Type("boolean")
-     * @Assert\Null(groups={"editType", "editTitle", "appCreate","editContent", "create",
-     * "editDraft"})
+     * @Assert\Null(groups={"create"})
      */
     private $complete;
 
@@ -101,7 +96,7 @@ class ExerciseModelResource
      * @var int
      * @Serializer\Type("integer")
      * @Serializer\Groups({"details", "list", "resource_list"})
-     * @Assert\Blank(groups={"create", "edit", "editType","editContent", "editTitle", "appCreate","editDraft"})
+     * @Assert\Blank(groups={"create", "edit"})
      */
     private $author;
 
@@ -110,15 +105,22 @@ class ExerciseModelResource
      * @Serializer\Type("array")
      * @Serializer\Groups({"details"})
      * @Assert\NotNull(groups={"create"})
-     * @Assert\Blank(groups={"editType","editContent", "editTitle", "appCreate","editDraft"})
      */
     private $requiredExerciseResources;
+
+    /**
+     * @var array $requiredKnowledges
+     * @Serializer\Type("array")
+     * @Serializer\Groups({"details"})
+     * @Assert\NotNull(groups={"create"})
+     */
+    private $requiredKnowledges;
 
     /**
      * @var int $owner
      * @Serializer\Type("integer")
      * @Serializer\Groups({"details", "list"})
-     * @Assert\Blank(groups={"create", "edit", "editPublic"})
+     * @Assert\Blank(groups={"create", "edit"})
      */
     private $owner;
 
@@ -126,7 +128,7 @@ class ExerciseModelResource
      * @var bool $public
      * @Serializer\Type("boolean")
      * @Serializer\Groups({"details","list"})
-     * @Assert\NotNull(groups={"create", "editPublic"})
+     * @Assert\NotNull(groups={"create"})
      */
     private $public;
 
@@ -134,7 +136,7 @@ class ExerciseModelResource
      * @var bool $archived
      * @Serializer\Type("boolean")
      * @Serializer\Groups({"details","list"})
-     * @Assert\Null(groups={"create", "editPublic"})
+     * @Assert\Null(groups={"create"})
      */
     private $archived;
 
@@ -158,13 +160,6 @@ class ExerciseModelResource
      * @Serializer\Groups({"details"})
      */
     private $forkFrom;
-
-    /**
-     * @var array
-     * @Serializer\Type("array<ExerciseModelResource>")
-     * @Serializer\Groups({"details"})
-     */
-    private $children;
 
     /**
      * Set content
@@ -464,6 +459,26 @@ class ExerciseModelResource
     public function getArchived()
     {
         return $this->archived;
+    }
+
+    /**
+     * Set requiredKnowledges
+     *
+     * @param array $requiredKnowledges
+     */
+    public function setRequiredKnowledges($requiredKnowledges)
+    {
+        $this->requiredKnowledges = $requiredKnowledges;
+    }
+
+    /**
+     * Get requiredKnowledges
+     *
+     * @return array
+     */
+    public function getRequiredKnowledges()
+    {
+        return $this->requiredKnowledges;
     }
 
     /**

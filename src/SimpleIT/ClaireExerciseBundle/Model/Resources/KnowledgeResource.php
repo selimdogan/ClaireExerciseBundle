@@ -26,7 +26,7 @@ class KnowledgeResource
      * @var int $id Id of knowledge
      * @Serializer\Type("integer")
      * @Serializer\Groups({"details", "list", "knowledge_list"})
-     * @Assert\Blank(groups={"create","editContent","edit", "appCreate"})
+     * @Assert\Blank(groups={"create","edit"})
      */
     private $id;
 
@@ -34,8 +34,8 @@ class KnowledgeResource
      * @var string $type
      * @Serializer\Type("string")
      * @Serializer\Groups({"details", "list", "knowledge_list"})
-     * @Assert\NotBlank(groups={"create", "appCreate"})
-     * @Assert\Blank(groups={"editContent", "edit"})
+     * @Assert\NotBlank(groups={"create"})
+     * @Assert\Blank(groups={"edit"})
      */
     private $type;
 
@@ -43,7 +43,7 @@ class KnowledgeResource
      * @var CommonKnowledge $content
      * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge")
      * @Serializer\Groups({"details", "knowledge_list"})
-     * @Assert\NotBlank(groups={"create","editContent"})
+     * @Assert\NotBlank(groups={"create"})
      * @Assert\Blank(groups={"appCreate"})
      * @Assert\Valid
      */
@@ -54,7 +54,6 @@ class KnowledgeResource
      * @Serializer\Type("array")
      * @Serializer\Groups({"details"})
      * @Assert\NotNull(groups={"create"})
-     * @Assert\Blank(groups={"editContent", "appCreate"})
      */
     private $requiredKnowledges;
 
@@ -62,7 +61,7 @@ class KnowledgeResource
      * @var int
      * @Serializer\Type("integer")
      * @Serializer\Groups({"details", "list", "knowledge_list"})
-     * @Assert\Blank(groups={"create", "edit","editContent", "appCreate"})
+     * @Assert\Blank(groups={"create", "edit"})
      */
     private $author;
 

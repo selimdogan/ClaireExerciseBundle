@@ -4,6 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseModel;
 
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\QueryBuilder;
+use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\CoreBundle\Model\Paginator;
@@ -278,6 +279,58 @@ class ExerciseModelRepository extends BaseRepository
             array(
                 'exerciseModelId' => $exerciseModelId,
                 'requiredId'      => $requiredResource->getId(),
+            )
+        );
+
+        if ($stmt->rowCount() != 1) {
+            throw new EntityDeletionException();
+        }
+    }
+
+    /**
+     * Add a required knowledge to an exercise model
+     *
+     * @param int              $exerciseModelId
+     * @param Knowledge $requiredKnowledge
+     *
+     * @throws EntityAlreadyExistsException
+     */
+    public function addRequiredKnowledge($exerciseModelId, Knowledge $requiredKnowledge)
+    {
+        $sql = 'INSERT INTO claire_exercise_model_knowledge_requirement VALUES (:exerciseModelId,:requiredId)';
+
+        $connection = $this->_em->getConnection();
+        try {
+            $connection->executeQuery(
+                $sql,
+                array(
+                    'exerciseModelId' => $exerciseModelId,
+                    'requiredId'      => $requiredKnowledge->getId(),
+                )
+            );
+        } catch (DBALException $e) {
+            throw new EntityAlreadyExistsException("Required resource");
+        }
+    }
+
+    /**
+     * Delete a requires resource
+     *
+     * @param int              $exerciseModelId
+     * @param Knowledge $requiredKnowledge
+     *
+     * @throws EntityDeletionException
+     */
+    public function deleteRequiredKnowledge($exerciseModelId, Knowledge $requiredKnowledge)
+    {
+        $sql = 'DELETE FROM claire_exercise_model_knowledge_requirement AS emrq WHERE emrq.model_id = :exerciseModelId AND emrq.required_knowledge_id = :requiredId';
+
+        $connection = $this->_em->getConnection();
+        $stmt = $connection->executeQuery(
+            $sql,
+            array(
+                'exerciseModelId' => $exerciseModelId,
+                'requiredId'      => $requiredKnowledge->getId(),
             )
         );
 

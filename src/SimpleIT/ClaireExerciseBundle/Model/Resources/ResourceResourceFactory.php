@@ -3,6 +3,8 @@ namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
 use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\SerializerBuilder;
+use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata;
 use SimpleIT\ClaireExerciseBundle\Serializer\Handler\AbstractClassForExerciseHandler;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
@@ -45,7 +47,28 @@ abstract class ResourceResourceFactory
         $resourceResource = new ResourceResource();
         $resourceResource->setId($resource->getId());
         $resourceResource->setType($resource->getType());
+        $resourceResource->setAuthor($resource->getAuthor()->getId());
+        $resourceResource->setPublic($resource->getPublic());
+        $resourceResource->setArchived($resource->getArchived());
+        $resourceResource->setOwner($resource->getOwner()->getId());
 
+        // Parent and fork from
+        if (!is_null($resource->getParent())) {
+            $resourceResource->setParent($resource->getParent()->getId());
+        }
+        if (!is_null($resource->getForkFrom())) {
+            $resourceResource->setForkFrom($resource->getForkFrom()->getId());
+        }
+
+        // metadata
+        $metadataArray = array();
+        foreach ($resource->getMetadata() as $md) {
+            /** @var Metadata $md */
+            $metadataArray[$md->getKey()] = $md->getValue();
+        }
+        $resourceResource->setMetadata($metadataArray);
+
+        // content
         $serializer = SerializerBuilder::create()
             ->addDefaultHandlers()
             ->configureHandlers(
@@ -61,6 +84,7 @@ abstract class ResourceResourceFactory
         );
         $resourceResource->setContent($content);
 
+        // required resources
         $requirements = array();
         foreach ($resource->getRequiredExerciseResources() as $req) {
             /** @var ExerciseResource $req */
@@ -68,9 +92,13 @@ abstract class ResourceResourceFactory
         }
         $resourceResource->setRequiredExerciseResources($requirements);
 
-        if (!is_null($resource->getAuthor())) {
-            $resourceResource->setAuthor($resource->getAuthor()->getId());
+        // required resources
+        $requirements = array();
+        foreach ($resource->getRequiredKnowledges() as $req) {
+            /** @var Knowledge $req */
+            $requirements[] = $req->getId();
         }
+        $resourceResource->setRequiredKnowledges($requirements);
 
         return $resourceResource;
     }

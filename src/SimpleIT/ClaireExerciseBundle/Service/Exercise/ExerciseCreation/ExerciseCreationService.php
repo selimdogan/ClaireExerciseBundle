@@ -382,7 +382,7 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
      * Select random resources from a block
      *
      * @param ResourceBlock $resourceBlock
-     * @param               $numberOfOccurrences
+     * @param int              $numberOfOccurrences
      * @param array         $blockResources
      * @param User          $owner
      */

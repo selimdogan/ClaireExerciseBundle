@@ -27,6 +27,8 @@ abstract class ExerciseResourceFactory
     {
         $exerciseResource = new ExerciseResource();
         $exerciseResource->setContent($content);
+        $exerciseResource->setPublic(false);
+        $exerciseResource->setArchived(false);
 
         return $exerciseResource;
     }
@@ -45,7 +47,10 @@ abstract class ExerciseResourceFactory
         $exerciseResource = new ExerciseResource();
         $exerciseResource->setId($resourceResource->getId());
         $exerciseResource->setType($resourceResource->getType());
+        $exerciseResource->setPublic($resourceResource->getPublic());
+        $exerciseResource->setArchived($resourceResource->getArchived());
 
+        // content
         $serializer = SerializerBuilder::create()
             ->addDefaultHandlers()
             ->configureHandlers(

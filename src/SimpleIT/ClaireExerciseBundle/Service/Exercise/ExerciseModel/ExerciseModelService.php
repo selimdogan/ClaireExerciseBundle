@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModelMetadataFactory;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidModelException;
+use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\KnowledgeServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
@@ -77,6 +78,11 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
     private $exerciseResourceService;
 
     /**
+     * @var KnowledgeServiceInterface
+     */
+    private $knowledgeService;
+
+    /**
      * @var MetadataService
      */
     private $metadataService;
@@ -129,6 +135,16 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
     public function setMetadataService($metadataService)
     {
         $this->metadataService = $metadataService;
+    }
+
+    /**
+     * Set knowledgeService
+     *
+     * @param \SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\KnowledgeServiceInterface $knowledgeService
+     */
+    public function setKnowledgeService($knowledgeService)
+    {
+        $this->knowledgeService = $knowledgeService;
     }
 
     /**
@@ -316,6 +332,13 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
         }
         $model->setRequiredExerciseResources(new ArrayCollection($reqResources));
 
+        // required resources
+        $reqKnowledges = array();
+        foreach ($modelResource->getRequiredKnowledges() as $reqKnowledge) {
+            $reqKnowledges[] = $this->knowledgeService->get($reqKnowledge);
+        }
+        $model->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
+
         // metadata
         $metadata = array();
         $resMetadata = $modelResource->getMetadata();
@@ -383,8 +406,15 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
             foreach ($modelResource->getRequiredExerciseResources() as $reqRes) {
                 $reqResources[] = $this->exerciseResourceService->get($reqRes);
             }
-
             $model->setRequiredExerciseResources(new ArrayCollection($reqResources));
+        }
+
+        if (!is_null($modelResource->getRequiredKnowledges())) {
+            $reqKnowledges = array();
+            foreach ($modelResource->getRequiredKnowledges() as $reqKnowledge) {
+                $reqKnowledges[] = $this->knowledgeService->get($reqKnowledge);
+            }
+            $model->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
         }
 
         if (!is_null($modelResource->getTitle())) {
@@ -416,8 +446,7 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
                 $this->serializer->jmsSerialize($content, 'json', $context)
             );
 
-            if ($model->getParent() === null)
-            {
+            if ($model->getParent() === null) {
                 $parentId = null;
             } else {
                 $parentId = $model->getParent()->getId();
@@ -465,9 +494,7 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      * @return ExerciseModel
      * @Transactional
      */
-    public function save(
-        ExerciseModel $model
-    )
+    public function save(ExerciseModel $model)
     {
         return $this->exerciseModelRepository->update($model);
     }
@@ -479,9 +506,7 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      *
      * @Transactional
      */
-    public function remove(
-        $modelId
-    )
+    public function remove($modelId)
     {
         $resource = $this->exerciseModelRepository->find($modelId);
         $this->exerciseModelRepository->delete($resource);
@@ -571,6 +596,66 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
         $exerciseModel->setRequiredExerciseResources(new ArrayCollection($resourcesCollection));
 
         return $this->save($exerciseModel)->getRequiredExerciseResources();
+    }
+
+    /**
+     * Add a required knowledge to an exercise model
+     *
+     * @param $exerciseModelId
+     * @param $reqKnoId
+     *
+     * @return ExerciseModel
+     */
+    public function addRequiredKnowledge(
+        $exerciseModelId,
+        $reqKnoId
+    )
+    {
+        $reqKno = $this->knowledgeService->get($reqKnoId);
+        $this->exerciseModelRepository->addRequiredKnowledge($exerciseModelId, $reqKno);
+
+        return $this->get($exerciseModelId);
+    }
+
+    /**
+     * Delete a required knowledge
+     *
+     * @param $exerciseModelId
+     * @param $reqKnoId
+     *
+     * @return ExerciseModel
+     */
+    public function deleteRequiredKnowledge(
+        $exerciseModelId,
+        $reqKnoId
+    )
+    {
+        $reqKno = $this->knowledgeService->get($reqKnoId);
+        $this->exerciseModelRepository->deleteRequiredKnowledge($exerciseModelId, $reqKno);
+    }
+
+    /**
+     * Edit the required knowledges
+     *
+     * @param int             $exerciseModelId
+     * @param ArrayCollection $requiredKnowledges
+     *
+     * @return ExerciseModel
+     */
+    public function editRequiredKnowledges(
+        $exerciseModelId,
+        ArrayCollection $requiredKnowledges
+    )
+    {
+        $exerciseModel = $this->exerciseModelRepository->find($exerciseModelId);
+
+        $reqKnowledgeCollection = array();
+        foreach ($requiredKnowledges as $rk) {
+            $reqKnowledgeCollection[] = $this->knowledgeService->get($rk);
+        }
+        $exerciseModel->setRequiredKnowledges(new ArrayCollection($reqKnowledgeCollection));
+
+        return $this->save($exerciseModel)->getRequiredKnowledges();
     }
 
     /**

@@ -34,6 +34,46 @@ class ExerciseResource
     private $author;
 
     /**
+     * @var User
+     */
+    private $owner;
+
+    /**
+     * @var Collection
+     */
+    private $children;
+
+    /**
+     * @var ExerciseResource
+     */
+    private $parent;
+
+    /**
+     * @var Collection
+     */
+    private $forkedBy;
+
+    /**
+     * @var ExerciseResource
+     */
+    private $forkFrom;
+
+    /**
+     * @var bool
+     */
+    private $public;
+
+    /**
+     * @var boolean $archived
+     */
+    private $archived;
+
+    /**
+     * @var Collection
+     */
+    private $metadata;
+
+    /**
      * @var Collection
      */
     private $requiredExerciseResources;
@@ -43,10 +83,6 @@ class ExerciseResource
      */
     private $requiredKnowledges;
 
-    /**
-     * @var Collection
-     */
-    private $ownerResources;
 
     /**
      * Constructor
@@ -55,6 +91,9 @@ class ExerciseResource
     {
         $this->metadata = new ArrayCollection();
         $this->requiredExerciseResources = new ArrayCollection();
+        $this->requiredKnowledges= new ArrayCollection();
+        $this->forkedBy= new ArrayCollection();
+        $this->children= new ArrayCollection();
     }
 
     /**
@@ -178,26 +217,6 @@ class ExerciseResource
     }
 
     /**
-     * Set ownerResources
-     *
-     * @param Collection $ownerResources
-     */
-    public function setOwnerResources($ownerResources)
-    {
-        $this->ownerResources = $ownerResources;
-    }
-
-    /**
-     * Get ownerResources
-     *
-     * @return Collection
-     */
-    public function getOwnerResources()
-    {
-        return $this->ownerResources;
-    }
-
-    /**
      * Set requiredKnowledges
      *
      * @param \Doctrine\Common\Collections\Collection $requiredKnowledges
@@ -215,5 +234,165 @@ class ExerciseResource
     public function getRequiredKnowledges()
     {
         return $this->requiredKnowledges;
+    }
+
+    /**
+     * Set archived
+     *
+     * @param boolean $archived
+     */
+    public function setArchived($archived)
+    {
+        $this->archived = $archived;
+    }
+
+    /**
+     * Get archived
+     *
+     * @return boolean
+     */
+    public function getArchived()
+    {
+        return $this->archived;
+    }
+
+    /**
+     * Set children
+     *
+     * @param \Doctrine\Common\Collections\Collection $children
+     */
+    public function setChildren($children)
+    {
+        $this->children = $children;
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * Set forkFrom
+     *
+     * @param \SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource $forkFrom
+     */
+    public function setForkFrom($forkFrom)
+    {
+        $this->forkFrom = $forkFrom;
+    }
+
+    /**
+     * Get forkFrom
+     *
+     * @return \SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource
+     */
+    public function getForkFrom()
+    {
+        return $this->forkFrom;
+    }
+
+    /**
+     * Set forkedBy
+     *
+     * @param \Doctrine\Common\Collections\Collection $forkedBy
+     */
+    public function setForkedBy($forkedBy)
+    {
+        $this->forkedBy = $forkedBy;
+    }
+
+    /**
+     * Get forkedBy
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getForkedBy()
+    {
+        return $this->forkedBy;
+    }
+
+    /**
+     * Set metadata
+     *
+     * @param \Doctrine\Common\Collections\Collection $metadata
+     */
+    public function setMetadata($metadata)
+    {
+        $this->metadata = $metadata;
+    }
+
+    /**
+     * Get metadata
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * Set owner
+     *
+     * @param \SimpleIT\ClaireExerciseBundle\Entity\User\User $owner
+     */
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return \SimpleIT\ClaireExerciseBundle\Entity\User\User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource $parent
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Set public
+     *
+     * @param boolean $public
+     */
+    public function setPublic($public)
+    {
+        $this->public = $public;
+    }
+
+    /**
+     * Get public
+     *
+     * @return boolean
+     */
+    public function getPublic()
+    {
+        return $this->public;
     }
 }

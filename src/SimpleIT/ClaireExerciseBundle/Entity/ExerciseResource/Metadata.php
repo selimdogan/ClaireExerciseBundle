@@ -10,9 +10,9 @@ namespace SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource;
 class Metadata
 {
     /**
-     * @var OwnerResource
+     * @var ExerciseResource
      */
-    private $ownerResource;
+    private $resource;
 
     /**
      * @var string
@@ -45,23 +45,23 @@ class Metadata
     }
 
     /**
-     * Set ownerResource
+     * Set resource
      *
-     * @param OwnerResource $ownerResource
+     * @param ExerciseResource $resource
      */
-    public function setOwnerResource($ownerResource)
+    public function setResource($resource)
     {
-        $this->ownerResource = $ownerResource;
+        $this->resource = $resource;
     }
 
     /**
-     * Get ownerResource
+     * Get resource
      *
-     * @return OwnerResource
+     * @return ExerciseResource
      */
-    public function getOwnerResource()
+    public function getResource()
     {
-        return $this->ownerResource;
+        return $this->resource;
     }
 
     /**

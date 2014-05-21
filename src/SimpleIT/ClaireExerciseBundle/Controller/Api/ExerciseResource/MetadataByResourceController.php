@@ -20,30 +20,30 @@ use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * API MetadataByOwnerResource Controller
+ * API MetadataByResource Controller
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class MetadataByOwnerResourceController extends ApiController
+class MetadataByResourceController extends ApiController
 {
     /**
      * Get all metadata
      *
-     * @param mixed                 $ownerResourceId
+     * @param mixed                 $resourceId
      * @param CollectionInformation $collectionInformation
      *
      * @throws ApiNotFoundException
      * @return ApiGotResponse
      */
     public function listAction(
-        $ownerResourceId,
+        $resourceId,
         CollectionInformation $collectionInformation
     )
     {
         try {
             $metadatas = $this->get('simple_it.exercise.resource_metadata')->getAll(
                 $collectionInformation,
-                $ownerResourceId
+                $resourceId
             );
 
             $metadataResources = MetadataResourceFactory::createCollection($metadatas);
@@ -57,17 +57,17 @@ class MetadataByOwnerResourceController extends ApiController
     /**
      * Get a metadata
      *
-     * @param mixed $ownerResourceId
+     * @param mixed $resourceId
      * @param mixed $metadataKey
      *
      * @throws ApiNotFoundException
      * @return ApiGotResponse
      */
-    public function viewAction($ownerResourceId, $metadataKey)
+    public function viewAction($resourceId, $metadataKey)
     {
         try {
-            $metadata = $this->get('simple_it.exercise.resource_metadata')->getByOwnerResource(
-                $ownerResourceId,
+            $metadata = $this->get('simple_it.exercise.resource_metadata')->getByExerciseResource(
+                $resourceId,
                 $metadataKey
             );
 
@@ -84,7 +84,7 @@ class MetadataByOwnerResourceController extends ApiController
      * Create a metadata
      *
      * @param Request $request
-     * @param mixed   $ownerResourceId
+     * @param mixed   $resourceId
      *
      * @throws ApiNotFoundException
      * @throws ApiConflictException;
@@ -92,14 +92,14 @@ class MetadataByOwnerResourceController extends ApiController
      */
     public function createAction(
         Request $request,
-        $ownerResourceId
+        $resourceId
     )
     {
         try {
             $metadata = $this->createMetadata($request);
 
-            $metadata = $this->get('simple_it.exercise.resource_metadata')->addToOwnerResource(
-                $ownerResourceId,
+            $metadata = $this->get('simple_it.exercise.resource_metadata')->addToExerciseResource(
+                $resourceId,
                 $metadata
             );
 
@@ -118,7 +118,7 @@ class MetadataByOwnerResourceController extends ApiController
      * Edit a metadata
      *
      * @param MetadataResource $metadata
-     * @param mixed            $ownerResourceId
+     * @param mixed            $resourceId
      * @param string           $metadataKey
      *
      * @throws ApiNotFoundException
@@ -126,15 +126,16 @@ class MetadataByOwnerResourceController extends ApiController
      */
     public function editAction(
         MetadataResource $metadata,
-        $ownerResourceId,
+        $resourceId,
         $metadataKey
     )
     {
         try {
             $this->validateResource($metadata, array('edit'));
 
-            $metadata = $this->get('simple_it.exercise.resource_metadata')->saveFromOwnerResource(
-                $ownerResourceId,
+            $metadata = $this->get('simple_it.exercise.resource_metadata')
+                ->saveFromExerciseResource(
+                $resourceId,
                 $metadata,
                 $metadataKey
             );
@@ -151,17 +152,17 @@ class MetadataByOwnerResourceController extends ApiController
     /**
      * Delete a metadata
      *
-     * @param mixed $ownerResourceId
+     * @param mixed $resourceId
      * @param mixed $metadataKey
      *
      * @throws ApiNotFoundException
      * @return ApiDeletedResponse
      */
-    public function deleteAction($ownerResourceId, $metadataKey)
+    public function deleteAction($resourceId, $metadataKey)
     {
         try {
-            $this->get('simple_it.exercise.resource_metadata')->removeFromOwnerResource(
-                $ownerResourceId,
+            $this->get('simple_it.exercise.resource_metadata')->removeFromExerciseResource(
+                $resourceId,
                 $metadataKey
             );
 
@@ -173,22 +174,22 @@ class MetadataByOwnerResourceController extends ApiController
     }
 
     /**
-     * Edit the list of metadata for this owner resource
+     * Edit the list of metadata for this resource
      *
      * @param ArrayCollection $metadatas
-     * @param int             $ownerResourceId
+     * @param int             $resourceId
      *
      * @return ApiEditedResponse
      * @throws ApiNotFoundException
      * @throws ApiConflictException
      */
-    public function editAllAction(ArrayCollection $metadatas, $ownerResourceId)
+    public function editAllAction(ArrayCollection $metadatas, $resourceId)
     {
         try {
-            $resources = $this->get('simple_it.exercise.owner_resource')
+            $resources = $this->get('simple_it.exercise.exercise_resource')
                 ->editMetadata
                 (
-                    $ownerResourceId,
+                    $resourceId,
                     $metadatas
                 );
 

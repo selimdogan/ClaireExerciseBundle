@@ -4,10 +4,10 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource;
 
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResourceFactory;
 use SimpleIT\Utils\Collection\CollectionInformation;
 
@@ -21,63 +21,67 @@ interface MetadataServiceInterface
     /**
      * Find a metadata by resourceId and metakey
      *
-     * @param int $ownerResourceId
+     * @param int $resourceId
      * @param int $metakey
      *
      * @return Metadata
      */
-    public function getByOwnerResource($ownerResourceId, $metakey);
+    public function getByExerciseResource($resourceId, $metakey);
 
     /**
-     * Get all the attempts
+     * Get all the metadata
      *
      * @param CollectionInformation $collectionInformation
-     * @param int                   $ownerResourceId
+     * @param int                   $resourceId
      *
      * @return array
      */
     public function getAll(
         $collectionInformation = null,
-        $ownerResourceId = null
+        $resourceId = null
     );
 
     /**
      * Add a metadata to an owner Resource
      *
-     * @param mixed    $ownerResourceId
+     * @param mixed    $resourceId
      * @param Metadata $metadata
      *
      * @return Metadata
+     * @Transactional
      */
-    public function addToOwnerResource($ownerResourceId, Metadata $metadata);
+    public function addToExerciseResource($resourceId, Metadata $metadata);
 
     /**
-     * Save a metadata from an ownerResource
+     * Save a metadata from an resource
      *
-     * @param mixed            $ownerResourceId
+     * @param mixed            $resourceId
      * @param MetadataResource $metadata
      * @param string           $metadataKey
      *
      * @return Metadata
+     * @Transactional
      */
-    public function saveFromOwnerResource(
-        $ownerResourceId,
+    public function saveFromExerciseResource(
+        $resourceId,
         MetadataResource $metadata,
         $metadataKey
     );
 
     /**
-     * Remove a metadata from a course
+     * Remove a metadata from an owner resource
      *
-     * @param mixed $ownerResourceId
+     * @param mixed $resourceId
      * @param mixed $metadataKey
+     *
+     * @Transactional
      */
-    public function removeFromOwnerResource($ownerResourceId, $metadataKey);
+    public function removeFromExerciseResource($resourceId, $metadataKey);
 
     /**
      * Delete all the metadata for an owner resource
      *
-     * @param int $ownerResourceId
+     * @param int $resourceId
      */
-    public function deleteAllByOwnerResource($ownerResourceId);
+    public function deleteAllByExerciseResource($resourceId);
 }

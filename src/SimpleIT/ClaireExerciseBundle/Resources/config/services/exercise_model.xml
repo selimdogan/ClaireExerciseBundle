@@ -42,6 +42,9 @@
             <call method="setMetadataService">
                 <argument type="service" id="simple_it.exercise.exercise_model_metadata"/>
             </call>
+            <call method="setKnowledgeService">
+                <argument type="service" id="simple_it.exercise.knowledge"/>
+            </call>
         </service>
 
         <service id="simple_it.exercise.exercise_model_metadata" class="%simple_it.exercise.exercise_model_metadata.class%">

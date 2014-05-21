@@ -3,6 +3,7 @@ namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
 use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\SerializerBuilder;
+use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata;
 use SimpleIT\ClaireExerciseBundle\Serializer\Handler\AbstractClassForExerciseHandler;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
@@ -93,6 +94,14 @@ abstract class ExerciseModelResourceFactory
             $rr[] = $req->getId();
         }
         $exerciseModelResource->setRequiredExerciseResources($rr);
+
+        // required knowledges
+        $rn = array();
+        foreach ($exerciseModel->getRequiredKnowledges() as $req) {
+            /** @var Knowledge $req */
+            $rn[] = $req->getId();
+        }
+        $exerciseModelResource->setRequiredKnowledges($rn);
 
         return $exerciseModelResource;
     }

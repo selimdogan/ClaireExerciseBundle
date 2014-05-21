@@ -91,6 +91,9 @@ class ResourceController extends ApiController
 
             $this->validateResource($resourceResource, array('create', 'Default'));
 
+            $resourceResource->setAuthor($userId);
+            $resourceResource->setOwner($userId);
+
             $exerciseResource = $this->get('simple_it.exercise.exercise_resource')->createAndAdd
                 (
                     $resourceResource,

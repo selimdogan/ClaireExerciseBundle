@@ -4,7 +4,6 @@
 namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Validable;
 
 /**
@@ -47,30 +46,30 @@ abstract class CommonResource implements Validable
     const SEQUENCE = "sequence";
 
     /**
-     * @var LocalFormula A LocalFormula
-     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula")
-     * @Serializer\Groups({"details", "exercise_model_storage"})
+     * @var array An array of LocalFormula
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula>")
+     * @Serializer\Groups({"details", "resource_storage"})
      */
-    protected $formula;
+    protected $formulas;
 
     /**
-     * Set formula
+     * Set formulas
      *
-     * @param LocalFormula $formula
+     * @param array $formulas
      */
-    public function setFormula($formula)
+    public function setFormulas($formulas)
     {
-        $this->formula = $formula;
+        $this->formulas = $formulas;
     }
 
     /**
-     * Get formula
+     * Get formulas
      *
-     * @return LocalFormula
+     * @return array
      */
-    public function getFormula()
+    public function getFormulas()
     {
-        return $this->formula;
+        return $this->formulas;
     }
 
     /**

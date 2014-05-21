@@ -4,12 +4,12 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource;
 
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
-use SimpleIT\CoreBundle\Services\TransactionalService;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata;
-use SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource\MetadataRepository;
-use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\CoreBundle\Annotation\Transactional;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
+use SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource\MetadataRepository;
+use SimpleIT\CoreBundle\Services\TransactionalService;
+use SimpleIT\Utils\Collection\CollectionInformation;
 
 /**
  * Service which manages the exercise resources
@@ -24,9 +24,9 @@ class MetadataService extends TransactionalService implements MetadataServiceInt
     private $metadataRepository;
 
     /**
-     * @var OwnerResourceServiceInterface
+     * @var ExerciseResourceServiceInterface
      */
-    private $ownerResourceService;
+    private $resourceService;
 
     /**
      * Set metadataRepository
@@ -39,29 +39,29 @@ class MetadataService extends TransactionalService implements MetadataServiceInt
     }
 
     /**
-     * Set ownerResourceService
+     * Set resourceService
      *
-     * @param OwnerResourceServiceInterface $ownerResourceService
+     * @param ExerciseResourceServiceInterface $resourceService
      */
-    public function setOwnerResourceService($ownerResourceService)
+    public function setResourceService($resourceService)
     {
-        $this->ownerResourceService = $ownerResourceService;
+        $this->resourceService = $resourceService;
     }
 
     /**
      * Find a metadata by resourceId and metakey
      *
-     * @param int $ownerResourceId
+     * @param int $resourceId
      * @param int $metakey
      *
      * @return Metadata
      */
-    public function getByOwnerResource($ownerResourceId, $metakey)
+    public function getByExerciseResource($resourceId, $metakey)
     {
         return $this->metadataRepository->find(
             array(
-                'ownerResource' => $ownerResourceId,
-                'key'           => $metakey
+                'resource' => $resourceId,
+                'key'      => $metakey
             )
         );
     }
@@ -70,60 +70,60 @@ class MetadataService extends TransactionalService implements MetadataServiceInt
      * Get all the metadata
      *
      * @param CollectionInformation $collectionInformation
-     * @param int                   $ownerResourceId
+     * @param int                   $resourceId
      *
      * @return array
      */
     public function getAll(
         $collectionInformation = null,
-        $ownerResourceId = null
+        $resourceId = null
     )
     {
-        $ownerResource = null;
-        if (!is_null($ownerResourceId)) {
-            $ownerResource = $this->ownerResourceService->get($ownerResourceId);
+        $resource = null;
+        if (!is_null($resourceId)) {
+            $resource = $this->resourceService->get($resourceId);
         }
 
         return $this->metadataRepository->findAllBy(
             $collectionInformation,
-            $ownerResource
+            $resource
         );
     }
 
     /**
      * Add a metadata to an owner Resource
      *
-     * @param mixed    $ownerResourceId
+     * @param mixed    $resourceId
      * @param Metadata $metadata
      *
      * @return Metadata
      * @Transactional
      */
-    public function addToOwnerResource($ownerResourceId, Metadata $metadata)
+    public function addToExerciseResource($resourceId, Metadata $metadata)
     {
-        $ownerResource = $this->ownerResourceService->get($ownerResourceId);
-        $metadata->setOwnerResource($ownerResource);
+        $resource = $this->resourceService->get($resourceId);
+        $metadata->setResource($resource);
 
         return $this->metadataRepository->insert($metadata);
     }
 
     /**
-     * Save a metadata from an ownerResource
+     * Save a metadata from an resource
      *
-     * @param mixed            $ownerResourceId
+     * @param mixed            $resourceId
      * @param MetadataResource $metadata
      * @param string           $metadataKey
      *
      * @return Metadata
      * @Transactional
      */
-    public function saveFromOwnerResource(
-        $ownerResourceId,
+    public function saveFromExerciseResource(
+        $resourceId,
         MetadataResource $metadata,
         $metadataKey
     )
     {
-        $mdToUpdate = $this->getByOwnerResource($ownerResourceId, $metadataKey);
+        $mdToUpdate = $this->getByExerciseResource($resourceId, $metadataKey);
         $mdToUpdate->setValue($metadata->getValue());
 
         return $this->metadataRepository->update($mdToUpdate);
@@ -132,14 +132,14 @@ class MetadataService extends TransactionalService implements MetadataServiceInt
     /**
      * Remove a metadata from an owner resource
      *
-     * @param mixed $ownerResourceId
+     * @param mixed $resourceId
      * @param mixed $metadataKey
      *
      * @Transactional
      */
-    public function removeFromOwnerResource($ownerResourceId, $metadataKey)
+    public function removeFromExerciseResource($resourceId, $metadataKey)
     {
-        $metadata = $this->getByOwnerResource($ownerResourceId, $metadataKey);
+        $metadata = $this->getByExerciseResource($resourceId, $metadataKey);
 
         $this->metadataRepository->delete($metadata);
     }
@@ -147,10 +147,10 @@ class MetadataService extends TransactionalService implements MetadataServiceInt
     /**
      * Delete all the metadata for an owner resource
      *
-     * @param int $ownerResourceId
+     * @param int $resourceId
      */
-    public function deleteAllByOwnerResource($ownerResourceId)
+    public function deleteAllByExerciseResource($resourceId)
     {
-        $this->metadataRepository->deleteAllByOwnerResource($ownerResourceId);
+        $this->metadataRepository->deleteAllByResource($resourceId);
     }
 }
