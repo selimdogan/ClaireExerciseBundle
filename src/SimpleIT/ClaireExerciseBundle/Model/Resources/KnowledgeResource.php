@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class KnowledgeResource
+class KnowledgeResource extends SharedResource
 {
     /**
      * @const RESOURCE_NAME = 'Knowledge'
@@ -28,7 +28,7 @@ class KnowledgeResource
      * @Serializer\Groups({"details", "list", "knowledge_list"})
      * @Assert\Blank(groups={"create","edit"})
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string $type
@@ -37,7 +37,7 @@ class KnowledgeResource
      * @Assert\NotBlank(groups={"create"})
      * @Assert\Blank(groups={"edit"})
      */
-    private $type;
+    protected $type;
 
     /**
      * @var CommonKnowledge $content
@@ -47,7 +47,7 @@ class KnowledgeResource
      * @Assert\Blank(groups={"appCreate"})
      * @Assert\Valid
      */
-    private $content;
+    protected $content;
 
     /**
      * @var array $requiredKnowledges
@@ -63,7 +63,52 @@ class KnowledgeResource
      * @Serializer\Groups({"details", "list", "knowledge_list"})
      * @Assert\Blank(groups={"create", "edit"})
      */
-    private $author;
+    protected $author;
+
+    /**
+     * @var int $owner
+     * @Serializer\Type("integer")
+     * @Serializer\Groups({"details", "list", "knowledge_list"})
+     * @Assert\Blank(groups={"create", "edit"})
+     */
+    protected $owner;
+
+    /**
+     * @var bool $public
+     * @Serializer\Type("boolean")
+     * @Serializer\Groups({"details","list", "knowledge_list"})
+     * @Assert\NotNull(groups={"create"})
+     */
+    protected $public;
+
+    /**
+     * @var bool $archived
+     * @Serializer\Type("boolean")
+     * @Serializer\Groups({"details","list", "knowledge_list"})
+     * @Assert\Null(groups={"create"})
+     */
+    protected $archived;
+
+    /**
+     * @var array
+     * @Serializer\Type("array")
+     * @Serializer\Groups({"details"})
+     */
+    protected $metadata;
+
+    /**
+     * @var int
+     * @Serializer\Type("integer")
+     * @Serializer\Groups({"details"})
+     */
+    protected $parent;
+
+    /**
+     * @var int
+     * @Serializer\Type("integer")
+     * @Serializer\Groups({"details", "resource_list"})
+     */
+    protected $forkFrom;
 
     /**
      * Set content
@@ -83,46 +128,6 @@ class KnowledgeResource
     public function getContent()
     {
         return $this->content;
-    }
-
-    /**
-     * Set id
-     *
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set type
-     *
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
     }
 
     /**
@@ -146,26 +151,6 @@ class KnowledgeResource
     }
 
     /**
-     * Set author
-     *
-     * @param int $author
-     */
-    public function setAuthor($author)
-    {
-        $this->author = $author;
-    }
-
-    /**
-     * Get author
-     *
-     * @return int
-     */
-    public function getAuthor()
-    {
-        return $this->author;
-    }
-
-    /**
      * Return the item serialization class corresponding to the type
      *
      * @param string $type
@@ -173,8 +158,13 @@ class KnowledgeResource
      * @return string
      * @throws \LogicException
      */
-    static public function getClass($type)
+    public function getClass($type = null)
     {
+        if ($type === null)
+        {
+            $type = $this->type;
+        }
+
         switch ($type) {
             case CommonKnowledge::FORMULA:
                 $class = self::FORMULA_CLASS;

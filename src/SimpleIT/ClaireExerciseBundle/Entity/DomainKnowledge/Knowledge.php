@@ -4,34 +4,24 @@ namespace SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use SimpleIT\ClaireExerciseBundle\Entity\Common\SharedEntity;
 
 /**
  * Claire exercise knowledge entity
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class Knowledge
+class Knowledge extends SharedEntity
 {
     /**
-     * @var int
+     * @var Knowledge
      */
-    private $id;
+    private $parent;
 
     /**
-     * @var string
+     * @var Knowledge
      */
-    private $content;
-
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var  User
-     */
-    private $author;
+    private $forkFrom;
 
     /**
      * @var Collection
@@ -39,57 +29,12 @@ class Knowledge
     private $requiredKnowledges;
 
     /**
-     * @var Collection
-     */
-    private $ownerKnowledges;
-
-    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->metadata = new ArrayCollection();
+        parent::__construct();
         $this->requiredKnowledges = new ArrayCollection();
-    }
-
-    /**
-     * Get content
-     *
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
-     * Set content
-     *
-     * @param string $content
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-    }
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set id
-     *
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
     }
 
     /**
@@ -133,62 +78,42 @@ class Knowledge
     }
 
     /**
-     * Get type
+     * Set forkFrom
      *
-     * @return string
+     * @param \SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge $forkFrom
      */
-    public function getType()
+    public function setForkFrom($forkFrom)
     {
-        return $this->type;
+        $this->forkFrom = $forkFrom;
     }
 
     /**
-     * Set type
+     * Get forkFrom
      *
-     * @param string $type
+     * @return \SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge
      */
-    public function setType($type)
+    public function getForkFrom()
     {
-        $this->type = $type;
+        return $this->forkFrom;
     }
 
     /**
-     * Set author
+     * Set parent
      *
-     * @param User $author
+     * @param \SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge $parent
      */
-    public function setAuthor($author)
+    public function setParent($parent)
     {
-        $this->author = $author;
+        $this->parent = $parent;
     }
 
     /**
-     * Get author
+     * Get parent
      *
-     * @return User
+     * @return \SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge
      */
-    public function getAuthor()
+    public function getParent()
     {
-        return $this->author;
-    }
-
-    /**
-     * Set ownerKnowledges
-     *
-     * @param Collection $ownerKnowledges
-     */
-    public function setOwnerKnowledges($ownerKnowledges)
-    {
-        $this->ownerKnowledges = $ownerKnowledges;
-    }
-
-    /**
-     * Get ownerKnowledges
-     *
-     * @return Collection
-     */
-    public function getOwnerKnowledges()
-    {
-        return $this->ownerKnowledges;
+        return $this->parent;
     }
 }

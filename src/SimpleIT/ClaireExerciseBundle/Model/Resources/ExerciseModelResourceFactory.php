@@ -15,7 +15,7 @@ use SimpleIT\Utils\Collection\PaginatorInterface;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-abstract class ExerciseModelResourceFactory
+abstract class ExerciseModelResourceFactory extends SharedResourceFactory
 {
 
     /**
@@ -45,47 +45,9 @@ abstract class ExerciseModelResourceFactory
     public static function create(ExerciseModel $exerciseModel)
     {
         $exerciseModelResource = new ExerciseModelResource();
-        $exerciseModelResource->setId($exerciseModel->getId());
-        $exerciseModelResource->setTitle($exerciseModel->getTitle());
-        $exerciseModelResource->setType($exerciseModel->getType());
-        $exerciseModelResource->setAuthor($exerciseModel->getAuthor()->getId());
+        parent::fill($exerciseModelResource, $exerciseModel);
         $exerciseModelResource->setDraft($exerciseModel->getDraft());
         $exerciseModelResource->setComplete($exerciseModel->getComplete());
-        $exerciseModelResource->setPublic($exerciseModel->getPublic());
-        $exerciseModelResource->setArchived($exerciseModel->getArchived());
-        $exerciseModelResource->setOwner($exerciseModel->getOwner()->getId());
-
-        // Parent and fork from
-        if (!is_null($exerciseModel->getParent())) {
-            $exerciseModelResource->setParent($exerciseModel->getParent()->getId());
-        }
-        if (!is_null($exerciseModel->getForkFrom())) {
-            $exerciseModelResource->setForkFrom($exerciseModel->getForkFrom()->getId());
-        }
-
-        // metadata
-        $metadataArray = array();
-        foreach ($exerciseModel->getMetadata() as $md) {
-            /** @var Metadata $md */
-            $metadataArray[$md->getKey()] = $md->getValue();
-        }
-        $exerciseModelResource->setMetadata($metadataArray);
-
-        // content
-        $serializer = SerializerBuilder::create()
-            ->addDefaultHandlers()
-            ->configureHandlers(
-                function (HandlerRegistry $registry) {
-                    $registry->registerSubscribingHandler(new AbstractClassForExerciseHandler());
-                }
-            )
-            ->build();
-        $content = $serializer->deserialize(
-            $exerciseModel->getContent(),
-            $exerciseModelResource::getClass($exerciseModel->getType()),
-            'json'
-        );
-        $exerciseModelResource->setContent($content);
 
         // required resources
         $rr = array();

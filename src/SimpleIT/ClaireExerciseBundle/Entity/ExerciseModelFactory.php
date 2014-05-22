@@ -14,7 +14,7 @@ use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-abstract class ExerciseModelFactory
+abstract class ExerciseModelFactory extends SharedEntityFactory
 {
     /**
      * Create a new ExerciseModel object
@@ -26,10 +26,7 @@ abstract class ExerciseModelFactory
     public static function createExerciseModel($content = '')
     {
         $exerciseModel = new ExerciseModel();
-        $exerciseModel->setContent($content);
-        $exerciseModel->setComplete(false);
-        $exerciseModel->setPublic(false);
-        $exerciseModel->setArchived(false);
+        parent::initialize($exerciseModel, $content);
 
         return $exerciseModel;
     }
@@ -46,27 +43,10 @@ abstract class ExerciseModelFactory
     )
     {
         $model = new ExerciseModel();
-        $model->setId($modelResource->getId());
-        $model->setType($modelResource->getType());
-        $model->setTitle($modelResource->getTitle());
+        parent::fillFromResource($model, $modelResource, 'exercise_model_storage');
+
         $model->setDraft($modelResource->getDraft());
         $model->setComplete($modelResource->getComplete());
-        $model->setPublic($modelResource->getPublic());
-        $model->setArchived($modelResource->getArchived());
-
-        // content
-        $serializer = SerializerBuilder::create()
-            ->addDefaultHandlers()
-            ->configureHandlers(
-                function (HandlerRegistry $registry) {
-                    $registry->registerSubscribingHandler(new AbstractClassForExerciseHandler());
-                }
-            )
-            ->build();
-        $context = SerializationContext::create();
-        $context->setGroups(array('exercise_model_storage', 'Default'));
-        $content = $serializer->serialize($modelResource->getContent(), 'json', $context);
-        $model->setContent($content);
 
         return $model;
     }

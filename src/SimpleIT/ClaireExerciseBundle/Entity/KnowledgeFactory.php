@@ -14,7 +14,7 @@ use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-abstract class KnowledgeFactory
+abstract class KnowledgeFactory extends SharedEntityFactory
 {
     /**
      * Create a new Knowledge object
@@ -26,7 +26,7 @@ abstract class KnowledgeFactory
     public static function create($content = '')
     {
         $knowledge = new Knowledge();
-        $knowledge->setContent($content);
+        parent::initialize($knowledge, $content);
 
         return $knowledge;
     }
@@ -43,22 +43,7 @@ abstract class KnowledgeFactory
     )
     {
         $knowledge = new Knowledge();
-        $knowledge->setId($knowledgeResource->getId());
-        $knowledge->setType($knowledgeResource->getType());
-
-        $serializer = SerializerBuilder::create()
-            ->addDefaultHandlers()
-            ->configureHandlers(
-                function (HandlerRegistry $registry) {
-                    $registry->registerSubscribingHandler(new AbstractClassForExerciseHandler());
-                }
-            )
-            ->build();
-        $context = SerializationContext::create();
-
-        $context->setGroups(array('knowledge_storage', 'Default'));
-        $content = $serializer->serialize($knowledgeResource->getContent(), 'json', $context);
-        $knowledge->setContent($content);
+        parent::fillFromResource($knowledge, $knowledgeResource, 'knowledge_storage');
 
         return $knowledge;
     }

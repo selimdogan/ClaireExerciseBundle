@@ -2,86 +2,37 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge;
 
+use SimpleIT\ClaireExerciseBundle\Entity\Common\Metadata as BaseMetadata;
+
 /**
  * Knowledge Metadata entity
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class Metadata
+class Metadata extends BaseMetadata
 {
     /**
-     * @var OwnerKnowledge
+     * @var Knowledge
      */
-    private $ownerKnowledge;
+    private $knowledge;
 
     /**
-     * @var string
-     */
-    private $key;
-
-    /**
-     * @var string
-     */
-    private $value;
-
-    /**
-     * Get key
+     * Set knowledge
      *
-     * @return string
+     * @param Knowledge $knowledge
      */
-    public function getKey()
+    public function setKnowledge($knowledge)
     {
-        return $this->key;
+        $this->knowledge = $knowledge;
     }
 
     /**
-     * Set key
+     * Get knowledge
      *
-     * @param string $key
+     * @return Knowledge
      */
-    public function setKey($key)
+    public function getKnowledge()
     {
-        $this->key = $key;
+        return $this->knowledge;
     }
-
-    /**
-     * Set ownerKnowledge
-     *
-     * @param OwnerKnowledge $ownerKnowledge
-     */
-    public function setOwnerKnowledge($ownerKnowledge)
-    {
-        $this->ownerKnowledge = $ownerKnowledge;
-    }
-
-    /**
-     * Get ownerKnowledge
-     *
-     * @return OwnerKnowledge
-     */
-    public function getOwnerKnowledge()
-    {
-        return $this->ownerKnowledge;
-    }
-
-    /**
-     * Get value
-     *
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * Set value
-     *
-     * @param string $value
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-    }
-
 }

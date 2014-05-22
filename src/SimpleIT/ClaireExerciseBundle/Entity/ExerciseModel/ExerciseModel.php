@@ -4,44 +4,19 @@ namespace SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use SimpleIT\ClaireExerciseBundle\Entity\Common\SharedEntity;
 
 /**
  * Claire exercise model entity
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseModel
+class ExerciseModel extends SharedEntity
 {
-    /**
-     * @var int
-     */
-    private $id;
-
-    /**
-     * @var string $type
-     */
-    private $type;
-
-    /**
-     * @var string $title
-     */
-    private $title;
-
-    /**
-     * @var string $content
-     */
-    private $content;
-
     /**
      * @var boolean $draft
      */
     private $draft;
-
-    /**
-     * @var boolean $archived
-     */
-    private $archived;
 
     /**
      * @var boolean $complete
@@ -49,44 +24,14 @@ class ExerciseModel
     private $complete;
 
     /**
-     * @var User
-     */
-    private $author;
-
-    /**
-     * @var User
-     */
-    private $owner;
-
-    /**
-     * @var Collection
-     */
-    private $children;
-
-    /**
      * @var ExerciseModel
      */
     private $parent;
 
     /**
-     * @var Collection
-     */
-    private $forkedBy;
-
-    /**
      * @var ExerciseModel
      */
     private $forkFrom;
-
-    /**
-     * @var bool
-     */
-    private $public;
-
-    /**
-     * @var Collection
-     */
-    private $metadata;
 
     /**
      * @var Collection
@@ -103,30 +48,9 @@ class ExerciseModel
      */
     public function __construct()
     {
-        $this->metadata = new ArrayCollection();
+        parent::__construct();
         $this->requiredExerciseResources = new ArrayCollection();
         $this->requiredKnowledges = new ArrayCollection();
-        $this->children = new ArrayCollection();
-    }
-
-    /**
-     * Set author
-     *
-     * @param \SimpleIT\ClaireExerciseBundle\Entity\User\User $author
-     */
-    public function setAuthor($author)
-    {
-        $this->author = $author;
-    }
-
-    /**
-     * Get author
-     *
-     * @return \SimpleIT\ClaireExerciseBundle\Entity\User\User
-     */
-    public function getAuthor()
-    {
-        return $this->author;
     }
 
     /**
@@ -150,26 +74,6 @@ class ExerciseModel
     }
 
     /**
-     * Set content
-     *
-     * @param string $content
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-    }
-
-    /**
-     * Get content
-     *
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
      * Set draft
      *
      * @param boolean $draft
@@ -187,86 +91,6 @@ class ExerciseModel
     public function getDraft()
     {
         return $this->draft;
-    }
-
-    /**
-     * Set id
-     *
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set metadata
-     *
-     * @param \Doctrine\Common\Collections\Collection $metadata
-     */
-    public function setMetadata($metadata)
-    {
-        $this->metadata = $metadata;
-    }
-
-    /**
-     * Get metadata
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMetadata()
-    {
-        return $this->metadata;
-    }
-
-    /**
-     * Set owner
-     *
-     * @param \SimpleIT\ClaireExerciseBundle\Entity\User\User $owner
-     */
-    public function setOwner($owner)
-    {
-        $this->owner = $owner;
-    }
-
-    /**
-     * Get owner
-     *
-     * @return \SimpleIT\ClaireExerciseBundle\Entity\User\User
-     */
-    public function getOwner()
-    {
-        return $this->owner;
-    }
-
-    /**
-     * Set public
-     *
-     * @param boolean $public
-     */
-    public function setPublic($public)
-    {
-        $this->public = $public;
-    }
-
-    /**
-     * Get public
-     *
-     * @return boolean
-     */
-    public function getPublic()
-    {
-        return $this->public;
     }
 
     /**
@@ -310,26 +134,6 @@ class ExerciseModel
     }
 
     /**
-     * Set children
-     *
-     * @param \Doctrine\Common\Collections\Collection $children
-     */
-    public function setChildren($children)
-    {
-        $this->children = $children;
-    }
-
-    /**
-     * Get children
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getChildren()
-    {
-        return $this->children;
-    }
-
-    /**
      * Set parent
      *
      * @param \SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel $parent
@@ -350,46 +154,6 @@ class ExerciseModel
     }
 
     /**
-     * Set title
-     *
-     * @param string $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Set type
-     *
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
      * Set forkFrom
      *
      * @param \SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel $forkFrom
@@ -407,45 +171,5 @@ class ExerciseModel
     public function getForkFrom()
     {
         return $this->forkFrom;
-    }
-
-    /**
-     * Set forkedBy
-     *
-     * @param \Doctrine\Common\Collections\Collection $forkedBy
-     */
-    public function setForkedBy($forkedBy)
-    {
-        $this->forkedBy = $forkedBy;
-    }
-
-    /**
-     * Get forkedBy
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getForkedBy()
-    {
-        return $this->forkedBy;
-    }
-
-    /**
-     * Set archived
-     *
-     * @param boolean $archived
-     */
-    public function setArchived($archived)
-    {
-        $this->archived = $archived;
-    }
-
-    /**
-     * Get archived
-     *
-     * @return boolean
-     */
-    public function getArchived()
-    {
-        return $this->archived;
     }
 }

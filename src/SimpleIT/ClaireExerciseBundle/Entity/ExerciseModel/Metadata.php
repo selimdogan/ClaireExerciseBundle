@@ -2,67 +2,19 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel;
 
+use SimpleIT\ClaireExerciseBundle\Entity\Common\Metadata as BaseMetadata;
+
 /**
  * Exercise Model Metadata entity
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class Metadata
+class Metadata extends BaseMetadata
 {
     /**
      * @var ExerciseModel
      */
     private $exerciseModel;
-
-    /**
-     * @var string
-     */
-    private $key;
-
-    /**
-     * @var string
-     */
-    private $value;
-
-    /**
-     * Set key
-     *
-     * @param string $key
-     */
-    public function setKey($key)
-    {
-        $this->key = $key;
-    }
-
-    /**
-     * Get key
-     *
-     * @return string
-     */
-    public function getKey()
-    {
-        return $this->key;
-    }
-
-    /**
-     * Set value
-     *
-     * @param string $value
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-    }
-
-    /**
-     * Get value
-     *
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
 
     /**
      * Set exerciseModel

@@ -13,7 +13,7 @@ use SimpleIT\Utils\Collection\PaginatorInterface;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-abstract class KnowledgeResourceFactory
+abstract class KnowledgeResourceFactory extends SharedResourceFactory
 {
 
     /**
@@ -43,34 +43,18 @@ abstract class KnowledgeResourceFactory
     public static function create(Knowledge $knowledge)
     {
         $knowledgeResource = new KnowledgeResource();
-        $knowledgeResource->setId($knowledge->getId());
-        $knowledgeResource->setType($knowledge->getType());
-
-        $serializer = SerializerBuilder::create()
-            ->addDefaultHandlers()
-            ->configureHandlers(
-                function (HandlerRegistry $registry) {
-                    $registry->registerSubscribingHandler(new AbstractClassForExerciseHandler());
-                }
-            )
-            ->build();
-        $content = $serializer->deserialize(
-            $knowledge->getContent(),
-            KnowledgeResource::getClass($knowledge->getType()),
-            'json'
+        parent::fill(
+            $knowledgeResource,
+            $knowledge
         );
-        $knowledgeResource->setContent($content);
 
+        // knowledge requirements
         $requirements = array();
         foreach ($knowledge->getRequiredKnowledges() as $req) {
             /** @var Knowledge $req */
             $requirements[] = $req->getId();
         }
         $knowledgeResource->setRequiredKnowledges($requirements);
-
-        if (!is_null($knowledge->getAuthor())) {
-            $knowledgeResource->setAuthor($knowledge->getAuthor()->getId());
-        }
 
         return $knowledgeResource;
     }

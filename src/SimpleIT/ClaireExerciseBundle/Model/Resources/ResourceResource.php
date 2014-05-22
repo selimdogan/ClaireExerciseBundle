@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ResourceResource
+class ResourceResource extends SharedResource
 {
     /**
      * @const RESOURCE_NAME = 'Exercise Resource'
@@ -48,7 +48,7 @@ class ResourceResource
      * @Serializer\Groups({"details", "list", "resource_list"})
      * @Assert\Blank(groups={"create","edit"})
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string $type
@@ -57,7 +57,7 @@ class ResourceResource
      * @Assert\NotBlank(groups={"create"})
      * @Assert\Blank(groups={"edit"})
      */
-    private $type;
+    protected $type;
 
     /**
      * @var CommonResource $content
@@ -66,7 +66,7 @@ class ResourceResource
      * @Assert\NotBlank(groups={"create"})
      * @Assert\Valid
      */
-    private $content;
+    protected $content;
 
     /**
      * @var array $requiredExerciseResources
@@ -90,7 +90,7 @@ class ResourceResource
      * @Serializer\Groups({"details", "list", "resource_list"})
      * @Assert\Blank(groups={"create", "edit"})
      */
-    private $author;
+    protected $author;
 
     /**
      * @var int $owner
@@ -98,7 +98,7 @@ class ResourceResource
      * @Serializer\Groups({"details", "list", "resource_list"})
      * @Assert\Blank(groups={"create", "edit"})
      */
-    private $owner;
+    protected $owner;
 
     /**
      * @var bool $public
@@ -106,7 +106,7 @@ class ResourceResource
      * @Serializer\Groups({"details","list", "resource_list"})
      * @Assert\NotNull(groups={"create"})
      */
-    private $public;
+    protected $public;
 
     /**
      * @var bool $archived
@@ -114,28 +114,28 @@ class ResourceResource
      * @Serializer\Groups({"details","list", "resource_list"})
      * @Assert\Null(groups={"create"})
      */
-    private $archived;
+    protected $archived;
 
     /**
      * @var array
      * @Serializer\Type("array")
      * @Serializer\Groups({"details"})
      */
-    private $metadata;
+    protected $metadata;
 
     /**
      * @var int
      * @Serializer\Type("integer")
      * @Serializer\Groups({"details"})
      */
-    private $parent;
+    protected $parent;
 
     /**
      * @var int
      * @Serializer\Type("integer")
      * @Serializer\Groups({"details", "resource_list"})
      */
-    private $forkFrom;
+    protected $forkFrom;
 
     /**
      * Set content
@@ -158,46 +158,6 @@ class ResourceResource
     }
 
     /**
-     * Set id
-     *
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set type
-     *
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
      * Set requiredExerciseResources
      *
      * @param array $requiredExerciseResources
@@ -215,146 +175,6 @@ class ResourceResource
     public function getRequiredExerciseResources()
     {
         return $this->requiredExerciseResources;
-    }
-
-    /**
-     * Set author
-     *
-     * @param int $author
-     */
-    public function setAuthor($author)
-    {
-        $this->author = $author;
-    }
-
-    /**
-     * Get author
-     *
-     * @return int
-     */
-    public function getAuthor()
-    {
-        return $this->author;
-    }
-
-    /**
-     * Set archived
-     *
-     * @param boolean $archived
-     */
-    public function setArchived($archived)
-    {
-        $this->archived = $archived;
-    }
-
-    /**
-     * Get archived
-     *
-     * @return boolean
-     */
-    public function getArchived()
-    {
-        return $this->archived;
-    }
-
-    /**
-     * Set forkFrom
-     *
-     * @param int $forkFrom
-     */
-    public function setForkFrom($forkFrom)
-    {
-        $this->forkFrom = $forkFrom;
-    }
-
-    /**
-     * Get forkFrom
-     *
-     * @return int
-     */
-    public function getForkFrom()
-    {
-        return $this->forkFrom;
-    }
-
-    /**
-     * Set metadata
-     *
-     * @param array $metadata
-     */
-    public function setMetadata($metadata)
-    {
-        $this->metadata = $metadata;
-    }
-
-    /**
-     * Get metadata
-     *
-     * @return array
-     */
-    public function getMetadata()
-    {
-        return $this->metadata;
-    }
-
-    /**
-     * Set owner
-     *
-     * @param int $owner
-     */
-    public function setOwner($owner)
-    {
-        $this->owner = $owner;
-    }
-
-    /**
-     * Get owner
-     *
-     * @return int
-     */
-    public function getOwner()
-    {
-        return $this->owner;
-    }
-
-    /**
-     * Set parent
-     *
-     * @param int $parent
-     */
-    public function setParent($parent)
-    {
-        $this->parent = $parent;
-    }
-
-    /**
-     * Get parent
-     *
-     * @return int
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
-     * Set public
-     *
-     * @param boolean $public
-     */
-    public function setPublic($public)
-    {
-        $this->public = $public;
-    }
-
-    /**
-     * Get public
-     *
-     * @return boolean
-     */
-    public function getPublic()
-    {
-        return $this->public;
     }
 
     /**
@@ -385,8 +205,13 @@ class ResourceResource
      * @return string
      * @throws \LogicException
      */
-    static public function getClass($type)
+    public function getClass($type = null)
     {
+        if ($type === null)
+        {
+            $type = $this->type;
+        }
+
         switch ($type) {
             case CommonResource::MULTIPLE_CHOICE_QUESTION:
                 $class = self::MULTIPLE_CHOICE_QUESTION_CLASS;

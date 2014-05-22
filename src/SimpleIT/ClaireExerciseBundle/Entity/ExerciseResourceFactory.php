@@ -14,7 +14,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-abstract class ExerciseResourceFactory
+abstract class ExerciseResourceFactory extends SharedEntityFactory
 {
     /**
      * Create a new ExerciseResource object
@@ -26,9 +26,7 @@ abstract class ExerciseResourceFactory
     public static function create($content = '')
     {
         $exerciseResource = new ExerciseResource();
-        $exerciseResource->setContent($content);
-        $exerciseResource->setPublic(false);
-        $exerciseResource->setArchived(false);
+        parent::initialize($exerciseResource, $content);
 
         return $exerciseResource;
     }
@@ -45,25 +43,7 @@ abstract class ExerciseResourceFactory
     )
     {
         $exerciseResource = new ExerciseResource();
-        $exerciseResource->setId($resourceResource->getId());
-        $exerciseResource->setType($resourceResource->getType());
-        $exerciseResource->setPublic($resourceResource->getPublic());
-        $exerciseResource->setArchived($resourceResource->getArchived());
-
-        // content
-        $serializer = SerializerBuilder::create()
-            ->addDefaultHandlers()
-            ->configureHandlers(
-                function (HandlerRegistry $registry) {
-                    $registry->registerSubscribingHandler(new AbstractClassForExerciseHandler());
-                }
-            )
-            ->build();
-        $context = SerializationContext::create();
-
-        $context->setGroups(array('resource_storage', 'Default'));
-        $content = $serializer->serialize($resourceResource->getContent(), 'json', $context);
-        $exerciseResource->setContent($content);
+        parent::fillFromResource($exerciseResource, $resourceResource, 'resource_storage');
 
         return $exerciseResource;
     }

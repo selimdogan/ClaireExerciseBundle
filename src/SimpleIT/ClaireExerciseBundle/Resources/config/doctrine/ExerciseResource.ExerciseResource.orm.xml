@@ -7,6 +7,7 @@
         </id>
 
         <field name="type" column="type" type="string" nullable="false"/>
+        <field name="title" column="title" type="string" nullable="true"/>
         <field name="content" column="content" type="text" nullable="false"/>
         <field name="public" column="public" type="boolean" nullable="false"/>
         <field name="archived" column="archived" type="boolean" nullable="true"/>
@@ -14,8 +15,7 @@
         <one-to-many field="children" target-entity="ExerciseResource" mapped-by="parent"/>
         <one-to-many field="forkedBy" target-entity="ExerciseResource" mapped-by="forkFrom"/>
 
-        <one-to-many
-                target-entity="SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata" mapped-by="resource" field="metadata">
+        <one-to-many target-entity="SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata" mapped-by="resource" field="metadata">
             <cascade>
                 <cascade-persist/>
                 <cascade-remove/>
@@ -39,9 +39,6 @@
         </many-to-one>
 
         <many-to-many target-entity="SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge" field="requiredKnowledges">
-            <cascade>
-                <cascade-persist/>
-            </cascade>
             <join-table name="claire_exercise_resource_knowledge_requirement">
                 <join-columns>
                     <join-column name="resource_id" referenced-column-name="id"/>
@@ -53,9 +50,6 @@
         </many-to-many>
 
         <many-to-many target-entity="ExerciseResource" field="requiredExerciseResources">
-            <cascade>
-                <cascade-persist/>
-            </cascade>
             <join-table name="claire_exercise_resource_resource_requirement">
                 <join-columns>
                     <join-column name="resource_id" referenced-column-name="id"/>
