@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel;
 
-use SimpleIT\ClaireExerciseBundle\Entity\Common\Metadata as BaseMetadata;
+use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\Metadata as BaseMetadata;
 
 /**
  * Exercise Model Metadata entity
@@ -34,5 +34,15 @@ class Metadata extends BaseMetadata
     public function getExerciseModel()
     {
         return $this->exerciseModel;
+    }
+
+    /**
+     * Set the exercise model
+     *
+     * @param ExerciseModel $entity
+     */
+    public function setEntity($entity)
+    {
+        $this->exerciseModel = $entity;
     }
 }

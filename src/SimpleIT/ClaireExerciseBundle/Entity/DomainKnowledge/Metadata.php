@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge;
 
-use SimpleIT\ClaireExerciseBundle\Entity\Common\Metadata as BaseMetadata;
+use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\Metadata as BaseMetadata;
 
 /**
  * Knowledge Metadata entity
@@ -34,5 +34,15 @@ class Metadata extends BaseMetadata
     public function getKnowledge()
     {
         return $this->knowledge;
+    }
+
+    /**
+     * Set the knowledge
+     *
+     * @param Knowledge $entity
+     */
+    public function setEntity($entity)
+    {
+        $this->knowledge = $entity;
     }
 }

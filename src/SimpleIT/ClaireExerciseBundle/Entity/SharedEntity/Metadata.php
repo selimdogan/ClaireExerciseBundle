@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseBundle\Entity\Common;
+namespace SimpleIT\ClaireExerciseBundle\Entity\SharedEntity;
 
 /**
  * Knowledge Metadata entity
@@ -58,4 +58,11 @@ abstract class Metadata
     {
         $this->value = $value;
     }
+
+    /**
+     * Set the entity
+     *
+     * @param SharedEntity $entity
+     */
+    abstract public function setEntity($entity);
 }

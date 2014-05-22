@@ -20,6 +20,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource\ExerciseResourceRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\KnowledgeServiceInterface;
+use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityService;
 use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 use SimpleIT\ClaireExerciseBundle\Service\User\UserService;
 use SimpleIT\CoreBundle\Annotation\Transactional;
@@ -32,7 +33,7 @@ use SimpleIT\Utils\Collection\PaginatorInterface;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseResourceService extends TransactionalService implements ExerciseResourceServiceInterface
+class ExerciseResourceService extends SharedEntityService implements ExerciseResourceServiceInterface
 {
     /**
      * @var ExerciseResourceRepository

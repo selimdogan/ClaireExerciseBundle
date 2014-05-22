@@ -3,6 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource;
 
 use Doctrine\ORM\QueryBuilder;
+use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedMetadataRepository;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\CoreBundle\Repository\BaseRepository;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata;
@@ -16,7 +17,7 @@ use SimpleIT\Utils\Collection\Sort;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class MetadataRepository extends BaseRepository
+class MetadataRepository extends SharedMetadataRepository
 {
     /**
      * Find a model by id
@@ -40,7 +41,7 @@ class MetadataRepository extends BaseRepository
      * Return all the metadata
      *
      * @param CollectionInformation $collectionInformation
-     * @param ExerciseResource         $resource
+     * @param ExerciseResource      $resource
      *
      * @return PaginatorInterface
      */
@@ -49,54 +50,16 @@ class MetadataRepository extends BaseRepository
         $resource = null
     )
     {
-        $queryBuilder = $this->createQueryBuilder('m');
-
-        if (!is_null($resource)) {
-            $queryBuilder->andWhere(
-                $queryBuilder->expr()->eq(
-                    'm.resource',
-                    $resource->getId()
-                )
-            );
-        }
-
-        // Handle Collection Information
-        if (!is_null($collectionInformation)) {
-            $sorts = $collectionInformation->getSorts();
-
-            foreach ($sorts as $sort) {
-                /** @var Sort $sort */
-                switch ($sort->getProperty()) {
-                    case 'resourceId':
-                        $queryBuilder->addOrderBy('m.resource', $sort->getOrder());
-                        break;
-                    case 'key':
-                        $queryBuilder->addOrderBy('m.key', $sort->getOrder());
-                        break;
-                }
-            }
-            $queryBuilder = $this->setRange($queryBuilder, $collectionInformation);
-        } else {
-            $queryBuilder->addOrderBy('m.resource', 'ASC');
-            $queryBuilder->addOrderBy('m.key', 'ASC');
-        }
-
-        return $queryBuilder->getQuery()->getResult();
+        return parent::findAllByEntityName('resource', $collectionInformation, $resource);
     }
 
     /**
-     * Delete all the metadata for an owner resource
+     * Delete all the metadata for a resource
      *
      * @param int $resourceId
      */
     public function deleteAllByResource($resourceId)
     {
-        $sql = 'DELETE FROM claire_exercise_resource_metadata AS rm WHERE rm.resource_id = :resourceId';
-
-        $connection = $this->_em->getConnection();
-        $connection->executeQuery(
-            $sql,
-            array('resourceId' => $resourceId)
-        );
+        parent::deleteAllByEntityByType($resourceId, 'claire_exercise_resource_metadata', 'resource_id');
     }
 }

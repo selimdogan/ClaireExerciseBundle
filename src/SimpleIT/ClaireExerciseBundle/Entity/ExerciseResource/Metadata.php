@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource;
 
-use SimpleIT\ClaireExerciseBundle\Entity\Common\Metadata as BaseMetadata;
+use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\Metadata as BaseMetadata;
 
 /**
  * Exercise Resource Metadata entity
@@ -34,5 +34,15 @@ class Metadata extends BaseMetadata
     public function getResource()
     {
         return $this->resource;
+    }
+
+    /**
+     * Set the resource
+     *
+     * @param ExerciseResource $entity
+     */
+    public function setEntity($entity)
+    {
+        $this->resource = $entity;
     }
 }

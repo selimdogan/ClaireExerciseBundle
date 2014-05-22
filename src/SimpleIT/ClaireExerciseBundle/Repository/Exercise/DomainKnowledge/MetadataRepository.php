@@ -2,21 +2,19 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\DomainKnowledge;
 
-use Doctrine\ORM\QueryBuilder;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Repository\BaseRepository;
+use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Metadata;
-use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\OwnerKnowledge;
+use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedMetadataRepository;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatorInterface;
-use SimpleIT\Utils\Collection\Sort;
 
 /**
  * Knowledge Metadata repository
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class MetadataRepository extends BaseRepository
+class MetadataRepository extends SharedMetadataRepository
 {
     /**
      * Find a model by id
@@ -40,63 +38,29 @@ class MetadataRepository extends BaseRepository
      * Return all the metadata
      *
      * @param CollectionInformation $collectionInformation
-     * @param OwnerKnowledge        $ownerKnowledge
+     * @param Knowledge             $knowledge
      *
      * @return PaginatorInterface
      */
     public function findAllBy(
         $collectionInformation = null,
-        $ownerKnowledge = null
+        $knowledge = null
     )
     {
-        $queryBuilder = $this->createQueryBuilder('m');
-
-        if (!is_null($ownerKnowledge)) {
-            $queryBuilder->andWhere(
-                $queryBuilder->expr()->eq(
-                    'm.ownerKnowledge',
-                    $ownerKnowledge->getId()
-                )
-            );
-        }
-
-        // Handle Collection Information
-        if (!is_null($collectionInformation)) {
-            $sorts = $collectionInformation->getSorts();
-
-            foreach ($sorts as $sort) {
-                /** @var Sort $sort */
-                switch ($sort->getProperty()) {
-                    case 'ownerKnowledgeId':
-                        $queryBuilder->addOrderBy('m.ownerKnowledge', $sort->getOrder());
-                        break;
-                    case 'key':
-                        $queryBuilder->addOrderBy('m.key', $sort->getOrder());
-                        break;
-                }
-            }
-            $queryBuilder = $this->setRange($queryBuilder, $collectionInformation);
-        } else {
-            $queryBuilder->addOrderBy('m.ownerKnowledge', 'ASC');
-            $queryBuilder->addOrderBy('m.key', 'ASC');
-        }
-
-        return $queryBuilder->getQuery()->getResult();
+        return parent::findAllByEntityName('knowledge', $collectionInformation, $knowledge);
     }
 
     /**
-     * Delete all the metadata for an owner knowledge
+     * Delete all the metadata for a knowledge
      *
-     * @param int $ownerKnowledgeId
+     * @param int $knowledgeId
      */
-    public function deleteAllByOwnerKnowledge($ownerKnowledgeId)
+    public function deleteAllByKnowledge($knowledgeId)
     {
-        $sql = 'DELETE FROM claire_exercise_knowledge_metadata AS rm WHERE rm.owner_knowledge_id = :ownerKnowledgeId';
-
-        $connection = $this->_em->getConnection();
-        $connection->executeQuery(
-            $sql,
-            array('ownerKnowledgeId' => $ownerKnowledgeId)
+        parent::deleteAllByEntityByType(
+            $knowledgeId,
+            'claire_exercise_knowledge_metadata',
+            'knowledge_id'
         );
     }
 }

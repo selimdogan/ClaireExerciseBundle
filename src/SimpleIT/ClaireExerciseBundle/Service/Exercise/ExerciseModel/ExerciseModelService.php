@@ -4,11 +4,11 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use JMS\Serializer\SerializationContext;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModelMetadataFactory;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModelFactory;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidModelException;
-use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\KnowledgeServiceInterface;
-use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
+use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
+use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\ResourceBlock;
@@ -36,18 +36,12 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResourc
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\MetadataConstraint;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Services\TransactionalService;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModelFactory;
-use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
-use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseModel\ExerciseModelRepository;
+use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\KnowledgeServiceInterface;
 use
     SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\ExerciseResourceServiceInterface;
-use SimpleIT\ClaireExerciseBundle\Service\User\UserService;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityService;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\CoreBundle\Annotation\Transactional;
 
 /**
@@ -55,22 +49,12 @@ use SimpleIT\CoreBundle\Annotation\Transactional;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseModelService extends TransactionalService implements ExerciseModelServiceInterface
+class ExerciseModelService extends SharedEntityService //implements ExerciseModelServiceInterface
 {
     /**
      * @var ExerciseModelRepository $exerciseModelRepository
      */
-    private $exerciseModelRepository;
-
-    /**
-     * @var SerializerInterface
-     */
-    protected $serializer;
-
-    /**
-     * @var UserService
-     */
-    private $userService;
+    private $entityRepository;
 
     /**
      * @var ExerciseResourceServiceInterface
@@ -83,41 +67,6 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
     private $knowledgeService;
 
     /**
-     * @var MetadataService
-     */
-    private $metadataService;
-
-    /**
-     * Set serializer
-     *
-     * @param SerializerInterface $serializer
-     */
-    public function setSerializer($serializer)
-    {
-        $this->serializer = $serializer;
-    }
-
-    /**
-     * Set exerciseModelRepository
-     *
-     * @param ExerciseModelRepository $exerciseModelRepository
-     */
-    public function setExerciseModelRepository($exerciseModelRepository)
-    {
-        $this->exerciseModelRepository = $exerciseModelRepository;
-    }
-
-    /**
-     * Set userService
-     *
-     * @param UserService $userService
-     */
-    public function setUserService($userService)
-    {
-        $this->userService = $userService;
-    }
-
-    /**
      * Set exerciseResourceService
      *
      * @param ExerciseResourceServiceInterface $exerciseResourceService
@@ -128,16 +77,6 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
     }
 
     /**
-     * Set metadataService
-     *
-     * @param \SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\MetadataService $metadataService
-     */
-    public function setMetadataService($metadataService)
-    {
-        $this->metadataService = $metadataService;
-    }
-
-    /**
      * Set knowledgeService
      *
      * @param \SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\KnowledgeServiceInterface $knowledgeService
@@ -145,24 +84,6 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
     public function setKnowledgeService($knowledgeService)
     {
         $this->knowledgeService = $knowledgeService;
-    }
-
-    /**
-     * Get an Exercise Model entity
-     *
-     * @param int $exerciseModelId
-     *
-     * @return ExerciseModel
-     * @throws NonExistingObjectException
-     */
-    public function get($exerciseModelId)
-    {
-        $exerciseModel = $this->exerciseModelRepository->find($exerciseModelId);
-        if (is_null($exerciseModel)) {
-            throw new NonExistingObjectException();
-        }
-
-        return $exerciseModel;
     }
 
     /**
@@ -216,70 +137,14 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
     }
 
     /**
-     * Get a list of Exercise Model
-     *
-     * @param CollectionInformation $collectionInformation The collection information
-     * @param int                   $ownerId
-     * @param int                   $authorId
-     * @param int                   $parentModelId
-     * @param int                   $forkFromModelId
-     * @param boolean               $isRoot
-     * @param boolean               $isPointer
-     *
-     * @return PaginatorInterface
-     */
-    public function getAll(
-        $collectionInformation = null,
-        $ownerId = null,
-        $authorId = null,
-        $parentModelId = null,
-        $forkFromModelId = null,
-        $isRoot = null,
-        $isPointer = null
-    )
-    {
-        $owner = null;
-        if (!is_null($ownerId)) {
-            $owner = $this->userService->get($ownerId);
-        }
-
-        $author = null;
-        if (!is_null($authorId)) {
-            $author = $this->userService->get($authorId);
-        }
-
-        $parentModel = null;
-        if (!is_null($parentModelId)) {
-            $parentModel = $this->get($parentModelId);
-        }
-
-        $forkFromModel = null;
-        if (!is_null($forkFromModelId)) {
-            $forkFromModel = $this->get($forkFromModelId);
-        }
-
-        return $this->exerciseModelRepository->findAll(
-            $collectionInformation,
-            $owner,
-            $author,
-            $parentModel,
-            $forkFromModel,
-            $isRoot,
-            $isPointer
-        );
-    }
-
-    /**
-     * Create an ExerciseModel entity from a resource
+     * Create an entity from a resource
      *
      * @param ExerciseModelResource $modelResource
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException
-     * @return ExerciseModel
+     * @return mixed
      */
-    public function createFromResource(
-        ExerciseModelResource $modelResource
-    )
+    public function createFromResource($modelResource)
     {
         $modelResource->setComplete(
             $this->checkModelComplete(
@@ -291,39 +156,7 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
 
         $model = ExerciseModelFactory::createFromResource($modelResource);
 
-        // author
-        if (is_null($modelResource->getAuthor())) {
-            throw new NoAuthorException();
-        } else {
-            $authorId = $modelResource->getAuthor();
-        }
-        $model->setAuthor(
-            $this->userService->get($authorId)
-        );
-
-        // owner
-        if (is_null($modelResource->getOwner())) {
-            throw new NoAuthorException('No owner for this model...');
-        } else {
-            $ownerId = $modelResource->getOwner();
-        }
-        $model->setOwner(
-            $this->userService->get($ownerId)
-        );
-
-        // parent model
-        if (!is_null($modelResource->getParent())) {
-            $model->setParent(
-                $this->get($modelResource->getParent())
-            );
-        }
-
-        // fork from
-        if (!is_null($modelResource->getForkFrom())) {
-            $model->setForkFrom(
-                $this->get($modelResource->getForkFrom())
-            );
-        }
+        parent::fillFromResource(parent::EXERCISE_MODEL, $model, $modelResource);
 
         // required resources
         $reqResources = array();
@@ -339,51 +172,6 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
         }
         $model->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
 
-        // metadata
-        $metadata = array();
-        $resMetadata = $modelResource->getMetadata();
-        if (!empty($resMetadata)) {
-            foreach ($resMetadata as $key => $value) {
-                $md = ExerciseModelMetadataFactory::create($key, $value);
-                $md->setExerciseModel($model);
-                $metadata[] = $md;
-            }
-        }
-        $model->setMetadata(new ArrayCollection($metadata));
-
-        return $model;
-    }
-
-    /**
-     * Create and add an exercise model from a resource
-     *
-     * @param ExerciseModelResource $modelResource
-     *
-     * @return ExerciseModel
-     */
-    public function createAndAdd(
-        ExerciseModelResource $modelResource
-    )
-    {
-        $model = $this->createFromResource($modelResource);
-
-        return $this->add($model);
-    }
-
-    /**
-     * Add a model from a Resource
-     *
-     * @param ExerciseModel $model
-     *
-     * @return ExerciseModel
-     * @Transactional
-     */
-    public function add(
-        ExerciseModel $model
-    )
-    {
-        $this->exerciseModelRepository->insert($model);
-
         return $model;
     }
 
@@ -397,10 +185,12 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      * @return ExerciseModel
      */
     public function updateFromResource(
-        ExerciseModelResource $modelResource,
+        $modelResource,
         $model
     )
     {
+        parent::updateFromSharedResource($modelResource, $model, 'exercise_model_storage');
+
         if (!is_null($modelResource->getRequiredExerciseResources())) {
             $reqResources = array();
             foreach ($modelResource->getRequiredExerciseResources() as $reqRes) {
@@ -416,15 +206,6 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
             }
             $model->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
         }
-
-        if (!is_null($modelResource->getTitle())) {
-            $model->setTitle($modelResource->getTitle());
-        }
-
-        if (!is_null($modelResource->getType())) {
-            $model->setType($modelResource->getType());
-        }
-
         if (!is_null($modelResource->getDraft())) {
             $model->setDraft($modelResource->getDraft());
         }
@@ -433,18 +214,9 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
             $model->setComplete($modelResource->getComplete());
         }
 
-        if (!is_null($modelResource->getPublic())) {
-            $model->setPublic($modelResource->getPublic());
-        }
-
         $content = $modelResource->getContent();
         if (!is_null($content)) {
             $this->validateType($content, $model->getType());
-            $context = SerializationContext::create();
-            $context->setGroups(array('exercise_model_storage', 'Default'));
-            $model->setContent(
-                $this->serializer->jmsSerialize($content, 'json', $context)
-            );
 
             if ($model->getParent() === null) {
                 $parentId = null;
@@ -465,54 +237,6 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
     }
 
     /**
-     * Save a resource given in form of a ResourceResource
-     *
-     * @param ExerciseModelResource $modelResource
-     * @param int                   $modelId
-     *
-     * @return ExerciseModel
-     */
-    public function edit(
-        ExerciseModelResource $modelResource,
-        $modelId
-    )
-    {
-        $model = $this->get($modelId);
-        $model = $this->updateFromResource(
-            $modelResource,
-            $model
-        );
-
-        return $this->save($model);
-    }
-
-    /**
-     * Save a resource
-     *
-     * @param ExerciseModel $model
-     *
-     * @return ExerciseModel
-     * @Transactional
-     */
-    public function save(ExerciseModel $model)
-    {
-        return $this->exerciseModelRepository->update($model);
-    }
-
-    /**
-     * Delete a resource
-     *
-     * @param $modelId
-     *
-     * @Transactional
-     */
-    public function remove($modelId)
-    {
-        $resource = $this->exerciseModelRepository->find($modelId);
-        $this->exerciseModelRepository->delete($resource);
-    }
-
-    /**
      * Edit all the metadata of an exercise model
      *
      * @param int             $exerciseModelId
@@ -523,19 +247,11 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
      */
     public function editMetadata($exerciseModelId, ArrayCollection $metadatas)
     {
-        $exerciseModel = $this->exerciseModelRepository->find($exerciseModelId);
-
-        $this->metadataService->deleteAllByExerciseModel($exerciseModelId);
-
-        $metadataCollection = array();
-        foreach ($metadatas as $key => $value) {
-            $md = ExerciseModelMetadataFactory::create($key, $value);
-            $md->setExerciseModel($exerciseModel);
-            $metadataCollection[] = $md;
-        }
-        $exerciseModel->setMetadata(new ArrayCollection($metadataCollection));
-
-        return $this->save($exerciseModel)->getMetadata();
+        return parent::editMetadataByEntityType(
+            parent::EXERCISE_MODEL,
+            $exerciseModelId,
+            $metadatas
+        );
     }
 
     /**
@@ -552,7 +268,7 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
     )
     {
         $reqRes = $this->exerciseResourceService->get($reqResId);
-        $this->exerciseModelRepository->addRequiredResource($exerciseModelId, $reqRes);
+        $this->entityRepository->addRequiredResource($exerciseModelId, $reqRes);
 
         return $this->get($exerciseModelId);
     }
@@ -571,7 +287,7 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
     )
     {
         $reqRes = $this->exerciseResourceService->get($reqResId);
-        $this->exerciseModelRepository->deleteRequiredResource($exerciseModelId, $reqRes);
+        $this->entityRepository->deleteRequiredResource($exerciseModelId, $reqRes);
     }
 
     /**
@@ -587,7 +303,7 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
         ArrayCollection $requiredResources
     )
     {
-        $exerciseModel = $this->exerciseModelRepository->find($exerciseModelId);
+        $exerciseModel = $this->entityRepository->find($exerciseModelId);
 
         $resourcesCollection = array();
         foreach ($requiredResources as $rr) {
@@ -595,7 +311,10 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
         }
         $exerciseModel->setRequiredExerciseResources(new ArrayCollection($resourcesCollection));
 
-        return $this->save($exerciseModel)->getRequiredExerciseResources();
+        /** @var ExerciseModel $exerciseModel */
+        $exerciseModel = $this->save($exerciseModel);
+
+        return $exerciseModel->getRequiredExerciseResources();
     }
 
     /**
@@ -612,7 +331,7 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
     )
     {
         $reqKno = $this->knowledgeService->get($reqKnoId);
-        $this->exerciseModelRepository->addRequiredKnowledge($exerciseModelId, $reqKno);
+        $this->entityRepository->addRequiredKnowledge($exerciseModelId, $reqKno);
 
         return $this->get($exerciseModelId);
     }
@@ -631,7 +350,7 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
     )
     {
         $reqKno = $this->knowledgeService->get($reqKnoId);
-        $this->exerciseModelRepository->deleteRequiredKnowledge($exerciseModelId, $reqKno);
+        $this->entityRepository->deleteRequiredKnowledge($exerciseModelId, $reqKno);
     }
 
     /**
@@ -647,7 +366,7 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
         ArrayCollection $requiredKnowledges
     )
     {
-        $exerciseModel = $this->exerciseModelRepository->find($exerciseModelId);
+        $exerciseModel = $this->entityRepository->find($exerciseModelId);
 
         $reqKnowledgeCollection = array();
         foreach ($requiredKnowledges as $rk) {
@@ -655,7 +374,10 @@ class ExerciseModelService extends TransactionalService implements ExerciseModel
         }
         $exerciseModel->setRequiredKnowledges(new ArrayCollection($reqKnowledgeCollection));
 
-        return $this->save($exerciseModel)->getRequiredKnowledges();
+        /** @var ExerciseModel $exerciseModel */
+        $exerciseModel = $this->save($exerciseModel);
+
+        return $exerciseModel->getRequiredExerciseResources();
     }
 
     /**

@@ -2,30 +2,24 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource;
 
-use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
-use SimpleIT\ClaireExerciseBundle\Exception\FilterException;
+use SimpleIT\ClaireExerciseBundle\Exception\EntityAlreadyExistsException;
+use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\MetadataConstraint;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId;
+use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedEntityRepository;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Model\Paginator;
-use SimpleIT\CoreBundle\Repository\BaseRepository;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
-use SimpleIT\ClaireExerciseBundle\Exception\EntityAlreadyExistsException;
-use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
-use SimpleIT\Utils\Collection\Sort;
 
 /**
  * ExerciseResource repository
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseResourceRepository extends BaseRepository
+class ExerciseResourceRepository extends SharedEntityRepository
 {
     /**
      * Find a resource by id
@@ -46,180 +40,6 @@ class ExerciseResourceRepository extends BaseRepository
     }
 
     /**
-     * Return all the resources
-     *
-     * @param CollectionInformation $collectionInformation
-     * @param User                  $owner
-     * @param User                  $author
-     * @param ExerciseResource      $parent
-     * @param ExerciseResource      $forkFrom
-     * @param boolean               $isRoot
-     * @param boolean               $isPointer
-     *
-     * @throws \SimpleIT\ClaireExerciseBundle\Exception\FilterException
-     * @return PaginatorInterface
-     */
-    public function findAll(
-        $collectionInformation = null,
-        $owner = null,
-        $author = null,
-        $parent = null,
-        $forkFrom = null,
-        $isRoot = null,
-        $isPointer = null
-    )
-    {
-        $metadata = array();
-        $keywords = array();
-        
-        $qb = $this->createQueryBuilder('r');
-
-        if (!is_null($owner)) {
-            $qb->where(
-                $qb->expr()->eq(
-                    'r.owner',
-                    $owner->getId()
-                )
-            );
-        }
-
-        if (!is_null($author)) {
-            $qb->where(
-                $qb->expr()->eq(
-                    'r.author',
-                    $author->getId()
-                )
-            );
-        }
-
-        if (!is_null($parent)) {
-            $qb->where(
-                $qb->expr()->eq(
-                    'r.parent',
-                    $parent->getId()
-                )
-            );
-        }
-
-        if (!is_null($forkFrom)) {
-            $qb->where(
-                $qb->expr()->eq(
-                    'r.forkFrom',
-                    $forkFrom->getId()
-                )
-            );
-        }
-
-        if ($isPointer === true) {
-            $qb->where($qb->expr()->isNotNull('r.parent'));
-        } else {
-            $qb->where($qb->expr()->isNotNull('r.content'));
-        }
-
-        if ($isRoot === true) {
-            $qb->where($qb->expr()->isNull('r.forkFrom'));
-        }
-
-        // Handle Collection Information
-        if (!is_null($collectionInformation)) {
-            $filters = $collectionInformation->getFilters();
-            foreach ($filters as $filter => $value) {
-                switch ($filter) {
-                    case ('author'):
-                        $qb->andWhere($qb->expr()->eq('r.author', "'" . $value . "'"));
-                        break;
-                    case ('owner'):
-                        $qb->andWhere($qb->expr()->eq('r.owner', $value));
-                        break;
-                    case ('type'):
-                        if (is_array($value)) {
-                            $qpType = '';
-                            foreach ($value as $val) {
-                                if ($qpType !== '') {
-                                    $qpType = $qb->expr()->orX(
-                                        $qpType,
-                                        $qb->expr()->eq('r.type', "'" . $val . "'")
-                                    );
-                                } else {
-                                    $qpType = $qb->expr()->eq('r.type', "'" . $val . "'");
-                                }
-                            }
-                            $qb->andWhere($qpType);
-                        } else {
-                            $qb->andWhere($qb->expr()->eq('r.type', "'" . $value . "'"));
-                        }
-                        break;
-                    case ('metadata'):
-                        $metadata = $this->metadataToArray($value);
-                        break;
-                    case ('keywords'):
-                        $keywords = $this->keywordsToArray($value);
-                        break;
-                    case ('public-except-user'):
-                        if (!is_numeric($value)) {
-                            throw new FilterException('public-except-user filter must be numeric');
-                        }
-                        $qb = $this->addPublicExceptUser($qb, $value);
-                        break;
-                }
-            }
-
-            // Metadata
-            $i = 0;
-            foreach ($metadata as $metaKey => $value) {
-                $alias = 'm' . $i;
-                $qb->leftJoin('r.metadata', $alias);
-
-                $qb->andWhere(
-                    $qb->expr()->andX(
-                        $qb->expr()->eq($alias . '.key', "'" . $metaKey . "'"),
-                        $qb->expr()->eq($alias . '.value', "'" . $value . "'")
-                    )
-                );
-
-                $i++;
-            }
-
-            // Misc keywords
-            foreach ($keywords as $keyword) {
-                $alias = 'm' . $i;
-                $qb->leftJoin('r.metadata', $alias);
-
-                $qb->andWhere(
-                    $qb->expr()->orX(
-                        $qb->expr()->eq($alias . '.key', "'" . $keyword . "'"),
-                        $qb->expr()->like($alias . '.value', "'%" . $keyword . "%'")
-                    )
-                );
-
-                $i++;
-            }
-            
-            $sorts = $collectionInformation->getSorts();
-
-            foreach ($sorts as $sort) {
-                /** @var Sort $sort */
-                switch ($sort->getProperty()) {
-                    case 'author':
-                        $qb->addOrderBy('r.author', $sort->getOrder());
-                        break;
-                    case 'type':
-                        $qb->addOrderBy('r.type', $sort->getOrder());
-                        break;
-                    case 'id':
-                        $qb->addOrderBy('r.id', $sort->getOrder());
-                        break;
-                }
-            }
-            $qb = $this->setRange($qb, $collectionInformation);
-        } else {
-            $qb->addOrderBy('r.id');
-        }
-
-        return new Paginator($qb);
-    }
-
-    /**
      * Add a required resource to a resource
      *
      * @param int              $resourceId
@@ -229,20 +49,12 @@ class ExerciseResourceRepository extends BaseRepository
      */
     public function addRequiredResource($resourceId, ExerciseResource $requiredResource)
     {
-        $sql = 'INSERT INTO claire_exercise_resource_resource_requirement VALUES (:resourceId,:requiredId)';
-
-        $connection = $this->_em->getConnection();
-        try {
-            $connection->executeQuery(
-                $sql,
-                array(
-                    'resourceId' => $resourceId,
-                    'requiredId' => $requiredResource->getId(),
-                )
-            );
-        } catch (DBALException $e) {
-            throw new EntityAlreadyExistsException("Required resource");
-        }
+        parent::addRequired(
+            $resourceId,
+            $requiredResource,
+            'claire_exercise_resource_resource_requirement',
+            'resource'
+        );
     }
 
     /**
@@ -255,72 +67,50 @@ class ExerciseResourceRepository extends BaseRepository
      */
     public function deleteRequiredResource($resourceId, ExerciseResource $requiredResource)
     {
-        $sql = 'DELETE FROM claire_exercise_resource_resource_requirement AS rrq WHERE rrq.resource_id = :resourceId AND rrq.required_id = :requiredId';
-
-        $connection = $this->_em->getConnection();
-        $stmt = $connection->executeQuery(
-            $sql,
-            array(
-                'resourceId' => $resourceId,
-                'requiredId' => $requiredResource->getId(),
-            )
+        parent::deleteRequired(
+            $resourceId,
+            $requiredResource,
+            'claire_exercise_resource_resource_requirement',
+            'resource_id',
+            'required_id'
         );
-
-        if ($stmt->rowCount() != 1) {
-            throw new EntityDeletionException();
-        }
     }
 
     /**
      * Add a required knowledge to an exercise model
      *
-     * @param int              $resourceId
+     * @param int       $resourceId
      * @param Knowledge $requiredKnowledge
      *
      * @throws EntityAlreadyExistsException
      */
     public function addRequiredKnowledge($resourceId, Knowledge $requiredKnowledge)
     {
-        $sql = 'INSERT INTO claire_exercise_resource_knowledge_requirement VALUES (:resourceId,:requiredId)';
-
-        $connection = $this->_em->getConnection();
-        try {
-            $connection->executeQuery(
-                $sql,
-                array(
-                    'resourceId' => $resourceId,
-                    'requiredId'      => $requiredKnowledge->getId(),
-                )
-            );
-        } catch (DBALException $e) {
-            throw new EntityAlreadyExistsException("Required resource");
-        }
+        parent::addRequired(
+            $resourceId,
+            $requiredKnowledge,
+            'claire_exercise_resource_knowledge_requirement',
+            'knowledge'
+        );
     }
 
     /**
      * Delete a requires resource
      *
-     * @param int              $resourceId
+     * @param int       $resourceId
      * @param Knowledge $requiredKnowledge
      *
      * @throws EntityDeletionException
      */
     public function deleteRequiredKnowledge($resourceId, Knowledge $requiredKnowledge)
     {
-        $sql = 'DELETE FROM claire_exercise_resource_knowledge_requirement AS rrq WHERE rrq.resource_id = :resourceId AND rrq.required_knowledge_id = :requiredId';
-
-        $connection = $this->_em->getConnection();
-        $stmt = $connection->executeQuery(
-            $sql,
-            array(
-                'resourceId' => $resourceId,
-                'requiredId'      => $requiredKnowledge->getId(),
-            )
+        parent::deleteRequired(
+            $resourceId,
+            $requiredKnowledge,
+            'claire_exercise_resource_knowledge_requirement',
+            'resource_id',
+            'required_knowledge_id'
         );
-
-        if ($stmt->rowCount() != 1) {
-            throw new EntityDeletionException();
-        }
     }
 
     /**
@@ -562,86 +352,9 @@ class ExerciseResourceRepository extends BaseRepository
     }
 
     /**
-     * Converts the content of the metadata filter into a key => value array
-     *
-     * @param string|array $metadata
-     *
-     * @return array
-     */
-    private function metadataToArray($metadata)
-    {
-        $metadataArray = array();
-        if (is_array($metadata)) {
-            foreach ($metadata as $md) {
-                $explode = explode(':', $md);
-                $metadataArray[$explode[0]] = $explode[1];
-            }
-        } else {
-            $explode = explode(':', $metadata);
-            $metadataArray[$explode[0]] = $explode[1];
-        }
-
-        return $metadataArray;
-    }
-
-    /**
-     * Convert the content of keywords filter into an array
-     *
-     * @param string|array $keywords
-     *
-     * @return array
-     */
-    private function keywordsToArray($keywords)
-    {
-        if (is_array($keywords)) {
-            return $keywords;
-        } else {
-            return array($keywords);
-        }
-    }
-
-    /**
-     * Add the join and the constraints to the query builder to exclude resources already covered
-     * by owner resources
-     *
-     * @param QueryBuilder $qb
-     * @param              $userId
-     *
-     * @return QueryBuilder
-     */
-    private function addPublicExceptUser(QueryBuilder $qb, $userId)
-    {
-        $qb->andWhere(
-            $qb->expr()->eq(
-                'r.public',
-                'true'
-            )
-        );
-
-        $notIn = $this->getEntityManager()->createQueryBuilder()
-            ->select('re.id')
-            ->from(
-                'SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Resource',
-                're'
-            )
-            ->andWhere(
-                $qb->expr()->eq(
-                    're.owner',
-                    $userId
-                )
-            )
-            ->getQuery()
-            ->getDQL();
-
-        $qb->andWhere($qb->expr()->notIn('r.id', $notIn));
-
-        return $qb;
-    }
-
-    /**
      * Find a knowledge if it is owned by the user
      *
-     * @param int     $resourceId
+     * @param int  $resourceId
      * @param User $owner
      *
      * @return mixed

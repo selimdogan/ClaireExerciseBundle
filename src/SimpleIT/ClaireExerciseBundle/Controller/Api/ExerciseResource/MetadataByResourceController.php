@@ -66,7 +66,7 @@ class MetadataByResourceController extends ApiController
     public function viewAction($resourceId, $metadataKey)
     {
         try {
-            $metadata = $this->get('simple_it.exercise.resource_metadata')->getByExerciseResource(
+            $metadata = $this->get('simple_it.exercise.resource_metadata')->getByEntity(
                 $resourceId,
                 $metadataKey
             );
