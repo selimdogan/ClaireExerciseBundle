@@ -79,8 +79,8 @@ abstract class ExerciseObjectFactory
             }
         }
 
-        if ($resource->getFormula() !== null) {
-            $object->setFormula($resource->getFormula());
+        if ($resource->getFormulas() !== null) {
+            $object->setFormulas($resource->getFormulas());
         }
 
         return $object;

@@ -27,7 +27,7 @@
             <call method="setEntityManager">
                 <argument type="service" id="doctrine.orm.entity_manager"/>
             </call>
-            <call method="setExerciseModelRepository">
+            <call method="setEntityRepository">
                 <argument type="service" id="simple_it.exercise.repository.exercise_model"/>
             </call>
             <call method="setSerializer">
@@ -54,7 +54,7 @@
             <call method="setMetadataRepository">
                 <argument type="service" id="simple_it.exercise.repository.exercise_model_metadata"/>
             </call>
-            <call method="setExerciseModelService">
+            <call method="setEntityService">
                 <argument type="service" id="simple_it.exercise.exercise_model"/>
             </call>
         </service>

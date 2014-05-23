@@ -3,7 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Entity\SharedEntity;
 
 /**
- * Knowledge Metadata entity
+ * Shared entity Metadata entity
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
@@ -12,12 +12,12 @@ abstract class Metadata
     /**
      * @var string
      */
-    private $key;
+    protected $key;
 
     /**
      * @var string
      */
-    private $value;
+    protected $value;
 
     /**
      * Get key

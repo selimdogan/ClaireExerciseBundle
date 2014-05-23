@@ -98,7 +98,7 @@ class MetadataByResourceController extends ApiController
         try {
             $metadata = $this->createMetadata($request);
 
-            $metadata = $this->get('simple_it.exercise.resource_metadata')->addToExerciseResource(
+            $metadata = $this->get('simple_it.exercise.resource_metadata')->addToEntity(
                 $resourceId,
                 $metadata
             );
@@ -134,7 +134,7 @@ class MetadataByResourceController extends ApiController
             $this->validateResource($metadata, array('edit'));
 
             $metadata = $this->get('simple_it.exercise.resource_metadata')
-                ->saveFromExerciseResource(
+                ->saveFromEntity(
                 $resourceId,
                 $metadata,
                 $metadataKey
@@ -161,7 +161,7 @@ class MetadataByResourceController extends ApiController
     public function deleteAction($resourceId, $metadataKey)
     {
         try {
-            $this->get('simple_it.exercise.resource_metadata')->removeFromExerciseResource(
+            $this->get('simple_it.exercise.resource_metadata')->removeFromEntity(
                 $resourceId,
                 $metadataKey
             );

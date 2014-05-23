@@ -16,12 +16,12 @@ class Knowledge extends SharedEntity
     /**
      * @var Knowledge
      */
-    private $parent;
+    protected $parent;
 
     /**
      * @var Knowledge
      */
-    private $forkFrom;
+    protected $forkFrom;
 
     /**
      * @var Collection

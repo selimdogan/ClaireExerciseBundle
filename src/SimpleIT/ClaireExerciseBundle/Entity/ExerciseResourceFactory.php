@@ -4,9 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Entity;
 
 use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\SerializationContext;
-use JMS\Serializer\SerializerBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
-use SimpleIT\ClaireExerciseBundle\Serializer\Handler\AbstractClassForExerciseHandler;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 
 /**

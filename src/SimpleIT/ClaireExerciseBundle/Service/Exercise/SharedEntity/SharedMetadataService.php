@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource;
+namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity;
 
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;

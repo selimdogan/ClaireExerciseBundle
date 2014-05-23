@@ -20,30 +20,30 @@ use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * API MetadataByOwnerKnowledge Controller
+ * API MetadataByKnowledge Controller
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class MetadataByOwnerKnowledgeController extends ApiController
+class MetadataByKnowledgeController extends ApiController
 {
     /**
      * Get all metadata
      *
-     * @param mixed                 $ownerKnowledgeId
+     * @param mixed                 $knowledgeId
      * @param CollectionInformation $collectionInformation
      *
      * @throws ApiNotFoundException
      * @return ApiGotResponse
      */
     public function listAction(
-        $ownerKnowledgeId,
+        $knowledgeId,
         CollectionInformation $collectionInformation
     )
     {
         try {
             $metadatas = $this->get('simple_it.exercise.knowledge_metadata')->getAll(
                 $collectionInformation,
-                $ownerKnowledgeId
+                $knowledgeId
             );
 
             $metadataResources = MetadataResourceFactory::createCollection($metadatas);
@@ -57,17 +57,17 @@ class MetadataByOwnerKnowledgeController extends ApiController
     /**
      * Get a metadata
      *
-     * @param mixed $ownerKnowledgeId
+     * @param mixed $knowledgeId
      * @param mixed $metadataKey
      *
      * @throws ApiNotFoundException
      * @return ApiGotResponse
      */
-    public function viewAction($ownerKnowledgeId, $metadataKey)
+    public function viewAction($knowledgeId, $metadataKey)
     {
         try {
-            $metadata = $this->get('simple_it.exercise.knowledge_metadata')->getByOwnerKnowledge(
-                $ownerKnowledgeId,
+            $metadata = $this->get('simple_it.exercise.knowledge_metadata')->getByEntity(
+                $knowledgeId,
                 $metadataKey
             );
 
@@ -84,7 +84,7 @@ class MetadataByOwnerKnowledgeController extends ApiController
      * Create a metadata
      *
      * @param Request $request
-     * @param mixed   $ownerKnowledgeId
+     * @param mixed   $knowledgeId
      *
      * @throws ApiNotFoundException
      * @throws ApiConflictException;
@@ -92,14 +92,14 @@ class MetadataByOwnerKnowledgeController extends ApiController
      */
     public function createAction(
         Request $request,
-        $ownerKnowledgeId
+        $knowledgeId
     )
     {
         try {
             $metadata = $this->createMetadata($request);
 
-            $metadata = $this->get('simple_it.exercise.knowledge_metadata')->addToOwnerKnowledge(
-                $ownerKnowledgeId,
+            $metadata = $this->get('simple_it.exercise.knowledge_metadata')->addToEntity(
+                $knowledgeId,
                 $metadata
             );
 
@@ -118,7 +118,7 @@ class MetadataByOwnerKnowledgeController extends ApiController
      * Edit a metadata
      *
      * @param MetadataResource $metadata
-     * @param mixed            $ownerKnowledgeId
+     * @param mixed            $knowledgeId
      * @param string           $metadataKey
      *
      * @throws ApiNotFoundException
@@ -126,15 +126,15 @@ class MetadataByOwnerKnowledgeController extends ApiController
      */
     public function editAction(
         MetadataResource $metadata,
-        $ownerKnowledgeId,
+        $knowledgeId,
         $metadataKey
     )
     {
         try {
             $this->validateResource($metadata, array('edit'));
 
-            $metadata = $this->get('simple_it.exercise.knowledge_metadata')->saveFromOwnerKnowledge(
-                $ownerKnowledgeId,
+            $metadata = $this->get('simple_it.exercise.knowledge_metadata')->saveFromEntity(
+                $knowledgeId,
                 $metadata,
                 $metadataKey
             );
@@ -151,17 +151,17 @@ class MetadataByOwnerKnowledgeController extends ApiController
     /**
      * Delete a metadata
      *
-     * @param mixed $ownerKnowledgeId
+     * @param mixed $knowledgeId
      * @param mixed $metadataKey
      *
      * @throws ApiNotFoundException
      * @return ApiDeletedResponse
      */
-    public function deleteAction($ownerKnowledgeId, $metadataKey)
+    public function deleteAction($knowledgeId, $metadataKey)
     {
         try {
-            $this->get('simple_it.exercise.knowledge_metadata')->removeFromOwnerKnowledge(
-                $ownerKnowledgeId,
+            $this->get('simple_it.exercise.knowledge_metadata')->removeFromEntity(
+                $knowledgeId,
                 $metadataKey
             );
 
@@ -173,28 +173,28 @@ class MetadataByOwnerKnowledgeController extends ApiController
     }
 
     /**
-     * Edit the list of metadata for this owner resource
+     * Edit the list of metadata for this knowledge
      *
      * @param ArrayCollection $metadatas
-     * @param int             $ownerKnowledgeId
+     * @param int             $knowledgeId
      *
      * @return ApiEditedResponse
      * @throws ApiNotFoundException
      * @throws ApiConflictException
      */
-    public function editAllAction(ArrayCollection $metadatas, $ownerKnowledgeId)
+    public function editAllAction(ArrayCollection $metadatas, $knowledgeId)
     {
         try {
-            $resources = $this->get('simple_it.exercise.owner_knowledge')
+            $knowledge = $this->get('simple_it.exercise.knowledge')
                 ->editMetadata
                 (
-                    $ownerKnowledgeId,
+                    $knowledgeId,
                     $metadatas
                 );
 
-            $resourceResource = MetadataResourceFactory::createCollection($resources);
+            $knowledgeResource = MetadataResourceFactory::createCollection($knowledge);
 
-            return new ApiEditedResponse($resourceResource);
+            return new ApiEditedResponse($knowledgeResource);
 
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(MetadataResource::RESOURCE_NAME);

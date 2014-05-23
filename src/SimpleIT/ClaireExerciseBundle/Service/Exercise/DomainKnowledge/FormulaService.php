@@ -1166,10 +1166,11 @@ class FormulaService implements FormulaServiceInterface
      */
     public function prefixVariableNames($variables, $formulaName)
     {
-        foreach ($variables as &$key => $variable) {
-            $key = $formulaName . ':' . $key;
+        $returnVariables = array();
+        foreach ($variables as $key => $variable) {
+            $returnVariables[$formulaName . ':' . $key] = $variable;
         }
 
-        return $variables;
+        return $returnVariables;
     }
 }

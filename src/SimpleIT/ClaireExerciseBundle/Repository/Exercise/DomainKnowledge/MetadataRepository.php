@@ -16,6 +16,9 @@ use SimpleIT\Utils\Collection\PaginatorInterface;
  */
 class MetadataRepository extends SharedMetadataRepository
 {
+    const METADATA_TABLE = 'claire_exercise_knowledge_metadata';
+
+    const ENTITY_ID_FIELD_NAME = 'knowledge_id';
     /**
      * Find a model by id
      *

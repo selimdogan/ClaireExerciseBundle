@@ -2,8 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel;
 
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResourceFactory;
-use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\SharedMetadataService;
+use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedMetadataService;
 
 /**
  * Service which manages the metadata for exercise models

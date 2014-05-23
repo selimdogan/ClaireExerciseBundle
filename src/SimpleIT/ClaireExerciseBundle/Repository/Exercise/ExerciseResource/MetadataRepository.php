@@ -3,11 +3,10 @@
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource;
 
 use Doctrine\ORM\QueryBuilder;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedMetadataRepository;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Repository\BaseRepository;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatorInterface;
 use SimpleIT\Utils\Collection\Sort;
@@ -19,6 +18,9 @@ use SimpleIT\Utils\Collection\Sort;
  */
 class MetadataRepository extends SharedMetadataRepository
 {
+    const METADATA_TABLE = 'claire_exercise_resource_metadata';
+
+    const ENTITY_ID_FIELD_NAME = 'resource_id';
     /**
      * Find a model by id
      *
@@ -51,15 +53,5 @@ class MetadataRepository extends SharedMetadataRepository
     )
     {
         return parent::findAllByEntityName('resource', $collectionInformation, $resource);
-    }
-
-    /**
-     * Delete all the metadata for a resource
-     *
-     * @param int $resourceId
-     */
-    public function deleteAllByResource($resourceId)
-    {
-        parent::deleteAllByEntityByType($resourceId, 'claire_exercise_resource_metadata', 'resource_id');
     }
 }

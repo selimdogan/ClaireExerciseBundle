@@ -2,10 +2,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
 use JMS\Serializer\Handler\HandlerRegistry;
-use JMS\Serializer\SerializerBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata;
-use SimpleIT\ClaireExerciseBundle\Serializer\Handler\AbstractClassForExerciseHandler;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\Utils\Collection\PaginatorInterface;

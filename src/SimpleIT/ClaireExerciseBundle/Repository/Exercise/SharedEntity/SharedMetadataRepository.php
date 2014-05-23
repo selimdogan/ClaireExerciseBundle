@@ -16,6 +16,10 @@ use SimpleIT\Utils\Collection\Sort;
  */
 class SharedMetadataRepository extends BaseRepository
 {
+    const METADATA_TABLE = 'Name of the table';
+
+    const ENTITY_ID_FIELD_NAME = 'Name of the field';
+
     /**
      * Return all the metadata
      *
@@ -67,16 +71,14 @@ class SharedMetadataRepository extends BaseRepository
     }
 
     /**
-     * Delete all the metadata for an exercise model
+     * Delete all the metadata for an entity
      *
      * @param int    $entityId
-     * @param string $table
-     * @param string $entityIdFieldName
      */
-    public function deleteAllByEntityByType($entityId, $table, $entityIdFieldName)
+    public function deleteAllByEntity($entityId)
     {
-        $sql = 'DELETE FROM ' . $table . ' AS emm WHERE emm.' .
-            $entityIdFieldName . '= :entityId';
+        $sql = 'DELETE FROM ' . static::METADATA_TABLE . ' AS emm WHERE emm.' .
+            static::ENTITY_ID_FIELD_NAME . '= :entityId';
 
         $connection = $this->_em->getConnection();
         $connection->executeQuery(
@@ -84,11 +86,4 @@ class SharedMetadataRepository extends BaseRepository
             array('entityId' => $entityId)
         );
     }
-
-    /**
-     * Delete all the metadata for an entity
-     *
-     * @param int $entityId
-     */
-    abstract public function deleteAllByEntity($entityId);
 }

@@ -30,7 +30,7 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
     /**
      * @var KnowledgeRepository
      */
-    private $entityRepository;
+    protected $entityRepository;
 
     /**
      * @var FormulaServiceInterface

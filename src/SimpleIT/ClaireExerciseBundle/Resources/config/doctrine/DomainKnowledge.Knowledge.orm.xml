@@ -7,9 +7,9 @@
         </id>
 
         <field name="type" column="type" type="string" nullable="false"/>
-        <field name="title" column="title" type="string" nullable="true"/>
+        <field name="title" column="title" type="string" nullable="false"/>
         <field name="content" column="content" type="text" nullable="false"/>
-        <field name="public" column="public" type="boolean" nullable="false"/>
+        <field name="public" column="public" type="boolean" nullable="true"/>
         <field name="archived" column="archived" type="boolean" nullable="true"/>
 
         <one-to-many field="children" target-entity="Knowledge" mapped-by="parent"/>

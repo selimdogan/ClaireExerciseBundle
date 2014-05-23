@@ -26,12 +26,12 @@ class ExerciseModel extends SharedEntity
     /**
      * @var ExerciseModel
      */
-    private $parent;
+    protected $parent;
 
     /**
      * @var ExerciseModel
      */
-    private $forkFrom;
+    protected $forkFrom;
 
     /**
      * @var Collection

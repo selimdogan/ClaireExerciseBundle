@@ -11,7 +11,7 @@ use SimpleIT\ClaireExerciseBundle\Entity\User\User;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class SharedEntity
+abstract class SharedEntity
 {
     /**
      * @var int

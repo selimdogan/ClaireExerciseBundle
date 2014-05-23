@@ -67,7 +67,7 @@ class MetadataByExerciseModelController extends ApiController
     {
         try {
             $metadata = $this->get('simple_it.exercise.exercise_model_metadata')
-                ->getByExerciseModel(
+                ->getByEntity(
                     $exerciseModelId,
                     $metadataKey
                 );
@@ -101,7 +101,7 @@ class MetadataByExerciseModelController extends ApiController
 
             $metadata = $this->get(
                 'simple_it.exercise.exercise_model_metadata'
-            )->addToExerciseModel(
+            )->addToEntity(
                     $exerciseModelId,
                     $metadata
                 );
@@ -139,7 +139,7 @@ class MetadataByExerciseModelController extends ApiController
 
             $metadata = $this->get(
                 'simple_it.exercise.exercise_model_metadata'
-            )->saveFromExerciseModel(
+            )->saveFromEntity(
                     $exerciseModelId,
                     $metadata,
                     $metadataKey
@@ -166,7 +166,7 @@ class MetadataByExerciseModelController extends ApiController
     public function deleteAction($exerciseModelId, $metadataKey)
     {
         try {
-            $this->get('simple_it.exercise.exercise_model_metadata')->removeFromExerciseModel(
+            $this->get('simple_it.exercise.exercise_model_metadata')->removeFromEntity(
                 $exerciseModelId,
                 $metadataKey
             );

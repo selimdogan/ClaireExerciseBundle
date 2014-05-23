@@ -1,10 +1,8 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
+use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\Metadata;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata as ResMD;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata as ModMD;
-use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Metadata as KnoMD;
 
 /**
  * Class ResourceMetadataResourceFactory
@@ -24,7 +22,7 @@ abstract class MetadataResourceFactory
     {
         $metadataResources = array();
         foreach ($metadatas as $metadata) {
-            /** @var ResMD|ModMD $metadata */
+            /** @var Metadata $metadata */
             $metadataResources[$metadata->getKey()] = $metadata->getValue();
         }
 
@@ -34,7 +32,7 @@ abstract class MetadataResourceFactory
     /**
      * Create Metadata Resource
      *
-     * @param ResMD|ModMD|KnoMD $metadata Metadata
+     * @param Metadata $metadata Metadata
      *
      * @return MetadataResource
      */

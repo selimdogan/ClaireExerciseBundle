@@ -3,7 +3,6 @@
 namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject;
 
 use JMS\Serializer\Annotation as Serializer;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula;
 
 /**
  * Abstract class for exercise objects (pictures, texts, ...)

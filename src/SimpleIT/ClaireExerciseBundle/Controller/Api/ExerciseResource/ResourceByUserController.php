@@ -6,8 +6,8 @@ use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResourceFactory;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 

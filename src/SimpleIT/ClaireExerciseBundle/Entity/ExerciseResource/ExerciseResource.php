@@ -16,12 +16,12 @@ class ExerciseResource extends SharedEntity
     /**
      * @var ExerciseResource
      */
-    private $parent;
+    protected $parent;
 
     /**
      * @var ExerciseResource
      */
-    private $forkFrom;
+    protected $forkFrom;
 
     /**
      * @var Collection

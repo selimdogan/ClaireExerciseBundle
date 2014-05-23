@@ -5,18 +5,18 @@ use SimpleIT\ApiBundle\Controller\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerKnowledgeResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResourceFactory;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerKnowledgeResourceFactory;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class OwnerKnowledgeByUserController
+ * Class KnowledgeByUserController
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class OwnerKnowledgeByUserController extends ApiController
+class KnowledgeByUserController extends ApiController
 {
     /**
      * Get a specific Owner knowledge resource
@@ -30,16 +30,16 @@ class OwnerKnowledgeByUserController extends ApiController
     public function viewAction($ownerKnowledgeId, $ownerId)
     {
         try {
-            $ownerKnowledge = $this->get('simple_it.exercise.owner_knowledge')->getByIdAndOwner(
+            $ownerKnowledge = $this->get('simple_it.exercise.knowledge')->getByIdAndOwner(
                 $ownerKnowledgeId,
                 $ownerId
             );
-            $ownerKnowledgeResource = OwnerKnowledgeResourceFactory::create($ownerKnowledge);
+            $ownerKnowledgeResource = KnowledgeResourceFactory::create($ownerKnowledge);
 
             return new ApiGotResponse($ownerKnowledgeResource, array("owner_knowledge", 'Default'));
 
         } catch (NonExistingObjectException $neoe) {
-            throw new ApiNotFoundException(OwnerKnowledgeResource::RESOURCE_NAME);
+            throw new ApiNotFoundException(KnowledgeResource::RESOURCE_NAME);
         }
     }
 
@@ -58,12 +58,12 @@ class OwnerKnowledgeByUserController extends ApiController
     )
     {
         try {
-            $ownerKnowledges = $this->get('simple_it.exercise.owner_knowledge')->getAll(
+            $ownerKnowledges = $this->get('simple_it.exercise.knowledge')->getAll(
                 $collectionInformation,
                 $ownerId
             );
 
-            $ownerKnowledgeResources = OwnerKnowledgeResourceFactory::createCollection(
+            $ownerKnowledgeResources = KnowledgeResourceFactory::createCollection(
                 $ownerKnowledges
             );
 

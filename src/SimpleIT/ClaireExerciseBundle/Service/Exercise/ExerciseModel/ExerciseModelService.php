@@ -57,7 +57,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     /**
      * @var ExerciseModelRepository $exerciseModelRepository
      */
-    private $entityRepository;
+    protected $entityRepository;
 
     /**
      * @var ExerciseResourceServiceInterface

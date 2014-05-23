@@ -2,6 +2,8 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource;
 
+use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedMetadataService;
+
 /**
  * Service which manages the metadata for resources
  *

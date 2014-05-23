@@ -74,7 +74,7 @@ class ExerciseModelResource extends SharedResource
      * @Assert\NotBlank(groups={"create"})
      * @Assert\Valid
      */
-    private $content;
+    protected $content;
 
     /**
      * @var boolean $draft

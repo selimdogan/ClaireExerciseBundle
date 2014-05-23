@@ -4,10 +4,9 @@ namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseModel;
 
 use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedMetadataRepository;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Repository\BaseRepository;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatorInterface;
 use SimpleIT\Utils\Collection\Sort;
@@ -19,6 +18,10 @@ use SimpleIT\Utils\Collection\Sort;
  */
 class MetadataRepository extends SharedMetadataRepository
 {
+    const METADATA_TABLE = 'claire_exercise_model_metadata';
+
+    const ENTITY_ID_FIELD_NAME = 'exercise_model_id';
+
     /**
      * Find a model by id
      *
