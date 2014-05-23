@@ -269,13 +269,8 @@ class ExerciseModelResource extends SharedResource
      * @return string
      * @throws \LogicException
      */
-    public function getClass($type = null)
+    public function getSerializationClass($type)
     {
-        if ($type === null)
-        {
-            $type = $this->type;
-        }
-
         switch ($type) {
             case CommonExercise::MULTIPLE_CHOICE:
                 $class = self::MULTIPLE_CHOICE_MODEL_CLASS;
@@ -297,5 +292,15 @@ class ExerciseModelResource extends SharedResource
         }
 
         return $class;
+    }
+
+    /**
+     * Return the item serialization class corresponding to the type of the object
+     *
+     * @return string
+     * @throws \LogicException
+     */
+    public function getClass(){
+        return self::getSerializationClass($this->type);
     }
 }

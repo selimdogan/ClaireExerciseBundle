@@ -46,7 +46,7 @@ abstract class SharedEntityService extends TransactionalService
     /**
      * @var UserService
      */
-    private $userService;
+    protected $userService;
 
     /**
      * @var SharedMetadataService
@@ -279,12 +279,10 @@ abstract class SharedEntityService extends TransactionalService
      * @param SharedResource $resource
      * @param SharedEntity   $entity
      * @param string         $storageGroup
-     *
-     * @return SharedEntity
      */
     protected function updateFromSharedResource(
         SharedResource $resource,
-        SharedEntity $entity,
+        SharedEntity &$entity,
         $storageGroup
     )
     {
@@ -308,8 +306,6 @@ abstract class SharedEntityService extends TransactionalService
                 $this->serializer->jmsSerialize($content, 'json', $context)
             );
         }
-
-        return $entity;
     }
 
     /**
@@ -410,5 +406,20 @@ abstract class SharedEntityService extends TransactionalService
         $entity->setMetadata(new ArrayCollection($metadataCollection));
 
         return $this->save($entity)->getMetadata();
+    }
+
+    /**
+     * Get an entity by id and by owner
+     *
+     * @param int $entityId
+     * @param int $ownerId
+     *
+     * @return SharedEntity
+     */
+    public function getByIdAndOwner($entityId, $ownerId)
+    {
+        $owner = $this->userService->get($ownerId);
+
+        return $this->entityRepository->findByIdAndOwner($entityId, $owner);
     }
 }

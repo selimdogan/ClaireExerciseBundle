@@ -9,6 +9,7 @@ use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityAlreadyExistsException;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\FilterException;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\CoreBundle\Model\Paginator;
 use SimpleIT\CoreBundle\Repository\BaseRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
@@ -361,6 +362,32 @@ abstract class SharedEntityRepository extends BaseRepository
 
         if ($stmt->rowCount() != 1) {
             throw new EntityDeletionException();
+        }
+    }
+
+    /**
+     * Find an entity if it is owned by the user
+     *
+     * @param int  $entityId
+     * @param User $owner
+     *
+     * @return SharedEntity
+     * @throws NonExistingObjectException
+     */
+    public function findByIdAndOwner($entityId, User $owner)
+    {
+        $queryBuilder = $this->createQueryBuilder('e');
+
+        $queryBuilder->where($queryBuilder->expr()->eq('e.owner', $owner->getId()));
+        $queryBuilder->andWhere($queryBuilder->expr()->eq('e.id', $entityId));
+
+        $result = $queryBuilder->getQuery()->getResult();
+
+        if (empty($result)) {
+            throw new NonExistingObjectException('Unable to find entity ' . $entityId .
+            ' for owner ' . $owner->getId());
+        } else {
+            return $result[0];
         }
     }
 }

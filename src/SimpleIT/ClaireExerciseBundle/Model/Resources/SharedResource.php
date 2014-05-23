@@ -284,12 +284,10 @@ abstract class SharedResource
     }
 
     /**
-     * Return the item serialization class corresponding to the type
-     *
-     * @param string $type
+     * Return the item serialization class corresponding to the type of the object
      *
      * @return string
      * @throws \LogicException
      */
-    abstract public function getClass($type = null);
+    abstract public function getClass();
 }

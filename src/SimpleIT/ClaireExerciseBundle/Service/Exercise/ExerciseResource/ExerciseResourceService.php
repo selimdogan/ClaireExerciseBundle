@@ -8,7 +8,6 @@ use JMS\Serializer\SerializationContext;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResourceFactory;
-use SimpleIT\ClaireExerciseBundle\Entity\ResourceMetadataFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidExerciseResourceException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
@@ -21,76 +20,24 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource\ExerciseResourceRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\KnowledgeServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityService;
-use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
-use SimpleIT\ClaireExerciseBundle\Service\User\UserService;
 use SimpleIT\CoreBundle\Annotation\Transactional;
-use SimpleIT\CoreBundle\Services\TransactionalService;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
 
 /**
  * Service which manages the exercise resources
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseResourceService extends SharedEntityService implements ExerciseResourceServiceInterface
+class ExerciseResourceService extends SharedEntityService //implements ExerciseResourceServiceInterface
 {
-    /**
-     * @var ExerciseResourceRepository
-     */
-    private $exerciseResourceRepository;
-
     /**
      * @var KnowledgeServiceInterface
      */
     private $knowledgeService;
 
     /**
-     * @var UserService
+     * @var ExerciseResourceRepository
      */
-    private $userService;
-
-    /**
-     * @var SerializerInterface
-     */
-    protected $serializer;
-
-    /**
-     * @var MetadataService
-     */
-    private $metadataService;
-
-    /**
-     * Set serializer
-     *
-     * @param SerializerInterface $serializer
-     */
-    public function setSerializer($serializer)
-    {
-        $this->serializer = $serializer;
-    }
-
-    /**
-     * Set exerciseResourceRepository
-     *
-     * @param ExerciseResourceRepository $exerciseResourceRepository
-     */
-    public function setExerciseResourceRepository(
-        ExerciseResourceRepository $exerciseResourceRepository
-    )
-    {
-        $this->exerciseResourceRepository = $exerciseResourceRepository;
-    }
-
-    /**
-     * Set userService
-     *
-     * @param UserService $userService
-     */
-    public function setUserService($userService)
-    {
-        $this->userService = $userService;
-    }
+    protected $entityRepository;
 
     /**
      * Set knowledgeService
@@ -100,16 +47,6 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     public function setKnowledgeService($knowledgeService)
     {
         $this->knowledgeService = $knowledgeService;
-    }
-
-    /**
-     * Set metadataService
-     *
-     * @param \SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\MetadataService $metadataService
-     */
-    public function setMetadataService($metadataService)
-    {
-        $this->metadataService = $metadataService;
     }
 
     /**
@@ -123,7 +60,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      */
     public function getExerciseObject(ObjectId $resId, User $owner)
     {
-        $resEntity = $this->exerciseResourceRepository->findByIdAndOwner($resId->getId(), $owner);
+        $resEntity = $this->entityRepository->findByIdAndOwner($resId->getId(), $owner);
 
         return $this->getExerciseObjectFromEntity($resEntity);
     }
@@ -143,7 +80,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         User $owner
     )
     {
-        $resList = $this->exerciseResourceRepository->findResourcesFromConstraintsByOwner(
+        $resList = $this->entityRepository->findResourcesFromConstraintsByOwner(
             $oc,
             $owner
         );
@@ -162,21 +99,6 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     }
 
     /**
-     * Add a resource from a ResourceResource
-     *
-     * @param ExerciseResource $exerciseResource
-     *
-     * @return ExerciseResource
-     * @Transactional
-     */
-    public function add(ExerciseResource $exerciseResource)
-    {
-        $this->exerciseResourceRepository->insert($exerciseResource);
-
-        return $exerciseResource;
-    }
-
-    /**
      * Create an ExerciseResource object from a ResourceResource
      *
      * @param ResourceResource $resourceResource
@@ -184,41 +106,11 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * @throws NoAuthorException
      * @return ExerciseResource
      */
-    public function createFromResource(
-        ResourceResource $resourceResource
-    )
+    public function createFromResource($resourceResource)
     {
         $exerciseResource = ExerciseResourceFactory::createFromResource($resourceResource);
 
-        // author
-        if (is_null($resourceResource->getAuthor())) {
-            throw new NoAuthorException();
-        }
-        $exerciseResource->setAuthor(
-            $this->userService->get($resourceResource->getAuthor())
-        );
-
-        // owner
-        if (is_null($resourceResource->getOwner())) {
-            throw new NoAuthorException('No owner for this model...');
-        }
-        $exerciseResource->setOwner(
-            $this->userService->get($resourceResource->getOwner())
-        );
-
-        // parent model
-        if (!is_null($resourceResource->getParent())) {
-            $exerciseResource->setParent(
-                $this->get($resourceResource->getParent())
-            );
-        }
-
-        // fork from
-        if (!is_null($resourceResource->getForkFrom())) {
-            $exerciseResource->setForkFrom(
-                $this->get($resourceResource->getForkFrom())
-            );
-        }
+        parent::fillFromResource(parent::RESOURCE, $exerciseResource, $resourceResource);
 
         // required resources
         $reqResources = array();
@@ -234,33 +126,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         }
         $exerciseResource->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
 
-        // metadata
-        $metadata = array();
-        $resMetadata = $resourceResource->getMetadata();
-        if (!empty($resMetadata)) {
-            foreach ($resMetadata as $key => $value) {
-                $md = ResourceMetadataFactory::create($key, $value);
-                $md->setResource($exerciseResource);
-                $metadata[] = $md;
-            }
-        }
-        $exerciseResource->setMetadata(new ArrayCollection($metadata));
-
         return $exerciseResource;
-    }
-
-    /**
-     * Create and add an exerciseResource from a ResourceResource
-     *
-     * @param ResourceResource $resourceResource
-     *
-     * @return ExerciseResource
-     */
-    public function createAndAdd(ResourceResource $resourceResource)
-    {
-        $exerciseResource = $this->createFromResource($resourceResource);
-
-        return $this->add($exerciseResource);
     }
 
     /**
@@ -273,10 +139,12 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * @return ExerciseResource
      */
     public function updateFromResource(
-        ResourceResource $resourceResource,
+        $resourceResource,
         $exerciseResource
     )
     {
+        parent::updateFromSharedResource($resourceResource, $exerciseResource, 'resource_storage');
+
         if (!is_null($resourceResource->getRequiredExerciseResources())) {
             $reqResources = array();
             foreach ($resourceResource->getRequiredExerciseResources() as $reqRes) {
@@ -293,58 +161,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
             $exerciseResource->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
         }
 
-        if (!is_null($resourceResource->getType())) {
-            $exerciseResource->setType($resourceResource->getType());
-        }
-
-        if (!is_null($resourceResource->getPublic())) {
-            $exerciseResource->setPublic($resourceResource->getPublic());
-        }
-
-        if (!is_null($resourceResource->getContent())) {
-            $context = SerializationContext::create();
-            $context->setGroups(array('resource_storage', 'Default'));
-            $exerciseResource->setContent(
-                $this->serializer->jmsSerialize($resourceResource->getContent(), 'json', $context)
-            );
-        }
-
         return $exerciseResource;
-    }
-
-    /**
-     * Save a resource given in form of a ResourceResource
-     *
-     * @param ResourceResource $resourceResource
-     * @param int              $resourceId
-     *
-     * @return ExerciseResource
-     */
-    public function edit(
-        ResourceResource $resourceResource,
-        $resourceId
-    )
-    {
-        $exerciseResource = $this->get($resourceId);
-        $exerciseResource = $this->updateFromResource(
-            $resourceResource,
-            $exerciseResource
-        );
-
-        return $this->save($exerciseResource);
-    }
-
-    /**
-     * Save a resource
-     *
-     * @param ExerciseResource $exerciseResource
-     *
-     * @return ExerciseResource
-     * @Transactional
-     */
-    public function save(ExerciseResource $exerciseResource)
-    {
-        return $this->exerciseResourceRepository->update($exerciseResource);
     }
 
     /**
@@ -358,19 +175,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      */
     public function editMetadata($resourceId, ArrayCollection $metadatas)
     {
-        $resource = $this->exerciseResourceRepository->find($resourceId);
-
-        $this->metadataService->deleteAllByExerciseResource($resourceId);
-
-        $metadataCollection = array();
-        foreach ($metadatas as $key => $value) {
-            $md = ResourceMetadataFactory::create($key, $value);
-            $md->setResource($resource);
-            $metadataCollection[] = $md;
-        }
-        $resource->setMetadata(new ArrayCollection($metadataCollection));
-
-        return $this->save($resource)->getMetadata();
+        return parent::editMetadataByEntityType(parent::RESOURCE, $resourceId, $metadatas);
     }
 
     /**
@@ -386,8 +191,9 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         $reqResId
     )
     {
+        /** @var ExerciseResource $reqRes */
         $reqRes = $this->get($reqResId);
-        $this->exerciseResourceRepository->addRequiredResource($resourceId, $reqRes);
+        $this->entityRepository->addRequiredResource($resourceId, $reqRes);
 
         return $this->get($resourceId);
     }
@@ -405,8 +211,9 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         $reqResId
     )
     {
+        /** @var ExerciseResource $reqRes */
         $reqRes = $this->get($reqResId);
-        $this->exerciseResourceRepository->deleteRequiredResource($resourceId, $reqRes);
+        $this->entityRepository->deleteRequiredResource($resourceId, $reqRes);
     }
 
     /**
@@ -419,15 +226,18 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      */
     public function editRequiredResource($resourceId, ArrayCollection $requiredResources)
     {
-        $resource = $this->exerciseResourceRepository->find($resourceId);
+        $resource = $this->entityRepository->find($resourceId);
 
         $resourcesCollection = array();
         foreach ($requiredResources as $rr) {
-            $resourcesCollection[] = $this->exerciseResourceRepository->find($rr);
+            $resourcesCollection[] = $this->entityRepository->find($rr);
         }
         $resource->setRequiredExerciseResources(new ArrayCollection($resourcesCollection));
 
-        return $this->save($resource)->getRequiredExerciseResources();
+        /** @var ExerciseResource $resource */
+        $resource = $this->save($resource);
+
+        return $resource->getRequiredExerciseResources();
     }
 
     /**
@@ -444,7 +254,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     )
     {
         $reqKno = $this->knowledgeService->get($reqKnoId);
-        $this->exerciseResourceRepository->addRequiredKnowledge($resourceId, $reqKno);
+        $this->entityRepository->addRequiredKnowledge($resourceId, $reqKno);
 
         return $this->get($resourceId);
     }
@@ -463,7 +273,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     )
     {
         $reqKno = $this->knowledgeService->get($reqKnoId);
-        $this->exerciseResourceRepository->deleteRequiredKnowledge($exerciseModelId, $reqKno);
+        $this->entityRepository->deleteRequiredKnowledge($exerciseModelId, $reqKno);
     }
 
     /**
@@ -479,7 +289,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         ArrayCollection $requiredKnowledges
     )
     {
-        $resource = $this->exerciseResourceRepository->find($resourceId);
+        $resource = $this->entityRepository->find($resourceId);
 
         $reqKnowledgeCollection = array();
         foreach ($requiredKnowledges as $rk) {
@@ -487,20 +297,10 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         }
         $resource->setRequiredKnowledges(new ArrayCollection($reqKnowledgeCollection));
 
-        return $this->save($resource)->getRequiredKnowledges();
-    }
+        /** @var ExerciseResource $resource */
+        $resource = $this->save($resource);
 
-    /**
-     * Delete a resource
-     *
-     * @param $resourceId
-     *
-     * @Transactional
-     */
-    public function remove($resourceId)
-    {
-        $resource = $this->exerciseResourceRepository->find($resourceId);
-        $this->exerciseResourceRepository->delete($resource);
+        return $resource->getRequiredKnowledges();
     }
 
     /**
@@ -515,17 +315,15 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         ExerciseResource $res
     )
     {
-        while ($res->getContent() === null)
-        {
-            if ($res->getParent() === null)
-            {
+        while ($res->getContent() === null) {
+            if ($res->getParent() === null) {
                 throw new InvalidExerciseResourceException('Resource ' . $res->getId() .
-                    ' has not content and no parent');
+                ' has not content and no parent');
             }
-            $res = $this->get($res->getParent());
+            $res = $this->get($res->getParent()->getId());
         }
 
-        $class = ResourceResource::getClass($res->getType());
+        $class = ResourceResource::getSerializationClass($res->getType());
 
         return $this->serializer->jmsDeserialize($res->getContent(), $class, 'json');
     }
@@ -570,88 +368,5 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
             $resEntity->getMetadata(),
             $requiredResources
         );
-    }
-
-    /**
-     * Get a resource by id
-     *
-     * @param $resourceId
-     *
-     * @return ExerciseResource
-     */
-    public function get(
-        $resourceId
-    )
-    {
-        return $this->exerciseResourceRepository->find($resourceId);
-    }
-
-    /**
-     * Get a list of Resources
-     *
-     * @param CollectionInformation $collectionInformation The collection information
-     * @param int                   $ownerId
-     * @param int                   $authorId
-     * @param int                   $parentModelId
-     * @param int                   $forkFromModelId
-     * @param boolean               $isRoot
-     * @param boolean               $isPointer
-     *
-     * @return PaginatorInterface
-     */
-    public function getAll(
-        $collectionInformation = null,
-        $ownerId = null,
-        $authorId = null,
-        $parentModelId = null,
-        $forkFromModelId = null,
-        $isRoot = null,
-        $isPointer = null
-    )
-    {
-        $owner = null;
-        if (!is_null($ownerId)) {
-            $owner = $this->userService->get($ownerId);
-        }
-
-        $author = null;
-        if (!is_null($authorId)) {
-            $author = $this->userService->get($authorId);
-        }
-
-        $parentModel = null;
-        if (!is_null($parentModelId)) {
-            $parentModel = $this->get($parentModelId);
-        }
-
-        $forkFromModel = null;
-        if (!is_null($forkFromModelId)) {
-            $forkFromModel = $this->get($forkFromModelId);
-        }
-
-        return $this->exerciseResourceRepository->findAll(
-            $collectionInformation,
-            $owner,
-            $author,
-            $parentModel,
-            $forkFromModel,
-            $isRoot,
-            $isPointer
-        );
-    }
-
-    /**
-     * Get an ExerciseResource by id and by owner
-     *
-     * @param int $resourceId
-     * @param int $ownerId
-     *
-     * @return ExerciseResource
-     */
-    public function getByIdAndOwner($resourceId, $ownerId)
-    {
-        $owner = $this->userService->get($ownerId);
-
-        return $this->exerciseResourceRepository->findByIdAndOwner($resourceId, $owner);
     }
 }

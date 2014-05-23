@@ -205,13 +205,8 @@ class ResourceResource extends SharedResource
      * @return string
      * @throws \LogicException
      */
-    public function getClass($type = null)
+    static public function getSerializationClass($type)
     {
-        if ($type === null)
-        {
-            $type = $this->type;
-        }
-
         switch ($type) {
             case CommonResource::MULTIPLE_CHOICE_QUESTION:
                 $class = self::MULTIPLE_CHOICE_QUESTION_CLASS;
@@ -233,5 +228,15 @@ class ResourceResource extends SharedResource
         }
 
         return $class;
+    }
+
+    /**
+     * Return the item serialization class corresponding to the type of the object
+     *
+     * @return string
+     * @throws \LogicException
+     */
+    public function getClass(){
+        return self::getSerializationClass($this->type);
     }
 }

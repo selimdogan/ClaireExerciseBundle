@@ -158,13 +158,8 @@ class KnowledgeResource extends SharedResource
      * @return string
      * @throws \LogicException
      */
-    public function getClass($type = null)
+    public function getSerializationClass($type)
     {
-        if ($type === null)
-        {
-            $type = $this->type;
-        }
-
         switch ($type) {
             case CommonKnowledge::FORMULA:
                 $class = self::FORMULA_CLASS;
@@ -174,5 +169,15 @@ class KnowledgeResource extends SharedResource
         }
 
         return $class;
+    }
+
+    /**
+     * Return the item serialization class corresponding to the type of the object
+     *
+     * @return string
+     * @throws \LogicException
+     */
+    public function getClass(){
+        return self::getSerializationClass($this->type);
     }
 }

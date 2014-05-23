@@ -354,23 +354,23 @@ class ExerciseResourceRepository extends SharedEntityRepository
     /**
      * Find a knowledge if it is owned by the user
      *
-     * @param int  $resourceId
+     * @param int  $entityId
      * @param User $owner
      *
      * @return mixed
      * @throws NonExistingObjectException
      */
-    public function findByIdAndOwner($resourceId, User $owner)
+    public function findByIdAndOwner($entityId, User $owner)
     {
         $queryBuilder = $this->createQueryBuilder('r');
 
         $queryBuilder->where($queryBuilder->expr()->eq('r.owner', $owner->getId()));
-        $queryBuilder->andWhere($queryBuilder->expr()->eq('r.id', $resourceId));
+        $queryBuilder->andWhere($queryBuilder->expr()->eq('r.id', $entityId));
 
         $result = $queryBuilder->getQuery()->getResult();
 
         if (empty($result)) {
-            throw new NonExistingObjectException('Unable to find resource ' . $resourceId .
+            throw new NonExistingObjectException('Unable to find resource ' . $entityId .
             ' for owner ' . $owner->getId());
         } else {
             return $result[0];

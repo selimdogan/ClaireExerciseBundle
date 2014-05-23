@@ -58,7 +58,7 @@ abstract class SharedResourceFactory
             ->build();
         $content = $serializer->deserialize(
             $entity->getContent(),
-            $resource->getClass(),
+            $resource->getSerializationClass(),
             'json'
         );
         $resource->setContent($content);
