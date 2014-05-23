@@ -13,6 +13,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class ResourceResource extends SharedResource
 {
     /**
+     * @const METADATA_IS_RESOURCE_PREFIX = '__'
+     */
+    const METADATA_IS_RESOURCE_PREFIX = '__';
+
+    /**
      * @const RESOURCE_NAME = 'Exercise Resource'
      */
     const RESOURCE_NAME = 'Exercise Resource';
@@ -236,7 +241,8 @@ class ResourceResource extends SharedResource
      * @return string
      * @throws \LogicException
      */
-    public function getClass(){
+    public function getClass()
+    {
         return self::getSerializationClass($this->type);
     }
 }

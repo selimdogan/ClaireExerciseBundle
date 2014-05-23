@@ -3,9 +3,10 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModelFactory;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidModelException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
@@ -49,8 +50,10 @@ use SimpleIT\CoreBundle\Annotation\Transactional;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseModelService extends SharedEntityService //implements ExerciseModelServiceInterface
+class ExerciseModelService extends SharedEntityService implements ExerciseModelServiceInterface
 {
+    const ENTITY_TYPE = 'exerciseModel';
+
     /**
      * @var ExerciseModelRepository $exerciseModelRepository
      */
@@ -96,6 +99,7 @@ class ExerciseModelService extends SharedEntityService //implements ExerciseMode
      */
     public function getModel($exerciseModelId)
     {
+        /** @var ExerciseModel $entity */
         $entity = $this->get($exerciseModelId);
 
         return $this->getModelFromEntity($entity);
@@ -156,7 +160,7 @@ class ExerciseModelService extends SharedEntityService //implements ExerciseMode
 
         $model = ExerciseModelFactory::createFromResource($modelResource);
 
-        parent::fillFromResource(parent::EXERCISE_MODEL, $model, $modelResource);
+        parent::fillFromResource($model, $modelResource);
 
         // required resources
         $reqResources = array();
@@ -237,24 +241,6 @@ class ExerciseModelService extends SharedEntityService //implements ExerciseMode
     }
 
     /**
-     * Edit all the metadata of an exercise model
-     *
-     * @param int             $exerciseModelId
-     * @param ArrayCollection $metadatas
-     *
-     * @return Collection
-     * @Transactional
-     */
-    public function editMetadata($exerciseModelId, ArrayCollection $metadatas)
-    {
-        return parent::editMetadataByEntityType(
-            parent::EXERCISE_MODEL,
-            $exerciseModelId,
-            $metadatas
-        );
-    }
-
-    /**
      * Add a requiredResource to an exercise model
      *
      * @param $exerciseModelId
@@ -267,6 +253,7 @@ class ExerciseModelService extends SharedEntityService //implements ExerciseMode
         $reqResId
     )
     {
+        /** @var ExerciseResource $reqRes */
         $reqRes = $this->exerciseResourceService->get($reqResId);
         $this->entityRepository->addRequiredResource($exerciseModelId, $reqRes);
 
@@ -286,6 +273,7 @@ class ExerciseModelService extends SharedEntityService //implements ExerciseMode
         $reqResId
     )
     {
+        /** @var ExerciseResource $reqRes */
         $reqRes = $this->exerciseResourceService->get($reqResId);
         $this->entityRepository->deleteRequiredResource($exerciseModelId, $reqRes);
     }
@@ -330,6 +318,7 @@ class ExerciseModelService extends SharedEntityService //implements ExerciseMode
         $reqKnoId
     )
     {
+        /** @var Knowledge $reqKno */
         $reqKno = $this->knowledgeService->get($reqKnoId);
         $this->entityRepository->addRequiredKnowledge($exerciseModelId, $reqKno);
 
@@ -349,6 +338,7 @@ class ExerciseModelService extends SharedEntityService //implements ExerciseMode
         $reqKnoId
     )
     {
+        /** @var Knowledge $reqKno */
         $reqKno = $this->knowledgeService->get($reqKnoId);
         $this->entityRepository->deleteRequiredKnowledge($exerciseModelId, $reqKno);
     }

@@ -16,7 +16,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonMod
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\Model;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\PairBlock;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\OwnerResourceResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 
 /**
  * Service which manages Pair Items Exercises.
@@ -222,7 +222,7 @@ class PairItemsService extends ExerciseCreationService
             $objectId = substr($metaValue, 2);
             try {
                 // Depending on the type of association (begins with '__' is resource, else text)
-                if ($substr === OwnerResourceResource::METADATA_IS_RESOURCE_PREFIX && is_numeric(
+                if ($substr === ResourceResource::METADATA_IS_RESOURCE_PREFIX && is_numeric(
                         $objectId
                     )
                 ) {

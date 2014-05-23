@@ -25,13 +25,9 @@ use SimpleIT\CoreBundle\Annotation\Transactional;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-abstract class SharedEntityService extends TransactionalService
+abstract class SharedEntityService extends TransactionalService implements SharedEntityServiceInterface
 {
-    const EXERCISE_MODEL = 'exerciseModel';
-
-    const RESOURCE = 'resource';
-
-    const KNOWLEDGE = 'knowledge';
+    const ENTITY_TYPE = '';
 
     /**
      * @var SharedEntityRepository $entityRepository
@@ -168,15 +164,13 @@ abstract class SharedEntityService extends TransactionalService
     /**
      * Fill an entity from a resource
      *
-     * @param string         $entityType
      * @param SharedEntity   $entity
      * @param SharedResource $sharedResource
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException
      * @return SharedEntity
      */
-    public function fillFromResource(
-        $entityType,
+    protected function fillFromResource(
         SharedEntity &$entity,
         SharedResource $sharedResource
     )
@@ -221,7 +215,7 @@ abstract class SharedEntityService extends TransactionalService
         $resMetadata = $sharedResource->getMetadata();
         if (!empty($resMetadata)) {
             foreach ($resMetadata as $key => $value) {
-                $md = SharedEntityMetadataFactory::create($entityType, $key, $value);
+                $md = SharedEntityMetadataFactory::create(static::ENTITY_TYPE, $key, $value);
                 $md->setEntity($entity);
                 $metadata[] = $md;
             }
@@ -248,7 +242,7 @@ abstract class SharedEntityService extends TransactionalService
      * @return SharedEntity
      */
     public function createAndAdd(
-        SharedResource $resource
+        $resource
     )
     {
         $model = $this->createFromResource($resource);
@@ -265,7 +259,7 @@ abstract class SharedEntityService extends TransactionalService
      * @Transactional
      */
     public function add(
-        SharedEntity $entity
+        $entity
     )
     {
         $this->entityRepository->insert($entity);
@@ -330,7 +324,7 @@ abstract class SharedEntityService extends TransactionalService
      * @return SharedEntity
      */
     public function edit(
-        SharedResource $resource,
+        $resource,
         $entityId
     )
     {
@@ -378,19 +372,7 @@ abstract class SharedEntityService extends TransactionalService
      * @return Collection
      * @Transactional
      */
-    abstract public function editMetadata($entityId, ArrayCollection $metadatas);
-
-    /**
-     * Edit all the metadata of an entity
-     *
-     * @param                 $entityType
-     * @param int             $entityId
-     * @param ArrayCollection $metadatas
-     *
-     * @return Collection
-     * @Transactional
-     */
-    protected function editMetadataByEntityType($entityType, $entityId, ArrayCollection $metadatas)
+    public function editMetadata($entityId, ArrayCollection $metadatas)
     {
         /** @var SharedEntity $entity */
         $entity = $this->entityRepository->find($entityId);
@@ -399,7 +381,7 @@ abstract class SharedEntityService extends TransactionalService
 
         $metadataCollection = array();
         foreach ($metadatas as $key => $value) {
-            $md = SharedEntityMetadataFactory::create($entityType, $key, $value);
+            $md = SharedEntityMetadataFactory::create(static::ENTITY_TYPE, $key, $value);
             $md->setEntity($entity);
             $metadataCollection[] = $md;
         }

@@ -3,21 +3,19 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\SerializationContext;
-use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
-use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\KnowledgeFactory;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\DomainKnowledge\KnowledgeRepository;
-use SimpleIT\ClaireExerciseBundle\Service\User\UserService;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityService;
+use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 use SimpleIT\CoreBundle\Annotation\Transactional;
 
 /**
@@ -25,27 +23,19 @@ use SimpleIT\CoreBundle\Annotation\Transactional;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class KnowledgeService extends TransactionalService implements KnowledgeServiceInterface
+class KnowledgeService extends SharedEntityService implements KnowledgeServiceInterface
 {
+    const ENTITY_TYPE = 'knowledge';
+
     /**
      * @var KnowledgeRepository
      */
-    private $knowledgeRepository;
-
-    /**
-     * @var UserService
-     */
-    private $userService;
+    private $entityRepository;
 
     /**
      * @var FormulaServiceInterface
      */
     private $formulaService;
-
-    /**
-     * @var SerializerInterface
-     */
-    protected $serializer;
 
     /**
      * Set serializer
@@ -55,28 +45,6 @@ class KnowledgeService extends TransactionalService implements KnowledgeServiceI
     public function setSerializer($serializer)
     {
         $this->serializer = $serializer;
-    }
-
-    /**
-     * Set knowledgeRepository
-     *
-     * @param KnowledgeRepository $knowledgeRepository
-     */
-    public function setKnowledgeRepository(
-        KnowledgeRepository $knowledgeRepository
-    )
-    {
-        $this->knowledgeRepository = $knowledgeRepository;
-    }
-
-    /**
-     * Set userService
-     *
-     * @param UserService $userService
-     */
-    public function setUserService($userService)
-    {
-        $this->userService = $userService;
     }
 
     /**
@@ -90,21 +58,6 @@ class KnowledgeService extends TransactionalService implements KnowledgeServiceI
     }
 
     /**
-     * Add a knowledge from a knowledgeResource
-     *
-     * @param Knowledge $knowledge
-     *
-     * @return Knowledge
-     * @Transactional
-     */
-    public function add(Knowledge $knowledge)
-    {
-        $this->knowledgeRepository->insert($knowledge);
-
-        return $knowledge;
-    }
-
-    /**
      * Create an Knowledge object from a knowledgeResource
      *
      * @param KnowledgeResource $knowledgeResource
@@ -114,7 +67,7 @@ class KnowledgeService extends TransactionalService implements KnowledgeServiceI
      * @return Knowledge
      */
     public function createFromResource(
-        KnowledgeResource $knowledgeResource,
+        $knowledgeResource,
         $authorId = null
     )
     {
@@ -122,15 +75,7 @@ class KnowledgeService extends TransactionalService implements KnowledgeServiceI
 
         $knowledge = KnowledgeFactory::createFromResource($knowledgeResource);
 
-        if (!is_null($knowledgeResource->getAuthor())) {
-            $authorId = $knowledgeResource->getAuthor();
-        }
-        if (is_null($authorId)) {
-            throw new NoAuthorException();
-        }
-        $knowledge->setAuthor(
-            $this->userService->get($authorId)
-        );
+        parent::fillFromResource($knowledge, $knowledgeResource);
 
         $reqKnowledges = array();
         foreach ($knowledgeResource->getRequiredKnowledges() as $reqKno) {
@@ -139,21 +84,6 @@ class KnowledgeService extends TransactionalService implements KnowledgeServiceI
         $knowledge->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
 
         return $knowledge;
-    }
-
-    /**
-     * Create and add an knowledge from a KnowledgeResource
-     *
-     * @param KnowledgeResource $knowledgeResource
-     * @param int               $authorId
-     *
-     * @return Knowledge
-     */
-    public function createAndAdd(KnowledgeResource $knowledgeResource, $authorId)
-    {
-        $knowledge = $this->createFromResource($knowledgeResource, $authorId);
-
-        return $this->add($knowledge);
     }
 
     /**
@@ -166,10 +96,12 @@ class KnowledgeService extends TransactionalService implements KnowledgeServiceI
      * @return Knowledge
      */
     public function updateFromResource(
-        KnowledgeResource $knowledgeResource,
+        $knowledgeResource,
         $knowledge
     )
     {
+        parent::updateFromSharedResource($knowledgeResource, $knowledge, 'knowledge_storage');
+
         if (!is_null($knowledgeResource->getRequiredKnowledges())) {
             $reqKnowledges = array();
             foreach ($knowledgeResource->getRequiredKnowledges() as $reqRes) {
@@ -179,50 +111,7 @@ class KnowledgeService extends TransactionalService implements KnowledgeServiceI
             $knowledge->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
         }
 
-        if (!is_null($knowledgeResource->getContent())) {
-            $context = SerializationContext::create();
-            $context->setGroups(array('knowledge_storage', 'Default'));
-            $knowledge->setContent(
-                $this->serializer->jmsSerialize($knowledgeResource->getContent(), 'json', $context)
-            );
-        }
-
         return $knowledge;
-    }
-
-    /**
-     * Save a knowledge given in form of a KnowledgeResource
-     *
-     * @param KnowledgeResource $knowledgeResource
-     * @param int               $resourceId
-     *
-     * @return Knowledge
-     */
-    public function edit(
-        KnowledgeResource $knowledgeResource,
-        $resourceId
-    )
-    {
-        $knowledge = $this->get($resourceId);
-        $knowledge = $this->updateFromResource(
-            $knowledgeResource,
-            $knowledge
-        );
-
-        return $this->save($knowledge);
-    }
-
-    /**
-     * Save a knowledge
-     *
-     * @param Knowledge $knowledge
-     *
-     * @return Knowledge
-     * @Transactional
-     */
-    public function save(Knowledge $knowledge)
-    {
-        return $this->knowledgeRepository->update($knowledge);
     }
 
     /**
@@ -238,8 +127,9 @@ class KnowledgeService extends TransactionalService implements KnowledgeServiceI
         $regKnoId
     )
     {
-        $reqRes = $this->get($regKnoId);
-        $this->knowledgeRepository->addRequiredKnowledge($knowledgeId, $reqRes);
+        /** @var Knowledge $reqKno */
+        $reqKno = $this->get($regKnoId);
+        $this->entityRepository->addRequiredKnowledge($knowledgeId, $reqKno);
 
         return $this->get($knowledgeId);
     }
@@ -257,21 +147,9 @@ class KnowledgeService extends TransactionalService implements KnowledgeServiceI
         $reqKnoId
     )
     {
-        $reqRes = $this->get($reqKnoId);
-        $this->knowledgeRepository->deleteRequiredKnowledge($knowledgeId, $reqRes);
-    }
-
-    /**
-     * Delete a knowledge
-     *
-     * @param $knowledgeId
-     *
-     * @Transactional
-     */
-    public function remove($knowledgeId)
-    {
-        $knowledge = $this->knowledgeRepository->find($knowledgeId);
-        $this->knowledgeRepository->delete($knowledge);
+        /** @var Knowledge $reqKno */
+        $reqKno = $this->get($reqKnoId);
+        $this->entityRepository->deleteRequiredKnowledge($knowledgeId, $reqKno);
     }
 
     /**
@@ -284,48 +162,18 @@ class KnowledgeService extends TransactionalService implements KnowledgeServiceI
      */
     public function editRequiredKnowledges($knowledgeId, ArrayCollection $requiredKnowledges)
     {
-        $knowledge = $this->knowledgeRepository->find($knowledgeId);
+        $knowledge = $this->entityRepository->find($knowledgeId);
 
         $knowledgesCollection = array();
         foreach ($requiredKnowledges as $rk) {
-            $knowledgesCollection[] = $this->knowledgeRepository->find($rk);
+            $knowledgesCollection[] = $this->entityRepository->find($rk);
         }
         $knowledge->setRequiredKnowledges(new ArrayCollection($knowledgesCollection));
 
-        return $this->save($knowledge)->getRequiredKnowledges();
-    }
+        /** @var Knowledge $knowledge */
+        $knowledge = $this->save($knowledge);
 
-    /**
-     * Get a knowledge by id
-     *
-     * @param $knowledgeId
-     *
-     * @return Knowledge
-     */
-    public function get($knowledgeId)
-    {
-        return $this->knowledgeRepository->find($knowledgeId);
-    }
-
-    /**
-     * Get a list of knowledges
-     *
-     * @param CollectionInformation $collectionInformation The collection information
-     * @param int                   $authorId
-     *
-     * @return PaginatorInterface
-     */
-    public function getAll(
-        $collectionInformation = null,
-        $authorId = null
-    )
-    {
-        $author = null;
-        if (!is_null($authorId)) {
-            $author = $this->userService->get($authorId);
-        }
-
-        return $this->knowledgeRepository->findAllBy($collectionInformation, $author);
+        return $knowledge->getRequiredKnowledges();
     }
 
     /**

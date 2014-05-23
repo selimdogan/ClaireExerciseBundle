@@ -16,7 +16,8 @@ use SimpleIT\ClaireExerciseBundle\Model\DomainKnowledge\Formula\Power;
 use SimpleIT\ClaireExerciseBundle\Model\DomainKnowledge\Formula\Sin;
 use SimpleIT\ClaireExerciseBundle\Model\DomainKnowledge\Formula\Value;
 use SimpleIT\ClaireExerciseBundle\Model\DomainKnowledge\Formula\Variable;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Variable as ResourceVariable;
+use
+    SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Variable as ResourceVariable;
 
 /**
  * Service that manages formulas
@@ -1041,9 +1042,9 @@ class FormulaService implements FormulaServiceInterface
     /**
      * Resolve a formula and returns values of the variables in an array
      *
-     * @param string                                                                   $formula
+     * @param string                                                                            $formula
      * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Variable[] $variables
-     * @param Unknown                                                                  $unknown
+     * @param Unknown                                                                           $unknown
      *
      * @throws \SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException
      * @return array
@@ -1153,5 +1154,22 @@ class FormulaService implements FormulaServiceInterface
         }
 
         return true;
+    }
+
+    /**
+     * Prefix the variable names with the formula name
+     *
+     * @param array  $variables An array in which keys are variable names and values the values
+     * @param string $formulaName
+     *
+     * @return array
+     */
+    public function prefixVariableNames($variables, $formulaName)
+    {
+        foreach ($variables as &$key => $variable) {
+            $key = $formulaName . ':' . $key;
+        }
+
+        return $variables;
     }
 }

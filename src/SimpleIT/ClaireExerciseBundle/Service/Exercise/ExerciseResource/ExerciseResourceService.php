@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
@@ -27,8 +28,10 @@ use SimpleIT\CoreBundle\Annotation\Transactional;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseResourceService extends SharedEntityService //implements ExerciseResourceServiceInterface
+class ExerciseResourceService extends SharedEntityService implements ExerciseResourceServiceInterface
 {
+    const ENTITY_TYPE = 'resource';
+
     /**
      * @var KnowledgeServiceInterface
      */
@@ -110,7 +113,7 @@ class ExerciseResourceService extends SharedEntityService //implements ExerciseR
     {
         $exerciseResource = ExerciseResourceFactory::createFromResource($resourceResource);
 
-        parent::fillFromResource(parent::RESOURCE, $exerciseResource, $resourceResource);
+        parent::fillFromResource($exerciseResource, $resourceResource);
 
         // required resources
         $reqResources = array();
@@ -162,20 +165,6 @@ class ExerciseResourceService extends SharedEntityService //implements ExerciseR
         }
 
         return $exerciseResource;
-    }
-
-    /**
-     * Edit all the metadata of a resource
-     *
-     * @param int             $resourceId
-     * @param ArrayCollection $metadatas
-     *
-     * @return Collection
-     * @Transactional
-     */
-    public function editMetadata($resourceId, ArrayCollection $metadatas)
-    {
-        return parent::editMetadataByEntityType(parent::RESOURCE, $resourceId, $metadatas);
     }
 
     /**
@@ -253,6 +242,7 @@ class ExerciseResourceService extends SharedEntityService //implements ExerciseR
         $reqKnoId
     )
     {
+        /** @var Knowledge $reqKno */
         $reqKno = $this->knowledgeService->get($reqKnoId);
         $this->entityRepository->addRequiredKnowledge($resourceId, $reqKno);
 
@@ -272,6 +262,7 @@ class ExerciseResourceService extends SharedEntityService //implements ExerciseR
         $reqKnoId
     )
     {
+        /** @var Knowledge $reqKno */
         $reqKno = $this->knowledgeService->get($reqKnoId);
         $this->entityRepository->deleteRequiredKnowledge($exerciseModelId, $reqKno);
     }
@@ -329,27 +320,6 @@ class ExerciseResourceService extends SharedEntityService //implements ExerciseR
     }
 
     /**
-     * Get the required resources of a resource entity under the form of an array of CommonResource
-     *
-     * @param ExerciseResource $resEntity
-     *
-     * @return array
-     */
-    private function getRequiredResources(
-        ExerciseResource $resEntity
-    )
-    {
-        $requiredResources = array();
-
-        foreach ($resEntity->getRequiredExerciseResources() as $req) {
-            /** @var ExerciseResource $req */
-            $requiredResources[$req->getId()] = $this->createResourceObjectFromResourceEntity($req);
-        }
-
-        return $requiredResources;
-    }
-
-    /**
      * Get an object from an entity
      *
      * @param ExerciseResource $resEntity
@@ -361,7 +331,12 @@ class ExerciseResourceService extends SharedEntityService //implements ExerciseR
     )
     {
         $resource = $this->createResourceObjectFromResourceEntity($resEntity);
-        $requiredResources = $this->getRequiredResources($resEntity);
+        $requiredResources = array();
+
+        foreach ($resEntity->getRequiredExerciseResources() as $req) {
+            /** @var ExerciseResource $req */
+            $requiredResources[$req->getId()] = $this->createResourceObjectFromResourceEntity($req);
+        }
 
         return ExerciseObjectFactory::createExerciseObject(
             $resource,

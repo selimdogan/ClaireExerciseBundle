@@ -3,7 +3,8 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge;
 
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Unknown;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Variable as ResourceVariable;
+use
+    SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Variable as ResourceVariable;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula;
 use SimpleIT\ClaireExerciseBundle\Exception\NotEvaluableException;
 use SimpleIT\ClaireExerciseBundle\Model\DomainKnowledge\Formula\Addition;
@@ -65,9 +66,9 @@ interface FormulaServiceInterface
     /**
      * Resolve a formula and returns values of the variables in an array
      *
-     * @param string                                                                   $formula
+     * @param string                                                                            $formula
      * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Variable[] $variables
-     * @param Unknown                                                                  $unknown
+     * @param Unknown                                                                           $unknown
      *
      * @throws \SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException
      * @return array
@@ -101,4 +102,14 @@ interface FormulaServiceInterface
      * @return array|null
      */
     public function getValueArrayFormat($values);
+
+    /**
+     * Prefix the variable names with the formula name
+     *
+     * @param array $variables An array in which keys are variable names and values the values
+     * @param string      $formulaName
+     *
+     * @return array
+     */
+    public function prefixVariableNames($variables, $formulaName);
 }

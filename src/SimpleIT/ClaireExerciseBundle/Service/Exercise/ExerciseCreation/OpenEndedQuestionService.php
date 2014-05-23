@@ -56,7 +56,7 @@ class OpenEndedQuestionService extends ExerciseCreationService
     private function generateOEQExercise(Model $model, User $owner)
     {
         // Formulas
-        $variables = $this->computeFormulaVariableValues($model->getFormula(), $owner);
+        $variables = $this->computeFormulaVariableValues($model->getFormulas(), $owner);
         $wording = $this->parseStringWithVariables($model->getWording(), $variables);
 
         $exercise = new Exercise($wording);
@@ -102,7 +102,7 @@ class OpenEndedQuestionService extends ExerciseCreationService
         foreach ($modelQuestionToAdd as $modelQuestion) {
             // initialize the variables
             $variables = $variables = $this->computeFormulaVariableValues(
-                $modelQuestion->getFormula(),
+                $modelQuestion->getFormulas(),
                 $owner
             );
 

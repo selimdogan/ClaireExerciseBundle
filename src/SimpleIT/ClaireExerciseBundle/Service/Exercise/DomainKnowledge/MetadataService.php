@@ -2,6 +2,8 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge;
 
+use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\SharedMetadataService;
+
 /**
  * Service which manages the knowledge metadata
  *

@@ -3,6 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\Test;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestModelResource;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\ExerciseModelService;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
@@ -139,6 +140,7 @@ class TestModelService extends TransactionalService implements TestModelServiceI
 
         $testModelPositions = array();
         foreach ($testModelResource->getExerciseModels() as $position => $oemId) {
+            /** @var ExerciseModel $exerciseModel */
             $exerciseModel = $this->exerciseModelService->get($oemId);
             $testModelPositions[] = TestModelPositionFactory::create(
                 $exerciseModel,
@@ -180,6 +182,7 @@ class TestModelService extends TransactionalService implements TestModelServiceI
         if (!is_null($testModelResource->getExerciseModels())) {
             $testModelPositions = array();
             foreach ($testModelResource->getExerciseModels() as $position => $oemId) {
+                /** @var ExerciseModel $exerciseModel */
                 $exerciseModel = $this->exerciseModelService->get($oemId);
                 $testModelPositions[] = TestModelPositionFactory::create(
                     $exerciseModel,

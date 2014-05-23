@@ -9,7 +9,6 @@ use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityServ
 use SimpleIT\CoreBundle\Annotation\Transactional;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\Metadata;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
-use SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource\MetadataRepository;
 use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\Utils\Collection\CollectionInformation;
 

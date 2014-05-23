@@ -40,6 +40,13 @@ class LocalFormula
     private $unknown;
 
     /**
+     * @var string $name The name of the formula inside the exercise model or inside the resource
+     * @Serializer\Type("string")
+     * @Serializer\Groups({"details", "knowledge_storage", "resource_storage", "exercise_model_storage"})
+     */
+    private $name;
+
+    /**
      * Set equation
      *
      * @param string $equation
@@ -117,5 +124,25 @@ class LocalFormula
     public function getUnknown()
     {
         return $this->unknown;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

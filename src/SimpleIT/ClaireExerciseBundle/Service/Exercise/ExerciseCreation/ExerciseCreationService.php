@@ -4,6 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\KnowledgeServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
@@ -25,7 +26,6 @@ use SimpleIT\ClaireExerciseBundle\Entity\StoredExerciseFactory;
 use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\ExerciseTextFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\FormulaServiceInterface;
-use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\OwnerKnowledgeServiceInterface;
 use
     SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\ExerciseResourceServiceInterface;
 
@@ -48,9 +48,9 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
     protected $formulaService;
 
     /**
-     * @var OwnerKnowledgeServiceInterface
+     * @var KnowledgeServiceInterface
      */
-    protected $ownerKnowledgeService;
+    protected $knowledgeService;
 
     /**
      * @var SerializerInterface
@@ -90,11 +90,11 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
     /**
      * Set ownerKnowledgeService
      *
-     * @param OwnerKnowledgeServiceInterface $ownerKnowledgeService
+     * @param KnowledgeServiceInterface $ownerKnowledgeService
      */
     public function setKnowledgeService($ownerKnowledgeService)
     {
-        $this->ownerKnowledgeService = $ownerKnowledgeService;
+        $this->knowledgeService = $ownerKnowledgeService;
     }
 
     /**
@@ -125,71 +125,84 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
     /**
      * Compute the values of the formula: variable instantiation and equation resolution
      *
-     * @param LocalFormula $localFormula
-     * @param User         $owner
+     * @param array $localFormulas
+     * @param User  $owner
      *
      * @throws \SimpleIT\ApiBundle\Exception\ApiBadRequestException
      * @return array
      */
-    protected function computeFormulaVariableValues($localFormula, User $owner)
+    protected function computeFormulaVariableValues($localFormulas, User $owner)
     {
-        if (empty($localFormula)) {
+        if (empty($localFormulas)) {
             return array();
         }
 
-        if (!is_null($localFormula->getFormulaId())) {
-            $formula = KnowledgeResourceFactory::create(
-                $this->ownerKnowledgeService->getByIdAndOwner
-                    (
-                        $localFormula->getFormulaId(),
-                        $owner->getId()
-                    )->getKnowledge()
-            )->getContent();
+        $returnVariables = array();
 
-            if (get_class($formula) != KnowledgeResource::FORMULA_CLASS) {
+        /** @var LocalFormula $localFormula */
+        foreach ($localFormulas as $localFormula) {
+            if (!is_null($localFormula->getFormulaId())) {
+                $formula = KnowledgeResourceFactory::create(
+                    $this->knowledgeService->getByIdAndOwner
+                        (
+                            $localFormula->getFormulaId(),
+                            $owner->getId()
+                        )
+                )->getContent();
+
+                if (get_class($formula) != KnowledgeResource::FORMULA_CLASS) {
+                    throw new ApiBadRequestException(
+                        'The specified formula resource is not a formula'
+                    );
+                }
+
+                /** @var Formula $formula */
+                $textFormula = $formula->getEquation();
+                $variables = $formula->getVariables();
+                $unknown = $formula->getUnknown();
+            } elseif (!is_null($localFormula->getEquation())) {
+                $textFormula = $localFormula->getEquation();
+                $unknown = $localFormula->getUnknown();
+                $variables = array();
+            } else {
                 throw new ApiBadRequestException(
-                    'The specified formula resource is not a formula'
+                    'The equation of the formula cannot be found'
                 );
             }
 
-            /** @var Formula $formula */
-            $textFormula = $formula->getEquation();
-            $variables = $formula->getVariables();
-            $unknown = $formula->getUnknown();
-        } elseif (!is_null($localFormula->getEquation())) {
-            $textFormula = $localFormula->getEquation();
-            $unknown = $localFormula->getUnknown();
-            $variables = array();
-        } else {
-            throw new ApiBadRequestException(
-                'The equation of the formula cannot be found'
+            $newVariables = array();
+            /** @var Formula\Variable $newVar */
+            foreach ($localFormula->getVariables() as $newVar) {
+                $newVariables[] = $newVar->getName();
+            }
+
+            /** @var Formula\Variable $variable */
+            foreach ($variables as $key => $variable) {
+                if (array_search($variable->getName(), $newVariables) !== false) {
+                    unset($variables[$key]);
+                }
+            }
+
+            $variables = array_merge($variables, $localFormula->getVariables());
+
+            if ($localFormula->getUnknown() != null) {
+                $unknown = $localFormula->getUnknown();
+            }
+
+            $returnVariables = array_merge(
+                $returnVariables,
+                $this->formulaService->prefixVariableNames(
+                    $this->formulaService->resolveFormulaResource(
+                        $textFormula,
+                        $variables,
+                        $unknown
+                    ),
+                    $localFormula->getName()
+                )
             );
         }
 
-        $newVariables = array();
-        /** @var Formula\Variable $newVar */
-        foreach ($localFormula->getVariables() as $newVar) {
-            $newVariables[] = $newVar->getName();
-        }
-
-        /** @var Formula\Variable $variable */
-        foreach ($variables as $key => $variable) {
-            if (array_search($variable->getName(), $newVariables) !== false) {
-                unset($variables[$key]);
-            }
-        }
-
-        $variables = array_merge($variables, $localFormula->getVariables());
-
-        if ($localFormula->getUnknown() != null) {
-            $unknown = $localFormula->getUnknown();
-        }
-
-        return $this->formulaService->resolveFormulaResource(
-            $textFormula,
-            $variables,
-            $unknown
-        );
+        return $returnVariables;
     }
 
     /**
@@ -382,7 +395,7 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
      * Select random resources from a block
      *
      * @param ResourceBlock $resourceBlock
-     * @param int              $numberOfOccurrences
+     * @param int           $numberOfOccurrences
      * @param array         $blockResources
      * @param User          $owner
      */

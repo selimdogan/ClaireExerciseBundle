@@ -5,88 +5,104 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
-use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
-use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityServiceInterface;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 
 /**
  * Interface for service which manages the domain knowledge
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-interface KnowledgeServiceInterface
+interface KnowledgeServiceInterface extends SharedEntityServiceInterface
 {
     /**
-     * Add a knowledge from a knowledgeResource
+     * Get an entity
      *
-     * @param Knowledge $knowledge
+     * @param int $entityId
      *
      * @return Knowledge
+     * @throws NonExistingObjectException
      */
-    public function add(Knowledge $knowledge);
+    public function get($entityId);
 
     /**
-     * Create an Knowledge object from a knowledgeResource
+     * Create an entity from a resource
      *
-     * @param KnowledgeResource $knowledgeResource
-     * @param int               $authorId
+     * @param KnowledgeResource $resource
      *
-     * @throws NoAuthorException
      * @return Knowledge
      */
-    public function createFromResource(
-        KnowledgeResource $knowledgeResource,
-        $authorId = null
+    public function createFromResource($resource);
+
+    /**
+     * Create and add an entity from a resource
+     *
+     * @param KnowledgeResource $resource
+     *
+     * @return Knowledge
+     */
+    public function createAndAdd(
+        $resource
     );
 
     /**
-     * Create and add an knowledge from a KnowledgeResource
+     * Add an entity
      *
-     * @param KnowledgeResource $knowledgeResource
-     * @param int               $authorId
+     * @param Knowledge $entity
      *
      * @return Knowledge
      */
-    public function createAndAdd(KnowledgeResource $knowledgeResource, $authorId);
+    public function add(
+        $entity
+    );
 
     /**
-     * Create or update a Knowledge object from a KnowledgeResource
+     * Update an entity object from a Resource
      *
-     * @param KnowledgeResource $knowledgeResource
-     * @param Knowledge         $knowledge
+     * @param KnowledgeResource $resource
+     * @param Knowledge         $entity
      *
-     * @throws NoAuthorException
      * @return Knowledge
      */
     public function updateFromResource(
-        KnowledgeResource $knowledgeResource,
-        $knowledge
+        $resource,
+        $entity
     );
 
     /**
-     * Save a knowledge given in form of a KnowledgeResource
+     * Save an entity given in form of a Resource
      *
-     * @param KnowledgeResource $knowledgeResource
-     * @param int               $resourceId
+     * @param KnowledgeResource $resource
+     * @param int               $entityId
      *
      * @return Knowledge
      */
     public function edit(
-        KnowledgeResource $knowledgeResource,
-        $resourceId
+        $resource,
+        $entityId
     );
 
     /**
-     * Save a knowledge
+     * Save an entity
      *
-     * @param Knowledge $knowledge
+     * @param Knowledge $entity
      *
      * @return Knowledge
      */
-    public function save(Knowledge $knowledge);
+    public function save($entity);
+
+    /**
+     * Get an entity by id and by owner
+     *
+     * @param int $entityId
+     * @param int $ownerId
+     *
+     * @return Knowledge
+     */
+    public function getByIdAndOwner($entityId, $ownerId);
 
     /**
      * Add a requiredKnowledge to a knowledge
@@ -115,15 +131,6 @@ interface KnowledgeServiceInterface
     );
 
     /**
-     * Delete a knowledge
-     *
-     * @param $knowledgeId
-     *
-     * @Transactional
-     */
-    public function remove($knowledgeId);
-
-    /**
      * Edit the required knowledges
      *
      * @param int             $knowledgeId
@@ -132,26 +139,4 @@ interface KnowledgeServiceInterface
      * @return Knowledge
      */
     public function editRequiredKnowledges($knowledgeId, ArrayCollection $requiredKnowledges);
-
-    /**
-     * Get a knowledge by id
-     *
-     * @param $knowledgeId
-     *
-     * @return Knowledge
-     */
-    public function get($knowledgeId);
-
-    /**
-     * Get a list of knowledges
-     *
-     * @param CollectionInformation $collectionInformation The collection information
-     * @param int                   $authorId
-     *
-     * @return PaginatorInterface
-     */
-    public function getAll(
-        $collectionInformation = null,
-        $authorId = null
-    );
 }

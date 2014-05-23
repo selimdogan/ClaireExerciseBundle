@@ -2,30 +2,107 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
+use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityServiceInterface;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
-use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
 
 /**
  * Interface for service which manages the exercise generation
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-interface ExerciseModelServiceInterface
+interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
 {
     /**
-     * Get an Exercise Model entity
+     * Get an entity
      *
-     * @param int $exerciseModelId
+     * @param int $entityId
      *
      * @return ExerciseModel
      * @throws NonExistingObjectException
      */
-    public function get($exerciseModelId);
+    public function get($entityId);
+
+    /**
+     * Create an entity from a resource
+     *
+     * @param ExerciseModelResource $resource
+     *
+     * @return ExerciseModel
+     */
+    public function createFromResource($resource);
+
+    /**
+     * Create and add an entity from a resource
+     *
+     * @param ExerciseModelResource $resource
+     *
+     * @return ExerciseModel
+     */
+    public function createAndAdd(
+        $resource
+    );
+
+    /**
+     * Add an entity
+     *
+     * @param ExerciseModel $entity
+     *
+     * @return ExerciseModel
+     * @Transactional
+     */
+    public function add(
+        $entity
+    );
+
+    /**
+     * Update an entity object from a Resource
+     *
+     * @param ExerciseModelResource $resource
+     * @param ExerciseModel         $entity
+     *
+     * @return ExerciseModel
+     */
+    public function updateFromResource(
+        $resource,
+        $entity
+    );
+
+    /**
+     * Save an entity given in form of a Resource
+     *
+     * @param ExerciseModelResource $resource
+     * @param int                   $entityId
+     *
+     * @return ExerciseModel
+     */
+    public function edit(
+        $resource,
+        $entityId
+    );
+
+    /**
+     * Save an entity
+     *
+     * @param ExerciseModel $entity
+     *
+     * @return ExerciseModel
+     * @Transactional
+     */
+    public function save($entity);
+
+    /**
+     * Get an entity by id and by owner
+     *
+     * @param int $entityId
+     * @param int $ownerId
+     *
+     * @return ExerciseModel
+     */
+    public function getByIdAndOwner($entityId, $ownerId);
 
     /**
      * Get an exercise Model (business object, no entity)
@@ -48,76 +125,80 @@ interface ExerciseModelServiceInterface
     public function getModelFromEntity(ExerciseModel $entity);
 
     /**
-     * Get a list of Exercise Model
+     * Add a requiredResource to an exercise model
      *
-     * @param CollectionInformation $collectionInformation The collection information
-     *
-     * @return PaginatorInterface
-     */
-    public function getAll($collectionInformation = null);
-
-    /**
-     * Create an ExerciseModel entity from a resource
-     *
-     * @param ExerciseModelResource $modelResource
-     *
-     * @throws NoAuthorException
-     * @return ExerciseModel
-     */
-    public function createFromResource(ExerciseModelResource $modelResource);
-
-    /**
-     * Create and add an exercise model from a resource
-     *
-     * @param ExerciseModelResource $modelResource
+     * @param $exerciseModelId
+     * @param $reqResId
      *
      * @return ExerciseModel
      */
-    public function createAndAdd(ExerciseModelResource $modelResource);
+    public function addRequiredResource(
+        $exerciseModelId,
+        $reqResId
+    );
 
     /**
-     * Add a model from a Resource
+     * Delete a required resource
      *
-     * @param ExerciseModel $model
+     * @param $exerciseModelId
+     * @param $reqResId
      *
      * @return ExerciseModel
      */
-    public function add(ExerciseModel $model);
+    public function deleteRequiredResource(
+        $exerciseModelId,
+        $reqResId
+    );
 
     /**
-     * Create or update an ExerciseResource object from a ResourceResource
+     * Edit the required resources
      *
-     * @param ExerciseModelResource $modelResource
-     * @param ExerciseModel         $model
-     *
-     * @throws NoAuthorException
-     * @return ExerciseModel
-     */
-    public function updateFromResource(ExerciseModelResource $modelResource, $model);
-
-    /**
-     * Save a resource given in form of a ResourceResource
-     *
-     * @param ExerciseModelResource $modelResource
-     * @param int                   $modelId
+     * @param int             $exerciseModelId
+     * @param ArrayCollection $requiredResources
      *
      * @return ExerciseModel
      */
-    public function edit(ExerciseModelResource $modelResource, $modelId);
+    public function editRequiredResource(
+        $exerciseModelId,
+        ArrayCollection $requiredResources
+    );
 
     /**
-     * Save a resource
+     * Add a required knowledge to an exercise model
      *
-     * @param ExerciseModel $model
+     * @param $exerciseModelId
+     * @param $reqKnoId
      *
      * @return ExerciseModel
      */
-    public function save(ExerciseModel $model);
+    public function addRequiredKnowledge(
+        $exerciseModelId,
+        $reqKnoId
+    );
 
     /**
-     * Delete a resource
+     * Delete a required knowledge
      *
-     * @param $modelId
+     * @param $exerciseModelId
+     * @param $reqKnoId
+     *
+     * @return ExerciseModel
      */
-    public function remove($modelId);
+    public function deleteRequiredKnowledge(
+        $exerciseModelId,
+        $reqKnoId
+    );
+
+    /**
+     * Edit the required knowledges
+     *
+     * @param int             $exerciseModelId
+     * @param ArrayCollection $requiredKnowledges
+     *
+     * @return ExerciseModel
+     */
+    public function editRequiredKnowledges(
+        $exerciseModelId,
+        ArrayCollection $requiredKnowledges
+    );
 }

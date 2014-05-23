@@ -34,11 +34,11 @@ abstract class ExerciseObject
     protected $metavalue = null;
 
     /**
-     * @var LocalFormula A LocalFormula
-     * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula")
+     * @var array LocalFormulas
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula>")
      * @Serializer\Groups({"details", "exercise_model_storage"})
      */
-    protected $formula;
+    protected $formulas;
 
     /**
      * Get metadata
@@ -104,22 +104,22 @@ abstract class ExerciseObject
     }
 
     /**
-     * Set formula
+     * Set formulas
      *
-     * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula $formula
+     * @param array $formulas
      */
-    public function setFormula($formula)
+    public function setFormulas($formulas)
     {
-        $this->formula = $formula;
+        $this->formulas = $formulas;
     }
 
     /**
-     * Get formula
+     * Get formulas
      *
-     * @return \SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula
+     * @return array
      */
-    public function getFormula()
+    public function getFormulas()
     {
-        return $this->formula;
+        return $this->formulas;
     }
 }

@@ -7,13 +7,12 @@ use Doctrine\Common\Collections\Collection;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
-use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityServiceInterface;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 
 /**
  * Service which manages the exercise resources
@@ -21,8 +20,94 @@ use SimpleIT\Utils\Collection\PaginatorInterface;
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
 
-interface ExerciseResourceServiceInterface
+interface ExerciseResourceServiceInterface extends SharedEntityServiceInterface
 {
+    /**
+     * Get an entity
+     *
+     * @param int $entityId
+     *
+     * @return ExerciseResource
+     * @throws NonExistingObjectException
+     */
+    public function get($entityId);
+
+    /**
+     * Create an entity from a resource
+     *
+     * @param ResourceResource $resource
+     *
+     * @return ExerciseResource
+     */
+    public function createFromResource($resource);
+
+    /**
+     * Create and add an entity from a resource
+     *
+     * @param ResourceResource $resource
+     *
+     * @return ExerciseResource
+     */
+    public function createAndAdd(
+        $resource
+    );
+
+    /**
+     * Add an entity
+     *
+     * @param ExerciseResource $entity
+     *
+     * @return ExerciseResource
+     */
+    public function add(
+        $entity
+    );
+
+    /**
+     * Update an entity object from a Resource
+     *
+     * @param ResourceResource $resource
+     * @param ExerciseResource $entity
+     *
+     * @return ExerciseResource
+     */
+    public function updateFromResource(
+        $resource,
+        $entity
+    );
+
+    /**
+     * Save an entity given in form of a Resource
+     *
+     * @param ResourceResource $resource
+     * @param int              $entityId
+     *
+     * @return ExerciseResource
+     */
+    public function edit(
+        $resource,
+        $entityId
+    );
+
+    /**
+     * Save an entity
+     *
+     * @param ExerciseResource $entity
+     *
+     * @return ExerciseResource
+     */
+    public function save($entity);
+
+    /**
+     * Get an entity by id and by owner
+     *
+     * @param int $entityId
+     * @param int $ownerId
+     *
+     * @return ExerciseResource
+     */
+    public function getByIdAndOwner($entityId, $ownerId);
+
     /**
      * Get a resource in the form of an ExerciseObject
      *
@@ -48,85 +133,6 @@ interface ExerciseResourceServiceInterface
         $numberOfObjects,
         User $owner
     );
-
-    /**
-     * Add a resource from a ResourceResource
-     *
-     * @param ExerciseResource $exerciseResource
-     *
-     * @return ExerciseResource
-     * @Transactional
-     */
-    public function add(ExerciseResource $exerciseResource);
-
-    /**
-     * Create an ExerciseResource object from a ResourceResource
-     *
-     * @param ResourceResource $resourceResource
-     *
-     * @throws NoAuthorException
-     * @return ExerciseResource
-     */
-    public function createFromResource(
-        ResourceResource $resourceResource
-    );
-
-    /**
-     * Create and add an exerciseResource from a ResourceResource
-     *
-     * @param ResourceResource $resourceResource
-     *
-     * @return ExerciseResource
-     */
-    public function createAndAdd(ResourceResource $resourceResource);
-
-    /**
-     * Create or update an ExerciseResource object from a ResourceResource
-     *
-     * @param ResourceResource $resourceResource
-     * @param ExerciseResource $exerciseResource
-     *
-     * @throws NoAuthorException
-     * @return ExerciseResource
-     */
-    public function updateFromResource(
-        ResourceResource $resourceResource,
-        $exerciseResource
-    );
-
-    /**
-     * Save a resource given in form of a ResourceResource
-     *
-     * @param ResourceResource $resourceResource
-     * @param int              $resourceId
-     *
-     * @return ExerciseResource
-     */
-    public function edit(
-        ResourceResource $resourceResource,
-        $resourceId
-    );
-
-    /**
-     * Save a resource
-     *
-     * @param ExerciseResource $exerciseResource
-     *
-     * @return ExerciseResource
-     * @Transactional
-     */
-    public function save(ExerciseResource $exerciseResource);
-
-    /**
-     * Edit all the metadata of a resource
-     *
-     * @param int             $resourceId
-     * @param ArrayCollection $metadatas
-     *
-     * @return Collection
-     * @Transactional
-     */
-    public function editMetadata($resourceId, ArrayCollection $metadatas);
 
     /**
      * Add a requiredResource to a resource
@@ -202,57 +208,4 @@ interface ExerciseResourceServiceInterface
         $resourceId,
         ArrayCollection $requiredKnowledges
     );
-
-    /**
-     * Delete a resource
-     *
-     * @param $resourceId
-     *
-     * @Transactional
-     */
-    public function remove($resourceId);
-
-    /**
-     * Get a resource by id
-     *
-     * @param $resourceId
-     *
-     * @return ExerciseResource
-     */
-    public function get(
-        $resourceId
-    );
-
-    /**
-     * Get a list of Resources
-     *
-     * @param CollectionInformation $collectionInformation The collection information
-     * @param int                   $ownerId
-     * @param int                   $authorId
-     * @param int                   $parentModelId
-     * @param int                   $forkFromModelId
-     * @param boolean               $isRoot
-     * @param boolean               $isPointer
-     *
-     * @return PaginatorInterface
-     */
-    public function getAll(
-        $collectionInformation = null,
-        $ownerId = null,
-        $authorId = null,
-        $parentModelId = null,
-        $forkFromModelId = null,
-        $isRoot = null,
-        $isPointer = null
-    );
-
-    /**
-     * Get an ExerciseResource by id and by owner
-     *
-     * @param int $resourceId
-     * @param int $ownerId
-     *
-     * @return ExerciseResource
-     */
-    public function getByIdAndOwner($resourceId, $ownerId);
 }
