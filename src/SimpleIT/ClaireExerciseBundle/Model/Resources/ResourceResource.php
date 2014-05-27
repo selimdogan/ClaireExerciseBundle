@@ -125,7 +125,7 @@ class ResourceResource extends SharedResource
      * @var bool $archived
      * @Serializer\Type("boolean")
      * @Serializer\Groups({"details","list", "resource_list"})
-     * @Assert\Null(groups={"create"})
+     * @Assert\NotNull(groups={"create"})
      */
     protected $archived;
 

@@ -93,7 +93,7 @@ class KnowledgeResource extends SharedResource
      * @var bool $archived
      * @Serializer\Type("boolean")
      * @Serializer\Groups({"details","list", "knowledge_list"})
-     * @Assert\Null(groups={"create"})
+     * @Assert\NotNull(groups={"create"})
      */
     protected $archived;
 

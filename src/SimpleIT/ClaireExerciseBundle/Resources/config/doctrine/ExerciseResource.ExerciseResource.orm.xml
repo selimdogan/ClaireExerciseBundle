@@ -10,7 +10,7 @@
         <field name="title" column="title" type="string" nullable="false"/>
         <field name="content" column="content" type="text" nullable="false"/>
         <field name="public" column="public" type="boolean" nullable="false"/>
-        <field name="archived" column="archived" type="boolean" nullable="true"/>
+        <field name="archived" column="archived" type="boolean" nullable="false"/>
 
         <one-to-many field="children" target-entity="ExerciseResource" mapped-by="parent"/>
         <one-to-many field="forkedBy" target-entity="ExerciseResource" mapped-by="forkFrom"/>
