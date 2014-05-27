@@ -19,17 +19,17 @@ use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 interface KnowledgeServiceInterface extends SharedEntityServiceInterface
 {
     /**
-     * Get an entity
+     * Get a knowledge
      *
-     * @param int $entityId
+     * @param int $knowledgeId
      *
      * @return Knowledge
      * @throws NonExistingObjectException
      */
-    public function get($entityId);
+    public function get($knowledgeId);
 
     /**
-     * Create an entity from a resource
+     * Create a knowledge from a resource
      *
      * @param KnowledgeResource $resource
      *
@@ -38,7 +38,7 @@ interface KnowledgeServiceInterface extends SharedEntityServiceInterface
     public function createFromResource($resource);
 
     /**
-     * Create and add an entity from a resource
+     * Create and add a knowledge from a resource
      *
      * @param KnowledgeResource $resource
      *
@@ -49,60 +49,58 @@ interface KnowledgeServiceInterface extends SharedEntityServiceInterface
     );
 
     /**
-     * Add an entity
+     * Add a knowledge
      *
-     * @param Knowledge $entity
+     * @param Knowledge $knowledge
      *
      * @return Knowledge
      */
     public function add(
-        $entity
+        $knowledge
     );
 
     /**
-     * Update an entity object from a Resource
+     * Update a knowledge object from a Resource
      *
      * @param KnowledgeResource $resource
-     * @param Knowledge         $entity
+     * @param Knowledge         $knowledge
      *
      * @return Knowledge
      */
     public function updateFromResource(
         $resource,
-        $entity
+        $knowledge
     );
 
     /**
-     * Save an entity given in form of a Resource
+     * Save a knowledge given in form of a Resource
      *
      * @param KnowledgeResource $resource
-     * @param int               $entityId
      *
      * @return Knowledge
      */
     public function edit(
-        $resource,
-        $entityId
+        $resource
     );
 
     /**
-     * Save an entity
+     * Save a knowledge
      *
-     * @param Knowledge $entity
+     * @param Knowledge $knowledge
      *
      * @return Knowledge
      */
-    public function save($entity);
+    public function save($knowledge);
 
     /**
-     * Get an entity by id and by owner
+     * Get a knowledge by id and by owner
      *
-     * @param int $entityId
+     * @param int $knowledgeId
      * @param int $ownerId
      *
      * @return Knowledge
      */
-    public function getByIdAndOwner($entityId, $ownerId);
+    public function getByIdAndOwner($knowledgeId, $ownerId);
 
     /**
      * Add a requiredKnowledge to a knowledge

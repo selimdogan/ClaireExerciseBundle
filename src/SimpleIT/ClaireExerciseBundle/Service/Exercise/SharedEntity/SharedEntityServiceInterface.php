@@ -22,7 +22,7 @@ use SimpleIT\CoreBundle\Annotation\Transactional;
 interface SharedEntityServiceInterface
 {
     /**
-     * Get an entity
+     * Get an entity by its id
      *
      * @param int $entityId
      *
@@ -32,15 +32,16 @@ interface SharedEntityServiceInterface
     public function get($entityId);
 
     /**
-     * Get a list of entities
+     * Get a list of entities according to restrictions. Parameters left to null are not taken in
+     * account.
      *
-     * @param CollectionInformation $collectionInformation The collection information
-     * @param int                   $ownerId
-     * @param int                   $authorId
-     * @param int                   $parentEntityId
-     * @param int                   $forkFromEntityId
-     * @param boolean               $isRoot
-     * @param boolean               $isPointer
+     * @param CollectionInformation $collectionInformation The collection information that can contain filters, sorting or pagination.
+     * @param int                   $ownerId               Entities owned by this owner
+     * @param int                   $authorId              Entities that have this author
+     * @param int                   $parentEntityId        Entities that have this one as parent
+     * @param int                   $forkFromEntityId      Entities that are forked from
+     * @param boolean               $isRoot                Entities that are root (not forked from) or not
+     * @param boolean               $isPointer             Entities that are pointer (no content) or not (no parent)
      *
      * @return PaginatorInterface
      */
@@ -55,7 +56,9 @@ interface SharedEntityServiceInterface
     );
 
     /**
-     * Create an entity from a resource
+     * Create an entity from a resource (no saving).
+     * Required fields: type, title, [content or parent], owner, author, archived, metadata
+     * Must be null: id
      *
      * @param SharedResource $resource
      *
@@ -64,30 +67,31 @@ interface SharedEntityServiceInterface
     public function createFromResource($resource);
 
     /**
-     * Create and add an entity from a resource
+     * Create and add an entity from a resource (saving).
+     * Required fields: type, title, [content or parent], owner, author, archived, metadata
+     * Must be null: id
      *
      * @param SharedResource $resource
      *
      * @return SharedEntity
      */
-    public function createAndAdd(
-        $resource
-    );
+    public function createAndAdd($resource);
 
     /**
-     * Add an entity
+     * Add a new entity (saving). The id must be null.
      *
      * @param SharedEntity $entity
      *
      * @return SharedEntity
-     * @Transactional
      */
     public function add(
         $entity
     );
 
     /**
-     * Update an entity object from a Resource
+     * Update an entity object from a Resource (no saving).
+     * Only the fields that are not null in the resource are taken in account to edit the entity.
+     * The id of an entity can never be modified (ignored if not null)
      *
      * @param SharedResource $resource
      * @param SharedEntity   $entity
@@ -100,50 +104,47 @@ interface SharedEntityServiceInterface
     );
 
     /**
-     * Save an entity given in form of a Resource
+     * Edit and save an entity given in form of a Resource object.
+     * Only the fields that are not null in the resource are taken in account to edit the entity.
+     * The id of the entity that must be modified is stored in the field id.
+     * The id of an entity can never be modified.
      *
-     * @param SharedResource $resource
-     * @param int            $entityId
+     * @param SharedResource $resource The resource corresponding to the entity
      *
-     * @return SharedEntity
+     * @return SharedEntity The edited and saved entity
      */
     public function edit(
-        $resource,
-        $entityId
+        $resource
     );
 
     /**
-     * Save an entity
+     * Save an entity after modifications
      *
-     * @param SharedEntity $entity
+     * @param SharedEntity $entity An entity
      *
-     * @return SharedEntity
-     * @Transactional
+     * @return SharedEntity The saved entity
      */
     public function save($entity);
 
     /**
      * Delete an entity
      *
-     * @param $entityId
-     *
-     * @Transactional
+     * @param int $entityId The id of the entity
      */
     public function remove($entityId);
 
     /**
-     * Edit all the metadata of an entity
+     * Edit all the metadata of an entity. Old ones are removed and replaced by new ones.
      *
      * @param int             $entityId
-     * @param ArrayCollection $metadatas
+     * @param ArrayCollection $metadatas An ArrayCollection of the form (string)metaKey => (string)metaValue
      *
-     * @return Collection
-     * @Transactional
+     * @return Collection The collection of metadata entities
      */
     public function editMetadata($entityId, ArrayCollection $metadatas);
 
     /**
-     * Get an entity by id and by owner
+     * Get an entity by its id and by the owner id
      *
      * @param int $entityId
      * @param int $ownerId

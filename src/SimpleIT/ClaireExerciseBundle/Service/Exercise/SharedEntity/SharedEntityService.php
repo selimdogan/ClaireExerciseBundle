@@ -9,6 +9,7 @@ use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntityMetadataFactory;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
+use SimpleIT\ClaireExerciseBundle\Exception\MissingIdException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResource;
@@ -90,12 +91,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
     }
 
     /**
-     * Get an entity
-     *
-     * @param int $entityId
-     *
-     * @return SharedEntity
-     * @throws NonExistingObjectException
+     * @inheritdoc
      */
     public function get($entityId)
     {
@@ -108,17 +104,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
     }
 
     /**
-     * Get a list of entities
-     *
-     * @param CollectionInformation $collectionInformation The collection information
-     * @param int                   $ownerId
-     * @param int                   $authorId
-     * @param int                   $parentEntityId
-     * @param int                   $forkFromEntityId
-     * @param boolean               $isRoot
-     * @param boolean               $isPointer
-     *
-     * @return PaginatorInterface
+     * @inheritdoc
      */
     public function getAll(
         $collectionInformation = null,
@@ -226,20 +212,12 @@ abstract class SharedEntityService extends TransactionalService implements Share
     }
 
     /**
-     * Create an entity from a resource
-     *
-     * @param SharedResource $resource
-     *
-     * @return mixed
+     * @inheritdoc
      */
     abstract public function createFromResource($resource);
 
     /**
-     * Create and add an entity from a resource
-     *
-     * @param SharedResource $resource
-     *
-     * @return SharedEntity
+     * @inheritdoc
      */
     public function createAndAdd(
         $resource
@@ -251,11 +229,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
     }
 
     /**
-     * Add an entity
-     *
-     * @param SharedEntity $entity
-     *
-     * @return SharedEntity
+     * @inheritdoc
      */
     public function add(
         $entity
@@ -304,12 +278,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
     }
 
     /**
-     * Update an entity object from a Resource
-     *
-     * @param SharedResource $resource
-     * @param SharedEntity   $entity
-     *
-     * @return SharedEntity
+     * @inheritdoc
      */
     abstract public function updateFromResource(
         $resource,
@@ -317,19 +286,18 @@ abstract class SharedEntityService extends TransactionalService implements Share
     );
 
     /**
-     * Save an entity given in form of a Resource
-     *
-     * @param SharedResource $resource
-     * @param int            $entityId
-     *
-     * @return SharedEntity
+     * @inheritdoc
      */
     public function edit(
-        $resource,
-        $entityId
+        $resource
     )
     {
-        $entity = $this->get($entityId);
+        if (is_null($resource->getId()))
+        {
+            throw new MissingIdException();
+        }
+
+        $entity = $this->get($resource->getId());
         $entity = $this->updateFromResource(
             $resource,
             $entity
@@ -339,11 +307,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
     }
 
     /**
-     * Save an entity
-     *
-     * @param SharedEntity $entity
-     *
-     * @return SharedEntity
+     * @inheritdoc
      */
     public function save($entity)
     {
@@ -354,11 +318,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
     }
 
     /**
-     * Delete an entity
-     *
-     * @param $entityId
-     *
-     * @throws \SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException
+     * @inheritdoc
      */
     public function remove($entityId)
     {
@@ -372,12 +332,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
     }
 
     /**
-     * Edit all the metadata of an entity
-     *
-     * @param int             $entityId
-     * @param ArrayCollection $metadatas
-     *
-     * @return Collection
+     * @inheritdoc
      */
     public function editMetadata($entityId, ArrayCollection $metadatas)
     {
@@ -402,12 +357,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
     }
 
     /**
-     * Get an entity by id and by owner
-     *
-     * @param int $entityId
-     * @param int $ownerId
-     *
-     * @return SharedEntity
+     * @inheritdoc
      */
     public function getByIdAndOwner($entityId, $ownerId)
     {

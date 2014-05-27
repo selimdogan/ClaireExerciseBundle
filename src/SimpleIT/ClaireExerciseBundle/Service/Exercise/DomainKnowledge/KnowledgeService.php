@@ -15,7 +15,6 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\DomainKnowledge\KnowledgeRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityService;
-use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 use SimpleIT\CoreBundle\Annotation\Transactional;
 
 /**
@@ -36,16 +35,6 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
      * @var FormulaServiceInterface
      */
     private $formulaService;
-
-    /**
-     * Set serializer
-     *
-     * @param SerializerInterface $serializer
-     */
-    public function setSerializer($serializer)
-    {
-        $this->serializer = $serializer;
-    }
 
     /**
      * Set formulaService

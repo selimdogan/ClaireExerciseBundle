@@ -193,8 +193,8 @@ abstract class SharedEntityRepository extends BaseRepository
                 $i++;
             }
 
+            // sort
             $sorts = $collectionInformation->getSorts();
-
             if (!empty($sorts)) {
                 foreach ($sorts as $sort) {
                     /** @var Sort $sort */
@@ -213,10 +213,12 @@ abstract class SharedEntityRepository extends BaseRepository
                             break;
                     }
                 }
-                $qb = $this->setRange($qb, $collectionInformation);
             } else {
                 $qb->addOrderBy('entity.id');
             }
+
+            // range
+            $qb = $this->setRange($qb, $collectionInformation);
         }
 
         return new Paginator($qb);
