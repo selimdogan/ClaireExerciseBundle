@@ -12,6 +12,7 @@ use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
 use SimpleIT\ApiBundle\Model\ApiResponse;
 use SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException;
+use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 use SimpleIT\CoreBundle\Exception\ExistingObjectException;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
@@ -90,10 +91,12 @@ class KnowledgeController extends ApiController
 
             $this->validateResource($knowledgeResource, array('create'));
 
+            $knowledgeResource->setAuthor($userId);
+            $knowledgeResource->setOwner($userId);
+
             $knowledge = $this->get('simple_it.exercise.knowledge')->createAndAdd
                 (
-                    $knowledgeResource,
-                    $userId
+                    $knowledgeResource
                 );
 
             $knowledgeResource = KnowledgeResourceFactory::create($knowledge);
@@ -148,9 +151,9 @@ class KnowledgeController extends ApiController
      *
      * @param int $knowledgeId
      *
+     * @throws \SimpleIT\ApiBundle\Exception\ApiBadRequestException
+     * @throws \SimpleIT\ApiBundle\Exception\ApiNotFoundException
      * @return \SimpleIT\ApiBundle\Model\ApiDeletedResponse
-     * @throws ApiNotFoundException
-     * @return ApiDeletedResponse
      */
     public function deleteAction($knowledgeId)
     {
@@ -161,6 +164,8 @@ class KnowledgeController extends ApiController
 
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(KnowledgeResource::RESOURCE_NAME);
+        } catch (EntityDeletionException $ede) {
+            throw new ApiBadRequestException($ede->getMessage());
         }
     }
 }

@@ -11,5 +11,5 @@ use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedMetadataSe
  */
 class MetadataService extends SharedMetadataService
 {
-
+    const ENTITY_NAME = 'exerciseModel';
 }

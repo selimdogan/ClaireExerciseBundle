@@ -3,7 +3,9 @@
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity;
 
 use Doctrine\ORM\QueryBuilder;
+use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\Metadata;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\CoreBundle\Repository\BaseRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatorInterface;
@@ -19,18 +21,35 @@ class SharedMetadataRepository extends BaseRepository
     const METADATA_TABLE = 'Name of the table';
 
     const ENTITY_ID_FIELD_NAME = 'Name of the field';
+    const ENTITY_NAME = 'Name of the entity';
+
+    /**
+     * Find a model by id
+     *
+     * @param array $parameters
+     *
+     * @return Metadata
+     * @throws NonExistingObjectException
+     */
+    public function find($parameters)
+    {
+        $metadata = parent::find($parameters);
+        if ($metadata === null) {
+            throw new NonExistingObjectException();
+        }
+
+        return $metadata;
+    }
 
     /**
      * Return all the metadata
      *
-     * @param string                $entityName
      * @param CollectionInformation $collectionInformation
      * @param SharedEntity          $entity
      *
      * @return PaginatorInterface
      */
-    public function findAllByEntityName(
-        $entityName,
+    public function findAllBy(
         $collectionInformation = null,
         $entity = null
     )
@@ -40,7 +59,7 @@ class SharedMetadataRepository extends BaseRepository
         if (!is_null($entity)) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(
-                    'm.' . $entityName,
+                    'm.' . static::ENTITY_NAME,
                     $entity->getId()
                 )
             );
@@ -53,8 +72,8 @@ class SharedMetadataRepository extends BaseRepository
             foreach ($sorts as $sort) {
                 /** @var Sort $sort */
                 switch ($sort->getProperty()) {
-                    case $entityName:
-                        $queryBuilder->addOrderBy('m.' . $entityName, $sort->getOrder());
+                    case static::ENTITY_NAME:
+                        $queryBuilder->addOrderBy('m.' . static::ENTITY_NAME, $sort->getOrder());
                         break;
                     case 'key':
                         $queryBuilder->addOrderBy('m.key', $sort->getOrder());
@@ -63,7 +82,7 @@ class SharedMetadataRepository extends BaseRepository
             }
             $queryBuilder = $this->setRange($queryBuilder, $collectionInformation);
         } else {
-            $queryBuilder->addOrderBy('m.' . $entityName, 'ASC');
+            $queryBuilder->addOrderBy('m.' . static::ENTITY_NAME, 'ASC');
             $queryBuilder->addOrderBy('m.key', 'ASC');
         }
 

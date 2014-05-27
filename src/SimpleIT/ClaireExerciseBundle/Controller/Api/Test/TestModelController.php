@@ -11,6 +11,7 @@ use SimpleIT\ApiBundle\Model\ApiEditedResponse;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
 use SimpleIT\ApiBundle\Model\ApiResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestModelResource;
 use SimpleIT\CoreBundle\Exception\ExistingObjectException;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
@@ -142,7 +143,8 @@ class TestModelController extends ApiController
      *
      * @param int $testModelId
      *
-     * @throws ApiNotFoundException
+     * @throws \SimpleIT\ApiBundle\Exception\ApiBadRequestException
+     * @throws \SimpleIT\ApiBundle\Exception\ApiNotFoundException
      * @return ApiDeletedResponse
      */
     public function deleteAction($testModelId)
@@ -154,6 +156,8 @@ class TestModelController extends ApiController
 
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(TestModelResource::RESOURCE_NAME);
+        } catch (EntityDeletionException $ede) {
+            throw new ApiBadRequestException($ede->getMessage());
         }
     }
 }

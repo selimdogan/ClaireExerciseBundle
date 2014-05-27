@@ -54,7 +54,7 @@ abstract class SharedEntityRepository extends BaseRepository
             ->select();
 
         if (!is_null($owner)) {
-            $qb->where(
+            $qb->andWhere(
                 $qb->expr()->eq(
                     'entity.owner',
                     $owner->getId()
@@ -63,7 +63,7 @@ abstract class SharedEntityRepository extends BaseRepository
         }
 
         if (!is_null($author)) {
-            $qb->where(
+            $qb->andWhere(
                 $qb->expr()->eq(
                     'entity.author',
                     $author->getId()
@@ -72,7 +72,7 @@ abstract class SharedEntityRepository extends BaseRepository
         }
 
         if (!is_null($parent)) {
-            $qb->where(
+            $qb->andWhere(
                 $qb->expr()->eq(
                     'entity.parent',
                     $parent->getId()
@@ -81,7 +81,7 @@ abstract class SharedEntityRepository extends BaseRepository
         }
 
         if (!is_null($forkFrom)) {
-            $qb->where(
+            $qb->andWhere(
                 $qb->expr()->eq(
                     'entity.forkFrom',
                     $forkFrom->getId()
@@ -90,13 +90,13 @@ abstract class SharedEntityRepository extends BaseRepository
         }
 
         if ($isPointer === true) {
-            $qb->where($qb->expr()->isNotNull('entity.parent'));
+            $qb->andWhere($qb->expr()->isNotNull('entity.parent'));
         } else {
-            $qb->where($qb->expr()->isNotNull('entity.content'));
+            $qb->andWhere($qb->expr()->isNotNull('entity.content'));
         }
 
         if ($isRoot === true) {
-            $qb->where($qb->expr()->isNull('entity.forkFrom'));
+            $qb->andWhere($qb->expr()->isNull('entity.forkFrom'));
         }
 
         if ($collectionInformation !== null) {
@@ -141,13 +141,13 @@ abstract class SharedEntityRepository extends BaseRepository
                         if ($value !== "true" && $value !== "false") {
                             throw new FilterException('draft filter must be true or false');
                         }
-                        $qb->where($qb->expr()->eq('entity.draft', "'" . $value . "'"));
+                        $qb->andWhere($qb->expr()->eq('entity.draft', "'" . $value . "'"));
                         break;
                     case ('complete'):
                         if ($value !== "true" && $value !== "false") {
                             throw new FilterException('complete filter must be true or false');
                         }
-                        $qb->where($qb->expr()->eq('entity.complete', "'" . $value . "'"));
+                        $qb->andWhere($qb->expr()->eq('entity.complete', "'" . $value . "'"));
                         break;
                     case ('public-except-user'):
                         if (!is_numeric($value)) {

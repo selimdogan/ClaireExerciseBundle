@@ -3,7 +3,9 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\Test;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\DBALException;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestModelResource;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\ExerciseModelService;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
@@ -243,6 +245,7 @@ class TestModelService extends TransactionalService implements TestModelServiceI
      */
     public function removePositions($testModelId)
     {
+        // TODO: possible only if no test has been generated from this model
         $this->testModelRepository->deleteAllPositions($testModelId);
     }
 
@@ -251,11 +254,16 @@ class TestModelService extends TransactionalService implements TestModelServiceI
      *
      * @param $testModelId
      *
-     * @Transactional
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException
      */
     public function remove($testModelId)
     {
-        $testModel = $this->testModelRepository->find($testModelId);
-        $this->testModelRepository->delete($testModel);
+        try {
+            $testModel = $this->testModelRepository->find($testModelId);
+            $this->testModelRepository->delete($testModel);
+            $this->em->flush();
+        } catch (DBALException $dbale) {
+            throw new EntityDeletionException('This entity is needed and cannot be deleted');
+        }
     }
 }

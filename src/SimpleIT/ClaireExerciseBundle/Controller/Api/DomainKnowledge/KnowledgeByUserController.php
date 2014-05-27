@@ -19,24 +19,24 @@ use Symfony\Component\HttpFoundation\Request;
 class KnowledgeByUserController extends ApiController
 {
     /**
-     * Get a specific Owner knowledge resource
+     * Get a specific knowledge resource
      *
-     * @param int $ownerKnowledgeId
+     * @param int $knowledgeId
      * @param int $ownerId
      *
      * @throws ApiNotFoundException
      * @return ApiGotResponse
      */
-    public function viewAction($ownerKnowledgeId, $ownerId)
+    public function viewAction($knowledgeId, $ownerId)
     {
         try {
-            $ownerKnowledge = $this->get('simple_it.exercise.knowledge')->getByIdAndOwner(
-                $ownerKnowledgeId,
+            $knowledge = $this->get('simple_it.exercise.knowledge')->getByIdAndOwner(
+                $knowledgeId,
                 $ownerId
             );
-            $ownerKnowledgeResource = KnowledgeResourceFactory::create($ownerKnowledge);
+            $knowledgeResource = KnowledgeResourceFactory::create($knowledge);
 
-            return new ApiGotResponse($ownerKnowledgeResource, array("owner_knowledge", 'Default'));
+            return new ApiGotResponse($knowledgeResource, array("details", 'Default'));
 
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(KnowledgeResource::RESOURCE_NAME);
@@ -44,7 +44,7 @@ class KnowledgeByUserController extends ApiController
     }
 
     /**
-     * Get the list of owner knowledges
+     * Get the list of knowledges
      *
      * @param CollectionInformation $collectionInformation
      * @param int                   $ownerId
@@ -58,17 +58,17 @@ class KnowledgeByUserController extends ApiController
     )
     {
         try {
-            $ownerKnowledges = $this->get('simple_it.exercise.knowledge')->getAll(
+            $knowledges = $this->get('simple_it.exercise.knowledge')->getAll(
                 $collectionInformation,
                 $ownerId
             );
 
-            $ownerKnowledgeResources = KnowledgeResourceFactory::createCollection(
-                $ownerKnowledges
+            $knowledgeResources = KnowledgeResourceFactory::createCollection(
+                $knowledges
             );
 
-            return new ApiPaginatedResponse($ownerKnowledgeResources, $ownerKnowledges, array(
-                'owner_knowledge_list',
+            return new ApiPaginatedResponse($knowledgeResources, $knowledges, array(
+                'knowledge_list',
                 'Default'
             ));
         } catch (NonExistingObjectException $neoe) {

@@ -1,4 +1,4 @@
-api_owner_resource_list_by_user:
+api_resource_list_by_user:
     pattern:  /{ownerId}/resources/
     defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/ResourceByUser:list }
     methods: [GET]
@@ -6,7 +6,7 @@ api_owner_resource_list_by_user:
         _format: json
         ownerId: \d+
 
-api_owner_resource_view_by_user:
+api_resource_view_by_user:
     pattern:  /{ownerId}/resources/{resourceId}
     defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/ResourceByUser:view }
     methods: [GET]
@@ -32,19 +32,19 @@ api_exercise_model_view_by_user:
         exerciseModelId: \d+
         ownerId: \d+
 
-api_owner_knowledge_list_by_user:
-    pattern:  /{ownerId}/owner-knowledges/
-    defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/OwnerKnowledgeByUser:list }
+api_knowledge_list_by_user:
+    pattern:  /{ownerId}/knowledges/
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/KnowledgeByUser:list }
     methods: [GET]
     requirements:
         _format: json
         ownerId: \d+
 
-api_owner_knowledge_view_by_user:
-    pattern:  /{ownerId}/owner-knowledges/{ownerKnowledgeId}
-    defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/OwnerKnowledgeByUser:view }
+api_knowledge_view_by_user:
+    pattern:  /{ownerId}/knowledges/{knowledgeId}
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/KnowledgeByUser:view }
     methods: [GET]
     requirements:
         _format: json
-        ownerKnowledgeId: \d+
+        knowledgeId: \d+
         ownerId: \d+

@@ -9,5 +9,5 @@ namespace SimpleIT\ClaireExerciseBundle\Exception;
  */
 class EntityDeletionException extends \Exception
 {
-    protected $message = 'Impossible to find the entity to delete';
+    protected $message = 'Impossible to find or to delete the entity';
 }

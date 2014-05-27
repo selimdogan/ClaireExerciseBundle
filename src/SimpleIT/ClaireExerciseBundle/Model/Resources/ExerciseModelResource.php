@@ -47,7 +47,7 @@ class ExerciseModelResource extends SharedResource
      * @var int $id Id of exercise model
      * @Serializer\Type("integer")
      * @Serializer\Groups({"details", "list", "exercise"})
-     * @Assert\Blank(groups={"create"})
+     * @Assert\Blank(groups={"create", "edit"})
      */
      protected $id;
 

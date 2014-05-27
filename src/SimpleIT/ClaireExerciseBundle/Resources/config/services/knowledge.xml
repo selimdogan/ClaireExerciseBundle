@@ -38,6 +38,9 @@
             <call method="setSerializer">
                 <argument type="service" id="simple_it.api.serializer"/>
             </call>
+            <call method="setMetadataService">
+                <argument type="service" id="simple_it.exercise.knowledge_metadata"/>
+            </call>
             <call method="setUserService">
                 <argument type="service" id="simple_it.exercise.user"/>
             </call>

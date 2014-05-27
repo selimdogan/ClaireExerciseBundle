@@ -2,9 +2,10 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity;
 
+use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Metadata as KnowledgeMetadata;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata as ModelMetadata;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata as ResourceMetadata;
-use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Metadata as KnowledgeMetadata;
+use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\Metadata;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 
 /**
@@ -28,7 +29,7 @@ abstract class SharedEntityMetadataFactory
      * @param string $key   Key
      * @param string $value Value
      *
-     * @return KnowledgeMetadata|ModelMetadata|ResourceMetadata
+     * @return Metadata
      */
     static public function create($entityType, $key = null, $value = null)
     {
@@ -45,7 +46,7 @@ abstract class SharedEntityMetadataFactory
      * @param string           $entityType
      * @param MetadataResource $metadataResource Metadata resource
      *
-     * @return KnowledgeMetadata|ModelMetadata|ResourceMetadata
+     * @return Metadata
      */
     static public function createFromResource($entityType, MetadataResource $metadataResource)
     {
@@ -61,7 +62,7 @@ abstract class SharedEntityMetadataFactory
      *
      * @param $entityType
      *
-     * @return KnowledgeMetadata|ModelMetadata|ResourceMetadata
+     * @return Metadata
      * @throws \LogicException
      */
     static private function newFromEntityType($entityType)

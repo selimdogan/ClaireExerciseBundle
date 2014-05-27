@@ -65,6 +65,14 @@ class ResourceResource extends SharedResource
     protected $type;
 
     /**
+     * @var string $title
+     * @Serializer\Type("string")
+     * @Serializer\Groups({"details", "list", "resource_list"})
+     * @Assert\NotBlank(groups={"create"})
+     */
+    protected $title;
+
+    /**
      * @var CommonResource $content
      * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource")
      * @Serializer\Groups({"details"})

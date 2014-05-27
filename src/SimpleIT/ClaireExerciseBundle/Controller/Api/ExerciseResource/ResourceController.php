@@ -11,6 +11,7 @@ use SimpleIT\ApiBundle\Model\ApiEditedResponse;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
 use SimpleIT\ApiBundle\Model\ApiResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\CoreBundle\Exception\ExistingObjectException;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
@@ -150,7 +151,8 @@ class ResourceController extends ApiController
      *
      * @param int $resourceId
      *
-     * @throws ApiNotFoundException
+     * @throws \SimpleIT\ApiBundle\Exception\ApiBadRequestException
+     * @throws \SimpleIT\ApiBundle\Exception\ApiNotFoundException
      * @return ApiDeletedResponse
      */
     public function deleteAction($resourceId)
@@ -162,6 +164,8 @@ class ResourceController extends ApiController
 
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(ResourceResource::RESOURCE_NAME);
+        } catch (EntityDeletionException $ede) {
+            throw new ApiBadRequestException($ede->getMessage());
         }
     }
 }

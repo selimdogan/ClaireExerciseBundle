@@ -4,11 +4,12 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity;
 
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedMetadataRepository;
-use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityService;
-use SimpleIT\CoreBundle\Annotation\Transactional;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\Metadata;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
+use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedMetadataRepository;
+use
+    SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\ExerciseResourceServiceInterface;
+use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityService;
 use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\Utils\Collection\CollectionInformation;
 
@@ -19,15 +20,17 @@ use SimpleIT\Utils\Collection\CollectionInformation;
  */
 abstract class SharedMetadataService extends TransactionalService
 {
+    const ENTITY_NAME = 'Entity name';
+
     /**
      * @var SharedMetadataRepository
      */
-    private $metadataRepository;
+    protected $metadataRepository;
 
     /**
      * @var SharedEntityService
      */
-    private $entityService;
+    protected $entityService;
 
     /**
      * Set metadataRepository
@@ -61,8 +64,8 @@ abstract class SharedMetadataService extends TransactionalService
     {
         return $this->metadataRepository->find(
             array(
-                'resource' => $entityId,
-                'key'      => $metakey
+                static::ENTITY_NAME => $entityId,
+                'key'               => $metakey
             )
         );
     }
@@ -85,7 +88,7 @@ abstract class SharedMetadataService extends TransactionalService
             $entity = $this->entityService->get($entityId);
         }
 
-        return $this->metadataRepository->findAll(
+        return $this->metadataRepository->findAllBy(
             $collectionInformation,
             $entity
         );
@@ -94,18 +97,21 @@ abstract class SharedMetadataService extends TransactionalService
     /**
      * Add a metadata to an entity
      *
-     * @param int    $entityId
+     * @param int      $entityId
      * @param Metadata $metadata
      *
      * @return Metadata
-     * @Transactional
      */
-    public function addToEntity($entityId, Metadata $metadata)
+    public function addToEntity($entityId, $metadata)
     {
         $resource = $this->entityService->get($entityId);
         $metadata->setEntity($resource);
 
-        return $this->metadataRepository->insert($metadata);
+        $metadata = $this->metadataRepository->insert($metadata);
+        $this->em->persist($metadata);
+        $this->em->flush();
+
+        return $metadata;
     }
 
     /**
@@ -116,7 +122,6 @@ abstract class SharedMetadataService extends TransactionalService
      * @param string           $metadataKey
      *
      * @return Metadata
-     * @Transactional
      */
     public function saveFromEntity(
         $entityId,
@@ -127,7 +132,10 @@ abstract class SharedMetadataService extends TransactionalService
         $mdToUpdate = $this->getByEntity($entityId, $metadataKey);
         $mdToUpdate->setValue($metadata->getValue());
 
-        return $this->metadataRepository->update($mdToUpdate);
+        $metadata = $this->metadataRepository->update($mdToUpdate);
+        $this->em->flush();
+
+        return $metadata;
     }
 
     /**
@@ -135,14 +143,13 @@ abstract class SharedMetadataService extends TransactionalService
      *
      * @param mixed $entityId
      * @param mixed $metadataKey
-     *
-     * @Transactional
      */
     public function removeFromEntity($entityId, $metadataKey)
     {
         $metadata = $this->getByEntity($entityId, $metadataKey);
 
         $this->metadataRepository->delete($metadata);
+        $this->em->flush();
     }
 
     /**
@@ -153,5 +160,6 @@ abstract class SharedMetadataService extends TransactionalService
     public function deleteAllByEntity($exerciseModelId)
     {
         $this->metadataRepository->deleteAllByEntity($exerciseModelId);
+        $this->em->flush();
     }
 }

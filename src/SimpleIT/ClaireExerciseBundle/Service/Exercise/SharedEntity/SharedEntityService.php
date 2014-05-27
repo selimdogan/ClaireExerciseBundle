@@ -4,21 +4,21 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\DBALException;
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntityMetadataFactory;
+use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResource;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedEntityRepository;
-use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\SharedMetadataService;
 use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 use SimpleIT\ClaireExerciseBundle\Service\User\UserService;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\PaginatorInterface;
-use SimpleIT\CoreBundle\Annotation\Transactional;
 
 /**
  * Service which manages the exercise generation
@@ -82,7 +82,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
     /**
      * Set metadataService
      *
-     * @param \SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\MetadataService $metadataService
+     * @param SharedMetadataService $metadataService
      */
     public function setMetadataService($metadataService)
     {
@@ -113,8 +113,8 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * @param CollectionInformation $collectionInformation The collection information
      * @param int                   $ownerId
      * @param int                   $authorId
-     * @param int                   $parentModelId
-     * @param int                   $forkFromModelId
+     * @param int                   $parentEntityId
+     * @param int                   $forkFromEntityId
      * @param boolean               $isRoot
      * @param boolean               $isPointer
      *
@@ -124,8 +124,8 @@ abstract class SharedEntityService extends TransactionalService implements Share
         $collectionInformation = null,
         $ownerId = null,
         $authorId = null,
-        $parentModelId = null,
-        $forkFromModelId = null,
+        $parentEntityId = null,
+        $forkFromEntityId = null,
         $isRoot = null,
         $isPointer = null
     )
@@ -140,22 +140,22 @@ abstract class SharedEntityService extends TransactionalService implements Share
             $author = $this->userService->get($authorId);
         }
 
-        $parentModel = null;
-        if (!is_null($parentModelId)) {
-            $parentModel = $this->get($parentModelId);
+        $parentEntity = null;
+        if (!is_null($parentEntityId)) {
+            $parentEntity = $this->get($parentEntityId);
         }
 
-        $forkFromModel = null;
-        if (!is_null($forkFromModelId)) {
-            $forkFromModel = $this->get($forkFromModelId);
+        $forkFromEntity = null;
+        if (!is_null($forkFromEntityId)) {
+            $forkFromEntity = $this->get($forkFromEntityId);
         }
 
         return $this->entityRepository->findAll(
             $collectionInformation,
             $owner,
             $author,
-            $parentModel,
-            $forkFromModel,
+            $parentEntity,
+            $forkFromEntity,
             $isRoot,
             $isPointer
         );
@@ -188,7 +188,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
 
         // owner
         if (is_null($sharedResource->getOwner())) {
-            throw new NoAuthorException('No owner for this model...');
+            throw new NoAuthorException('No owner for this entity...');
         } else {
             $ownerId = $sharedResource->getOwner();
         }
@@ -196,7 +196,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
             $this->userService->get($ownerId)
         );
 
-        // parent model
+        // parent entity
         if (!is_null($sharedResource->getParent())) {
             $entity->setParent(
                 $this->get($sharedResource->getParent())
@@ -245,9 +245,9 @@ abstract class SharedEntityService extends TransactionalService implements Share
         $resource
     )
     {
-        $model = $this->createFromResource($resource);
+        $entity = $this->createFromResource($resource);
 
-        return $this->add($model);
+        return $this->add($entity);
     }
 
     /**
@@ -256,13 +256,14 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * @param SharedEntity $entity
      *
      * @return SharedEntity
-     * @Transactional
      */
     public function add(
         $entity
     )
     {
-        $this->entityRepository->insert($entity);
+        $entity = $this->entityRepository->insert($entity);
+        $this->em->persist($entity);
+        $this->em->flush();
 
         return $entity;
     }
@@ -343,11 +344,13 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * @param SharedEntity $entity
      *
      * @return SharedEntity
-     * @Transactional
      */
     public function save($entity)
     {
-        return $this->entityRepository->update($entity);
+        $entity = $this->entityRepository->update($entity);
+        $this->em->flush();
+
+        return $entity;
     }
 
     /**
@@ -355,12 +358,17 @@ abstract class SharedEntityService extends TransactionalService implements Share
      *
      * @param $entityId
      *
-     * @Transactional
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException
      */
     public function remove($entityId)
     {
         $entity = $this->entityRepository->find($entityId);
-        $this->entityRepository->delete($entity);
+        try {
+            $this->entityRepository->delete($entity);
+            $this->em->flush();
+        } catch (DBALException $dbale) {
+            throw new EntityDeletionException('This entity is needed and cannot be deleted');
+        }
     }
 
     /**
@@ -370,7 +378,6 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * @param ArrayCollection $metadatas
      *
      * @return Collection
-     * @Transactional
      */
     public function editMetadata($entityId, ArrayCollection $metadatas)
     {
@@ -387,7 +394,11 @@ abstract class SharedEntityService extends TransactionalService implements Share
         }
         $entity->setMetadata(new ArrayCollection($metadataCollection));
 
-        return $this->save($entity)->getMetadata();
+        $metadatas = $this->save($entity)->getMetadata();
+
+        $this->em->flush();
+
+        return $metadatas;
     }
 
     /**

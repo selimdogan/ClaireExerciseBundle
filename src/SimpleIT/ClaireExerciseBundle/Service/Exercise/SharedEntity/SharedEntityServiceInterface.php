@@ -37,8 +37,8 @@ interface SharedEntityServiceInterface
      * @param CollectionInformation $collectionInformation The collection information
      * @param int                   $ownerId
      * @param int                   $authorId
-     * @param int                   $parentModelId
-     * @param int                   $forkFromModelId
+     * @param int                   $parentEntityId
+     * @param int                   $forkFromEntityId
      * @param boolean               $isRoot
      * @param boolean               $isPointer
      *
@@ -48,8 +48,8 @@ interface SharedEntityServiceInterface
         $collectionInformation = null,
         $ownerId = null,
         $authorId = null,
-        $parentModelId = null,
-        $forkFromModelId = null,
+        $parentEntityId = null,
+        $forkFromEntityId = null,
         $isRoot = null,
         $isPointer = null
     );

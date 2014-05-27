@@ -40,6 +40,14 @@ class KnowledgeResource extends SharedResource
     protected $type;
 
     /**
+     * @var string $title
+     * @Serializer\Type("string")
+     * @Serializer\Groups({"details", "list", "knowledge_list"})
+     * @Assert\NotBlank(groups={"create"})
+     */
+    protected $title;
+
+    /**
      * @var CommonKnowledge $content
      * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge")
      * @Serializer\Groups({"details", "knowledge_list"})

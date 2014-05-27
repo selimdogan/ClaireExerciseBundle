@@ -30,10 +30,6 @@ api_attempts:
     resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/attempt.yml"
     prefix:   /api/attempts/
 
-api_owner_resources:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/owner_resource.yml"
-    prefix:   /api/owner-resources/
-
 api_exercise_users:
     resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/user.yml"
     prefix:   /api/users/
@@ -41,7 +37,3 @@ api_exercise_users:
 api_domain_knowledges:
     resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/knowledge.yml"
     prefix:   /api/knowledges/
-
-api_owner_domain_knowledges:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/owner_knowledge.yml"
-    prefix:   /api/owner-knowledges/
