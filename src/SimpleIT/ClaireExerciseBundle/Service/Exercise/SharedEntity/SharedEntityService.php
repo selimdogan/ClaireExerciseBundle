@@ -3,16 +3,19 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\DBALException;
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntityMetadataFactory;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
+use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\MissingIdException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedEntityRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 use SimpleIT\ClaireExerciseBundle\Service\User\UserService;
@@ -161,6 +164,14 @@ abstract class SharedEntityService extends TransactionalService implements Share
         SharedResource $sharedResource
     )
     {
+        // complete
+        $entity->setComplete(
+            $this->checkEntityComplete(
+                $sharedResource->getType(),
+                $sharedResource->getParent(),
+                $sharedResource->getContent()
+            )
+        );
 
         // author
         if (is_null($sharedResource->getAuthor())) {
@@ -267,12 +278,36 @@ abstract class SharedEntityService extends TransactionalService implements Share
             $entity->setPublic($resource->getPublic());
         }
 
+        if (!is_null($resource->getDraft())) {
+            $entity->setDraft($resource->getDraft());
+        }
+
+        if (!is_null($resource->getComplete())) {
+            $entity->setComplete($resource->getComplete());
+        }
+
         $content = $resource->getContent();
         if (!is_null($content)) {
             $context = SerializationContext::create();
             $context->setGroups(array($storageGroup, 'Default'));
             $entity->setContent(
                 $this->serializer->jmsSerialize($content, 'json', $context)
+            );
+
+            $this->validateType($content, $entity->getType());
+
+            if ($entity->getParent() === null) {
+                $parentId = null;
+            } else {
+                $parentId = $entity->getParent()->getId();
+            }
+            // Check if the entity is complete with the new content
+            $entity->setComplete(
+                $this->checkEntityComplete(
+                    $entity->getType(),
+                    $parentId,
+                    $content
+                )
             );
         }
     }
@@ -292,8 +327,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
         $resource
     )
     {
-        if (is_null($resource->getId()))
-        {
+        if (is_null($resource->getId())) {
             throw new MissingIdException();
         }
 
@@ -365,4 +399,147 @@ abstract class SharedEntityService extends TransactionalService implements Share
 
         return $this->entityRepository->findByIdAndOwner($entityId, $owner);
     }
+
+    /**
+     * Get a resource view of the entity with a content. If the entity has a content,
+     * it just gets the resource view of the entity. If the entity has no content (and thus a
+     * parent), the content of the resource is filled with the parent content
+     *
+     * @param int $entityId
+     *
+     * @return SharedResource
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException
+     */
+    public function getContentFullResource($entityId)
+    {
+        $entity = $this->get($entityId);
+        $resource = SharedResourceFactory::createFromEntity($entity, static::ENTITY_TYPE);
+
+        return $this->getContentFullResourceFromResource($resource);
+    }
+
+    /**
+     * Get a list of resource with content.
+     * For each entity, if it has a content, it just gets the resource view of the entity. If it
+     * has no content (and thus a parent), the content of the resource is filled with the parent
+     * content
+     *
+     * @param CollectionInformation $collectionInformation
+     * @param int                   $ownerId
+     * @param int                   $authorId
+     * @param int                   $parentEntityId
+     * @param int                   $forkFromEntityId
+     * @param int                   $isRoot
+     * @param int                   $isPointer
+     *
+     * @return array An array of SharedResource
+     */
+    public function getAllContentFullResources(
+        $collectionInformation = null,
+        $ownerId = null,
+        $authorId = null,
+        $parentEntityId = null,
+        $forkFromEntityId = null,
+        $isRoot = null,
+        $isPointer = null
+    )
+    {
+        $entities = $this->getAll(
+            $collectionInformation,
+            $ownerId,
+            $authorId,
+            $parentEntityId,
+            $forkFromEntityId,
+            $isRoot,
+            $isPointer
+        );
+
+        return $this->getAllContentFullResourcesFromEntityList($entities);
+    }
+
+    /**
+     * Get a list of resource with content from a list of entities in a PaginatorInterface.
+     * For each entity, if it has a content, it just gets the resource view of the entity. If it
+     * has no content (and thus a parent), the content of the resource is filled with the parent
+     * content
+     *
+     * @param PaginatorInterface $entities
+     *
+     * @return array
+     */
+    public function getAllContentFullResourcesFromEntityList(PaginatorInterface $entities)
+    {
+        $resources = SharedResourceFactory::createFromEntityCollection(
+            $entities,
+            static::ENTITY_TYPE
+        );
+
+        // find a content for every pointer resource
+        /** @var SharedResource $resource */
+        foreach ($resources as &$resource) {
+            if ($resource->getContent() === null) {
+                $resource = $this->getContentFullResourceFromResource($resource);
+            }
+        }
+
+        return $resources;
+    }
+
+    /**
+     * Get a resource with a content. If the resource has a content,
+     * it just gets the resource view of the entity. If the resource has no content (and thus a
+     * parent), the content of the resource is filled with the parent content
+     *
+     * @param SharedResource $resource
+     *
+     * @return SharedResource
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException
+     */
+    private function getContentFullResourceFromResource(SharedResource $resource)
+    {
+        $entity = $this->get($resource->getId());
+
+        while ($entity->getContent() === null) {
+            if ($entity->getParent() === null) {
+                throw new InconsistentEntityException('Entity must have a content or a parent');
+            }
+            $entity = $entity->getParent();
+        }
+
+        $parentResource = SharedResourceFactory::createFromEntity($entity, static::ENTITY_TYPE);
+        $resource->setContent($parentResource->getContent());
+        $resource->setMetadata($parentResource->getMetadata());
+
+        return $resource;
+    }
+
+    /**
+     * Check if the content of an entity is sufficient to use it to generate exercises.
+     *
+     * @param string                                     $type
+     * @param int                                        $parentEntityId
+     * @param CommonModel|CommonResource|CommonKnowledge $content
+     *
+     * @throws \LogicException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\InvalidModelException
+     * @return boolean True if the model is complete
+     */
+    abstract protected function checkEntityComplete(
+        $type,
+        $parentEntityId,
+        $content
+    );
+
+    /**
+     * Throws an exception if the content does not match the type
+     *
+     * @param $content
+     * @param $type
+     *
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException
+     */
+    abstract protected function validateType(
+        $content,
+        $type
+    );
 }

@@ -128,10 +128,10 @@ class ResourceController extends ApiController
         try {
             $this->validateResource($resourceResource, array('edit', 'Default'));
 
+            $resourceResource->setId($resourceId);
             $resource = $this->get('simple_it.exercise.exercise_resource')->edit
                 (
-                    $resourceResource,
-                    $resourceId
+                    $resourceResource
                 );
             $resourceResource = ResourceResourceFactory::create($resource);
 

@@ -44,6 +44,16 @@ abstract class SharedResource
     protected $archived;
 
     /**
+     * @var boolean $draft
+     */
+    protected $draft;
+
+    /**
+     * @var boolean $complete
+     */
+    protected $complete;
+
+    /**
      * @var array
      */
     protected $metadata;
@@ -281,6 +291,46 @@ abstract class SharedResource
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * Set complete
+     *
+     * @param boolean $complete
+     */
+    public function setComplete($complete)
+    {
+        $this->complete = $complete;
+    }
+
+    /**
+     * Get complete
+     *
+     * @return boolean
+     */
+    public function getComplete()
+    {
+        return $this->complete;
+    }
+
+    /**
+     * Set draft
+     *
+     * @param boolean $draft
+     */
+    public function setDraft($draft)
+    {
+        $this->draft = $draft;
+    }
+
+    /**
+     * Get draft
+     *
+     * @return boolean
+     */
+    public function getDraft()
+    {
+        return $this->draft;
     }
 
     /**

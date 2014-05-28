@@ -43,8 +43,6 @@ abstract class ExerciseModelResourceFactory extends SharedResourceFactory
     {
         $exerciseModelResource = new ExerciseModelResource();
         parent::fill($exerciseModelResource, $exerciseModel);
-        $exerciseModelResource->setDraft($exerciseModel->getDraft());
-        $exerciseModelResource->setComplete($exerciseModel->getComplete());
 
         // required resources
         $rr = array();

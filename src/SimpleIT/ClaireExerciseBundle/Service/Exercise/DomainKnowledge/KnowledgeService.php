@@ -8,12 +8,15 @@ use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\KnowledgeFactory;
+use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
+use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\DomainKnowledge\KnowledgeRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityService;
 use SimpleIT\CoreBundle\Annotation\Transactional;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 
 /**
  * Service which manages the domain knowledge
@@ -46,7 +49,7 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
 
     /**
      * Create and add an entity from a resource (saving).
-     * Required fields: type, title, [content or parent], owner, author, archived, metadata
+     * Required fields: type, title, [content or parent], draft, owner, author, archived, metadata
      * Must be null: id
      *
      * @param KnowledgeResource $knowledgeResource
@@ -188,6 +191,73 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
             }
         } else {
             throw new InvalidKnowledgeException('Unknown type of knowledge');
+        }
+    }
+
+    /**
+     * Check if the content of an exercise model is sufficient to generate exercises.
+     *
+     * @param string          $type
+     * @param int             $parentEntityId
+     * @param CommonKnowledge $content
+     *
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException
+     * @return boolean True if the model is complete
+     */
+    protected function checkEntityComplete(
+        $type,
+        $parentEntityId,
+        $content
+    )
+    {
+        if ($parentEntityId === null) {
+            switch ($type) {
+                case CommonKnowledge::FORMULA:
+                    /** @var Formula $content */
+                    try {
+
+                        $this->formulaService->validateFormulaResource($content);
+
+                        return true;
+                    } catch (InvalidKnowledgeException $ike) {
+                        return false;
+                    }
+                    break;
+                default:
+                    throw new InconsistentEntityException('Invalid type');
+            }
+        } else {
+            if ($content !== null) {
+                throw new InconsistentEntityException('A model must be a pointer OR have a content');
+            }
+            try {
+
+                $parentEntity = $this->get($parentEntityId);
+            } catch (NonExistingObjectException $neoe) {
+                throw new InconsistentEntityException('The parent knowledge cannot be found.');
+            }
+
+            return $parentEntity->getPublic();
+        }
+    }
+
+    /**
+     * Throws an exception if the content does not match the type
+     *
+     * @param $content
+     * @param $type
+     *
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException
+     */
+    protected function validateType(
+        $content,
+        $type
+    )
+    {
+        if (($type === CommonKnowledge::FORMULA &&
+            get_class($content) !== KnowledgeResource::FORMULA_CLASS)
+        ) {
+            throw new InvalidTypeException('Content does not match exercise model type');
         }
     }
 }

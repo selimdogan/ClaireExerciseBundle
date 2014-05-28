@@ -128,10 +128,10 @@ class KnowledgeController extends ApiController
         try {
             $this->validateResource($knowledgeResource, array('edit', 'Default'));
 
+            $knowledgeResource->setId($knowledgeId);
             $knowledge = $this->get('simple_it.exercise.knowledge')->edit
                 (
-                    $knowledgeResource,
-                    $knowledgeId
+                    $knowledgeResource
                 );
             $knowledgeResource = KnowledgeResourceFactory::create($knowledge);
 

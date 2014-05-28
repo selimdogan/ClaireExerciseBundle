@@ -50,12 +50,27 @@ class KnowledgeResource extends SharedResource
     /**
      * @var CommonKnowledge $content
      * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge")
-     * @Serializer\Groups({"details", "knowledge_list"})
-     * @Assert\NotBlank(groups={"create"})
+     * @Serializer\Groups({"details"})
      * @Assert\Blank(groups={"appCreate"})
      * @Assert\Valid
      */
     protected $content;
+
+    /**
+     * @var boolean $draft
+     * @Serializer\Groups({"details", "list", "knowledge_list"})
+     * @Serializer\Type("boolean")
+     * @Assert\NotNull(groups={"create"})
+     */
+    protected $draft;
+
+    /**
+     * @var boolean $complete
+     * @Serializer\Groups({"details", "list", "knowledge_list"})
+     * @Serializer\Type("boolean")
+     * @Assert\Null(groups={"create"})
+     */
+    protected $complete;
 
     /**
      * @var array $requiredKnowledges

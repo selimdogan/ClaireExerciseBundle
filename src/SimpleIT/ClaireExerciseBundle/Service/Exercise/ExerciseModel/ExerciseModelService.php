@@ -7,7 +7,7 @@ use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModelFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
-use SimpleIT\ClaireExerciseBundle\Exception\InvalidModelException;
+use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise;
@@ -151,14 +151,6 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      */
     public function createFromResource($modelResource)
     {
-        $modelResource->setComplete(
-            $this->checkModelComplete(
-                $modelResource->getType(),
-                $modelResource->getParent(),
-                $modelResource->getContent()
-            )
-        );
-
         $model = ExerciseModelFactory::createFromResource($modelResource);
 
         parent::fillFromResource($model, $modelResource);
@@ -212,32 +204,6 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                 $reqKnowledges[] = $this->knowledgeService->get($reqKnowledge);
             }
             $model->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
-        }
-        if (!is_null($modelResource->getDraft())) {
-            $model->setDraft($modelResource->getDraft());
-        }
-
-        if (!is_null($modelResource->getComplete())) {
-            $model->setComplete($modelResource->getComplete());
-        }
-
-        $content = $modelResource->getContent();
-        if (!is_null($content)) {
-            $this->validateType($content, $model->getType());
-
-            if ($model->getParent() === null) {
-                $parentId = null;
-            } else {
-                $parentId = $model->getParent()->getId();
-            }
-            // Check if the model is complete with the new content
-            $model->setComplete(
-                $this->checkModelComplete(
-                    $model->getType(),
-                    $parentId,
-                    $content
-                )
-            );
         }
 
         return $model;
@@ -383,20 +349,19 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Check if the content of an exercise model is sufficient to generate exercises.
      *
      * @param string      $type
-     * @param int         $parentModelId
+     * @param int         $parentEntityId
      * @param CommonModel $content
      *
-     * @throws \LogicException
-     * @throws \SimpleIT\ClaireExerciseBundle\Exception\InvalidModelException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException
      * @return boolean True if the model is complete
      */
-    private function checkModelComplete(
+    protected function checkEntityComplete(
         $type,
-        $parentModelId,
+        $parentEntityId,
         $content
     )
     {
-        if ($parentModelId === null) {
+        if ($parentEntityId === null) {
             switch ($type) {
                 case CommonModel::MULTIPLE_CHOICE:
                     /** @var MultipleChoice $content */
@@ -419,17 +384,17 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                     return $this->checkOEQComplete($content);
                     break;
                 default:
-                    throw new \LogicException('Invalid type');
+                    throw new InconsistentEntityException('Invalid type');
             }
         } else {
             if ($content !== null) {
-                throw new InvalidModelException('A model must be a pointer OR have a content');
+                throw new InconsistentEntityException('A model must be a pointer OR have a content');
             }
             try {
 
-                $parentModel = $this->get($parentModelId);
+                $parentModel = $this->get($parentEntityId);
             } catch (NonExistingObjectException $neoe) {
-                throw new InvalidModelException('The parent model cannot be found.');
+                throw new InconsistentEntityException('The parent model cannot be found.');
             }
 
             return $parentModel->getPublic();
@@ -846,7 +811,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException
      */
-    private function validateType(
+    protected function validateType(
         $content,
         $type
     )

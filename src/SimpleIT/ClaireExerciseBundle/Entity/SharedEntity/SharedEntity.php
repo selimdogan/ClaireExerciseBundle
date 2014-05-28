@@ -44,6 +44,16 @@ abstract class SharedEntity
     protected $owner;
 
     /**
+     * @var boolean $draft
+     */
+    protected $draft;
+
+    /**
+     * @var boolean $complete
+     */
+    protected $complete;
+
+    /**
      * @var Collection
      */
     protected $children;
@@ -346,5 +356,45 @@ abstract class SharedEntity
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set complete
+     *
+     * @param boolean $complete
+     */
+    public function setComplete($complete)
+    {
+        $this->complete = $complete;
+    }
+
+    /**
+     * Get complete
+     *
+     * @return boolean
+     */
+    public function getComplete()
+    {
+        return $this->complete;
+    }
+
+    /**
+     * Set draft
+     *
+     * @param boolean $draft
+     */
+    public function setDraft($draft)
+    {
+        $this->draft = $draft;
+    }
+
+    /**
+     * Get draft
+     *
+     * @return boolean
+     */
+    public function getDraft()
+    {
+        return $this->draft;
     }
 }

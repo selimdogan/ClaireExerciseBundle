@@ -44,7 +44,7 @@ abstract class ExerciseObjectFactory
                 /** @var MultipleChoiceQuestionResource $resource */
                 $object = MultipleChoiceQuestionFactory::createFromCommonResource($resource);
                 break;
-            case ResourceResource::OPEN_ENDED_QUESTION:
+            case ResourceResource::OPEN_ENDED_QUESTION_CLASS:
                 /** @var OpenEndedQuestionResource $resource */
                 $object = OpenEndedQuestionFactory::createFromCommonResource($resource);
                 break;

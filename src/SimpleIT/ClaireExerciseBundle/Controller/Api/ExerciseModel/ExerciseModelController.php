@@ -11,6 +11,7 @@ use SimpleIT\ApiBundle\Model\ApiEditedResponse;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
 use SimpleIT\ApiBundle\Model\ApiResponse;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
 use SimpleIT\CoreBundle\Exception\ExistingObjectException;
@@ -40,8 +41,13 @@ class ExerciseModelController extends ApiController
     public function viewAction($exerciseModelId)
     {
         try {
-            $exerciseModel = $this->get('simple_it.exercise.exercise_model')->get($exerciseModelId);
-            $exerciseModelResource = ExerciseModelResourceFactory::create($exerciseModel);
+            /** @var ExerciseModel $exerciseModel */
+            $exerciseModelResource = $this->get(
+                'simple_it.exercise.exercise_model'
+            )->getContentFullResource
+                (
+                    $exerciseModelId
+                );
 
             return new ApiGotResponse($exerciseModelResource, array("details", 'Default'));
 
@@ -67,7 +73,9 @@ class ExerciseModelController extends ApiController
                 $collectionInformation
             );
 
-            $exerciseModelResources = ExerciseModelResourceFactory::createCollection(
+            $exerciseModelResources = $this->get(
+                'simple_it.exercise.exercise_model'
+            )->getAllContentFullResourcesFromEntityList(
                 $exerciseModels
             );
 
@@ -137,10 +145,11 @@ class ExerciseModelController extends ApiController
         try {
             $this->validateResource($modelResource, array('edit', 'Default'));
 
+            $modelResource->setId($exerciseModelId);
+
             $resource = $this->get('simple_it.exercise.exercise_model')->edit
                 (
-                    $modelResource,
-                    $exerciseModelId
+                    $modelResource
                 );
             $modelResource = ExerciseModelResourceFactory::create($resource);
 

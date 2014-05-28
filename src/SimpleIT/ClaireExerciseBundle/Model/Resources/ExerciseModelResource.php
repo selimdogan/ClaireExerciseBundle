@@ -71,7 +71,6 @@ class ExerciseModelResource extends SharedResource
      * @var CommonModel $content
      * @Serializer\Groups({"details"})
      * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel")
-     * @Assert\NotBlank(groups={"create"})
      * @Assert\Valid
      */
     protected $content;
@@ -82,7 +81,7 @@ class ExerciseModelResource extends SharedResource
      * @Serializer\Type("boolean")
      * @Assert\NotNull(groups={"create"})
      */
-    private $draft;
+    protected $draft;
 
     /**
      * @var boolean $complete
@@ -90,7 +89,7 @@ class ExerciseModelResource extends SharedResource
      * @Serializer\Type("boolean")
      * @Assert\Null(groups={"create"})
      */
-    private $complete;
+    protected $complete;
 
     /**
      * @var int
@@ -199,46 +198,6 @@ class ExerciseModelResource extends SharedResource
     public function getRequiredExerciseResources()
     {
         return $this->requiredExerciseResources;
-    }
-
-    /**
-     * Set complete
-     *
-     * @param boolean $complete
-     */
-    public function setComplete($complete)
-    {
-        $this->complete = $complete;
-    }
-
-    /**
-     * Get complete
-     *
-     * @return boolean
-     */
-    public function getComplete()
-    {
-        return $this->complete;
-    }
-
-    /**
-     * Set draft
-     *
-     * @param boolean $draft
-     */
-    public function setDraft($draft)
-    {
-        $this->draft = $draft;
-    }
-
-    /**
-     * Get draft
-     *
-     * @return boolean
-     */
-    public function getDraft()
-    {
-        return $this->draft;
     }
 
     /**

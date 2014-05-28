@@ -14,16 +14,6 @@ use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 class ExerciseModel extends SharedEntity
 {
     /**
-     * @var boolean $draft
-     */
-    private $draft;
-
-    /**
-     * @var boolean $complete
-     */
-    private $complete;
-
-    /**
      * @var ExerciseModel
      */
     protected $parent;
@@ -51,46 +41,6 @@ class ExerciseModel extends SharedEntity
         parent::__construct();
         $this->requiredExerciseResources = new ArrayCollection();
         $this->requiredKnowledges = new ArrayCollection();
-    }
-
-    /**
-     * Set complete
-     *
-     * @param boolean $complete
-     */
-    public function setComplete($complete)
-    {
-        $this->complete = $complete;
-    }
-
-    /**
-     * Get complete
-     *
-     * @return boolean
-     */
-    public function getComplete()
-    {
-        return $this->complete;
-    }
-
-    /**
-     * Set draft
-     *
-     * @param boolean $draft
-     */
-    public function setDraft($draft)
-    {
-        $this->draft = $draft;
-    }
-
-    /**
-     * Get draft
-     *
-     * @return boolean
-     */
-    public function getDraft()
-    {
-        return $this->draft;
     }
 
     /**

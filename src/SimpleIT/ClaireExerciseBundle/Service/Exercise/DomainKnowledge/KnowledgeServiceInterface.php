@@ -30,7 +30,7 @@ interface KnowledgeServiceInterface extends SharedEntityServiceInterface
 
     /**
      * Create and add an entity from a resource (saving).
-     * Required fields: type, title, [content or parent], owner, author, archived, metadata
+     * Required fields: type, title, [content or parent], draft, owner, author, archived, metadata
      * Must be null: id
      *
      * @param KnowledgeResource $knowledgeResource
@@ -41,7 +41,7 @@ interface KnowledgeServiceInterface extends SharedEntityServiceInterface
 
     /**
      * Create and add an entity from a resource (saving).
-     * Required fields: type, title, [content or parent], owner, author, archived, metadata
+     * Required fields: type, title, [content or parent], draft, owner, author, archived, metadata
      * Must be null: id
      *
      * @param KnowledgeResource $knowledgeResource

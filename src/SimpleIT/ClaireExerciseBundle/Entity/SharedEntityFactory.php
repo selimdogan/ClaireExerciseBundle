@@ -51,6 +51,8 @@ abstract class SharedEntityFactory
         $entity->setTitle($resource->getTitle());
         $entity->setPublic($resource->getPublic());
         $entity->setArchived($resource->getArchived());
+        $entity->setDraft($resource->getDraft());
+        $entity->setComplete($resource->getComplete());
 
         // content
         $serializer = SerializerBuilder::create()

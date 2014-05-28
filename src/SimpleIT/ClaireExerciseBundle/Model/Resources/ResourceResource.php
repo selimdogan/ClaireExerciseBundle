@@ -40,7 +40,7 @@ class ResourceResource extends SharedResource
     /**
      * @const OPEN_ENDED_QUESTION = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource'
      */
-    const OPEN_ENDED_QUESTION = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource';
+    const OPEN_ENDED_QUESTION_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource';
 
     /**
      * @const TEXT = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\TextResource'
@@ -76,10 +76,25 @@ class ResourceResource extends SharedResource
      * @var CommonResource $content
      * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource")
      * @Serializer\Groups({"details"})
-     * @Assert\NotBlank(groups={"create"})
      * @Assert\Valid
      */
     protected $content;
+
+    /**
+     * @var boolean $draft
+     * @Serializer\Type("boolean")
+     * @Serializer\Groups({"details", "list", "resource_list"})
+     * @Assert\NotNull(groups={"create"})
+     */
+    protected $draft;
+
+    /**
+     * @var boolean $complete
+     * @Serializer\Type("boolean")
+     * @Serializer\Groups({"details", "list", "resource_list"})
+     * @Assert\Null(groups={"create"})
+     */
+    protected $complete;
 
     /**
      * @var array $requiredExerciseResources
@@ -234,7 +249,7 @@ class ResourceResource extends SharedResource
                 $class = self::TEXT_CLASS;
                 break;
             case CommonResource::OPEN_ENDED_QUESTION:
-                $class = self::OPEN_ENDED_QUESTION;
+                $class = self::OPEN_ENDED_QUESTION_CLASS;
                 break;
             default:
                 throw new \LogicException('Unknown type');

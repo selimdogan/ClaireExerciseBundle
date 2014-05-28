@@ -9,6 +9,8 @@
         <field name="type" column="type" type="string" nullable="false"/>
         <field name="title" column="title" type="string" nullable="false"/>
         <field name="content" column="content" type="text" nullable="false"/>
+        <field name="draft" column="draft" type="boolean" nullable="true"/>
+        <field name="complete" column="complete" type="boolean" nullable="true"/>
         <field name="public" column="public" type="boolean" nullable="true"/>
         <field name="archived" column="archived" type="boolean" nullable="false"/>
 

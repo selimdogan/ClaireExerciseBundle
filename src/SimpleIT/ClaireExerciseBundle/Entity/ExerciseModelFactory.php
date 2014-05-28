@@ -43,9 +43,6 @@ abstract class ExerciseModelFactory extends SharedEntityFactory
         $model = new ExerciseModel();
         parent::fillFromResource($model, $modelResource, 'exercise_model_storage');
 
-        $model->setDraft($modelResource->getDraft());
-        $model->setComplete($modelResource->getComplete());
-
         return $model;
     }
 }
