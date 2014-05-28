@@ -130,6 +130,7 @@ class ExerciseResourceRepository extends SharedEntityRepository
             ->select();
 
         $qb->where($qb->expr()->eq('r.owner', $owner->getId()));
+        $qb->andWhere($qb->expr()->eq('r.archived', "false"));
 
         // Type of the resources (if any specified)
         if ($objectConstraints->getType() != null) {
