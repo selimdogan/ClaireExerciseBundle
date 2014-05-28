@@ -36,7 +36,7 @@ api_exercise_resource_delete:
         _format: json
         resourceId: \d+
 
-api_exercise_resource_add_requirement:
+api_exercise_resource_add_required_resource:
     pattern:  /{resourceId}/required-resources/{reqResId}
     defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/RequiredResourceByResource:add }
     methods: [POST]
@@ -45,7 +45,7 @@ api_exercise_resource_add_requirement:
         resourceId: \d+
         reqResId: \d+
 
-api_exercise_resource_delete_requirement:
+api_exercise_resource_delete_required_resource:
     pattern:  /{resourceId}/required-resources/{reqResId}
     defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/RequiredResourceByResource:delete }
     methods: [DELETE]
@@ -54,14 +54,39 @@ api_exercise_resource_delete_requirement:
         resourceId: \d+
         reqResId: \d+
 
-api_exercise_resource_update_required-resource:
+api_exercise_resource_update_required_resources:
     pattern:  /{resourceId}/required-resources/
     defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/RequiredResourceByResource:edit }
     methods: [PUT]
     requirements:
         _format: json
         resourceId: \d+
-        reqResId: \d+
+
+api_exercise_resource_add_required_knowledge:
+    pattern:  /{resourceId}/required-knowledges/{reqKnoId}
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/RequiredKnowledgeByResource:add }
+    methods: [POST]
+    requirements:
+        _format: json
+        resourceId: \d+
+        reqKnoId: \d+
+
+api_exercise_resource_delete_required_knowledge:
+    pattern:  /{resourceId}/required-knowledges/{reqKnoId}
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/RequiredKnowledgeByResource:delete }
+    methods: [DELETE]
+    requirements:
+        _format: json
+        resourceId: \d+
+        reqKnoId: \d+
+
+api_exercise_resource_update_required_knowledges:
+    pattern:  /{resourceId}/required-knowledges/
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/RequiredKnowledgeByResource:edit }
+    methods: [PUT]
+    requirements:
+        _format: json
+        resourceId: \d+
 
 api_metadata_list_by_resource:
     pattern:  /{resourceId}/metadatas/

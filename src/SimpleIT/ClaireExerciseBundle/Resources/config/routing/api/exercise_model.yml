@@ -36,7 +36,7 @@ api_exercise_model_delete:
         _format: json
         exerciseModelId: \d+
 
-api_exercise_model_add_requirement:
+api_exercise_model_add_required_resource:
     pattern:  /{exerciseModelId}/required-resources/{reqResId}
     defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/RequiredResourceByExerciseModel:add }
     methods: [POST]
@@ -45,7 +45,7 @@ api_exercise_model_add_requirement:
         exerciseModelId: \d+
         reqResId: \d+
 
-api_exercise_model_delete_requirement:
+api_exercise_model_delete_required_resource:
     pattern:  /{exerciseModelId}/required-resources/{reqResId}
     defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/RequiredResourceByExerciseModel:delete }
     methods: [DELETE]
@@ -61,7 +61,32 @@ api_exercise_model_update_required_resource:
     requirements:
         _format: json
         exerciseModelId: \d+
-        reqResId: \d+
+
+api_exercise_model_add_required_knowledge:
+    pattern:  /{exerciseModelId}/required-knowledges/{reqKnoId}
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/RequiredKnowledgeByExerciseModel:add }
+    methods: [POST]
+    requirements:
+        _format: json
+        exerciseModelId: \d+
+        reqKnoId: \d+
+
+api_exercise_model_delete_required_knowledge:
+    pattern:  /{exerciseModelId}/required-knowledges/{reqKnoId}
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/RequiredKnowledgeByExerciseModel:delete }
+    methods: [DELETE]
+    requirements:
+        _format: json
+        exerciseModelId: \d+
+        reqKnoId: \d+
+
+api_exercise_model_update_required_knowledge:
+    pattern:  /{exerciseModelId}/required-knowledges/
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/RequiredKnowledgeByExerciseModel:edit }
+    methods: [PUT]
+    requirements:
+        _format: json
+        exerciseModelId: \d+
 
 api_metadata_list_by_exercise_model:
     pattern:  /{exerciseModelId}/metadatas/

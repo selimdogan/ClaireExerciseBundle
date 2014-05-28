@@ -11,41 +11,42 @@ use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
 use SimpleIT\ApiBundle\Model\ApiDeletedResponse;
 use SimpleIT\ApiBundle\Model\ApiEditedResponse;
 use SimpleIT\ApiBundle\Model\ApiResponse;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
-use SimpleIT\CoreBundle\Exception\ExistingObjectException;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityAlreadyExistsException;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResourceFactory;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\RequiredResourceResourceFactory;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\RequiredKnowledgeResourceFactory;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResourceFactory;
+use SimpleIT\CoreBundle\Exception\ExistingObjectException;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 
 /**
- * Class RequiredResourceByExerciseModelController
+ * Class RequiredKnowledgeByExerciseModelController
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class RequiredResourceByExerciseModelController extends ApiController
+class RequiredKnowledgeByExerciseModelController extends ApiController
 {
     /**
-     * Add a required resource to the exercise model
+     * Add a required knowledge to the exercise model
      *
      * @param $exerciseModelId
-     * @param $reqResId
+     * @param $reqKnoId
      *
      * @throws ApiBadRequestException
      * @throws ApiNotFoundException
      * @return ApiResponse
      */
-    public function addAction($exerciseModelId, $reqResId)
+    public function addAction($exerciseModelId, $reqKnoId)
     {
         try {
             $exerciseModel = $this->get('simple_it.exercise.exercise_model')
-                ->addRequiredResource
+                ->addRequiredKnowledge
                 (
                     $exerciseModelId,
-                    $reqResId
+                    $reqKnoId
                 );
 
             $exerciseModelResource = ExerciseModelResourceFactory::create($exerciseModel);
@@ -60,57 +61,57 @@ class RequiredResourceByExerciseModelController extends ApiController
     }
 
     /**
-     * Delete a required resource from the exercise model
+     * Delete a required knowledge from the exercise model
      *
      * @param $exerciseModelId
-     * @param $reqResId
+     * @param $reqKnoId
      *
      * @throws ApiBadRequestException
      * @throws ApiNotFoundException
      * @return ApiResponse
      */
-    public function deleteAction($exerciseModelId, $reqResId)
+    public function deleteAction($exerciseModelId, $reqKnoId)
     {
         try {
             $this->get('simple_it.exercise.exercise_model')
-                ->deleteRequiredResource
+                ->deleteRequiredKnowledge
                 (
                     $exerciseModelId,
-                    $reqResId
+                    $reqKnoId
                 );
 
             return new ApiDeletedResponse();
 
         } catch (NonExistingObjectException $neoe) {
-            throw new ApiNotFoundException(ResourceResource::RESOURCE_NAME);
+            throw new ApiNotFoundException(KnowledgeResource::RESOURCE_NAME);
         } catch (EntityDeletionException $ede) {
             throw new ApiBadRequestException($ede->getMessage());
         }
     }
 
     /**
-     * Edit the required resources of an exercise model
+     * Edit the required knowledges of an exercise model
      *
-     * @param ArrayCollection $requiredResources
+     * @param ArrayCollection $requiredKnowledges
      * @param int             $exerciseModelId
      *
      * @throws ApiNotFoundException
      * @throws ApiConflictException
      * @return ApiEditedResponse
      */
-    public function editAction(ArrayCollection $requiredResources, $exerciseModelId)
+    public function editAction(ArrayCollection $requiredKnowledges, $exerciseModelId)
     {
         try {
-            $resources = $this->get('simple_it.exercise.exercise_model')
-                ->editRequiredResource
+            $knowledges = $this->get('simple_it.exercise.exercise_model')
+                ->editRequiredKnowledges
                 (
                     $exerciseModelId,
-                    $requiredResources
+                    $requiredKnowledges
                 );
 
-            $resourceResource = RequiredResourceResourceFactory::createCollection($resources);
+            $knowledgeResource = RequiredKnowledgeResourceFactory::createCollection($knowledges);
 
-            return new ApiEditedResponse($resourceResource);
+            return new ApiEditedResponse($knowledgeResource);
 
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(ExerciseModelResource::RESOURCE_NAME);

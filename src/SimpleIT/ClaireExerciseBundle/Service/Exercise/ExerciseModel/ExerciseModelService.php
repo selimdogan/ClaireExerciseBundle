@@ -376,7 +376,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
         /** @var ExerciseModel $exerciseModel */
         $exerciseModel = $this->save($exerciseModel);
 
-        return $exerciseModel->getRequiredExerciseResources();
+        return $exerciseModel->getRequiredKnowledges();
     }
 
     /**
