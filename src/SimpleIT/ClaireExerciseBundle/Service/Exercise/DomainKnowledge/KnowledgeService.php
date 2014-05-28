@@ -3,13 +3,11 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\KnowledgeFactory;
-use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
@@ -47,17 +45,16 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
     }
 
     /**
-     * Create an Knowledge object from a knowledgeResource
+     * Create and add an entity from a resource (saving).
+     * Required fields: type, title, [content or parent], owner, author, archived, metadata
+     * Must be null: id
      *
      * @param KnowledgeResource $knowledgeResource
-     * @param int               $authorId
      *
-     * @throws NoAuthorException
      * @return Knowledge
      */
     public function createFromResource(
-        $knowledgeResource,
-        $authorId = null
+        $knowledgeResource
     )
     {
         $this->validateKnowledgeResource($knowledgeResource);
@@ -76,12 +73,13 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
     }
 
     /**
-     * Create or update a Knowledge object from a KnowledgeResource
+     * Update an entity object from a Resource (no saving).
+     * Only the fields that are not null in the resource are taken in account to edit the entity.
+     * The id of an entity can never be modified (ignored if not null)
      *
      * @param KnowledgeResource $knowledgeResource
      * @param Knowledge         $knowledge
      *
-     * @throws NoAuthorException
      * @return Knowledge
      */
     public function updateFromResource(
@@ -106,18 +104,19 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
     /**
      * Add a requiredKnowledge to a knowledge
      *
-     * @param $knowledgeId
-     * @param $regKnoId
+     * @param int $knowledgeId The id of the requiring knowledge
+     * @param int $reqKnoId    The id of the required knowledge
      *
      * @return Knowledge
+     * @Transactional
      */
     public function addRequiredKnowledge(
         $knowledgeId,
-        $regKnoId
+        $reqKnoId
     )
     {
         /** @var Knowledge $reqKno */
-        $reqKno = $this->get($regKnoId);
+        $reqKno = $this->get($reqKnoId);
         $this->entityRepository->addRequiredKnowledge($knowledgeId, $reqKno);
 
         return $this->get($knowledgeId);
@@ -126,12 +125,13 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
     /**
      * Delete a required knowledge
      *
-     * @param $knowledgeId
-     * @param $reqKnoId
+     * @param int $knowledgeId The id of the requiring knowledge
+     * @param int $reqKnoId    The id of the required knowledge
      *
      * @return Knowledge
+     * @Transactional
      */
-    public function deleteRequiredResource(
+    public function deleteRequiredKnowledge(
         $knowledgeId,
         $reqKnoId
     )
@@ -142,12 +142,14 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
     }
 
     /**
-     * Edit the required knowledges
+     * Edit the required knowledges: remove all the old requirements and write the new ones
+     * (saving).
      *
-     * @param int             $knowledgeId
-     * @param ArrayCollection $requiredKnowledges
+     * @param int             $knowledgeId        The id of the requiring knowledge
+     * @param ArrayCollection $requiredKnowledges A collection of int: the id of knowledge
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Knowledge
+     * @Transactional
      */
     public function editRequiredKnowledges($knowledgeId, ArrayCollection $requiredKnowledges)
     {

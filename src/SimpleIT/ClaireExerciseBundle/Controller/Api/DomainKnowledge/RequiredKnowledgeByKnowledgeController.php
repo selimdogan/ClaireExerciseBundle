@@ -71,7 +71,7 @@ class RequiredKnowledgeByKnowledgeController extends ApiController
     {
         try {
             $this->get('simple_it.exercise.knowledge')
-                ->deleteRequiredResource
+                ->deleteRequiredKnowledge
                 (
                     $knowledgeId,
                     $reqKnoId

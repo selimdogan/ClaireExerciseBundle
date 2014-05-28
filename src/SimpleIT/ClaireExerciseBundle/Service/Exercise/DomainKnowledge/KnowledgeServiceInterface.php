@@ -19,7 +19,7 @@ use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 interface KnowledgeServiceInterface extends SharedEntityServiceInterface
 {
     /**
-     * Get a knowledge
+     * Get an entity by its id
      *
      * @param int $knowledgeId
      *
@@ -29,27 +29,31 @@ interface KnowledgeServiceInterface extends SharedEntityServiceInterface
     public function get($knowledgeId);
 
     /**
-     * Create a knowledge from a resource
+     * Create and add an entity from a resource (saving).
+     * Required fields: type, title, [content or parent], owner, author, archived, metadata
+     * Must be null: id
      *
-     * @param KnowledgeResource $resource
+     * @param KnowledgeResource $knowledgeResource
      *
      * @return Knowledge
      */
-    public function createFromResource($resource);
+    public function createFromResource($knowledgeResource);
 
     /**
-     * Create and add a knowledge from a resource
+     * Create and add an entity from a resource (saving).
+     * Required fields: type, title, [content or parent], owner, author, archived, metadata
+     * Must be null: id
      *
-     * @param KnowledgeResource $resource
+     * @param KnowledgeResource $knowledgeResource
      *
      * @return Knowledge
      */
     public function createAndAdd(
-        $resource
+        $knowledgeResource
     );
 
     /**
-     * Add a knowledge
+     * Add a new entity (saving). The id must be null.
      *
      * @param Knowledge $knowledge
      *
@@ -60,31 +64,36 @@ interface KnowledgeServiceInterface extends SharedEntityServiceInterface
     );
 
     /**
-     * Update a knowledge object from a Resource
+     * Update an entity object from a Resource (no saving).
+     * Only the fields that are not null in the resource are taken in account to edit the entity.
+     * The id of an entity can never be modified (ignored if not null)
      *
-     * @param KnowledgeResource $resource
+     * @param KnowledgeResource $knowledgeResource
      * @param Knowledge         $knowledge
      *
      * @return Knowledge
      */
     public function updateFromResource(
-        $resource,
+        $knowledgeResource,
         $knowledge
     );
 
     /**
-     * Save a knowledge given in form of a Resource
+     * Edit and save an entity given in form of a Resource object.
+     * Only the fields that are not null in the resource are taken in account to edit the entity.
+     * The id of the entity that must be modified is stored in the field id.
+     * The id of an entity can never be modified.
      *
-     * @param KnowledgeResource $resource
+     * @param KnowledgeResource $knowledgeResource
      *
      * @return Knowledge
      */
     public function edit(
-        $resource
+        $knowledgeResource
     );
 
     /**
-     * Save a knowledge
+     * Save an entity after modifications
      *
      * @param Knowledge $knowledge
      *
@@ -93,7 +102,7 @@ interface KnowledgeServiceInterface extends SharedEntityServiceInterface
     public function save($knowledge);
 
     /**
-     * Get a knowledge by id and by owner
+     * Get an entity by its id and by the owner id
      *
      * @param int $knowledgeId
      * @param int $ownerId
@@ -103,36 +112,38 @@ interface KnowledgeServiceInterface extends SharedEntityServiceInterface
     public function getByIdAndOwner($knowledgeId, $ownerId);
 
     /**
-     * Add a requiredKnowledge to a knowledge
+     * Add a requiredKnowledge to a knowledge (saving)
      *
-     * @param $knowledgeId
-     * @param $regKnoId
+     * @param int $knowledgeId The id of the requiring knowledge
+     * @param int $reqKnoId    The id of the required knowledge
      *
      * @return Knowledge
      */
     public function addRequiredKnowledge(
         $knowledgeId,
-        $regKnoId
+        $reqKnoId
     );
 
     /**
-     * Delete a required knowledge
+     * Delete a required knowledge (saving)
      *
-     * @param $knowledgeId
-     * @param $reqKnoId
+     * @param int $knowledgeId The id of the requiring knowledge
+     * @param int $reqKnoId    The id of the required knowledge
      *
+     * @internal param int $regKnoId The id of the required knowledge
      * @return Knowledge
      */
-    public function deleteRequiredResource(
+    public function deleteRequiredKnowledge(
         $knowledgeId,
         $reqKnoId
     );
 
     /**
-     * Edit the required knowledges
+     * Edit the required knowledges: remove all the old requirements and write the new ones
+     * (saving).
      *
-     * @param int             $knowledgeId
-     * @param ArrayCollection $requiredKnowledges
+     * @param int             $knowledgeId        The id of the requiring knowledge
+     * @param ArrayCollection $requiredKnowledges A collection of int: the id of knowledge
      *
      * @return Knowledge
      */

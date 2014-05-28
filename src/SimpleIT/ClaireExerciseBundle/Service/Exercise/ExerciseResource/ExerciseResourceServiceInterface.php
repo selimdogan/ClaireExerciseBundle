@@ -33,7 +33,9 @@ interface ExerciseResourceServiceInterface extends SharedEntityServiceInterface
     public function get($entityId);
 
     /**
-     * Create an entity from a resource
+     * Create an entity from a resource (no saving).
+     * Required fields: type, title, [content or parent], owner, author, archived, metadata
+     * Must be null: id
      *
      * @param ResourceResource $resource
      *
@@ -42,7 +44,9 @@ interface ExerciseResourceServiceInterface extends SharedEntityServiceInterface
     public function createFromResource($resource);
 
     /**
-     * Create and add an entity from a resource
+     * Create and add an entity from a resource (saving).
+     * Required fields: type, title, [content or parent], owner, author, archived, metadata
+     * Must be null: id
      *
      * @param ResourceResource $resource
      *
@@ -53,7 +57,7 @@ interface ExerciseResourceServiceInterface extends SharedEntityServiceInterface
     );
 
     /**
-     * Add an entity
+     * Add a new entity (saving). The id must be null.
      *
      * @param ExerciseResource $entity
      *
@@ -64,33 +68,36 @@ interface ExerciseResourceServiceInterface extends SharedEntityServiceInterface
     );
 
     /**
-     * Update an entity object from a Resource
+     * Update an entity object from a Resource (no saving).
+     * Only the fields that are not null in the resource are taken in account to edit the entity.
+     * The id of an entity can never be modified (ignored if not null)
      *
-     * @param ResourceResource $resource
-     * @param ExerciseResource $entity
+     * @param ResourceResource $resourceResource
+     * @param ExerciseResource $exerciseResource
      *
      * @return ExerciseResource
      */
     public function updateFromResource(
-        $resource,
-        $entity
+        $resourceResource,
+        $exerciseResource
     );
 
     /**
-     * Save an entity given in form of a Resource
+     * Edit and save an entity given in form of a Resource object.
+     * Only the fields that are not null in the resource are taken in account to edit the entity.
+     * The id of the entity that must be modified is stored in the field id.
+     * The id of an entity can never be modified.
      *
-     * @param ResourceResource $resource
-     * @param int              $entityId
+     * @param ResourceResource $resource The resource corresponding to the entity
      *
-     * @return ExerciseResource
+     * @return ExerciseResource The edited and saved entity
      */
     public function edit(
-        $resource,
-        $entityId
+        $resource
     );
 
     /**
-     * Save an entity
+     * Save an entity after modifications
      *
      * @param ExerciseResource $entity
      *
@@ -99,7 +106,7 @@ interface ExerciseResourceServiceInterface extends SharedEntityServiceInterface
     public function save($entity);
 
     /**
-     * Get an entity by id and by owner
+     * Get an entity by its id and by the owner id
      *
      * @param int $entityId
      * @param int $ownerId
@@ -109,7 +116,82 @@ interface ExerciseResourceServiceInterface extends SharedEntityServiceInterface
     public function getByIdAndOwner($entityId, $ownerId);
 
     /**
-     * Get a resource in the form of an ExerciseObject
+     * Add a requiredResource to a resource entity (saving)
+     *
+     * @param int $resourceId The id of the requiring resource entity
+     * @param int $reqResId   The id of the required resource entity
+     *
+     * @return ExerciseResource
+     */
+    public function addRequiredResource(
+        $resourceId,
+        $reqResId
+    );
+
+    /**
+     * Delete a required resource (saving)
+     *
+     * @param int $resourceId The id of the requiring resource entity
+     * @param int $reqResId   The id of the required resource entity
+     *
+     * @return ExerciseResource
+     */
+    public function deleteRequiredResource(
+        $resourceId,
+        $reqResId
+    );
+
+    /**
+     * Edit the required resources (saving)
+     *
+     * @param int             $resourceId        The id of the requiring resource entity
+     * @param ArrayCollection $requiredResources A collection of int: id of the required entities
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function editRequiredResource($resourceId, ArrayCollection $requiredResources);
+
+    /**
+     * Add a required knowledge to a resource entity (saving)
+     *
+     * @param int $resourceId The id of the requiring resource entity
+     * @param int $reqKnoId   The id of the required knowledge entity
+     *
+     * @return ExerciseResource
+     */
+    public function addRequiredKnowledge(
+        $resourceId,
+        $reqKnoId
+    );
+
+    /**
+     * Delete a required knowledge (saving)
+     *
+     * @param int $resourceId The id of the requiring resource entity
+     * @param int $reqKnoId   The id of the required knowledge entity
+     *
+     * @return ExerciseResource
+     */
+    public function deleteRequiredKnowledge(
+        $resourceId,
+        $reqKnoId
+    );
+
+    /**
+     * Edit the required knowledges (saving)
+     *
+     * @param int             $resourceId         The id of the requiring resource entity
+     * @param ArrayCollection $requiredKnowledges A collection of int: id of the required knowledges
+     *
+     * @return ExerciseResource
+     */
+    public function editRequiredKnowledges(
+        $resourceId,
+        ArrayCollection $requiredKnowledges
+    );
+
+    /**
+     * Get a resource in the form of an ExerciseObject (useful for exercise generation)
      *
      * @param ObjectId $resId
      * @param User     $owner
@@ -132,80 +214,5 @@ interface ExerciseResourceServiceInterface extends SharedEntityServiceInterface
         ObjectConstraints $oc,
         $numberOfObjects,
         User $owner
-    );
-
-    /**
-     * Add a requiredResource to a resource
-     *
-     * @param $resourceId
-     * @param $reqResId
-     *
-     * @return ExerciseResource
-     */
-    public function addRequiredResource(
-        $resourceId,
-        $reqResId
-    );
-
-    /**
-     * Delete a required resource
-     *
-     * @param $resourceId
-     * @param $reqResId
-     *
-     * @return ExerciseResource
-     */
-    public function deleteRequiredResource(
-        $resourceId,
-        $reqResId
-    );
-
-    /**
-     * Edit the required resources
-     *
-     * @param int             $resourceId
-     * @param ArrayCollection $requiredResources
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function editRequiredResource($resourceId, ArrayCollection $requiredResources);
-
-    /**
-     * Add a required knowledge to an exercise model
-     *
-     * @param $resourceId
-     * @param $reqKnoId
-     *
-     * @return ExerciseResource
-     */
-    public function addRequiredKnowledge(
-        $resourceId,
-        $reqKnoId
-    );
-
-    /**
-     * Delete a required knowledge
-     *
-     * @param $exerciseModelId
-     * @param $reqKnoId
-     *
-     * @return ExerciseResource
-     */
-    public function deleteRequiredKnowledge(
-        $exerciseModelId,
-        $reqKnoId
-    );
-
-    /**
-     * Edit the required knowledges
-     *
-     * @param int             $resourceId
-     * @param ArrayCollection $requiredKnowledges
-     *
-     * @return ExerciseResource
-     */
-    public function editRequiredKnowledges(
-        $resourceId,
-        ArrayCollection $requiredKnowledges
     );
 }

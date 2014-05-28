@@ -94,8 +94,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      *
      * @param int $exerciseModelId
      *
-     * @return object
-     * @throws \LogicException
+     * @return CommonModel
      */
     public function getModel($exerciseModelId)
     {
@@ -107,7 +106,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     }
 
     /**
-     * Get an exercise model from an entity
+     * Get an exercise model from an entity  (business object, no entity)
      *
      * @param ExerciseModel $entity
      *
@@ -141,7 +140,9 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     }
 
     /**
-     * Create an entity from a resource
+     * Create an entity from a resource (no saving).
+     * Required fields: type, title, [content or parent], draft, owner, author, archived, metadata
+     * Must be null: id
      *
      * @param ExerciseModelResource $modelResource
      *
@@ -180,7 +181,9 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     }
 
     /**
-     * Update an ExerciseResource object from a ResourceResource
+     * Update an entity object from a Resource (no saving).
+     * Only the fields that are not null in the resource are taken in account to edit the entity.
+     * The id of an entity can never be modified (ignored if not null)
      *
      * @param ExerciseModelResource $modelResource
      * @param ExerciseModel         $model
@@ -247,6 +250,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * @param $reqResId
      *
      * @return ExerciseModel
+     * @Transactional
      */
     public function addRequiredResource(
         $exerciseModelId,
@@ -267,6 +271,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * @param $reqResId
      *
      * @return ExerciseModel
+     * @Transactional
      */
     public function deleteRequiredResource(
         $exerciseModelId,
@@ -285,6 +290,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * @param ArrayCollection $requiredResources
      *
      * @return ExerciseModel
+     * @Transactional
      */
     public function editRequiredResource(
         $exerciseModelId,
@@ -312,6 +318,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * @param $reqKnoId
      *
      * @return ExerciseModel
+     * @Transactional
      */
     public function addRequiredKnowledge(
         $exerciseModelId,
@@ -332,6 +339,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * @param $reqKnoId
      *
      * @return ExerciseModel
+     * @Transactional
      */
     public function deleteRequiredKnowledge(
         $exerciseModelId,
@@ -350,6 +358,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * @param ArrayCollection $requiredKnowledges
      *
      * @return ExerciseModel
+     * @Transactional
      */
     public function editRequiredKnowledges(
         $exerciseModelId,

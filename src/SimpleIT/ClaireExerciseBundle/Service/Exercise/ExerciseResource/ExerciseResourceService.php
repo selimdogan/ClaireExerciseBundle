@@ -11,7 +11,6 @@ use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidExerciseResourceException;
-use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\ExerciseObjectFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
@@ -53,7 +52,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     }
 
     /**
-     * Get a resource in the form of an ExerciseObject
+     * Get a resource in the form of an ExerciseObject (useful for exercise generation)
      *
      * @param ObjectId $resId
      * @param User     $owner
@@ -102,11 +101,12 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     }
 
     /**
-     * Create an ExerciseResource object from a ResourceResource
+     * Create an entity from a resource (no saving).
+     * Required fields: type, title, [content or parent], owner, author, archived, metadata
+     * Must be null: id
      *
      * @param ResourceResource $resourceResource
      *
-     * @throws NoAuthorException
      * @return ExerciseResource
      */
     public function createFromResource($resourceResource)
@@ -133,12 +133,13 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     }
 
     /**
-     * Create or update an ExerciseResource object from a ResourceResource
+     * Update an entity object from a Resource (no saving).
+     * Only the fields that are not null in the resource are taken in account to edit the entity.
+     * The id of an entity can never be modified (ignored if not null)
      *
      * @param ResourceResource $resourceResource
      * @param ExerciseResource $exerciseResource
      *
-     * @throws NoAuthorException
      * @return ExerciseResource
      */
     public function updateFromResource(
@@ -168,12 +169,13 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     }
 
     /**
-     * Add a requiredResource to a resource
+     * Add a requiredResource to a resource entity (saving)
      *
-     * @param $resourceId
-     * @param $reqResId
+     * @param int $resourceId The id of the requiring resource entity
+     * @param int $reqResId   The id of the required resource entity
      *
      * @return ExerciseResource
+     * @Transactional
      */
     public function addRequiredResource(
         $resourceId,
@@ -188,12 +190,13 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     }
 
     /**
-     * Delete a required resource
+     * Delete a required resource (saving)
      *
-     * @param $resourceId
-     * @param $reqResId
+     * @param int $resourceId The id of the requiring resource entity
+     * @param int $reqResId   The id of the required resource entity
      *
      * @return ExerciseResource
+     * @Transactional
      */
     public function deleteRequiredResource(
         $resourceId,
@@ -206,12 +209,13 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     }
 
     /**
-     * Edit the required resources
+     * Edit the required resources (saving)
      *
-     * @param int             $resourceId
-     * @param ArrayCollection $requiredResources
+     * @param int             $resourceId        The id of the requiring resource entity
+     * @param ArrayCollection $requiredResources A collection of int: id of the required entities
      *
      * @return \Doctrine\Common\Collections\Collection
+     * @Transactional
      */
     public function editRequiredResource($resourceId, ArrayCollection $requiredResources)
     {
@@ -230,12 +234,13 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     }
 
     /**
-     * Add a required knowledge to an exercise model
+     * Add a required knowledge to a resource entity (saving)
      *
-     * @param $resourceId
-     * @param $reqKnoId
+     * @param int $resourceId The id of the requiring resource entity
+     * @param int $reqKnoId   The id of the required knowledge entity
      *
      * @return ExerciseResource
+     * @Transactional
      */
     public function addRequiredKnowledge(
         $resourceId,
@@ -250,30 +255,32 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     }
 
     /**
-     * Delete a required knowledge
+     * Delete a required knowledge (saving)
      *
-     * @param $exerciseModelId
-     * @param $reqKnoId
+     * @param int $resourceId The id of the requiring resource entity
+     * @param int $reqKnoId   The id of the required knowledge entity
      *
      * @return ExerciseResource
+     * @Transactional
      */
     public function deleteRequiredKnowledge(
-        $exerciseModelId,
+        $resourceId,
         $reqKnoId
     )
     {
         /** @var Knowledge $reqKno */
         $reqKno = $this->knowledgeService->get($reqKnoId);
-        $this->entityRepository->deleteRequiredKnowledge($exerciseModelId, $reqKno);
+        $this->entityRepository->deleteRequiredKnowledge($resourceId, $reqKno);
     }
 
     /**
-     * Edit the required knowledges
+     * Edit the required knowledges (saving)
      *
-     * @param int             $resourceId
-     * @param ArrayCollection $requiredKnowledges
+     * @param int             $resourceId         The id of the requiring resource entity
+     * @param ArrayCollection $requiredKnowledges A collection of int: id of the required knowledges
      *
      * @return ExerciseResource
+     * @Transactional
      */
     public function editRequiredKnowledges(
         $resourceId,

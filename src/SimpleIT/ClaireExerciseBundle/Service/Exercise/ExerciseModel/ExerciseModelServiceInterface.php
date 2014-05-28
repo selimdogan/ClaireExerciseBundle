@@ -17,7 +17,7 @@ use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
 {
     /**
-     * Get an entity
+     * Get an entity by its id
      *
      * @param int $entityId
      *
@@ -27,7 +27,9 @@ interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
     public function get($entityId);
 
     /**
-     * Create an entity from a resource
+     * Create an entity from a resource (no saving).
+     * Required fields: type, title, [content or parent], draft, owner, author, archived, metadata
+     * Must be null: id
      *
      * @param ExerciseModelResource $resource
      *
@@ -36,7 +38,9 @@ interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
     public function createFromResource($resource);
 
     /**
-     * Create and add an entity from a resource
+     * Create and add an entity from a resource (saving).
+     * Required fields: type, title, [content or parent], draft, owner, author, archived, metadata
+     * Must be null: id
      *
      * @param ExerciseModelResource $resource
      *
@@ -47,7 +51,7 @@ interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
     );
 
     /**
-     * Add an entity
+     *Add a new entity (saving). The id must be null.
      *
      * @param ExerciseModel $entity
      *
@@ -59,10 +63,12 @@ interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
     );
 
     /**
-     * Update an entity object from a Resource
+     * Update an entity object from a Resource (no saving).
+     * Only the fields that are not null in the resource are taken in account to edit the entity.
+     * The id of an entity can never be modified (ignored if not null)
      *
      * @param ExerciseModelResource $resource
-     * @param ExerciseModel         $entity
+     * @param ExerciseModel   $entity
      *
      * @return ExerciseModel
      */
@@ -72,30 +78,30 @@ interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
     );
 
     /**
-     * Save an entity given in form of a Resource
+     * Edit and save an entity given in form of a Resource object.
+     * Only the fields that are not null in the resource are taken in account to edit the entity.
+     * The id of the entity that must be modified is stored in the field id.
+     * The id of an entity can never be modified.
      *
-     * @param ExerciseModelResource $resource
-     * @param int                   $entityId
+     * @param ExerciseModelResource $resource The resource corresponding to the entity
      *
-     * @return ExerciseModel
+     * @return ExerciseModel The edited and saved entity
      */
     public function edit(
-        $resource,
-        $entityId
+        $resource
     );
 
     /**
-     * Save an entity
+     * Save an entity after modifications
      *
      * @param ExerciseModel $entity
      *
      * @return ExerciseModel
-     * @Transactional
      */
     public function save($entity);
 
     /**
-     * Get an entity by id and by owner
+     * Get an entity by its id and by the owner id
      *
      * @param int $entityId
      * @param int $ownerId
@@ -109,18 +115,16 @@ interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
      *
      * @param int $exerciseModelId
      *
-     * @return object
-     * @throws \LogicException
+     * @return CommonModel
      */
     public function getModel($exerciseModelId);
 
     /**
-     * Get an exercise model from an entity
+     * Get an exercise model from an entity (business object, no entity)
      *
      * @param ExerciseModel $entity
      *
      * @return CommonModel
-     * @throws \LogicException
      */
     public function getModelFromEntity(ExerciseModel $entity);
 
@@ -151,7 +155,7 @@ interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
     );
 
     /**
-     * Edit the required resources
+     * Edit all the required resources
      *
      * @param int             $exerciseModelId
      * @param ArrayCollection $requiredResources
@@ -190,7 +194,7 @@ interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
     );
 
     /**
-     * Edit the required knowledges
+     * Edit all the required knowledges
      *
      * @param int             $exerciseModelId
      * @param ArrayCollection $requiredKnowledges

@@ -15,7 +15,7 @@ use SimpleIT\Utils\Collection\PaginatorInterface;
 use SimpleIT\CoreBundle\Annotation\Transactional;
 
 /**
- * Service which manages the exercise generation
+ * Interface for service which manages the exercise generation
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
