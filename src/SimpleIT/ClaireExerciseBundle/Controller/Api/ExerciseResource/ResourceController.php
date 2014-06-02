@@ -38,9 +38,7 @@ class ResourceController extends ApiController
     {
         try {
             // Call to the resource service to get the resource
-            $resource = $this->get('simple_it.exercise.exercise_resource')->get($resourceId);
-
-            $resourceResource = ResourceResourceFactory::create($resource, false);
+            $resourceResource = $this->get('simple_it.exercise.exercise_resource')->getContentFullResource($resourceId);
 
             return new ApiGotResponse($resourceResource, array("details", 'Default'));
 

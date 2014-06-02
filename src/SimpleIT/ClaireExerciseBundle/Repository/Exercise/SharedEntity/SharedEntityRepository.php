@@ -91,7 +91,7 @@ abstract class SharedEntityRepository extends BaseRepository
 
         if ($isPointer === true) {
             $qb->andWhere($qb->expr()->isNotNull('entity.parent'));
-        } else {
+        } elseif ($isPointer === false) {
             $qb->andWhere($qb->expr()->isNotNull('entity.content'));
         }
 
