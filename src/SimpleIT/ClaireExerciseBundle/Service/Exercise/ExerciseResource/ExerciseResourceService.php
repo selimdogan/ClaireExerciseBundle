@@ -3,10 +3,8 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
@@ -14,6 +12,7 @@ use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidExerciseResourceException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\ExerciseObjectFactory;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use
@@ -21,6 +20,9 @@ use
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\PictureResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\ResourceId;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\SequenceBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\SequenceElement;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\SequenceResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\TextResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
@@ -114,6 +116,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * Create an entity from a resource (no saving).
      * Required fields: type, title, [content or parent], draft, owner, author, archived, metadata
      * Must be null: id
+     * Not used (computed) : required resources, required knowledge
      *
      * @param ResourceResource $resourceResource
      *
@@ -124,20 +127,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         $exerciseResource = ExerciseResourceFactory::createFromResource($resourceResource);
 
         parent::fillFromResource($exerciseResource, $resourceResource);
-
-        // required resources
-        $reqResources = array();
-        foreach ($resourceResource->getRequiredExerciseResources() as $reqRes) {
-            $reqResources[] = $this->get($reqRes);
-        }
-        $exerciseResource->setRequiredExerciseResources(new ArrayCollection($reqResources));
-
-        // required knowledges
-        $reqKnowledges = array();
-        foreach ($resourceResource->getRequiredKnowledges() as $reqKnowledge) {
-            $reqKnowledges[] = $this->knowledgeService->get($reqKnowledge);
-        }
-        $exerciseResource->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
+        $exerciseResource = $this->computeRequirements($exerciseResource, $resourceResource);
 
         return $exerciseResource;
     }
@@ -148,7 +138,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * The id of an entity can never be modified (ignored if not null)
      *
      * @param ResourceResource $resourceResource
-     * @param ExerciseResource $exerciseResource
+     * @param                  $exerciseResource
      *
      * @return ExerciseResource
      */
@@ -158,16 +148,33 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     )
     {
         parent::updateFromSharedResource($resourceResource, $exerciseResource, 'resource_storage');
+        $exerciseResource = $this->computeRequirements($exerciseResource, $resourceResource);
 
-        if (!is_null($resourceResource->getRequiredExerciseResources())) {
+        return $exerciseResource;
+    }
+
+    /**
+     * Compute the requirements of the entity from the resource content (if content is empty,
+     * no change)
+     *
+     * @param ExerciseResource $exerciseResource
+     * @param ResourceResource $resourceResource
+     *
+     * @return ExerciseResource
+     */
+    private function computeRequirements($exerciseResource, $resourceResource)
+    {
+        if ($resourceResource->getContent() != null) {
+            // required resources
+            $resourceResource = $this->computeRequiredResourcesFromResource($resourceResource);
             $reqResources = array();
             foreach ($resourceResource->getRequiredExerciseResources() as $reqRes) {
                 $reqResources[] = $this->get($reqRes);
             }
             $exerciseResource->setRequiredExerciseResources(new ArrayCollection($reqResources));
-        }
 
-        if (!is_null($resourceResource->getRequiredKnowledges())) {
+            // required knowledges
+            $resourceResource = $this->computeRequiredKnowledgesFromResource($resourceResource);
             $reqKnowledges = array();
             foreach ($resourceResource->getRequiredKnowledges() as $reqKnowledge) {
                 $reqKnowledges[] = $this->knowledgeService->get($reqKnowledge);
@@ -176,139 +183,6 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         }
 
         return $exerciseResource;
-    }
-
-    /**
-     * Add a requiredResource to a resource entity (saving)
-     *
-     * @param int $resourceId The id of the requiring resource entity
-     * @param int $reqResId   The id of the required resource entity
-     *
-     * @return ExerciseResource
-     * @Transactional
-     */
-    public function addRequiredResource(
-        $resourceId,
-        $reqResId
-    )
-    {
-        /** @var ExerciseResource $reqRes */
-        $reqRes = $this->get($reqResId);
-        $this->entityRepository->addRequiredResource($resourceId, $reqRes);
-
-        return $this->get($resourceId);
-    }
-
-    /**
-     * Delete a required resource (saving)
-     *
-     * @param int $resourceId The id of the requiring resource entity
-     * @param int $reqResId   The id of the required resource entity
-     *
-     * @return ExerciseResource
-     * @Transactional
-     */
-    public function deleteRequiredResource(
-        $resourceId,
-        $reqResId
-    )
-    {
-        /** @var ExerciseResource $reqRes */
-        $reqRes = $this->get($reqResId);
-        $this->entityRepository->deleteRequiredResource($resourceId, $reqRes);
-    }
-
-    /**
-     * Edit the required resources (saving)
-     *
-     * @param int             $resourceId        The id of the requiring resource entity
-     * @param ArrayCollection $requiredResources A collection of int: id of the required entities
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     * @Transactional
-     */
-    public function editRequiredResource($resourceId, ArrayCollection $requiredResources)
-    {
-        $resource = $this->entityRepository->find($resourceId);
-
-        $resourcesCollection = array();
-        foreach ($requiredResources as $rr) {
-            $resourcesCollection[] = $this->entityRepository->find($rr);
-        }
-        $resource->setRequiredExerciseResources(new ArrayCollection($resourcesCollection));
-
-        /** @var ExerciseResource $resource */
-        $resource = $this->save($resource);
-
-        return $resource->getRequiredExerciseResources();
-    }
-
-    /**
-     * Add a required knowledge to a resource entity (saving)
-     *
-     * @param int $resourceId The id of the requiring resource entity
-     * @param int $reqKnoId   The id of the required knowledge entity
-     *
-     * @return ExerciseResource
-     * @Transactional
-     */
-    public function addRequiredKnowledge(
-        $resourceId,
-        $reqKnoId
-    )
-    {
-        /** @var Knowledge $reqKno */
-        $reqKno = $this->knowledgeService->get($reqKnoId);
-        $this->entityRepository->addRequiredKnowledge($resourceId, $reqKno);
-
-        return $this->get($resourceId);
-    }
-
-    /**
-     * Delete a required knowledge (saving)
-     *
-     * @param int $resourceId The id of the requiring resource entity
-     * @param int $reqKnoId   The id of the required knowledge entity
-     *
-     * @return ExerciseResource
-     * @Transactional
-     */
-    public function deleteRequiredKnowledge(
-        $resourceId,
-        $reqKnoId
-    )
-    {
-        /** @var Knowledge $reqKno */
-        $reqKno = $this->knowledgeService->get($reqKnoId);
-        $this->entityRepository->deleteRequiredKnowledge($resourceId, $reqKno);
-    }
-
-    /**
-     * Edit the required knowledges (saving)
-     *
-     * @param int             $resourceId         The id of the requiring resource entity
-     * @param ArrayCollection $requiredKnowledges A collection of int: id of the required knowledges
-     *
-     * @return ExerciseResource
-     * @Transactional
-     */
-    public function editRequiredKnowledges(
-        $resourceId,
-        ArrayCollection $requiredKnowledges
-    )
-    {
-        $resource = $this->entityRepository->find($resourceId);
-
-        $reqKnowledgeCollection = array();
-        foreach ($requiredKnowledges as $rk) {
-            $reqKnowledgeCollection[] = $this->knowledgeService->get($rk);
-        }
-        $resource->setRequiredKnowledges(new ArrayCollection($reqKnowledgeCollection));
-
-        /** @var ExerciseResource $resource */
-        $resource = $this->save($resource);
-
-        return $resource->getRequiredKnowledges();
     }
 
     /**
@@ -547,5 +421,108 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         ) {
             throw new InvalidTypeException('Content does not match exercise model type');
         }
+    }
+
+    /**
+     * Computes the required resources according to the content of the resource resource and
+     * write it in the corresponding field of the output resource
+     *
+     * @param ResourceResource $resourceResource
+     *
+     * @throws InvalidTypeException
+     * @return ResourceResource
+     */
+    public function computeRequiredResourcesFromResource($resourceResource)
+    {
+        switch (get_class($resourceResource->getContent())) {
+            case ResourceResource::PICTURE_CLASS:
+            case ResourceResource::TEXT_CLASS:
+            case ResourceResource::MULTIPLE_CHOICE_QUESTION_CLASS:
+            case ResourceResource::OPEN_ENDED_QUESTION_CLASS:
+                $resourceResource->setRequiredExerciseResources(array());
+                break;
+            case ResourceResource::SEQUENCE_CLASS:
+                $resourceResource = $this->computeRequiredResourcesForSequence($resourceResource);
+                break;
+            default:
+                throw new InvalidTypeException('Unknown type:' . $resourceResource->getType());
+        }
+
+        return $resourceResource;
+    }
+
+    /**
+     * Compute the required resources for a sequence resource
+     *
+     * @param ResourceResource $resourceResource
+     *
+     * @return ResourceResource
+     */
+    private function computeRequiredResourcesForSequence($resourceResource)
+    {
+        /** @var SequenceResource $content */
+        $content = $resourceResource->getContent();
+
+        if ($content->getTextObjectId() !== null) {
+            $resourceResource->setRequiredExerciseResources(array($content->getTextObjectId()));
+        } else {
+            $resourceResource->setRequiredExerciseResources(
+                $this->computeRequiredResourcesForSequenceFromBlock(
+                    $content->getMainBlock()
+                )
+            );
+
+        }
+
+        return $resourceResource;
+    }
+
+    /**
+     * Get all the required resources in this block
+     *
+     * @param SequenceBlock $block
+     *
+     * @return array
+     */
+    private function computeRequiredResourcesForSequenceFromBlock($block)
+    {
+        $reqRes = array();
+
+        foreach ($block->getElements() as $element) {
+            if (get_class($element) === SequenceElement::RESOURCE_ID_CLASS) {
+                /** @var ResourceId $element */
+                $reqRes[] = $element->getResourceId();
+            } elseif (get_class($element) === SequenceElement::BLOCK_CLASS) {
+                /** @var SequenceBlock $element */
+                $reqRes = array_unique(
+                    $this->computeRequiredResourcesForSequenceFromBlock($element)
+                );
+            }
+        }
+
+        return $reqRes;
+    }
+
+    /**
+     * Computes the required knowledges according to the content of the resource resource and
+     * write it in the corresponding field of the output resource
+     *
+     * @param ResourceResource $resourceResource
+     *
+     * @throws InvalidTypeException
+     * @return ResourceResource
+     */
+    public function computeRequiredKnowledgesFromResource($resourceResource)
+    {
+        $reqKno = array();
+
+        /** @var LocalFormula $formula */
+        foreach ($resourceResource->getContent()->getFormulas() as $formula) {
+            $reqKno[] = $formula->getFormulaId();
+        }
+
+        $resourceResource->setRequiredKnowledges(array_unique($reqKno));
+
+        return $resourceResource;
     }
 }

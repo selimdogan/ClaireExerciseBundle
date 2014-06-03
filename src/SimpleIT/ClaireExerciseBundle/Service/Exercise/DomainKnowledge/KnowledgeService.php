@@ -65,12 +65,7 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
         $knowledge = KnowledgeFactory::createFromResource($knowledgeResource);
 
         parent::fillFromResource($knowledge, $knowledgeResource);
-
-        $reqKnowledges = array();
-        foreach ($knowledgeResource->getRequiredKnowledges() as $reqKno) {
-            $reqKnowledges[] = $this->get($reqKno);
-        }
-        $knowledge->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
+        $knowledge = $this->computeRequirements($knowledgeResource, $knowledge);
 
         return $knowledge;
     }
@@ -91,83 +86,33 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
     )
     {
         parent::updateFromSharedResource($knowledgeResource, $knowledge, 'knowledge_storage');
-
-        if (!is_null($knowledgeResource->getRequiredKnowledges())) {
-            $reqKnowledges = array();
-            foreach ($knowledgeResource->getRequiredKnowledges() as $reqRes) {
-                $reqKnowledges[] = $this->get($reqRes);
-            }
-
-            $knowledge->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
-        }
+        $knowledge = $this->computeRequirements($knowledgeResource, $knowledge);
 
         return $knowledge;
     }
 
     /**
-     * Add a requiredKnowledge to a knowledge
+     * Compute the requirements of the entity from the resource content (if content is empty,
+     * no change)
      *
-     * @param int $knowledgeId The id of the requiring knowledge
-     * @param int $reqKnoId    The id of the required knowledge
-     *
-     * @return Knowledge
-     * @Transactional
-     */
-    public function addRequiredKnowledge(
-        $knowledgeId,
-        $reqKnoId
-    )
-    {
-        /** @var Knowledge $reqKno */
-        $reqKno = $this->get($reqKnoId);
-        $this->entityRepository->addRequiredKnowledge($knowledgeId, $reqKno);
-
-        return $this->get($knowledgeId);
-    }
-
-    /**
-     * Delete a required knowledge
-     *
-     * @param int $knowledgeId The id of the requiring knowledge
-     * @param int $reqKnoId    The id of the required knowledge
+     * @param KnowledgeResource $knowledgeResource
+     * @param Knowledge $knowledge
      *
      * @return Knowledge
-     * @Transactional
      */
-    public function deleteRequiredKnowledge(
-        $knowledgeId,
-        $reqKnoId
-    )
+    private function computeRequirements($knowledgeResource, $knowledge)
     {
-        /** @var Knowledge $reqKno */
-        $reqKno = $this->get($reqKnoId);
-        $this->entityRepository->deleteRequiredKnowledge($knowledgeId, $reqKno);
-    }
-
-    /**
-     * Edit the required knowledges: remove all the old requirements and write the new ones
-     * (saving).
-     *
-     * @param int             $knowledgeId        The id of the requiring knowledge
-     * @param ArrayCollection $requiredKnowledges A collection of int: the id of knowledge
-     *
-     * @return Knowledge
-     * @Transactional
-     */
-    public function editRequiredKnowledges($knowledgeId, ArrayCollection $requiredKnowledges)
-    {
-        $knowledge = $this->entityRepository->find($knowledgeId);
-
-        $knowledgesCollection = array();
-        foreach ($requiredKnowledges as $rk) {
-            $knowledgesCollection[] = $this->entityRepository->find($rk);
+        if ($knowledgeResource->getContent() != null) {
+            // required knowledges
+            $knowledgeResource = $this->computeRequiredKnowledgesFromResource($knowledgeResource);
+            $reqKnowledges = array();
+            foreach ($knowledgeResource->getRequiredKnowledges() as $reqKnowledge) {
+                $reqKnowledges[] = $this->get($reqKnowledge);
+            }
+            $knowledge->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
         }
-        $knowledge->setRequiredKnowledges(new ArrayCollection($knowledgesCollection));
 
-        /** @var Knowledge $knowledge */
-        $knowledge = $this->save($knowledge);
-
-        return $knowledge->getRequiredKnowledges();
+        return $knowledge;
     }
 
     /**
@@ -259,5 +204,20 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
         ) {
             throw new InvalidTypeException('Content does not match exercise model type');
         }
+    }
+
+    /**
+     * Computes the required knowledges according to the content of the resource resource and
+     * write it in the corresponding field of the output resource
+     *
+     * @param KnowledgeResource $knowledgeResource
+     *
+     * @throws InvalidTypeException
+     * @return KnowledgeResource
+     */
+    public function computeRequiredKnowledgesFromResource($knowledgeResource)
+    {
+        // no knowledge inter dependencies for the moment
+        return array();
     }
 }

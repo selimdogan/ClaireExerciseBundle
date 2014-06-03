@@ -103,7 +103,7 @@ class ExerciseModelResource extends SharedResource
      * @var array $requiredExerciseResources
      * @Serializer\Type("array")
      * @Serializer\Groups({"details"})
-     * @Assert\NotNull(groups={"create"})
+     * @Assert\Null()
      */
     private $requiredExerciseResources;
 
@@ -111,7 +111,7 @@ class ExerciseModelResource extends SharedResource
      * @var array $requiredKnowledges
      * @Serializer\Type("array")
      * @Serializer\Groups({"details"})
-     * @Assert\NotNull(groups={"create"})
+     * @Assert\Null()
      */
     private $requiredKnowledges;
 

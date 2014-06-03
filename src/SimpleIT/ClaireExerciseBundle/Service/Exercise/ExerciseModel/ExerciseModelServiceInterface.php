@@ -4,6 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityServiceInterface;
@@ -30,6 +31,7 @@ interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
      * Create an entity from a resource (no saving).
      * Required fields: type, title, [content or parent], draft, owner, author, archived, metadata
      * Must be null: id
+     * Not used (computed) : required resources, required knowledge
      *
      * @param ExerciseModelResource $resource
      *
@@ -129,80 +131,24 @@ interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
     public function getModelFromEntity(ExerciseModel $entity);
 
     /**
-     * Add a requiredResource to an exercise model
+     * Computes the required resources according to the content of the resource resource and
+     * write it in the corresponding field of the output resource
      *
-     * @param $exerciseModelId
-     * @param $reqResId
+     * @param ExerciseModelResource $modelResource
      *
-     * @return ExerciseModel
+     * @throws InvalidTypeException
+     * @return ExerciseModelResource
      */
-    public function addRequiredResource(
-        $exerciseModelId,
-        $reqResId
-    );
+    public function computeRequiredResourcesFromResource($modelResource);
 
     /**
-     * Delete a required resource
+     * Computes the required knowledges according to the content of the resource resource and
+     * write it in the corresponding field of the output resource
      *
-     * @param $exerciseModelId
-     * @param $reqResId
+     * @param ExerciseModelResource $modelResource
      *
-     * @return ExerciseModel
+     * @throws InvalidTypeException
+     * @return ExerciseModelResource
      */
-    public function deleteRequiredResource(
-        $exerciseModelId,
-        $reqResId
-    );
-
-    /**
-     * Edit all the required resources
-     *
-     * @param int             $exerciseModelId
-     * @param ArrayCollection $requiredResources
-     *
-     * @return ExerciseModel
-     */
-    public function editRequiredResource(
-        $exerciseModelId,
-        ArrayCollection $requiredResources
-    );
-
-    /**
-     * Add a required knowledge to an exercise model
-     *
-     * @param $exerciseModelId
-     * @param $reqKnoId
-     *
-     * @return ExerciseModel
-     */
-    public function addRequiredKnowledge(
-        $exerciseModelId,
-        $reqKnoId
-    );
-
-    /**
-     * Delete a required knowledge
-     *
-     * @param $exerciseModelId
-     * @param $reqKnoId
-     *
-     * @return ExerciseModel
-     */
-    public function deleteRequiredKnowledge(
-        $exerciseModelId,
-        $reqKnoId
-    );
-
-    /**
-     * Edit all the required knowledges
-     *
-     * @param int             $exerciseModelId
-     * @param ArrayCollection $requiredKnowledges
-     *
-     * @return ExerciseModel
-     */
-    public function editRequiredKnowledges(
-        $exerciseModelId,
-        ArrayCollection $requiredKnowledges
-    );
+    public function computeRequiredKnowledgesFromResource($modelResource);
 }

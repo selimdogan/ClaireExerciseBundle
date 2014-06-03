@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId;
@@ -36,6 +37,7 @@ interface ExerciseResourceServiceInterface extends SharedEntityServiceInterface
      * Create an entity from a resource (no saving).
      * Required fields: type, title, [content or parent], draft, owner, author, archived, metadata
      * Must be null: id
+     * Not used (computed) : required resources, required knowledge
      *
      * @param ResourceResource $resource
      *
@@ -116,81 +118,6 @@ interface ExerciseResourceServiceInterface extends SharedEntityServiceInterface
     public function getByIdAndOwner($entityId, $ownerId);
 
     /**
-     * Add a requiredResource to a resource entity (saving)
-     *
-     * @param int $resourceId The id of the requiring resource entity
-     * @param int $reqResId   The id of the required resource entity
-     *
-     * @return ExerciseResource
-     */
-    public function addRequiredResource(
-        $resourceId,
-        $reqResId
-    );
-
-    /**
-     * Delete a required resource (saving)
-     *
-     * @param int $resourceId The id of the requiring resource entity
-     * @param int $reqResId   The id of the required resource entity
-     *
-     * @return ExerciseResource
-     */
-    public function deleteRequiredResource(
-        $resourceId,
-        $reqResId
-    );
-
-    /**
-     * Edit the required resources (saving)
-     *
-     * @param int             $resourceId        The id of the requiring resource entity
-     * @param ArrayCollection $requiredResources A collection of int: id of the required entities
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function editRequiredResource($resourceId, ArrayCollection $requiredResources);
-
-    /**
-     * Add a required knowledge to a resource entity (saving)
-     *
-     * @param int $resourceId The id of the requiring resource entity
-     * @param int $reqKnoId   The id of the required knowledge entity
-     *
-     * @return ExerciseResource
-     */
-    public function addRequiredKnowledge(
-        $resourceId,
-        $reqKnoId
-    );
-
-    /**
-     * Delete a required knowledge (saving)
-     *
-     * @param int $resourceId The id of the requiring resource entity
-     * @param int $reqKnoId   The id of the required knowledge entity
-     *
-     * @return ExerciseResource
-     */
-    public function deleteRequiredKnowledge(
-        $resourceId,
-        $reqKnoId
-    );
-
-    /**
-     * Edit the required knowledges (saving)
-     *
-     * @param int             $resourceId         The id of the requiring resource entity
-     * @param ArrayCollection $requiredKnowledges A collection of int: id of the required knowledges
-     *
-     * @return ExerciseResource
-     */
-    public function editRequiredKnowledges(
-        $resourceId,
-        ArrayCollection $requiredKnowledges
-    );
-
-    /**
      * Get a resource in the form of an ExerciseObject (useful for exercise generation)
      *
      * @param ObjectId $resId
@@ -215,4 +142,26 @@ interface ExerciseResourceServiceInterface extends SharedEntityServiceInterface
         $numberOfObjects,
         User $owner
     );
+
+    /**
+     * Computes the required resources according to the content of the resource resource and
+     * write it in the corresponding field of the output resource
+     *
+     * @param ResourceResource $resourceResource
+     *
+     * @throws InvalidTypeException
+     * @return ResourceResource
+     */
+    public function computeRequiredResourcesFromResource($resourceResource);
+
+    /**
+     * Computes the required knowledges according to the content of the resource resource and
+     * write it in the corresponding field of the output resource
+     *
+     * @param ResourceResource $resourceResource
+     *
+     * @throws InvalidTypeException
+     * @return ResourceResource
+     */
+    public function computeRequiredKnowledgesFromResource($resourceResource);
 }

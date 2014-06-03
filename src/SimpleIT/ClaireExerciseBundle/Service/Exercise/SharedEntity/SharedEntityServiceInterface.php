@@ -59,6 +59,7 @@ interface SharedEntityServiceInterface
      * Create an entity from a resource (no saving).
      * Required fields: type, title, [content or parent], draft, owner, author, archived, metadata
      * Must be null: id
+     * Not used (computed) : required resources or knowledge
      *
      * @param SharedResource $resource
      *

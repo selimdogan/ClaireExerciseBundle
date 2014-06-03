@@ -110,42 +110,4 @@ interface KnowledgeServiceInterface extends SharedEntityServiceInterface
      * @return Knowledge
      */
     public function getByIdAndOwner($knowledgeId, $ownerId);
-
-    /**
-     * Add a requiredKnowledge to a knowledge (saving)
-     *
-     * @param int $knowledgeId The id of the requiring knowledge
-     * @param int $reqKnoId    The id of the required knowledge
-     *
-     * @return Knowledge
-     */
-    public function addRequiredKnowledge(
-        $knowledgeId,
-        $reqKnoId
-    );
-
-    /**
-     * Delete a required knowledge (saving)
-     *
-     * @param int $knowledgeId The id of the requiring knowledge
-     * @param int $reqKnoId    The id of the required knowledge
-     *
-     * @internal param int $regKnoId The id of the required knowledge
-     * @return Knowledge
-     */
-    public function deleteRequiredKnowledge(
-        $knowledgeId,
-        $reqKnoId
-    );
-
-    /**
-     * Edit the required knowledges: remove all the old requirements and write the new ones
-     * (saving).
-     *
-     * @param int             $knowledgeId        The id of the requiring knowledge
-     * @param ArrayCollection $requiredKnowledges A collection of int: the id of knowledge
-     *
-     * @return Knowledge
-     */
-    public function editRequiredKnowledges($knowledgeId, ArrayCollection $requiredKnowledges);
 }
