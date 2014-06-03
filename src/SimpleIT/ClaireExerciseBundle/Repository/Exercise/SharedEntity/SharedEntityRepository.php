@@ -33,6 +33,7 @@ abstract class SharedEntityRepository extends BaseRepository
      * @param SharedEntity          $forkFrom
      * @param boolean               $isRoot
      * @param boolean               $isPointer
+     * @param boolean               $ignoreArchived
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\FilterException
      * @return array
@@ -44,7 +45,8 @@ abstract class SharedEntityRepository extends BaseRepository
         $parent = null,
         $forkFrom = null,
         $isRoot = null,
-        $isPointer = null
+        $isPointer = null,
+        $ignoreArchived = true
     )
     {
         $metadata = array();
@@ -85,6 +87,15 @@ abstract class SharedEntityRepository extends BaseRepository
                 $qb->expr()->eq(
                     'entity.forkFrom',
                     $forkFrom->getId()
+                )
+            );
+        }
+
+        if ($ignoreArchived) {
+            $qb->andWhere(
+                $qb->expr()->eq(
+                    'entity.archived',
+                    'false'
                 )
             );
         }

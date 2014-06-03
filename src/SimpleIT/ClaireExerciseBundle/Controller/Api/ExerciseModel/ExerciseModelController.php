@@ -111,7 +111,6 @@ class ExerciseModelController extends ApiController
 
             $modelResource->setAuthor($userId);
             $modelResource->setOwner($userId);
-            $modelResource->setArchived(false);
 
             $model = $this->get('simple_it.exercise.exercise_model')->createAndAdd
                 (
