@@ -5,6 +5,7 @@ use SimpleIT\ApiBundle\Controller\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
+use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResourceFactory;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
@@ -30,6 +31,7 @@ class KnowledgeByUserController extends ApiController
     public function viewAction($knowledgeId, $ownerId)
     {
         try {
+            /** @var Knowledge $knowledge */
             $knowledge = $this->get('simple_it.exercise.knowledge')->getByIdAndOwner(
                 $knowledgeId,
                 $ownerId

@@ -3,9 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseModel;
 
 use Doctrine\ORM\QueryBuilder;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedMetadataRepository;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\Sort;
 
 /**

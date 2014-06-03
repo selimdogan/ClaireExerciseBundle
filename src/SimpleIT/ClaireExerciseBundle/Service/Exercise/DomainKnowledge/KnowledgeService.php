@@ -220,4 +220,24 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
         // no knowledge inter dependencies for the moment
         return array();
     }
+
+
+
+    /**
+     * Subscribe to an entity: the new entity is a pointer to the parent entity. It has no
+     * content and no metadata because these elements rely on the parent.
+     *
+     * @param int $ownerId        The id of the owner who wants to get the new pointer
+     * @param int $parentEntityId The id of the parent entity
+     *
+     * @return Knowledge
+     */
+    public function subscribe($ownerId, $parentEntityId)
+    {
+        /** @var Knowledge $knowledge */
+        $knowledge = parent::subscribe($ownerId, $parentEntityId);
+        $knowledge->setRequiredKnowledges(new ArrayCollection());
+
+        return $knowledge;
+    }
 }

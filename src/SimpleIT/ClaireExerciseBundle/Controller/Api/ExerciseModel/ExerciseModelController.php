@@ -76,8 +76,8 @@ class ExerciseModelController extends ApiController
             $exerciseModelResources = $this->get(
                 'simple_it.exercise.exercise_model'
             )->getAllContentFullResourcesFromEntityList(
-                $exerciseModels
-            );
+                    $exerciseModels
+                );
 
             return new ApiPaginatedResponse($exerciseModelResources, $exerciseModels, array(
                 'list',
@@ -146,11 +146,11 @@ class ExerciseModelController extends ApiController
 
             $modelResource->setId($exerciseModelId);
 
-            $resource = $this->get('simple_it.exercise.exercise_model')->edit
+            $model = $this->get('simple_it.exercise.exercise_model')->edit
                 (
                     $modelResource
                 );
-            $modelResource = ExerciseModelResourceFactory::create($resource);
+            $modelResource = ExerciseModelResourceFactory::create($model);
 
             return new ApiEditedResponse($modelResource);
 
@@ -185,6 +185,38 @@ class ExerciseModelController extends ApiController
             throw new ApiNotFoundException(ExerciseModelResource::RESOURCE_NAME);
         } catch (EntityDeletionException $ede) {
             throw new ApiBadRequestException($ede->getMessage());
+        }
+    }
+
+    /**
+     * Subscribe to a model
+     *
+     * @param int $exerciseModelId
+     *
+     * @throws ApiBadRequestException
+     * @throws ApiNotFoundException
+     * @return ApiResponse
+     */
+    public function subscribeAction($exerciseModelId)
+    {
+        try {
+            if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+                $ownerId = $this->get('security.context')->getToken()->getUser()->getId();
+            } else {
+                throw new ApiBadRequestException('An owner must be authenticated');
+            }
+
+            $model = $this->get('simple_it.exercise.exercise_model')->subscribe(
+                $ownerId,
+                $exerciseModelId
+            );
+
+            $modelResource = ExerciseModelResourceFactory::create($model);
+
+            return new ApiCreatedResponse($modelResource, array("details", 'Default'));
+
+        } catch (NonExistingObjectException $neoe) {
+            throw new ApiNotFoundException(ExerciseModelResource::RESOURCE_NAME);
         }
     }
 }

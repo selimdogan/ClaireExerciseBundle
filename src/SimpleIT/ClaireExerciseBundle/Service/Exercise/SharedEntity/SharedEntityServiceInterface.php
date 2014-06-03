@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntityMetadataFactory;
+use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResource;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
@@ -30,6 +31,16 @@ interface SharedEntityServiceInterface
      * @throws NonExistingObjectException
      */
     public function get($entityId);
+
+    /**
+     * Get the final parent entity (the one with content) pointed by an entity
+     *
+     * @param int $entityId
+     *
+     * @return SharedEntity
+     * @throws InconsistentEntityException
+     */
+    public function getParent($entityId);
 
     /**
      * Get a list of entities according to restrictions. Parameters left to null are not taken in
@@ -153,4 +164,15 @@ interface SharedEntityServiceInterface
      * @return SharedEntity
      */
     public function getByIdAndOwner($entityId, $ownerId);
+
+    /**
+     * Subscribe to an entity: the new entity is a pointer to the parent entity. It has no
+     * content and no metadata because these elements rely on the parent.
+     *
+     * @param int $ownerId        The id of the owner who wants to get the new pointer
+     * @param int $parentEntityId The id of the parent entity
+     *
+     * @return SharedEntity
+     */
+    public function subscribe($ownerId, $parentEntityId);
 }

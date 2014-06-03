@@ -5,6 +5,7 @@ use SimpleIT\ApiBundle\Controller\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResourceFactory;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
@@ -30,6 +31,7 @@ class ResourceByUserController extends ApiController
     public function viewAction($resourceId, $ownerId)
     {
         try {
+            /** @var ExerciseResource $resource */
             $resource = $this->get('simple_it.exercise.exercise_resource')->getByIdAndOwner(
                 $resourceId,
                 $ownerId

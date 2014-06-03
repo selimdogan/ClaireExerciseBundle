@@ -109,6 +109,23 @@ abstract class SharedEntityService extends TransactionalService implements Share
     /**
      * @inheritdoc
      */
+    public function getParent($entityId)
+    {
+        $entity = $this->get($entityId);
+
+        while ($entity->getContent() === null) {
+            if ($entity->getParent() === null) {
+                throw new InconsistentEntityException('The entity has no content and no parent');
+            }
+            $entity = $entity->getParent();
+        }
+
+        return $entity;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getAll(
         $collectionInformation = null,
         $ownerId = null,
@@ -542,4 +559,27 @@ abstract class SharedEntityService extends TransactionalService implements Share
         $content,
         $type
     );
+
+    /**
+     * @inheritdoc
+     */
+    public function subscribe($ownerId, $parentEntityId)
+    {
+        $owner = $this->userService->get($ownerId);
+        $parent = $this->get($parentEntityId);
+
+        $entity = clone($parent);
+        $entity->setId(null);
+        $entity->setContent(null);
+        $entity->setArchived(false);
+        $entity->setOwner($owner);
+        $entity->setMetadata(new ArrayCollection());
+        $entity->setForkFrom(null);
+        $entity->setParent($parent);
+
+        $this->em->persist($entity);
+        $this->em->flush();
+
+        return $entity;
+    }
 }

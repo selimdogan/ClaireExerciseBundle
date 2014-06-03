@@ -2,10 +2,10 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
+use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityServiceInterface;
@@ -27,6 +27,16 @@ interface KnowledgeServiceInterface extends SharedEntityServiceInterface
      * @throws NonExistingObjectException
      */
     public function get($knowledgeId);
+
+    /**
+     * Get the final parent entity (the one with content) pointed by an entity
+     *
+     * @param int $entityId
+     *
+     * @return Knowledge
+     * @throws InconsistentEntityException
+     */
+    public function getParent($entityId);
 
     /**
      * Create and add an entity from a resource (saving).
@@ -110,4 +120,15 @@ interface KnowledgeServiceInterface extends SharedEntityServiceInterface
      * @return Knowledge
      */
     public function getByIdAndOwner($knowledgeId, $ownerId);
+
+    /**
+     * Subscribe to an entity: the new entity is a pointer to the parent entity. It has no
+     * content and no metadata because these elements rely on the parent.
+     *
+     * @param int $ownerId        The id of the owner who wants to get the new pointer
+     * @param int $parentEntityId The id of the parent entity
+     *
+     * @return Knowledge
+     */
+    public function subscribe($ownerId, $parentEntityId);
 }

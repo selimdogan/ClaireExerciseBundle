@@ -2,8 +2,8 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
@@ -26,6 +26,16 @@ interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
      * @throws NonExistingObjectException
      */
     public function get($entityId);
+
+    /**
+     * Get the final parent entity (the one with content) pointed by an entity
+     *
+     * @param int $entityId
+     *
+     * @return ExerciseModel
+     * @throws InconsistentEntityException
+     */
+    public function getParent($entityId);
 
     /**
      * Create an entity from a resource (no saving).
@@ -151,4 +161,15 @@ interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
      * @return ExerciseModelResource
      */
     public function computeRequiredKnowledgesFromResource($modelResource);
+
+    /**
+     * Subscribe to an entity: the new entity is a pointer to the parent entity. It has no
+     * content and no metadata because these elements rely on the parent.
+     *
+     * @param int $ownerId        The id of the owner who wants to get the new pointer
+     * @param int $parentEntityId The id of the parent entity
+     *
+     * @return ExerciseModel
+     */
+    public function subscribe($ownerId, $parentEntityId);
 }

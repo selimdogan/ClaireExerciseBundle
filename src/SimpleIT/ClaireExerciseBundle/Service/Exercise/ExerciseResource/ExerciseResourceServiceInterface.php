@@ -2,11 +2,10 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
@@ -32,6 +31,16 @@ interface ExerciseResourceServiceInterface extends SharedEntityServiceInterface
      * @throws NonExistingObjectException
      */
     public function get($entityId);
+
+    /**
+     * Get the final parent entity (the one with content) pointed by an entity
+     *
+     * @param int $entityId
+     *
+     * @return ExerciseResource
+     * @throws InconsistentEntityException
+     */
+    public function getParent($entityId);
 
     /**
      * Create an entity from a resource (no saving).
@@ -164,4 +173,15 @@ interface ExerciseResourceServiceInterface extends SharedEntityServiceInterface
      * @return ResourceResource
      */
     public function computeRequiredKnowledgesFromResource($resourceResource);
+
+    /**
+     * Subscribe to an entity: the new entity is a pointer to the parent entity. It has no
+     * content and no metadata because these elements rely on the parent.
+     *
+     * @param int $ownerId        The id of the owner who wants to get the new pointer
+     * @param int $parentEntityId The id of the parent entity
+     *
+     * @return ExerciseResource
+     */
+    public function subscribe($ownerId, $parentEntityId);
 }

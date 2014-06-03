@@ -36,6 +36,14 @@ api_exercise_model_delete:
         _format: json
         exerciseModelId: \d+
 
+api_exercise_model_subscribe:
+    pattern:  /{exerciseModelId}/subscribe
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/ExerciseModel:subscribe }
+    methods: [POST]
+    requirements:
+        _format: json
+        exerciseModelId: \d+
+
 api_exercise_model_add_required_resource:
     pattern:  /{exerciseModelId}/required-resources/{reqResId}
     defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/RequiredResourceByExerciseModel:add }

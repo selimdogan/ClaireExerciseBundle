@@ -843,4 +843,23 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
 
         return $modelResource;
     }
+
+    /**
+     * Subscribe to an entity: the new entity is a pointer to the parent entity. It has no
+     * content and no metadata because these elements rely on the parent.
+     *
+     * @param int $ownerId        The id of the owner who wants to get the new pointer
+     * @param int $parentEntityId The id of the parent entity
+     *
+     * @return ExerciseModel
+     */
+    public function subscribe($ownerId, $parentEntityId)
+    {
+        /** @var ExerciseModel $model */
+        $model = parent::subscribe($ownerId, $parentEntityId);
+        $model->setRequiredExerciseResources(new ArrayCollection());
+        $model->setRequiredKnowledges(new ArrayCollection());
+
+        return $model;
+    }
 }
