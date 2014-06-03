@@ -319,13 +319,36 @@ abstract class SharedEntityService extends TransactionalService implements Share
                 $parentId = $entity->getParent()->getId();
             }
             // Check if the entity is complete with the new content
-            $entity->setComplete(
-                $this->checkEntityComplete(
-                    $entity->getType(),
-                    $parentId,
-                    $content
-                )
+            $oldComplete = $entity->getComplete();
+            $newComplete = $this->checkEntityComplete(
+                $entity->getType(),
+                $parentId,
+                $content
             );
+            $entity->setComplete($newComplete);
+
+            // update children if necessary
+            if ($oldComplete != $newComplete) {
+                $this->updateChildrenComplete($entity, $newComplete);
+            }
+        }
+    }
+
+    /**
+     * Update the complete property of all the children of an entity
+     *
+     * @param SharedEntity $entity
+     * @param bool         $complete
+     */
+    private function updateChildrenComplete($entity, $complete)
+    {
+        /** @var SharedEntity $child */
+        foreach ($entity->getChildren() as $child) {
+            $child->setComplete($complete);
+
+            if (count($child->getChildren()) > 0) {
+                $this->updateChildrenComplete($child, $complete);
+            }
         }
     }
 

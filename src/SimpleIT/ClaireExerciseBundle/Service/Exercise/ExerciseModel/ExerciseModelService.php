@@ -518,7 +518,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
         array $resourceTypes
     )
     {
-        if (!($block->getNumberOfOccurrences() >= 0)) {
+        if (!($block->getNumberOfOccurrences() > 0)) {
             return false;
         }
 
