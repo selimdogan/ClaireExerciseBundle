@@ -48,6 +48,13 @@ class SequenceBlock extends ResourceBlock
     private $useLast;
 
     /**
+     * @var int $numberOfOccurrences The number of occurrences to generate in the block: 1
+     * @Serializer\Type("integer")
+     * @Serializer\Groups({"details", "exercise_model_storage"})
+     */
+    protected $numberOfOccurrences = 1;
+
+    /**
      * Constructor
      */
     function __construct()
