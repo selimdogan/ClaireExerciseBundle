@@ -44,6 +44,14 @@ api_exercise_model_subscribe:
         _format: json
         exerciseModelId: \d+
 
+api_exercise_model_subscribe:
+    pattern:  /{exerciseModelId}/duplicate
+    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/ExerciseModel:duplicate }
+    methods: [POST]
+    requirements:
+        _format: json
+        exerciseModelId: \d+
+
 api_exercise_model_add_required_resource:
     pattern:  /{exerciseModelId}/required-resources/{reqResId}
     defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/RequiredResourceByExerciseModel:add }

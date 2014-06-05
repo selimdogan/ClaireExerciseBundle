@@ -605,4 +605,23 @@ abstract class SharedEntityService extends TransactionalService implements Share
 
         return $entity;
     }
+
+    /**
+     * Duplicate an entity (same owner).
+     *
+     * @param int $originalId The id of the entity to be duplicated
+     *
+     * @return SharedEntity
+     */
+    public function duplicate($originalId)
+    {
+        $original = $this->get($originalId);
+
+        $entity = clone($original);
+        $entity->setId(null);
+        $this->em->persist($entity);
+        $this->em->flush();
+
+        return $entity;
+    }
 }

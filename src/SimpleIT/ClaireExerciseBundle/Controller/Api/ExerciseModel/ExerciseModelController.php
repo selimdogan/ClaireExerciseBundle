@@ -219,4 +219,28 @@ class ExerciseModelController extends ApiController
             throw new ApiNotFoundException(ExerciseModelResource::RESOURCE_NAME);
         }
     }
+    /**
+     * Duplicate a model
+     *
+     * @param int $exerciseModelId
+     *
+     * @throws ApiBadRequestException
+     * @throws ApiNotFoundException
+     * @return ApiResponse
+     */
+    public function duplicateAction($exerciseModelId)
+    {
+        try {
+            $model = $this->get('simple_it.exercise.exercise_model')->duplicate(
+                $exerciseModelId
+            );
+
+            $modelResource = ExerciseModelResourceFactory::create($model);
+
+            return new ApiCreatedResponse($modelResource, array("details", 'Default'));
+
+        } catch (NonExistingObjectException $neoe) {
+            throw new ApiNotFoundException(ExerciseModelResource::RESOURCE_NAME);
+        }
+    }
 }
