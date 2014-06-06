@@ -184,4 +184,14 @@ interface ExerciseResourceServiceInterface extends SharedEntityServiceInterface
      * @return ExerciseResource
      */
     public function subscribe($ownerId, $parentEntityId);
+
+    /**
+     * Import an entity. The entity is duplicated and the required entities are also imported.
+     *
+     * @param int  $ownerId
+     * @param int  $originalId The id of the original entity that must be duplicated
+     *
+     * @return ExerciseResource
+     */
+    public function import($ownerId, $originalId);
 }

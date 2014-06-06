@@ -13,6 +13,7 @@ use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\DomainKnowledge\KnowledgeRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityService;
 use SimpleIT\CoreBundle\Annotation\Transactional;
@@ -96,15 +97,26 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
      * no change)
      *
      * @param KnowledgeResource $knowledgeResource
-     * @param Knowledge $knowledge
+     * @param Knowledge         $knowledge
+     * @param bool              $import
+     * @param int               $ownerId
      *
      * @return Knowledge
      */
-    private function computeRequirements($knowledgeResource, $knowledge)
+    private function computeRequirements(
+        $knowledgeResource,
+        $knowledge,
+        $import = false,
+        $ownerId = null
+    )
     {
         if ($knowledgeResource->getContent() != null) {
             // required knowledges
-            $knowledgeResource = $this->computeRequiredKnowledgesFromResource($knowledgeResource);
+            $knowledgeResource = $this->computeRequiredKnowledgesFromResource(
+                $knowledgeResource,
+                $import,
+                $ownerId
+            );
             $reqKnowledges = array();
             foreach ($knowledgeResource->getRequiredKnowledges() as $reqKnowledge) {
                 $reqKnowledges[] = $this->get($reqKnowledge);
@@ -211,17 +223,21 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
      * write it in the corresponding field of the output resource
      *
      * @param KnowledgeResource $knowledgeResource
+     * @param bool              $import
+     * @param int               $ownerId
      *
      * @throws InvalidTypeException
      * @return KnowledgeResource
      */
-    public function computeRequiredKnowledgesFromResource($knowledgeResource)
+    public function computeRequiredKnowledgesFromResource(
+        $knowledgeResource,
+        $import = false,
+        $ownerId = null
+    )
     {
         // no knowledge inter dependencies for the moment
-        return array();
+        return $knowledgeResource;
     }
-
-
 
     /**
      * Subscribe to an entity: the new entity is a pointer to the parent entity. It has no
@@ -239,5 +255,29 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
         $knowledge->setRequiredKnowledges(new ArrayCollection());
 
         return $knowledge;
+    }
+
+    /**
+     * Import an entity. The entity is duplicated and the required entities are also imported.
+     *
+     * @param int  $ownerId
+     * @param int  $originalId The id of the original entity that must be duplicated
+     *
+     * @return Knowledge
+     */
+    public function import($ownerId, $originalId)
+    {
+        /** @var Knowledge $entity */
+        $entity = parent::parentImport($ownerId, $originalId);
+        $resource = KnowledgeResourceFactory::create($entity);
+
+        // requirement
+        $entity = $this->computeRequirements($resource, $entity, true, $ownerId);
+
+        $this->em->persist($entity);
+
+        $this->em->flush();
+
+        return $entity;
     }
 }

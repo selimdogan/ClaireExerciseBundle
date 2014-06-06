@@ -141,28 +141,6 @@ interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
     public function getModelFromEntity(ExerciseModel $entity);
 
     /**
-     * Computes the required resources according to the content of the resource resource and
-     * write it in the corresponding field of the output resource
-     *
-     * @param ExerciseModelResource $modelResource
-     *
-     * @throws InvalidTypeException
-     * @return ExerciseModelResource
-     */
-    public function computeRequiredResourcesFromResource($modelResource);
-
-    /**
-     * Computes the required knowledges according to the content of the resource resource and
-     * write it in the corresponding field of the output resource
-     *
-     * @param ExerciseModelResource $modelResource
-     *
-     * @throws InvalidTypeException
-     * @return ExerciseModelResource
-     */
-    public function computeRequiredKnowledgesFromResource($modelResource);
-
-    /**
      * Subscribe to an entity: the new entity is a pointer to the parent entity. It has no
      * content and no metadata because these elements rely on the parent.
      *
@@ -172,4 +150,14 @@ interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
      * @return ExerciseModel
      */
     public function subscribe($ownerId, $parentEntityId);
+
+    /**
+     * Import an entity. The entity is duplicated and the required entities are also imported.
+     *
+     * @param int  $ownerId
+     * @param int  $originalId The id of the original entity that must be duplicated
+     *
+     * @return ExerciseModel
+     */
+    public function import($ownerId, $originalId);
 }

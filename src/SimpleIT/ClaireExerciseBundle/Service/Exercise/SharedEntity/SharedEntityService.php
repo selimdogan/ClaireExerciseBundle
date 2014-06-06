@@ -624,4 +624,56 @@ abstract class SharedEntityService extends TransactionalService implements Share
 
         return $entity;
     }
+
+    /**
+     * Import an entity. Base work.
+     *
+     * @param int $ownerId
+     * @param int $originalId The id of the original entity that must be duplicated
+     *
+     * @return SharedEntity
+     */
+    protected function parentImport($ownerId, $originalId)
+    {
+        $original = $this->get($originalId);
+
+        // clone original
+        $entity = clone($original);
+        $entity->setId(null);
+        $entity->setOwner($this->userService->get($ownerId));
+        $entity->setForkFrom($original);
+
+        return $entity;
+    }
+
+    /**
+     * Import an entity. The entity is duplicated and the required entities are also imported.
+     *
+     * @param int  $ownerId
+     * @param int  $originalId The id of the original entity that must be duplicated
+     *
+     * @return SharedEntity
+     */
+    abstract public function import($ownerId, $originalId);
+
+    /**
+     * Import an entity if no direct children is owned by the user. (no flush if existing)
+     *
+     * @param int $ownerId
+     * @param int $originalId The id of the original entity that must be duplicated
+     *
+     * @return int The id of the imported or already existing entity
+     */
+    public function importOrLink($ownerId, $originalId)
+    {
+        try {
+            $fork = $this->entityRepository->findByForkFromAndOwner($originalId, $ownerId);
+
+            return $fork->getId();
+        } catch (NonExistingObjectException $neoe) {
+            $entity = $this->import($ownerId, $originalId, false);
+
+            return $entity->getId();
+        }
+    }
 }

@@ -403,4 +403,31 @@ abstract class SharedEntityRepository extends BaseRepository
             return $result[0];
         }
     }
+
+    /**
+     * Find an entity if it is owned by the user
+     *
+     * @param int  $forkFromId
+     * @param int $ownerId
+     *
+     * @return SharedEntity
+     * @throws NonExistingObjectException
+     */
+    public function findByForkFromAndOwner($forkFromId, $ownerId)
+    {
+        $queryBuilder = $this->createQueryBuilder('e');
+
+        $queryBuilder->where($queryBuilder->expr()->eq('e.owner', $ownerId));
+        $queryBuilder->andWhere($queryBuilder->expr()->eq('e.forkFrom', $forkFromId));
+
+        $result = $queryBuilder->getQuery()->getResult();
+
+
+        if (empty($result)) {
+            throw new NonExistingObjectException('Unable to find entity for fork' . $forkFromId .
+            ' and for owner ' . $ownerId);
+        } else {
+            return $result[0];
+        }
+    }
 }

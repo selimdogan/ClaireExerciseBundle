@@ -3,6 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModelFactory;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
@@ -32,6 +33,7 @@ use
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\Model as PairItems;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\PairBlock;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\MetadataConstraint;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ModelDocument;
@@ -185,17 +187,30 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     /**
      * Compute the requirements of the entity from the resource content (if empty,
      * requirements are not changed).
+     * The model can be imported if owned by another user. Content of the resource is updated in
+     * this case.
      *
      * @param ExerciseModelResource $modelResource
      * @param ExerciseModel         $model
+     * @param bool                  $import
+     * @param int                   $ownerId
      *
      * @return ExerciseModel
      */
-    private function computeRequirements($modelResource, $model)
+    private function computeRequirements(
+        $modelResource,
+        $model,
+        $import = false,
+        $ownerId = null
+    )
     {
         if ($modelResource->getContent() != null) {
             // required resources
-            $modelResource = $this->computeRequiredResourcesFromResource($modelResource);
+            $modelResource = $this->computeRequiredResourcesFromResource(
+                $modelResource,
+                $import,
+                $ownerId
+            );
             $reqResources = array();
             foreach ($modelResource->getRequiredExerciseResources() as $reqRes) {
                 $reqResources[] = $this->exerciseResourceService->get($reqRes);
@@ -203,7 +218,11 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
             $model->setRequiredExerciseResources(new ArrayCollection($reqResources));
 
             // required knowledges
-            $modelResource = $this->computeRequiredKnowledgesFromResource($modelResource);
+            $modelResource = $this->computeRequiredKnowledgesFromResource(
+                $modelResource,
+                $import,
+                $ownerId
+            );
             $reqKnowledges = array();
             foreach ($modelResource->getRequiredKnowledges() as $reqKnowledge) {
                 $reqKnowledges[] = $this->knowledgeService->get($reqKnowledge);
@@ -702,20 +721,36 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
 
     /**
      * Computes the required resources according to the content of the resource resource and
-     * write it in the corresponding field of the output resource (content must not be empty)
+     * write it in the corresponding field of the output resource (content must not be empty).
+     * The resource can be imported if owned by another user.
      *
      * @param ExerciseModelResource $modelResource
+     * @param bool                  $import
+     * @param int                   $ownerId
      *
-     * @throws InvalidTypeException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException
      * @return ExerciseModelResource
      */
-    public function computeRequiredResourcesFromResource($modelResource)
+    private function computeRequiredResourcesFromResource(
+        $modelResource,
+        $import = false,
+        $ownerId = null
+    )
     {
         $reqRes = array();
 
         /** @var ModelDocument $document */
         foreach ($modelResource->getContent()->getDocuments() as $document) {
-            $reqRes[] = $document->getId();
+            if ($import) {
+                $requiredId = $this->exerciseResourceService->importOrLink(
+                    $ownerId,
+                    $document->getId()
+                );
+                $document->setId($requiredId);
+            } else {
+                $requiredId = $document->getId();
+            }
+            $reqRes[] = $requiredId;
         }
 
         $content = $modelResource->getContent();
@@ -726,14 +761,18 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                     $reqRes,
                     $this->computeRequiredResourcesFromModelBlocks
                         (
-                            $content->getObjectBlocks()
+                            $content->getObjectBlocks(),
+                            $import,
+                            $ownerId
                         )
                 );
                 $reqRes = array_merge(
                     $reqRes,
                     $this->computeRequiredResourcesFromModelBlock
                         (
-                            $content->getSequenceBlock()
+                            $content->getSequenceBlock(),
+                            $import,
+                            $ownerId
                         )
                 );
                 break;
@@ -743,7 +782,9 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                     $reqRes,
                     $this->computeRequiredResourcesFromModelBlocks
                         (
-                            $content->getPairBlocks()
+                            $content->getPairBlocks(),
+                            $import,
+                            $ownerId
                         )
                 );
                 break;
@@ -753,7 +794,9 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                     $reqRes,
                     $this->computeRequiredResourcesFromModelBlocks
                         (
-                            $content->getObjectBlocks()
+                            $content->getObjectBlocks(),
+                            $import,
+                            $ownerId
                         )
                 );
                 break;
@@ -764,7 +807,9 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                     $reqRes,
                     $this->computeRequiredResourcesFromModelBlocks
                         (
-                            $content->getQuestionBlocks()
+                            $content->getQuestionBlocks(),
+                            $import,
+                            $ownerId
                         )
                 );
                 break;
@@ -781,19 +826,27 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * List all the required resources found in a list of blocks
      *
      * @param array $blocks
+     * @param bool  $import
+     * @param int   $ownerId
      *
      * @return array
      */
-    private function computeRequiredResourcesFromModelBlocks($blocks)
+    private function computeRequiredResourcesFromModelBlocks(
+        $blocks,
+        $import = false,
+        $ownerId = null
+    )
     {
         $reqRes = array();
 
         /** @var ResourceBlock $block */
-        foreach ($blocks as $block) {
+        foreach ($blocks as &$block) {
             $reqRes = array_merge(
                 $reqRes,
                 $this->computeRequiredResourcesFromModelBlock(
-                    $block
+                    $block,
+                    $import,
+                    $ownerId
                 )
             );
         }
@@ -805,16 +858,31 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * List all the required resource found in a block
      *
      * @param ResourceBlock $block
+     * @param bool          $import
+     * @param int           $ownerId
      *
      * @return array
      */
-    private function computeRequiredResourcesFromModelBlock($block)
+    private function computeRequiredResourcesFromModelBlock(
+        $block,
+        $import = false,
+        $ownerId = null
+    )
     {
         $reqRes = array();
 
         /** @var ObjectId $resource */
         foreach ($block->getResources() as $resource) {
-            $reqRes[] = $resource->getId();
+            if ($import) {
+                $requiredId = $this->exerciseResourceService->importOrLink(
+                    $ownerId,
+                    $resource->getId()
+                );
+                $resource->setId($requiredId);
+            } else {
+                $requiredId = $resource->getId();
+            }
+            $reqRes[] = $requiredId;
         }
 
         return $reqRes;
@@ -823,20 +891,36 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     /**
      * Computes the required knowledges according to the content of the resource resource and
      * write it in the corresponding field of the output resource (content must not be empty)
+     *The knowledge can be imported if owned by another user.
      *
      * @param ExerciseModelResource $modelResource
+     * @param bool                  $import
+     * @param int                   $ownerId
      *
      * @throws InvalidTypeException
      * @return ExerciseModelResource
      */
-    public function computeRequiredKnowledgesFromResource($modelResource)
+    private function computeRequiredKnowledgesFromResource(
+        $modelResource,
+        $import = false,
+        $ownerId = null
+    )
     {
-
         $reqKno = array();
 
         /** @var LocalFormula $formula */
         foreach ($modelResource->getContent()->getFormulas() as $formula) {
-            $reqKno[] = $formula->getFormulaId();
+            if ($import) {
+                $requiredId = $this->knowledgeService->importOrLink(
+                    $ownerId,
+                    $formula->getFormulaId()
+                );
+                $formula->setFormulaId($requiredId);
+            } else {
+                $requiredId = $formula->getFormulaId();
+            }
+
+            $reqKno[] = $requiredId;
         }
 
         $modelResource->setRequiredKnowledges(array_unique($reqKno));
@@ -861,5 +945,35 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
         $model->setRequiredKnowledges(new ArrayCollection());
 
         return $model;
+    }
+
+    /**
+     * Import an entity. The entity is duplicated and the required entities are also imported.
+     *
+     * @param int $ownerId
+     * @param int $originalId The id of the original entity that must be duplicated
+     *
+     * @return ExerciseModel
+     */
+    public function import($ownerId, $originalId)
+    {
+        /** @var ExerciseModel $entity */
+        $entity = parent::parentImport($ownerId, $originalId);
+        $resource = ExerciseModelResourceFactory::create($entity);
+
+        // requirement
+        $entity = $this->computeRequirements($resource, $entity, true, $ownerId);
+
+        // updated content
+        $context = SerializationContext::create();
+        $context->setGroups(array('exercise_model_storage', 'Default'));
+        $entity->setContent(
+            $this->serializer->jmsSerialize($resource->getContent(), 'json', $context)
+        );
+
+        $this->em->persist($entity);
+        $this->em->flush();
+
+        return $entity;
     }
 }

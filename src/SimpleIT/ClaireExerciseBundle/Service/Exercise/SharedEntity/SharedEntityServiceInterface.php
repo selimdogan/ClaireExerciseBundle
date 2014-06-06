@@ -175,4 +175,24 @@ interface SharedEntityServiceInterface
      * @return SharedEntity
      */
     public function subscribe($ownerId, $parentEntityId);
+
+    /**
+     * Import an entity. The entity is duplicated and the required entities are also imported.
+     *
+     * @param int  $ownerId
+     * @param int  $originalId The id of the original entity that must be duplicated
+     *
+     * @return SharedEntity
+     */
+    public function import($ownerId, $originalId);
+
+    /**
+     * Import an entity if no direct children is owned by the user. (no flush if existing)
+     *
+     * @param int $ownerId
+     * @param int $originalId The id of the original entity that must be duplicated
+     *
+     * @return int The id of the imported or already existing entity
+     */
+    public function importOrLink($ownerId, $originalId);
 }
