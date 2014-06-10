@@ -34,6 +34,8 @@ abstract class SharedEntityRepository extends BaseRepository
      * @param boolean               $isRoot
      * @param boolean               $isPointer
      * @param boolean               $ignoreArchived
+     * @param int                   $publicExceptUser Get the public entities that are not owned by this user
+     * @param boolean               $complete
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\FilterException
      * @return array
@@ -46,68 +48,50 @@ abstract class SharedEntityRepository extends BaseRepository
         $forkFrom = null,
         $isRoot = null,
         $isPointer = null,
-        $ignoreArchived = true
+        $ignoreArchived = true,
+        $publicExceptUser = null,
+        $complete = null
     )
     {
         $metadata = array();
         $keywords = array();
 
-        $qb = $this->createQueryBuilder('entity')
-            ->select();
+        $qb = $this->createQueryBuilder('entity')->select();
 
         if (!is_null($owner)) {
-            $qb->andWhere(
-                $qb->expr()->eq(
-                    'entity.owner',
-                    $owner->getId()
-                )
-            );
+            $qb = $this->qbOwner($qb, $owner->getId());
         }
 
         if (!is_null($author)) {
-            $qb->andWhere(
-                $qb->expr()->eq(
-                    'entity.author',
-                    $author->getId()
-                )
-            );
+            $qb = $this->qbAuthor($qb, $author->getId());
         }
 
         if (!is_null($parent)) {
-            $qb->andWhere(
-                $qb->expr()->eq(
-                    'entity.parent',
-                    $parent->getId()
-                )
-            );
+            $qb = $this->qbParent($qb, $parent->getId());
         }
 
         if (!is_null($forkFrom)) {
-            $qb->andWhere(
-                $qb->expr()->eq(
-                    'entity.forkFrom',
-                    $forkFrom->getId()
-                )
-            );
+            $qb = $this->qbForkFrom($qb, $forkFrom->getId());
         }
 
         if ($ignoreArchived) {
-            $qb->andWhere(
-                $qb->expr()->eq(
-                    'entity.archived',
-                    'false'
-                )
-            );
+            $qb = $this->qbNotArchived($qb);
         }
 
-        if ($isPointer === true) {
-            $qb->andWhere($qb->expr()->isNotNull('entity.parent'));
-        } elseif ($isPointer === false) {
-            $qb->andWhere($qb->expr()->isNotNull('entity.content'));
+        if ($isPointer !== null) {
+            $qb = $this->qbIsPointer($qb, $isPointer);
         }
 
         if ($isRoot === true) {
-            $qb->andWhere($qb->expr()->isNull('entity.forkFrom'));
+            $qb = $this->qbNotForkFrom($qb);
+        }
+
+        if (!is_null($publicExceptUser)) {
+            $qb = $this->qbPublicExceptUser($qb, $publicExceptUser);
+        }
+
+        if (!is_null($complete)) {
+            $qb = $this->qbPublicExceptUser($qb, $publicExceptUser);
         }
 
         if ($collectionInformation !== null) {
@@ -115,14 +99,37 @@ abstract class SharedEntityRepository extends BaseRepository
             $filters = $collectionInformation->getFilters();
             foreach ($filters as $filter => $value) {
                 switch ($filter) {
-                    case ('id'):
-                        $qb->andWhere($qb->expr()->eq('entity.id', $value));
-                        break;
                     case ('author'):
-                        $qb->andWhere($qb->expr()->eq('entity.author', "'" . $value . "'"));
+                        $qb = $this->qbAuthor($qb, $value);
                         break;
                     case ('owner'):
-                        $qb->andWhere($qb->expr()->eq('entity.owner', $value));
+                        $qb = $this->qbOwner($qb, $value);
+                        break;
+                    case ('fork-from'):
+                        $qb = $this->qbForkFrom($qb, $value);
+                        break;
+                    case ('parent'):
+                        $qb = $this->qbParent($qb, $value);
+                        break;
+                    case ('ignore-archived'):
+                        $qb = $this->qbNotArchived($qb);
+                        break;
+                    case ('is-pointer'):
+                        $qb = $this->qbIsPointer($qb, $value);
+                        break;
+                    case ('is-root'):
+                        if ($value === 'true') {
+                            $qb = $this->qbNotForkFrom($qb);
+                        }
+                        break;
+                    case ('complete'):
+                        if ($value !== "true" && $value !== "false") {
+                            throw new FilterException('complete filter must be true or false');
+                        }
+                        $qb = $this->qbComplete($qb, $value);
+                        break;
+                    case ('public-except-user'):
+                        $qb = $this->qbPublicExceptUser($qb, $value);
                         break;
                     case ('type'):
                         if (is_array($value)) {
@@ -153,22 +160,6 @@ abstract class SharedEntityRepository extends BaseRepository
                             throw new FilterException('draft filter must be true or false');
                         }
                         $qb->andWhere($qb->expr()->eq('entity.draft', "'" . $value . "'"));
-                        break;
-                    case ('complete'):
-                        if ($value !== "true" && $value !== "false") {
-                            throw new FilterException('complete filter must be true or false');
-                        }
-                        $qb->andWhere($qb->expr()->eq('entity.complete', "'" . $value . "'"));
-                        break;
-                    case ('public-except-user'):
-                        if (!is_numeric($value)) {
-                            throw new FilterException('public-except-user filter must be numeric');
-                        }
-                        $qb = $this->addPublicExceptUser(
-                            $qb,
-                            $value,
-                            $this->getClassMetadata()->getName()
-                        );
                         break;
                 }
             }
@@ -236,6 +227,154 @@ abstract class SharedEntityRepository extends BaseRepository
     }
 
     /**
+     * Create the query part to filter by owner
+     *
+     * @param QueryBuilder $qb
+     * @param int          $ownerId
+     *
+     * @return QueryBuilder
+     */
+    private function qbOwner(QueryBuilder $qb, $ownerId)
+    {
+        $qb->andWhere($qb->expr()->eq('entity.owner', $ownerId));
+
+        return $qb;
+    }
+
+    /**
+     * Create the query part to filter by author
+     *
+     * @param QueryBuilder $qb
+     * @param int          $authorId
+     *
+     * @return QueryBuilder
+     */
+    private function qbAuthor(QueryBuilder $qb, $authorId)
+    {
+        $qb->andWhere($qb->expr()->eq('entity.author', $authorId));
+
+        return $qb;
+    }
+
+    /**
+     * Create the query part to filter by parent
+     *
+     * @param QueryBuilder $qb
+     * @param int          $parentId
+     *
+     * @return QueryBuilder
+     */
+    private function qbParent(QueryBuilder $qb, $parentId)
+    {
+        $qb->andWhere($qb->expr()->eq('entity.parent', $parentId));
+
+        return $qb;
+    }
+
+    /**
+     * Create the query part to filter by fork from
+     *
+     * @param QueryBuilder $qb
+     * @param int          $forkFromId
+     *
+     * @return QueryBuilder
+     */
+    private function qbForkFrom(QueryBuilder $qb, $forkFromId)
+    {
+        $qb->andWhere($qb->expr()->eq('entity.forkFrom', $forkFromId));
+
+        return $qb;
+    }
+
+    /**
+     * Create the query part to filter by fork from
+     *
+     * @param QueryBuilder $qb
+     * @param string|bool  $complete
+     *
+     * @return QueryBuilder
+     */
+    private function qbComplete(QueryBuilder $qb, $complete)
+    {
+        if ($complete === true || $complete === 'true') {
+            $qb->andWhere($qb->expr()->eq('entity.complete', 'true'));
+        } else {
+            $qb->andWhere($qb->expr()->eq('entity.complete', 'false'));
+        }
+
+        return $qb;
+    }
+
+    /**
+     * Create the query part to get the public resources owned by other users
+     *
+     * @param QueryBuilder $qb
+     * @param int          $value
+     *
+     * @return QueryBuilder
+     * @throws FilterException
+     */
+    private function qbPublicExceptUser(QueryBuilder $qb, $value)
+    {
+        if (!is_numeric($value)) {
+            throw new FilterException('public-except-user filter must be numeric');
+        }
+        $qb->andWhere($qb->expr()->neq('entity.owner', $value));
+        $qb->andWhere($qb->expr()->eq('entity.public', 'true'));
+
+        return $qb;
+    }
+
+    /**
+     * Create the query part depending on the 'is pointer' parameter
+     *
+     * @param QueryBuilder $qb
+     * @param bool|string  $isPointer
+     *
+     * @return QueryBuilder
+     */
+    private function qbIsPointer(QueryBuilder $qb, $isPointer)
+    {
+        if ($isPointer === true || $isPointer === 'true') {
+            $qb->andWhere($qb->expr()->isNotNull('entity.parent'));
+        } elseif ($isPointer === false || $isPointer === 'false') {
+            $qb->andWhere($qb->expr()->isNotNull('entity.content'));
+        }
+
+        return $qb;
+    }
+
+    /**
+     * Create the query part to get the public resources that are not archived
+     *
+     * @param QueryBuilder $qb
+     *
+     * @return QueryBuilder
+     * @throws FilterException
+     */
+    private function qbNotArchived(QueryBuilder $qb)
+    {
+        $qb->andWhere($qb->expr()->eq('entity.archived', 'false'));
+
+        return $qb;
+    }
+
+    /**
+     * Create the query part to get the resources that are root (no fork)
+     *
+     * @param QueryBuilder $qb
+     *
+     * @return QueryBuilder
+     * @throws FilterException
+     */
+    private function qbNotForkFrom(QueryBuilder $qb)
+    {
+        $qb->andWhere($qb->expr()->isNull('entity.forkFrom'));
+
+        return $qb;
+    }
+
+    /**
      * Convert the content of keywords filter into an array
      *
      * @param string|array $keywords
@@ -272,45 +411,6 @@ abstract class SharedEntityRepository extends BaseRepository
         }
 
         return $metadataArray;
-    }
-
-    /**
-     * Add the join and the constraints to the query builder to exclude resources already covered
-     * by entities
-     *
-     * @param QueryBuilder $qb
-     * @param string       $userId
-     * @param string       $entityClass
-     *
-     * @return QueryBuilder
-     */
-    private function addPublicExceptUser(QueryBuilder $qb, $userId, $entityClass)
-    {
-        $qb->andWhere(
-            $qb->expr()->eq(
-                'entity.public',
-                'true'
-            )
-        );
-
-        $notIn = $this->getEntityManager()->createQueryBuilder()
-            ->select('entity2.id')
-            ->from(
-                $entityClass,
-                'entity2'
-            )
-            ->andWhere(
-                $qb->expr()->eq(
-                    'entity2.owner',
-                    $userId
-                )
-            )
-            ->getQuery()
-            ->getDQL();
-
-        $qb->andWhere($qb->expr()->notIn('entity.id', $notIn));
-
-        return $qb;
     }
 
     /**
@@ -407,7 +507,7 @@ abstract class SharedEntityRepository extends BaseRepository
     /**
      * Find an entity if it is owned by the user
      *
-     * @param int  $forkFromId
+     * @param int $forkFromId
      * @param int $ownerId
      *
      * @return SharedEntity
@@ -421,7 +521,6 @@ abstract class SharedEntityRepository extends BaseRepository
         $queryBuilder->andWhere($queryBuilder->expr()->eq('e.forkFrom', $forkFromId));
 
         $result = $queryBuilder->getQuery()->getResult();
-
 
         if (empty($result)) {
             throw new NonExistingObjectException('Unable to find entity for fork' . $forkFromId .

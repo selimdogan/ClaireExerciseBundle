@@ -471,6 +471,9 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * @param int                   $forkFromEntityId
      * @param int                   $isRoot
      * @param int                   $isPointer
+     * @param boolean               $ignoreArchived
+     * @param int                   $publicExceptUser Get the public entities that are not owned by this user
+     * @param boolean               $complete
      *
      * @return array An array of SharedResource
      */
@@ -481,7 +484,10 @@ abstract class SharedEntityService extends TransactionalService implements Share
         $parentEntityId = null,
         $forkFromEntityId = null,
         $isRoot = null,
-        $isPointer = null
+        $isPointer = null,
+        $ignoreArchived = true,
+        $publicExceptUser = null,
+        $complete = null
     )
     {
         $entities = $this->getAll(
@@ -491,7 +497,10 @@ abstract class SharedEntityService extends TransactionalService implements Share
             $parentEntityId,
             $forkFromEntityId,
             $isRoot,
-            $isPointer
+            $isPointer,
+            $ignoreArchived,
+            $publicExceptUser,
+            $complete
         );
 
         return $this->getAllContentFullResourcesFromEntityList($entities);
@@ -649,8 +658,8 @@ abstract class SharedEntityService extends TransactionalService implements Share
     /**
      * Import an entity. The entity is duplicated and the required entities are also imported.
      *
-     * @param int  $ownerId
-     * @param int  $originalId The id of the original entity that must be duplicated
+     * @param int $ownerId
+     * @param int $originalId The id of the original entity that must be duplicated
      *
      * @return SharedEntity
      */
