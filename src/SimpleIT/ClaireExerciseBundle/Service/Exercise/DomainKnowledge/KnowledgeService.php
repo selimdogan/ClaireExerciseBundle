@@ -258,17 +258,15 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
     }
 
     /**
-     * Import an entity. The entity is duplicated and the required entities are also imported.
+     * Import an entity. Additionnal work, specific to entity type
      *
-     * @param int  $ownerId
-     * @param int  $originalId The id of the original entity that must be duplicated
+     * @param int $ownerId
+     * @param Knowledge $entity The duplicata
      *
      * @return Knowledge
      */
-    public function import($ownerId, $originalId)
+    protected function importDetail($ownerId, $entity)
     {
-        /** @var Knowledge $entity */
-        $entity = parent::parentImport($ownerId, $originalId);
         $resource = KnowledgeResourceFactory::create($entity);
 
         // requirement

@@ -95,7 +95,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         User $owner
     )
     {
-        $resList = $this->entityRepository->findResourcesFromConstraintsByOwner(
+        $resList = $this->getResourcesFromConstraintsByOwner(
             $oc,
             $owner
         );
@@ -111,6 +111,22 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         }
 
         return $objList;
+    }
+
+    /**
+     * Get all the resources that match the constraint and belong to the owner
+     *
+     * @param ObjectConstraints $oc
+     * @param User              $owner
+     *
+     * @return array
+     */
+    public function getResourcesFromConstraintsByOwner(ObjectConstraints $oc, User $owner)
+    {
+        return $this->entityRepository->findResourcesFromConstraintsByOwner(
+            $oc,
+            $owner
+        );
     }
 
     /**
@@ -620,17 +636,15 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     }
 
     /**
-     * Import an entity. The entity is duplicated and the required entities are also imported.
+     * Import an entity. Additionnal work, specific to entity type
      *
      * @param int $ownerId
-     * @param int $originalId The id of the original entity that must be duplicated
+     * @param ExerciseResource $entity The duplicata
      *
      * @return ExerciseResource
      */
-    public function import($ownerId, $originalId)
+    protected function importDetail($ownerId, $entity)
     {
-        /** @var ExerciseResource $entity */
-        $entity = parent::parentImport($ownerId, $originalId);
         $resource = ResourceResourceFactory::create($entity);
 
         // requirement

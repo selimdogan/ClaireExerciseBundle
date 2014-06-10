@@ -23,7 +23,7 @@ abstract class MetadataResourceFactory
         $metadataResources = array();
         foreach ($metadatas as $metadata) {
             /** @var Metadata $metadata */
-            $metadataResources[$metadata->getKey()] = $metadata->getValue();
+            $metadataResources[] = self::create($metadata);
         }
 
         return $metadataResources;
@@ -38,7 +38,26 @@ abstract class MetadataResourceFactory
      */
     public static function create($metadata)
     {
-        $metadataResource = array($metadata->getKey() => $metadata->getValue());
+        $metadataResource = new MetadataResource();
+        $metadataResource->setKey($metadata->getKey());
+        $metadataResource->setValue($metadata->getValue());
+
+        return $metadataResource;
+    }
+
+    /**
+     * Create Metadata Resource
+     *
+     * @param string $key
+     * @param string $value
+     *
+     * @return MetadataResource
+     */
+    public static function createFromKeyValue($key, $value)
+    {
+        $metadataResource = new MetadataResource();
+        $metadataResource->setKey($key);
+        $metadataResource->setValue($value);
 
         return $metadataResource;
     }

@@ -187,6 +187,16 @@ interface SharedEntityServiceInterface
     public function import($ownerId, $originalId);
 
     /**
+     * Import an entity from the entity. Base work.
+     *
+     * @param int $ownerId
+     * @param SharedEntity $original The original entity that must be duplicated
+     *
+     * @return SharedEntity
+     */
+    public function importByEntity($ownerId, $original);
+
+    /**
      * Import an entity if no direct children is owned by the user. (no flush if existing)
      *
      * @param int $ownerId

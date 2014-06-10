@@ -228,8 +228,11 @@ abstract class SharedEntityService extends TransactionalService implements Share
         $metadata = array();
         $resMetadata = $sharedResource->getMetadata();
         if (!empty($resMetadata)) {
-            foreach ($resMetadata as $key => $value) {
-                $md = SharedEntityMetadataFactory::create(static::ENTITY_TYPE, $key, $value);
+            foreach ($resMetadata as $resMetaD) {
+                $md = SharedEntityMetadataFactory::createFromResource(
+                    static::ENTITY_TYPE,
+                    $resMetaD
+                );
                 $md->setEntity($entity);
                 $metadata[] = $md;
             }
@@ -635,35 +638,48 @@ abstract class SharedEntityService extends TransactionalService implements Share
     }
 
     /**
-     * Import an entity. Base work.
+     * Import an entity from the id. Base work.
      *
      * @param int $ownerId
      * @param int $originalId The id of the original entity that must be duplicated
      *
      * @return SharedEntity
      */
-    protected function parentImport($ownerId, $originalId)
+    public function import($ownerId, $originalId)
     {
         $original = $this->get($originalId);
 
+        return $this->importByEntity($ownerId, $original);
+    }
+
+    /**
+     * Import an entity from the entity. Base work.
+     *
+     * @param int          $ownerId
+     * @param SharedEntity $original The original entity that must be duplicated
+     *
+     * @return SharedEntity
+     */
+    public function importByEntity($ownerId, $original)
+    {
         // clone original
         $entity = clone($original);
         $entity->setId(null);
         $entity->setOwner($this->userService->get($ownerId));
         $entity->setForkFrom($original);
 
-        return $entity;
+        return $this->importDetail($ownerId, $entity);
     }
 
     /**
-     * Import an entity. The entity is duplicated and the required entities are also imported.
+     * Import an entity. Additionnal work, specific to entity type
      *
-     * @param int $ownerId
-     * @param int $originalId The id of the original entity that must be duplicated
+     * @param int          $ownerId
+     * @param SharedEntity $entity The duplicata
      *
      * @return SharedEntity
      */
-    abstract public function import($ownerId, $originalId);
+    abstract protected function importDetail($ownerId, $entity);
 
     /**
      * Import an entity if no direct children is owned by the user. (no flush if existing)

@@ -141,7 +141,7 @@ class ExerciseModelResource extends SharedResource
 
     /**
      * @var array
-     * @Serializer\Type("array")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource>")
      * @Serializer\Groups({"details"})
      */
     protected $metadata;

@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModelFactory;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
+use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
@@ -948,17 +950,15 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     }
 
     /**
-     * Import an entity. The entity is duplicated and the required entities are also imported.
+     * Import an entity. Additionnal work, specific to entity type
      *
      * @param int $ownerId
-     * @param int $originalId The id of the original entity that must be duplicated
+     * @param ExerciseModel $entity The duplicata
      *
      * @return ExerciseModel
      */
-    public function import($ownerId, $originalId)
+    protected function importDetail($ownerId, $entity)
     {
-        /** @var ExerciseModel $entity */
-        $entity = parent::parentImport($ownerId, $originalId);
         $resource = ExerciseModelResourceFactory::create($entity);
 
         // requirement
@@ -975,5 +975,150 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
         $this->em->flush();
 
         return $entity;
+    }
+
+    /**
+     * Import the public resources that can be used by constraints in a public exercise model.
+     *
+     * @param $ownerId
+     * @param $originalId
+     *
+     * @return array Array of SharedEntity that are new imported entities
+     */
+    public function importUsedResources($ownerId, $originalId)
+    {
+        /** @var ExerciseModel $entity */
+        $entity = $this->get($originalId);
+        $resource = ExerciseModelResourceFactory::create($entity);
+        $owner = $this->userService->get($ownerId);
+
+        $usedResources = $this->getUsedResourcesFromResource($resource, $owner);
+
+        $newRes = array();
+        /** @var ExerciseResource $usedResource */
+        foreach ($usedResources as $usedResource)
+        {
+            $newRes = $this->exerciseResourceService->importByEntity($ownerId, $usedResource);
+        }
+
+        return $newRes;
+    }
+
+    /**
+     * Computes the used resources according to the content of the resource resource.
+     *
+     * @param ExerciseModelResource $modelResource
+     * @param User                  $owner
+     *
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException
+     * @return array
+     */
+    private function getUsedResourcesFromResource(
+        $modelResource,
+        $owner
+    )
+    {
+        $usedRes = array();
+
+        $content = $modelResource->getContent();
+        switch (get_class($modelResource->getContent())) {
+            case ExerciseModelResource::ORDER_ITEMS_MODEL_CLASS:
+                /** @var OrderItems $content */
+                $usedRes = array_merge(
+                    $usedRes,
+                    $this->getUsedResourcesFromModelBlocks
+                        (
+                            $content->getObjectBlocks(),
+                            $owner
+                        )
+                );
+                $usedRes = array_merge(
+                    $usedRes,
+                    $this->getUsedResourcesFromModelBlock
+                        (
+                            $content->getSequenceBlock(),
+                            $owner
+                        )
+                );
+                break;
+            case ExerciseModelResource::PAIR_ITEMS_MODEL_CLASS:
+                /** @var PairItems $content */
+                $usedRes = array_merge(
+                    $usedRes,
+                    $this->getUsedResourcesFromModelBlocks
+                        (
+                            $content->getPairBlocks(),
+                            $owner
+                        )
+                );
+                break;
+            case ExerciseModelResource::GROUP_ITEMS_MODEL_CLASS:
+                /** @var GroupItems $content */
+                $usedRes = array_merge(
+                    $usedRes,
+                    $this->getUsedResourcesFromModelBlocks
+                        (
+                            $content->getObjectBlocks(),
+                            $owner
+                        )
+                );
+                break;
+            case ExerciseModelResource::MULTIPLE_CHOICE_MODEL_CLASS:
+            case ExerciseModelResource::OPEN_ENDED_QUESTION_CLASS:
+                /** @var MultipleChoice|OpenEnded $content */
+                $usedRes = array_merge(
+                    $usedRes,
+                    $this->getUsedResourcesFromModelBlocks
+                        (
+                            $content->getQuestionBlocks(),
+                            $owner
+                        )
+                );
+                break;
+            default:
+                throw new InvalidTypeException('Unknown type:' . $modelResource->getType());
+        }
+
+        return array_unique($usedRes);
+    }
+
+    /**
+     * List all the required resources found in a list of blocks
+     *
+     * @param array $blocks
+     * @param User  $owner
+     *
+     * @return array
+     */
+    private function getUsedResourcesFromModelBlocks($blocks, $owner)
+    {
+        $usedRes = array();
+
+        /** @var ResourceBlock $block */
+        foreach ($blocks as &$block) {
+            $usedRes = array_merge(
+                $usedRes,
+                $this->getUsedResourcesFromModelBlock($block, $owner)
+            );
+        }
+
+        return $usedRes;
+    }
+
+    /**
+     * Import all the used resource found in a block
+     *
+     * @param ResourceBlock $block
+     * @param User          $owner
+     *
+     * @return array
+     */
+    private function getUsedResourcesFromModelBlock($block, $owner)
+    {
+        return $this->exerciseResourceService->getResourcesFromConstraintsByOwner
+            (
+                $block->getResourceConstraint(),
+                $owner
+            );
     }
 }

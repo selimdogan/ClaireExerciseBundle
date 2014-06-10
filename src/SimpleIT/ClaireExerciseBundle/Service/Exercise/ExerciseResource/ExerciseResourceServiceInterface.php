@@ -153,6 +153,16 @@ interface ExerciseResourceServiceInterface extends SharedEntityServiceInterface
     );
 
     /**
+     * Get all the resources that match the constraint and belong to the owner
+     *
+     * @param ObjectConstraints $oc
+     * @param User              $owner
+     *
+     * @return array
+     */
+    public function getResourcesFromConstraintsByOwner(ObjectConstraints $oc, User $owner);
+
+    /**
      * Computes the required resources according to the content of the resource resource and
      * write it in the corresponding field of the output resource
      *

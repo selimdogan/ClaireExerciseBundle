@@ -56,7 +56,10 @@ abstract class SharedResourceFactory
         $metadataArray = array();
         foreach ($entity->getMetadata() as $md) {
             /** @var Metadata $md */
-            $metadataArray[$md->getKey()] = $md->getValue();
+            $metadataArray[] = MetadataResourceFactory::createFromKeyValue(
+                $md->getKey(),
+                $md->getValue()
+            );
         }
         $resource->setMetadata($metadataArray);
 

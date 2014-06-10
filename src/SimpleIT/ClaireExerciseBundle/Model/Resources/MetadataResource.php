@@ -25,7 +25,7 @@ class MetadataResource
     /**
      * @var string
      * @Serializer\Type("string")
-     * @Serializer\Groups({"list"})
+     * @Serializer\Groups({"list","details"})
      * @Assert\NotBlank(groups={"create"})
      * @Assert\Blank(groups={"edit"})
      */
@@ -34,7 +34,7 @@ class MetadataResource
     /**
      * @var string
      * @Serializer\Type("string")
-     * @Serializer\Groups({"list"})
+     * @Serializer\Groups({"list","details"})
      * @Assert\NotBlank(groups={"create","edit"})
      */
     private $value;
