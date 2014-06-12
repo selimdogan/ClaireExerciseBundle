@@ -119,6 +119,19 @@ abstract class ResourceBlock
     }
 
     /**
+     * Remove the specified resource
+     *
+     * @param ObjectId $resource
+     */
+    public function removeResource($resource)
+    {
+        $key = array_search($resource, $this->resources);
+        if ($key !== false) {
+            unset($this->resources[$key]);
+        }
+    }
+
+    /**
      * Get the resource constraints
      *
      * @return ObjectConstraints
