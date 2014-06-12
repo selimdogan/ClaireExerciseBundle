@@ -38,6 +38,24 @@ abstract class ResourceBlock
     protected $resourceConstraint = null;
 
     /**
+     * The label of the block
+     *
+     * @var string
+     * @Serializer\Type("string")
+     * @Serializer\Groups({"details", "exercise_model_storage"})
+     */
+    protected $label;
+
+    /**
+     * True if the block resources are taken from a list, false is they are found by constraints
+     *
+     * @var bool
+     * @Serializer\Type("boolean")
+     * @Serializer\Groups({"details", "exercise_model_storage"})
+     */
+    protected $isList;
+
+    /**
      * Test if the block is a list of designated resources or a constraint to
      * find resources
      *
@@ -45,7 +63,7 @@ abstract class ResourceBlock
      */
     public function isList()
     {
-        return is_null($this->resourceConstraint);
+        return $this->isList;
     }
 
     /**
@@ -119,5 +137,45 @@ abstract class ResourceBlock
     public function setResourceConstraint(ObjectConstraints $resourceConstraint)
     {
         $this->resourceConstraint = $resourceConstraint;
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     * Set isList
+     *
+     * @param boolean $isList
+     */
+    public function setIsList($isList)
+    {
+        $this->isList = $isList;
+    }
+
+    /**
+     * Get isList
+     *
+     * @return boolean
+     */
+    public function getIsList()
+    {
+        return $this->isList;
     }
 }

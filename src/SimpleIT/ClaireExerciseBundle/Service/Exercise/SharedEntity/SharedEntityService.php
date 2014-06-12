@@ -14,6 +14,8 @@ use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedEntityRepository;
@@ -224,9 +226,34 @@ abstract class SharedEntityService extends TransactionalService implements Share
             );
         }
 
-        // metadata
+        // metadata and keywords
+        $entity->setMetadata($this->metadataAndKeyWords($sharedResource, $entity));
+
+        return $entity;
+    }
+
+    /**
+     * Create an array of metadata entities from metadata and keyword in resource
+     *
+     * @param SharedResource $sharedResource
+     * @param SharedEntity $entity
+     *
+     * @return ArrayCollection
+     */
+    private function metadataAndKeyWords($sharedResource, $entity)
+    {
         $metadata = array();
         $resMetadata = $sharedResource->getMetadata();
+        $resKeywords = $sharedResource->getKeywords();
+
+        // add keywords if any
+        if (!empty($resKeywords)) {
+            $resMetadata[] = MetadataResourceFactory::createFromKeyValue(
+                MetadataResource::MISC_METADATA_KEY,
+                implode(';', $resKeywords)
+            );
+        }
+
         if (!empty($resMetadata)) {
             foreach ($resMetadata as $resMetaD) {
                 $md = SharedEntityMetadataFactory::createFromResource(
@@ -237,9 +264,8 @@ abstract class SharedEntityService extends TransactionalService implements Share
                 $metadata[] = $md;
             }
         }
-        $entity->setMetadata(new ArrayCollection($metadata));
 
-        return $entity;
+        return new ArrayCollection($metadata);
     }
 
     /**
@@ -302,8 +328,10 @@ abstract class SharedEntityService extends TransactionalService implements Share
             $entity->setDraft($resource->getDraft());
         }
 
-        if (!is_null($resource->getComplete())) {
-            $entity->setComplete($resource->getComplete());
+        if (!is_null($resource->getKeywords() || !is_null($resource->getMetadata())))
+        {
+            $this->metadataService->deleteAllByEntity($entity->getId());
+            $entity->setMetadata($this->metadataAndKeyWords($resource, $entity));
         }
 
         $content = $resource->getContent();

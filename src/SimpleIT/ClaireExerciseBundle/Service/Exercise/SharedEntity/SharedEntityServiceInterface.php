@@ -147,6 +147,7 @@ interface SharedEntityServiceInterface
 
     /**
      * Edit all the metadata of an entity. Old ones are removed and replaced by new ones.
+     * Keywords must be set in the appropriate field of metadata.
      *
      * @param int             $entityId
      * @param ArrayCollection $metadatas An ArrayCollection of the form (string)metaKey => (string)metaValue
