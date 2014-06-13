@@ -56,11 +56,24 @@ class ExerciseResource
     private $exerciseModel;
 
     /**
+     * @var string $type
+     * @Serializer\Exclude
+     */
+    private $type;
+
+    /**
      * @var CommonExercise $content
      * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise")
      * @Serializer\Groups({"details", "exercise"})
      */
     private $content;
+
+    /**
+     * @var string $title
+     * @Serializer\Type("string")
+     * @Serializer\Groups({"details", "exercise"})
+     */
+    private $title;
 
     /**
      * Set content
@@ -120,6 +133,46 @@ class ExerciseResource
     public function getExerciseModel()
     {
         return $this->exerciseModel;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 
     /**

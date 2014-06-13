@@ -59,11 +59,6 @@ abstract class SharedResource
     protected $metadata;
 
     /**
-     * @var array
-     */
-    protected $keywords;
-
-    /**
      * @var int
      */
     protected $parent;
@@ -345,25 +340,4 @@ abstract class SharedResource
      * @throws \LogicException
      */
     abstract public function getClass();
-
-    /**
-     * Set keywords
-     *
-     * @param array $keywords
-     */
-    public function setKeywords($keywords)
-    {
-        $this->keywords = $keywords;
-    }
-
-    /**
-     * Get keywords
-     *
-     * @return array
-     */
-    public function getKeywords()
-    {
-        return $this->keywords;
-    }
-
 }

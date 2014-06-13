@@ -16,6 +16,8 @@ use JMS\Serializer\Annotation as Serializer;
  */
 abstract class ExerciseObject
 {
+    const OBJECT_TYPE = "object type";
+
     /**
      * @var array $metadata An array of metadata: key => value
      * @Serializer\Type("array")
@@ -120,5 +122,15 @@ abstract class ExerciseObject
     public function getFormulas()
     {
         return $this->formulas;
+    }
+
+    /**
+     * Get the type of object
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return static::OBJECT_TYPE;
     }
 }

@@ -6,7 +6,7 @@ use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\SerializerBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
+//use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\Metadata;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
@@ -52,22 +52,16 @@ abstract class SharedResourceFactory
             $resource->setForkFrom($entity->getForkFrom()->getId());
         }
 
-        // metadata and keywords
+        // metadata
         $metadataArray = array();
-        $keywordArray = array();
-        /** @var Metadata $md */
         foreach ($entity->getMetadata() as $md) {
-            if ($md->getKey() === MetadataResource::MISC_METADATA_KEY) {
-                $keywordArray = array_merge($keywordArray, explode(';', $md->getValue()));
-            } else {
-                $metadataArray[] = MetadataResourceFactory::createFromKeyValue(
-                    $md->getKey(),
-                    $md->getValue()
-                );
-            }
+            /** @var Metadata $md */
+            $metadataArray[] = MetadataResourceFactory::createFromKeyValue(
+                $md->getKey(),
+                $md->getValue()
+            );
         }
         $resource->setMetadata($metadataArray);
-        $resource->setKeywords($keywordArray);
 
         // content
         if ($entity->getContent() !== null) {

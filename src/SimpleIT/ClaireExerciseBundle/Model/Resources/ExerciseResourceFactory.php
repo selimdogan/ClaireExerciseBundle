@@ -47,6 +47,8 @@ abstract class ExerciseResourceFactory
         $exerciseResource = new ExerciseResource();
         $exerciseResource->setId($exercise->getId());
         $exerciseResource->setExerciseModel($exercise->getExerciseModel()->getId());
+        $exerciseResource->setType($exercise->getExerciseModel()->getType());
+        $exerciseResource->setTitle($exercise->getExerciseModel()->getTitle());
 
         $serializer = SerializerBuilder::create()
             ->addDefaultHandlers()

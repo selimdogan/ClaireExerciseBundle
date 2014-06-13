@@ -11,6 +11,8 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
  */
 class OpenEndedQuestion extends ExerciseObject
 {
+    const OBJECT_TYPE = "open-ended-question";
+
     /**
      * @var string $question The wording of the question (text)
      */

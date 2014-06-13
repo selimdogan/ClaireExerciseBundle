@@ -16,6 +16,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
  */
 class MultipleChoiceQuestion extends ExerciseObject
 {
+    const OBJECT_TYPE = "multiple-choice-question";
     /**
      * @var string $question The wording of the question (text)
      */

@@ -11,6 +11,8 @@ use JMS\Serializer\Annotation as Serializer;
  */
 class ExerciseTextObject extends ExerciseObject
 {
+    const OBJECT_TYPE = "text";
+
     /**
      * @var string $text The text
      * @Serializer\Type("string")

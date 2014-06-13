@@ -11,6 +11,8 @@ use JMS\Serializer\Annotation as Serializer;
  */
 class ExercisePictureObject extends ExerciseObject
 {
+    const OBJECT_TYPE = "picture";
+
     /**
      * @var string $source The source of the picture
      * @Serializer\Type("string")

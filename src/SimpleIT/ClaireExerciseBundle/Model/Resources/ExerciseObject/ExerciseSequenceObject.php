@@ -11,6 +11,8 @@ use JMS\Serializer\Annotation as Serializer;
  */
 class ExerciseSequenceObject extends ExerciseObject
 {
+    const OBJECT_TYPE = "sequence";
+
     /**
      * @var array $objects An array of ExerciseObject of the same type
      * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject>")
