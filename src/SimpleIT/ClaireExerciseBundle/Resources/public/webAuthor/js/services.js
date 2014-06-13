@@ -4,19 +4,23 @@ resourceServices.factory('Resource', ['$resource',
     function($resource){
 
         return $resource(
+
             'http://claire/app_dev.php/api/resources/:id',
             { 'id': '@id'},
-            {'update': {method: 'PUT', headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}} ,
-                'save': {method: 'POST', headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}} }
-            //,{'update': {method: 'PUT', params: {'id': '@id'}, isArray: false} }
+            {
+                 update: {method: 'PUT', headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}}
+                 ,save: {method: 'POST', headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}}
+            }
         );
          /*
 
         return $resource(
             'http://claire/app_dev.php/api/resources/:id',
             {},
-            {'update': {method: 'PUT', params: {'id': '@id'}, isArray: false, headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}} }
-            //,{'save': {method: 'POST', params: {}, isArray: false, headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}} }
+            {
+                update: {method: 'PUT', params: {'id': '@id'}, headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}}
+                ,save: {method: 'POST', isArray: false, headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}}
+            }
         );*/
 
     }]);
@@ -29,8 +33,10 @@ modelServices.factory('Model', ['$resource',
         return $resource(
             'http://claire/app_dev.php/api/exercise-models/:id',
             {},
-            {'update': {method: 'PUT', params: {'id': '@id'}, headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}} }
-            ,{'save': {method: 'POST', isArray: false, headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}} }
+            {
+                'update': {method: 'PUT', params: {'id': '@id'}, headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}}
+                ,save: {method: 'POST', isArray: false, headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}}
+            }
         );
 
     }]);
