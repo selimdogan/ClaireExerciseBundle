@@ -17,6 +17,8 @@ mainApp.config(
                 $locationProvider.hashPrefix('!'); // Enable ajax crawling
                 */
 
+                $resourceProvider.defaults.stripTrailingSlashes = false;
+
                 $urlRouterProvider.otherwise('/model');
 
                 $stateProvider.state('modelList', { // /contacts?myParam1&myParam2
