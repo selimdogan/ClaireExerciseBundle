@@ -16,6 +16,8 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonMod
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResourceFactory;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedEntityRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 use SimpleIT\ClaireExerciseBundle\Service\User\UserService;
@@ -234,7 +236,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * Create an array of metadata entities from metadata and keyword in resource
      *
      * @param SharedResource $sharedResource
-     * @param SharedEntity   $entity
+     * @param SharedEntity $entity
      *
      * @return ArrayCollection
      */
@@ -326,7 +328,8 @@ abstract class SharedEntityService extends TransactionalService implements Share
             $entity->setDraft($resource->getDraft());
         }
 
-        if (!is_null($resource->getKeywords() || !is_null($resource->getMetadata()))) {
+        if (!is_null($resource->getKeywords() || !is_null($resource->getMetadata())))
+        {
             $this->metadataService->deleteAllByEntity($entity->getId());
             $entity->setMetadata($this->metadataAndKeyWords($resource, $entity));
         }
