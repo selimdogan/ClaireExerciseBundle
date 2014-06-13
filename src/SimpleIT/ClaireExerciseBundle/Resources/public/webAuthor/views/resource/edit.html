@@ -1,0 +1,100 @@
+<div class="container">
+
+    <div class="">
+        <div class="panel panel-primary">
+
+            <div class="panel-heading"><h3>Editer une ressource</h3></div>
+
+            <div class="panel-body">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <h4>
+                                    <label>Titre</label><input type="text" ng-model="resource.title" class="form-control" data-ng-change="updateResource()">
+                                </h4>
+                            </div>
+                            <div class="col-xs-2">
+                                <h4><label>Type</label><input type="text" ng-model="resource.type" class="form-control" disabled>
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <label>Auteur</label>
+                                <input type="text" ng-model="resource.author" class="form-control" disabled>
+                            </div>
+
+                            <div class="col-xs-6">
+                                <label>Propriétaire</label>
+                                <input type="text" ng-model="resource.owner" class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <label>Partagé</label><input type="checkbox" ng-model="resource.public" class="form-control" data-ng-change="updateResource()"/>
+                            </div>
+                            <div class="col-xs-3">
+                                <label>Archivé</label><input type="checkbox" ng-model="resource.archived" class="form-control" data-ng-change="updateResource()"/>
+                            </div>
+                            <div class="col-xs-3">
+                                <label>Brouillon</label><input type="checkbox" ng-model="resource.draft" class="form-control" data-ng-change="updateResource()"/>
+                            </div>
+                            <div class="col-xs-3">
+                                <label>Complet</label><input type="checkbox" ng-model="resource.complete" class="form-control" data-ng-change="updateResource()"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br/>
+
+                <div ng-switch="resource.type">
+                    <div ng-switch-when="text">
+                        <blockquote>
+                            <h3 ng-click="context.content.collapse = !context.content.collapse" class="panel-default">Texte</h3>
+                            <div collapse="context.content.collapse">
+                                <input type="text" ng-model="resource.content.text" class="form-control" data-ng-change="updateResource()">
+                            </div>
+                        </blockquote>
+                    </div>
+
+                    <div ng-switch-when="image">
+                        <blockquote>
+                            <h3 ng-click="context.content.collapse = !context.content.collapse" class="panel-default">Image</h3>
+                            <div collapse="context.content.collapse">
+                                <input type="text" ng-model="resource.content.source" class="form-control" data-ng-change="updateResource()">
+                            </div>
+                        </blockquote>
+                    </div>
+
+                </div>
+
+
+                <blockquote>
+                    <h3 ng-click="context.metadata.collapse = !context.metadata.collapse" class="panel-default">Métadonnées</h3>
+                    <div collapse="context.metadata.collapse" class="panel panel-default">
+                        <div class="panel-heading">
+                            <table class="table">
+                                <tr><th>Clé</th><th>Valeur</th></tr>
+                                <tr ng-repeat="(metakey, metaval) in resource.metadata">
+                                    <th><input type="text" ng-model="metakey" class="form-control" data-ng-change="updateResource()"></th>
+                                    <th><input type="text" ng-model="metaval" class="form-control" data-ng-change="updateResource()"></th>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </blockquote>
+
+                <blockquote>
+                    &nbsp;
+                </blockquote>
+
+            </div>
+        </div>
+    </div>
+
+    <br/>
+
+</div>

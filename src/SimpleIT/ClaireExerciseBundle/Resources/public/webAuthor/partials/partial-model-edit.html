@@ -1,0 +1,133 @@
+<div class="panel panel-heading"><h3>Editer un modèle d'exercice</h3></div>
+
+<div class="panel-body">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-10">
+                    <h4>
+                        <label>Titre</label><input type="text" ng-model="model.title" class="form-control"
+                                                   data-ng-change="updateModel()">
+                    </h4>
+                </div>
+                <div class="col-xs-2">
+                    <h4><label>Type</label><input type="text" ng-model="model.type" class="form-control"
+                                                  disabled>
+                    </h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <label>Auteur</label>
+                    <input type="text" ng-model="model.author" class="form-control" disabled>
+                </div>
+
+                <div class="col-xs-6">
+                    <label>Propriétaire</label>
+                    <input type="text" ng-model="model.owner" class="form-control" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-3">
+                    <label>Partagé</label><input type="checkbox" ng-model="model.public" class="form-control"
+                                                 data-ng-change="updateModel()"/>
+                </div>
+                <div class="col-xs-3">
+                    <label>Archivé</label><input type="checkbox" ng-model="model.archived" class="form-control"
+                                                 data-ng-change="updateModel()"/>
+                </div>
+                <div class="col-xs-3">
+                    <label>Brouillon</label><input type="checkbox" ng-model="model.draft" class="form-control"
+                                                   data-ng-change="updateModel()"/>
+                </div>
+                <div class="col-xs-3">
+                    <label>Complet</label><input type="checkbox" ng-model="model.complete" class="form-control"
+                                                 data-ng-change="updateModel()"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+
+    <div ng-switch="model.type">
+
+        <div ng-switch-when="pair-items">
+
+            <blockquote>
+                <h3 ng-click="context.pair_items.collapse = !context.pair_items.collapse" class="panel-default">
+                    Appariement</h3>
+                <div collapse="context.pair_items.collapse">
+
+                    <blockquote>
+                        <h4 ng-click="context.pair_items.wording.collapse = !context.pair_items.wording.collapse" class="panel-default">
+                            Commun{{$index}}</h4>
+                        <div collapse="context.pair_items.wording.collapse">
+
+                            <label>Intitulé</label><input type="text" ng-model="model.content.wording" class="form-control"
+                                                          data-ng-change="updateModel()"/>
+
+                        </div>
+                    </blockquote>
+
+                    <blockquote data-ng-repeat="pair_blocks in model.content.pair_blocks">
+                        <h4 ng-click="context.pair_items.pair_blocks.collapse = !context.pair_items.pair_blocks.collapse" class="panel-default">
+                            Block</h4>
+                        <div collapse="context.pair_items.pair_blocks.collapse">
+
+                            <label>Clé de métadonnée</label><input type="text" ng-model="pair_blocks.pair_meta_key" class="form-control"
+                                                                   data-ng-change="updateModel()"/>
+
+                            <label>Nombre d'occurence</label><input type="text" ng-model="pair_blocks.number_of_occurrences" class="form-control"
+                                                                    data-ng-change="updateModel()"/>
+
+                            <h4 ng-click="context.pair_items.pair_blocks.resources.collapse = !context.pair_items.pair_blocks.resources.collapse" class="panel-default">
+                                Liste des resources
+                            </h4>
+                            <blockquote collapse="context.pair_items.pair_blocks.resources.collapse">
+                                <div data-ng-repeat="resource in pair_blocks.resources">
+                                    <input type="text" ng-model="resource.id" class="form-control"
+                                           data-ng-change="updateModel()"/>
+                                </div>
+
+                            </blockquote>
+
+                        </div>
+                    </blockquote>
+
+                </div>
+            </blockquote>
+
+        </div>
+
+    </div>
+
+
+    <blockquote>
+        <h3 ng-click="context.metadata.collapse = !context.metadata.collapse" class="panel-default">
+            Métadonnées</h3>
+
+        <div collapse="context.metadata.collapse" class="panel panel-default">
+            <div class="panel-heading">
+                <table class="table">
+                    <tr>
+                        <th>Clé</th>
+                        <th>Valeur</th>
+                    </tr>
+                    <tr ng-repeat="(metakey, metaval) in resource.metadata">
+                        <th><input type="text" ng-model="metakey" class="form-control"
+                                   data-ng-change="updateModel()"></th>
+                        <th><input type="text" ng-model="metaval" class="form-control"
+                                   data-ng-change="updateModel()"></th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </blockquote>
+
+    <blockquote>
+        &nbsp;
+    </blockquote>
+
+</div>

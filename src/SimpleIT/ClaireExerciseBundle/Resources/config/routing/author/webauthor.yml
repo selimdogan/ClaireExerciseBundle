@@ -1,0 +1,3 @@
+web_author_index:
+    pattern: /
+    defaults: { _controller: SimpleITClaireExerciseBundle:Author/Author:index }
