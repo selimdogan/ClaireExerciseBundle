@@ -241,7 +241,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * @return ArrayCollection
      */
     private function metadataAndKeyWords($sharedResource, $entity)
-    {
+    {&
         $metadata = array();
         $resMetadata = $sharedResource->getMetadata();
         $resKeywords = $sharedResource->getKeywords();

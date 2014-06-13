@@ -147,6 +147,13 @@ class ExerciseModelResource extends SharedResource
     protected $metadata;
 
     /**
+     * @var array
+     * @Serializer\Type("array")
+     * @Serializer\Groups({"details"})
+     */
+    protected $keywords;
+
+    /**
      * @var int
      * @Serializer\Type("integer")
      * @Serializer\Groups({"details"})
