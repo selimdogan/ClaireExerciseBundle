@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" data-ng-controller="resourceListController">
 
     <div class="table-responsive">
         <table class="table table-striped">
@@ -17,23 +17,24 @@
                           style="font-size: 120%"></span></th>
                 <th>&nbsp;</th>
             </tr>
-
-            <tr ng-repeat="resource in resources">
+            <tr ng-repeat="resource in resources" ui-draggable="true" drag="resource.id" on-drop-success="dropSuccessHandler($event,$index)">
                 <td><kbd class="label-info">{{ resource.type }}</kbd></td>
                 <td>{{ resource.title }}</td>
                 <td>{{ resource.author }}</td>
                 <td>{{ resource.owner }}</td>
-                <td><kbd ng-class="{'label-success': resource.public, 'label-danger': !resource.public}">&nbsp;&nbsp;&nbsp;</kbd></td>
-                <td><kbd ng-class="{'label-success': resource.archived, 'label-danger': !resource.archived}">&nbsp;&nbsp;&nbsp;</kbd></td>
-                <td><kbd ng-class="{'label-success': resource.draft, 'label-danger': !resource.draft}">&nbsp;&nbsp;&nbsp;</kbd></td>
-                <td><kbd ng-class="{'label-success': resource.complete, 'label-danger': !resource.complete}">&nbsp;&nbsp;&nbsp;</kbd></td>
-                <td><span ui-sref="resourceDisplay({ id:resource.id })" class="glyphicon glyphicon-eye-open"
-                          style="font-size: 120%"></span></td>
-                <td><span ui-sref="resourceEdit({ id:resource.id })" class="glyphicon glyphicon-edit"
-                          style="font-size: 120%"></span></td>
-                <td><span ng-click="deleteResource(resource)" class="glyphicon glyphicon-remove"
-                          style="font-size: 120%"></span>
-                </td>
+                <td><ng-switch on="resource.public"><span ng-switch-when="true">Oui</span><span ng-switch-when="false">Non</span></ng-switch></td>
+                <td><ng-switch on="resource.archived"><span ng-switch-when="true">Oui</span><span ng-switch-when="false">Non</span></ng-switch></td>
+                <td><ng-switch on="resource.draft"><span ng-switch-when="true">Oui</span><span ng-switch-when="false">Non</span></ng-switch></td>
+                <td><ng-switch on="resource.complete"><span ng-switch-when="true">Oui</span><span ng-switch-when="false">Non</span></ng-switch></td>
+                <td><ng-switch on="includedby">
+                    <span ng-switch-when="resource" ui-sref="model.edit.resource.display({ resourceid:resource.id })" class="glyphicon glyphicon-eye-open" style="font-size: 120%"></span>
+                    <span ng-switch-default ui-sref="resource.display({ resourceid:resource.id })" class="glyphicon glyphicon-eye-open" style="font-size: 120%"></span>
+                </ng-switch></td>
+                <td ><ng-switch on="includedby">
+                    <span ng-switch-when="resource" ui-sref="model.edit.resource.edit({ resourceid:resource.id })" class="glyphicon glyphicon-edit"style="font-size: 120%"></span>
+                    <span ng-switch-default ui-sref="resource.edit({ resourceid:resource.id })" class="glyphicon glyphicon-edit"style="font-size: 120%"></span>
+                </ng-switch></td>
+                <td><span ng-click="deleteResource(resource)" class="glyphicon glyphicon-remove"style="font-size: 120%"></span></td>
             </tr>
 
         </table>

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container"  data-ng-controller="modelDisplayController">
 
     <div class="table-responsive">
         <table class="table table-striped">
@@ -19,10 +19,10 @@
                 <td>{{ model.title }}</td>
                 <td>{{ model.author }}</td>
                 <td>{{ model.owner }}</td>
-                <td><kbd ng-class="{'label-success': model.public, 'label-danger': !model.public}">&nbsp;&nbsp;&nbsp;</kbd></td>
-                <td><kbd ng-class="{'label-success': model.archived, 'label-danger': !model.archived}">&nbsp;&nbsp;&nbsp;</kbd></td>
-                <td><kbd ng-class="{'label-success': model.draft, 'label-danger': !model.draft}">&nbsp;&nbsp;&nbsp;</kbd></td>
-                <td><kbd ng-class="{'label-success': model.complete, 'label-danger': !model.complete}">&nbsp;&nbsp;&nbsp;</kbd></td>
+                <td><ng-switch on="model.public"><span ng-switch-when="true">Oui</span><span ng-switch-when="false">Non</span></ng-switch></td>
+                <td><ng-switch on="model.archived"><span ng-switch-when="true">Oui</span><span ng-switch-when="false">Non</span></ng-switch></td>
+                <td><ng-switch on="model.draft"><span ng-switch-when="true">Oui</span><span ng-switch-when="false">Non</span></ng-switch></td>
+                <td><ng-switch on="model.complete"><span ng-switch-when="true">Oui</span><span ng-switch-when="false">Non</span></ng-switch></td>
             </tr>
 
         </table>

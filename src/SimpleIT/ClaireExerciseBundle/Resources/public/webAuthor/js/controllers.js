@@ -1,7 +1,13 @@
 var resourceControllers = angular.module('resourceControllers', ['ui.router']);
 
-resourceControllers.controller('mainCtrl', ['$scope', '$routeParams', '$location',
+resourceControllers.controller('mainController', ['$scope', '$routeParams', '$location',
     function($scope, $routeParams, $location) {
+
+        $scope.toggleResourceList = false;
+        $scope.togglePanelResourceList = function (){
+            $scope.toggleResourceList = !$scope.toggleResourceList;
+        }
+
         /*
         $scope.title = 'Resource';
          */
@@ -12,7 +18,16 @@ resourceControllers.controller('mainCtrl', ['$scope', '$routeParams', '$location
 
     }]);
 
+resourceControllers.controller('resourceController', ['$scope', '$routeParams', '$location',
+    function($scope, $routeParams, $location) {
+
+    }]);
+
 resourceControllers.controller('resourceListController', ['$scope', 'Resource', '$location', function($scope, Resource, $location) {
+
+    if($scope.$parent.context === undefined) {
+        $scope.includedby = '';
+    }else{$scope.includedby = $scope.$parent.context.include;}
 
     $scope.resources = Resource.query();
 
@@ -26,30 +41,43 @@ resourceControllers.controller('resourceListController', ['$scope', 'Resource', 
 
         var newResource = {
             "type": "text",
-            "title": "Titre de la ressource new!!!!",
+            "title": "retry",
             "public": true,
             "archived": false,
             "draft": false,
             "complete": null,
-            "metadata": {
-                "_misc": "de",
-                "author": "Toto",
-                "language": "en",
-                "prog-language": "C",
-                "return-value": "200",
-                "size": "35"
-            },
+            "metadata": [
+                {
+                    "key": "author",
+                    "value": "Toto"
+                },
+                {
+                    "key": "language",
+                    "value": "en"
+                },
+                {
+                    "key": "prog-language",
+                    "value": "C"
+                },
+                {
+                    "key": "return-value",
+                    "value": "200"
+                },
+                {
+                    "key": "size",
+                    "value": "35"
+                }
+            ],
+            "keywords": [
+                "de"
+            ],
             "content": {
                 "text": "Programme 12 en C return value 200",
                 "object_type": "text"
             },
-            "required_exercise_resources": [],
-            "required_knowledges": []
+            "required_exercise_resources": null,
+            "required_knowledges": null
         };
-
-        $scope.newResource = new Resource(newResource);
-
-        //console.log(Resource);
 
         Resource.save(newResource);
     };
@@ -58,7 +86,11 @@ resourceControllers.controller('resourceListController', ['$scope', 'Resource', 
 
 resourceControllers.controller('resourceDisplayController', ['$scope', 'Resource', '$location', '$stateParams', function($scope, Resource, $location, $stateParams) {
 
-    $scope.resource = Resource.get({id:$stateParams.id});
+    if($scope.$parent.context === undefined) {
+        $scope.includedby = '';
+    }else{$scope.includedby = $scope.$parent.context.include;}
+
+    $scope.resource = Resource.get({id:$stateParams.resourceid});
 
 }]);
 
@@ -69,25 +101,79 @@ resourceControllers.controller('resourceAddController', ['$scope', 'Resource', '
 resourceControllers.controller('resourceEditController', ['$scope', 'Resource', '$location', '$stateParams', function($scope, Resource, $location, $stateParams) {
 
     $scope.context = {
+        "include": '',
+        "included": '',
         "common": { "collapse": false },
+        "keywords": { "collapse": true },
         "metadata": { "collapse": true },
         "content": { "collapse": false }
     };
 
-    $scope.resource = Resource.get({id:$stateParams.id});
+    $scope.resource = Resource.get({id:$stateParams.resourceid});
+
+    //console.log($scope.resource);
 
     $scope.updateResource = function () {
+
         delete $scope.resource.id;
         delete $scope.resource.type;
         delete $scope.resource.author;
         delete $scope.resource.owner;
-        $scope.resource.$update({id:$stateParams.id},function (resource) {});
+        //delete $scope.resource.complete;
+        delete $scope.resource.required_exercise_resources;
+        delete $scope.resource.required_knowledges;
+
+        $scope.resource.$update({id:$stateParams.resourceid},function (resource) {});
+
     };
+
+    $scope.resourceAddField = function (collection){
+
+        //var newElement = {key: '', value: ''};
+        //var newElement = Object(collection[collection.length-1]);
+        var newElement = deepCopy(collection[collection.length-1]);
+        collection.splice(collection.length, 0, newElement);
+
+    }
+
+    $scope.resourceAddKeywordsField = function (collection){
+
+        collection.push($("#resourceAddKeyword")[0].value);
+        $("#resourceAddKeyword")[0].value = '';
+
+    }
+
+    $scope.resourceAddMetadataField = function (collection){
+
+        var newElement = {key: '', value: ''};
+        collection.splice(collection.length, 0, newElement);
+
+    }
+
+    $scope.resourceRemoveField = function (collection, index){
+        collection.splice(index, 1);
+    }
+
+    function deepCopy(p,c) {
+        var c = c||{};
+        for (var i in p) {
+            if (typeof p[i] === 'object') {
+                c[i] = (p[i].constructor === Array)?[]:{};
+                deepCopy(p[i],c[i]);
+            } else c[i] = '';}
+        return c;
+    }
 
 }]);
 
 
 var modelControllers = angular.module('modelControllers', ['ui.router']);
+
+modelControllers.controller('modelController', ['$scope', '$routeParams', '$location',
+    function($scope, $routeParams, $location) {
+
+
+    }]);
 
 modelControllers.controller('modelListController', ['$scope', 'Model', '$location', function($scope, Model, $location) {
 
@@ -99,25 +185,93 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
         });
     };
 
-    $scope.createResource = function () {// todo : not working
-
+    $scope.createResource = function () {
         var newModel = {
-
+            "type": "pair-items",
+            "title": "Appariement de test n°2",
+            "public": true,
+            "archived": false,
+            "draft": false,
+            "complete": null,
+            "metadata": [],
+            "keywords": [],
+            "content": {
+                "wording": "1",
+                "documents": [],
+                "pair_blocks": [
+                    {
+                        "number_of_occurrences": 2,
+                        "resources": [
+                            {
+                                "id": 9
+                            },
+                            {
+                                "id": 10
+                            },
+                            {
+                                "id": 11
+                            },
+                            {
+                                "id": 12
+                            },
+                            {
+                                "id": 13
+                            },
+                            {
+                                "id": 14
+                            },
+                            {
+                                "id": 15
+                            },
+                            {
+                                "id": 16
+                            }
+                        ],
+                        "pair_meta_key": "screen-output"
+                    },
+                    {
+                        "number_of_occurrences": 2,
+                        "resources": [
+                            {
+                                "id": 17
+                            },
+                            {
+                                "id": 18
+                            },
+                            {
+                                "id": 19
+                            },
+                            {
+                                "id": 20
+                            },
+                            {
+                                "id": 21
+                            },
+                            {
+                                "id": 22
+                            },
+                            {
+                                "id": 23
+                            },
+                            {
+                                "id": 24
+                            }
+                        ],
+                        "pair_meta_key": "return-value"
+                    }
+                ],
+                "exercise_model_type": "pair-items"
+            }
         };
 
-        $scope.newModel = new Model(newModel);
-
-        $scope.newModel.$save(function (data) {
-            console.log(data);
-            //$location.path("/resource/"+data.id+"/edit");
-        });
+        Model.save(newModel);
     };
 
 }]);
 
 modelControllers.controller('modelDisplayController', ['$scope', 'Model', '$location', '$stateParams', function($scope, Model, $location, $stateParams) {
 
-    $scope.model = Model.get({id:$stateParams.id});
+    $scope.model = Model.get({id:$stateParams.modelid});
 
 }]);
 
@@ -125,10 +279,55 @@ modelControllers.controller('modelAddController', ['$scope', 'Model', '$location
 
 }]);
 
-modelControllers.controller('modelEditController', ['$scope', 'Model', '$location', '$stateParams', function($scope, Model, $location, $stateParams) {
+modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', function($scope, Model, Resource, $location, $stateParams) {
+
+    $scope.tooltipPreviewResource = function(idRes){
+        $scope.tooltipResource = Resource.get({id:idRes});
+    }
+
+    $scope.modelAddKeywordsField = function (collection){
+
+        collection.push($("#resourceAddKeyword")[0].value);
+        $("#resourceAddKeyword")[0].value = '';
+
+    }
+
+    $scope.modelAddMetadataField = function (collection){
+
+        var newElement = {key: '', value: ''};
+        collection.splice(collection.length, 0, newElement);
+
+    }
+
+    $scope.modelAddBlockField = function (collection){
+
+        var newElement = {
+            "number_of_occurrences": 0,
+            "resources": [],
+            "pair_meta_key": ""
+        };
+        collection.splice(collection.length, 0, newElement);
+
+    }
+
+    $scope.modelAddBlockResourceField = function (collection, id){
+
+        var newElement = {"id": id};
+        collection.splice(collection.length, 0, newElement);
+
+    }
+
+    $scope.modelRemoveField = function (collection, index){
+
+        collection.splice(index, 1);
+
+    }
 
     $scope.context = {
+        "include": 'resource',
+        "included": '',
         "common": { "collapse": false },
+        "keywords": { "collapse": true },
         "metadata": { "collapse": true },
         "pair_items": {
             "collapse": false,
@@ -136,21 +335,28 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', '$locatio
             "documents": { "collapse": false },
             "pair_blocks": {
                 "collapse": false,
-                "resources": { "collapse": false },
+                "resources": { "collapse": false }
             }
         }
     };
 
-    $scope.model = Model.get({id:$stateParams.id});
+    $scope.model = Model.get({id:$stateParams.modelid});
 
-    console.log($scope.model);
+    //console.log($scope.model );
 
     $scope.updateModel = function () {
         delete $scope.model.id;
-        delete $scope.model.type;
         delete $scope.model.author;
         delete $scope.model.owner;
-        $scope.model.$update({id:$stateParams.id},function (model) {});
+        delete $scope.model.required_exercise_resources;
+        delete $scope.model.required_knowledges;
+        $scope.model.$update({id:$stateParams.modelid},function (model) {});
     };
+
+    $scope.onDrop = function(event,data,collection){
+
+        $scope.modelAddBlockResourceField(collection, data);
+
+    }
 
 }]);

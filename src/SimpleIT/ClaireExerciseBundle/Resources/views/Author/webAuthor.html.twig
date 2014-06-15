@@ -18,6 +18,7 @@
     <script src="{{ asset('bundles/simpleitclaireexercise/webAuthor/js/vendors/ui-bootstrap-tpls.min.js') }}"></script>
     <script src="{{ asset('bundles/simpleitclaireexercise/webAuthor/js/vendors/angular-ui-router.min.js') }}"></script>
     <script src="{{ asset('bundles/simpleitclaireexercise/webAuthor/js/vendors/draganddrop.js') }}"></script>
+    <script src="{{ asset('bundles/simpleitclaireexercise/webAuthor/js/vendors/fileupload.js') }}"></script>
 
     <script src="{{ asset('bundles/simpleitclaireexercise/webAuthor/js/apps.js') }}"></script>
     <script src="{{ asset('bundles/simpleitclaireexercise/webAuthor/js/controllers.js') }}"></script>
@@ -27,7 +28,7 @@
 
 
 </head>
-<body ng-controller="mainCtrl">
+<body ng-controller="mainController">
 
     <div id="header">
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -38,9 +39,10 @@
             </div>-->
 
             <ul class="nav navbar-nav">
-                <li><a ui-sref="modelList">Modèles d'exercices</a></li>
-                <li><a ui-sref="resourceList">Resources</a></li>
+                <li><a ui-sref="model">Modèles d'exercices</a></li>
+                <li><a ui-sref="resource">Resources</a></li>
                 <li><a href class="navbar-brand"><i class="glyphicon glyphicon-user pull-right"></i></a></li>
+                <li><a href class="navbar-brand" ng-model="toggleResourceList" data-ng-click="togglePanelResourceList()"><i class="glyphicon glyphicon-list-alt"></i></a></li>
             </ul>
         </nav>
 
@@ -56,7 +58,7 @@
         <div class="col-xs-12 navbar navbar-inverse navbar-fixed-bottom">
             <div class="row" id="bottomNav">
                 <div class="col-xs-4 text-center"><a back-Button href><i class="glyphicon glyphicon-circle-arrow-left"></i><br></a></div>
-                <div class="col-xs-4 text-center"><a href ui-sref="modelList"><i class="glyphicon glyphicon-th-large"></i><br></a></div>
+                <div class="col-xs-4 text-center"><a href ui-sref="model"><i class="glyphicon glyphicon-th-large"></i><br></a></div>
                 <div class="col-xs-4 text-right"><a next-Button href><i class="glyphicon glyphicon-circle-arrow-right"></i><br></a></div>
             </div>
         </div>

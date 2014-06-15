@@ -21,57 +21,73 @@ mainApp.config(
 
                 $urlRouterProvider.otherwise('/model');
 
-                $stateProvider.state('modelList', { // /contacts?myParam1&myParam2
+                $stateProvider.state('model', {
                     url: '/model',
-                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-model-list.html',
-                    controller: 'modelListController'
+                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-model.html'
                 });
 
-                $stateProvider.state('modelDisplay', {
-                    url: '/model/:id',
-                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-model-display.html',
-                    controller: 'modelDisplayController'
+                $stateProvider.state('model.list', { // /contacts?myParam1&myParam2
+                    url: '/',
+                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-model-list.html'
+                    //,controller: 'modelListController'
                 });
 
-                $stateProvider.state('modelEdit', {
-                    url: '/model/:id/edit',
-                    views: {
-
-                        // the main template will be placed here (relatively named)
-                        '': { templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-model.html' },
-
-                        // the child views will be defined here (absolutely named)
-                        'modelEditPanel@modelEdit': {
-                            templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-model-edit.html',
-                            controller: 'modelEditController'
-                        },
-
-                        // for column two, we'll define a separate controller
-                        'resourceListPanel@modelEdit': {
-                            templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-list.html',
-                            controller: 'resourceListController'
-                        }
-
-                    }
+                $stateProvider.state('model.display', {
+                    url: '/:modelid',
+                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-model-display.html'
+                    //,controller: 'modelDisplayController'
                 });
 
+                $stateProvider.state('model.edit', {
+                    url: '/:modelid/edit',
+                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-model-edit.html'
+                    //,controller: 'modelEditController'
+                });
 
-                $stateProvider.state('resourceList', {
+                $stateProvider.state('model.edit.resource', {
                     url: '/resource',
-                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-list.html',
-                    controller: 'resourceListController'
+                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource.html'
                 });
 
-                $stateProvider.state('resourceDisplay', {
-                    url: '/resource/:id',
-                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-display.html',
-                    controller: 'resourceDisplayController'
+                $stateProvider.state('model.edit.resource.list', {
+                    url: '/list',
+                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-list.html'
+                    //,controller: 'resourceListController'
                 });
 
-                $stateProvider.state('resourceEdit', {
-                    url: '/resource/:id/edit',
-                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-edit.html',
-                    controller: 'resourceEditController'
+                $stateProvider.state('model.edit.resource.display', {
+                    url: '/:resourceid',
+                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-display.html'
+                    //,controller: 'resourceDisplayController'
+                });
+
+                $stateProvider.state('model.edit.resource.edit', {
+                    url: '/:resourceid/edit',
+                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-edit.html'
+                    //,controller: 'resourceEditController'
+                });
+
+                $stateProvider.state('resource', {
+                    url: '/resource',
+                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource.html'
+                });
+
+                $stateProvider.state('model.resource.list', {
+                    url: '/list',
+                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-list.html'
+                    //,controller: 'resourceListController'
+                });
+
+                $stateProvider.state('resource.display', {
+                    url: '/:resourceid',
+                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-display.html'
+                    //,controller: 'resourceDisplayController'
+                });
+
+                $stateProvider.state('resource.edit', {
+                    url: '/:resourceid/edit',
+                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-edit.html'
+                    //,controller: 'resourceEditController'
                 });
 
             }
