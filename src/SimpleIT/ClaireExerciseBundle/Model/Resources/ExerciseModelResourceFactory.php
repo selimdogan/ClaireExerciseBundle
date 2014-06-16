@@ -4,7 +4,6 @@ namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 use JMS\Serializer\Handler\HandlerRegistry;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\Utils\Collection\PaginatorInterface;
 
 /**
@@ -47,7 +46,7 @@ abstract class ExerciseModelResourceFactory extends SharedResourceFactory
         // required resources
         $rr = array();
         foreach ($exerciseModel->getRequiredExerciseResources() as $req) {
-            /** @var ExerciseResource $req */
+            /** @var \SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource $req */
             $rr[] = $req->getId();
         }
         $exerciseModelResource->setRequiredExerciseResources($rr);

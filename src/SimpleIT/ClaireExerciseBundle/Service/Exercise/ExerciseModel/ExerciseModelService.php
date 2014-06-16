@@ -874,17 +874,19 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
         $reqRes = array();
 
         /** @var ObjectId $resource */
-        foreach ($block->getResources() as $resource) {
-            if ($import) {
-                $requiredId = $this->exerciseResourceService->importOrLink(
-                    $ownerId,
-                    $resource->getId()
-                );
-                $resource->setId($requiredId);
-            } else {
-                $requiredId = $resource->getId();
+        if (!empty($block)) {
+            foreach ($block->getResources() as $resource) {
+                if ($import) {
+                    $requiredId = $this->exerciseResourceService->importOrLink(
+                        $ownerId,
+                        $resource->getId()
+                    );
+                    $resource->setId($requiredId);
+                } else {
+                    $requiredId = $resource->getId();
+                }
+                $reqRes[] = $requiredId;
             }
-            $reqRes[] = $requiredId;
         }
 
         return $reqRes;
@@ -952,7 +954,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     /**
      * Import an entity. Additionnal work, specific to entity type
      *
-     * @param int $ownerId
+     * @param int           $ownerId
      * @param ExerciseModel $entity The duplicata
      *
      * @return ExerciseModel
@@ -996,8 +998,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
 
         $newRes = array();
         /** @var ExerciseResource $usedResource */
-        foreach ($usedResources as $usedResource)
-        {
+        foreach ($usedResources as $usedResource) {
             $newRes = $this->exerciseResourceService->importByEntity($ownerId, $usedResource);
         }
 

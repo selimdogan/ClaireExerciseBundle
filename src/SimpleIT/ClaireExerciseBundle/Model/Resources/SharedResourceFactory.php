@@ -6,7 +6,6 @@ use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\SerializerBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\Metadata;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
@@ -107,7 +106,7 @@ abstract class SharedResourceFactory
                 $resource = ExerciseModelResourceFactory::create($entity);
                 break;
             case self::RESOURCE:
-                /** @var ExerciseResource $entity */
+                /** @var \SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource $entity */
                 $resource = ResourceResourceFactory::create($entity);
                 break;
             case self::KNOWLEDGE:

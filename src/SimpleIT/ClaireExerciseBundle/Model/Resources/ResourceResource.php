@@ -147,7 +147,7 @@ class ResourceResource extends SharedResource
     /**
      * @var array
      * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource>")
-     * @Serializer\Groups({"details"})
+     * @Serializer\Groups({"details", "resource_list"})
      */
     protected $metadata;
 
