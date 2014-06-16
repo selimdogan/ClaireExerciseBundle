@@ -31,9 +31,11 @@ resourceControllers.controller('resourceListController', ['$scope', 'Resource', 
 
     $scope.resources = Resource.query();
 
+    //console.log($scope.resources);
+
     $scope.deleteResource = function (resource) {
         resource.$delete(function () {
-            $location.path("/resource/list");
+            $location.path("/resource");
         });
     };
 
@@ -78,6 +80,8 @@ resourceControllers.controller('resourceListController', ['$scope', 'Resource', 
             "required_exercise_resources": null,
             "required_knowledges": null
         };
+
+        //console.log(newResource);
 
         Resource.save(newResource);
     };
@@ -181,14 +185,15 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
 
     $scope.deleteModel = function (model) {
         model.$delete(function () {
-            $location.path("/model/list");
+            $location.path("/model");
         });
     };
 
-    $scope.createResource = function () {
+    $scope.createModel = function () {
+
         var newModel = {
             "type": "pair-items",
-            "title": "Appariement de test n°2",
+            "title": "new Appariement",
             "public": true,
             "archived": false,
             "draft": false,
@@ -200,69 +205,21 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
                 "documents": [],
                 "pair_blocks": [
                     {
-                        "number_of_occurrences": 2,
-                        "resources": [
-                            {
-                                "id": 9
-                            },
-                            {
-                                "id": 10
-                            },
-                            {
-                                "id": 11
-                            },
-                            {
-                                "id": 12
-                            },
-                            {
-                                "id": 13
-                            },
-                            {
-                                "id": 14
-                            },
-                            {
-                                "id": 15
-                            },
-                            {
-                                "id": 16
-                            }
-                        ],
-                        "pair_meta_key": "screen-output"
+                        "number_of_occurrences": 0,
+                        "resources": [],
+                        "pair_meta_key": ""
                     },
                     {
-                        "number_of_occurrences": 2,
-                        "resources": [
-                            {
-                                "id": 17
-                            },
-                            {
-                                "id": 18
-                            },
-                            {
-                                "id": 19
-                            },
-                            {
-                                "id": 20
-                            },
-                            {
-                                "id": 21
-                            },
-                            {
-                                "id": 22
-                            },
-                            {
-                                "id": 23
-                            },
-                            {
-                                "id": 24
-                            }
-                        ],
-                        "pair_meta_key": "return-value"
+                        "number_of_occurrences": 0,
+                        "resources": [],
+                        "pair_meta_key": ""
                     }
                 ],
                 "exercise_model_type": "pair-items"
             }
         };
+
+        console.log(newModel);
 
         Model.save(newModel);
     };

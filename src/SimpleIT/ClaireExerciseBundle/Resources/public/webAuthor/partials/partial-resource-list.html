@@ -18,9 +18,9 @@
                 <th>&nbsp;</th>
             </tr>
             <tr ng-repeat="resource in resources" ui-draggable="true" drag="resource.id" on-drop-success="dropSuccessHandler($event,$index)">
-                <td><kbd class="label-info">{{ resource.type }}</kbd></td>
-                <td>{{ resource.title }}</td>
-                <td>{{ resource.author }}</td>
+                <td><kbd class="label-info">{{ resource.type }}</kbd><code><br>Méta-données:</code></td>
+                <td>{{ resource.title }}<br><code>{{ resource.metadata[0].key }}:&nbsp;{{ resource.metadata[0].value }}</code></td>
+                <td>{{ resource.author }}<br><code>{{ resource.metadata[1].key }}:&nbsp;{{ resource.metadata[1].value }}</code></td>
                 <td>{{ resource.owner }}</td>
                 <td><ng-switch on="resource.public"><span ng-switch-when="true">Oui</span><span ng-switch-when="false">Non</span></ng-switch></td>
                 <td><ng-switch on="resource.archived"><span ng-switch-when="true">Oui</span><span ng-switch-when="false">Non</span></ng-switch></td>
