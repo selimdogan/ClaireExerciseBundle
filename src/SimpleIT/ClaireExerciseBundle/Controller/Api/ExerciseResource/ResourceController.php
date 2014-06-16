@@ -64,7 +64,7 @@ class ResourceController extends ApiController
             $resourceResources = ResourceResourceFactory::createCollection($resources);
 
             return new ApiPaginatedResponse($resourceResources, $resources, array(
-                'list',
+                'resource_list',
                 'Default'
             ));
         } catch (NonExistingObjectException $neoe) {
