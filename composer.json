@@ -28,7 +28,7 @@
         "simpleit/core-bundle": "1.1.x-dev",
         "simpleit/php-utils": "1.1.x-dev",
         "simpleit/api-bundle": "1.1.x-dev",
-        "jms/serializer-bundle": "0.13.x-dev",
+        "jms/serializer-bundle": ">=0.12",
         "jms/security-extra-bundle": "1.5.*",
         "twig/twig": "1.*"
     },
