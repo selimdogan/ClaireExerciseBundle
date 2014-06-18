@@ -2,8 +2,9 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise;
 
+use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 use Doctrine\ORM\QueryBuilder;
-use SimpleIT\CoreBundle\Repository\BaseRepository;
+
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 

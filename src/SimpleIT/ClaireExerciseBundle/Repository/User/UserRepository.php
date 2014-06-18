@@ -4,7 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Repository\User;
 
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
-use SimpleIT\CoreBundle\Repository\BaseRepository;
+use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;

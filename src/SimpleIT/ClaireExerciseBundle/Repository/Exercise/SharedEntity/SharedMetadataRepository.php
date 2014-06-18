@@ -6,7 +6,7 @@ use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\Metadata;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Repository\BaseRepository;
+use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 
 use SimpleIT\Utils\Collection\Sort;

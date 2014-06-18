@@ -107,7 +107,6 @@ abstract class SharedMetadataService extends TransactionalService
         $resource = $this->entityService->get($entityId);
         $metadata->setEntity($resource);
 
-        $metadata = $this->metadataRepository->insert($metadata);
         $this->em->persist($metadata);
         $this->em->flush();
 

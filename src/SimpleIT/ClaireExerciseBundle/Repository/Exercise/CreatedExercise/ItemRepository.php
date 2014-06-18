@@ -7,7 +7,7 @@ use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Repository\BaseRepository;
+use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;

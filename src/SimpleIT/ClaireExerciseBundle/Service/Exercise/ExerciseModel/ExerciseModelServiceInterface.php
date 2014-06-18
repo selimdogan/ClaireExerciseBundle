@@ -63,7 +63,7 @@ interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
     );
 
     /**
-     *Add a new entity (saving). The id must be null.
+     * Add a new entity (saving). The id must be null.
      *
      * @param ExerciseModel $entity
      *

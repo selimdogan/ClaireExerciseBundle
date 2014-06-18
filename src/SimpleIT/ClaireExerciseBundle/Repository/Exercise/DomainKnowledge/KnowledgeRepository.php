@@ -70,8 +70,6 @@ class KnowledgeRepository extends SharedEntityRepository
         );
     }
 
-
-
     /**
      * Get the join that reduce the number of requests.
      *

@@ -107,7 +107,6 @@ class TestService extends TransactionalService implements TestServiceInterface
 
         $test = TestFactory::create($testPositions, $testModel);
 
-        $test = $this->testRepository->insert($test);
         $this->em->persist($test);
         $this->em->flush();
 

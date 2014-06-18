@@ -4,7 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test;
 
 use Doctrine\ORM\QueryBuilder;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Repository\BaseRepository;
+use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\Sort;

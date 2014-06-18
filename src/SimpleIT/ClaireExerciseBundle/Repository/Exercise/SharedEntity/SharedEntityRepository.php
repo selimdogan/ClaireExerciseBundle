@@ -9,13 +9,13 @@ use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityAlreadyExistsException;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\FilterException;
+use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Repository\BaseRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\Sort;
 
 /**
- * Abstract SharedEntityRepository
+ * Abstract SharedBaseRepository
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
@@ -55,12 +55,10 @@ abstract class SharedEntityRepository extends BaseRepository
         $metadata = array();
         $keywords = array();
 
-
         // build select
         $lj = $this->getLeftJoins();
         $select = 'entity, md';
-        foreach(array_keys($lj) as $alias)
-        {
+        foreach (array_keys($lj) as $alias) {
             $select .= ', ' . $alias;
         }
 
@@ -545,5 +543,10 @@ abstract class SharedEntityRepository extends BaseRepository
         }
     }
 
+    /**
+     * Get the join that reduce the number of requests.
+     *
+     * @return array
+     */
     abstract protected function getLeftJoins();
 }

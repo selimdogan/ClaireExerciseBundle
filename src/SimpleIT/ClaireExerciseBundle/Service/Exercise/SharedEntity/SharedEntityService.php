@@ -291,7 +291,6 @@ abstract class SharedEntityService extends TransactionalService implements Share
         $entity
     )
     {
-        $entity = $this->entityRepository->insert($entity);
         $this->em->persist($entity);
         $this->em->flush();
 

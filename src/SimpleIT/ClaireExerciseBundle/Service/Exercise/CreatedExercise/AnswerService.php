@@ -133,7 +133,6 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
 
         $answer = AnswerFactory::create($content, $item, $attempt);
         // Add the answer to the database
-        $this->answerRepository->insert($answer);
 
         $this->em->persist($answer);
         $this->em->flush();

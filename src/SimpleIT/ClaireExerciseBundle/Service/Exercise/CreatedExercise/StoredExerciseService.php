@@ -167,7 +167,6 @@ class StoredExerciseService extends TransactionalService implements StoredExerci
         $oem = $this->exerciseModelService->getParent($emId);
 
         $exercise = $this->exerciseService->generateExercise($oem);
-        $exercise = $this->storedExerciseRepository->insert($exercise);
 
         $this->em->persist($exercise);
         $this->em->flush();

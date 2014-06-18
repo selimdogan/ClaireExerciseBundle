@@ -117,7 +117,6 @@ class AttemptService extends TransactionalService implements AttemptServiceInter
         }
 
         $attempt = AttemptFactory::create($exercise, $user, $testAttempt, $position);
-        $attempt = $this->attemptRepository->insert($attempt);
 
         $this->em->persist($attempt);
         $this->em->flush();

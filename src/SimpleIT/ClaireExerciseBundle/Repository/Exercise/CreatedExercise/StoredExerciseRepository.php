@@ -4,7 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise;
 
 use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
-use SimpleIT\CoreBundle\Repository\BaseRepository;
+use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
 use SimpleIT\Utils\Collection\CollectionInformation;
 

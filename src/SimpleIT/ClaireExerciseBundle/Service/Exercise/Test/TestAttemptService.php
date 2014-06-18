@@ -112,7 +112,6 @@ class TestAttemptService extends TransactionalService implements TestAttemptServ
         $testAttempt = TestAttemptFactory::create($test, $user);
 
         /** @var TestAttempt $testAttempt */
-        $testAttempt = $this->testAttemptRepository->insert($testAttempt);
         $this->em->persist($testAttempt);
 
         foreach ($test->getTestPositions() as $position) {

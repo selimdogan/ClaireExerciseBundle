@@ -5,7 +5,7 @@ namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise;
 use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
-use SimpleIT\CoreBundle\Repository\BaseRepository;
+use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\Sort;
 
@@ -114,7 +114,6 @@ class AttemptRepository extends BaseRepository
                     $queryBuilder->addOrderBy('a.id');
                 }
             }
-            $queryBuilder = $this->setRange($queryBuilder, $collectionInformation);
         } else {
             $queryBuilder->addOrderBy('a.id');
         }

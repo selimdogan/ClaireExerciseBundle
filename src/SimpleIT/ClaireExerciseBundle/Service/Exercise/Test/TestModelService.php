@@ -162,7 +162,6 @@ class TestModelService extends TransactionalService implements TestModelServiceI
      */
     public function add(TestModel $testModel)
     {
-        $this->testModelRepository->insert($testModel);
         $this->em->persist($testModel);
         $this->em->flush();
 
