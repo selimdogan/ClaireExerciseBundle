@@ -4,7 +4,6 @@ namespace SimpleIT\ClaireExerciseBundle\Controller\Api\ExerciseResource;
 use SimpleIT\ApiBundle\Controller\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResourceFactory;
@@ -52,7 +51,7 @@ class ResourceByUserController extends ApiController
      * @param int                   $ownerId
      *
      * @throws ApiNotFoundException
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      */
     public function listAction(
         CollectionInformation $collectionInformation,
@@ -67,7 +66,7 @@ class ResourceByUserController extends ApiController
 
             $oemResources = ResourceResourceFactory::createCollection($resources);
 
-            return new ApiPaginatedResponse($oemResources, $resources, array(
+            return new ApiGotResponse($oemResources, array(
                 'resource_list',
                 'Default'
             ));

@@ -3,10 +3,10 @@ namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
 use SimpleIT\ApiBundle\Controller\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
+use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 
 /**
  * API ItemByExercise controller
@@ -21,7 +21,7 @@ class ItemByExerciseController extends ApiController
      * @param int $exerciseId    Exercise id
      *
      * @throws ApiNotFoundException
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      */
     public function listAction($exerciseId)
     {
@@ -30,7 +30,7 @@ class ItemByExerciseController extends ApiController
 
             $itemResources = ItemResourceFactory::createCollection($items);
 
-            return new ApiPaginatedResponse($itemResources, $items, array('list', 'Default'));
+            return new ApiGotResponse($itemResources, array('list', 'Default'));
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(ItemResource::RESOURCE_NAME);
         }

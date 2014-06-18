@@ -17,7 +17,7 @@ use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestModelRepository;
 use SimpleIT\ClaireExerciseBundle\Service\User\UserService;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+
 use SimpleIT\CoreBundle\Annotation\Transactional;
 
 /**
@@ -95,7 +95,7 @@ class TestModelService extends TransactionalService implements TestModelServiceI
      *
      * @param CollectionInformation $collectionInformation The collection information
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll($collectionInformation = null)
     {

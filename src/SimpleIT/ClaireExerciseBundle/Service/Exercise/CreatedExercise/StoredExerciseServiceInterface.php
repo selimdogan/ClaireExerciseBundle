@@ -5,7 +5,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+
 
 /**
  * Interface for service which manages the stored exercises
@@ -30,7 +30,7 @@ interface StoredExerciseServiceInterface
      * @param CollectionInformation $collectionInformation
      * @param int                   $exerciseModelId
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll(
         $collectionInformation = null,
@@ -42,7 +42,7 @@ interface StoredExerciseServiceInterface
      *
      * @param $testAttemptId
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAllByTestAttempt($testAttemptId);
 

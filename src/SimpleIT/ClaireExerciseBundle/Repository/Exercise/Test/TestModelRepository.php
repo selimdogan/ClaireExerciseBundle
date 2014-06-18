@@ -4,7 +4,6 @@ namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test;
 
 use Doctrine\ORM\QueryBuilder;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Model\Paginator;
 use SimpleIT\CoreBundle\Repository\BaseRepository;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel;
 use SimpleIT\Utils\Collection\CollectionInformation;
@@ -40,7 +39,7 @@ class TestModelRepository extends BaseRepository
      *
      * @param CollectionInformation $collectionInformation
      *
-     * @return Paginator
+     * @return array
      */
     public function findAllBy($collectionInformation = null)
     {
@@ -68,7 +67,7 @@ class TestModelRepository extends BaseRepository
 //            $queryBuilder = $this->setRange($queryBuilder, $collectionInformation);
         }
 
-        return new Paginator($queryBuilder);
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

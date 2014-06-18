@@ -10,7 +10,7 @@ use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\AnswerRepo
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\ItemRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation\ExerciseServiceInterface;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+
 
 /**
  * Service which manages the items
@@ -165,7 +165,7 @@ class ItemService extends TransactionalService implements ItemServiceInterface
      *
      * @param int $exerciseId  Exercise id
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll($exerciseId = null)
     {
@@ -183,7 +183,7 @@ class ItemService extends TransactionalService implements ItemServiceInterface
      * @param CollectionInformation $collectionInformation
      * @param int                   $attemptId
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAllByAttempt($collectionInformation = null, $attemptId = null)
     {

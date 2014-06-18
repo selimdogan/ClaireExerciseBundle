@@ -10,7 +10,6 @@ use SimpleIT\ClaireExerciseBundle\Exception\EntityAlreadyExistsException;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\FilterException;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Model\Paginator;
 use SimpleIT\CoreBundle\Repository\BaseRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\Sort;
@@ -230,7 +229,7 @@ abstract class SharedEntityRepository extends BaseRepository
 //            $qb = $this->setRange($qb, $collectionInformation);
         }
 
-        return new Paginator($qb);
+        return $qb->getQuery()->getResult();
     }
 
     /**

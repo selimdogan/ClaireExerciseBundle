@@ -6,7 +6,6 @@ use JMS\Serializer\SerializerBuilder;
 use SimpleIT\ClaireExerciseBundle\Serializer\Handler\AbstractClassForExerciseHandler;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
-use SimpleIT\Utils\Collection\PaginatorInterface;
 
 /**
  * Class AnswerResourceFactory
@@ -19,11 +18,11 @@ abstract class AnswerResourceFactory
     /**
      * Create an AnswerResource collection
      *
-     * @param PaginatorInterface $answers
+     * @param array $answers
      *
      * @return array
      */
-    public static function createCollection(PaginatorInterface $answers)
+    public static function createCollection(array $answers)
     {
         $answerResources = array();
         foreach ($answers as $answer) {

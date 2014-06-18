@@ -5,7 +5,6 @@ use JMS\Serializer\Handler\HandlerRegistry;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
-use SimpleIT\Utils\Collection\PaginatorInterface;
 
 /**
  * Class ResourceResourceFactory
@@ -18,15 +17,15 @@ abstract class ResourceResourceFactory extends SharedResourceFactory
     /**
      * Create an ResourceResource collection
      *
-     * @param PaginatorInterface $resources
+     * @param array $resources
      *
      * @return array
      */
-    public static function createCollection(PaginatorInterface $resources)
+    public static function createCollection(array $resources)
     {
         $resourceResources = array();
         foreach ($resources as $resource) {
-            $resourceResources[] = self::create($resource);
+            $resourceResources[] = self::create($resource, true);
         }
 
         return $resourceResources;
@@ -36,32 +35,36 @@ abstract class ResourceResourceFactory extends SharedResourceFactory
      * Create a ResourceResource
      *
      * @param ExerciseResource $resource
+     * @param bool             $light
      *
      * @return ResourceResource
      */
-    public static function create(ExerciseResource $resource)
+    public static function create(ExerciseResource $resource, $light = false)
     {
         $resourceResource = new ResourceResource();
         parent::fill(
             $resourceResource,
-            $resource
+            $resource,
+            $light
         );
 
-        // required resources
-        $requirements = array();
-        foreach ($resource->getRequiredExerciseResources() as $req) {
-            /** @var ExerciseResource $req */
-            $requirements[] = $req->getId();
-        }
-        $resourceResource->setRequiredExerciseResources($requirements);
+        if (!$light) {
+            // required resources
+            $requirements = array();
+            foreach ($resource->getRequiredExerciseResources() as $req) {
+                /** @var ExerciseResource $req */
+                $requirements[] = $req->getId();
+            }
+            $resourceResource->setRequiredExerciseResources($requirements);
 
-        // required resources
-        $requirements = array();
-        foreach ($resource->getRequiredKnowledges() as $req) {
-            /** @var Knowledge $req */
-            $requirements[] = $req->getId();
+            // required resources
+            $requirements = array();
+            foreach ($resource->getRequiredKnowledges() as $req) {
+                /** @var Knowledge $req */
+                $requirements[] = $req->getId();
+            }
+            $resourceResource->setRequiredKnowledges($requirements);
         }
-        $resourceResource->setRequiredKnowledges($requirements);
 
         return $resourceResource;
     }

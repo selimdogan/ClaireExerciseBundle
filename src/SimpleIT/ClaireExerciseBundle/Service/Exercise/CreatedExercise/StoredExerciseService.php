@@ -3,7 +3,6 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Model\Paginator;
 use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\ItemRepository;
@@ -13,7 +12,6 @@ use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\ExerciseModelSe
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\Test\TestAttemptServiceInterface;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\CoreBundle\Annotation\Transactional;
-use SimpleIT\Utils\Collection\PaginatorInterface;
 
 /**
  * Service which manages the stored exercises
@@ -122,7 +120,7 @@ class StoredExerciseService extends TransactionalService implements StoredExerci
      * @param CollectionInformation $collectionInformation
      * @param int                   $exerciseModelId
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll(
         $collectionInformation = null,
@@ -146,7 +144,7 @@ class StoredExerciseService extends TransactionalService implements StoredExerci
      *
      * @param $testAttemptId
      *
-     * @return Paginator
+     * @return array
      */
     public function getAllByTestAttempt($testAttemptId)
     {

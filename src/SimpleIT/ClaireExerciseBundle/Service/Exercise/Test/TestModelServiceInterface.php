@@ -6,7 +6,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+
 
 /**
  * Interface for class TestModelService
@@ -30,7 +30,7 @@ interface TestModelServiceInterface
      *
      * @param CollectionInformation $collectionInformation The collection information
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll($collectionInformation = null);
 }

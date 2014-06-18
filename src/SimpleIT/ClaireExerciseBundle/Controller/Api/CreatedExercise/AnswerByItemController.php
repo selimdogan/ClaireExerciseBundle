@@ -6,13 +6,12 @@ use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
 use SimpleIT\ApiBundle\Model\ApiResponse;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidAnswerException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -27,7 +26,7 @@ class AnswerByItemController extends ApiController
      *
      * @param $itemId
      *
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      * @throws ApiNotFoundException
      */
     public function listAction($itemId)
@@ -37,7 +36,7 @@ class AnswerByItemController extends ApiController
 
             $answerResources = AnswerResourceFactory::createCollection($answers);
 
-            return new ApiPaginatedResponse($answerResources, $answers, array('list', 'Default'));
+            return new ApiGotResponse($answerResources, array('list', 'Default'));
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(AnswerResource::RESOURCE_NAME);
         }

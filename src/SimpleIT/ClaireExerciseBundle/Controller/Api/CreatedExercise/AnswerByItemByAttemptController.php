@@ -5,13 +5,13 @@ use SimpleIT\ApiBundle\Controller\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
+use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiResponse;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Exception\AnswerAlreadyExistsException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidAnswerException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 
 /**
  * API AnswerByItemByAttempt Controller
@@ -27,7 +27,7 @@ class AnswerByItemByAttemptController extends ApiController
      * @param int $itemId
      *
      * @throws ApiNotFoundException
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      */
     public function listAction($attemptId, $itemId)
     {
@@ -36,7 +36,7 @@ class AnswerByItemByAttemptController extends ApiController
 
             $answerResources = AnswerResourceFactory::createCollection($answers);
 
-            return new ApiPaginatedResponse($answerResources, $answers, array('list', 'Default'));
+            return new ApiGotResponse($answerResources, array('list', 'Default'));
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(AnswerResource::RESOURCE_NAME);
         }

@@ -6,10 +6,9 @@ use SimpleIT\ApiBundle\Controller\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestAttemptResource;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestAttemptResourceFactory;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -49,7 +48,7 @@ class TestAttemptController extends ApiController
      *
      * @throws ApiBadRequestException
      * @throws ApiNotFoundException
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      */
     public function listAction(
         Request $request,
@@ -76,7 +75,7 @@ class TestAttemptController extends ApiController
 
             $testAttemptResources = TestAttemptResourceFactory::createCollection($testAttempts);
 
-            return new ApiPaginatedResponse($testAttemptResources, $testAttempts, array(
+            return new ApiGotResponse($testAttemptResources, array(
                 'list',
                 'Default'
             ));

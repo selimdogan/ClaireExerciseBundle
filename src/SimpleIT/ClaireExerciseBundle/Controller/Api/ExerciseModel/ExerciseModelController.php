@@ -9,17 +9,16 @@ use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
 use SimpleIT\ApiBundle\Model\ApiDeletedResponse;
 use SimpleIT\ApiBundle\Model\ApiEditedResponse;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
 use SimpleIT\ApiBundle\Model\ApiResponse;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
-use SimpleIT\CoreBundle\Exception\ExistingObjectException;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Exception\FilterException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResourceFactory;
+use SimpleIT\CoreBundle\Exception\ExistingObjectException;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -64,7 +63,7 @@ class ExerciseModelController extends ApiController
      * @param CollectionInformation $collectionInformation
      *
      * @throws ApiBadRequestException
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      */
     public function listAction(CollectionInformation $collectionInformation)
     {
@@ -79,7 +78,7 @@ class ExerciseModelController extends ApiController
                     $exerciseModels
                 );
 
-            return new ApiPaginatedResponse($exerciseModelResources, $exerciseModels, array(
+            return new ApiGotResponse($exerciseModelResources, array(
                 'list',
                 'Default'
             ));

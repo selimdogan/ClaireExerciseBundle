@@ -3,12 +3,10 @@
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise;
 
 use Doctrine\ORM\QueryBuilder;
-use SimpleIT\CoreBundle\Model\Paginator;
-use SimpleIT\CoreBundle\Repository\BaseRepository;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
+use SimpleIT\CoreBundle\Repository\BaseRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
 use SimpleIT\Utils\Collection\Sort;
 
 /**
@@ -26,7 +24,7 @@ class AttemptRepository extends BaseRepository
      * @param StoredExercise        $exercise
      * @param TestAttempt           $testAttempt
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function findAllBy(
         $collectionInformation = null,
@@ -121,6 +119,6 @@ class AttemptRepository extends BaseRepository
             $queryBuilder->addOrderBy('a.id');
         }
 
-        return new Paginator($queryBuilder);
+        return $queryBuilder->getQuery()->getResult();
     }
 }

@@ -10,12 +10,12 @@ use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
 use SimpleIT\ApiBundle\Model\ApiDeletedResponse;
 use SimpleIT\ApiBundle\Model\ApiEditedResponse;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
-use SimpleIT\CoreBundle\Exception\ExistingObjectException;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModelMetadataFactory;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResourceFactory;
+use SimpleIT\CoreBundle\Exception\ExistingObjectException;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 

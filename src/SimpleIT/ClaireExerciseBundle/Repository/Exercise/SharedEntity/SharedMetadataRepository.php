@@ -8,7 +8,7 @@ use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\CoreBundle\Repository\BaseRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+
 use SimpleIT\Utils\Collection\Sort;
 
 /**
@@ -47,7 +47,7 @@ class SharedMetadataRepository extends BaseRepository
      * @param CollectionInformation $collectionInformation
      * @param SharedEntity          $entity
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function findAllBy(
         $collectionInformation = null,

@@ -12,7 +12,7 @@ use SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise\StoredExerciseServiceInterface;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\CoreBundle\Annotation\Transactional;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+
 
 /**
  * Service which manages the tests
@@ -121,7 +121,7 @@ class TestService extends TransactionalService implements TestServiceInterface
      * @param CollectionInformation $collectionInformation
      * @param int                   $testModelId
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll($collectionInformation = null, $testModelId = null)
     {

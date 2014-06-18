@@ -6,7 +6,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestAttemptResource;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+
 
 /**
  * Class TestAttemptResourceFactory
@@ -19,11 +19,11 @@ abstract class TestAttemptResourceFactory
     /**
      * Create a TestResource collection
      *
-     * @param PaginatorInterface $testAttempts
+     * @param array $testAttempts
      *
      * @return array
      */
-    public static function createCollection(PaginatorInterface $testAttempts)
+    public static function createCollection(array $testAttempts)
     {
         $testAttemptResources = array();
         foreach ($testAttempts as $testAttempt) {

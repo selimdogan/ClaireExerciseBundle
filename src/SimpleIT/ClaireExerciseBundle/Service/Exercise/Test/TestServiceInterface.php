@@ -5,7 +5,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\Test;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\Test;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+
 
 /**
  * Interface for service which manages the tests
@@ -39,7 +39,7 @@ interface TestServiceInterface
      * @param CollectionInformation $collectionInformation
      * @param int                   $testModelId
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll($collectionInformation = null, $testModelId = null);
 }

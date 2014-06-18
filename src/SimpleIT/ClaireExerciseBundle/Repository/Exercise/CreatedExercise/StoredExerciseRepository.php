@@ -4,11 +4,10 @@ namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise;
 
 use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
-use SimpleIT\CoreBundle\Model\Paginator;
 use SimpleIT\CoreBundle\Repository\BaseRepository;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+
 use SimpleIT\Utils\Collection\Sort;
 
 /**
@@ -24,7 +23,7 @@ class StoredExerciseRepository extends BaseRepository
      * @param CollectionInformation $collectionInformation
      * @param ExerciseModel    $exerciseModel
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function findAllBy(
         $collectionInformation = null,
@@ -78,7 +77,8 @@ class StoredExerciseRepository extends BaseRepository
 //            $queryBuilder = $this->setRange($queryBuilder, $collectionInformation);
         }
 
-        return new Paginator($queryBuilder);
+        return $queryBuilder->getQuery()->getResult();
+
     }
 
     /**
@@ -86,7 +86,7 @@ class StoredExerciseRepository extends BaseRepository
      *
      * @param TestAttempt $testAttempt
      *
-     * @return Paginator
+     * @return array
      */
     public function findAllByTestAttempt(TestAttempt $testAttempt)
     {
@@ -98,6 +98,6 @@ class StoredExerciseRepository extends BaseRepository
         $queryBuilder->where($queryBuilder->expr()->eq('ta.id', $testAttempt->getId()));
         $queryBuilder->orderBy('tp.position');
 
-        return new Paginator($queryBuilder);
+        return $queryBuilder->getQuery()->getResult();
     }
 }

@@ -9,14 +9,13 @@ use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
 use SimpleIT\ApiBundle\Model\ApiDeletedResponse;
 use SimpleIT\ApiBundle\Model\ApiEditedResponse;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
 use SimpleIT\ApiBundle\Model\ApiResponse;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
+use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResourceFactory;
 use SimpleIT\CoreBundle\Exception\ExistingObjectException;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResourceFactory;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -54,7 +53,7 @@ class ResourceController extends ApiController
      * @param CollectionInformation $collectionInformation
      *
      * @throws \SimpleIT\ApiBundle\Exception\ApiNotFoundException
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      */
     public function listAction(CollectionInformation $collectionInformation)
     {
@@ -63,7 +62,7 @@ class ResourceController extends ApiController
 
             $resourceResources = ResourceResourceFactory::createCollection($resources);
 
-            return new ApiPaginatedResponse($resourceResources, $resources, array(
+            return new ApiGotResponse($resourceResources, array(
                 'resource_list',
                 'Default'
             ));

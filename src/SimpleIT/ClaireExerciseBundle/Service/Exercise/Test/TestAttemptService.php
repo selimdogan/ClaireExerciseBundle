@@ -12,7 +12,7 @@ use SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise\AttemptServic
 use SimpleIT\ClaireExerciseBundle\Service\User\UserServiceInterface;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\CoreBundle\Annotation\Transactional;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+
 
 /**
  * Service which manages the test attempts
@@ -138,7 +138,7 @@ class TestAttemptService extends TransactionalService implements TestAttemptServ
      * @param int                   $userId
      * @param int                   $testId
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll(
         $collectionInformation = null,

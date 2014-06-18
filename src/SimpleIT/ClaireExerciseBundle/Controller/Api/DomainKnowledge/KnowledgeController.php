@@ -9,15 +9,14 @@ use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
 use SimpleIT\ApiBundle\Model\ApiDeletedResponse;
 use SimpleIT\ApiBundle\Model\ApiEditedResponse;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
 use SimpleIT\ApiBundle\Model\ApiResponse;
 use SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
+use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResourceFactory;
 use SimpleIT\CoreBundle\Exception\ExistingObjectException;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResourceFactory;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -57,7 +56,7 @@ class KnowledgeController extends ApiController
      * @param CollectionInformation $collectionInformation
      *
      * @throws \SimpleIT\ApiBundle\Exception\ApiNotFoundException
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      */
     public function listAction(CollectionInformation $collectionInformation)
     {
@@ -66,7 +65,7 @@ class KnowledgeController extends ApiController
 
             $knowledgeResources = KnowledgeResourceFactory::createCollection($knowledges);
 
-            return new ApiPaginatedResponse($knowledgeResources, $knowledges, array(
+            return new ApiGotResponse($knowledgeResources, array(
                 'knowledge_list',
                 'Default'
             ));

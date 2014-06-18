@@ -6,7 +6,6 @@ use JMS\Serializer\SerializerBuilder;
 use SimpleIT\ClaireExerciseBundle\Serializer\Handler\AbstractClassForExerciseHandler;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
-use SimpleIT\Utils\Collection\PaginatorInterface;
 
 /**
  * Class ExerciseModelResourceFactory
@@ -19,15 +18,15 @@ abstract class ItemResourceFactory
     /**
      * Create an ItemResource collection
      *
-     * @param PaginatorInterface $items
+     * @param array $items
      *
      * @return array
      */
-    public static function createCollection(PaginatorInterface $items)
+    public static function createCollection(array $items)
     {
         $itemResources = array();
         foreach ($items as $item) {
-            $itemResources[] = self::create($item);
+            $itemResources[] = self::create($item, null, true);
         }
 
         return $itemResources;
@@ -38,32 +37,38 @@ abstract class ItemResourceFactory
      *
      * @param Item $item
      * @param null $corrected
+     * @param bool $light   Light version of the resource
      *
      * @return ItemResource
      */
-    public static function create(Item $item, $corrected = null)
+    public static function create(Item $item, $corrected = null, $light = false)
     {
         $itemResource = new ItemResource();
 
         $itemResource->setItemId($item->getId());
         $itemResource->setType($item->getType());
-        $itemResource->setCorrected($corrected);
 
-        $serializer = SerializerBuilder::create()
-            ->addDefaultHandlers()
-            ->configureHandlers(
-                function (HandlerRegistry $registry) {
-                    $registry->registerSubscribingHandler(new AbstractClassForExerciseHandler());
-                }
-            )
-            ->build();
-        $content = $serializer->deserialize(
-            $item->getContent(),
-            ItemResource::getClass($item->getType()),
-            'json'
-        );
+        if (!$light) {
+            $itemResource->setCorrected($corrected);
 
-        $itemResource->setContent($content);
+            $serializer = SerializerBuilder::create()
+                ->addDefaultHandlers()
+                ->configureHandlers(
+                    function (HandlerRegistry $registry) {
+                        $registry->registerSubscribingHandler(
+                            new AbstractClassForExerciseHandler()
+                        );
+                    }
+                )
+                ->build();
+            $content = $serializer->deserialize(
+                $item->getContent(),
+                ItemResource::getClass($item->getType()),
+                'json'
+            );
+
+            $itemResource->setContent($content);
+        }
 
         return $itemResource;
     }

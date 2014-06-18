@@ -5,7 +5,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\Test;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+
 
 /**
  * Service which manages the test attempts
@@ -41,7 +41,7 @@ interface TestAttemptServiceInterface
      * @param int                   $userId
      * @param int                   $testId
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll(
         $collectionInformation = null,

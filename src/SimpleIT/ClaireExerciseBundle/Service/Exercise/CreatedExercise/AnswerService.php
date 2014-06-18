@@ -13,7 +13,7 @@ use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 use SimpleIT\ClaireExerciseBundle\Exception\AnswerAlreadyExistsException;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\AnswerRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation\ExerciseService;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+
 use SimpleIT\CoreBundle\Annotation\Transactional;
 
 /**
@@ -147,7 +147,7 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
      * @param int $itemId Item id
      * @param int $attemptId
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll($itemId = null, $attemptId = null)
     {

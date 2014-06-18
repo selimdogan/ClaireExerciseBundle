@@ -8,7 +8,6 @@ use SimpleIT\ClaireExerciseBundle\Serializer\Handler\AbstractClassForExerciseHan
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
-use SimpleIT\Utils\Collection\PaginatorInterface;
 
 /**
  * Class ExerciseModelResourceFactory
@@ -21,15 +20,15 @@ abstract class ExerciseResourceFactory
     /**
      * Create an ExerciseResource collection
      *
-     * @param PaginatorInterface $exercises
+     * @param array $exercises
      *
      * @return array
      */
-    public static function createCollection(PaginatorInterface $exercises)
+    public static function createCollection(array $exercises)
     {
         $exerciseResources = array();
         foreach ($exercises as $exercise) {
-            $exerciseResources[] = self::create($exercise);
+            $exerciseResources[] = self::create($exercise, true);
         }
 
         return $exerciseResources;
@@ -39,10 +38,11 @@ abstract class ExerciseResourceFactory
      * Create an Exercise Resource
      *
      * @param StoredExercise $exercise
+     * @param bool           $light
      *
      * @return ExerciseResource
      */
-    public static function create(StoredExercise $exercise)
+    public static function create(StoredExercise $exercise, $light = false)
     {
         $exerciseResource = new ExerciseResource();
         $exerciseResource->setId($exercise->getId());
@@ -50,21 +50,25 @@ abstract class ExerciseResourceFactory
         $exerciseResource->setType($exercise->getExerciseModel()->getType());
         $exerciseResource->setTitle($exercise->getExerciseModel()->getTitle());
 
-        $serializer = SerializerBuilder::create()
-            ->addDefaultHandlers()
-            ->configureHandlers(
-                function (HandlerRegistry $registry) {
-                    $registry->registerSubscribingHandler(new AbstractClassForExerciseHandler());
-                }
-            )
-            ->build();
-        $content = $serializer->deserialize(
-            $exercise->getContent(),
-            ExerciseResource::getClass($exercise->getExerciseModel()->getType()),
-            'json'
-        );
+        if (!$light) {
+            $serializer = SerializerBuilder::create()
+                ->addDefaultHandlers()
+                ->configureHandlers(
+                    function (HandlerRegistry $registry) {
+                        $registry->registerSubscribingHandler(
+                            new AbstractClassForExerciseHandler()
+                        );
+                    }
+                )
+                ->build();
+            $content = $serializer->deserialize(
+                $exercise->getContent(),
+                ExerciseResource::getClass($exercise->getExerciseModel()->getType()),
+                'json'
+            );
 
-        $exerciseResource->setContent($content);
+            $exerciseResource->setContent($content);
+        }
 
         return $exerciseResource;
     }

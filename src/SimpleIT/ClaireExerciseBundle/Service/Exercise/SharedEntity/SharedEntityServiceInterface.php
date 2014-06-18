@@ -12,7 +12,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResourc
 use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResource;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+
 use SimpleIT\CoreBundle\Annotation\Transactional;
 
 /**
@@ -54,7 +54,7 @@ interface SharedEntityServiceInterface
      * @param boolean               $isRoot                Entities that are root (not forked from) or not
      * @param boolean               $isPointer             Entities that are pointer (no content) or not (no parent)
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll(
         $collectionInformation = null,

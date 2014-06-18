@@ -5,11 +5,11 @@ namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 use SimpleIT\ApiBundle\Controller\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
+use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResourceFactory;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\CollectionInformation;
 
 /**
@@ -49,7 +49,7 @@ class ExerciseByExerciseModelController extends ApiController
      * @param int                   $exerciseModelId
      *
      * @throws ApiNotFoundException
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      */
     public function listAction(CollectionInformation $collectionInformation, $exerciseModelId)
     {
@@ -62,7 +62,7 @@ class ExerciseByExerciseModelController extends ApiController
 
             $exerciseResources = ExerciseResourceFactory::createCollection($exercises);
 
-            return new ApiPaginatedResponse($exerciseResources, $exercises, array(
+            return new ApiGotResponse($exerciseResources, array(
                 'list',
                 'Default'
             ));

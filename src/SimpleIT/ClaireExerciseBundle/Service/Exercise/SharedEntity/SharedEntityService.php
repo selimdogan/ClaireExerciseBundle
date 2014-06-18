@@ -24,7 +24,6 @@ use SimpleIT\ClaireExerciseBundle\Service\User\UserService;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
 
 /**
  * Service which manages the exercise generation
@@ -236,7 +235,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * Create an array of metadata entities from metadata and keyword in resource
      *
      * @param SharedResource $sharedResource
-     * @param SharedEntity $entity
+     * @param SharedEntity   $entity
      *
      * @return ArrayCollection
      */
@@ -328,8 +327,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
             $entity->setDraft($resource->getDraft());
         }
 
-        if (!is_null($resource->getKeywords() || !is_null($resource->getMetadata())))
-        {
+        if (!is_null($resource->getKeywords() || !is_null($resource->getMetadata()))) {
             $this->metadataService->deleteAllByEntity($entity->getId());
             $entity->setMetadata($this->metadataAndKeyWords($resource, $entity));
         }
@@ -538,16 +536,16 @@ abstract class SharedEntityService extends TransactionalService implements Share
     }
 
     /**
-     * Get a list of resource with content from a list of entities in a PaginatorInterface.
+     * Get a list of resource with content from a list of entities in a array.
      * For each entity, if it has a content, it just gets the resource view of the entity. If it
      * has no content (and thus a parent), the content of the resource is filled with the parent
      * content
      *
-     * @param PaginatorInterface $entities
+     * @param array $entities
      *
      * @return array
      */
-    public function getAllContentFullResourcesFromEntityList(PaginatorInterface $entities)
+    public function getAllContentFullResourcesFromEntityList(array $entities)
     {
         $resources = SharedResourceFactory::createFromEntityCollection(
             $entities,
@@ -558,7 +556,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
         /** @var SharedResource $resource */
         foreach ($resources as &$resource) {
             if ($resource->getContent() === null) {
-                $resource = $this->getContentFullResourceFromResource($resource);
+                $resource = $this->getContentFullResourceFromResource($resource, true);
             }
         }
 
@@ -571,11 +569,12 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * parent), the content of the resource is filled with the parent content
      *
      * @param SharedResource $resource
+     * @param bool           $light
      *
-     * @return SharedResource
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException
+     * @return SharedResource
      */
-    private function getContentFullResourceFromResource(SharedResource $resource)
+    private function getContentFullResourceFromResource(SharedResource $resource, $light = false)
     {
         $entity = $this->get($resource->getId());
 
@@ -586,7 +585,11 @@ abstract class SharedEntityService extends TransactionalService implements Share
             $entity = $entity->getParent();
         }
 
-        $parentResource = SharedResourceFactory::createFromEntity($entity, static::ENTITY_TYPE);
+        $parentResource = SharedResourceFactory::createFromEntity(
+            $entity,
+            static::ENTITY_TYPE,
+            $light
+        );
         $resource->setContent($parentResource->getContent());
         $resource->setMetadata($parentResource->getMetadata());
 

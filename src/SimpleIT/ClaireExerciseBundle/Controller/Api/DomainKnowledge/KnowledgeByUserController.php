@@ -4,7 +4,6 @@ namespace SimpleIT\ClaireExerciseBundle\Controller\Api\DomainKnowledge;
 use SimpleIT\ApiBundle\Controller\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResourceFactory;
@@ -52,7 +51,7 @@ class KnowledgeByUserController extends ApiController
      * @param int                   $ownerId
      *
      * @throws ApiNotFoundException
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      */
     public function listAction(
         CollectionInformation $collectionInformation,
@@ -69,7 +68,7 @@ class KnowledgeByUserController extends ApiController
                 $knowledges
             );
 
-            return new ApiPaginatedResponse($knowledgeResources, $knowledges, array(
+            return new ApiGotResponse($knowledgeResources, array(
                 'knowledge_list',
                 'Default'
             ));
