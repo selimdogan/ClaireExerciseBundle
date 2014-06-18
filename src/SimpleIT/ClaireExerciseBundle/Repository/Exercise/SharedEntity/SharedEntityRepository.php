@@ -55,11 +55,20 @@ abstract class SharedEntityRepository extends BaseRepository
         $metadata = array();
         $keywords = array();
 
-        $qb = $this->createQueryBuilder('entity')->select('entity, md, rr, rk');
+
+        // build select
+        $lj = $this->getLeftJoins();
+        $select = 'entity, md';
+        foreach(array_keys($lj) as $alias)
+        {
+            $select .= ', ' . $alias;
+        }
+
+        $qb = $this->createQueryBuilder('entity')->select($select);
         $qb->leftJoin('entity.metadata', 'md');
 
         // add other joins
-        foreach ($this->getLeftJoins() as $alias => $table) {
+        foreach ($lj as $alias => $table) {
             $qb->leftJoin($table, $alias);
         }
 

@@ -16,6 +16,8 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonMod
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\Model;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\PairBlock;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 
 /**
@@ -77,13 +79,13 @@ class PairItemsService extends ExerciseCreationService
      * @param Item   $entityItem
      * @param Answer $answer
      *
-     * @return Item
+     * @return ItemResource
      */
     public function correct(Item $entityItem, Answer $answer)
     {
-        $exClass = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems\Exercise';
+        $itemResource = ItemResourceFactory::create($entityItem);
         /** @var ResItem $item */
-        $item = $this->getItemFromEntity($entityItem, $exClass);
+        $item = $itemResource->getContent();
 
         $la = AnswerResourceFactory::create($answer);
         $learnerAnswers = $la->getContent();
@@ -121,10 +123,9 @@ class PairItemsService extends ExerciseCreationService
 
         $this->mark($item);
 
-        return $this->toCorrectedItemEntity(
-            $item,
-            "pair-items"
-        );
+        $itemResource->setContent($item);
+
+        return $itemResource;
     }
 
     /**
@@ -338,7 +339,7 @@ class PairItemsService extends ExerciseCreationService
     public function validateAnswer(Item $itemEntity, array $answer)
     {
         /** @var ResItem $item */
-        $item = $this->getItemFromEntity($itemEntity);
+        $item = ItemResourceFactory::create($itemEntity)->getContent();
 
         $nbPairs = count($item->getFixParts());
 

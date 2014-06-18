@@ -18,6 +18,8 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\Seque
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseSequenceObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseTextObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
 
 /**
  * Service which manages Order Items Exercises.
@@ -56,13 +58,13 @@ class OrderItemsService extends ExerciseCreationService
      * @param Item   $entityItem
      * @param Answer $answer
      *
-     * @return Item
+     * @return ItemResource
      */
     public function correct(Item $entityItem, Answer $answer)
     {
-        $exClass = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OrderItems\Exercise';
+        $itemResource = ItemResourceFactory::create($entityItem);
         /** @var ResItem $item */
-        $item = $this->getItemFromEntity($entityItem, $exClass);
+        $item = $itemResource->getContent();
 
         $la = AnswerResourceFactory::create($answer);
         $learnerAnswers = $la->getContent();
@@ -84,10 +86,9 @@ class OrderItemsService extends ExerciseCreationService
 
         $this->mark($item);
 
-        return $this->toCorrectedItemEntity(
-            $item,
-            "order-items"
-        );
+        $itemResource->setContent($item);
+
+        return $itemResource;
     }
 
     /**
@@ -978,7 +979,7 @@ class OrderItemsService extends ExerciseCreationService
     public function validateAnswer(Item $itemEntity, array $answer)
     {
         /** @var ResItem $item */
-        $item = $this->getItemFromEntity($itemEntity);
+        $item = ItemResourceFactory::create($itemEntity)->getContent();
 
         $nbObj = count($item->getObjects());
 

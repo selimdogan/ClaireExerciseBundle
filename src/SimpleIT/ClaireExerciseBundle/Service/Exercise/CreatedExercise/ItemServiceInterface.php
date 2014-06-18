@@ -2,6 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 
@@ -27,14 +28,12 @@ interface ItemServiceInterface
      *
      * @param int     $itemId
      * @param int     $attemptId
-     * @param boolean $corrected
      *
-     * @return Item
+     * @return ItemResource
      */
     public function findItemAndCorrectionByAttempt(
         $itemId,
-        $attemptId,
-        &$corrected
+        $attemptId
     );
 
     /**
@@ -71,7 +70,7 @@ interface ItemServiceInterface
      * @param $itemId
      * @param $answerId
      *
-     * @return Item
+     * @return ItemResource
      * @throws NonExistingObjectException
      */
     public function findItemAndCorrectionById($itemId, $answerId);

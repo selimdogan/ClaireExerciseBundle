@@ -2,6 +2,8 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
@@ -111,14 +113,12 @@ class ItemService extends TransactionalService implements ItemServiceInterface
      *
      * @param int     $itemId
      * @param int     $attemptId
-     * @param boolean $corrected
      *
-     * @return Item
+     * @return ItemResource
      */
     public function findItemAndCorrectionByAttempt(
         $itemId,
-        $attemptId,
-        &$corrected
+        $attemptId
     )
     {
         $item = $this->getByAttempt($itemId, $attemptId);
@@ -132,14 +132,13 @@ class ItemService extends TransactionalService implements ItemServiceInterface
 
         // If no correction to do (no user's answer found), return the item
         if (is_null($answer)) {
-            $corrected = false;
-
-            return $item;
+            $itemResource = ItemResourceFactory::create($item);
+            $itemResource->setCorrected(false);
+            return $itemResource;
         }
 
         /** @var Answer $answer */
         // set corrected to true (it is returned)
-        $corrected = true;
 
         // correct it with the exercise service
         return $this->exerciseService->correctItem($answer);
@@ -201,7 +200,7 @@ class ItemService extends TransactionalService implements ItemServiceInterface
      * @param $itemId
      * @param $answerId
      *
-     * @return Item
+     * @return ItemResource
      * @throws NonExistingObjectException
      */
     public function findItemAndCorrectionById($itemId, $answerId)

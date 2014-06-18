@@ -114,7 +114,7 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
         // Get the item and the attempt
         /** @var Item $item */
         if (!is_null($attemptId)) {
-            if ($this->getAll($itemId, $attemptId)->count() > 0) {
+            if (count($this->getAll($itemId, $attemptId)) > 0) {
                 throw new AnswerAlreadyExistsException();
             }
             $attempt = $this->attemptService->get($attemptId);

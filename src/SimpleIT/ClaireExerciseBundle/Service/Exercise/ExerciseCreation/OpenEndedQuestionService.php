@@ -15,6 +15,8 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonMod
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\Model;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\QuestionBlock;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
 
 /**
  * Service which manages OpenEndedQuestion
@@ -186,24 +188,22 @@ class OpenEndedQuestionService extends ExerciseCreationService
      * @param Item   $item
      * @param Answer $answer
      *
-     * @return Item
+     * @return ItemResource
      */
     public function correct(Item $item, Answer $answer)
     {
+        $itemResource = ItemResourceFactory::create($item);
         /** @var Question $question */
-        $question = $this->getItemFromEntity($item);
+        $question = $itemResource->getContent();
+
         $la = AnswerResourceFactory::create($answer);
-
         $userAnswer = $la->getContent()['answer'];
-
         $question->setAnswer($userAnswer);
-
         $this->mark($question);
 
-        return $this->toCorrectedItemEntity(
-            $question,
-            'open-ended-question'
-        );
+        $itemResource->setContent($question);
+
+        return $itemResource;
     }
 
     /**

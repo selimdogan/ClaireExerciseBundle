@@ -31,11 +31,10 @@ class ItemByAttemptController extends ApiController
     {
         try {
             // Call to the item service to get the item and its correction if there is one
-            $corrected = false;
             $itemResource = $this->get('simple_it.exercise.item')
-                ->findItemAndCorrectionByAttempt($itemId, $attemptId, $corrected);
+                ->findItemAndCorrectionByAttempt($itemId, $attemptId);
 
-            if ($corrected) {
+            if ($itemResource->getCorrected()) {
                 $groups = array("corrected", 'Default');
             } else {
                 $groups = array("not_corrected", 'Default');

@@ -377,21 +377,6 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
     }
 
     /**
-     * Get Exercise object from entity
-     *
-     * @param Item $entityItem
-     *
-     * @return CommonItem
-     */
-    public function getItemFromEntity(Item $entityItem)
-    {
-        $content = $entityItem->getContent();
-        $class = ItemResource::getClass($entityItem->getType());
-
-        return $this->serializer->jmsDeserialize($content, $class, 'json');
-    }
-
-    /**
      * Select random resources from a block
      *
      * @param ResourceBlock $resourceBlock

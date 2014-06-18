@@ -154,7 +154,7 @@ class ResourceResource extends SharedResource
     /**
      * @var array
      * @Serializer\Type("array")
-     * @Serializer\Groups({"details"})
+     * @Serializer\Groups({"details", "resource_list"})
      */
     protected $keywords;
 
@@ -175,7 +175,7 @@ class ResourceResource extends SharedResource
     /**
      * Set content
      *
-     * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource $content
+     * @param CommonResource $content
      */
     public function setContent($content)
     {

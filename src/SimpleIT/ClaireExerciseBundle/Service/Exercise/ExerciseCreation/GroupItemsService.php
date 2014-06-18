@@ -17,6 +17,8 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\Group
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\Model;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ObjectBlock;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\MetadataConstraint;
 
 /**
@@ -69,12 +71,13 @@ class GroupItemsService extends ExerciseCreationService
      * @param Item   $entityItem
      * @param Answer $answer
      *
-     * @return Item
+     * @return ItemResource
      */
     public function correct(Item $entityItem, Answer $answer)
     {
         /** @var ResItem $item */
-        $item = $this->getItemFromEntity($entityItem);
+        $itemResource = ItemResourceFactory::create($entityItem);
+        $item = $itemResource->getContent();
 
         $la = AnswerResourceFactory::create($answer);
         $learnerAnswers = $la->getContent();
@@ -108,10 +111,9 @@ class GroupItemsService extends ExerciseCreationService
         // copy the learnerAnswers
         $item->setAnswers($learnerAnswers);
 
-        return $this->toCorrectedItemEntity(
-            $item,
-            "group-items"
-        );
+        $itemResource->setContent($item);
+
+        return $itemResource;
     }
 
     /**
@@ -720,7 +722,7 @@ class GroupItemsService extends ExerciseCreationService
     public function validateAnswer(Item $itemEntity, array $answer)
     {
         /** @var ResItem $item */
-        $item = $this->getItemFromEntity($itemEntity);
+        $item = ItemResourceFactory::create($itemEntity)->getContent();
         $nbGroups = count($item->getGroups());
 
         if ($item->getDisplayGroupNames() == "ask") {
