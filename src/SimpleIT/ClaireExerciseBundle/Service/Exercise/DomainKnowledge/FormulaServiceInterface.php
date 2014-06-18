@@ -2,10 +2,6 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge;
 
-use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Unknown;
-use
-    SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Variable as ResourceVariable;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula;
 use SimpleIT\ClaireExerciseBundle\Exception\NotEvaluableException;
 use SimpleIT\ClaireExerciseBundle\Model\DomainKnowledge\Formula\Addition;
 use SimpleIT\ClaireExerciseBundle\Model\DomainKnowledge\Formula\Cos;
@@ -16,6 +12,10 @@ use SimpleIT\ClaireExerciseBundle\Model\DomainKnowledge\Formula\Power;
 use SimpleIT\ClaireExerciseBundle\Model\DomainKnowledge\Formula\Sin;
 use SimpleIT\ClaireExerciseBundle\Model\DomainKnowledge\Formula\Value;
 use SimpleIT\ClaireExerciseBundle\Model\DomainKnowledge\Formula\Variable;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Unknown;
+use
+    SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Variable as ResourceVariable;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula;
 
 /**
  * Interface for the service that manages formulas
@@ -106,8 +106,8 @@ interface FormulaServiceInterface
     /**
      * Prefix the variable names with the formula name
      *
-     * @param array $variables An array in which keys are variable names and values the values
-     * @param string      $formulaName
+     * @param array  $variables An array in which keys are variable names and values the values
+     * @param string $formulaName
      *
      * @return array
      */

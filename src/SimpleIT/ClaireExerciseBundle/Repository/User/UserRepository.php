@@ -34,7 +34,10 @@ class UserRepository extends BaseRepository implements UserProviderInterface
         try {
             $user = $q->getSingleResult();
         } catch (NoResultException $e) {
-            throw new UsernameNotFoundException(sprintf('Unable to find an active admin AcmeUserBundle:User object identified by "%s".', $username), 0, $e);
+            throw new UsernameNotFoundException(sprintf(
+                'Unable to find an active admin AcmeUserBundle:User object identified by "%s".',
+                $username
+            ), 0, $e);
         }
 
         return $user;

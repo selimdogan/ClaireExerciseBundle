@@ -4,11 +4,10 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel;
 
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
-use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityServiceInterface;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 
 /**
  * Interface for service which manages the exercise generation
@@ -79,7 +78,7 @@ interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
      * The id of an entity can never be modified (ignored if not null)
      *
      * @param ExerciseModelResource $resource
-     * @param ExerciseModel   $entity
+     * @param ExerciseModel         $entity
      *
      * @return ExerciseModel
      */
@@ -153,8 +152,8 @@ interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
     /**
      * Import an entity. The entity is duplicated and the required entities are also imported.
      *
-     * @param int  $ownerId
-     * @param int  $originalId The id of the original entity that must be duplicated
+     * @param int $ownerId
+     * @param int $originalId The id of the original entity that must be duplicated
      *
      * @return ExerciseModel
      */

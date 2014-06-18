@@ -11,6 +11,7 @@ use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidExerciseResourceException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\ExerciseObjectFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
@@ -32,7 +33,6 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource\ExerciseResourceRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\KnowledgeServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityService;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 
 /**
  * Service which manages the exercise resources
@@ -637,7 +637,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     /**
      * Import an entity. Additionnal work, specific to entity type
      *
-     * @param int $ownerId
+     * @param int              $ownerId
      * @param ExerciseResource $entity The duplicata
      *
      * @return ExerciseResource

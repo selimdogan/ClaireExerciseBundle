@@ -32,8 +32,7 @@
             <join-column name="fork_from_id" referenced-column-name="id"/>
         </many-to-one>
 
-        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\User\User"
-                     field="author">
+        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\User\User" field="author">
             <join-column name="author_id" referenced-column-name="id" nullable="false"/>
         </many-to-one>
 

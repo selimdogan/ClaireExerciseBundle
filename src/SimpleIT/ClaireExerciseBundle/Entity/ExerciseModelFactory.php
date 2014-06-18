@@ -4,8 +4,8 @@ namespace SimpleIT\ClaireExerciseBundle\Entity;
 
 use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\SerializationContext;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
 
 /**
  * Class to manage the creation of ExerciseModel

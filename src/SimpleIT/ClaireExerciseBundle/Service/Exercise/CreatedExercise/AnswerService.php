@@ -136,6 +136,7 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
 
         $this->em->persist($answer);
         $this->em->flush();
+
         return $answer;
     }
 

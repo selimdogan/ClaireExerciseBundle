@@ -2,9 +2,9 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Model\ExerciseCreation\GroupItems;
 
+use SimpleIT\ClaireExerciseBundle\Model\ExerciseCreation\Common\CommonModelFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\Model;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ObjectBlock;
-use SimpleIT\ClaireExerciseBundle\Model\ExerciseCreation\Common\CommonModelFactory;
 
 /**
  * This class manages the creation of instances of group items Model.

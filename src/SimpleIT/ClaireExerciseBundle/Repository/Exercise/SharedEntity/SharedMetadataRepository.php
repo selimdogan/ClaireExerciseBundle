@@ -5,10 +5,9 @@ namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity;
 use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\Metadata;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
-
 use SimpleIT\Utils\Collection\Sort;
 
 /**
@@ -21,6 +20,7 @@ class SharedMetadataRepository extends BaseRepository
     const METADATA_TABLE = 'Name of the table';
 
     const ENTITY_ID_FIELD_NAME = 'Name of the field';
+
     const ENTITY_NAME = 'Name of the entity';
 
     /**
@@ -93,7 +93,7 @@ class SharedMetadataRepository extends BaseRepository
     /**
      * Delete all the metadata for an entity
      *
-     * @param int    $entityId
+     * @param int $entityId
      */
     public function deleteAllByEntity($entityId)
     {

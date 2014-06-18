@@ -2,10 +2,9 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
-
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 
 /**
  * Interface for service which manages the stored exercises
@@ -26,8 +25,8 @@ interface ItemServiceInterface
     /**
      * Find the item and the correction (if corrected by this user)
      *
-     * @param int     $itemId
-     * @param int     $attemptId
+     * @param int $itemId
+     * @param int $attemptId
      *
      * @return ItemResource
      */

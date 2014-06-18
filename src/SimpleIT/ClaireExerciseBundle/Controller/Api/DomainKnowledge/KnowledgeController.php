@@ -1,6 +1,7 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\DomainKnowledge;
 
+use Doctrine\DBAL\DBALException;
 use SimpleIT\ApiBundle\Controller\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiConflictException;
@@ -13,10 +14,9 @@ use SimpleIT\ApiBundle\Model\ApiResponse;
 use SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResourceFactory;
-use SimpleIT\CoreBundle\Exception\ExistingObjectException;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -61,7 +61,9 @@ class KnowledgeController extends ApiController
     public function listAction(CollectionInformation $collectionInformation)
     {
         try {
-            $knowledges = $this->get('simple_it.exercise.knowledge')->getAll($collectionInformation);
+            $knowledges = $this->get('simple_it.exercise.knowledge')->getAll(
+                $collectionInformation
+            );
 
             $knowledgeResources = KnowledgeResourceFactory::createCollection($knowledges);
 
@@ -141,7 +143,7 @@ class KnowledgeController extends ApiController
 
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(KnowledgeResource::RESOURCE_NAME);
-        } catch (ExistingObjectException $eoe) {
+        } catch (DBALException $eoe) {
             throw new ApiConflictException($eoe->getMessage());
         } catch (NoAuthorException $nae) {
             throw new ApiBadRequestException($nae->getMessage());

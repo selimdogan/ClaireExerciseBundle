@@ -25,7 +25,7 @@ class ItemResource
     /**
      * @const OPEN_ENDED_QUESTION_CLASS ='SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OpenEndedQuestion\Question'
      */
-    const OPEN_ENDED_QUESTION_CLASS ='SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OpenEndedQuestion\Question';
+    const OPEN_ENDED_QUESTION_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OpenEndedQuestion\Question';
 
     /**
      * @const GROUP_ITEMS_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\GroupItems\Item'

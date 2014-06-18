@@ -1,9 +1,8 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
-use SimpleIT\ClaireExerciseBundle\Model\Resources\AttemptResource;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
-
+use SimpleIT\ClaireExerciseBundle\Model\Resources\AttemptResource;
 
 /**
  * Class AttemptResourceFactory

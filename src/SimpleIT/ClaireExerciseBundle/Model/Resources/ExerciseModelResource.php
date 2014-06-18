@@ -49,7 +49,7 @@ class ExerciseModelResource extends SharedResource
      * @Serializer\Groups({"details", "list", "exercise"})
      * @Assert\Blank(groups={"create", "edit"})
      */
-     protected $id;
+    protected $id;
 
     /**
      * @var string $type
@@ -266,7 +266,8 @@ class ExerciseModelResource extends SharedResource
      * @return string
      * @throws \LogicException
      */
-    public function getClass(){
+    public function getClass()
+    {
         return self::getSerializationClass($this->type);
     }
 }

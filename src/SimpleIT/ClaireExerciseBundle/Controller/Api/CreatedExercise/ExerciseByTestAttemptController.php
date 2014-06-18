@@ -5,9 +5,9 @@ namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 use SimpleIT\ApiBundle\Controller\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResourceFactory;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 
 /**
  * Class ExerciseByTestAttemptController

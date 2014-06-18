@@ -1,13 +1,12 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
+use SimpleIT\ClaireExerciseBundle\Entity\Test\Test;
+use SimpleIT\ClaireExerciseBundle\Entity\Test\TestPosition;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestResource;
-use SimpleIT\ClaireExerciseBundle\Entity\Test\Test;
-use SimpleIT\ClaireExerciseBundle\Entity\Test\TestPosition;
-
 
 /**
  * Class TestResourceFactory

@@ -1,6 +1,7 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\ExerciseModel;
 
+use Doctrine\DBAL\DBALException;
 use SimpleIT\ApiBundle\Controller\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiConflictException;
@@ -15,10 +16,9 @@ use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\FilterException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResourceFactory;
-use SimpleIT\CoreBundle\Exception\ExistingObjectException;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -155,7 +155,7 @@ class ExerciseModelController extends ApiController
 
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(ExerciseModelResource::RESOURCE_NAME);
-        } catch (ExistingObjectException $eoe) {
+        } catch (DBALException $eoe) {
             throw new ApiConflictException($eoe->getMessage());
         } catch (NoAuthorException $nae) {
             throw new ApiBadRequestException($nae->getMessage());
@@ -218,6 +218,7 @@ class ExerciseModelController extends ApiController
             throw new ApiNotFoundException(ExerciseModelResource::RESOURCE_NAME);
         }
     }
+
     /**
      * Duplicate a model
      *
@@ -242,6 +243,7 @@ class ExerciseModelController extends ApiController
             throw new ApiNotFoundException(ExerciseModelResource::RESOURCE_NAME);
         }
     }
+
     /**
      * Import a model
      *

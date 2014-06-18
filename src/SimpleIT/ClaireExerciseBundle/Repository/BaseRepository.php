@@ -3,11 +3,10 @@
 namespace SimpleIT\ClaireExerciseBundle\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 
 /**
  * Class BaseRepository
@@ -23,7 +22,7 @@ class BaseRepository extends EntityRepository
      * @param mixed $entity
      *
      * @return mixed
-     * @throws \SimpleIT\CoreBundle\Exception\NonExistingObjectException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException
      */
     public function update($entity)
     {
@@ -95,7 +94,7 @@ class BaseRepository extends EntityRepository
      *
      * @param mixed $entity
      *
-     * @throws \SimpleIT\CoreBundle\Exception\NonExistingObjectException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException
      */
     public function delete($entity)
     {
@@ -118,7 +117,7 @@ class BaseRepository extends EntityRepository
      *
      * @param mixed $id
      *
-     * @throws \SimpleIT\CoreBundle\Exception\NonExistingObjectException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException
      */
     public function deleteById($id)
     {

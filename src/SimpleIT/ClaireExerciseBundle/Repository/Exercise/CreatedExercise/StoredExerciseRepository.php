@@ -4,10 +4,9 @@ namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise;
 
 use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
-use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
+use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
-
 use SimpleIT\Utils\Collection\Sort;
 
 /**
@@ -21,7 +20,7 @@ class StoredExerciseRepository extends BaseRepository
      * Return all the stored exercises corresponding to an exercise model (if specified)
      *
      * @param CollectionInformation $collectionInformation
-     * @param ExerciseModel    $exerciseModel
+     * @param ExerciseModel         $exerciseModel
      *
      * @return array
      */

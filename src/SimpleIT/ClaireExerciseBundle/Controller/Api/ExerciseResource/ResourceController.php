@@ -1,6 +1,7 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\ExerciseResource;
 
+use Doctrine\DBAL\DBALException;
 use SimpleIT\ApiBundle\Controller\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiConflictException;
@@ -12,10 +13,9 @@ use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiResponse;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResourceFactory;
-use SimpleIT\CoreBundle\Exception\ExistingObjectException;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -38,7 +38,9 @@ class ResourceController extends ApiController
     {
         try {
             // Call to the resource service to get the resource
-            $resourceResource = $this->get('simple_it.exercise.exercise_resource')->getContentFullResource($resourceId);
+            $resourceResource = $this->get(
+                'simple_it.exercise.exercise_resource'
+            )->getContentFullResource($resourceId);
 
             return new ApiGotResponse($resourceResource, array("details", 'Default'));
 
@@ -58,7 +60,9 @@ class ResourceController extends ApiController
     public function listAction(CollectionInformation $collectionInformation)
     {
         try {
-            $resources = $this->get('simple_it.exercise.exercise_resource')->getAll($collectionInformation);
+            $resources = $this->get('simple_it.exercise.exercise_resource')->getAll(
+                $collectionInformation
+            );
 
             $resourceResources = ResourceResourceFactory::createCollection($resources);
 
@@ -139,7 +143,7 @@ class ResourceController extends ApiController
 
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(ResourceResource::RESOURCE_NAME);
-        } catch (ExistingObjectException $eoe) {
+        } catch (DBALException $eoe) {
             throw new ApiConflictException($eoe->getMessage());
         } catch (NoAuthorException $nae) {
             throw new ApiBadRequestException($nae->getMessage());

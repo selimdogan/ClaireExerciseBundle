@@ -5,8 +5,8 @@ namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\DomainKnowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityAlreadyExistsException;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedEntityRepository;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 
 /**
  * Knowledge repository

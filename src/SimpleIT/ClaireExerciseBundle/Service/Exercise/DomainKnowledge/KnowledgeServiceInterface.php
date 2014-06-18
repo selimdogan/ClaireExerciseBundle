@@ -6,10 +6,10 @@ use JMS\Serializer\SerializationContext;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityServiceInterface;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 
 /**
  * Interface for service which manages the domain knowledge
@@ -135,8 +135,8 @@ interface KnowledgeServiceInterface extends SharedEntityServiceInterface
     /**
      * Import an entity. The entity is duplicated and the required entities are also imported.
      *
-     * @param int  $ownerId
-     * @param int  $originalId The id of the original entity that must be duplicated
+     * @param int $ownerId
+     * @param int $originalId The id of the original entity that must be duplicated
      *
      * @return Knowledge
      */
