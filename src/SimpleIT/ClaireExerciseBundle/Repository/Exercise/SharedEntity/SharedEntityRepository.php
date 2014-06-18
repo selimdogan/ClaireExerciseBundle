@@ -56,7 +56,10 @@ abstract class SharedEntityRepository extends BaseRepository
         $metadata = array();
         $keywords = array();
 
-        $qb = $this->createQueryBuilder('entity')->select();
+        $qb = $this->createQueryBuilder('entity')->select('entity, md, rr, rk');
+        $qb->leftJoin('entity.metadata', 'md');
+        $qb->leftJoin('entity.requiredExerciseResources', 'rr');
+        $qb->leftJoin('entity.requiredKnowledges', 'rk');
 
         if (!is_null($owner)) {
             $qb = $this->qbOwner($qb, $owner->getId());
@@ -220,8 +223,23 @@ abstract class SharedEntityRepository extends BaseRepository
             }
 
             // range
-            $qb = $this->setRange($qb, $collectionInformation);
+            // FIXME wait for a fix in api-bundle
+//            $qb = $this->setRange($qb, $collectionInformation);
         }
+
+//        $qb = $this->getEntityManager()->createQuery(
+//            'SELECT
+//                  r, m, rr, rk
+//                FROM
+//                  SimpleITClaireExerciseBundle:ExerciseResource\ExerciseResource r
+//                  LEFT JOIN r.metadata m
+//                  LEFT JOIN r.requiredExerciseResources rr
+//                  LEFT JOIN r.requiredKnowledges rk
+//                WHERE
+//                  r.archived = FALSE
+//                ORDER BY
+//                  r.id ASC'
+//        );
 
         return new Paginator($qb);
     }

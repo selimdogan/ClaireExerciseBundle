@@ -74,7 +74,8 @@ class StoredExerciseRepository extends BaseRepository
                         break;
                 }
             }
-            $queryBuilder = $this->setRange($queryBuilder, $collectionInformation);
+            // FIXME wait for a fix in api-bundle
+//            $queryBuilder = $this->setRange($queryBuilder, $collectionInformation);
         }
 
         return new Paginator($queryBuilder);
