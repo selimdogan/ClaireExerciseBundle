@@ -69,4 +69,18 @@ class KnowledgeRepository extends SharedEntityRepository
             'required_id'
         );
     }
+
+
+
+    /**
+     * Get the join that reduce the number of requests.
+     *
+     * @return array
+     */
+    protected function getLeftJoins()
+    {
+        return array(
+            "rk" => "entity.requiredKnowledges"
+        );
+    }
 }

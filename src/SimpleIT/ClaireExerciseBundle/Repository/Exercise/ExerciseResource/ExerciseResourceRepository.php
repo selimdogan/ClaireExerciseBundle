@@ -377,4 +377,17 @@ class ExerciseResourceRepository extends SharedEntityRepository
             return $result[0];
         }
     }
+
+    /**
+     * Get the join that reduce the number of requests.
+     *
+     * @return array
+     */
+    protected function getLeftJoins()
+    {
+        return array(
+            "rr" => "entity.requiredExerciseResources",
+            "rk" => "entity.requiredKnowledges"
+        );
+    }
 }

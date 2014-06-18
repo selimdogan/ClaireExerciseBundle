@@ -108,4 +108,19 @@ class ExerciseModelRepository extends SharedEntityRepository
             'required_knowledge_id'
         );
     }
+
+
+
+    /**
+     * Get the join that reduce the number of requests.
+     *
+     * @return array
+     */
+    protected function getLeftJoins()
+    {
+        return array(
+            "rr" => "entity.requiredExerciseResources",
+            "rk" => "entity.requiredKnowledges"
+        );
+    }
 }
