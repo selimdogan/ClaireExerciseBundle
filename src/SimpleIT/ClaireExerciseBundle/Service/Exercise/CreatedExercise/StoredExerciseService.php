@@ -2,16 +2,15 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\ItemRepository;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\StoredExerciseRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation\ExerciseServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\ExerciseModelServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\Test\TestAttemptServiceInterface;
+use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\CoreBundle\Annotation\Transactional;
 
 /**
  * Service which manages the stored exercises
@@ -162,7 +161,6 @@ class StoredExerciseService extends TransactionalService implements StoredExerci
      * @param $emId
      *
      * @return StoredExercise
-     * @Transactional
      */
     public function addByExerciseModel($emId)
     {
@@ -170,6 +168,9 @@ class StoredExerciseService extends TransactionalService implements StoredExerci
 
         $exercise = $this->exerciseService->generateExercise($oem);
         $exercise = $this->storedExerciseRepository->insert($exercise);
+
+        $this->em->persist($exercise);
+        $this->em->flush();
 
         return $exercise;
     }

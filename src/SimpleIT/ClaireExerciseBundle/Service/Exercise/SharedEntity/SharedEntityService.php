@@ -20,9 +20,9 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedEntityRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
+use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Service\User\UserService;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\Utils\Collection\CollectionInformation;
 
 /**

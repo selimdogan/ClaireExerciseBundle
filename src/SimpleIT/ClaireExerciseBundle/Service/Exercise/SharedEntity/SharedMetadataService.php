@@ -10,7 +10,7 @@ use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedMetadat
 use
     SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\ExerciseResourceServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityService;
-use SimpleIT\CoreBundle\Services\TransactionalService;
+use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
 use SimpleIT\Utils\Collection\CollectionInformation;
 
 /**

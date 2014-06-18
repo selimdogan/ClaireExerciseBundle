@@ -4,7 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\User;
 
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Repository\User\UserRepository;
-use SimpleIT\CoreBundle\Services\TransactionalService;
+use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
 
 /**
  * Service which manages the users

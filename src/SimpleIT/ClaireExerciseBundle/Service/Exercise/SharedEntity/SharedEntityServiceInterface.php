@@ -13,8 +13,6 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResource;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\CollectionInformation;
 
-use SimpleIT\CoreBundle\Annotation\Transactional;
-
 /**
  * Interface for service which manages the exercise generation
  *
@@ -180,8 +178,8 @@ interface SharedEntityServiceInterface
     /**
      * Import an entity. The entity is duplicated and the required entities are also imported.
      *
-     * @param int  $ownerId
-     * @param int  $originalId The id of the original entity that must be duplicated
+     * @param int $ownerId
+     * @param int $originalId The id of the original entity that must be duplicated
      *
      * @return SharedEntity
      */
@@ -190,7 +188,7 @@ interface SharedEntityServiceInterface
     /**
      * Import an entity from the entity. Base work.
      *
-     * @param int $ownerId
+     * @param int          $ownerId
      * @param SharedEntity $original The original entity that must be duplicated
      *
      * @return SharedEntity

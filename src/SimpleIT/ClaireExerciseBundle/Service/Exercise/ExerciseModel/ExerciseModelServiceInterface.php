@@ -68,7 +68,6 @@ interface ExerciseModelServiceInterface extends SharedEntityServiceInterface
      * @param ExerciseModel $entity
      *
      * @return ExerciseModel
-     * @Transactional
      */
     public function add(
         $entity

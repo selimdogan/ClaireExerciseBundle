@@ -2,17 +2,15 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\Test;
 
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\Test;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModelPosition;
 use SimpleIT\ClaireExerciseBundle\Entity\TestFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\TestPositionFactory;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise\StoredExerciseServiceInterface;
+use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\CoreBundle\Annotation\Transactional;
-
 
 /**
  * Service which manages the tests
@@ -91,7 +89,6 @@ class TestService extends TransactionalService implements TestServiceInterface
      * @param int $testModelId
      *
      * @return Test
-     * @Transactional
      */
     public function add($testModelId)
     {
@@ -111,6 +108,8 @@ class TestService extends TransactionalService implements TestServiceInterface
         $test = TestFactory::create($testPositions, $testModel);
 
         $test = $this->testRepository->insert($test);
+        $this->em->persist($test);
+        $this->em->flush();
 
         return $test;
     }

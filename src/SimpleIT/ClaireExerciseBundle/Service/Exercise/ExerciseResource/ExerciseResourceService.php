@@ -32,7 +32,6 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource\ExerciseResourceRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\KnowledgeServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityService;
-use SimpleIT\CoreBundle\Annotation\Transactional;
 use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 
 /**

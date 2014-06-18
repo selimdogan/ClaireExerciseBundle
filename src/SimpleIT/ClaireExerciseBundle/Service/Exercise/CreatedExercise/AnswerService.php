@@ -3,18 +3,16 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
 use JMS\Serializer\SerializationContext;
-use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
-use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\AnswerFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 use SimpleIT\ClaireExerciseBundle\Exception\AnswerAlreadyExistsException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\AnswerRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation\ExerciseService;
-
-use SimpleIT\CoreBundle\Annotation\Transactional;
+use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
+use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
 
 /**
  * Service which manages the stored exercises
@@ -107,7 +105,6 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
      *
      * @throws AnswerAlreadyExistsException
      * @return Answer
-     * @Transactional
      */
     public function add($itemId, AnswerResource $answerResource, $attemptId = null)
     {
@@ -138,6 +135,8 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
         // Add the answer to the database
         $this->answerRepository->insert($answer);
 
+        $this->em->persist($answer);
+        $this->em->flush();
         return $answer;
     }
 

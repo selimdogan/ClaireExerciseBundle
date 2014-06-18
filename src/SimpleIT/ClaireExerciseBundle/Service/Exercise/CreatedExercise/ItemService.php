@@ -2,17 +2,16 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\AnswerRepository;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\ItemRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation\ExerciseServiceInterface;
+use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\CollectionInformation;
-
 
 /**
  * Service which manages the items
@@ -111,8 +110,8 @@ class ItemService extends TransactionalService implements ItemServiceInterface
     /**
      * Find the item and the correction (if corrected by this user)
      *
-     * @param int     $itemId
-     * @param int     $attemptId
+     * @param int $itemId
+     * @param int $attemptId
      *
      * @return ItemResource
      */
@@ -134,10 +133,12 @@ class ItemService extends TransactionalService implements ItemServiceInterface
         if (is_null($answer)) {
             $itemResource = ItemResourceFactory::create($item);
             $itemResource->setCorrected(false);
+
             return $itemResource;
         }
 
         /** @var Answer $answer */
+
         // set corrected to true (it is returned)
 
         // correct it with the exercise service

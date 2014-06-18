@@ -2,17 +2,15 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\Test;
 
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestPosition;
 use SimpleIT\ClaireExerciseBundle\Entity\TestAttemptFactory;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestAttemptRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise\AttemptService;
+use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Service\User\UserServiceInterface;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\CoreBundle\Annotation\Transactional;
-
 
 /**
  * Service which manages the test attempts
@@ -106,7 +104,6 @@ class TestAttemptService extends TransactionalService implements TestAttemptServ
      * @param int $userId
      *
      * @return TestAttempt
-     * @Transactional
      */
     public function add($testId, $userId)
     {
@@ -116,6 +113,7 @@ class TestAttemptService extends TransactionalService implements TestAttemptServ
 
         /** @var TestAttempt $testAttempt */
         $testAttempt = $this->testAttemptRepository->insert($testAttempt);
+        $this->em->persist($testAttempt);
 
         foreach ($test->getTestPositions() as $position) {
             /** @var TestPosition $position */
@@ -127,6 +125,8 @@ class TestAttemptService extends TransactionalService implements TestAttemptServ
                 $position->getPosition()
             );
         }
+
+        $this->em->flush();
 
         return $testAttempt;
     }

@@ -2,16 +2,14 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
-use SimpleIT\ClaireExerciseBundle\Service\User\UserServiceInterface;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\AttemptFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\AttemptRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\Test\TestAttemptServiceInterface;
+use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
+use SimpleIT\ClaireExerciseBundle\Service\User\UserServiceInterface;
+use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\CoreBundle\Annotation\Transactional;
-
 
 /**
  * Service which manages the attempt
@@ -107,7 +105,6 @@ class AttemptService extends TransactionalService implements AttemptServiceInter
      * @param int $position
      *
      * @return Attempt
-     * @Transactional
      */
     public function add($exerciseId, $userId, $testAttemptId = null, $position = null)
     {
@@ -121,6 +118,9 @@ class AttemptService extends TransactionalService implements AttemptServiceInter
 
         $attempt = AttemptFactory::create($exercise, $user, $testAttempt, $position);
         $attempt = $this->attemptRepository->insert($attempt);
+
+        $this->em->persist($attempt);
+        $this->em->flush();
 
         return $attempt;
     }
