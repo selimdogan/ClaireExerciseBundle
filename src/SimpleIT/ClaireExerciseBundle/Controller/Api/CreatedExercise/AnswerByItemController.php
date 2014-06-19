@@ -1,7 +1,7 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
@@ -32,7 +32,11 @@ class AnswerByItemController extends ApiController
     public function listAction($itemId)
     {
         try {
-            $answers = $this->get('simple_it.exercise.answer')->getAll($itemId);
+            $answers = $this->get('simple_it.exercise.answer')->getAll(
+                $itemId,
+                null,
+                $this->getUserIdIfNoCreator()
+            );
 
             $answerResources = AnswerResourceFactory::createCollection($answers);
 
@@ -68,7 +72,7 @@ class AnswerByItemController extends ApiController
     /**
      * Answer action. Create an answer for the given stored exercise.
      *
-     * @param int            $itemId
+     * @param int $itemId
      * @param AnswerResource $answerResource
      *
      * @throws ApiBadRequestException

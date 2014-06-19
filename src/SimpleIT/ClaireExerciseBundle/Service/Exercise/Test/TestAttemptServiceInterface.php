@@ -3,7 +3,6 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\Test;
 
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
-use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\Utils\Collection\CollectionInformation;
 
 /**
@@ -17,11 +16,11 @@ interface TestAttemptServiceInterface
      * Find a test attempt by its id
      *
      * @param int $testAttemptId Test attempt Id
+     * @param int $userId
      *
-     * @throws NonExistingObjectException
      * @return TestAttempt
      */
-    public function get($testAttemptId);
+    public function get($testAttemptId, $userId = null);
 
     /**
      * Add a new test attempt to the database.

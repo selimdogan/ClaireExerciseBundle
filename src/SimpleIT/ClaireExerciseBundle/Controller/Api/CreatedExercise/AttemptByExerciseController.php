@@ -1,7 +1,7 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
@@ -47,7 +47,7 @@ class AttemptByExerciseController extends ApiController
                 if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
                     throw new ApiBadRequestException("A user must be authenticated");
                 }
-                $userId = $this->get('security.context')->getToken()->getUser()->getId();
+                $userId = $this->getUserId();
             } elseif ($user !== "all") {
                 throw new ApiBadRequestException('Incorrect value for parameter user: ' . $user);
             }
@@ -82,7 +82,7 @@ class AttemptByExerciseController extends ApiController
             if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
                 throw new ApiBadRequestException("A user must be authenticated");
             }
-            $userId = $this->get('security.context')->getToken()->getUser()->getId();
+            $userId = $this->getUserId();
 
             $attempt = $this->get('simple_it.exercise.attempt')->add($exerciseId, $userId);
 

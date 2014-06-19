@@ -1,7 +1,7 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
@@ -32,7 +32,7 @@ class ItemByAttemptController extends ApiController
         try {
             // Call to the item service to get the item and its correction if there is one
             $itemResource = $this->get('simple_it.exercise.item')
-                ->findItemAndCorrectionByAttempt($itemId, $attemptId);
+                ->findItemAndCorrectionByAttempt($itemId, $attemptId, $this->getUserId());
 
             if ($itemResource->getCorrected()) {
                 $groups = array("corrected", 'Default');
@@ -61,7 +61,8 @@ class ItemByAttemptController extends ApiController
         try {
             $items = $this->get('simple_it.exercise.item')->getAllByAttempt(
                 $collectionInformation,
-                $attemptId
+                $attemptId,
+                $this->getUserId()
             );
 
             $itemResources = ItemResourceFactory::createCollection($items);

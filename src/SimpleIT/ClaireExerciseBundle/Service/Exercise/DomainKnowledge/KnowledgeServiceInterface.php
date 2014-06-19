@@ -10,6 +10,7 @@ use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityServiceInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Interface for service which manages the domain knowledge
@@ -94,12 +95,15 @@ interface KnowledgeServiceInterface extends SharedEntityServiceInterface
      * The id of the entity that must be modified is stored in the field id.
      * The id of an entity can never be modified.
      *
-     * @param KnowledgeResource $knowledgeResource
+     * @param Knowledge $resource The resource corresponding to the entity
+     * @param int       $userId   Id of the user who tries to edit
      *
-     * @return Knowledge
+     * @throws AccessDeniedException
+     * @return Knowledge The edited and saved entity
      */
     public function edit(
-        $knowledgeResource
+        $resource,
+        $userId
     );
 
     /**
@@ -135,10 +139,10 @@ interface KnowledgeServiceInterface extends SharedEntityServiceInterface
     /**
      * Import an entity. The entity is duplicated and the required entities are also imported.
      *
-     * @param int $ownerId
+     * @param int $userId
      * @param int $originalId The id of the original entity that must be duplicated
      *
      * @return Knowledge
      */
-    public function import($ownerId, $originalId);
+    public function import($userId, $originalId);
 }

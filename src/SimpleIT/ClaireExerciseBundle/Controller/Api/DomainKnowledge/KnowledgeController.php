@@ -2,7 +2,6 @@
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\DomainKnowledge;
 
 use Doctrine\DBAL\DBALException;
-use SimpleIT\ApiBundle\Controller\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiConflictException;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
@@ -12,6 +11,8 @@ use SimpleIT\ApiBundle\Model\ApiEditedResponse;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiResponse;
 use SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
@@ -38,10 +39,11 @@ class KnowledgeController extends ApiController
     public function viewAction($knowledgeId)
     {
         try {
-            // Call to the knowledge service to get the knowledge
-            $knowledge = $this->get('simple_it.exercise.knowledge')->get($knowledgeId);
-
-            $knowledgeResource = KnowledgeResourceFactory::create($knowledge, false);
+            /** @var KnowledgeResource $knowledge */
+            $knowledgeResource = $this->get('simple_it.exercise.knowledge')->getContentFullResource(
+                $knowledgeId,
+                $this->getUserId()
+            );
 
             return new ApiGotResponse($knowledgeResource, array("details", 'Default'));
 
@@ -62,7 +64,8 @@ class KnowledgeController extends ApiController
     {
         try {
             $knowledges = $this->get('simple_it.exercise.knowledge')->getAll(
-                $collectionInformation
+                $collectionInformation,
+                $this->getUserId()
             );
 
             $knowledgeResources = KnowledgeResourceFactory::createCollection($knowledges);
@@ -88,16 +91,13 @@ class KnowledgeController extends ApiController
     public function createAction(KnowledgeResource $knowledgeResource)
     {
         try {
-            $userId = null;
-            if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                $userId = $this->get('security.context')->getToken()->getUser()->getId();
-            }
-
             $this->validateResource($knowledgeResource, array('create'));
 
+            $userId = $this->getUserId();
             $knowledgeResource->setAuthor($userId);
             $knowledgeResource->setOwner($userId);
 
+            /** @var Knowledge $knowledge */
             $knowledge = $this->get('simple_it.exercise.knowledge')->createAndAdd
                 (
                     $knowledgeResource
@@ -135,7 +135,8 @@ class KnowledgeController extends ApiController
             $knowledgeResource->setId($knowledgeId);
             $knowledge = $this->get('simple_it.exercise.knowledge')->edit
                 (
-                    $knowledgeResource
+                    $knowledgeResource,
+                    $this->getUserId()
                 );
             $knowledgeResource = KnowledgeResourceFactory::create($knowledge);
 
@@ -162,7 +163,7 @@ class KnowledgeController extends ApiController
     public function deleteAction($knowledgeId)
     {
         try {
-            $this->get('simple_it.exercise.knowledge')->remove($knowledgeId);
+            $this->get('simple_it.exercise.knowledge')->remove($knowledgeId, $this->getUserId());
 
             return new ApiDeletedResponse();
 

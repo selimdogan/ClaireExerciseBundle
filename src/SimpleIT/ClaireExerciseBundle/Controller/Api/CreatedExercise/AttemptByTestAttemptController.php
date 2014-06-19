@@ -1,7 +1,7 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
@@ -33,7 +33,7 @@ class AttemptByTestAttemptController extends ApiController
         try {
             $attempts = $this->get('simple_it.exercise.attempt')->getAll(
                 $collectionInformation,
-                null,
+                $this->getUserIdIfNoCreator(),
                 null,
                 $testAttemptId
             );

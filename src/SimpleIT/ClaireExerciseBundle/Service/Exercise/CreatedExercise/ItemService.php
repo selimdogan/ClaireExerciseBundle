@@ -12,6 +12,7 @@ use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\ItemReposi
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation\ExerciseServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Service which manages the items
@@ -112,15 +113,17 @@ class ItemService extends TransactionalService implements ItemServiceInterface
      *
      * @param int $itemId
      * @param int $attemptId
+     * @param int $userId
      *
      * @return ItemResource
      */
     public function findItemAndCorrectionByAttempt(
         $itemId,
-        $attemptId
+        $attemptId,
+        $userId = null
     )
     {
-        $item = $this->getByAttempt($itemId, $attemptId);
+        $item = $this->getByAttempt($itemId, $attemptId, $userId);
 
         $answer = $this->answerRepository->findOneBy(
             array(
@@ -150,12 +153,14 @@ class ItemService extends TransactionalService implements ItemServiceInterface
      *
      * @param int $itemId
      * @param int $attemptId
+     * @param int $userId
      *
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @return Item
      */
-    public function getByAttempt($itemId, $attemptId)
+    public function getByAttempt($itemId, $attemptId, $userId = null)
     {
-        $attempt = $this->attemptService->get($attemptId);
+        $attempt = $this->attemptService->get($attemptId, $userId);
 
         return $this->itemRepository->getByAttempt($itemId, $attempt);
     }
@@ -182,14 +187,19 @@ class ItemService extends TransactionalService implements ItemServiceInterface
      *
      * @param CollectionInformation $collectionInformation
      * @param int                   $attemptId
+     * @param int                   $userId
      *
      * @return array
      */
-    public function getAllByAttempt($collectionInformation = null, $attemptId = null)
+    public function getAllByAttempt(
+        $collectionInformation = null,
+        $attemptId = null,
+        $userId = null
+    )
     {
         $attempt = null;
         if (!is_null($attemptId)) {
-            $attempt = $this->attemptService->get($attemptId);
+            $attempt = $this->attemptService->get($attemptId, $userId);
         }
 
         return $this->itemRepository->findAllByAttempt($attempt, $collectionInformation);

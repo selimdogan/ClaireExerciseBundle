@@ -2,7 +2,6 @@
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\ExerciseResource;
 
 use Doctrine\DBAL\DBALException;
-use SimpleIT\ApiBundle\Controller\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiConflictException;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
@@ -11,6 +10,8 @@ use SimpleIT\ApiBundle\Model\ApiDeletedResponse;
 use SimpleIT\ApiBundle\Model\ApiEditedResponse;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiResponse;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
@@ -40,7 +41,7 @@ class ResourceController extends ApiController
             // Call to the resource service to get the resource
             $resourceResource = $this->get(
                 'simple_it.exercise.exercise_resource'
-            )->getContentFullResource($resourceId);
+            )->getContentFullResource($resourceId, $this->getUserId());
 
             return new ApiGotResponse($resourceResource, array("details", 'Default'));
 
@@ -61,7 +62,8 @@ class ResourceController extends ApiController
     {
         try {
             $resources = $this->get('simple_it.exercise.exercise_resource')->getAll(
-                $collectionInformation
+                $collectionInformation,
+                $this->getUserId()
             );
 
             $resourceResources = ResourceResourceFactory::createCollection($resources);
@@ -89,16 +91,14 @@ class ResourceController extends ApiController
     )
     {
         try {
-            $userId = null;
-            if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                $userId = $this->get('security.context')->getToken()->getUser()->getId();
-            }
+            $userId = $this->getUserId();
 
             $this->validateResource($resourceResource, array('create', 'Default'));
 
             $resourceResource->setAuthor($userId);
             $resourceResource->setOwner($userId);
 
+            /** @var ExerciseResource $exerciseResource */
             $exerciseResource = $this->get('simple_it.exercise.exercise_resource')->createAndAdd
                 (
                     $resourceResource,
@@ -135,7 +135,8 @@ class ResourceController extends ApiController
             $resourceResource->setId($resourceId);
             $resource = $this->get('simple_it.exercise.exercise_resource')->edit
                 (
-                    $resourceResource
+                    $resourceResource,
+                    $this->getUserId()
                 );
             $resourceResource = ResourceResourceFactory::create($resource);
 
@@ -162,7 +163,10 @@ class ResourceController extends ApiController
     public function deleteAction($resourceId)
     {
         try {
-            $this->get('simple_it.exercise.exercise_resource')->remove($resourceId);
+            $this->get('simple_it.exercise.exercise_resource')->remove(
+                $resourceId,
+                $this->getUserId()
+            );
 
             return new ApiDeletedResponse();
 

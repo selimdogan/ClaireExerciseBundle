@@ -2,7 +2,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\Test;
 
 use Doctrine\DBAL\DBALException;
-use SimpleIT\ApiBundle\Controller\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiConflictException;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
@@ -81,7 +81,7 @@ class TestModelController extends ApiController
         try {
             $userId = null;
             if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                $userId = $this->get('security.context')->getToken()->getUser()->getId();
+                $userId = $this->getUserId();
             }
 
             $this->validateResource($testModelResource, array('create', 'Default'));

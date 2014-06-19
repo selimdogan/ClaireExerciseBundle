@@ -102,11 +102,12 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
      * @param int            $itemId
      * @param AnswerResource $answerResource
      * @param int            $attemptId
+     * @param int           $userId
      *
-     * @throws AnswerAlreadyExistsException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\AnswerAlreadyExistsException
      * @return Answer
      */
-    public function add($itemId, AnswerResource $answerResource, $attemptId = null)
+    public function add($itemId, AnswerResource $answerResource, $attemptId = null, $userId = null)
     {
         // Get the item and the attempt
         /** @var Item $item */
@@ -114,7 +115,7 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
             if (count($this->getAll($itemId, $attemptId)) > 0) {
                 throw new AnswerAlreadyExistsException();
             }
-            $attempt = $this->attemptService->get($attemptId);
+            $attempt = $this->attemptService->get($attemptId, $userId);
             $item = $this->itemService->getByAttempt($itemId, $attemptId);
         } else {
             $item = $this->itemService->get($itemId);
@@ -143,20 +144,21 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
     /**
      * Get all answers for an item
      *
-     * @param int $itemId Item id
-     * @param int $attemptId
+     * @param int  $itemId Item id
+     * @param int  $attemptId
+     * @param null $userId
      *
      * @return array
      */
-    public function getAll($itemId = null, $attemptId = null)
+    public function getAll($itemId = null, $attemptId = null, $userId = null)
     {
         $item = null;
         $attempt = null;
 
         if (!is_null($itemId)) {
             if (!is_null($attemptId)) {
+                $attempt = $this->attemptService->get($attemptId, $userId);
                 $item = $this->itemService->getByAttempt($itemId, $attemptId);
-                $attempt = $this->attemptService->get($attemptId);
             } else {
                 $item = $this->itemService->get($itemId);
             }

@@ -1,7 +1,7 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
@@ -32,7 +32,12 @@ class AnswerByItemByAttemptController extends ApiController
     public function listAction($attemptId, $itemId)
     {
         try {
-            $answers = $this->get('simple_it.exercise.answer')->getAll($itemId, $attemptId);
+
+            $answers = $this->get('simple_it.exercise.answer')->getAll(
+                $itemId,
+                $attemptId,
+                $this->getUserIdIfNoCreator()
+            );
 
             $answerResources = AnswerResourceFactory::createCollection($answers);
 
@@ -60,7 +65,7 @@ class AnswerByItemByAttemptController extends ApiController
 
             // send to the answer service in order to create the answer
             $answer = $this->get('simple_it.exercise.answer')
-                ->add($itemId, $answerResource, $attemptId);
+                ->add($itemId, $answerResource, $attemptId, $this->getUserId());
 
             $answerResource = AnswerResourceFactory::create($answer);
 

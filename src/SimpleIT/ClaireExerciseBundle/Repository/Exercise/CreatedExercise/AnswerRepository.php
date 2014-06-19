@@ -3,8 +3,10 @@
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise;
 
 use Doctrine\ORM\QueryBuilder;
+use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 
 /**
@@ -14,6 +16,24 @@ use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
  */
 class AnswerRepository extends BaseRepository
 {
+    /**
+     * Find an answer by id
+     *
+     * @param int $itemId
+     *
+     * @return Answer
+     * @throws NonExistingObjectException
+     */
+    public function find($itemId)
+    {
+        $item = parent::find($itemId);
+        if ($item === null) {
+            throw new NonExistingObjectException();
+        }
+
+        return $item;
+    }
+
     /**
      * Get all the answers. An item can be specified.
      *

@@ -1,7 +1,7 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
 use SimpleIT\ApiBundle\Model\ApiResponse;
@@ -9,6 +9,7 @@ use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * API Item controller
@@ -44,11 +45,17 @@ class ItemController extends ApiController
     /**
      * Get all items
      *
-     * @throws ApiNotFoundException
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \SimpleIT\ApiBundle\Exception\ApiNotFoundException
      * @return ApiGotResponse
      */
     public function listAction()
     {
+        if (!$this->get('security.context')->getToken()->getUser()->hasRole('ROLE_WS_CREATOR'))
+        {
+            throw new AccessDeniedException();
+        }
+
         try {
             $items = $this->get('simple_it.exercise.item')->getAll();
 

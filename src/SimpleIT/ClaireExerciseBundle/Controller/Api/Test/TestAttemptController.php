@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\Test;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
@@ -30,7 +30,10 @@ class TestAttemptController extends ApiController
     public function viewAction($testAttemptId)
     {
         try {
-            $testAttempt = $this->get('simple_it.exercise.test_attempt')->get($testAttemptId);
+            $testAttempt = $this->get('simple_it.exercise.test_attempt')->get(
+                $testAttemptId,
+                $this->getUserIdIfNoCreator()
+            );
             $testAttemptResource = TestAttemptResourceFactory::create($testAttempt);
 
             return new ApiGotResponse($testAttemptResource, array("test_attempt", 'Default'));
@@ -43,7 +46,6 @@ class TestAttemptController extends ApiController
     /**
      * List the test attempts for this test
      *
-     * @param Request               $request
      * @param CollectionInformation $collectionInformation
      *
      * @throws ApiBadRequestException
@@ -51,26 +53,14 @@ class TestAttemptController extends ApiController
      * @return ApiGotResponse
      */
     public function listAction(
-        Request $request,
         CollectionInformation $collectionInformation
     )
     {
         try {
-            $user = $request->get('user');
-            $userId = null;
-            if (is_null($user) || $user === 'me') {
-                if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                    throw new ApiBadRequestException("A user must be authenticated");
-                }
-                $userId = $this->get('security.context')->getToken()->getUser()->getId();
-            } elseif ($user !== "all") {
-                throw new ApiBadRequestException('Incorrect value for parameter user: ' . $user);
-            }
-
             $testAttempts = $this->get('simple_it.exercise.test_attempt')->getAll
                 (
                     $collectionInformation,
-                    $userId
+                    $this->getUserIdIfNoCreator()
                 );
 
             $testAttemptResources = TestAttemptResourceFactory::createCollection($testAttempts);

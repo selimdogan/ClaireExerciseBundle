@@ -406,4 +406,23 @@ class User implements AdvancedUserInterface, \Serializable
     {
         return $this->isActive;
     }
+
+    /**
+     * Does a user have a role?
+     *
+     * @param $role
+     *
+     * @return bool
+     */
+    public function hasRole($role)
+    {
+        foreach ($this->groups as $group) {
+            /** @var Group $group */
+            if ($group->getRole() === $role) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -3,7 +3,7 @@ namespace SimpleIT\ClaireExerciseBundle\Controller\Api\DomainKnowledge;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\DBALException;
-use SimpleIT\ApiBundle\Controller\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiConflictException;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
@@ -43,7 +43,8 @@ class MetadataByKnowledgeController extends ApiController
         try {
             $metadatas = $this->get('simple_it.exercise.knowledge_metadata')->getAll(
                 $collectionInformation,
-                $knowledgeId
+                $knowledgeId,
+                $this->getUserId()
             );
 
             $metadataResources = MetadataResourceFactory::createCollection($metadatas);
@@ -68,7 +69,8 @@ class MetadataByKnowledgeController extends ApiController
         try {
             $metadata = $this->get('simple_it.exercise.knowledge_metadata')->getByEntity(
                 $knowledgeId,
-                $metadataKey
+                $metadataKey,
+                $this->getUserId()
             );
 
             $metadataResource = MetadataResourceFactory::create($metadata);
@@ -100,7 +102,8 @@ class MetadataByKnowledgeController extends ApiController
 
             $metadata = $this->get('simple_it.exercise.knowledge_metadata')->addToEntity(
                 $knowledgeId,
-                $metadata
+                $metadata,
+                $this->getUserId()
             );
 
             $metadataResource = MetadataResourceFactory::create($metadata);
@@ -136,7 +139,8 @@ class MetadataByKnowledgeController extends ApiController
             $metadata = $this->get('simple_it.exercise.knowledge_metadata')->saveFromEntity(
                 $knowledgeId,
                 $metadata,
-                $metadataKey
+                $metadataKey,
+                $this->getUserId()
             );
 
             $metadataResource = MetadataResourceFactory::create($metadata);
@@ -162,7 +166,8 @@ class MetadataByKnowledgeController extends ApiController
         try {
             $this->get('simple_it.exercise.knowledge_metadata')->removeFromEntity(
                 $knowledgeId,
-                $metadataKey
+                $metadataKey,
+                $this->getUserId()
             );
 
             return new ApiDeletedResponse();
@@ -189,7 +194,8 @@ class MetadataByKnowledgeController extends ApiController
                 ->editMetadata
                 (
                     $knowledgeId,
-                    $metadatas
+                    $metadatas,
+                    $this->getUserId()
                 );
 
             $knowledgeResource = MetadataResourceFactory::createCollection($knowledge);

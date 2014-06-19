@@ -11,6 +11,7 @@ use SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise\AttemptServic
 use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Service\User\UserServiceInterface;
 use SimpleIT\Utils\Collection\CollectionInformation;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Service which manages the test attempts
@@ -83,15 +84,19 @@ class TestAttemptService extends TransactionalService implements TestAttemptServ
      * Find a test attempt by its id
      *
      * @param int $testAttemptId Test attempt Id
+     * @param int $userId
      *
-     * @throws NonExistingObjectException
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException
      * @return TestAttempt
      */
-    public function get($testAttemptId)
+    public function get($testAttemptId, $userId = null)
     {
         $testAttempt = $this->testAttemptRepository->find($testAttemptId);
         if (is_null($testAttempt)) {
             throw new NonExistingObjectException();
+        } elseif ($userId !== null && $testAttempt->getUser()->getId() !== $userId) {
+            throw new AccessDeniedException();
         }
 
         return $testAttempt;

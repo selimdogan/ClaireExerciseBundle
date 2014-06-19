@@ -28,10 +28,11 @@ interface AnswerServiceInterface
     /**
      * Get all answers for an item
      *
-     * @param int $itemId Item id
-     * @param int $attemptId
+     * @param int  $itemId Item id
+     * @param int  $attemptId
+     * @param null $userId
      *
      * @return array
      */
-    public function getAll($itemId = null, $attemptId = null);
+    public function getAll($itemId = null, $attemptId = null, $userId = null);
 }

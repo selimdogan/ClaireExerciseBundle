@@ -13,6 +13,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityServiceInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Service which manages the exercise resources
@@ -99,12 +100,15 @@ interface ExerciseResourceServiceInterface extends SharedEntityServiceInterface
      * The id of the entity that must be modified is stored in the field id.
      * The id of an entity can never be modified.
      *
-     * @param ResourceResource $resource The resource corresponding to the entity
+     * @param ExerciseResource $resource The resource corresponding to the entity
+     * @param int            $userId   Id of the user who tries to edit
      *
+     * @throws AccessDeniedException
      * @return ExerciseResource The edited and saved entity
      */
     public function edit(
-        $resource
+        $resource,
+        $userId
     );
 
     /**
@@ -198,10 +202,10 @@ interface ExerciseResourceServiceInterface extends SharedEntityServiceInterface
     /**
      * Import an entity. The entity is duplicated and the required entities are also imported.
      *
-     * @param int $ownerId
+     * @param int $userId
      * @param int $originalId The id of the original entity that must be duplicated
      *
      * @return ExerciseResource
      */
-    public function import($ownerId, $originalId);
+    public function import($userId, $originalId);
 }

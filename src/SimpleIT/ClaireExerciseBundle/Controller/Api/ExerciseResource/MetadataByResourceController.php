@@ -3,7 +3,6 @@ namespace SimpleIT\ClaireExerciseBundle\Controller\Api\ExerciseResource;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\DBALException;
-use SimpleIT\ApiBundle\Controller\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiConflictException;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
@@ -11,6 +10,7 @@ use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
 use SimpleIT\ApiBundle\Model\ApiDeletedResponse;
 use SimpleIT\ApiBundle\Model\ApiEditedResponse;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata;
 use SimpleIT\ClaireExerciseBundle\Entity\ResourceMetadataFactory;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
@@ -43,7 +43,8 @@ class MetadataByResourceController extends ApiController
         try {
             $metadatas = $this->get('simple_it.exercise.resource_metadata')->getAll(
                 $collectionInformation,
-                $resourceId
+                $resourceId,
+                $this->getUserId()
             );
 
             $metadataResources = MetadataResourceFactory::createCollection($metadatas);
@@ -68,7 +69,8 @@ class MetadataByResourceController extends ApiController
         try {
             $metadata = $this->get('simple_it.exercise.resource_metadata')->getByEntity(
                 $resourceId,
-                $metadataKey
+                $metadataKey,
+                $this->getUserId()
             );
 
             $metadataResource = MetadataResourceFactory::create($metadata);
@@ -100,7 +102,8 @@ class MetadataByResourceController extends ApiController
 
             $metadata = $this->get('simple_it.exercise.resource_metadata')->addToEntity(
                 $resourceId,
-                $metadata
+                $metadata,
+                $this->getUserId()
             );
 
             $metadataResource = MetadataResourceFactory::create($metadata);
@@ -137,7 +140,8 @@ class MetadataByResourceController extends ApiController
                 ->saveFromEntity(
                     $resourceId,
                     $metadata,
-                    $metadataKey
+                    $metadataKey,
+                    $this->getUserId()
                 );
 
             $metadataResource = MetadataResourceFactory::create($metadata);
@@ -163,7 +167,8 @@ class MetadataByResourceController extends ApiController
         try {
             $this->get('simple_it.exercise.resource_metadata')->removeFromEntity(
                 $resourceId,
-                $metadataKey
+                $metadataKey,
+                $this->getUserId()
             );
 
             return new ApiDeletedResponse();
@@ -190,7 +195,8 @@ class MetadataByResourceController extends ApiController
                 ->editMetadata
                 (
                     $resourceId,
-                    $metadatas
+                    $metadatas,
+                    $this->getUserId()
                 );
 
             $resourceResource = MetadataResourceFactory::createCollection($resources);

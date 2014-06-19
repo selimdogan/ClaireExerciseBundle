@@ -1,7 +1,7 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
 use SimpleIT\ApiBundle\Model\ApiGotResponse;
@@ -30,7 +30,10 @@ class AttemptController extends ApiController
     public function viewAction($attemptId)
     {
         try {
-            $attempt = $this->get('simple_it.exercise.attempt')->get($attemptId);
+            $attempt = $this->get('simple_it.exercise.attempt')->get(
+                $attemptId,
+                $this->getUserId()
+            );
             $attemptResource = AttemptResourceFactory::create($attempt);
 
             return new ApiGotResponse($attemptResource, array("attempt", 'Default'));
@@ -43,29 +46,16 @@ class AttemptController extends ApiController
     /**
      * Get the list of attempts
      *
-     * @param Request               $request
      * @param CollectionInformation $collectionInformation
      *
      * @throws ApiBadRequestException
      * @return ApiGotResponse
      */
-    public function listAction(Request $request, CollectionInformation $collectionInformation)
+    public function listAction(CollectionInformation $collectionInformation)
     {
-        $user = $request->get('user');
-
-        $userId = null;
-        if (is_null($user) || $user === 'me') {
-            if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                throw new ApiBadRequestException("A user must be authenticated");
-            }
-            $userId = $this->get('security.context')->getToken()->getUser()->getId();
-        } elseif ($user !== "all") {
-            throw new ApiBadRequestException('Incorrect value for parameter user: ' . $user);
-        }
-
         $attempts = $this->get('simple_it.exercise.attempt')->getAll(
             $collectionInformation,
-            $userId
+            $this->getUserIdIfNoCreator()
         );
 
         $attemptsResources = AttemptResourceFactory::createCollection($attempts);

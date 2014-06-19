@@ -3,8 +3,10 @@
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise;
 
 use Doctrine\ORM\QueryBuilder;
+use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 use SimpleIT\Utils\Collection\CollectionInformation;
 use SimpleIT\Utils\Collection\Sort;
@@ -16,6 +18,24 @@ use SimpleIT\Utils\Collection\Sort;
  */
 class AttemptRepository extends BaseRepository
 {
+    /**
+     * Find an attempt by id
+     *
+     * @param int $itemId
+     *
+     * @return Attempt
+     * @throws NonExistingObjectException
+     */
+    public function find($itemId)
+    {
+        $item = parent::find($itemId);
+        if ($item === null) {
+            throw new NonExistingObjectException();
+        }
+
+        return $item;
+    }
+
     /**
      * Return all the attempts
      *

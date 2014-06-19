@@ -3,7 +3,7 @@ namespace SimpleIT\ClaireExerciseBundle\Controller\Api\ExerciseModel;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\DBALException;
-use SimpleIT\ApiBundle\Controller\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
 use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
 use SimpleIT\ApiBundle\Exception\ApiConflictException;
 use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
@@ -43,7 +43,8 @@ class MetadataByExerciseModelController extends ApiController
         try {
             $metadatas = $this->get('simple_it.exercise.exercise_model_metadata')->getAll(
                 $collectionInformation,
-                $exerciseModelId
+                $exerciseModelId,
+                $this->getUserId()
             );
 
             $metadataResources = MetadataResourceFactory::createCollection($metadatas);
@@ -69,7 +70,8 @@ class MetadataByExerciseModelController extends ApiController
             $metadata = $this->get('simple_it.exercise.exercise_model_metadata')
                 ->getByEntity(
                     $exerciseModelId,
-                    $metadataKey
+                    $metadataKey,
+                    $this->getUserId()
                 );
 
             $metadataResource = MetadataResourceFactory::create($metadata);
@@ -103,7 +105,8 @@ class MetadataByExerciseModelController extends ApiController
                 'simple_it.exercise.exercise_model_metadata'
             )->addToEntity(
                     $exerciseModelId,
-                    $metadata
+                    $metadata,
+                    $this->getUserId()
                 );
 
             $metadataResource = MetadataResourceFactory::create($metadata);
@@ -142,7 +145,8 @@ class MetadataByExerciseModelController extends ApiController
             )->saveFromEntity(
                     $exerciseModelId,
                     $metadata,
-                    $metadataKey
+                    $metadataKey,
+                    $this->getUserId()
                 );
 
             $metadataResource = MetadataResourceFactory::create($metadata);
@@ -168,7 +172,8 @@ class MetadataByExerciseModelController extends ApiController
         try {
             $this->get('simple_it.exercise.exercise_model_metadata')->removeFromEntity(
                 $exerciseModelId,
-                $metadataKey
+                $metadataKey,
+                $this->getUserId()
             );
 
             return new ApiDeletedResponse();
@@ -195,7 +200,8 @@ class MetadataByExerciseModelController extends ApiController
                 ->editMetadata
                 (
                     $exerciseModelId,
-                    $metadatas
+                    $metadatas,
+                    $this->getUserId()
                 );
 
             $resourceResource = MetadataResourceFactory::createCollection($resources);

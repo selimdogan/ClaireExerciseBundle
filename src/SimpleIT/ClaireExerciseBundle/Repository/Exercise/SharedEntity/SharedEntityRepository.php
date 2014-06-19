@@ -26,6 +26,7 @@ abstract class SharedEntityRepository extends BaseRepository
      * collection information
      *
      * @param CollectionInformation $collectionInformation
+     * @param int                   $authenticatedUserId
      * @param User                  $owner
      * @param User                  $author
      * @param SharedEntity          $parent
@@ -41,6 +42,7 @@ abstract class SharedEntityRepository extends BaseRepository
      */
     public function findAll(
         $collectionInformation = null,
+        $authenticatedUserId = null,
         $owner = null,
         $author = null,
         $parent = null,
@@ -68,6 +70,10 @@ abstract class SharedEntityRepository extends BaseRepository
         // add other joins
         foreach ($lj as $alias => $table) {
             $qb->leftJoin($table, $alias);
+        }
+
+        if (!is_null($authenticatedUserId)) {
+            $qb = $this->qbAuthenticatedUser($qb, $authenticatedUserId);
         }
 
         if (!is_null($owner)) {
@@ -133,6 +139,9 @@ abstract class SharedEntityRepository extends BaseRepository
                         if ($value === 'true') {
                             $qb = $this->qbNotForkFrom($qb);
                         }
+                        break;
+                    case ('public'):
+                        $qb = $this->qbPublic($qb, $value);
                         break;
                     case ('complete'):
                         if ($value !== "true" && $value !== "false") {
@@ -243,6 +252,26 @@ abstract class SharedEntityRepository extends BaseRepository
      * Create the query part to filter by owner
      *
      * @param QueryBuilder $qb
+     * @param int          $userId
+     *
+     * @return QueryBuilder
+     */
+    private function qbAuthenticatedUser(QueryBuilder $qb, $userId)
+    {
+        $qb->andWhere(
+            $qb->expr()->orX(
+                $qb->expr()->eq('entity.owner', $userId),
+                $qb->expr()->eq('entity.public', 'true')
+            )
+        );
+
+        return $qb;
+    }
+
+    /**
+     * Create the query part to filter by owner
+     *
+     * @param QueryBuilder $qb
      * @param int          $ownerId
      *
      * @return QueryBuilder
@@ -265,6 +294,32 @@ abstract class SharedEntityRepository extends BaseRepository
     private function qbAuthor(QueryBuilder $qb, $authorId)
     {
         $qb->andWhere($qb->expr()->eq('entity.author', $authorId));
+
+        return $qb;
+    }
+
+    /**
+     * Create the query part to filter by public
+     *
+     * @param QueryBuilder $qb
+     * @param string|bool  $public
+     *
+     * @return QueryBuilder
+     */
+    private function qbPublic(QueryBuilder $qb, $public)
+    {
+        if ($public === 'true' || $public === true) {
+            $public = 'true';
+        } else {
+            $public = 'false';
+        }
+
+        $qb->andWhere(
+            $qb->expr()->eq(
+                'entity.public',
+                $public
+            )
+        );
 
         return $qb;
     }

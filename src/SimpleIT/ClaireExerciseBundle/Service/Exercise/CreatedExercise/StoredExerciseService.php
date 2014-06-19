@@ -141,15 +141,16 @@ class StoredExerciseService extends TransactionalService implements StoredExerci
     /**
      * Get all by test attempt id
      *
-     * @param $testAttemptId
+     * @param int     $testAttemptId
+     * @param int $userId
      *
      * @return array
      */
-    public function getAllByTestAttempt($testAttemptId)
+    public function getAllByTestAttempt($testAttemptId, $userId = null)
     {
         $testAttempt = null;
         if (!is_null($testAttemptId)) {
-            $testAttempt = $this->testAttemptService->get($testAttemptId);
+            $testAttempt = $this->testAttemptService->get($testAttemptId, $userId);
         }
 
         return $this->storedExerciseRepository->findAllByTestAttempt($testAttempt);
