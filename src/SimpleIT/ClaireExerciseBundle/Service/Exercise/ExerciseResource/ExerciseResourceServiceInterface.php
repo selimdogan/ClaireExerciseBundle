@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource;
 
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;

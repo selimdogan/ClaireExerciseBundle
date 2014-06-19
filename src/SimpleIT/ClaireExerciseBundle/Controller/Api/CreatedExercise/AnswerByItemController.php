@@ -2,11 +2,11 @@
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
 use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
-use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
-use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ApiBundle\Model\ApiResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidAnswerException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;

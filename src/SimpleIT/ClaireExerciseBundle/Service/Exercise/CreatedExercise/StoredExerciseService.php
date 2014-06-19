@@ -10,7 +10,7 @@ use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation\ExerciseServ
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\ExerciseModelServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\Test\TestAttemptServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 
 /**
  * Service which manages the stored exercises

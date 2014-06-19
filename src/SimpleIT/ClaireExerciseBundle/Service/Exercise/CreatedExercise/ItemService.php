@@ -11,7 +11,7 @@ use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\AnswerRepo
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\ItemRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation\ExerciseServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**

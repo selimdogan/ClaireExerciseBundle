@@ -4,7 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\Test;
 
 use SimpleIT\ClaireExerciseBundle\Entity\Test\Test;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 
 /**
  * Interface for service which manages the tests

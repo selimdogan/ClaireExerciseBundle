@@ -3,7 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 
 /**
  * Interface for service which manages the attempt

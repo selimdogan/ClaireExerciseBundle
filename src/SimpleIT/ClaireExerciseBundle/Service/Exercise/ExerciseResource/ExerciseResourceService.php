@@ -4,7 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\SerializationContext;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;

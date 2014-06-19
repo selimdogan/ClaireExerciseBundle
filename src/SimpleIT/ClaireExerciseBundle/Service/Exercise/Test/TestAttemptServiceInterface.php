@@ -3,7 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\Test;
 
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 
 /**
  * Service which manages the test attempts

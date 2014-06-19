@@ -6,8 +6,8 @@ use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
 use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\Sort;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\Sort;
 
 /**
  * StoredExercise repository

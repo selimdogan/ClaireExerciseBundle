@@ -4,7 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\SerializationContext;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\KnowledgeFactory;

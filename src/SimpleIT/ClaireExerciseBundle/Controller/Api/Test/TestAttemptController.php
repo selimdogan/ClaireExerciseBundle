@@ -3,13 +3,13 @@
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\Test;
 
 use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
-use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestAttemptResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestAttemptResourceFactory;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

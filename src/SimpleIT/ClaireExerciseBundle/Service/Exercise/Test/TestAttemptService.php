@@ -10,7 +10,7 @@ use SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestAttemptRepository
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise\AttemptService;
 use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Service\User\UserServiceInterface;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**

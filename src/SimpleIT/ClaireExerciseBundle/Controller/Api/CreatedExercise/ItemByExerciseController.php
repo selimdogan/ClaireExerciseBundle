@@ -2,8 +2,8 @@
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
 use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;

@@ -16,7 +16,7 @@ use SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestModelRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\ExerciseModelService;
 use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Service\User\UserService;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 
 /**
  * Class TestModelService

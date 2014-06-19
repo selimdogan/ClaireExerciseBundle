@@ -2,14 +2,14 @@
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\DomainKnowledge;
 
 use Doctrine\DBAL\DBALException;
-use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
-use SimpleIT\ApiBundle\Exception\ApiConflictException;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
-use SimpleIT\ApiBundle\Model\ApiDeletedResponse;
-use SimpleIT\ApiBundle\Model\ApiEditedResponse;
-use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ApiBundle\Model\ApiResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiConflictException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiDeletedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiEditedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
 use SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException;
 use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
@@ -18,7 +18,7 @@ use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResourceFactory;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -57,7 +57,7 @@ class KnowledgeController extends ApiController
      *
      * @param CollectionInformation $collectionInformation
      *
-     * @throws \SimpleIT\ApiBundle\Exception\ApiNotFoundException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException
      * @return ApiGotResponse
      */
     public function listAction(CollectionInformation $collectionInformation)
@@ -156,9 +156,9 @@ class KnowledgeController extends ApiController
      *
      * @param int $knowledgeId
      *
-     * @throws \SimpleIT\ApiBundle\Exception\ApiBadRequestException
-     * @throws \SimpleIT\ApiBundle\Exception\ApiNotFoundException
-     * @return \SimpleIT\ApiBundle\Model\ApiDeletedResponse
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException
+     * @return \SimpleIT\ClaireExerciseBundle\Model\Api\ApiDeletedResponse
      */
     public function deleteAction($knowledgeId)
     {

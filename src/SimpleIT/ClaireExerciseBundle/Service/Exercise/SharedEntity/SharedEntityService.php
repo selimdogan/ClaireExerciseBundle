@@ -23,7 +23,7 @@ use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedEntityR
 use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Service\User\UserService;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 

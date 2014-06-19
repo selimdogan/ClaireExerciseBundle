@@ -11,8 +11,8 @@ use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\FilterException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\Sort;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\Sort;
 
 /**
  * Abstract SharedBaseRepository

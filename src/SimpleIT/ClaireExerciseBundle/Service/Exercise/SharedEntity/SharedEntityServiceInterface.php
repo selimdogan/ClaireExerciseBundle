@@ -11,7 +11,7 @@ use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResource;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**

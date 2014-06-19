@@ -3,7 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise;
 
 use Doctrine\ORM\QueryBuilder;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
@@ -11,7 +11,7 @@ use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 
 /**
  * Item repository

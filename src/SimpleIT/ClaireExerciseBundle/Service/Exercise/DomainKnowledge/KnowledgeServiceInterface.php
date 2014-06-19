@@ -3,7 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge;
 
 use JMS\Serializer\SerializationContext;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;

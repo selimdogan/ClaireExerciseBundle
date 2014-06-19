@@ -2,14 +2,14 @@
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\ExerciseModel;
 
 use Doctrine\DBAL\DBALException;
-use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
-use SimpleIT\ApiBundle\Exception\ApiConflictException;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
-use SimpleIT\ApiBundle\Model\ApiDeletedResponse;
-use SimpleIT\ApiBundle\Model\ApiEditedResponse;
-use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ApiBundle\Model\ApiResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiConflictException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiDeletedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiEditedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
 use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
@@ -19,7 +19,7 @@ use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResourceFactory;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -36,7 +36,7 @@ class ExerciseModelController extends ApiController
      * @param int $exerciseModelId Exercise Model id
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @throws \SimpleIT\ApiBundle\Exception\ApiNotFoundException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException
      * @return ApiGotResponse
      */
     public function viewAction($exerciseModelId)
@@ -173,8 +173,8 @@ class ExerciseModelController extends ApiController
      *
      * @param int $exerciseModelId
      *
-     * @throws \SimpleIT\ApiBundle\Exception\ApiNotFoundException
-     * @throws \SimpleIT\ApiBundle\Exception\ApiBadRequestException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException
      * @return ApiDeletedResponse
      */
     public function deleteAction($exerciseModelId)

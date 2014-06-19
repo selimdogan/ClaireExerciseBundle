@@ -3,20 +3,20 @@ namespace SimpleIT\ClaireExerciseBundle\Controller\Api\ExerciseResource;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\DBALException;
-use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
-use SimpleIT\ApiBundle\Exception\ApiConflictException;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
-use SimpleIT\ApiBundle\Model\ApiDeletedResponse;
-use SimpleIT\ApiBundle\Model\ApiEditedResponse;
-use SimpleIT\ApiBundle\Model\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiConflictException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiDeletedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiEditedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
 use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata;
 use SimpleIT\ClaireExerciseBundle\Entity\ResourceMetadataFactory;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResourceFactory;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

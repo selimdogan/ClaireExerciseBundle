@@ -10,7 +10,7 @@ use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise\StoredExerciseServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 
 /**
  * Service which manages the tests

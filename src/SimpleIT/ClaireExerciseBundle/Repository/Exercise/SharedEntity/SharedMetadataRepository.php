@@ -7,8 +7,8 @@ use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\Metadata;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\Sort;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\Sort;
 
 /**
  * SharedMetadata repository

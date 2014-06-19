@@ -3,7 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
 use JMS\Serializer\SerializationContext;
-use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
@@ -127,7 +127,7 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
      * @param array $localFormulas
      * @param User  $owner
      *
-     * @throws \SimpleIT\ApiBundle\Exception\ApiBadRequestException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException
      * @return array
      */
     protected function computeFormulaVariableValues($localFormulas, User $owner)

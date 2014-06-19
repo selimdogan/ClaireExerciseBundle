@@ -2,12 +2,12 @@
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\Test;
 
 use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestResourceFactory;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 
 /**
  * API Test controller
