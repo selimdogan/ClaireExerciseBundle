@@ -80,8 +80,6 @@ class SharedMetadataRepository extends BaseRepository
                         break;
                 }
             }
-            // FIXME wait for a fix in api-bundle
-//            $queryBuilder = $this->setRange($queryBuilder, $collectionInformation);
         } else {
             $queryBuilder->addOrderBy('m.' . static::ENTITY_NAME, 'ASC');
             $queryBuilder->addOrderBy('m.key', 'ASC');

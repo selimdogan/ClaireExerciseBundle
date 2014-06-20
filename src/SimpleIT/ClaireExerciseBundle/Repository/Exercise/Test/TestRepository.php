@@ -51,8 +51,6 @@ class TestRepository extends BaseRepository
                         break;
                 }
             }
-            // FIXME wait for a fix in api-bundle
-//            $queryBuilder = $this->setRange($queryBuilder, $collectionInformation);
         }
 
         return $queryBuilder->getQuery()->getResult();

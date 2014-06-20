@@ -239,10 +239,6 @@ abstract class SharedEntityRepository extends BaseRepository
             } else {
                 $qb->addOrderBy('entity.id');
             }
-
-            // range
-            // FIXME wait for a fix in api-bundle
-//            $qb = $this->setRange($qb, $collectionInformation);
         }
 
         return $qb->getQuery()->getResult();
