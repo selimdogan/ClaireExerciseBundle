@@ -51,7 +51,7 @@ class ApiResourceParamConverter implements ParamConverterInterface
                     $resource = $this->serializer->deserialize(
                         $request->getContent(),
                         'array',
-                        $request->getRequestFormat()
+                        'json'
                     );
                     $resource = new ArrayCollection($resource);
                 }
