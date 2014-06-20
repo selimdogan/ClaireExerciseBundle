@@ -331,7 +331,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
         }
 
         if (!is_null($resource->getKeywords() || !is_null($resource->getMetadata()))) {
-            $this->metadataService->deleteAllByEntity($entity->getId());
+            $this->metadataService->deleteAllByEntity($entity);
             $entity->setMetadata($this->metadataAndKeyWords($resource, $entity));
         }
 
@@ -458,7 +458,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
             throw new AccessDeniedException();
         }
 
-        $this->metadataService->deleteAllByEntity($entityId);
+        $this->metadataService->deleteAllByEntity($entity);
 
         $metadataCollection = array();
         foreach ($metadatas as $key => $value) {

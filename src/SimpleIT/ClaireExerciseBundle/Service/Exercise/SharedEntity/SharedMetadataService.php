@@ -3,6 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity;
 
 use JMS\Serializer\SerializationContext;
+use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\Metadata;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
@@ -179,11 +180,11 @@ abstract class SharedMetadataService extends TransactionalService
     /**
      * Delete all the metadata for an owner resource
      *
-     * @param int $exerciseModelId
+     * @param SharedEntity $entity
      */
-    public function deleteAllByEntity($exerciseModelId)
+    public function deleteAllByEntity($entity)
     {
-        $this->metadataRepository->deleteAllByEntity($exerciseModelId);
+        $this->metadataRepository->deleteAllByEntity($entity);
         $this->em->flush();
     }
 }

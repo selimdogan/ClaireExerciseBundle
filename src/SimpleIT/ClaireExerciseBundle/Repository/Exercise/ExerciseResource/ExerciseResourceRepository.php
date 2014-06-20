@@ -3,11 +3,8 @@
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource;
 
 use Doctrine\ORM\QueryBuilder;
-use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\User\User;
-use SimpleIT\ClaireExerciseBundle\Exception\EntityAlreadyExistsException;
-use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\MetadataConstraint;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
@@ -37,80 +34,6 @@ class ExerciseResourceRepository extends SharedEntityRepository
         }
 
         return $resource;
-    }
-
-    /**
-     * Add a required resource to a resource
-     *
-     * @param int              $resourceId
-     * @param ExerciseResource $requiredResource
-     *
-     * @throws EntityAlreadyExistsException
-     */
-    public function addRequiredResource($resourceId, ExerciseResource $requiredResource)
-    {
-        parent::addRequired(
-            $resourceId,
-            $requiredResource,
-            'claire_exercise_resource_resource_requirement',
-            'resource'
-        );
-    }
-
-    /**
-     * Delete a requires resource
-     *
-     * @param int              $resourceId
-     * @param ExerciseResource $requiredResource
-     *
-     * @throws EntityDeletionException
-     */
-    public function deleteRequiredResource($resourceId, ExerciseResource $requiredResource)
-    {
-        parent::deleteRequired(
-            $resourceId,
-            $requiredResource,
-            'claire_exercise_resource_resource_requirement',
-            'resource_id',
-            'required_id'
-        );
-    }
-
-    /**
-     * Add a required knowledge to an exercise model
-     *
-     * @param int       $resourceId
-     * @param Knowledge $requiredKnowledge
-     *
-     * @throws EntityAlreadyExistsException
-     */
-    public function addRequiredKnowledge($resourceId, Knowledge $requiredKnowledge)
-    {
-        parent::addRequired(
-            $resourceId,
-            $requiredKnowledge,
-            'claire_exercise_resource_knowledge_requirement',
-            'knowledge'
-        );
-    }
-
-    /**
-     * Delete a requires resource
-     *
-     * @param int       $resourceId
-     * @param Knowledge $requiredKnowledge
-     *
-     * @throws EntityDeletionException
-     */
-    public function deleteRequiredKnowledge($resourceId, Knowledge $requiredKnowledge)
-    {
-        parent::deleteRequired(
-            $resourceId,
-            $requiredKnowledge,
-            'claire_exercise_resource_knowledge_requirement',
-            'resource_id',
-            'required_knowledge_id'
-        );
     }
 
     /**

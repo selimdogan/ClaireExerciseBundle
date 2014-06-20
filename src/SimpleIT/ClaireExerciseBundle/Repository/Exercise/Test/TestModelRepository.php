@@ -67,20 +67,4 @@ class TestModelRepository extends BaseRepository
 
         return $queryBuilder->getQuery()->getResult();
     }
-
-    /**
-     * Delete all the positions for a test model
-     *
-     * @param int $testModelId
-     */
-    public function deleteAllPositions($testModelId)
-    {
-        $sql = 'DELETE FROM claire_exercise_test_model_position AS etmp WHERE etmp.test_model_id = :testModelId';
-
-        $connection = $this->_em->getConnection();
-        $connection->executeQuery(
-            $sql,
-            array('testModelId' => $testModelId)
-        );
-    }
 }
