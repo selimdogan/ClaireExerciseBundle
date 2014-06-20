@@ -83,6 +83,9 @@ class ApiResourceParamConverter implements ParamConverterInterface
     {
         if (null === $configuration->getClass()) {
             return false;
+        } elseif (explode(':', $configuration->getClass())[0] !== 'SimpleITClaireExerciseBundle')
+        {
+            return false;
         }
 
         return true;

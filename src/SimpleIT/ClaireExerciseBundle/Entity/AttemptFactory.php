@@ -5,7 +5,7 @@ namespace SimpleIT\ClaireExerciseBundle\Entity;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use Claroline\CoreBundle\Entity\User;
 
 /**
  * Class to manage the creation of Attempts

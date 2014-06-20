@@ -28,7 +28,12 @@ abstract class ApiController extends Controller
      */
     protected function getUserIdIfNoCreator()
     {
-        if (!$this->get('security.context')->getToken()->getUser()->hasRole('ROLE_WS_CREATOR')) {
+
+        if (!$this->get('simple_it.exercise.user')->hasRole(
+            $this->get('security.context')->getToken()->getUser(),
+            'ROLE_WS_CREATOR'
+        )
+        ) {
             return $this->getUserId();
         } else {
             return null;

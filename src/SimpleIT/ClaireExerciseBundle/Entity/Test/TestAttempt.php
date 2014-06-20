@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity\Test;
 
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use Claroline\CoreBundle\Entity\User;
 
 /**
  * Class Test for the test sessions containing stored exercises.

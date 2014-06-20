@@ -5,7 +5,7 @@ namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource;
 use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use Claroline\CoreBundle\Entity\User;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityAlreadyExistsException;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;

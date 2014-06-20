@@ -4,7 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource;
 
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use Claroline\CoreBundle\Entity\User;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
