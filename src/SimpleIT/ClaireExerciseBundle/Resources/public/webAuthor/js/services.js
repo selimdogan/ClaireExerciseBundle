@@ -5,7 +5,7 @@ resourceServices.factory('Resource', ['$resource',
 
         return $resource(
 
-            'http://claire/app_dev.php/api/resources/:id',
+            'http://localhost:8085/projets/Exercices-APP/web/app_dev.php/api/resources/:id',
             { 'id': '@id'},
             {
                  update: {method: 'PUT', headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}}
@@ -21,7 +21,7 @@ modelServices.factory('Model', ['$resource',
     function($resource){
 
         return $resource(
-            'http://claire/app_dev.php/api/exercise-models/:id',
+            'http://localhost:8085/projets/Exercices-APP/web/app_dev.php/api/exercise-models/:id',
             {},
             {
                 'update': {method: 'PUT', params: {'id': '@id'}, headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}}
