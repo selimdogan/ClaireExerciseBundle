@@ -51,13 +51,6 @@ class UserService extends TransactionalService implements UserServiceInterface
      */
     public function hasRole($user, $roleName)
     {
-        /** @var Role $role */
-        foreach ($user->getRoles() as $role) {
-            if ($role->getRole() === $roleName) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_search($roleName, $user->getRoles()) !== false;
     }
 }
