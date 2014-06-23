@@ -1,204 +1,354 @@
+<div data-ng-controller="modelController">
 <div class="row" data-ng-controller="modelEditController">
 
-    <div ng-class="{'col-xs-4': !$parent.toggleResourceList, 'col-xs-12': $parent.toggleResourceList}">
-
-        <div class="panel panel-heading"><h3>Editer un modèle d'exercice</h3></div>
-
+    <div class="col-xs-12">
         <div class="panel-body">
-
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-xs-10">
-                            <h4>
-                                <label>Titre</label>
-                                <input type="text" ng-model="model.title" class="form-control"/>
-                            </h4>
+                        <div class="col-xs-1">
+                            <span class="glyphicon glyphicon-th-list" style="font-size: 920%"></span>
+                        </div>
+                        <div class="col-xs-8">
+                            <h4><strong>Titre</strong></h4>
+                            <input type="text" ng-model="model.title" class="form-control"/>
+                            <h4><strong>Intitulé</strong></h4>
+                            <input type="text" ng-model="model.content.wording" class="form-control"/>
                         </div>
                         <div class="col-xs-2">
-                            <h4>
-                                <label>Type</label>
-                                <input type="text" ng-model="model.type" class="form-control" disabled>
-                            </h4>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <label>Auteur</label>
+                            <h4><strong>Auteur</strong></h4>
                             <input type="text" ng-model="model.author" class="form-control" disabled>
-                        </div>
-
-                        <div class="col-xs-6">
-                            <label>Propriétaire</label>
+                            <h4><strong>Propriétaire</strong></h4>
                             <input type="text" ng-model="model.owner" class="form-control" disabled>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <label>Partagé</label>
-                            <input type="checkbox" ng-model="model.public" class="form-control"/>
-                        </div>
-                        <div class="col-xs-3">
-                            <label>Archivé</label>
-                            <input type="checkbox" ng-model="model.archived" class="form-control"/>
-                        </div>
-                        <div class="col-xs-3">
-                            <label>Brouillon</label>
-                            <input type="checkbox" ng-model="model.draft" class="form-control"/>
-                        </div>
-                        <div class="col-xs-3">
-                            <label>Complet</label>
-                            <input type="checkbox" ng-model="model.complete" class="form-control"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <br/>
-
-            <div ng-switch="model.type">
-
-                <div ng-switch-when="pair-items">
-
-                    <blockquote>
-                        <h3 ng-click="context.pair_items.collapse = !context.pair_items.collapse"
-                            class="panel-default">Appariement</h3>
-
-                        <div collapse="context.pair_items.collapse">
-
-                            <blockquote>
-                                <h4 ng-click="context.pair_items.wording.collapse = !context.pair_items.wording.collapse"
-                                    class="panel-default">Commun</h4>
-
-                                <div collapse="context.pair_items.wording.collapse">
-
-                                    <label>Intitulé</label>
-                                    <input type="text" ng-model="model.content.wording" class="form-control"/>
-
-                                </div>
-                            </blockquote>
-
-                            <blockquote data-ng-repeat="pair_blocks in model.content.pair_blocks track by $index">
-                                <h4 ng-click="context.pair_items.pair_blocks.collapse = !context.pair_items.pair_blocks.collapse"
-                                    class="panel-default">Block&nbsp;{{ $index }}&nbsp;&nbsp;
-                                    <span data-ng-click="modelRemoveField(model.content.pair_blocks, $index)"
-                                                                      class="glyphicon glyphicon-remove"></span>
-                                </h4>
-
-                                <div collapse="context.pair_items.pair_blocks.collapse">
-
-                                    <label>Clé de métadonnée</label>
-                                    <input type="text" ng-model="pair_blocks.pair_meta_key" class="form-control"/>
-
-                                    <label>Nombre d'occurence</label>
-                                    <input type="text"  ng-model="pair_blocks.number_of_occurrences" class="form-control"/>
-
-                                    <h4 ng-click="context.pair_items.pair_blocks.resources.collapse = !context.pair_items.pair_blocks.resources.collapse"
-                                        class="panel-default">
-                                        Liste des resources
-                                    </h4>
-                                    <blockquote collapse="context.pair_items.pair_blocks.resources.collapse" ui-on-Drop="onDrop($event,$data,pair_blocks.resources)">
-                                        <div data-ng-repeat="resource in pair_blocks.resources track by $index" class="row">
-                                            <div class="col-xs-10">
-                                                <input type="text" ng-model="resource.id" class="form-control" disabled/>
-                                            </div>
-                                            <div class="col-xs-1">
-                                                <span ui-sref="model.edit.resource.display({ resourceid:resource.id })" class="glyphicon glyphicon-eye-open"></span>
-                                            </div>
-                                            <div class="col-xs-1">
-                                                <span data-ng-click="modelRemoveField(pair_blocks.resources, $index)"
-                                                class="glyphicon glyphicon-remove"></span>
-                                            </div>
-                                        </div>
-                                    </blockquote>
-
-                                </div>
-                            </blockquote>
-
-                            <blockquote>
-                                <div>
-                                    <span data-ng-click="modelAddBlockField(model.content.pair_blocks)"
-                                        class="glyphicon glyphicon-plus"></span>
-                                </div>
-                            </blockquote>
-                        </div>
-                    </blockquote>
-
-                </div>
-
-            </div>
-
-
-            <blockquote>
-                <h3 ng-click="context.keywords.collapse = !context.keywords.collapse" class="panel-default">
-                    Mots-clés</h3>
-
-                <div collapse="context.keywords.collapse" class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div ng-repeat="keyword in model.keywords track by $index">
-                                <div class="col-xs-5">
-                                    <input type="text" ng-model="keyword" class="form-control" disabled>
-                                </div>
-                                <div class="col-xs-1"><span data-ng-click="modelRemoveField(model.keywords, $index)"
-                                                            class="glyphicon glyphicon-remove"></span></div>
+                        <div class="col-xs-1">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="model.public">
+                                    <h4><strong>Partagé</strong></h4>
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="model.archived">
+                                    <h4><strong>Archivé</strong></h4>
+                                </label>
+                            </div>
+                            <div>&nbsp;</div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="model.draft">
+                                    <h4><strong>Brouillon</strong></h4>
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="model.complete">
+                                    <h4><strong>Complet</strong></h4>
+                                </label>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-class="{'col-xs-4': !$parent.toggleResourceList, 'col-xs-12': $parent.toggleResourceList}">
+        <div class="panel-body">
+
+            <accordion>
+                <accordion-group class="panel panel-primary">
+                    <accordion-heading class="panel-heading">
                         <div class="row">
-                            <div class="col-xs-5"><input id="resourceAddKeyword" type="text" value=""
-                                                         placeholder="nouveau mot-clé" class="form-control"></div>
-                            <div class="col-xs-1"><span data-ng-click="modelAddKeywordsField(model.keywords)"
-                                                        class="glyphicon glyphicon-plus"></span></div>
+                            <div class="col-xs-11" data-ng-click="">
+                                <h4><strong>Documents&nbsp;<span class="caret"></span></strong></h4>
+                            </div>
+                            <div class="col-xs-1">
+                                <span data-ng-click="" class="glyphicon glyphicon-plus"></span>
+                            </div>
+                        </div>
+                    </accordion-heading>
+                    <div class="panel-body panel panel-primary" collapse="context.pair_items.pair_blocks.resources.collapse" ui-on-Drop="onDropDocument($event,$data,model.content.documents)">
+                        <accordion close-others="true">
+                            <accordion-group class="panel panel-success" data-ng-repeat="documentId in model.content.documents track by $index" class="row" data-ng-init="getDocumentInfo(documentId.id)">
+                                <accordion-heading class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-xs-2" ng-switch="usedDocuments[documentId.id].type">
+                                            <div ng-switch-when="text">
+                                                <span class="glyphicon glyphicon-th-list" style="font-size: 260%"></span>
+                                            </div>
+                                            <div ng-switch-when="picture">
+                                                <span class="glyphicon glyphicon-th-list" style="font-size: 260%"></span>
+                                            </div>
+                                            <div ng-switch-when="multiple-choice-question">
+                                                <span class="glyphicon glyphicon-th-list" style="font-size: 260%"></span>
+                                            </div>
+                                            <div ng-switch-when="open-ended-question">
+                                                <span class="glyphicon glyphicon-th-list" style="font-size: 260%"></span>
+                                            </div>
+                                            <div ng-switch-when="sequence">
+                                                <span class="glyphicon glyphicon-th-list" style="font-size: 260%"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-8">
+                                            <h4><strong>{{ usedDocuments[documentId.id].title }}&nbsp;<span class="caret"></span></strong></h4>
+                                        </div>
+                                        <div class="col-xs-1">
+
+                                        </div>
+                                        <div class="col-xs-1">
+                                                    <span data-ng-click="modelRemoveField(model.content.documents, $index)"
+                                                          class="glyphicon glyphicon-remove"></span>
+                                        </div>
+                                    </div>
+                                </accordion-heading>
+                                <div class="row">
+                                    <div class="col-xs-12"><small><strong>ID: {{ usedDocuments[documentId.id].id }}</strong></small></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <small><strong>Auteur: {{ usedDocuments[documentId.id].author }}</strong></small><br>
+                                        <small><strong>Propriétaire: {{ usedDocuments[documentId.id].owner }}</strong></small>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <small><strong>Partagé:&nbsp;
+                                            <ng-switch on="usedDocuments[documentId.id].public">
+                                                <span ng-switch-when="true">Oui</span>
+                                                <span ng-switch-when="false">Non</span>
+                                            </ng-switch>
+                                        </strong></small><br>
+                                        <small><strong>Archivé:&nbsp;
+                                            <ng-switch on="usedDocuments[documentId.id].archived">
+                                                <span ng-switch-when="true">Oui</span>
+                                                <span ng-switch-when="false">Non</span>
+                                            </ng-switch>
+                                        </strong></small>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <small><strong>Brouillon:&nbsp;
+                                            <ng-switch on="usedDocuments[documentId.id].draft">
+                                                <span ng-switch-when="true">Oui</span>
+                                                <span ng-switch-when="false">Non</span>
+                                            </ng-switch>
+                                        </strong></small><br>
+                                        <small><strong>Complet:&nbsp;
+                                            <ng-switch on="usedDocuments[documentId.id].complete">
+                                                <span ng-switch-when="true">Oui</span>
+                                                <span ng-switch-when="false">Non</span>
+                                            </ng-switch>
+                                        </strong></small>
+                                    </div>
+                                </div>
+                            </accordion-group>
+                        </accordion>
+                    </div>
+                </accordion-group>
+            </accordion>
+
+            <div ng-switch="model.type">
+                <div ng-switch-when="pair-items">
+                    <accordion close-others="true">
+                        <accordion-group class="panel panel-primary" data-ng-repeat="pair_blocks in model.content.pair_blocks track by $index">
+                            <accordion-heading class="panel-heading">
+                                <div class="row" data-ng-init="usedResources.push([])">
+                                    <div class="col-xs-11">
+                                        <h4><strong>Bloc d'appariement&nbsp;<span class="caret"></span></strong></h4>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <span data-ng-click="modelRemoveField(model.content.pair_blocks, $index)" class="glyphicon glyphicon-remove"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <h5><strong>Clé de métadonnée</strong></h5>
+                                        <input type="text" ng-model="pair_blocks.pair_meta_key" class="form-control" ui-on-Drop="onDropMetadataKey($event,$data,pair_blocks)"/>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <h5><strong>Nombre d'occurence</strong></h5>
+                                        <input type="text"  ng-model="pair_blocks.number_of_occurrences" class="form-control"/>
+                                    </div>
+                                </div>
+                            </accordion-heading>
+
+                            <tabset type="pills">
+                                <tab heading="Lister les resources">
+                                    <div class="panel-body panel panel-primary" collapse="context.pair_items.pair_blocks.resources.collapse" ui-on-Drop="onDropResourceToBlock($event,$data,pair_blocks.resources)">
+                                        <accordion close-others="true">
+                                            <accordion-group class="panel panel-success" data-ng-repeat="blockResourceId in pair_blocks.resources track by $index" class="row" data-ng-init="getResourceInfo($parent.$index, blockResourceId.id)">
+                                                <accordion-heading class="panel-heading">
+                                                    <div class="row">
+                                                        <div class="col-xs-2" ng-switch="usedResources[$parent.$parent.$parent.$index][blockResourceId.id].type">
+                                                            <div ng-switch-when="text">
+                                                                <span class="glyphicon glyphicon-th-list" style="font-size: 260%"></span>
+                                                            </div>
+                                                            <div ng-switch-when="picture">
+                                                                <span class="glyphicon glyphicon-th-list" style="font-size: 260%"></span>
+                                                            </div>
+                                                            <div ng-switch-when="multiple-choice-question">
+                                                                <span class="glyphicon glyphicon-th-list" style="font-size: 260%"></span>
+                                                            </div>
+                                                            <div ng-switch-when="open-ended-question">
+                                                                <span class="glyphicon glyphicon-th-list" style="font-size: 260%"></span>
+                                                            </div>
+                                                            <div ng-switch-when="sequence">
+                                                                <span class="glyphicon glyphicon-th-list" style="font-size: 260%"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <h4><strong>{{ usedResources[$parent.$parent.$parent.$index][blockResourceId.id].title }}&nbsp;<span class="caret"></span></strong></h4>
+                                                        </div>
+                                                        <div class="col-xs-1">
+
+                                                        </div>
+                                                        <div class="col-xs-1">
+                                                    <span data-ng-click="modelRemoveField(pair_blocks.resources, $index)"
+                                                          class="glyphicon glyphicon-remove"></span>
+                                                        </div>
+                                                    </div>
+                                                </accordion-heading>
+                                                <div class="row">
+                                                    <div class="col-xs-12"><small><strong>ID: {{ usedResources[$parent.$parent.$parent.$index][blockResourceId.id].id }}</strong></small></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-4">
+                                                        <small><strong>Auteur: {{ usedResources[$parent.$parent.$parent.$index][blockResourceId.id].author }}</strong></small><br>
+                                                        <small><strong>Propriétaire: {{ usedResources[$parent.$parent.$parent.$index][blockResourceId.id].owner }}</strong></small>
+                                                    </div>
+                                                    <div class="col-xs-4">
+                                                        <small><strong>Partagé:&nbsp;
+                                                            <ng-switch on="usedResources[$parent.$parent.$parent.$index][blockResourceId.id].public">
+                                                                <span ng-switch-when="true">Oui</span>
+                                                                <span ng-switch-when="false">Non</span>
+                                                            </ng-switch>
+                                                        </strong></small><br>
+                                                        <small><strong>Archivé:&nbsp;
+                                                            <ng-switch on="usedResources[$parent.$parent.$parent.$index][blockResourceId.id].archived">
+                                                                <span ng-switch-when="true">Oui</span>
+                                                                <span ng-switch-when="false">Non</span>
+                                                            </ng-switch>
+                                                        </strong></small>
+                                                    </div>
+                                                    <div class="col-xs-4">
+                                                        <small><strong>Brouillon:&nbsp;
+                                                            <ng-switch on="usedResources[$parent.$parent.$parent.$index][blockResourceId.id].draft">
+                                                                <span ng-switch-when="true">Oui</span>
+                                                                <span ng-switch-when="false">Non</span>
+                                                            </ng-switch>
+                                                        </strong></small><br>
+                                                        <small><strong>Complet:&nbsp;
+                                                            <ng-switch on="usedResources[$parent.$parent.$parent.$index][blockResourceId.id].complete">
+                                                                <span ng-switch-when="true">Oui</span>
+                                                                <span ng-switch-when="false">Non</span>
+                                                            </ng-switch>
+                                                        </strong></small>
+                                                    </div>
+                                                </div>
+                                            </accordion-group>
+                                        </accordion>
+                                    </div>
+                                </tab>
+                                <tab heading="Sélectionner par contraintes">
+                                    <div class="panel-body panel panel-primary">
+
+                                    </div>
+                                </tab>
+                            </tabset>
+
+
+                        </accordion-group>
+
+                        <div class="panel panel-primary">
+                            <div class="panel-heading" data-ng-click="modelAddBlockField(model.content.pair_blocks)" >
+                                <div class="row">
+                                    <div class="col-xs-1">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </div>
+                                    <div class="col-xs-10"></div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </accordion>
+                </div>
+            </div>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4><strong>Mots-clés</strong></h4>
+                    <div class="row">
+                        <div ng-repeat="keyword in model.keywords track by $index">
+                            <div class="col-xs-5">
+                                <input type="text" ng-model="keyword" class="form-control" disabled>
+                            </div>
+                            <div class="col-xs-1"><span data-ng-click="modelRemoveField(model.keywords, $index)"
+                                                        class="glyphicon glyphicon-remove"></span></div>
                         </div>
                     </div>
-                </div>
-            </blockquote>
-
-
-            <blockquote>
-                <h3 ng-click="context.metadata.collapse = !context.metadata.collapse" class="panel-default">
-                    Méta-données</h3>
-
-                <div collapse="context.metadata.collapse" class="panel panel-default">
-                    <div class="panel-heading">
-                        <table class="table">
-                            <tr>
-                                <th>Clé</th>
-                                <th>Valeur</th>
-                                <th>&nbsp;</th>
-                            </tr>
-                            <tr ng-repeat="meta in model.metadata track by $index">
-                                <th><input type="text" ng-model="meta.key" class="form-control"></th>
-                                <th><input type="text" ng-model="meta.value" class="form-control"></th>
-                                <th><span data-ng-click="modelRemoveField(model.metadata, $index)"
-                                          class="glyphicon glyphicon-remove"></span></th>
-                            </tr>
-                            <tr>
-                                <th><span data-ng-click="modelAddMetadataField(model.metadata)"
-                                          class="glyphicon glyphicon-plus"></span></th>
-                            </tr>
-                        </table>
+                    <div class="row">
+                        <div class="col-xs-5"><input id="modelAddKeyword" type="text" value=""
+                                                     placeholder="nouveau mot-clé" class="form-control"></div>
+                        <div class="col-xs-1"><span data-ng-click="modelAddKeywordsField(model.keywords)"
+                                                    class="glyphicon glyphicon-plus"></span></div>
                     </div>
                 </div>
-            </blockquote>
+            </div>
 
-            <br/>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4><strong>Méta-données</strong></h4>
+                    <div class="row">
+                        <div ng-repeat="meta in model.metadata track by $index">
+                            <div class="col-xs-5">
+                                <input type="text" ng-model="meta.key" class="form-control" disabled>
+                            </div>
+                            <div class="col-xs-6">
+                                <input type="text" ng-model="meta.value" class="form-control" disabled>
+                            </div>
+                            <div class="col-xs-1"><span data-ng-click="modelRemoveField(model.metadata, $index)"
+                                                        class="glyphicon glyphicon-remove"></span></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-5"><input id="modelAddMetadataKey" type="text" value=""
+                                                     placeholder="nouvelle clé" class="form-control"></div>
+                        <div class="col-xs-6"><input id="modelAddMetadataValue" type="text" value=""
+                                                     placeholder="nouvelle valeur" class="form-control"></div>
+                        <div class="col-xs-1"><span data-ng-click="modelAddMetadataField(model.metadata)"
+                                                    class="glyphicon glyphicon-plus"></span></div>
+                    </div>
+                </div>
+            </div>
 
-            <div>
+            <div class="navbar navbar-inverse navbar-fixed-bottom" style="margin-bottom:60px; padding-left: 20px">
                 <button back-Button class="btn btn-primary">Retour</button>
                 <button ng-click="updateModel()" class="btn btn-primary">Sauvegarder</button>
             </div>
 
-            <br/>
-
         </div>
     </div>
 
-    <div ng-class="{'col-xs-8': !$parent.toggleResourceList, 'hide': $parent.toggleResourceList}">
-        <br/><br/><br/><br/><br/><br/>
+<script>
+    $(function() {
+        var window_height = $(window).height(),
+                content_height = window_height - 386; // 484
+
+        $('.scrollContainer').height(content_height);
+    });
+
+    $( window ).resize(function() {
+        var window_height = $(window).height(),
+                content_height = window_height - 386;
+        $('.scrollContainer').height(content_height);
+    });
+</script>
+
+    <div class="scrollContainer" style="right:0;" ng-class="{'col-xs-8': !$parent.toggleResourceList, 'hide': $parent.toggleResourceList}">
         <div ui-view>
             <div data-ng-include="'/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-list.html'"></div>
         </div>
     </div>
 
+</div>
 </div>

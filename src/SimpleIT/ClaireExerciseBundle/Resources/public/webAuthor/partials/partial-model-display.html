@@ -1,31 +1,33 @@
-<div class="container"  data-ng-controller="modelDisplayController">
+<div data-ng-controller="modelController">
+    <div class="container"  data-ng-controller="modelDisplayController">
 
-    <div class="table-responsive">
-        <table class="table table-striped">
+        <div class="table-responsive">
+            <table class="table table-striped">
 
-            <tr>
-                <th>Type</th>
-                <th>Titre</th>
-                <th>Auteur</th>
-                <th>Propriétaire</th>
-                <th>Partagé</th>
-                <th>Archivé</th>
-                <th>Brouillon</th>
-                <th>Complet</th>
-            </tr>
+                <tr>
+                    <th>Type</th>
+                    <th>Titre</th>
+                    <th>Auteur</th>
+                    <th>Propriétaire</th>
+                    <th>Partagé</th>
+                    <th>Archivé</th>
+                    <th>Brouillon</th>
+                    <th>Complet</th>
+                </tr>
 
-            <tr>
-                <td><kbd class="label-info">{{ model.type }}</kbd></td>
-                <td>{{ model.title }}</td>
-                <td>{{ model.author }}</td>
-                <td>{{ model.owner }}</td>
-                <td><ng-switch on="model.public"><span ng-switch-when="true">Oui</span><span ng-switch-when="false">Non</span></ng-switch></td>
-                <td><ng-switch on="model.archived"><span ng-switch-when="true">Oui</span><span ng-switch-when="false">Non</span></ng-switch></td>
-                <td><ng-switch on="model.draft"><span ng-switch-when="true">Oui</span><span ng-switch-when="false">Non</span></ng-switch></td>
-                <td><ng-switch on="model.complete"><span ng-switch-when="true">Oui</span><span ng-switch-when="false">Non</span></ng-switch></td>
-            </tr>
+                <tr>
+                    <td><kbd class="label-info">{{ model.type }}</kbd></td>
+                    <td>{{ model.title }}</td>
+                    <td>{{ model.author }}</td>
+                    <td>{{ model.owner }}</td>
+                    <td><ng-switch on="model.public"><span ng-switch-when="true">Oui</span><span ng-switch-when="false">Non</span></ng-switch></td>
+                    <td><ng-switch on="model.archived"><span ng-switch-when="true">Oui</span><span ng-switch-when="false">Non</span></ng-switch></td>
+                    <td><ng-switch on="model.draft"><span ng-switch-when="true">Oui</span><span ng-switch-when="false">Non</span></ng-switch></td>
+                    <td><ng-switch on="model.complete"><span ng-switch-when="true">Oui</span><span ng-switch-when="false">Non</span></ng-switch></td>
+                </tr>
 
-        </table>
+            </table>
+        </div>
+
     </div>
-
 </div>

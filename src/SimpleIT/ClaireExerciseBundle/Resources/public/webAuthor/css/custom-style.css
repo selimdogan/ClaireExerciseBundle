@@ -3,13 +3,8 @@ html {
 }
 
 body {
-    padding-top: 80px;
+    padding-top: 48px;
     padding-bottom: 80px;
-}
-
-#title {
-    font-size:18pt;
-    color:#ddd;
 }
 
 #TopNav {
@@ -43,4 +38,10 @@ body {
 
 option {
     text-align: center;
+}
+
+.scrollContainer {
+    position: fixed;
+    margin-top: 222px;
+    overflow: auto;
 }

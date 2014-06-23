@@ -44,35 +44,41 @@ mainApp.config(
                     //,controller: 'modelEditController'
                 });
 
+
                 $stateProvider.state('model.edit.resource', {
                     url: '/resource',
                     templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource.html'
+                    //,controller: 'resourceController'
                 });
 
                 $stateProvider.state('model.edit.resource.list', {
                     url: '/list',
                     templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-list.html'
+                    //,controller: 'resourceController'
                     //,controller: 'resourceListController'
                 });
 
                 $stateProvider.state('model.edit.resource.display', {
                     url: '/:resourceid',
                     templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-display.html'
+                    //,controller: 'resourceController'
                     //,controller: 'resourceDisplayController'
                 });
 
                 $stateProvider.state('model.edit.resource.edit', {
                     url: '/:resourceid/edit',
                     templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-edit.html'
+                    //,controller: 'resourceController'
                     //,controller: 'resourceEditController'
                 });
 
                 $stateProvider.state('resource', {
                     url: '/resource',
                     templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource.html'
+                    //,controller: 'resourceController'
                 });
 
-                $stateProvider.state('model.resource.list', {
+                $stateProvider.state('resource.list', {
                     url: '/list',
                     templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-list.html'
                     //,controller: 'resourceListController'
