@@ -7,8 +7,8 @@ use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityAlreadyExistsException;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedEntityRepository;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 
 /**
  * ExerciseModel repository
@@ -106,6 +106,19 @@ class ExerciseModelRepository extends SharedEntityRepository
             'claire_exercise_model_knowledge_requirement',
             'model_id',
             'required_knowledge_id'
+        );
+    }
+
+    /**
+     * Get the join that reduce the number of requests.
+     *
+     * @return array
+     */
+    protected function getLeftJoins()
+    {
+        return array(
+            "rr" => "entity.requiredExerciseResources",
+            "rk" => "entity.requiredKnowledges"
         );
     }
 }

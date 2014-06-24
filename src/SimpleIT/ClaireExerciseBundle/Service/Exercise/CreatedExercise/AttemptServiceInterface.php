@@ -2,10 +2,8 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 
 /**
  * Interface for service which manages the attempt
@@ -17,12 +15,12 @@ interface AttemptServiceInterface
     /**
      * Find an attempt by its id
      *
-     * @param int $attemptId
+     * @param int  $attemptId
+     * @param null $userId
      *
-     * @throws NonExistingObjectException
      * @return Attempt
      */
-    public function get($attemptId);
+    public function get($attemptId, $userId = null);
 
     /**
      * Add a new attempt to the database
@@ -43,7 +41,7 @@ interface AttemptServiceInterface
      * @param int                   $exerciseId
      * @param int                   $testAttemptId
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll(
         $collectionInformation = null,

@@ -15,7 +15,7 @@
             </cascade>
         </one-to-many>
 
-        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\User\User" field="author">
+        <many-to-one target-entity="Claroline\CoreBundle\Entity\User" field="author">
             <join-column name="author_id" referenced-column-name="id"/>
         </many-to-one>
 

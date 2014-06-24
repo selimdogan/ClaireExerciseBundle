@@ -51,23 +51,22 @@ class KnowledgeResource extends SharedResource
      * @var CommonKnowledge $content
      * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge")
      * @Serializer\Groups({"details"})
-     * @Assert\Blank(groups={"appCreate"})
      * @Assert\Valid
      */
     protected $content;
 
     /**
      * @var boolean $draft
-     * @Serializer\Groups({"details", "list", "knowledge_list"})
      * @Serializer\Type("boolean")
+     * @Serializer\Groups({"details", "list", "knowledge_list"})
      * @Assert\NotNull(groups={"create"})
      */
     protected $draft;
 
     /**
      * @var boolean $complete
-     * @Serializer\Groups({"details", "list", "knowledge_list"})
      * @Serializer\Type("boolean")
+     * @Serializer\Groups({"details", "list", "knowledge_list"})
      * @Assert\Null(groups={"create"})
      */
     protected $complete;
@@ -115,14 +114,14 @@ class KnowledgeResource extends SharedResource
     /**
      * @var array
      * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource>")
-     * @Serializer\Groups({"details"})
+     * @Serializer\Groups({"details", "knowledge_list"})
      */
     protected $metadata;
 
     /**
      * @var array
      * @Serializer\Type("array")
-     * @Serializer\Groups({"details"})
+     * @Serializer\Groups({"details", "knowledge_list"})
      */
     protected $keywords;
 
@@ -207,7 +206,8 @@ class KnowledgeResource extends SharedResource
      * @return string
      * @throws \LogicException
      */
-    public function getClass(){
+    public function getClass()
+    {
         return self::getSerializationClass($this->type);
     }
 }

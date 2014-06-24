@@ -1,23 +1,23 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\ExerciseResource;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
-use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
-use SimpleIT\ApiBundle\Exception\ApiConflictException;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
-use SimpleIT\ApiBundle\Model\ApiDeletedResponse;
-use SimpleIT\ApiBundle\Model\ApiEditedResponse;
-use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
-use SimpleIT\ApiBundle\Model\ApiResponse;
+use Doctrine\DBAL\DBALException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiConflictException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiDeletedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiEditedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
-use SimpleIT\CoreBundle\Exception\ExistingObjectException;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResourceFactory;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -39,7 +39,9 @@ class ResourceController extends ApiController
     {
         try {
             // Call to the resource service to get the resource
-            $resourceResource = $this->get('simple_it.exercise.exercise_resource')->getContentFullResource($resourceId);
+            $resourceResource = $this->get(
+                'simple_it.exercise.exercise_resource'
+            )->getContentFullResource($resourceId, $this->getUserId());
 
             return new ApiGotResponse($resourceResource, array("details", 'Default'));
 
@@ -53,17 +55,20 @@ class ResourceController extends ApiController
      *
      * @param CollectionInformation $collectionInformation
      *
-     * @throws \SimpleIT\ApiBundle\Exception\ApiNotFoundException
-     * @return ApiPaginatedResponse
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException
+     * @return ApiGotResponse
      */
     public function listAction(CollectionInformation $collectionInformation)
     {
         try {
-            $resources = $this->get('simple_it.exercise.exercise_resource')->getAll($collectionInformation);
+            $resources = $this->get('simple_it.exercise.exercise_resource')->getAll(
+                $collectionInformation,
+                $this->getUserId()
+            );
 
             $resourceResources = ResourceResourceFactory::createCollection($resources);
 
-            return new ApiPaginatedResponse($resourceResources, $resources, array(
+            return new ApiGotResponse($resourceResources, array(
                 'resource_list',
                 'Default'
             ));
@@ -86,16 +91,14 @@ class ResourceController extends ApiController
     )
     {
         try {
-            $userId = null;
-            if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                $userId = $this->get('security.context')->getToken()->getUser()->getId();
-            }
+            $userId = $this->getUserId();
 
             $this->validateResource($resourceResource, array('create', 'Default'));
 
             $resourceResource->setAuthor($userId);
             $resourceResource->setOwner($userId);
 
+            /** @var ExerciseResource $exerciseResource */
             $exerciseResource = $this->get('simple_it.exercise.exercise_resource')->createAndAdd
                 (
                     $resourceResource,
@@ -132,7 +135,8 @@ class ResourceController extends ApiController
             $resourceResource->setId($resourceId);
             $resource = $this->get('simple_it.exercise.exercise_resource')->edit
                 (
-                    $resourceResource
+                    $resourceResource,
+                    $this->getUserId()
                 );
             $resourceResource = ResourceResourceFactory::create($resource);
 
@@ -140,7 +144,7 @@ class ResourceController extends ApiController
 
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(ResourceResource::RESOURCE_NAME);
-        } catch (ExistingObjectException $eoe) {
+        } catch (DBALException $eoe) {
             throw new ApiConflictException($eoe->getMessage());
         } catch (NoAuthorException $nae) {
             throw new ApiBadRequestException($nae->getMessage());
@@ -152,14 +156,17 @@ class ResourceController extends ApiController
      *
      * @param int $resourceId
      *
-     * @throws \SimpleIT\ApiBundle\Exception\ApiBadRequestException
-     * @throws \SimpleIT\ApiBundle\Exception\ApiNotFoundException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException
      * @return ApiDeletedResponse
      */
     public function deleteAction($resourceId)
     {
         try {
-            $this->get('simple_it.exercise.exercise_resource')->remove($resourceId);
+            $this->get('simple_it.exercise.exercise_resource')->remove(
+                $resourceId,
+                $this->getUserId()
+            );
 
             return new ApiDeletedResponse();
 

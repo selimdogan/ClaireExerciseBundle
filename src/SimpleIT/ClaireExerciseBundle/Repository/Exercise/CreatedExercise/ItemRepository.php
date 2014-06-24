@@ -3,17 +3,15 @@
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise;
 
 use Doctrine\ORM\QueryBuilder;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Model\Paginator;
-use SimpleIT\CoreBundle\Repository\BaseRepository;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
+use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 
 /**
  * Item repository
@@ -28,7 +26,7 @@ class ItemRepository extends BaseRepository
      * @param StoredExercise $storedExercise Exercise
      *
      * @throws ApiNotFoundException
-     * @return PaginatorInterface
+     * @return array
      */
     public function findAllBy($storedExercise = null)
     {
@@ -45,13 +43,7 @@ class ItemRepository extends BaseRepository
 
         $queryBuilder->add('orderBy', 'i.id', true);
 
-        $pag = new Paginator($queryBuilder);
-
-        if ($pag->count() === 0) {
-            throw new ApiNotFoundException(ItemResource::RESOURCE_NAME);
-        }
-
-        return $pag;
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -60,7 +52,7 @@ class ItemRepository extends BaseRepository
      * @param Attempt               $attempt
      * @param CollectionInformation $collectionInformation
      *
-     * @return Paginator
+     * @return array
      */
     public function findAllByAttempt(Attempt $attempt, $collectionInformation = null)
     {
@@ -71,7 +63,7 @@ class ItemRepository extends BaseRepository
         $queryBuilder->where($queryBuilder->expr()->eq('a.id', $attempt->getId()));
         $queryBuilder->orderBy('i.id');
 
-        return new Paginator($queryBuilder);
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

@@ -49,7 +49,7 @@ class ExerciseModelResource extends SharedResource
      * @Serializer\Groups({"details", "list", "exercise"})
      * @Assert\Blank(groups={"create", "edit"})
      */
-     protected $id;
+    protected $id;
 
     /**
      * @var string $type
@@ -142,14 +142,14 @@ class ExerciseModelResource extends SharedResource
     /**
      * @var array
      * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource>")
-     * @Serializer\Groups({"details"})
+     * @Serializer\Groups({"details","list"})
      */
     protected $metadata;
 
     /**
      * @var array
      * @Serializer\Type("array")
-     * @Serializer\Groups({"details"})
+     * @Serializer\Groups({"details","list"})
      */
     protected $keywords;
 
@@ -266,7 +266,8 @@ class ExerciseModelResource extends SharedResource
      * @return string
      * @throws \LogicException
      */
-    public function getClass(){
+    public function getClass()
+    {
         return self::getSerializationClass($this->type);
     }
 }

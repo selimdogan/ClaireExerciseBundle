@@ -3,7 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test;
 
 use Doctrine\ORM\QueryBuilder;
-use SimpleIT\CoreBundle\Repository\BaseRepository;
+use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 
 /**
  * Class TestPositionRepository

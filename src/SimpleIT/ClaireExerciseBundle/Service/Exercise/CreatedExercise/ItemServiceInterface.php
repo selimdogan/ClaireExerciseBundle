@@ -2,9 +2,9 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 
 /**
  * Interface for service which manages the stored exercises
@@ -25,16 +25,14 @@ interface ItemServiceInterface
     /**
      * Find the item and the correction (if corrected by this user)
      *
-     * @param int     $itemId
-     * @param int     $attemptId
-     * @param boolean $corrected
+     * @param int $itemId
+     * @param int $attemptId
      *
-     * @return Item
+     * @return ItemResource
      */
     public function findItemAndCorrectionByAttempt(
         $itemId,
-        $attemptId,
-        &$corrected
+        $attemptId
     );
 
     /**
@@ -52,7 +50,7 @@ interface ItemServiceInterface
      *
      * @param int $exerciseId  Exercise id
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll($exerciseId = null);
 
@@ -61,7 +59,7 @@ interface ItemServiceInterface
      *
      * @param int $attemptId
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAllByAttempt($attemptId = null);
 
@@ -71,7 +69,7 @@ interface ItemServiceInterface
      * @param $itemId
      * @param $answerId
      *
-     * @return Item
+     * @return ItemResource
      * @throws NonExistingObjectException
      */
     public function findItemAndCorrectionById($itemId, $answerId);

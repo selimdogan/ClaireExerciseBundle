@@ -4,7 +4,6 @@ namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 use JMS\Serializer\Handler\HandlerRegistry;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
-use SimpleIT\Utils\Collection\PaginatorInterface;
 
 /**
  * Class KnowledgeResourceFactory
@@ -17,15 +16,15 @@ abstract class KnowledgeResourceFactory extends SharedResourceFactory
     /**
      * Create an KnowledgeResource collection
      *
-     * @param PaginatorInterface $knowledges
+     * @param array $knowledges
      *
      * @return array
      */
-    public static function createCollection(PaginatorInterface $knowledges)
+    public static function createCollection(array $knowledges)
     {
         $knowledgeResources = array();
         foreach ($knowledges as $knowledge) {
-            $knowledgeResources[] = self::create($knowledge);
+            $knowledgeResources[] = self::create($knowledge, true);
         }
 
         return $knowledgeResources;
@@ -35,24 +34,28 @@ abstract class KnowledgeResourceFactory extends SharedResourceFactory
      * Create a KnowledgeResource
      *
      * @param Knowledge $knowledge
+     * @param bool      $light
      *
      * @return KnowledgeResource
      */
-    public static function create(Knowledge $knowledge)
+    public static function create(Knowledge $knowledge, $light = false)
     {
         $knowledgeResource = new KnowledgeResource();
         parent::fill(
             $knowledgeResource,
-            $knowledge
+            $knowledge,
+            $light
         );
 
-        // knowledge requirements
-        $requirements = array();
-        foreach ($knowledge->getRequiredKnowledges() as $req) {
-            /** @var Knowledge $req */
-            $requirements[] = $req->getId();
+        if (!$light) {
+            // knowledge requirements
+            $requirements = array();
+            foreach ($knowledge->getRequiredKnowledges() as $req) {
+                /** @var Knowledge $req */
+                $requirements[] = $req->getId();
+            }
+            $knowledgeResource->setRequiredKnowledges($requirements);
         }
-        $knowledgeResource->setRequiredKnowledges($requirements);
 
         return $knowledgeResource;
     }

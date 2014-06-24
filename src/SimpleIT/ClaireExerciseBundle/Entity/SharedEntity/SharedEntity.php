@@ -4,7 +4,7 @@ namespace SimpleIT\ClaireExerciseBundle\Entity\SharedEntity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use Claroline\CoreBundle\Entity\User;
 
 /**
  * Claire exercise knowledge entity
@@ -261,7 +261,7 @@ abstract class SharedEntity
     /**
      * Set owner
      *
-     * @param \SimpleIT\ClaireExerciseBundle\Entity\User\User $owner
+     * @param \Claroline\CoreBundle\Entity\User $owner
      */
     public function setOwner($owner)
     {
@@ -271,7 +271,7 @@ abstract class SharedEntity
     /**
      * Get owner
      *
-     * @return \SimpleIT\ClaireExerciseBundle\Entity\User\User
+     * @return \Claroline\CoreBundle\Entity\User
      */
     public function getOwner()
     {

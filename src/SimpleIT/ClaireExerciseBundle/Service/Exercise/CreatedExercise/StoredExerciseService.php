@@ -2,18 +2,15 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Model\Paginator;
-use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\ItemRepository;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\StoredExerciseRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation\ExerciseServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\ExerciseModelServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\Test\TestAttemptServiceInterface;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\CoreBundle\Annotation\Transactional;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 
 /**
  * Service which manages the stored exercises
@@ -122,7 +119,7 @@ class StoredExerciseService extends TransactionalService implements StoredExerci
      * @param CollectionInformation $collectionInformation
      * @param int                   $exerciseModelId
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll(
         $collectionInformation = null,
@@ -144,15 +141,16 @@ class StoredExerciseService extends TransactionalService implements StoredExerci
     /**
      * Get all by test attempt id
      *
-     * @param $testAttemptId
+     * @param int     $testAttemptId
+     * @param int $userId
      *
-     * @return Paginator
+     * @return array
      */
-    public function getAllByTestAttempt($testAttemptId)
+    public function getAllByTestAttempt($testAttemptId, $userId = null)
     {
         $testAttempt = null;
         if (!is_null($testAttemptId)) {
-            $testAttempt = $this->testAttemptService->get($testAttemptId);
+            $testAttempt = $this->testAttemptService->get($testAttemptId, $userId);
         }
 
         return $this->storedExerciseRepository->findAllByTestAttempt($testAttempt);
@@ -164,14 +162,15 @@ class StoredExerciseService extends TransactionalService implements StoredExerci
      * @param $emId
      *
      * @return StoredExercise
-     * @Transactional
      */
     public function addByExerciseModel($emId)
     {
         $oem = $this->exerciseModelService->getParent($emId);
 
         $exercise = $this->exerciseService->generateExercise($oem);
-        $exercise = $this->storedExerciseRepository->insert($exercise);
+
+        $this->em->persist($exercise);
+        $this->em->flush();
 
         return $exercise;
     }

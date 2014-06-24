@@ -2,9 +2,9 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity;
 
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\Test;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
+use Claroline\CoreBundle\Entity\User;
 
 /**
  * Class to manage the creation of Test Attempts

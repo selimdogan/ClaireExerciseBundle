@@ -11,7 +11,6 @@ use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
 use SimpleIT\ClaireExerciseBundle\Serializer\Handler\AbstractClassForExerciseHandler;
-use SimpleIT\Utils\Collection\PaginatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -30,8 +29,9 @@ abstract class SharedResourceFactory
     /**
      * @param SharedResource $resource
      * @param SharedEntity   $entity
+     * @param bool           $light
      */
-    protected static function fill(&$resource, $entity)
+    protected static function fill(&$resource, $entity, $light = false)
     {
         $resource->setId($entity->getId());
         $resource->setType($entity->getType());
@@ -68,24 +68,26 @@ abstract class SharedResourceFactory
         $resource->setMetadata($metadataArray);
         $resource->setKeywords($keywordArray);
 
-        // content
-        if ($entity->getContent() !== null) {
-            $serializer = SerializerBuilder::create()
-                ->addDefaultHandlers()
-                ->configureHandlers(
-                    function (HandlerRegistry $registry) {
-                        $registry->registerSubscribingHandler(
-                            new AbstractClassForExerciseHandler()
-                        );
-                    }
-                )
-                ->build();
-            $content = $serializer->deserialize(
-                $entity->getContent(),
-                $resource->getClass(),
-                'json'
-            );
-            $resource->setContent($content);
+        if (!$light) {
+            // content
+            if ($entity->getContent() !== null) {
+                $serializer = SerializerBuilder::create()
+                    ->addDefaultHandlers()
+                    ->configureHandlers(
+                        function (HandlerRegistry $registry) {
+                            $registry->registerSubscribingHandler(
+                                new AbstractClassForExerciseHandler()
+                            );
+                        }
+                    )
+                    ->build();
+                $content = $serializer->deserialize(
+                    $entity->getContent(),
+                    $resource->getClass(),
+                    'json'
+                );
+                $resource->setContent($content);
+            }
         }
     }
 
@@ -94,24 +96,25 @@ abstract class SharedResourceFactory
      *
      * @param SharedEntity $entity
      * @param string       $type
+     * @param bool         $light
      *
-     * @return SharedResource
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException
+     * @return SharedResource
      */
-    public static function createFromEntity($entity, $type)
+    public static function createFromEntity($entity, $type, $light = false)
     {
         switch ($type) {
             case self::EXERCISE_MODEL:
                 /** @var ExerciseModel $entity */
-                $resource = ExerciseModelResourceFactory::create($entity);
+                $resource = ExerciseModelResourceFactory::create($entity, $light);
                 break;
             case self::RESOURCE:
                 /** @var \SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource $entity */
-                $resource = ResourceResourceFactory::create($entity);
+                $resource = ResourceResourceFactory::create($entity, $light);
                 break;
             case self::KNOWLEDGE:
                 /** @var Knowledge $entity */
-                $resource = KnowledgeResourceFactory::create($entity);
+                $resource = KnowledgeResourceFactory::create($entity, $light);
                 break;
             default:
                 throw new InvalidTypeException('Unknown type:' . $type);
@@ -123,13 +126,13 @@ abstract class SharedResourceFactory
     /**
      * Create a collection of resources from a collection of entities and the type of the entity
      *
-     * @param PaginatorInterface $entities
-     * @param string             $type
+     * @param array  $entities
+     * @param string $type
      *
      * @return array
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException
      */
-    public static function createFromEntityCollection(PaginatorInterface $entities, $type)
+    public static function createFromEntityCollection(array $entities, $type)
     {
         switch ($type) {
             case self::EXERCISE_MODEL:

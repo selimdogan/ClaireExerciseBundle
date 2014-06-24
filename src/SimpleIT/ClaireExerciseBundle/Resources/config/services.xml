@@ -7,6 +7,8 @@
         <import resource="services/resource.xml"/>
         <import resource="services/knowledge.xml"/>
         <import resource="services/user.xml"/>
+        <import resource="services/listeners.xml"/>
+        <import resource="services/converters.xml"/>
     </imports>
 
     <parameters>

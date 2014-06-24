@@ -5,18 +5,17 @@ namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use Claroline\CoreBundle\Entity\User;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityAlreadyExistsException;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\FilterException;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Model\Paginator;
-use SimpleIT\CoreBundle\Repository\BaseRepository;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\Sort;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\Sort;
 
 /**
- * Abstract SharedEntityRepository
+ * Abstract SharedBaseRepository
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
@@ -27,6 +26,7 @@ abstract class SharedEntityRepository extends BaseRepository
      * collection information
      *
      * @param CollectionInformation $collectionInformation
+     * @param int                   $authenticatedUserId
      * @param User                  $owner
      * @param User                  $author
      * @param SharedEntity          $parent
@@ -42,6 +42,7 @@ abstract class SharedEntityRepository extends BaseRepository
      */
     public function findAll(
         $collectionInformation = null,
+        $authenticatedUserId = null,
         $owner = null,
         $author = null,
         $parent = null,
@@ -56,7 +57,24 @@ abstract class SharedEntityRepository extends BaseRepository
         $metadata = array();
         $keywords = array();
 
-        $qb = $this->createQueryBuilder('entity')->select();
+        // build select
+        $lj = $this->getLeftJoins();
+        $select = 'entity, md';
+        foreach (array_keys($lj) as $alias) {
+            $select .= ', ' . $alias;
+        }
+
+        $qb = $this->createQueryBuilder('entity')->select($select);
+        $qb->leftJoin('entity.metadata', 'md');
+
+        // add other joins
+        foreach ($lj as $alias => $table) {
+            $qb->leftJoin($table, $alias);
+        }
+
+        if (!is_null($authenticatedUserId)) {
+            $qb = $this->qbAuthenticatedUser($qb, $authenticatedUserId);
+        }
 
         if (!is_null($owner)) {
             $qb = $this->qbOwner($qb, $owner->getId());
@@ -121,6 +139,9 @@ abstract class SharedEntityRepository extends BaseRepository
                         if ($value === 'true') {
                             $qb = $this->qbNotForkFrom($qb);
                         }
+                        break;
+                    case ('public'):
+                        $qb = $this->qbPublic($qb, $value);
                         break;
                     case ('complete'):
                         if ($value !== "true" && $value !== "false") {
@@ -220,10 +241,31 @@ abstract class SharedEntityRepository extends BaseRepository
             }
 
             // range
-            $qb = $this->setRange($qb, $collectionInformation);
+            // FIXME wait for a fix in api-bundle
+//            $qb = $this->setRange($qb, $collectionInformation);
         }
 
-        return new Paginator($qb);
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Create the query part to filter by owner
+     *
+     * @param QueryBuilder $qb
+     * @param int          $userId
+     *
+     * @return QueryBuilder
+     */
+    private function qbAuthenticatedUser(QueryBuilder $qb, $userId)
+    {
+        $qb->andWhere(
+            $qb->expr()->orX(
+                $qb->expr()->eq('entity.owner', $userId),
+                $qb->expr()->eq('entity.public', 'true')
+            )
+        );
+
+        return $qb;
     }
 
     /**
@@ -252,6 +294,32 @@ abstract class SharedEntityRepository extends BaseRepository
     private function qbAuthor(QueryBuilder $qb, $authorId)
     {
         $qb->andWhere($qb->expr()->eq('entity.author', $authorId));
+
+        return $qb;
+    }
+
+    /**
+     * Create the query part to filter by public
+     *
+     * @param QueryBuilder $qb
+     * @param string|bool  $public
+     *
+     * @return QueryBuilder
+     */
+    private function qbPublic(QueryBuilder $qb, $public)
+    {
+        if ($public === 'true' || $public === true) {
+            $public = 'true';
+        } else {
+            $public = 'false';
+        }
+
+        $qb->andWhere(
+            $qb->expr()->eq(
+                'entity.public',
+                $public
+            )
+        );
 
         return $qb;
     }
@@ -529,4 +597,11 @@ abstract class SharedEntityRepository extends BaseRepository
             return $result[0];
         }
     }
+
+    /**
+     * Get the join that reduce the number of requests.
+     *
+     * @return array
+     */
+    abstract protected function getLeftJoins();
 }

@@ -182,5 +182,4 @@ class StoredExercise
         return $this->testPositions;
     }
 
-
 }

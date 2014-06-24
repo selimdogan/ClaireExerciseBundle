@@ -2,13 +2,14 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
-use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise;
-use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\ExerciseModelServiceInterface;
+use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
 
 /**
  * Service which manages the exercise generation
@@ -113,7 +114,7 @@ class ExerciseService extends TransactionalService implements ExerciseServiceInt
      *
      * @param Answer $answer Answer
      *
-     * @return Item The corrected item
+     * @return ItemResource The corrected item
      * @throws \Exception
      */
     public function correctItem(Answer $answer)
@@ -124,7 +125,10 @@ class ExerciseService extends TransactionalService implements ExerciseServiceInt
         // depending on the type of the item, call the service
         $service = $this->getServiceFromType($type);
 
-        return $service->correct($item, $answer);
+        $correctedItem = $service->correct($item, $answer);
+        $correctedItem->setCorrected(true);
+
+        return $correctedItem;
     }
 
     /**

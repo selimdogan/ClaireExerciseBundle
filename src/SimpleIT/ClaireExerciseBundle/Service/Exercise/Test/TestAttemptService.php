@@ -2,17 +2,16 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\Test;
 
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestPosition;
 use SimpleIT\ClaireExerciseBundle\Entity\TestAttemptFactory;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestAttemptRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise\AttemptService;
+use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Service\User\UserServiceInterface;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\CoreBundle\Annotation\Transactional;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Service which manages the test attempts
@@ -85,15 +84,19 @@ class TestAttemptService extends TransactionalService implements TestAttemptServ
      * Find a test attempt by its id
      *
      * @param int $testAttemptId Test attempt Id
+     * @param int $userId
      *
-     * @throws NonExistingObjectException
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException
      * @return TestAttempt
      */
-    public function get($testAttemptId)
+    public function get($testAttemptId, $userId = null)
     {
         $testAttempt = $this->testAttemptRepository->find($testAttemptId);
         if (is_null($testAttempt)) {
             throw new NonExistingObjectException();
+        } elseif ($userId !== null && $testAttempt->getUser()->getId() !== $userId) {
+            throw new AccessDeniedException();
         }
 
         return $testAttempt;
@@ -106,7 +109,6 @@ class TestAttemptService extends TransactionalService implements TestAttemptServ
      * @param int $userId
      *
      * @return TestAttempt
-     * @Transactional
      */
     public function add($testId, $userId)
     {
@@ -115,7 +117,7 @@ class TestAttemptService extends TransactionalService implements TestAttemptServ
         $testAttempt = TestAttemptFactory::create($test, $user);
 
         /** @var TestAttempt $testAttempt */
-        $testAttempt = $this->testAttemptRepository->insert($testAttempt);
+        $this->em->persist($testAttempt);
 
         foreach ($test->getTestPositions() as $position) {
             /** @var TestPosition $position */
@@ -128,6 +130,8 @@ class TestAttemptService extends TransactionalService implements TestAttemptServ
             );
         }
 
+        $this->em->flush();
+
         return $testAttempt;
     }
 
@@ -138,7 +142,7 @@ class TestAttemptService extends TransactionalService implements TestAttemptServ
      * @param int                   $userId
      * @param int                   $testId
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll(
         $collectionInformation = null,

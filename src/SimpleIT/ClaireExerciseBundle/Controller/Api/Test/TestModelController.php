@@ -1,23 +1,22 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\Test;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
-use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
-use SimpleIT\ApiBundle\Exception\ApiConflictException;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
-use SimpleIT\ApiBundle\Model\ApiDeletedResponse;
-use SimpleIT\ApiBundle\Model\ApiEditedResponse;
-use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
-use SimpleIT\ApiBundle\Model\ApiResponse;
+use Doctrine\DBAL\DBALException;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiConflictException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiDeletedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiEditedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\TestModelResource;
-use SimpleIT\CoreBundle\Exception\ExistingObjectException;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\TestModelResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestModelResourceFactory;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -53,7 +52,7 @@ class TestModelController extends ApiController
      *
      * @param CollectionInformation $collectionInformation
      *
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      */
     public function listAction(CollectionInformation $collectionInformation)
     {
@@ -63,7 +62,7 @@ class TestModelController extends ApiController
 
         $testModelResources = TestModelResourceFactory::createCollection($testModels);
 
-        return new ApiPaginatedResponse($testModelResources, $testModels, array('list', 'Default'));
+        return new ApiGotResponse($testModelResources, array('list', 'Default'));
     }
 
     /**
@@ -82,7 +81,7 @@ class TestModelController extends ApiController
         try {
             $userId = null;
             if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                $userId = $this->get('security.context')->getToken()->getUser()->getId();
+                $userId = $this->getUserId();
             }
 
             $this->validateResource($testModelResource, array('create', 'Default'));
@@ -131,7 +130,7 @@ class TestModelController extends ApiController
 
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(TestModelResource::RESOURCE_NAME);
-        } catch (ExistingObjectException $eoe) {
+        } catch (DBALException $eoe) {
             throw new ApiConflictException($eoe->getMessage());
         } catch (NoAuthorException $nae) {
             throw new ApiBadRequestException($nae->getMessage());
@@ -143,8 +142,8 @@ class TestModelController extends ApiController
      *
      * @param int $testModelId
      *
-     * @throws \SimpleIT\ApiBundle\Exception\ApiBadRequestException
-     * @throws \SimpleIT\ApiBundle\Exception\ApiNotFoundException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException
      * @return ApiDeletedResponse
      */
     public function deleteAction($testModelId)

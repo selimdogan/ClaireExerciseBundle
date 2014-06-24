@@ -1,14 +1,13 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\Test;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestResource;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestResourceFactory;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 
 /**
  * API Test controller
@@ -44,7 +43,7 @@ class TestController extends ApiController
      * @param CollectionInformation $collectionInformation
      *
      * @throws ApiNotFoundException
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      */
     public function listAction(CollectionInformation $collectionInformation)
     {
@@ -55,7 +54,7 @@ class TestController extends ApiController
 
             $testResources = TestResourceFactory::createCollection($tests);
 
-            return new ApiPaginatedResponse($testResources, $tests, array('list', 'Default'));
+            return new ApiGotResponse($testResources, array('list', 'Default'));
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(TestResource::RESOURCE_NAME);
         }

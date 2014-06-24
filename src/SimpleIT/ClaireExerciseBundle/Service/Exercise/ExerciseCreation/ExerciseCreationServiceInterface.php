@@ -2,13 +2,13 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonItem;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
+use Claroline\CoreBundle\Entity\User;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 
 /**
  * Interface for the services which manages the specific exercise
@@ -40,7 +40,7 @@ interface ExerciseCreationServiceInterface
      * @param Item   $entityItem
      * @param Answer $answer
      *
-     * @return Item
+     * @return ItemResource
      */
     public function correct(Item $entityItem, Answer $answer);
 
@@ -53,13 +53,4 @@ interface ExerciseCreationServiceInterface
      * @throws \LogicException
      */
     public function validateAnswer(Item $itemEntity, array $answer);
-
-    /**
-     * Get Exercise object from entity
-     *
-     * @param Item $entityItem
-     *
-     * @return CommonItem
-     */
-    public function getItemFromEntity(Item $entityItem);
 }

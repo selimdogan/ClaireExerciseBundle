@@ -2,10 +2,9 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
-use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Exception\AnswerAlreadyExistsException;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
 
 /**
  * Interface for a service which manages the stored exercises
@@ -29,10 +28,11 @@ interface AnswerServiceInterface
     /**
      * Get all answers for an item
      *
-     * @param int $itemId Item id
-     * @param int $attemptId
+     * @param int  $itemId Item id
+     * @param int  $attemptId
+     * @param null $userId
      *
-     * @return PaginatorInterface
+     * @return array
      */
-    public function getAll($itemId = null, $attemptId = null);
+    public function getAll($itemId = null, $attemptId = null, $userId = null);
 }

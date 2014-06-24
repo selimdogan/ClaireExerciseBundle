@@ -3,31 +3,30 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
 use JMS\Serializer\SerializationContext;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
+use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
+use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
-use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\KnowledgeServiceInterface;
-use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
-use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
+use SimpleIT\ClaireExerciseBundle\Entity\ItemFactory;
+use SimpleIT\ClaireExerciseBundle\Entity\StoredExerciseFactory;
+use Claroline\CoreBundle\Entity\User;
+use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\ExerciseTextFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonItem;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\ResourceBlock;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ModelDocument;
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
-use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
-use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
-use SimpleIT\ClaireExerciseBundle\Entity\ItemFactory;
-use SimpleIT\ClaireExerciseBundle\Entity\StoredExerciseFactory;
-use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\ExerciseTextFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResourceFactory;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ModelDocument;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\FormulaServiceInterface;
+use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\KnowledgeServiceInterface;
 use
     SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\ExerciseResourceServiceInterface;
+use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 
 /**
  * Abstract class for the services which manages the specific exercise
@@ -128,7 +127,7 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
      * @param array $localFormulas
      * @param User  $owner
      *
-     * @throws \SimpleIT\ApiBundle\Exception\ApiBadRequestException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException
      * @return array
      */
     protected function computeFormulaVariableValues($localFormulas, User $owner)
@@ -374,21 +373,6 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
         );
 
         return ItemFactory::create($itemContent, $typeOfItem);
-    }
-
-    /**
-     * Get Exercise object from entity
-     *
-     * @param Item $entityItem
-     *
-     * @return CommonItem
-     */
-    public function getItemFromEntity(Item $entityItem)
-    {
-        $content = $entityItem->getContent();
-        $class = ItemResource::getClass($entityItem->getType());
-
-        return $this->serializer->jmsDeserialize($content, $class, 'json');
     }
 
     /**

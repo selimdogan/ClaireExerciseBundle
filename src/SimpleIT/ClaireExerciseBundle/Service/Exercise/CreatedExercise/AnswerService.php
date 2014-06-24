@@ -3,18 +3,16 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
 use JMS\Serializer\SerializationContext;
-use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
-use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\AnswerFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 use SimpleIT\ClaireExerciseBundle\Exception\AnswerAlreadyExistsException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\AnswerRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation\ExerciseService;
-use SimpleIT\Utils\Collection\PaginatorInterface;
-use SimpleIT\CoreBundle\Annotation\Transactional;
+use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
+use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
 
 /**
  * Service which manages the stored exercises
@@ -104,20 +102,20 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
      * @param int            $itemId
      * @param AnswerResource $answerResource
      * @param int            $attemptId
+     * @param int           $userId
      *
-     * @throws AnswerAlreadyExistsException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\AnswerAlreadyExistsException
      * @return Answer
-     * @Transactional
      */
-    public function add($itemId, AnswerResource $answerResource, $attemptId = null)
+    public function add($itemId, AnswerResource $answerResource, $attemptId = null, $userId = null)
     {
         // Get the item and the attempt
         /** @var Item $item */
         if (!is_null($attemptId)) {
-            if ($this->getAll($itemId, $attemptId)->count() > 0) {
+            if (count($this->getAll($itemId, $attemptId)) > 0) {
                 throw new AnswerAlreadyExistsException();
             }
-            $attempt = $this->attemptService->get($attemptId);
+            $attempt = $this->attemptService->get($attemptId, $userId);
             $item = $this->itemService->getByAttempt($itemId, $attemptId);
         } else {
             $item = $this->itemService->get($itemId);
@@ -136,7 +134,9 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
 
         $answer = AnswerFactory::create($content, $item, $attempt);
         // Add the answer to the database
-        $this->answerRepository->insert($answer);
+
+        $this->em->persist($answer);
+        $this->em->flush();
 
         return $answer;
     }
@@ -144,20 +144,21 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
     /**
      * Get all answers for an item
      *
-     * @param int $itemId Item id
-     * @param int $attemptId
+     * @param int  $itemId Item id
+     * @param int  $attemptId
+     * @param null $userId
      *
-     * @return PaginatorInterface
+     * @return array
      */
-    public function getAll($itemId = null, $attemptId = null)
+    public function getAll($itemId = null, $attemptId = null, $userId = null)
     {
         $item = null;
         $attempt = null;
 
         if (!is_null($itemId)) {
             if (!is_null($attemptId)) {
+                $attempt = $this->attemptService->get($attemptId, $userId);
                 $item = $this->itemService->getByAttempt($itemId, $attemptId);
-                $attempt = $this->attemptService->get($attemptId);
             } else {
                 $item = $this->itemService->get($itemId);
             }

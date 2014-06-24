@@ -2,9 +2,9 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Model\ExerciseCreation\PairItems;
 
+use SimpleIT\ClaireExerciseBundle\Model\ExerciseCreation\Common\CommonModelFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\Model;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\PairBlock;
-use SimpleIT\ClaireExerciseBundle\Model\ExerciseCreation\Common\CommonModelFactory;
 
 /**
  * This class manages the creation of instances of pair items Model.

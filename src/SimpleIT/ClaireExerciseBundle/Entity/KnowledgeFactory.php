@@ -4,8 +4,8 @@ namespace SimpleIT\ClaireExerciseBundle\Entity;
 
 use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\SerializationContext;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 
 /**
  * Class to manage the creation of Knowledge

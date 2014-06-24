@@ -5,20 +5,18 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\Test;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\DBALException;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
-use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\TestModelResource;
-use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\ExerciseModelService;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel;
 use SimpleIT\ClaireExerciseBundle\Entity\TestModelFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\TestModelPositionFactory;
+use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\TestModelResource;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestModelRepository;
+use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\ExerciseModelService;
+use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Service\User\UserService;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
-use SimpleIT\CoreBundle\Annotation\Transactional;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 
 /**
  * Class TestModelService
@@ -95,7 +93,7 @@ class TestModelService extends TransactionalService implements TestModelServiceI
      *
      * @param CollectionInformation $collectionInformation The collection information
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll($collectionInformation = null)
     {
@@ -161,11 +159,11 @@ class TestModelService extends TransactionalService implements TestModelServiceI
      * @param TestModel $testModel
      *
      * @return TestModel
-     * @Transactional
      */
     public function add(TestModel $testModel)
     {
-        $this->testModelRepository->insert($testModel);
+        $this->em->persist($testModel);
+        $this->em->flush();
 
         return $testModel;
     }
@@ -231,11 +229,13 @@ class TestModelService extends TransactionalService implements TestModelServiceI
      * @param TestModel $testModel
      *
      * @return TestModel
-     * @Transactional
      */
     public function save(TestModel $testModel)
     {
-        return $this->testModelRepository->update($testModel);
+        $testModel = $this->testModelRepository->update($testModel);
+        $this->em->flush();
+
+        return $testModel;
     }
 
     /**

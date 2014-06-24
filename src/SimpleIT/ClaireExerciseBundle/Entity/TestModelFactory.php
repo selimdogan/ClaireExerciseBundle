@@ -3,10 +3,10 @@
 namespace SimpleIT\ClaireExerciseBundle\Entity;
 
 use JMS\Serializer\SerializationContext;
+use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel;
+use Claroline\CoreBundle\Entity\User;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestModelResource;
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
-use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel;
 
 /**
  * Class to manage the creation of TestModel

@@ -2,7 +2,6 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Exception;
 
-
 /**
  * Class InvalidModelException
  *
@@ -11,7 +10,7 @@ namespace SimpleIT\ClaireExerciseBundle\Exception;
 class InvalidModelException extends \Exception
 {
     /**
-     * @param string                $message
+     * @param string $message
      */
     public function __construct($message)
     {

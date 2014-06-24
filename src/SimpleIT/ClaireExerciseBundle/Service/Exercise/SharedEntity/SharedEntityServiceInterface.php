@@ -8,12 +8,11 @@ use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntityMetadataFactory;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResource;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
-use SimpleIT\CoreBundle\Annotation\Transactional;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Interface for service which manages the exercise generation
@@ -46,18 +45,20 @@ interface SharedEntityServiceInterface
      * Get a list of entities according to restrictions. Parameters left to null are not taken in
      * account.
      *
-     * @param CollectionInformation $collectionInformation The collection information that can contain filters, sorting or pagination.
-     * @param int                   $ownerId               Entities owned by this owner
-     * @param int                   $authorId              Entities that have this author
-     * @param int                   $parentEntityId        Entities that have this one as parent
-     * @param int                   $forkFromEntityId      Entities that are forked from
-     * @param boolean               $isRoot                Entities that are root (not forked from) or not
-     * @param boolean               $isPointer             Entities that are pointer (no content) or not (no parent)
+     * @param CollectionInformation $collectionInformation   The collection information that can contain filters, sorting or pagination.
+     * @param int                   $authenticatedUserId     The authenticated user
+     * @param int                   $ownerId                 Entities owned by this owner
+     * @param int                   $authorId                Entities that have this author
+     * @param int                   $parentEntityId          Entities that have this one as parent
+     * @param int                   $forkFromEntityId        Entities that are forked from
+     * @param boolean               $isRoot                  Entities that are root (not forked from) or not
+     * @param boolean               $isPointer               Entities that are pointer (no content) or not (no parent)
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll(
         $collectionInformation = null,
+        $authenticatedUserId = null,
         $ownerId = null,
         $authorId = null,
         $parentEntityId = null,
@@ -122,11 +123,14 @@ interface SharedEntityServiceInterface
      * The id of an entity can never be modified.
      *
      * @param SharedResource $resource The resource corresponding to the entity
+     * @param int            $userId   Id of the user who tries to edit
      *
+     * @throws AccessDeniedException
      * @return SharedEntity The edited and saved entity
      */
     public function edit(
-        $resource
+        $resource,
+        $userId
     );
 
     /**
@@ -142,8 +146,11 @@ interface SharedEntityServiceInterface
      * Delete an entity
      *
      * @param int $entityId The id of the entity
+     * @param int $userId
+     *
+     * @throws AccessDeniedException
      */
-    public function remove($entityId);
+    public function remove($entityId, $userId);
 
     /**
      * Edit all the metadata of an entity. Old ones are removed and replaced by new ones.
@@ -151,10 +158,12 @@ interface SharedEntityServiceInterface
      *
      * @param int             $entityId
      * @param ArrayCollection $metadatas An ArrayCollection of the form (string)metaKey => (string)metaValue
+     * @param int             $userId
      *
+     * @throws AccessDeniedException
      * @return Collection The collection of metadata entities
      */
-    public function editMetadata($entityId, ArrayCollection $metadatas);
+    public function editMetadata($entityId, ArrayCollection $metadatas, $userId);
 
     /**
      * Get an entity by its id and by the owner id
@@ -178,19 +187,21 @@ interface SharedEntityServiceInterface
     public function subscribe($ownerId, $parentEntityId);
 
     /**
-     * Import an entity. The entity is duplicated and the required entities are also imported.
+     * Import an entity from the id. Base work.
      *
-     * @param int  $ownerId
-     * @param int  $originalId The id of the original entity that must be duplicated
+     * @param int $userId
+     * @param int $originalId The id of the original entity that must be duplicated
      *
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
      * @return SharedEntity
      */
-    public function import($ownerId, $originalId);
+    public function import($userId, $originalId);
 
     /**
      * Import an entity from the entity. Base work.
      *
-     * @param int $ownerId
+     * @param int          $ownerId
      * @param SharedEntity $original The original entity that must be duplicated
      *
      * @return SharedEntity

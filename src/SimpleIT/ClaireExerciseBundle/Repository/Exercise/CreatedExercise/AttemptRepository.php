@@ -3,13 +3,13 @@
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise;
 
 use Doctrine\ORM\QueryBuilder;
-use SimpleIT\CoreBundle\Model\Paginator;
-use SimpleIT\CoreBundle\Repository\BaseRepository;
+use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
-use SimpleIT\Utils\Collection\Sort;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\Sort;
 
 /**
  * Attempt Repository
@@ -19,6 +19,24 @@ use SimpleIT\Utils\Collection\Sort;
 class AttemptRepository extends BaseRepository
 {
     /**
+     * Find an attempt by id
+     *
+     * @param int $itemId
+     *
+     * @return Attempt
+     * @throws NonExistingObjectException
+     */
+    public function find($itemId)
+    {
+        $item = parent::find($itemId);
+        if ($item === null) {
+            throw new NonExistingObjectException();
+        }
+
+        return $item;
+    }
+
+    /**
      * Return all the attempts
      *
      * @param CollectionInformation $collectionInformation
@@ -26,7 +44,7 @@ class AttemptRepository extends BaseRepository
      * @param StoredExercise        $exercise
      * @param TestAttempt           $testAttempt
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function findAllBy(
         $collectionInformation = null,
@@ -116,11 +134,10 @@ class AttemptRepository extends BaseRepository
                     $queryBuilder->addOrderBy('a.id');
                 }
             }
-            $queryBuilder = $this->setRange($queryBuilder, $collectionInformation);
         } else {
             $queryBuilder->addOrderBy('a.id');
         }
 
-        return new Paginator($queryBuilder);
+        return $queryBuilder->getQuery()->getResult();
     }
 }

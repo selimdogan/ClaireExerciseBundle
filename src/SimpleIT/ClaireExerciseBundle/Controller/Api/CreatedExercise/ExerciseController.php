@@ -1,14 +1,14 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResourceFactory;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * API Exercise controller
@@ -43,19 +43,25 @@ class ExerciseController extends ApiController
      *
      * @param CollectionInformation $collectionInformation
      *
-     * @throws ApiNotFoundException
-     * @return ApiPaginatedResponse
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException
+     * @return ApiGotResponse
      */
     public function listAction(CollectionInformation $collectionInformation)
     {
         try {
+            if (!$this->get('security.context')->getToken()->getUser()->hasRole('ROLE_WS_CREATOR'))
+            {
+                throw new AccessDeniedException();
+            }
+
             $exercises = $this->get('simple_it.exercise.stored_exercise')->getAll(
                 $collectionInformation
             );
 
             $exerciseResources = ExerciseResourceFactory::createCollection($exercises);
 
-            return new ApiPaginatedResponse($exerciseResources, $exercises, array(
+            return new ApiGotResponse($exerciseResources, array(
                 'list',
                 'Default'
             ));

@@ -7,7 +7,6 @@ use JMS\Serializer\DeserializationContext;
 use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerBuilder;
-use SimpleIT\ApiBundle\Services\SerializerInterface;
 use SimpleIT\ClaireExerciseBundle\Serializer\Handler\AbstractClassForExerciseHandler;
 
 /**

@@ -2,8 +2,8 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Model\ExerciseObject;
 
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseSequenceObject;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidExerciseResourceException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseSequenceObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\ResourceId;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\SequenceBlock;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\SequenceElement;

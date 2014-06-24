@@ -1,13 +1,12 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
+use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel;
+use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModelPosition;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestModelResource;
-use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel;
-use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModelPosition;
-use SimpleIT\Utils\Collection\PaginatorInterface;
 
 /**
  * Class TestModelResourceFactory
@@ -20,11 +19,11 @@ abstract class TestModelResourceFactory
     /**
      * Create a TestModelResource collection
      *
-     * @param PaginatorInterface $testModels
+     * @param array $testModels
      *
      * @return array
      */
-    public static function createCollection(PaginatorInterface $testModels)
+    public static function createCollection(array $testModels)
     {
         $testModelResources = array();
         foreach ($testModels as $testModel) {

@@ -2,11 +2,11 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResourceFactory;
 
 /**
@@ -21,19 +21,19 @@ class ExerciseByTestAttemptController extends ApiController
      *
      * @param $testAttemptId
      *
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      * @throws ApiNotFoundException
      */
     public function listAction($testAttemptId)
     {
         try {
             $exercises = $this->get('simple_it.exercise.stored_exercise')->getAllByTestAttempt(
-                $testAttemptId
+                $testAttemptId, $this->getUserId()
             );
 
             $exerciseResources = ExerciseResourceFactory::createCollection($exercises);
 
-            return new ApiPaginatedResponse($exerciseResources, $exercises, array(
+            return new ApiGotResponse($exerciseResources, array(
                 'list',
                 'Default'
             ));

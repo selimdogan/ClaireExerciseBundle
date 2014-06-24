@@ -1,16 +1,16 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
-use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
-use SimpleIT\ApiBundle\Model\ApiResponse;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
 use SimpleIT\ClaireExerciseBundle\Exception\AnswerAlreadyExistsException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidAnswerException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
 
 /**
@@ -27,16 +27,21 @@ class AnswerByItemByAttemptController extends ApiController
      * @param int $itemId
      *
      * @throws ApiNotFoundException
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      */
     public function listAction($attemptId, $itemId)
     {
         try {
-            $answers = $this->get('simple_it.exercise.answer')->getAll($itemId, $attemptId);
+
+            $answers = $this->get('simple_it.exercise.answer')->getAll(
+                $itemId,
+                $attemptId,
+                $this->getUserIdIfNoCreator()
+            );
 
             $answerResources = AnswerResourceFactory::createCollection($answers);
 
-            return new ApiPaginatedResponse($answerResources, $answers, array('list', 'Default'));
+            return new ApiGotResponse($answerResources, array('list', 'Default'));
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(AnswerResource::RESOURCE_NAME);
         }
@@ -60,7 +65,7 @@ class AnswerByItemByAttemptController extends ApiController
 
             // send to the answer service in order to create the answer
             $answer = $this->get('simple_it.exercise.answer')
-                ->add($itemId, $answerResource, $attemptId);
+                ->add($itemId, $answerResource, $attemptId, $this->getUserId());
 
             $answerResource = AnswerResourceFactory::create($answer);
 

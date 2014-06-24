@@ -2,8 +2,8 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise;
 
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
+use Claroline\CoreBundle\Entity\User;
 
 /**
  * Claire attempt entity

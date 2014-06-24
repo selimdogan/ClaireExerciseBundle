@@ -2,15 +2,17 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\AnswerRepository;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\ItemRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation\ExerciseServiceInterface;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Service which manages the items
@@ -109,19 +111,19 @@ class ItemService extends TransactionalService implements ItemServiceInterface
     /**
      * Find the item and the correction (if corrected by this user)
      *
-     * @param int     $itemId
-     * @param int     $attemptId
-     * @param boolean $corrected
+     * @param int $itemId
+     * @param int $attemptId
+     * @param int $userId
      *
-     * @return Item
+     * @return ItemResource
      */
     public function findItemAndCorrectionByAttempt(
         $itemId,
         $attemptId,
-        &$corrected
+        $userId = null
     )
     {
-        $item = $this->getByAttempt($itemId, $attemptId);
+        $item = $this->getByAttempt($itemId, $attemptId, $userId);
 
         $answer = $this->answerRepository->findOneBy(
             array(
@@ -132,14 +134,15 @@ class ItemService extends TransactionalService implements ItemServiceInterface
 
         // If no correction to do (no user's answer found), return the item
         if (is_null($answer)) {
-            $corrected = false;
+            $itemResource = ItemResourceFactory::create($item);
+            $itemResource->setCorrected(false);
 
-            return $item;
+            return $itemResource;
         }
 
         /** @var Answer $answer */
+
         // set corrected to true (it is returned)
-        $corrected = true;
 
         // correct it with the exercise service
         return $this->exerciseService->correctItem($answer);
@@ -150,12 +153,14 @@ class ItemService extends TransactionalService implements ItemServiceInterface
      *
      * @param int $itemId
      * @param int $attemptId
+     * @param int $userId
      *
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @return Item
      */
-    public function getByAttempt($itemId, $attemptId)
+    public function getByAttempt($itemId, $attemptId, $userId = null)
     {
-        $attempt = $this->attemptService->get($attemptId);
+        $attempt = $this->attemptService->get($attemptId, $userId);
 
         return $this->itemRepository->getByAttempt($itemId, $attempt);
     }
@@ -165,7 +170,7 @@ class ItemService extends TransactionalService implements ItemServiceInterface
      *
      * @param int $exerciseId  Exercise id
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll($exerciseId = null)
     {
@@ -182,14 +187,19 @@ class ItemService extends TransactionalService implements ItemServiceInterface
      *
      * @param CollectionInformation $collectionInformation
      * @param int                   $attemptId
+     * @param int                   $userId
      *
-     * @return PaginatorInterface
+     * @return array
      */
-    public function getAllByAttempt($collectionInformation = null, $attemptId = null)
+    public function getAllByAttempt(
+        $collectionInformation = null,
+        $attemptId = null,
+        $userId = null
+    )
     {
         $attempt = null;
         if (!is_null($attemptId)) {
-            $attempt = $this->attemptService->get($attemptId);
+            $attempt = $this->attemptService->get($attemptId, $userId);
         }
 
         return $this->itemRepository->findAllByAttempt($attempt, $collectionInformation);
@@ -201,7 +211,7 @@ class ItemService extends TransactionalService implements ItemServiceInterface
      * @param $itemId
      * @param $answerId
      *
-     * @return Item
+     * @return ItemResource
      * @throws NonExistingObjectException
      */
     public function findItemAndCorrectionById($itemId, $answerId)

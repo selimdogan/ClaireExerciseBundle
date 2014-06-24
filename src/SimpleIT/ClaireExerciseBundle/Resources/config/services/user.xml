@@ -4,7 +4,7 @@
 
     <parameters>
         <parameter key="simple_it.exercise.user.class">SimpleIT\ClaireExerciseBundle\Service\User\UserService</parameter>
-        <parameter key="simple_it.exercise.entity.user.class">SimpleIT\ClaireExerciseBundle\Entity\User\User</parameter>
+        <parameter key="simple_it.exercise.entity.user.class">Claroline\CoreBundle\Entity\User</parameter>
         <parameter key="simple_it.exercise.repository.user.class">SimpleIT\ClaireExerciseBundle\Repository\User\UserRepository</parameter>
     </parameters>
 

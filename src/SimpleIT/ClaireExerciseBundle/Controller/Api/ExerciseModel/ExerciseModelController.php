@@ -1,27 +1,27 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\ExerciseModel;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
-use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
-use SimpleIT\ApiBundle\Exception\ApiConflictException;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
-use SimpleIT\ApiBundle\Model\ApiDeletedResponse;
-use SimpleIT\ApiBundle\Model\ApiEditedResponse;
-use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
-use SimpleIT\ApiBundle\Model\ApiResponse;
+use Doctrine\DBAL\DBALException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiConflictException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiDeletedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiEditedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
-use SimpleIT\CoreBundle\Exception\ExistingObjectException;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Exception\FilterException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResourceFactory;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * API Exercise Model controller
@@ -35,7 +35,8 @@ class ExerciseModelController extends ApiController
      *
      * @param int $exerciseModelId Exercise Model id
      *
-     * @throws ApiNotFoundException
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException
      * @return ApiGotResponse
      */
     public function viewAction($exerciseModelId)
@@ -46,7 +47,8 @@ class ExerciseModelController extends ApiController
                 'simple_it.exercise.exercise_model'
             )->getContentFullResource
                 (
-                    $exerciseModelId
+                    $exerciseModelId,
+                    $this->getUserId()
                 );
 
             return new ApiGotResponse($exerciseModelResource, array("details", 'Default'));
@@ -64,13 +66,15 @@ class ExerciseModelController extends ApiController
      * @param CollectionInformation $collectionInformation
      *
      * @throws ApiBadRequestException
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      */
     public function listAction(CollectionInformation $collectionInformation)
     {
         try {
             $exerciseModels = $this->get('simple_it.exercise.exercise_model')->getAll(
-                $collectionInformation
+                $collectionInformation,
+                $userId = $this->getUserId()
+
             );
 
             $exerciseModelResources = $this->get(
@@ -79,7 +83,7 @@ class ExerciseModelController extends ApiController
                     $exerciseModels
                 );
 
-            return new ApiPaginatedResponse($exerciseModelResources, $exerciseModels, array(
+            return new ApiGotResponse($exerciseModelResources, array(
                 'list',
                 'Default'
             ));
@@ -102,16 +106,14 @@ class ExerciseModelController extends ApiController
     )
     {
         try {
-            $userId = null;
-            if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                $userId = $this->get('security.context')->getToken()->getUser()->getId();
-            }
+            $userId = $this->getUserId();
 
             $this->validateResource($modelResource, array('create', 'Default'));
 
             $modelResource->setAuthor($userId);
             $modelResource->setOwner($userId);
 
+            /** @var ExerciseModel $model */
             $model = $this->get('simple_it.exercise.exercise_model')->createAndAdd
                 (
                     $modelResource
@@ -148,7 +150,8 @@ class ExerciseModelController extends ApiController
 
             $model = $this->get('simple_it.exercise.exercise_model')->edit
                 (
-                    $modelResource
+                    $modelResource,
+                    $this->getUserId()
                 );
             $modelResource = ExerciseModelResourceFactory::create($model);
 
@@ -156,7 +159,7 @@ class ExerciseModelController extends ApiController
 
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(ExerciseModelResource::RESOURCE_NAME);
-        } catch (ExistingObjectException $eoe) {
+        } catch (DBALException $eoe) {
             throw new ApiConflictException($eoe->getMessage());
         } catch (NoAuthorException $nae) {
             throw new ApiBadRequestException($nae->getMessage());
@@ -170,14 +173,17 @@ class ExerciseModelController extends ApiController
      *
      * @param int $exerciseModelId
      *
-     * @throws \SimpleIT\ApiBundle\Exception\ApiNotFoundException
-     * @throws \SimpleIT\ApiBundle\Exception\ApiBadRequestException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException
      * @return ApiDeletedResponse
      */
     public function deleteAction($exerciseModelId)
     {
         try {
-            $this->get('simple_it.exercise.exercise_model')->remove($exerciseModelId);
+            $this->get('simple_it.exercise.exercise_model')->remove(
+                $exerciseModelId,
+                $this->getUserId()
+            );
 
             return new ApiDeletedResponse();
 
@@ -200,14 +206,8 @@ class ExerciseModelController extends ApiController
     public function subscribeAction($exerciseModelId)
     {
         try {
-            if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                $ownerId = $this->get('security.context')->getToken()->getUser()->getId();
-            } else {
-                throw new ApiBadRequestException('An owner must be authenticated');
-            }
-
             $model = $this->get('simple_it.exercise.exercise_model')->subscribe(
-                $ownerId,
+                $this->getUserId(),
                 $exerciseModelId
             );
 
@@ -219,6 +219,7 @@ class ExerciseModelController extends ApiController
             throw new ApiNotFoundException(ExerciseModelResource::RESOURCE_NAME);
         }
     }
+
     /**
      * Duplicate a model
      *
@@ -231,8 +232,10 @@ class ExerciseModelController extends ApiController
     public function duplicateAction($exerciseModelId)
     {
         try {
+            /** @var ExerciseModel $model */
             $model = $this->get('simple_it.exercise.exercise_model')->duplicate(
-                $exerciseModelId
+                $exerciseModelId,
+                $this->getUserId()
             );
 
             $modelResource = ExerciseModelResourceFactory::create($model);
@@ -243,6 +246,7 @@ class ExerciseModelController extends ApiController
             throw new ApiNotFoundException(ExerciseModelResource::RESOURCE_NAME);
         }
     }
+
     /**
      * Import a model
      *
@@ -255,14 +259,9 @@ class ExerciseModelController extends ApiController
     public function importAction($exerciseModelId)
     {
         try {
-            if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                $ownerId = $this->get('security.context')->getToken()->getUser()->getId();
-            } else {
-                throw new ApiBadRequestException('An owner must be authenticated');
-            }
-
+            /** @var ExerciseModel $model */
             $model = $this->get('simple_it.exercise.exercise_model')->import(
-                $ownerId,
+                $this->getUserId(),
                 $exerciseModelId
             );
 

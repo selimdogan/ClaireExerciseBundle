@@ -2,9 +2,10 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\User;
 
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
-use SimpleIT\ClaireExerciseBundle\Repository\User\UserRepository;
-use SimpleIT\CoreBundle\Services\TransactionalService;
+use Claroline\CoreBundle\Entity\Role;
+use Claroline\CoreBundle\Entity\User;
+use Claroline\CoreBundle\Repository\UserRepository;
+use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
 
 /**
  * Service which manages the users
@@ -21,7 +22,7 @@ class UserService extends TransactionalService implements UserServiceInterface
     /**
      * Set userRepository
      *
-     * @param \SimpleIT\ClaireExerciseBundle\Repository\User\UserRepository $userRepository
+     * @param UserRepository $userRepository
      */
     public function setUserRepository($userRepository)
     {
@@ -38,5 +39,18 @@ class UserService extends TransactionalService implements UserServiceInterface
     public function get($userId)
     {
         return $this->userRepository->find($userId);
+    }
+
+    /**
+     *
+     *
+     * @param User $user
+     * @param string $roleName
+     *
+     * @return bool
+     */
+    public function hasRole($user, $roleName)
+    {
+        return array_search($roleName, $user->getRoles()) !== false;
     }
 }

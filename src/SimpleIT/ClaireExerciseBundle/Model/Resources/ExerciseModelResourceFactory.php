@@ -4,7 +4,6 @@ namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 use JMS\Serializer\Handler\HandlerRegistry;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
-use SimpleIT\Utils\Collection\PaginatorInterface;
 
 /**
  * Class ExerciseModelResourceFactory
@@ -17,15 +16,15 @@ abstract class ExerciseModelResourceFactory extends SharedResourceFactory
     /**
      * Create an ExerciseModel Resource collection
      *
-     * @param PaginatorInterface $exerciseModels
+     * @param array $exerciseModels
      *
      * @return array
      */
-    public static function createCollection(PaginatorInterface $exerciseModels)
+    public static function createCollection(array $exerciseModels)
     {
         $exerciseModelResources = array();
         foreach ($exerciseModels as $exerciseModel) {
-            $exerciseModelResources[] = self::create($exerciseModel);
+            $exerciseModelResources[] = self::create($exerciseModel, true);
         }
 
         return $exerciseModelResources;
@@ -35,29 +34,32 @@ abstract class ExerciseModelResourceFactory extends SharedResourceFactory
      * Create an ExerciseModel Resource
      *
      * @param ExerciseModel $exerciseModel
+     * @param bool          $light
      *
      * @return ExerciseModelResource
      */
-    public static function create(ExerciseModel $exerciseModel)
+    public static function create(ExerciseModel $exerciseModel, $light = false)
     {
         $exerciseModelResource = new ExerciseModelResource();
-        parent::fill($exerciseModelResource, $exerciseModel);
+        parent::fill($exerciseModelResource, $exerciseModel, $light);
 
-        // required resources
-        $rr = array();
-        foreach ($exerciseModel->getRequiredExerciseResources() as $req) {
-            /** @var \SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource $req */
-            $rr[] = $req->getId();
-        }
-        $exerciseModelResource->setRequiredExerciseResources($rr);
+        if (!$light) {
+            // required resources
+            $rr = array();
+            foreach ($exerciseModel->getRequiredExerciseResources() as $req) {
+                /** @var \SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource $req */
+                $rr[] = $req->getId();
+            }
+            $exerciseModelResource->setRequiredExerciseResources($rr);
 
-        // required knowledges
-        $rn = array();
-        foreach ($exerciseModel->getRequiredKnowledges() as $req) {
-            /** @var Knowledge $req */
-            $rn[] = $req->getId();
+            // required knowledges
+            $rn = array();
+            foreach ($exerciseModel->getRequiredKnowledges() as $req) {
+                /** @var Knowledge $req */
+                $rn[] = $req->getId();
+            }
+            $exerciseModelResource->setRequiredKnowledges($rn);
         }
-        $exerciseModelResource->setRequiredKnowledges($rn);
 
         return $exerciseModelResource;
     }

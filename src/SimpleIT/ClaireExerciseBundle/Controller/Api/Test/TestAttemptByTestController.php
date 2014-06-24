@@ -2,15 +2,15 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\Test;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
-use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\TestResource;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestAttemptResourceFactory;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\TestResource;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -32,13 +32,10 @@ class TestAttemptByTestController extends ApiController
     public function createAction($testId)
     {
         try {
-            // get the user
-            if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                throw new ApiBadRequestException("A user must be authenticated");
-            }
-            $userId = $this->get('security.context')->getToken()->getUser()->getId();
-
-            $testAttempt = $this->get('simple_it.exercise.test_attempt')->add($testId, $userId);
+            $testAttempt = $this->get('simple_it.exercise.test_attempt')->add(
+                $testId,
+                $this->getUserId()
+            );
 
             $testAttemptResource = TestAttemptResourceFactory::create($testAttempt);
 
@@ -52,44 +49,28 @@ class TestAttemptByTestController extends ApiController
     /**
      * List the test attempts for this test
      *
-     * @param Request               $request
      * @param CollectionInformation $collectionInformation
-     * @param int                   $testId
+     * @param int $testId
      *
      * @throws ApiBadRequestException
      * @throws ApiNotFoundException
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      */
     public function listAction(
-        Request $request,
         CollectionInformation $collectionInformation,
         $testId
     )
     {
         try {
-            // get the user
-            $concernedUser = $request->get('user');
-
-            $userId = null;
-            if (is_null($concernedUser) || $concernedUser === 'me') {
-                if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                    throw new ApiBadRequestException("A user must be authenticated");
-                }
-                $userId = $this->get('security.context')->getToken()->getUser()->getId();
-            } elseif ($concernedUser !== "all") {
-                throw new ApiBadRequestException('Incorrect value for parameter user: '
-                . $concernedUser);
-            }
-
             $testAttempts = $this->get('simple_it.exercise.test_attempt')->getAll(
                 $collectionInformation,
-                $userId,
+                $this->getUserIdIfNoCreator(),
                 $testId
             );
 
             $testAttemptResources = TestAttemptResourceFactory::createCollection($testAttempts);
 
-            return new ApiPaginatedResponse($testAttemptResources, $testAttempts, array(
+            return new ApiGotResponse($testAttemptResources, array(
                 'list',
                 'Default'
             ));

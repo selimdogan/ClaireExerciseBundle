@@ -1,14 +1,13 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 
 /**
  * API ItemByExercise controller
@@ -32,11 +31,10 @@ class ItemByAttemptController extends ApiController
     {
         try {
             // Call to the item service to get the item and its correction if there is one
-            $corrected = false;
             $itemResource = $this->get('simple_it.exercise.item')
-                ->findItemAndCorrectionByAttempt($itemId, $attemptId, $corrected);
+                ->findItemAndCorrectionByAttempt($itemId, $attemptId, $this->getUserId());
 
-            if ($corrected) {
+            if ($itemResource->getCorrected()) {
                 $groups = array("corrected", 'Default');
             } else {
                 $groups = array("not_corrected", 'Default');
@@ -56,19 +54,20 @@ class ItemByAttemptController extends ApiController
      * @param int                   $attemptId    Attempt id
      *
      * @throws ApiNotFoundException
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      */
     public function listAction(CollectionInformation $collectionInformation, $attemptId)
     {
         try {
             $items = $this->get('simple_it.exercise.item')->getAllByAttempt(
                 $collectionInformation,
-                $attemptId
+                $attemptId,
+                $this->getUserId()
             );
 
             $itemResources = ItemResourceFactory::createCollection($items);
 
-            return new ApiPaginatedResponse($itemResources, $items, array('list', 'Default'));
+            return new ApiGotResponse($itemResources, array('list', 'Default'));
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(ItemResource::RESOURCE_NAME);
         }

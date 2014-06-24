@@ -15,7 +15,7 @@ abstract class StoredExerciseFactory
     /**
      * Create a new StoredExercise object
      *
-     * @param string             $content Content
+     * @param string        $content Content
      * @param ExerciseModel $exerciseModel
      *
      * @return StoredExercise

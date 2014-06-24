@@ -2,16 +2,15 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
-use SimpleIT\ClaireExerciseBundle\Service\User\UserServiceInterface;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Services\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Entity\AttemptFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise\AttemptRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\Test\TestAttemptServiceInterface;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\CoreBundle\Annotation\Transactional;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
+use SimpleIT\ClaireExerciseBundle\Service\User\UserServiceInterface;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Service which manages the attempt
@@ -84,15 +83,19 @@ class AttemptService extends TransactionalService implements AttemptServiceInter
      * Find an attempt by its id
      *
      * @param int $attemptId
+     * @param int $userId
      *
-     * @throws NonExistingObjectException
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException
      * @return Attempt
      */
-    public function get($attemptId)
+    public function get($attemptId, $userId = null)
     {
         $attempt = $this->attemptRepository->find($attemptId);
         if (is_null($attempt)) {
             throw new NonExistingObjectException();
+        } elseif ($userId !== null && $attempt->getUser()->getId() !== $userId) {
+            throw new AccessDeniedException();
         }
 
         return $attempt;
@@ -107,7 +110,6 @@ class AttemptService extends TransactionalService implements AttemptServiceInter
      * @param int $position
      *
      * @return Attempt
-     * @Transactional
      */
     public function add($exerciseId, $userId, $testAttemptId = null, $position = null)
     {
@@ -120,7 +122,9 @@ class AttemptService extends TransactionalService implements AttemptServiceInter
         }
 
         $attempt = AttemptFactory::create($exercise, $user, $testAttempt, $position);
-        $attempt = $this->attemptRepository->insert($attempt);
+
+        $this->em->persist($attempt);
+        $this->em->flush();
 
         return $attempt;
     }
@@ -133,7 +137,7 @@ class AttemptService extends TransactionalService implements AttemptServiceInter
      * @param int                   $exerciseId
      * @param int                   $testAttemptId
      *
-     * @return PaginatorInterface
+     * @return array
      */
     public function getAll(
         $collectionInformation = null,

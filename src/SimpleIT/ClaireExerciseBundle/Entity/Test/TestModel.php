@@ -3,7 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Entity\Test;
 
 use Doctrine\Common\Collections\Collection;
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use Claroline\CoreBundle\Entity\User;
 
 /**
  * Class Test for the test sessions models containing exercise models.

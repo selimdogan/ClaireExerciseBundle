@@ -1,9 +1,8 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
-use SimpleIT\ClaireExerciseBundle\Model\Resources\AttemptResource;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\AttemptResource;
 
 /**
  * Class AttemptResourceFactory
@@ -16,11 +15,11 @@ abstract class AttemptResourceFactory
     /**
      * Create an AttemptResourceFactory collection
      *
-     * @param PaginatorInterface $attempts
+     * @param array $attempts
      *
      * @return array
      */
-    public static function createCollection(PaginatorInterface $attempts)
+    public static function createCollection(array $attempts)
     {
         $attemptResources = array();
         foreach ($attempts as $attempt) {

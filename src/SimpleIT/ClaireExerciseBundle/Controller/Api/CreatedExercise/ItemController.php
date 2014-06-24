@@ -1,15 +1,15 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
-use SimpleIT\ApiBundle\Model\ApiResponse;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * API Item controller
@@ -45,17 +45,23 @@ class ItemController extends ApiController
     /**
      * Get all items
      *
-     * @throws ApiNotFoundException
-     * @return ApiPaginatedResponse
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException
+     * @return ApiGotResponse
      */
     public function listAction()
     {
+        if (!$this->get('security.context')->getToken()->getUser()->hasRole('ROLE_WS_CREATOR'))
+        {
+            throw new AccessDeniedException();
+        }
+
         try {
             $items = $this->get('simple_it.exercise.item')->getAll();
 
             $itemResources = ItemResourceFactory::createCollection($items);
 
-            return new ApiPaginatedResponse($itemResources, $items, array('list'));
+            return new ApiGotResponse($itemResources, array('list'));
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(ItemResource::RESOURCE_NAME);
         }

@@ -1,14 +1,14 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
-use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AttemptResourceFactory;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -26,21 +26,21 @@ class AttemptByTestAttemptController extends ApiController
      *
      * @throws ApiBadRequestException
      * @throws ApiNotFoundException
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      */
     public function listAction(CollectionInformation $collectionInformation, $testAttemptId)
     {
         try {
             $attempts = $this->get('simple_it.exercise.attempt')->getAll(
                 $collectionInformation,
-                null,
+                $this->getUserIdIfNoCreator(),
                 null,
                 $testAttemptId
             );
 
             $attemptResources = AttemptResourceFactory::createCollection($attempts);
 
-            return new ApiPaginatedResponse($attemptResources, $attempts, array('list', 'Default'));
+            return new ApiGotResponse($attemptResources, array('list', 'Default'));
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(AnswerResource::RESOURCE_NAME);
         }

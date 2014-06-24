@@ -5,14 +5,14 @@ namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource;
 use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use Claroline\CoreBundle\Entity\User;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityAlreadyExistsException;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\MetadataConstraint;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedEntityRepository;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 
 /**
  * ExerciseResource repository
@@ -376,5 +376,18 @@ class ExerciseResourceRepository extends SharedEntityRepository
         } else {
             return $result[0];
         }
+    }
+
+    /**
+     * Get the join that reduce the number of requests.
+     *
+     * @return array
+     */
+    protected function getLeftJoins()
+    {
+        return array(
+            "rr" => "entity.requiredExerciseResources",
+            "rk" => "entity.requiredKnowledges"
+        );
     }
 }

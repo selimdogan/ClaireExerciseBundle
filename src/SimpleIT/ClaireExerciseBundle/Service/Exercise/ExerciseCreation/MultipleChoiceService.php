@@ -5,7 +5,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use Claroline\CoreBundle\Entity\User;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidAnswerException;
 use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\MultipleChoiceQuestion;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
@@ -15,6 +15,8 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice\Questi
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\Model;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\QuestionBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
 
 /**
  * Service which manages Multiple Choice Exercises.
@@ -326,12 +328,13 @@ class MultipleChoiceService extends ExerciseCreationService
      * @param Item   $item
      * @param Answer $answer
      *
-     * @return Item
+     * @return ItemResource
      */
     public function correct(Item $item, Answer $answer)
     {
+        $itemResource = ItemResourceFactory::create($item);
         /** @var Question $question */
-        $question = $this->getItemFromEntity($item);
+        $question = $itemResource->getContent();
         $la = AnswerResourceFactory::create($answer);
 
         $userTicks = $la->getContent();
@@ -342,10 +345,9 @@ class MultipleChoiceService extends ExerciseCreationService
 
         $this->mark($question);
 
-        return $this->toCorrectedItemEntity(
-            $question,
-            'multiple-choice'
-        );
+        $itemResource->setContent($question);
+
+        return $itemResource;
     }
 
     /**
@@ -378,7 +380,7 @@ class MultipleChoiceService extends ExerciseCreationService
     public function validateAnswer(Item $itemEntity, array $answer)
     {
         /** @var Question $question */
-        $question = $this->getItemFromEntity($itemEntity);
+        $question = ItemResourceFactory::create($itemEntity)->getContent();
 
         $nbProp = count($question->getPropositions());
 

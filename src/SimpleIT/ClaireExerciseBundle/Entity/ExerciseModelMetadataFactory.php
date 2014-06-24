@@ -2,8 +2,8 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity;
 
-use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 
 /**
  * Class to manage the creation of StoredExercise

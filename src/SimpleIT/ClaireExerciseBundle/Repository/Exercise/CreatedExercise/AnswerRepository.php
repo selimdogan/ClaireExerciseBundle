@@ -3,10 +3,11 @@
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise;
 
 use Doctrine\ORM\QueryBuilder;
-use SimpleIT\CoreBundle\Model\Paginator;
-use SimpleIT\CoreBundle\Repository\BaseRepository;
+use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 
 /**
  * Answer repository
@@ -16,12 +17,30 @@ use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 class AnswerRepository extends BaseRepository
 {
     /**
+     * Find an answer by id
+     *
+     * @param int $itemId
+     *
+     * @return Answer
+     * @throws NonExistingObjectException
+     */
+    public function find($itemId)
+    {
+        $item = parent::find($itemId);
+        if ($item === null) {
+            throw new NonExistingObjectException();
+        }
+
+        return $item;
+    }
+
+    /**
      * Get all the answers. An item can be specified.
      *
      * @param Item    $item
      * @param Attempt $attempt
      *
-     * @return Paginator
+     * @return array
      */
     public function findAllBy($item = null, $attempt = null)
     {
@@ -47,6 +66,6 @@ class AnswerRepository extends BaseRepository
 
         $queryBuilder->add('orderBy', 'a.id', true);
 
-        return new Paginator($queryBuilder);
+        return $queryBuilder->getQuery()->getResult();
     }
 }

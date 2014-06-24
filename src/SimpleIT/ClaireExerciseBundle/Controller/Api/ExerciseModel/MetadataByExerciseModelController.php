@@ -2,21 +2,21 @@
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\ExerciseModel;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use SimpleIT\ApiBundle\Controller\ApiController;
-use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
-use SimpleIT\ApiBundle\Exception\ApiConflictException;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiCreatedResponse;
-use SimpleIT\ApiBundle\Model\ApiDeletedResponse;
-use SimpleIT\ApiBundle\Model\ApiEditedResponse;
-use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
-use SimpleIT\CoreBundle\Exception\ExistingObjectException;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
+use Doctrine\DBAL\DBALException;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiConflictException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiDeletedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiEditedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModelMetadataFactory;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResourceFactory;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -43,7 +43,8 @@ class MetadataByExerciseModelController extends ApiController
         try {
             $metadatas = $this->get('simple_it.exercise.exercise_model_metadata')->getAll(
                 $collectionInformation,
-                $exerciseModelId
+                $exerciseModelId,
+                $this->getUserId()
             );
 
             $metadataResources = MetadataResourceFactory::createCollection($metadatas);
@@ -69,7 +70,8 @@ class MetadataByExerciseModelController extends ApiController
             $metadata = $this->get('simple_it.exercise.exercise_model_metadata')
                 ->getByEntity(
                     $exerciseModelId,
-                    $metadataKey
+                    $metadataKey,
+                    $this->getUserId()
                 );
 
             $metadataResource = MetadataResourceFactory::create($metadata);
@@ -103,7 +105,8 @@ class MetadataByExerciseModelController extends ApiController
                 'simple_it.exercise.exercise_model_metadata'
             )->addToEntity(
                     $exerciseModelId,
-                    $metadata
+                    $metadata,
+                    $this->getUserId()
                 );
 
             $metadataResource = MetadataResourceFactory::create($metadata);
@@ -112,7 +115,7 @@ class MetadataByExerciseModelController extends ApiController
 
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException();
-        } catch (ExistingObjectException $eoe) {
+        } catch (DBALException $eoe) {
             throw new ApiConflictException();
         }
     }
@@ -142,7 +145,8 @@ class MetadataByExerciseModelController extends ApiController
             )->saveFromEntity(
                     $exerciseModelId,
                     $metadata,
-                    $metadataKey
+                    $metadataKey,
+                    $this->getUserId()
                 );
 
             $metadataResource = MetadataResourceFactory::create($metadata);
@@ -168,7 +172,8 @@ class MetadataByExerciseModelController extends ApiController
         try {
             $this->get('simple_it.exercise.exercise_model_metadata')->removeFromEntity(
                 $exerciseModelId,
-                $metadataKey
+                $metadataKey,
+                $this->getUserId()
             );
 
             return new ApiDeletedResponse();
@@ -195,7 +200,8 @@ class MetadataByExerciseModelController extends ApiController
                 ->editMetadata
                 (
                     $exerciseModelId,
-                    $metadatas
+                    $metadatas,
+                    $this->getUserId()
                 );
 
             $resourceResource = MetadataResourceFactory::createCollection($resources);
@@ -204,7 +210,7 @@ class MetadataByExerciseModelController extends ApiController
 
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(MetadataResource::RESOURCE_NAME);
-        } catch (ExistingObjectException $eoe) {
+        } catch (DBALException $eoe) {
             throw new ApiConflictException($eoe->getMessage());
         }
     }

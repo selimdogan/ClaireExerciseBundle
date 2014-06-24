@@ -2,15 +2,14 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\Test;
 
-use SimpleIT\ApiBundle\Controller\ApiController;
-use SimpleIT\ApiBundle\Exception\ApiBadRequestException;
-use SimpleIT\ApiBundle\Exception\ApiNotFoundException;
-use SimpleIT\ApiBundle\Model\ApiGotResponse;
-use SimpleIT\ApiBundle\Model\ApiPaginatedResponse;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestAttemptResource;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestAttemptResourceFactory;
-use SimpleIT\Utils\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -31,7 +30,10 @@ class TestAttemptController extends ApiController
     public function viewAction($testAttemptId)
     {
         try {
-            $testAttempt = $this->get('simple_it.exercise.test_attempt')->get($testAttemptId);
+            $testAttempt = $this->get('simple_it.exercise.test_attempt')->get(
+                $testAttemptId,
+                $this->getUserIdIfNoCreator()
+            );
             $testAttemptResource = TestAttemptResourceFactory::create($testAttempt);
 
             return new ApiGotResponse($testAttemptResource, array("test_attempt", 'Default'));
@@ -44,39 +46,26 @@ class TestAttemptController extends ApiController
     /**
      * List the test attempts for this test
      *
-     * @param Request               $request
      * @param CollectionInformation $collectionInformation
      *
      * @throws ApiBadRequestException
      * @throws ApiNotFoundException
-     * @return ApiPaginatedResponse
+     * @return ApiGotResponse
      */
     public function listAction(
-        Request $request,
         CollectionInformation $collectionInformation
     )
     {
         try {
-            $user = $request->get('user');
-            $userId = null;
-            if (is_null($user) || $user === 'me') {
-                if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                    throw new ApiBadRequestException("A user must be authenticated");
-                }
-                $userId = $this->get('security.context')->getToken()->getUser()->getId();
-            } elseif ($user !== "all") {
-                throw new ApiBadRequestException('Incorrect value for parameter user: ' . $user);
-            }
-
             $testAttempts = $this->get('simple_it.exercise.test_attempt')->getAll
                 (
                     $collectionInformation,
-                    $userId
+                    $this->getUserIdIfNoCreator()
                 );
 
             $testAttemptResources = TestAttemptResourceFactory::createCollection($testAttempts);
 
-            return new ApiPaginatedResponse($testAttemptResources, $testAttempts, array(
+            return new ApiGotResponse($testAttemptResources, array(
                 'list',
                 'Default'
             ));

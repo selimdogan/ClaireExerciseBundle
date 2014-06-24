@@ -11,6 +11,7 @@ use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\MissingIdException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
@@ -20,11 +21,11 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedEntityRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
+use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Service\User\UserService;
-use SimpleIT\CoreBundle\Exception\NonExistingObjectException;
-use SimpleIT\CoreBundle\Services\TransactionalService;
-use SimpleIT\Utils\Collection\CollectionInformation;
-use SimpleIT\Utils\Collection\PaginatorInterface;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Service which manages the exercise generation
@@ -130,6 +131,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
      */
     public function getAll(
         $collectionInformation = null,
+        $authenticatedUserId = null,
         $ownerId = null,
         $authorId = null,
         $parentEntityId = null,
@@ -160,6 +162,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
 
         return $this->entityRepository->findAll(
             $collectionInformation,
+            $authenticatedUserId,
             $owner,
             $author,
             $parentEntity,
@@ -236,7 +239,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * Create an array of metadata entities from metadata and keyword in resource
      *
      * @param SharedResource $sharedResource
-     * @param SharedEntity $entity
+     * @param SharedEntity   $entity
      *
      * @return ArrayCollection
      */
@@ -292,7 +295,6 @@ abstract class SharedEntityService extends TransactionalService implements Share
         $entity
     )
     {
-        $entity = $this->entityRepository->insert($entity);
         $this->em->persist($entity);
         $this->em->flush();
 
@@ -328,8 +330,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
             $entity->setDraft($resource->getDraft());
         }
 
-        if (!is_null($resource->getKeywords() || !is_null($resource->getMetadata())))
-        {
+        if (!is_null($resource->getKeywords() || !is_null($resource->getMetadata()))) {
             $this->metadataService->deleteAllByEntity($entity->getId());
             $entity->setMetadata($this->metadataAndKeyWords($resource, $entity));
         }
@@ -395,7 +396,8 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * @inheritdoc
      */
     public function edit(
-        $resource
+        $resource,
+        $userId
     )
     {
         if (is_null($resource->getId())) {
@@ -403,6 +405,10 @@ abstract class SharedEntityService extends TransactionalService implements Share
         }
 
         $entity = $this->get($resource->getId());
+        if ($entity->getOwner()->getId() !== $userId) {
+            throw new AccessDeniedException();
+        }
+
         $entity = $this->updateFromResource(
             $resource,
             $entity
@@ -425,9 +431,14 @@ abstract class SharedEntityService extends TransactionalService implements Share
     /**
      * @inheritdoc
      */
-    public function remove($entityId)
+    public function remove($entityId, $userId)
     {
         $entity = $this->entityRepository->find($entityId);
+
+        if ($entity->getOwner()->getId() !== $userId) {
+            throw new AccessDeniedException();
+        }
+
         try {
             $this->entityRepository->delete($entity);
             $this->em->flush();
@@ -439,10 +450,13 @@ abstract class SharedEntityService extends TransactionalService implements Share
     /**
      * @inheritdoc
      */
-    public function editMetadata($entityId, ArrayCollection $metadatas)
+    public function editMetadata($entityId, ArrayCollection $metadatas, $userId)
     {
         /** @var SharedEntity $entity */
         $entity = $this->entityRepository->find($entityId);
+        if ($entity->getOwner()->getId() !== $userId) {
+            throw new AccessDeniedException();
+        }
 
         $this->metadataService->deleteAllByEntity($entityId);
 
@@ -477,13 +491,19 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * parent), the content of the resource is filled with the parent content
      *
      * @param int $entityId
+     * @param     $userId
      *
+     * @throws AccessDeniedException
      * @return SharedResource
-     * @throws \SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException
      */
-    public function getContentFullResource($entityId)
+    public function getContentFullResource($entityId, $userId)
     {
         $entity = $this->get($entityId);
+        if (!$entity->getPublic() &&
+            $entity->getOwner()->getId() !== $userId
+        ) {
+            throw new AccessDeniedException();
+        }
         $resource = SharedResourceFactory::createFromEntity($entity, static::ENTITY_TYPE);
 
         return $this->getContentFullResourceFromResource($resource);
@@ -538,16 +558,16 @@ abstract class SharedEntityService extends TransactionalService implements Share
     }
 
     /**
-     * Get a list of resource with content from a list of entities in a PaginatorInterface.
+     * Get a list of resource with content from a list of entities in a array.
      * For each entity, if it has a content, it just gets the resource view of the entity. If it
      * has no content (and thus a parent), the content of the resource is filled with the parent
      * content
      *
-     * @param PaginatorInterface $entities
+     * @param array $entities
      *
      * @return array
      */
-    public function getAllContentFullResourcesFromEntityList(PaginatorInterface $entities)
+    public function getAllContentFullResourcesFromEntityList(array $entities)
     {
         $resources = SharedResourceFactory::createFromEntityCollection(
             $entities,
@@ -558,7 +578,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
         /** @var SharedResource $resource */
         foreach ($resources as &$resource) {
             if ($resource->getContent() === null) {
-                $resource = $this->getContentFullResourceFromResource($resource);
+                $resource = $this->getContentFullResourceFromResource($resource, true);
             }
         }
 
@@ -571,11 +591,12 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * parent), the content of the resource is filled with the parent content
      *
      * @param SharedResource $resource
+     * @param bool           $light
      *
-     * @return SharedResource
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException
+     * @return SharedResource
      */
-    private function getContentFullResourceFromResource(SharedResource $resource)
+    private function getContentFullResourceFromResource(SharedResource $resource, $light = false)
     {
         $entity = $this->get($resource->getId());
 
@@ -586,7 +607,11 @@ abstract class SharedEntityService extends TransactionalService implements Share
             $entity = $entity->getParent();
         }
 
-        $parentResource = SharedResourceFactory::createFromEntity($entity, static::ENTITY_TYPE);
+        $parentResource = SharedResourceFactory::createFromEntity(
+            $entity,
+            static::ENTITY_TYPE,
+            $light
+        );
         $resource->setContent($parentResource->getContent());
         $resource->setMetadata($parentResource->getMetadata());
 
@@ -631,6 +656,10 @@ abstract class SharedEntityService extends TransactionalService implements Share
         $owner = $this->userService->get($ownerId);
         $parent = $this->get($parentEntityId);
 
+        if (!$parent->getPublic()) {
+            throw new BadRequestHttpException('The imported object must be public');
+        }
+
         $entity = clone($parent);
         $entity->setId(null);
         $entity->setContent(null);
@@ -650,12 +679,17 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * Duplicate an entity (same owner).
      *
      * @param int $originalId The id of the entity to be duplicated
+     * @param int $userId
      *
+     * @throws AccessDeniedException
      * @return SharedEntity
      */
-    public function duplicate($originalId)
+    public function duplicate($originalId, $userId)
     {
         $original = $this->get($originalId);
+        if ($original->getOwner()->getId() !== $userId) {
+            throw new AccessDeniedException();
+        }
 
         $entity = clone($original);
         $entity->setId(null);
@@ -668,16 +702,23 @@ abstract class SharedEntityService extends TransactionalService implements Share
     /**
      * Import an entity from the id. Base work.
      *
-     * @param int $ownerId
+     * @param int $userId
      * @param int $originalId The id of the original entity that must be duplicated
      *
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
      * @return SharedEntity
      */
-    public function import($ownerId, $originalId)
+    public function import($userId, $originalId)
     {
         $original = $this->get($originalId);
+        if ($original->getOwner()->getId() === $userId) {
+            throw new BadRequestHttpException('Model is already owned.');
+        } elseif (!$original->getPublic()) {
+            throw new BadRequestHttpException('The imported object must be public');
+        }
 
-        return $this->importByEntity($ownerId, $original);
+        return $this->importByEntity($userId, $original);
     }
 
     /**
