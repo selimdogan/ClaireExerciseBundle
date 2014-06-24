@@ -322,8 +322,9 @@ abstract class SharedEntityService extends TransactionalService implements Share
             $entity->setType($resource->getType());
         }
 
-        if (!is_null($resource->getPublic())) {
-            $entity->setPublic($resource->getPublic());
+        // public can be modified only to make public (not to make private)
+        if ($resource->getPublic() === true) {
+            $this->makePublic($entity);
         }
 
         if (!is_null($resource->getDraft())) {
@@ -770,4 +771,11 @@ abstract class SharedEntityService extends TransactionalService implements Share
             return $entity->getId();
         }
     }
+
+    /**
+     * Make public an entity and all its requirements
+     *
+     * @param $entity
+     */
+    abstract public function makePublic($entity);
 }

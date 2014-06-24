@@ -1121,4 +1121,24 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                 $owner
             );
     }
+
+    /**
+     * Set public a model and all its requirements
+     *
+     * @param ExerciseModel $entity
+     */
+    public function makePublic($entity)
+    {
+        $entity->setPublic(true);
+
+        foreach($entity->getRequiredExerciseResources() as $resource)
+        {
+            $this->exerciseResourceService->makePublic($resource);
+        }
+
+        foreach ($entity->getRequiredKnowledges() as $knowledge)
+        {
+            $this->knowledgeService->makePublic($knowledge);
+        }
+    }
 }
