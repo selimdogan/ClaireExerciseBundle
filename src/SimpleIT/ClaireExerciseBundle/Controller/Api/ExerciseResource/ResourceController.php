@@ -15,10 +15,15 @@ use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\ExercisePictureFactory;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\PictureResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * API Resource controller
@@ -175,5 +180,54 @@ class ResourceController extends ApiController
         } catch (EntityDeletionException $ede) {
             throw new ApiBadRequestException($ede->getMessage());
         }
+    }
+
+    public function uploadImageAction(Request $request, $resourceId)
+    {
+        $userId = $this->getUserId();
+        /** @var ResourceResource $resource */
+        $resource = $this->get('simple_it.exercise.exercise_resource')->getContentFullResource
+            (
+                $resourceId,
+                $userId
+            );
+
+        if ($resource->getType() !== CommonResource::PICTURE) {
+            throw new ApiBadRequestException('The resource is not a picture');
+        }
+        $oldFileName = $resource->getContent()->getSource();
+
+        $fileName = $request->get('fileName');
+        $tmpFile = $request->files->get('file');
+        $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+        $size = filesize($tmpFile);
+        if ($size > 2000000) {
+            throw new ApiBadRequestException('File too big');
+        }
+
+        if (empty($oldFileName)) {
+            $hashName = $this->container->get('claroline.utilities.misc')->generateGuid(
+                ) . '.' . $extension;
+
+        } else {
+            $hashName = $oldFileName;
+        }
+
+        // update the resource (even if same name, to see if no problem updating)
+        $resource->getContent()->setSource($hashName);
+        $this->get('simple_it.exercise.exercise_resource')->updateFromResource(
+            $resource,
+            $userId
+        );
+
+        // copy the file
+        $tmpFile->move(
+            $this->container->getParameter('claroline.param.files_directory'),
+            $hashName
+        );
+
+        return new JsonResponse(
+            array("file-name" => $fileName)
+        );
     }
 }
