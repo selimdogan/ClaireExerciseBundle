@@ -5,7 +5,7 @@ resourceServices.factory('Resource', ['$resource',
 
         return $resource(
 
-            'http://claroline/app_dev.php/claire_exercise/api/resources/:id',
+            BASE_CONFIG.apiResourcesUrl+':id', //'http://claroline/app_dev.php/claire_exercise/api/resources/:id',
             { 'id': '@id'},
             {
                  update: {method: 'PUT', headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}}
@@ -21,7 +21,7 @@ modelServices.factory('Model', ['$resource',
     function($resource){
 
         return $resource(
-            'http://claroline/app_dev.php/claire_exercise/api/exercise-models/:id',
+            BASE_CONFIG.apiModelsUrl+':id', //'http://claroline/app_dev.php/claire_exercise/api/exercise-models/:id',
             {},
             {
                 'update': {method: 'PUT', params: {'id': '@id'}, headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}}

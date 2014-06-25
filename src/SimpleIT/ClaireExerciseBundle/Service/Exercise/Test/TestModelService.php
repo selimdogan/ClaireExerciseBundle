@@ -12,6 +12,7 @@ use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestModelResource;
+use SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestModelPositionRepository;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestModelRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\ExerciseModelService;
 use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
@@ -29,6 +30,11 @@ class TestModelService extends TransactionalService implements TestModelServiceI
      * @var TestModelRepository $testModelRepository
      */
     private $testModelRepository;
+
+    /**
+     * @var TestModelPositionRepository $testModelPositionRepository
+     */
+    private $testModelPositionRepository;
 
     /**
      * @var UserService
@@ -68,6 +74,16 @@ class TestModelService extends TransactionalService implements TestModelServiceI
     public function setExerciseModelService($exerciseModelService)
     {
         $this->exerciseModelService = $exerciseModelService;
+    }
+
+    /**
+     * Set testModelPositionRepository
+     *
+     * @param \SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestModelPositionRepository $testModelPositionRepository
+     */
+    public function setTestModelPositionRepository($testModelPositionRepository)
+    {
+        $this->testModelPositionRepository = $testModelPositionRepository;
     }
 
     /**
@@ -242,11 +258,23 @@ class TestModelService extends TransactionalService implements TestModelServiceI
      * Remove all the positions for a test model
      *
      * @param int $testModelId
+     *
+     * @throws EntityDeletionException
+     * @return TestModel
      */
     public function removePositions($testModelId)
     {
-        // TODO: possible only if no test has been generated from this model
-        $this->testModelRepository->deleteAllPositions($testModelId);
+        $testModel = $this->get($testModelId);
+
+        if (count($testModel->getTests())) {
+            $this->testModelPositionRepository->deleteAllPositions($testModel);
+            $this->em->flush();
+        } else {
+            throw new EntityDeletionException('Positions cannot be deleted because test model'
+            . 'has been used.');
+        }
+
+        return $testModel;
     }
 
     /**

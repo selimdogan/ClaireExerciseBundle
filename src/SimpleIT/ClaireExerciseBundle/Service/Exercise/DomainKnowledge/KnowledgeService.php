@@ -277,4 +277,19 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
 
         return $entity;
     }
+
+    /**
+     * Set public a knowledge and all its requirements
+     *
+     * @param Knowledge $entity
+     */
+    public function makePublic($entity)
+    {
+        $entity->setPublic(true);
+
+        foreach ($entity->getRequiredKnowledges() as $knowledge)
+        {
+            $this->makePublic($knowledge);
+        }
+    }
 }

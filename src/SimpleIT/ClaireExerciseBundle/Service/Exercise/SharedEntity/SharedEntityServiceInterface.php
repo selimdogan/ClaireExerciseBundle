@@ -217,4 +217,11 @@ interface SharedEntityServiceInterface
      * @return int The id of the imported or already existing entity
      */
     public function importOrLink($ownerId, $originalId);
+
+    /**
+     * Make public an entity and all its requirements
+     *
+     * @param $entity
+     */
+    public function makePublic($entity);
 }

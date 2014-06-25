@@ -44,6 +44,9 @@
         <parameter key="simple_it.exercise.entity.test_model.class">SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel</parameter>
         <parameter key="simple_it.exercise.repository.test_model.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestModelRepository</parameter>
 
+        <parameter key="simple_it.exercise.entity.test_model_position.class">SimpleIT\ClaireExerciseBundle\Entity\Test\TestModelPosition</parameter>
+        <parameter key="simple_it.exercise.repository.test_model_position.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestModelPositionRepository</parameter>
+
         <parameter key="simple_it.exercise.test_attempt.class">SimpleIT\ClaireExerciseBundle\Service\Exercise\Test\TestAttemptService</parameter>
         <parameter key="simple_it.exercise.entity.test_attempt.class">SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt</parameter>
         <parameter key="simple_it.exercise.repository.test_attempt.class">SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestAttemptRepository</parameter>
@@ -86,6 +89,13 @@
         <!-- Test Model Repository -->
         <service id="simple_it.exercise.repository.test_model" factory-service="doctrine.orm.entity_manager" factory-method="getRepository" class="%simple_it.exercise.repository.test_model.class%">
             <argument>%simple_it.exercise.entity.test_model.class%</argument>
+        </service>
+
+        <!-- Test Model Position Repository -->
+        <service id="simple_it.exercise.repository.test_model_position"
+                 factory-service="doctrine.orm.entity_manager" factory-method="getRepository"
+                 class="%simple_it.exercise.repository.test_model_position.class%">
+            <argument>%simple_it.exercise.entity.test_model_position.class%</argument>
         </service>
 
         <!-- Test Attempt Repository -->
@@ -298,6 +308,9 @@
             </call>
             <call method="setTestModelRepository">
                 <argument type="service" id="simple_it.exercise.repository.test_model"/>
+            </call>
+            <call method="setTestModelPositionRepository">
+                <argument type="service" id="simple_it.exercise.repository.test_model_position"/>
             </call>
             <call method="setUserService">
                 <argument type="service" id="simple_it.exercise.user"/>

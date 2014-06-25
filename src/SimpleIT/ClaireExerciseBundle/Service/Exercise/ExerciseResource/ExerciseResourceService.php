@@ -654,4 +654,24 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
 
         return $entity;
     }
+
+    /**
+     * Set public a resource and all its requirements
+     *
+     * @param ExerciseResource $entity
+     */
+    public function makePublic($entity)
+    {
+        $entity->setPublic(true);
+
+        foreach($entity->getRequiredExerciseResources() as $resource)
+        {
+            $this->makePublic($resource);
+        }
+
+        foreach ($entity->getRequiredKnowledges() as $knowledge)
+        {
+            $this->knowledgeService->makePublic($knowledge);
+        }
+    }
 }

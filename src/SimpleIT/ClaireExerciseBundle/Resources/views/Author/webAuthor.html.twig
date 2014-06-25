@@ -26,6 +26,13 @@
     <script src="{{ asset('bundles/simpleitclaireexercise/webAuthor/js/routes.js') }}"></script>
     <script src="{{ asset('bundles/simpleitclaireexercise/webAuthor/js/services.js') }}"></script>
 
+    <script>
+        var BASE_CONFIG = {
+            apiResourcesUrl: "{{ path('api_exercise_resource_list') }}",
+            apiModelsUrl: "{{ path('api_exercise_model_list') }}",
+            lang: 'fr'
+        };
+    </script>
 
 </head>
 <body ng-controller="mainController">

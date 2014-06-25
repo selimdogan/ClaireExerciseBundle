@@ -7,12 +7,11 @@ use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use Claroline\CoreBundle\Entity\User;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityAlreadyExistsException;
-use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\FilterException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
-use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use SimpleIT\ClaireExerciseBundle\Model\Collection\Sort;
+use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 
 /**
  * Abstract SharedBaseRepository
@@ -239,10 +238,6 @@ abstract class SharedEntityRepository extends BaseRepository
             } else {
                 $qb->addOrderBy('entity.id');
             }
-
-            // range
-            // FIXME wait for a fix in api-bundle
-//            $qb = $this->setRange($qb, $collectionInformation);
         }
 
         return $qb->getQuery()->getResult();
@@ -506,43 +501,6 @@ abstract class SharedEntityRepository extends BaseRepository
             );
         } catch (DBALException $e) {
             throw new EntityAlreadyExistsException("Required " . $reqEntityName);
-        }
-    }
-
-    /**
-     * Delete a requires resource
-     *
-     * @param int          $entityId
-     * @param SharedEntity $required
-     * @param string       $table
-     * @param string       $entityIdField
-     * @param string       $requiredIdField
-     *
-     * @throws EntityDeletionException
-     */
-    protected function deleteRequired(
-        $entityId,
-        SharedEntity $required,
-        $table,
-        $entityIdField,
-        $requiredIdField
-    )
-    {
-        $sql = 'DELETE FROM ' . $table . ' AS erq WHERE erq.' .
-            $entityIdField . ' = :entityId AND erq.' .
-            $requiredIdField . ' = :requiredId';
-
-        $connection = $this->_em->getConnection();
-        $stmt = $connection->executeQuery(
-            $sql,
-            array(
-                'entityId'   => $entityId,
-                'requiredId' => $required->getId(),
-            )
-        );
-
-        if ($stmt->rowCount() != 1) {
-            throw new EntityDeletionException();
         }
     }
 
