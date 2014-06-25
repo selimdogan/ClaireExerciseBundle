@@ -176,4 +176,84 @@ class ResourceController extends ApiController
             throw new ApiBadRequestException($ede->getMessage());
         }
     }
+
+    /**
+     * Subscribe to a resource
+     *
+     * @param int $resourceId
+     *
+     * @throws ApiBadRequestException
+     * @throws ApiNotFoundException
+     * @return ApiResponse
+     */
+    public function subscribeAction($resourceId)
+    {
+        try {
+            $resource = $this->get('simple_it.exercise.exercise_resource')->subscribe(
+                $this->getUserId(),
+                $resourceId
+            );
+
+            $resourceResource = ResourceResourceFactory::create($resource);
+
+            return new ApiCreatedResponse($resourceResource, array("details", 'Default'));
+
+        } catch (NonExistingObjectException $neoe) {
+            throw new ApiNotFoundException(ResourceResource::RESOURCE_NAME);
+        }
+    }
+
+    /**
+     * Duplicate a resource
+     *
+     * @param int $resourceId
+     *
+     * @throws ApiBadRequestException
+     * @throws ApiNotFoundException
+     * @return ApiResponse
+     */
+    public function duplicateAction($resourceId)
+    {
+        try {
+            /** @var ExerciseResource $resource */
+            $resource = $this->get('simple_it.exercise.exercise_resource')->duplicate(
+                $resourceId,
+                $this->getUserId()
+            );
+
+            $resourceResource = ResourceResourceFactory::create($resource);
+
+            return new ApiCreatedResponse($resourceResource, array("details", 'Default'));
+
+        } catch (NonExistingObjectException $neoe) {
+            throw new ApiNotFoundException(ResourceResource::RESOURCE_NAME);
+        }
+    }
+
+    /**
+     * Import a resource
+     *
+     * @param int $resourceId
+     *
+     * @throws ApiBadRequestException
+     * @throws ApiNotFoundException
+     * @return ApiResponse
+     */
+    public function importAction($resourceId)
+    {
+        try {
+            /** @var ExerciseResource $resource */
+            $resource = $this->get('simple_it.exercise.exercise_resource')->import(
+                $this->getUserId(),
+                $resourceId
+            );
+
+            $resourceResource = ResourceResourceFactory::create($resource);
+
+            return new ApiCreatedResponse($resourceResource, array("details", 'Default'));
+
+        } catch (NonExistingObjectException $neoe) {
+            throw new ApiNotFoundException(ResourceResource::RESOURCE_NAME);
+        }
+    }
 }
