@@ -1,0 +1,31 @@
+<div class="container">
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+
+            <tr>
+                <th>Type</th>
+                <th>Titre</th>
+                <th>Auteur</th>
+                <th>Propriétaire</th>
+                <th>Partagé</th>
+                <th>Archivé</th>
+                <th>Brouillon</th>
+                <th>Complet</th>
+            </tr>
+
+            <tr>
+                <td><kbd class="label-info">{{ resource.type }}</kbd></td>
+                <td>{{ resource.title }}</td>
+                <td>{{ resource.author }}</td>
+                <td>{{ resource.owner }}</td>
+                <td><kbd ng-class="{'label-success': resource.public, 'label-danger': !resource.public}">&nbsp;&nbsp;&nbsp;</kbd></td>
+                <td><kbd ng-class="{'label-success': resource.archived, 'label-danger': !resource.archived}">&nbsp;&nbsp;&nbsp;</kbd></td>
+                <td><kbd ng-class="{'label-success': resource.draft, 'label-danger': !resource.draft}">&nbsp;&nbsp;&nbsp;</kbd></td>
+                <td><kbd ng-class="{'label-success': resource.complete, 'label-danger': !resource.complete}">&nbsp;&nbsp;&nbsp;</kbd></td>
+            </tr>
+
+        </table>
+    </div>
+
+</div>

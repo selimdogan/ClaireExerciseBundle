@@ -1,0 +1,47 @@
+html {
+    overflow-y: scroll;
+}
+
+body {
+    padding-top: 48px;
+    padding-bottom: 80px;
+}
+
+#TopNav {
+    padding:10px;
+}
+
+#TopNav a {
+    font-size:24pt;
+    color:#ddd;
+    text-decoration:none;
+}
+
+#TopNav a:hover {
+    color:#fff;
+}
+
+
+#bottomNav {
+    padding:10px;
+}
+
+#bottomNav a {
+    font-size:24pt;
+    color:#ddd;
+    text-decoration:none;
+}
+
+#bottomNav a:hover {
+    color:#fff;
+}
+
+option {
+    text-align: center;
+}
+
+.scrollContainer {
+    position: fixed;
+    margin-top: 222px;
+    overflow: auto;
+}
