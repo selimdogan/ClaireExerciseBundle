@@ -1,14 +1,8 @@
+/**
+ * Created by bryan on 25/06/14.
+ */
+
 var resourceControllers = angular.module('resourceControllers', ['ui.router']);
-
-resourceControllers.controller('mainController', ['$scope', '$routeParams', '$location',
-    function($scope, $routeParams, $location) {
-
-        $scope.toggleResourceList = false;
-        $scope.togglePanelResourceList = function (){
-            $scope.toggleResourceList = !$scope.toggleResourceList;
-        }
-
-    }]);
 
 resourceControllers.controller('resourceController', ['$scope', '$routeParams', '$location',
     function($scope, $routeParams, $location) {
