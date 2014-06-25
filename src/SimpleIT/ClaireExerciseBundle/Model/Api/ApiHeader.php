@@ -30,16 +30,6 @@ class ApiHeader
     const ALLOW = 'Allow';
 
     /**
-     * const RANGE = 'Range'
-     */
-    const RANGE = 'Range';
-
-    /**
-     * @const RANGE_UNIT = 'items'
-     */
-    const RANGE_UNIT = 'items';
-
-    /**
      * @const FORMAT_DEFAULT = 'json'
      */
     const FORMAT_DEFAULT = self::FORMAT_JSON;
@@ -59,8 +49,4 @@ class ApiHeader
      */
     const FORMAT_XML = 'xml';
 
-    /**
-     *
-     */
-    const FORMAT_EPUB = "epub";
 }

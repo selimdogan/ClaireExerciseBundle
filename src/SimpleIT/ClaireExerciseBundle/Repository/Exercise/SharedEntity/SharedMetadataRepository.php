@@ -80,8 +80,6 @@ class SharedMetadataRepository extends BaseRepository
                         break;
                 }
             }
-            // FIXME wait for a fix in api-bundle
-//            $queryBuilder = $this->setRange($queryBuilder, $collectionInformation);
         } else {
             $queryBuilder->addOrderBy('m.' . static::ENTITY_NAME, 'ASC');
             $queryBuilder->addOrderBy('m.key', 'ASC');
@@ -93,17 +91,15 @@ class SharedMetadataRepository extends BaseRepository
     /**
      * Delete all the metadata for an entity
      *
-     * @param int $entityId
+     * @param SharedEntity $entity
      */
-    public function deleteAllByEntity($entityId)
+    public function deleteAllByEntity($entity)
     {
-        $sql = 'DELETE FROM ' . static::METADATA_TABLE . ' AS emm WHERE emm.' .
-            static::ENTITY_ID_FIELD_NAME . '= :entityId';
-
-        $connection = $this->_em->getConnection();
-        $connection->executeQuery(
-            $sql,
-            array('entityId' => $entityId)
-        );
+        if (count($entity->getMetadata()) > 0) {
+            $qb = $this->createQueryBuilder('m');
+            $qb->delete(get_class($entity->getMetadata()[0]), 'm');
+            $qb->where($qb->expr()->eq('m.'.static::ENTITY_NAME, $entity->getId()));
+            $qb->getQuery()->getResult();
+        }
     }
 }

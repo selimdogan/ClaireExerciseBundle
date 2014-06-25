@@ -56,11 +56,6 @@ class ApiException extends HttpException
     const STATUS_CODE_REQUEST_ENTITY_TOO_LARGE = 413;
 
     /**
-     * REQUESTED RANGE NOT SATISFIABLE
-     */
-    const STATUS_REQUESTED_RANGE_NOT_SATISFIABLE = 416;
-
-    /**
      * UNPROCESSABLE_ENTITY
      */
     const STATUS_CODE_UNPROCESSABLE_ENTITY = 422;
