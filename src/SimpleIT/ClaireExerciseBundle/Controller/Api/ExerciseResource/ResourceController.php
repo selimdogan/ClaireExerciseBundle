@@ -297,7 +297,7 @@ class ResourceController extends ApiController
 
         // copy the file
         $tmpFile->move(
-            $this->container->getParameter('claroline.param.files_directory') . DIRECTORY_SEPARATOR
+            $this->container->getParameter('claroline.param.uploads_directory') . DIRECTORY_SEPARATOR
             . 'claire_exercise',
             $hashName
         );
