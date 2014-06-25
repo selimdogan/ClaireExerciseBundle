@@ -182,6 +182,15 @@ class ResourceController extends ApiController
         }
     }
 
+    /**
+     * Upload an image in a picture resource
+     *
+     * @param Request $request
+     * @param int     $resourceId
+     *
+     * @return JsonResponse
+     * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException
+     */
     public function uploadImageAction(Request $request, $resourceId)
     {
         $userId = $this->getUserId();
