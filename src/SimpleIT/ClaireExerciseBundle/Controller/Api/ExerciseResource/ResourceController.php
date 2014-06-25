@@ -2,28 +2,26 @@
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\ExerciseResource;
 
 use Doctrine\DBAL\DBALException;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiConflictException;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
+use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiDeletedResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiEditedResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
-use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
-use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
-use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
-use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
-use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\ExercisePictureFactory;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\PictureResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResourceFactory;
-use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * API Resource controller
@@ -183,7 +181,87 @@ class ResourceController extends ApiController
     }
 
     /**
-     * Upload an image in a picture resource
+     * Subscribe to a resource
+     *
+     * @param int $resourceId
+     *
+     * @throws ApiBadRequestException
+     * @throws ApiNotFoundException
+     * @return ApiResponse
+     */
+    public function subscribeAction($resourceId)
+    {
+        try {
+            $resource = $this->get('simple_it.exercise.exercise_resource')->subscribe(
+                $this->getUserId(),
+                $resourceId
+            );
+
+            $resourceResource = ResourceResourceFactory::create($resource);
+
+            return new ApiCreatedResponse($resourceResource, array("details", 'Default'));
+
+        } catch (NonExistingObjectException $neoe) {
+            throw new ApiNotFoundException(ResourceResource::RESOURCE_NAME);
+        }
+    }
+
+    /**
+     * Duplicate a resource
+     *
+     * @param int $resourceId
+     *
+     * @throws ApiBadRequestException
+     * @throws ApiNotFoundException
+     * @return ApiResponse
+     */
+    public function duplicateAction($resourceId)
+    {
+        try {
+            /** @var ExerciseResource $resource */
+            $resource = $this->get('simple_it.exercise.exercise_resource')->duplicate(
+                $resourceId,
+                $this->getUserId()
+            );
+
+            $resourceResource = ResourceResourceFactory::create($resource);
+
+            return new ApiCreatedResponse($resourceResource, array("details", 'Default'));
+
+        } catch (NonExistingObjectException $neoe) {
+            throw new ApiNotFoundException(ResourceResource::RESOURCE_NAME);
+        }
+    }
+
+    /**
+     * Import a resource
+     *
+     * @param int $resourceId
+     *
+     * @throws ApiBadRequestException
+     * @throws ApiNotFoundException
+     * @return ApiResponse
+     */
+    public function importAction($resourceId)
+    {
+        try {
+            /** @var ExerciseResource $resource */
+            $resource = $this->get('simple_it.exercise.exercise_resource')->import(
+                $this->getUserId(),
+                $resourceId
+            );
+
+            $resourceResource = ResourceResourceFactory::create($resource);
+
+            return new ApiCreatedResponse($resourceResource, array("details", 'Default'));
+
+        } catch (NonExistingObjectException $neoe) {
+            throw new ApiNotFoundException(ResourceResource::RESOURCE_NAME);
+        }
+    }
+
+    /**
+     * Upload an image in a picture resource (no resource update)
      *
      * @param Request $request
      * @param int     $resourceId
@@ -204,39 +282,26 @@ class ResourceController extends ApiController
         if ($resource->getType() !== CommonResource::PICTURE) {
             throw new ApiBadRequestException('The resource is not a picture');
         }
-        $oldFileName = $resource->getContent()->getSource();
 
-        $fileName = $request->get('fileName');
+        /** @var UploadedFile $tmpFile */
         $tmpFile = $request->files->get('file');
+        $fileName = $tmpFile->getClientOriginalName();
         $extension = pathinfo($fileName, PATHINFO_EXTENSION);
         $size = filesize($tmpFile);
         if ($size > 2000000) {
             throw new ApiBadRequestException('File too big');
         }
 
-        if (empty($oldFileName)) {
-            $hashName = $this->container->get('claroline.utilities.misc')->generateGuid(
-                ) . '.' . $extension;
-
-        } else {
-            $hashName = $oldFileName;
-        }
-
-        // update the resource (even if same name, to see if no problem updating)
-        $resource->getContent()->setSource($hashName);
-        $this->get('simple_it.exercise.exercise_resource')->updateFromResource(
-            $resource,
-            $userId
-        );
+        $hashName = $this->container->get('claroline.utilities.misc')
+                ->generateGuid() . '.' . $extension;
 
         // copy the file
         $tmpFile->move(
-            $this->container->getParameter('claroline.param.files_directory'),
+            $this->container->getParameter('claroline.param.files_directory') . DIRECTORY_SEPARATOR
+            . 'claire_exercise',
             $hashName
         );
 
-        return new JsonResponse(
-            array("file-name" => $fileName)
-        );
+        return new JsonResponse(array('fileName' => $hashName));
     }
 }
