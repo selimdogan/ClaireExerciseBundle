@@ -51,8 +51,8 @@
                         <div class="col-xs-1">
                             <h4><strong>
                                 <ng-switch on="parentSection">
-                                    <span ng-switch-when="model" ui-sref="model.edit.resource.edit({ resourceid:resource.id })" class="glyphicon glyphicon-edit"></span>
-                                    <span ng-switch-default ui-sref="resource.edit({ resourceid:resource.id })" class="glyphicon glyphicon-edit"></span>
+                                    <span ng-switch-when="model" ui-sref="modelEdit.resourceEdit({ resourceid:resource.id })" class="glyphicon glyphicon-edit"></span>
+                                    <span ng-switch-default ui-sref="resourceEdit({ resourceid:resource.id })" class="glyphicon glyphicon-edit"></span>
                                 </ng-switch>&nbsp;&nbsp;
                                 <span ng-click="deleteResource(resource)" class="glyphicon glyphicon-remove"></span>
                             </strong></h4>
