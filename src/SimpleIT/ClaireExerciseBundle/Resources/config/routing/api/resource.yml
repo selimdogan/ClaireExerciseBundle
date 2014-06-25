@@ -36,7 +36,7 @@ api_exercise_resource_delete:
         _format: json
         resourceId: \d+
 
-api_exercise_model_subscribe:
+api_exercise_resource_subscribe:
     pattern:  /{resourceId}/subscribe
     defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/Resource:subscribe }
     methods: [POST]
@@ -44,7 +44,7 @@ api_exercise_model_subscribe:
         _format: json
         resourceId: \d+
 
-api_exercise_model_duplicate:
+api_exercise_resource_duplicate:
     pattern:  /{resourceId}/duplicate
     defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/Resource:duplicate }
     methods: [POST]
@@ -52,7 +52,7 @@ api_exercise_model_duplicate:
         _format: json
         resourceId: \d+
 
-api_exercise_model_import:
+api_exercise_resource_import:
     pattern:  /{resourceId}/import
     defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/Resource:import }
     methods: [POST]

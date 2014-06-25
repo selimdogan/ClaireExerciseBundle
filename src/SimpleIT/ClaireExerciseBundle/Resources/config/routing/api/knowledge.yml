@@ -36,7 +36,7 @@ api_knowledge_delete:
         _format: json
         knowledgeId: \d+
 
-api_exercise_model_subscribe:
+api_knowledge_subscribe:
     pattern:  /{knowledgeId}/subscribe
     defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/Knowledge:subscribe }
     methods: [POST]
@@ -44,7 +44,7 @@ api_exercise_model_subscribe:
         _format: json
         knowledgeId: \d+
 
-api_exercise_model_duplicate:
+api_knowledge_duplicate:
     pattern:  /{knowledgeId}/duplicate
     defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/Knowledge:duplicate }
     methods: [POST]
@@ -52,7 +52,7 @@ api_exercise_model_duplicate:
         _format: json
         knowledgeId: \d+
 
-api_exercise_model_import:
+api_knowledge_import:
     pattern:  /{knowledgeId}/import
     defaults: { _controller: SimpleITClaireExerciseBundle:Api/DomainKnowledge/Knowledge:import }
     methods: [POST]
