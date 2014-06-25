@@ -3,8 +3,6 @@
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\DomainKnowledge;
 
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
-use SimpleIT\ClaireExerciseBundle\Exception\EntityAlreadyExistsException;
-use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedEntityRepository;
 
@@ -31,43 +29,6 @@ class KnowledgeRepository extends SharedEntityRepository
         }
 
         return $knowledge;
-    }
-
-    /**
-     * Add a required knowledge to a knowledge
-     *
-     * @param int       $knowledgeId
-     * @param Knowledge $requiredKnowledge
-     *
-     * @throws EntityAlreadyExistsException
-     */
-    public function addRequiredKnowledge($knowledgeId, Knowledge $requiredKnowledge)
-    {
-        parent::addRequired(
-            $knowledgeId,
-            $requiredKnowledge,
-            'claire_exercise_knowledge_knowledge_requirement',
-            'knowledge'
-        );
-    }
-
-    /**
-     * Delete a required knowledge
-     *
-     * @param int       $knowledgeId
-     * @param Knowledge $requiredKnowledge
-     *
-     * @throws EntityDeletionException
-     */
-    public function deleteRequiredKnowledge($knowledgeId, Knowledge $requiredKnowledge)
-    {
-        parent::deleteRequired(
-            $knowledgeId,
-            $requiredKnowledge,
-            'claire_exercise_knowledge_knowledge_requirement',
-            'knowledge_id',
-            'required_id'
-        );
     }
 
     /**

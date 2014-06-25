@@ -33,6 +33,11 @@ class TestModel
     private $author;
 
     /**
+     * @var Collection
+     */
+    private $tests;
+
+    /**
      * Set id
      *
      * @param int $id
@@ -110,5 +115,25 @@ class TestModel
     public function getAuthor()
     {
         return $this->author;
+    }
+
+    /**
+     * Set tests
+     *
+     * @param \Doctrine\Common\Collections\Collection $tests
+     */
+    public function setTests($tests)
+    {
+        $this->tests = $tests;
+    }
+
+    /**
+     * Get tests
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTests()
+    {
+        return $this->tests;
     }
 }

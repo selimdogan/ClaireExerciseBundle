@@ -1,0 +1,3 @@
+frontend_index:
+    pattern: /
+    defaults: { _controller: SimpleITClaireExerciseBundle:Frontend/Frontend:index }
