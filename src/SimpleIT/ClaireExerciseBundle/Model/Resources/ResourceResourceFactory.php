@@ -25,7 +25,7 @@ abstract class ResourceResourceFactory extends SharedResourceFactory
     {
         $resourceResources = array();
         foreach ($resources as $resource) {
-            $resourceResources[] = self::create($resource, true);
+            $resourceResources[] = self::create($resource);
         }
 
         return $resourceResources;
@@ -35,36 +35,32 @@ abstract class ResourceResourceFactory extends SharedResourceFactory
      * Create a ResourceResource
      *
      * @param ExerciseResource $resource
-     * @param bool             $light
      *
      * @return ResourceResource
      */
-    public static function create(ExerciseResource $resource, $light = false)
+    public static function create(ExerciseResource $resource)
     {
         $resourceResource = new ResourceResource();
         parent::fill(
             $resourceResource,
-            $resource,
-            $light
+            $resource
         );
 
-        if (!$light) {
-            // required resources
-            $requirements = array();
-            foreach ($resource->getRequiredExerciseResources() as $req) {
-                /** @var ExerciseResource $req */
-                $requirements[] = $req->getId();
-            }
-            $resourceResource->setRequiredExerciseResources($requirements);
-
-            // required resources
-            $requirements = array();
-            foreach ($resource->getRequiredKnowledges() as $req) {
-                /** @var Knowledge $req */
-                $requirements[] = $req->getId();
-            }
-            $resourceResource->setRequiredKnowledges($requirements);
+        // required resources
+        $requirements = array();
+        foreach ($resource->getRequiredExerciseResources() as $req) {
+            /** @var ExerciseResource $req */
+            $requirements[] = $req->getId();
         }
+        $resourceResource->setRequiredExerciseResources($requirements);
+
+        // required resources
+        $requirements = array();
+        foreach ($resource->getRequiredKnowledges() as $req) {
+            /** @var Knowledge $req */
+            $requirements[] = $req->getId();
+        }
+        $resourceResource->setRequiredKnowledges($requirements);
 
         return $resourceResource;
     }

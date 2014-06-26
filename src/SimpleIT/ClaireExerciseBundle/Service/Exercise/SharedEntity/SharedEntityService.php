@@ -579,7 +579,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
         /** @var SharedResource $resource */
         foreach ($resources as &$resource) {
             if ($resource->getContent() === null) {
-                $resource = $this->getContentFullResourceFromResource($resource, true);
+                $resource = $this->getContentFullResourceFromResource($resource);
             }
         }
 
@@ -592,12 +592,11 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * parent), the content of the resource is filled with the parent content
      *
      * @param SharedResource $resource
-     * @param bool           $light
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException
      * @return SharedResource
      */
-    private function getContentFullResourceFromResource(SharedResource $resource, $light = false)
+    private function getContentFullResourceFromResource(SharedResource $resource)
     {
         $entity = $this->get($resource->getId());
 
@@ -610,8 +609,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
 
         $parentResource = SharedResourceFactory::createFromEntity(
             $entity,
-            static::ENTITY_TYPE,
-            $light
+            static::ENTITY_TYPE
         );
         $resource->setContent($parentResource->getContent());
         $resource->setMetadata($parentResource->getMetadata());

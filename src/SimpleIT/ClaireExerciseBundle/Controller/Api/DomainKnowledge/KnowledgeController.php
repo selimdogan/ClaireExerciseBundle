@@ -71,7 +71,7 @@ class KnowledgeController extends ApiController
             $knowledgeResources = KnowledgeResourceFactory::createCollection($knowledges);
 
             return new ApiGotResponse($knowledgeResources, array(
-                'knowledge_list',
+                'details',
                 'Default'
             ));
         } catch (NonExistingObjectException $neoe) {
