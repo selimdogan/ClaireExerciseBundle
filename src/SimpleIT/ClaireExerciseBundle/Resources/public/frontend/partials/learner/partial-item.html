@@ -1,0 +1,44 @@
+<div data-ng-controller="itemController" class="container">
+
+    <div class="row" ui-on-Drop="onDropList($event,$data,item.content.mobile_parts)">
+        <div class="row">
+            <h4><strong>Parties mobiles</strong></h4>
+        </div>
+        <div class="row" style="height: 50px">
+            <div class="panel panel-primary col-xs-1"
+                 ng-repeat="mobilePart in item.content.mobile_parts track by $index"
+                 ui-draggable="true" drag="mobilePart"
+                 on-drop-success="dropSuccessHandler($event,$index,item.content.mobile_parts)">
+                <div>{{ mobilePart.text }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="row">
+            <h4><strong>Parties fixes</strong></h4>
+        </div>
+
+        <div class="row" ng-repeat="fixPart in item.content.fix_parts track by $index">
+            <div class="col-xs-8 panel panel-primary">{{ fixPart.text }}</div>
+            <div class="col-xs-4 panel panel-primary" ng-model="drop[$index]">
+                <div ng-switch="drop[$index]">
+                    <div ng-switch-when="null" ui-on-Drop="onDropField($event,$data,$index)"
+                         style="height: 20px">
+                    </div>
+                    <div ng-switch-default
+                         ui-draggable="true" drag="drop[$index]"
+                         on-drop-success="dropSuccessHandlerField($event,$index)">
+                        {{ drop[$index].text }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="navbar navbar-inverse navbar-fixed-bottom" style="margin-bottom:60px; padding-left: 20px">
+        <button back-Button class="btn btn-primary">Retour</button>
+        <button ng-click="saveAnswer()" class="btn btn-primary">Valider</button>
+    </div>
+
+</div>
