@@ -12,6 +12,7 @@ var mainApp = angular.module('mainApp',
         'modelControllers',
         'modelServices',
         'itemControllers',
-        'itemServices'
+        'itemServices',
+        'answerServices'
     ]
 );

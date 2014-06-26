@@ -4,8 +4,8 @@
 
 var itemControllers = angular.module('itemControllers', ['ui.router']);
 
-itemControllers.controller('itemController', ['$scope', 'Item', '$routeParams', '$location', '$stateParams',
-    function ($scope, Item, $routeParams, $location, $stateParams) {
+itemControllers.controller('itemController', ['$scope', 'Item', 'Answer', '$routeParams', '$location', '$stateParams',
+    function ($scope, Item, Answer, $routeParams, $location, $stateParams) {
 
         $scope.section = 'item';
 
@@ -16,19 +16,61 @@ itemControllers.controller('itemController', ['$scope', 'Item', '$routeParams', 
         }
 
         // retrieve item
-        $scope.item = Item.get({itemId: $stateParams.itemId, attemptId: $stateParams.attemptId});
+        $scope.item = Item.get({itemId: $stateParams.itemId, attemptId: $stateParams.attemptId},
+            function () {
+                // when data loaded
+                for (i = 0; i < $scope.item['content'].mobile_parts.length; ++i) {
+                    $scope.drop[i] = null;
+                    $scope.solution[i] = null;
+                    $scope.item['content'].mobile_parts[i].id = i;
+                }
+                if ($scope.item['corrected'] == true) {
+                    $scope.fillLearnerAnswers();
+                    $scope.displayCorrection($scope.item);
+                }
+            });
 
-        console.log($scope.item);
-
+        // init answer array
         $scope.drop = [];
-        $scope.drop[0] = null;
-        $scope.drop[1] = null;
-        $scope.drop[2] = null;
-        $scope.drop[3] = null;
+        $scope.solution = [];
 
+        // post answer
         $scope.saveAnswer = function () {
+            answer = new Answer;
+            answer.content = [];
+
+            for (i = 0; i < $scope.drop.length; ++i) {
+                answer.content.push($scope.drop[i].id);
+            }
+
+            item = answer.$save({itemId: $stateParams.itemId, attemptId: $stateParams.attemptId},
+                function (item) {
+                    $scope.displayCorrection(item)
+                });
         };
 
+        // correction
+        $scope.displayCorrection = function (item) {
+            console.log(item);
+            for (i = 0; i < $scope.drop.length; ++i) {
+                $scope.solution[i] = item['content'].mobile_parts[
+                    item['content'].solutions[i]
+                    ];
+                $scope.solution[i].right =
+                    item['content'].answers[i] == item['content'].solutions[i];
+            }
+        };
+
+        // display learner answers
+        $scope.fillLearnerAnswers = function () {
+            for (i = 0; i < $scope.drop.length; ++i) {
+                $scope.drop[i] = $scope.item['content'].mobile_parts[
+                    $scope.item['content'].answers[i]
+                    ];
+            }
+        };
+
+        // drag and drop
         $scope.onDropList = function ($event, $data, array) {
             array.push($data);
         };
