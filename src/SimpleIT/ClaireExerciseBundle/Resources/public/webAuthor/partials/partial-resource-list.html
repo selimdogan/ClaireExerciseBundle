@@ -1,0 +1,112 @@
+<div data-ng-controller="resourceController">
+    <div class="panel-body" data-ng-controller="resourceListController">
+
+        <accordion>
+            <accordion-group class="panel panel-success">
+                <accordion-heading class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-10">
+                            <h4><strong>Mes ressources&nbsp;<span class="caret"></span></strong></h4>
+                        </div>
+                        <div class="col-xs-1">
+                        </div>
+                        <div class="col-xs-1 text-center" data-ng-click="createResource()">
+                            <h4><strong><span class="glyphicon glyphicon-plus"></span></strong></h4>
+                        </div>
+                    </div>
+                </accordion-heading>
+                <div>
+                    <input ng-model="search.$">
+                    <input ng-model="search.type">
+                    <input ng-model="search.title">
+                </div>
+            </accordion-group>
+        </accordion>
+
+
+        <accordion close-others="true">
+            <accordion-group class="panel panel-success" ng-repeat="resource in resources | filter:search">
+                <accordion-heading class="panel-heading">
+                    <div class="row" ui-draggable="true" drag="resource">
+                        <div class="col-xs-1" ng-switch="resource.type">
+                            <div ng-switch-when="text">
+                                <span class="glyphicon glyphicon-th-list" style="font-size: 260%"></span>
+                            </div>
+                            <div ng-switch-when="picture">
+                                <span class="glyphicon glyphicon-th-list" style="font-size: 260%"></span>
+                            </div>
+                            <div ng-switch-when="multiple-choice-question">
+                                <span class="glyphicon glyphicon-th-list" style="font-size: 260%"></span>
+                            </div>
+                            <div ng-switch-when="open-ended-question">
+                                <span class="glyphicon glyphicon-th-list" style="font-size: 260%"></span>
+                            </div>
+                            <div ng-switch-when="sequence">
+                                <span class="glyphicon glyphicon-th-list" style="font-size: 260%"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-10">
+                            <h4><strong>{{ resource.title }}&nbsp;<span class="caret"></span></strong></h4>
+                        </div>
+                        <div class="col-xs-1">
+                            <h4><strong>
+                                <ng-switch on="parentSection">
+                                    <span ng-switch-when="model" ui-sref="model.edit.resource.edit({ resourceid:resource.id })" class="glyphicon glyphicon-edit"></span>
+                                    <span ng-switch-default ui-sref="resource.edit({ resourceid:resource.id })" class="glyphicon glyphicon-edit"></span>
+                                </ng-switch>&nbsp;&nbsp;
+                                <span ng-click="deleteResource(resource)" class="glyphicon glyphicon-remove"></span>
+                            </strong></h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div style="margin: 1%;">
+                            <label class="panel panel-success" data-ng-repeat="meta in resource.metadata track by $index" style="margin: 2px;">
+                                &nbsp;<span ui-draggable="true" drag="meta.key">{{ meta.key }}</span>:&nbsp;<span>{{ meta.value }}</span>&nbsp;
+                            </label>
+                            <label class="panel panel-success" data-ng-repeat="keyword in resource.keywords track by $index" style="margin: 2px;">
+                                &nbsp;{{ keyword }}&nbsp;
+                            </label>
+                        </div>
+
+                    </div>
+                </accordion-heading>
+                <div class="row">
+                    <div class="col-xs-6"></div>
+                    <div class="col-xs-2">
+                        <small><strong>Auteur: {{ resource.author }}</strong></small><br>
+                        <small><strong>Propriétaire: {{ resource.owner }}</strong></small>
+                    </div>
+                    <div class="col-xs-2">
+                        <small><strong>Partagé:&nbsp;
+                            <ng-switch on="resource.public">
+                                <span ng-switch-when="true">Oui</span>
+                                <span ng-switch-when="false">Non</span>
+                            </ng-switch>
+                        </strong></small><br>
+                        <small><strong>Archivé:&nbsp;
+                            <ng-switch on="resource.archived">
+                                <span ng-switch-when="true">Oui</span>
+                                <span ng-switch-when="false">Non</span>
+                            </ng-switch>
+                        </strong></small>
+                    </div>
+                    <div class="col-xs-2">
+                        <small><strong>Brouillon:&nbsp;
+                            <ng-switch on="resource.draft">
+                                <span ng-switch-when="true">Oui</span>
+                                <span ng-switch-when="false">Non</span>
+                            </ng-switch>
+                        </strong></small><br>
+                        <small><strong>Complet:&nbsp;
+                            <ng-switch on="resource.complete">
+                                <span ng-switch-when="true">Oui</span>
+                                <span ng-switch-when="false">Non</span>
+                            </ng-switch>
+                        </strong></small>
+                    </div>
+                </div>
+            </accordion-group>
+        </accordion>
+
+    </div>
+</div>

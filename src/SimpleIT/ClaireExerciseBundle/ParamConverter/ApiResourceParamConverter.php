@@ -83,6 +83,11 @@ class ApiResourceParamConverter implements ParamConverterInterface
     {
         if (null === $configuration->getClass()) {
             return false;
+        } elseif ($configuration->getClass() === 'Doctrine\Common\Collections\ArrayCollection'
+        || $configuration->getClass() === 'Doctrine\Common\Collections\Collection') {
+            return true;
+        } elseif (explode('\\', $configuration->getClass())[0] !== 'SimpleIT') {
+            return false;
         }
 
         return true;

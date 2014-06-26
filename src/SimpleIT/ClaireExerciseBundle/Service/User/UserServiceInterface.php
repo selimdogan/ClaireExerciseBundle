@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\User;
 
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use Claroline\CoreBundle\Entity\User;
 
 /**
  * Interface for service which manages the users

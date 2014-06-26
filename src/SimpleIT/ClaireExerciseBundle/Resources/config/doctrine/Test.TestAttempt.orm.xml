@@ -14,7 +14,7 @@
             <join-column name="test_id" referenced-column-name="id"/>
         </many-to-one>
 
-        <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\User\User" field="user">
+        <many-to-one target-entity="Claroline\CoreBundle\Entity\User" field="user">
             <join-column name="user_id" referenced-column-name="id" on-delete="CASCADE"/>
         </many-to-one>
 

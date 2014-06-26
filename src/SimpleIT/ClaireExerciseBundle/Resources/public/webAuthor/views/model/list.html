@@ -1,0 +1,42 @@
+<div class="container">
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+
+            <tr>
+                <th>Type</th>
+                <th>Titre</th>
+                <th>Auteur</th>
+                <th>Propriétaire</th>
+                <th>Partagé</th>
+                <th>Archivé</th>
+                <th>Brouillon</th>
+                <th>Complet</th>
+                <th>&nbsp;</th>
+                <th><span ng-click="createResource()" class="glyphicon glyphicon-plus"
+                          style="font-size: 120%"></span></th>
+                <th>&nbsp;</th>
+            </tr>
+
+            <tr ng-repeat="model in models">
+                <td><kbd class="label-info">{{ model.type }}</kbd></td>
+                <td>{{ model.title }}</td>
+                <td>{{ model.author }}</td>
+                <td>{{ model.owner }}</td>
+                <td><kbd ng-class="{'label-success': model.public, 'label-danger': !model.public}">&nbsp;&nbsp;&nbsp;</kbd></td>
+                <td><kbd ng-class="{'label-success': model.archived, 'label-danger': !model.archived}">&nbsp;&nbsp;&nbsp;</kbd></td>
+                <td><kbd ng-class="{'label-success': model.draft, 'label-danger': !model.draft}">&nbsp;&nbsp;&nbsp;</kbd></td>
+                <td><kbd ng-class="{'label-success': model.complete, 'label-danger': !model.complete}">&nbsp;&nbsp;&nbsp;</kbd></td>
+                <td><span ng-click="go('/model/'+model.id)" class="glyphicon glyphicon-eye-open"
+                          style="font-size: 120%"></span></td>
+                <td><span ng-click="go('/model/'+model.id+'/edit')" class="glyphicon glyphicon-edit"
+                          style="font-size: 120%"></span></td>
+                <td><span ng-click="deleteModel(model)" class="glyphicon glyphicon-remove"
+                          style="font-size: 120%"></span>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+
+</div>

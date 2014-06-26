@@ -1,0 +1,123 @@
+<div data-ng-controller="resourceController">
+    <div class="container" data-ng-controller="resourceDisplayController">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-10">
+                        <h4>
+                            <label>Titre</label><input type="text" ng-model="resource.title" class="form-control" disabled>
+                        </h4>
+                    </div>
+                    <div class="col-xs-2">
+                        <h4><label>Type</label><input type="text" ng-model="resource.type" class="form-control" disabled>
+                        </h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <label>Auteur</label>
+                        <input type="text" ng-model="resource.author" class="form-control" disabled>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <label>Propriétaire</label>
+                        <input type="text" ng-model="resource.owner" class="form-control" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3">
+                        <label>Partagé</label><input type="checkbox" ng-model="resource.public" class="form-control" disabled/>
+                    </div>
+                    <div class="col-xs-3">
+                        <label>Archivé</label><input type="checkbox" ng-model="resource.archived" class="form-control" disabled/>
+                    </div>
+                    <div class="col-xs-3">
+                        <label>Brouillon</label><input type="checkbox" ng-model="resource.draft" class="form-control" disabled/>
+                    </div>
+                    <div class="col-xs-3">
+                        <label>Complet</label><input type="checkbox" ng-model="resource.complete" class="form-control" disabled/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br/>
+
+        <div ng-switch="resource.type">
+            <div ng-switch-when="text">
+                <blockquote>
+                    <h3 ng-click="context.content.collapse = !context.content.collapse" class="panel-default">Texte</h3>
+
+                    <div collapse="context.content.collapse">
+                        <input type="text" ng-model="resource.content.text" class="form-control" disabled>
+                    </div>
+                </blockquote>
+            </div>
+
+            <div ng-switch-when="picture">
+                <blockquote>
+                    <h3 ng-click="context.content.collapse = !context.content.collapse" class="panel-default">Image</h3>
+
+                    <div collapse="context.content.collapse">
+                        <div class="row">
+                            <div class="col-xs-3"><input type="text" ng-model="resource.content.source" class="form-control" disabled></div>
+                        </div>
+                        <img ng-src="/bundles/simpleitclaireexercise/img/exercise/{{resource.content.source}}"/>
+                    </div>
+                </blockquote>
+            </div>
+
+        </div>
+
+
+        <blockquote>
+            <h3 ng-click="context.keywords.collapse = !context.keywords.collapse" class="panel-default">Mots-clés</h3>
+
+            <div collapse="context.keywords.collapse" class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div ng-repeat="keyword in resource.keywords">
+                            <div class="col-xs-2" >
+                                <input type="text" ng-model="keyword" class="form-control" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </blockquote>
+
+
+        <blockquote>
+            <h3 ng-click="context.metadata.collapse = !context.metadata.collapse" class="panel-default">Méta-données</h3>
+
+            <div collapse="context.metadata.collapse" class="panel panel-default">
+                <div class="panel-heading">
+                    <table class="table">
+                        <tr>
+                            <th>Clé</th>
+                            <th>Valeur</th>
+                        </tr>
+                        <tr ng-repeat="meta in resource.metadata track by $index">
+                            <th><input type="text" ng-model="meta.key" class="form-control" disabled></th>
+                            <th><input type="text" ng-model="meta.value" class="form-control" disabled></th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </blockquote>
+
+        <br/>
+
+        <div>
+            <button back-Button class="btn btn-primary">Retour</button>
+            <ng-switch on="includedby">
+                <button ng-switch-when="resource" ui-sref="model.edit.resource.edit({ resourceid:resource.id })" class="btn btn-primary">Modifier</button>
+                <button ng-switch-default ui-sref="resource.edit({ resourceid:resource.id })" class="btn btn-primary">Modifier</button>
+            </ng-switch>
+        </div>
+
+        <br/>
+
+    </div>
+</div>

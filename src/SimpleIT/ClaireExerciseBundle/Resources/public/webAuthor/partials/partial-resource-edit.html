@@ -1,0 +1,155 @@
+<div data-ng-controller="resourceController">
+    <div class="row" data-ng-controller="resourceEditController">
+
+        <div class="col-xs-12">
+            <div class="panel-body">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <span class="glyphicon glyphicon-th-list" style="font-size: 920%"></span>
+                            </div>
+                            <div class="col-xs-4">
+                                <h4><strong>Titre</strong></h4>
+                                <input type="text" ng-model="resource.title" class="form-control"/>
+                                <h4><strong>Intitulé</strong></h4>
+                                <input type="text" ng-model="resource.content.wording" class="form-control"/>
+                            </div>
+                            <div class="col-xs-4">
+                                <h4><strong>Auteur</strong></h4>
+                                <input type="text" ng-model="resource.author" class="form-control" disabled>
+                                <h4><strong>Propriétaire</strong></h4>
+                                <input type="text" ng-model="resource.owner" class="form-control" disabled>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="resource.public">
+                                        <h4><strong>Partagé</strong></h4>
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="resource.archived">
+                                        <h4><strong>Archivé</strong></h4>
+                                    </label>
+                                </div>
+                                <div>&nbsp;</div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="resource.draft">
+                                        <h4><strong>Brouillon</strong></h4>
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="resource.complete">
+                                        <h4><strong>Complet</strong></h4>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12">
+            <div class="panel-body">
+
+                <div ng-switch="resource.type">
+                    <div ng-switch-when="text">
+
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-11">
+                                        <h4><strong>Texte</strong></h4>
+                                    </div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-5">
+                                        <input type="text" ng-model="resource.content.text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div ng-switch-when="picture">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-11">
+                                        <h4><strong>Image</strong></h4>
+                                    </div>
+                                    <div class="col-xs-1"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-5"><input type="text" ng-model="resource.content.source" class="form-control"></div>
+                                </div>
+                                <img ng-src="/bundles/simpleitclaireexercise/img/exercise/{{resource.content.source}}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h4><strong>Mots-clés</strong></h4>
+                        <div class="row">
+                            <div ng-repeat="keyword in resource.keywords track by $index">
+                                <div class="col-xs-5">
+                                    <input type="text" ng-model="keyword" class="form-control" disabled>
+                                </div>
+                                <div class="col-xs-1"><span data-ng-click="resourceRemoveField(resource.keywords, $index)"
+                                                            class="glyphicon glyphicon-remove"></span></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-5"><input id="resourceAddKeyword" type="text" value=""
+                                                         placeholder="nouveau mot-clé" class="form-control"></div>
+                            <div class="col-xs-1"><span data-ng-click="resourceAddKeywordsField(resource.keywords)"
+                                                        class="glyphicon glyphicon-plus"></span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h4><strong>Méta-données</strong></h4>
+                        <div class="row">
+                            <div ng-repeat="meta in resource.metadata track by $index">
+                                <div class="col-xs-5">
+                                    <input type="text" ng-model="meta.key" class="form-control" >
+                                </div>
+                                <div class="col-xs-6">
+                                    <input type="text" ng-model="meta.value" class="form-control" >
+                                </div>
+                                <div class="col-xs-1"><span data-ng-click="resourceRemoveField(resource.metadata, $index)"
+                                                            class="glyphicon glyphicon-remove"></span></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-5"><input id="resourceAddMetadataKey" type="text" value=""
+                                                         placeholder="nouvelle clé" class="form-control"></div>
+                            <div class="col-xs-6"><input id="resourceAddMetadataValue" type="text" value=""
+                                                         placeholder="nouvelle valeur" class="form-control"></div>
+                            <div class="col-xs-1"><span data-ng-click="resourceAddMetadataField(resource.metadata)"
+                                                        class="glyphicon glyphicon-plus"></span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navbar navbar-inverse navbar-fixed-bottom" style="margin-bottom:60px; padding-left: 20px">
+                    <button back-Button class="btn btn-primary">Retour</button>
+                    <button ng-click="updateResource()" class="btn btn-primary">Sauvegarder</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -3,6 +3,7 @@ namespace SimpleIT\ClaireExerciseBundle\Controller\Api;
 
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Core\Exception\InsufficientAuthenticationException;
 
 /**
  * API Controller
@@ -14,11 +15,16 @@ abstract class ApiController extends Controller
     /**
      * Get the current user's id
      *
+     * @throws InsufficientAuthenticationException
      * @return int
      */
     protected function getUserId()
     {
-        return $this->get('security.context')->getToken()->getUser()->getId();
+        if ($this->get('security.context')->isGranted('ROLE_USER')) {
+            return $this->get('security.context')->getToken()->getUser()->getId();
+        } else {
+            throw new InsufficientAuthenticationException();
+        }
     }
 
     /**
@@ -28,7 +34,7 @@ abstract class ApiController extends Controller
      */
     protected function getUserIdIfNoCreator()
     {
-        if (!$this->get('security.context')->getToken()->getUser()->hasRole('ROLE_WS_CREATOR')) {
+        if (!$this->get('security.context')->isGranted('ROLE_WS_CREATOR')) {
             return $this->getUserId();
         } else {
             return null;

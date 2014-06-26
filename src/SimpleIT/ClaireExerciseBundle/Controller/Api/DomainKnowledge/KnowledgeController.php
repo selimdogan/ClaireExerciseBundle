@@ -173,4 +173,84 @@ class KnowledgeController extends ApiController
             throw new ApiBadRequestException($ede->getMessage());
         }
     }
+
+    /**
+     * Subscribe to a knowledge
+     *
+     * @param int $knowledgeId
+     *
+     * @throws ApiBadRequestException
+     * @throws ApiNotFoundException
+     * @return ApiResponse
+     */
+    public function subscribeAction($knowledgeId)
+    {
+        try {
+            $knowledge = $this->get('simple_it.exercise.knowledge')->subscribe(
+                $this->getUserId(),
+                $knowledgeId
+            );
+
+            $knowledgeResource = KnowledgeResourceFactory::create($knowledge);
+
+            return new ApiCreatedResponse($knowledgeResource, array("details", 'Default'));
+
+        } catch (NonExistingObjectException $neoe) {
+            throw new ApiNotFoundException(KnowledgeResource::RESOURCE_NAME);
+        }
+    }
+
+    /**
+     * Duplicate a knowledge
+     *
+     * @param int $knowledgeId
+     *
+     * @throws ApiBadRequestException
+     * @throws ApiNotFoundException
+     * @return ApiResponse
+     */
+    public function duplicateAction($knowledgeId)
+    {
+        try {
+            /** @var Knowledge $knowledge */
+            $knowledge = $this->get('simple_it.exercise.knowledge')->duplicate(
+                $knowledgeId,
+                $this->getUserId()
+            );
+
+            $knowledgeResource = KnowledgeResourceFactory::create($knowledge);
+
+            return new ApiCreatedResponse($knowledgeResource, array("details", 'Default'));
+
+        } catch (NonExistingObjectException $neoe) {
+            throw new ApiNotFoundException(KnowledgeResource::RESOURCE_NAME);
+        }
+    }
+
+    /**
+     * Import a knowledge
+     *
+     * @param int $knowledgeId
+     *
+     * @throws ApiBadRequestException
+     * @throws ApiNotFoundException
+     * @return ApiResponse
+     */
+    public function importAction($knowledgeId)
+    {
+        try {
+            /** @var Knowledge $knowledge */
+            $knowledge = $this->get('simple_it.exercise.knowledge')->import(
+                $this->getUserId(),
+                $knowledgeId
+            );
+
+            $knowledgeResource = KnowledgeResourceFactory::create($knowledge);
+
+            return new ApiCreatedResponse($knowledgeResource, array("details", 'Default'));
+
+        } catch (NonExistingObjectException $neoe) {
+            throw new ApiNotFoundException(KnowledgeResource::RESOURCE_NAME);
+        }
+    }
 }

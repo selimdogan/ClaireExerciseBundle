@@ -7,7 +7,7 @@ use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResourceFactory;
-use SimpleIT\ClaireExerciseBundle\Entity\User\User;
+use Claroline\CoreBundle\Entity\User;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidExerciseResourceException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
@@ -552,25 +552,26 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     )
     {
         $reqRes = array();
-
-        foreach ($block->getElements() as $element) {
-            if (get_class($element) === SequenceElement::RESOURCE_ID_CLASS) {
-                /** @var ResourceId $element */
-                if ($import) {
-                    $requiredId = $this->importOrLink(
-                        $ownerId,
-                        $element->getResourceId()
+        if (is_array($block->getElements())) {
+            foreach ($block->getElements() as $element) {
+                if (get_class($element) === SequenceElement::RESOURCE_ID_CLASS) {
+                    /** @var ResourceId $element */
+                    if ($import) {
+                        $requiredId = $this->importOrLink(
+                            $ownerId,
+                            $element->getResourceId()
+                        );
+                        $element->setResourceId($requiredId);
+                    } else {
+                        $requiredId = $element->getResourceId();
+                    }
+                    $reqRes[] = $requiredId;
+                } elseif (get_class($element) === SequenceElement::BLOCK_CLASS) {
+                    /** @var SequenceBlock $element */
+                    $reqRes = array_unique(
+                        $this->computeRequiredResourcesForSequenceFromBlock($element)
                     );
-                    $element->setResourceId($requiredId);
-                } else {
-                    $requiredId = $element->getResourceId();
                 }
-                $reqRes[] = $requiredId;
-            } elseif (get_class($element) === SequenceElement::BLOCK_CLASS) {
-                /** @var SequenceBlock $element */
-                $reqRes = array_unique(
-                    $this->computeRequiredResourcesForSequenceFromBlock($element)
-                );
             }
         }
 
@@ -596,21 +597,23 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     {
         $reqKno = array();
 
-        /** @var LocalFormula $formula */
-        foreach ($resourceResource->getContent()->getFormulas() as $formula) {
-            if ($import) {
-                $requiredId = $this->knowledgeService->importOrLink(
-                    $ownerId,
-                    $formula->getFormulaId()
-                );
-                $formula->setFormulaId($requiredId);
-            } else {
-                $requiredId = $formula->getFormulaId();
+        if (is_array($resourceResource->getContent()->getFormulas())) {
+            /** @var LocalFormula $formula */
+            foreach ($resourceResource->getContent()->getFormulas() as $formula) {
+                if ($import) {
+                    $requiredId = $this->knowledgeService->importOrLink(
+                        $ownerId,
+                        $formula->getFormulaId()
+                    );
+                    $formula->setFormulaId($requiredId);
+                } else {
+                    $requiredId = $formula->getFormulaId();
+                }
+                $reqKno[] = $requiredId;
             }
-            $reqKno[] = $requiredId;
-        }
 
-        $resourceResource->setRequiredKnowledges(array_unique($reqKno));
+            $resourceResource->setRequiredKnowledges(array_unique($reqKno));
+        }
 
         return $resourceResource;
     }
@@ -664,13 +667,11 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     {
         $entity->setPublic(true);
 
-        foreach($entity->getRequiredExerciseResources() as $resource)
-        {
+        foreach ($entity->getRequiredExerciseResources() as $resource) {
             $this->makePublic($resource);
         }
 
-        foreach ($entity->getRequiredKnowledges() as $knowledge)
-        {
+        foreach ($entity->getRequiredKnowledges() as $knowledge) {
             $this->knowledgeService->makePublic($knowledge);
         }
     }

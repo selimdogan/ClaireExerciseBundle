@@ -30,10 +30,10 @@ api_attempts:
     resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/attempt.yml"
     prefix:   /api/attempts/
 
-api_exercise_users:
-    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/user.yml"
-    prefix:   /api/users/
-
 api_domain_knowledges:
     resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/knowledge.yml"
     prefix:   /api/knowledges/
+
+web_author:
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/author/webauthor.yml"
+    prefix:   /webauthor/
