@@ -24,7 +24,7 @@ abstract class ExerciseModelResourceFactory extends SharedResourceFactory
     {
         $exerciseModelResources = array();
         foreach ($exerciseModels as $exerciseModel) {
-            $exerciseModelResources[] = self::create($exerciseModel, true);
+            $exerciseModelResources[] = self::create($exerciseModel);
         }
 
         return $exerciseModelResources;
@@ -34,16 +34,14 @@ abstract class ExerciseModelResourceFactory extends SharedResourceFactory
      * Create an ExerciseModel Resource
      *
      * @param ExerciseModel $exerciseModel
-     * @param bool          $light
      *
      * @return ExerciseModelResource
      */
-    public static function create(ExerciseModel $exerciseModel, $light = false)
+    public static function create(ExerciseModel $exerciseModel)
     {
         $exerciseModelResource = new ExerciseModelResource();
-        parent::fill($exerciseModelResource, $exerciseModel, $light);
+        parent::fill($exerciseModelResource, $exerciseModel);
 
-        if (!$light) {
             // required resources
             $rr = array();
             foreach ($exerciseModel->getRequiredExerciseResources() as $req) {
@@ -59,7 +57,6 @@ abstract class ExerciseModelResourceFactory extends SharedResourceFactory
                 $rn[] = $req->getId();
             }
             $exerciseModelResource->setRequiredKnowledges($rn);
-        }
 
         return $exerciseModelResource;
     }
