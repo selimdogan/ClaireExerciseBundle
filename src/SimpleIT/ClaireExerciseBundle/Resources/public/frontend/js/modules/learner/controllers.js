@@ -59,6 +59,7 @@ itemControllers.controller('itemController', ['$scope', 'Item', 'Answer', '$rout
                 $scope.solution[i].right =
                     item['content'].answers[i] == item['content'].solutions[i];
             }
+            $scope.item.corrected = true;
         };
 
         // display learner answers
