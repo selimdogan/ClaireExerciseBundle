@@ -84,7 +84,7 @@ class ExerciseModelController extends ApiController
                 );
 
             return new ApiGotResponse($exerciseModelResources, array(
-                'list',
+                'details',
                 'Default'
             ));
         } catch (FilterException $fe) {
