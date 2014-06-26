@@ -19,83 +19,87 @@ mainApp.config(
 
                 $resourceProvider.defaults.stripTrailingSlashes = false;
 
+
+                // Teacher's routes
                 $urlRouterProvider.otherwise('/model');
 
                 $stateProvider.state('model', {
                     url: '/model',
-                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-model.html'
+                    templateUrl: BASE_CONFIG.urls.partials.teacher+'/partial-model.html'
                 });
 
                 $stateProvider.state('model.list', { // /contacts?myParam1&myParam2
                     url: '/',
-                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-model-list.html'
+                    templateUrl: BASE_CONFIG.urls.partials.teacher+'/partial-model-list.html'
                     //,controller: 'modelListController'
                 });
 
                 $stateProvider.state('model.display', {
                     url: '/:modelid',
-                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-model-display.html'
+                    templateUrl: BASE_CONFIG.urls.partials.teacher+'/partial-model-display.html'
                     //,controller: 'modelDisplayController'
                 });
 
                 $stateProvider.state('model.edit', {
                     url: '/:modelid/edit',
-                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-model-edit.html'
+                    templateUrl: BASE_CONFIG.urls.partials.teacher+'/partial-model-edit.html'
                     //,controller: 'modelEditController'
                 });
 
 
                 $stateProvider.state('model.edit.resource', {
                     url: '/resource',
-                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource.html'
+                    templateUrl: BASE_CONFIG.urls.partials.teacher+'/partial-resource.html'
                     //,controller: 'resourceController'
                 });
 
                 $stateProvider.state('model.edit.resource.list', {
                     url: '/list',
-                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-list.html'
+                    templateUrl: BASE_CONFIG.urls.partials.teacher+'/partial-resource-list.html'
                     //,controller: 'resourceController'
                     //,controller: 'resourceListController'
                 });
 
                 $stateProvider.state('model.edit.resource.display', {
                     url: '/:resourceid',
-                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-display.html'
+                    templateUrl: BASE_CONFIG.urls.partials.teacher+'/partial-resource-display.html'
                     //,controller: 'resourceController'
                     //,controller: 'resourceDisplayController'
                 });
 
                 $stateProvider.state('model.edit.resource.edit', {
                     url: '/:resourceid/edit',
-                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-edit.html'
+                    templateUrl: BASE_CONFIG.urls.partials.teacher+'/partial-resource-edit.html'
                     //,controller: 'resourceController'
                     //,controller: 'resourceEditController'
                 });
 
                 $stateProvider.state('resource', {
                     url: '/resource',
-                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource.html'
+                    templateUrl: BASE_CONFIG.urls.partials.teacher+'/partial-resource.html'
                     //,controller: 'resourceController'
                 });
 
                 $stateProvider.state('resource.list', {
                     url: '/list',
-                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-list.html'
+                    templateUrl: BASE_CONFIG.urls.partials.teacher+'/partial-resource-list.html'
                     //,controller: 'resourceListController'
                 });
 
                 $stateProvider.state('resource.display', {
                     url: '/:resourceid',
-                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-display.html'
+                    templateUrl: BASE_CONFIG.urls.partials.teacher+'/partial-resource-display.html'
                     //,controller: 'resourceDisplayController'
                 });
 
                 $stateProvider.state('resource.edit', {
                     url: '/:resourceid/edit',
-                    templateUrl: '/bundles/simpleitclaireexercise/webAuthor/partials/partial-resource-edit.html'
+                    templateUrl: BASE_CONFIG.urls.partials.teacher+'/partial-resource-edit.html'
                     //,controller: 'resourceEditController'
                 });
 
+                // learner's routes
+                // ...
             }
         ]
     );
