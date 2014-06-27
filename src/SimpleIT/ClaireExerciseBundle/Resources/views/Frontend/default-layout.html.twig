@@ -50,7 +50,10 @@
                     teacher: "{{ asset('bundles/simpleitclaireexercise/frontend/partials/teacher') }}",
                     learner: "{{ asset('bundles/simpleitclaireexercise/frontend/partials/learner') }}"
                 },
-                images: "{{ asset('uploads/claire_exercise/') }}"
+                images: {
+                    uploads: "{{ asset('uploads/claire_exercise/') }}",
+                    exercise: "{{ asset('bundles/simpleitclaireexercise/images/exercise/') }}"
+                }
             },
             language: 'fr'
         };

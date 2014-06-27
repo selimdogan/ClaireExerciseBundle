@@ -18,6 +18,7 @@ var mainApp = angular.module('mainApp',
         'exerciseControllers',
         'exerciseServices',
         'answerServices',
+        'exerciseByAttemptServices',
         'attemptServices'
     ]
 );

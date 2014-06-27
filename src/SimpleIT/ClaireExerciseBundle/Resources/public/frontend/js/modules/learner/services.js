@@ -59,10 +59,28 @@ modelTryServices.factory('ModelTry', ['$resource',
     function ($resource) {
 
         return $resource(
-            BASE_CONFIG.urls.api.models + ':modelId/try',
+            BASE_CONFIG.urls.api.models + ':modelId/exercises/',
             {'modelId': '@modelId'},
             {
                 try: {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
+                }
+            }
+        );
+
+    }]);
+
+var exerciseByAttemptServices = angular.module('exerciseByAttemptServices', ['ngResource']);
+
+exerciseByAttemptServices.factory('ExerciseByAttempt', ['$resource',
+    function ($resource) {
+
+        return $resource(
+            BASE_CONFIG.urls.api.exercises + ':exerciseId/attempts/',
+            {'exerciseId': '@exerciseId'},
+            {
+                create: {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
                 }

@@ -28,8 +28,6 @@
 
     <div class="row">
         <div class="row" ng-repeat="fixPart in item.content.fix_parts track by $index">
-            <div class="col-xs-2">
-            </div>
             <div class="col-xs-4">
                 <div class="span panel panel-primary">
                     <div ng-if="fixPart.object_type == 'text'">
@@ -69,6 +67,14 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-xs-1">
+                    <div ng-if="solution[$index] != null && !solution[$index].right">
+                        <img ng-src="{{ imageExoUrl }}/wrong.png"/>
+                    </div>
+                    <div ng-if="solution[$index] != null && solution[$index].right">
+                        <img ng-src="{{ imageExoUrl }}/right.png"/>
+                    </div>
             </div>
             <div class="col-xs-2">
                 <div class="span" style="min-width: 50px">
