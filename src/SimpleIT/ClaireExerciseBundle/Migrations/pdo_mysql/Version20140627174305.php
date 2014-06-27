@@ -8,9 +8,9 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated migration based on mapping information: modify it with caution
  *
- * Generation date: 2014/06/20 04:29:27
+ * Generation date: 2014/06/27 05:43:17
  */
-class Version20140620162916 extends AbstractMigration
+class Version20140627174305 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
@@ -100,6 +100,7 @@ class Version20140620162916 extends AbstractMigration
         $this->addSql("
             CREATE TABLE claire_exercise_model (
                 id INT NOT NULL, 
+                resourcenode_id INT DEFAULT NULL, 
                 parent_id INT DEFAULT NULL, 
                 fork_from_id INT DEFAULT NULL, 
                 author_id INT NOT NULL, 
@@ -111,6 +112,7 @@ class Version20140620162916 extends AbstractMigration
                 complete TINYINT(1) NOT NULL, 
                 public TINYINT(1) NOT NULL, 
                 archived TINYINT(1) DEFAULT NULL, 
+                UNIQUE INDEX UNIQ_C3EFD3877C292AE (resourcenode_id), 
                 INDEX IDX_C3EFD38727ACA70 (parent_id), 
                 INDEX IDX_C3EFD383AB8C0BA (fork_from_id), 
                 INDEX IDX_C3EFD38F675F31B (author_id), 
@@ -321,6 +323,11 @@ class Version20140620162916 extends AbstractMigration
             ALTER TABLE claire_exercise_knowledge_metadata 
             ADD CONSTRAINT FK_269D7264E7DC6902 FOREIGN KEY (knowledge_id) 
             REFERENCES claire_exercise_knowledge (id)
+        ");
+        $this->addSql("
+            ALTER TABLE claire_exercise_model 
+            ADD CONSTRAINT FK_C3EFD3877C292AE FOREIGN KEY (resourcenode_id) 
+            REFERENCES claro_resource_node (id)
         ");
         $this->addSql("
             ALTER TABLE claire_exercise_model 

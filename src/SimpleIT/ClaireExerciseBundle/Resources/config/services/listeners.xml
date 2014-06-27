@@ -4,6 +4,7 @@
 
     <parameters>
         <parameter key="simple_it.listener.response.class">SimpleIT\ClaireExerciseBundle\Listener\ApiResponseListener</parameter>
+        <parameter key="simple_it.listener.exercise_model.class">SimpleIT\ClaireExerciseBundle\Listener\ExerciseModelListener</parameter>
     </parameters>
 
     <services>
@@ -12,6 +13,12 @@
                 <argument type="service" id="simple_it.api.serializer"/>
             </call>
             <tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse" priority="0"/>
+        </service>
+        <service id="simple_it.listener.exercise_model" class="%simple_it.listener.exercise_model.class%">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <tag name="kernel.event_listener" event="try_menu_claire_exercise_model" method="onTry" priority="0"/>
         </service>
     </services>
 </container>

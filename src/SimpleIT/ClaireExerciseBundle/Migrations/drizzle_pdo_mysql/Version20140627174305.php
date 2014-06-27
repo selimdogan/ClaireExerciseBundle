@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseBundle\Migrations\mysqli;
+namespace SimpleIT\ClaireExerciseBundle\Migrations\drizzle_pdo_mysql;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
@@ -8,9 +8,9 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated migration based on mapping information: modify it with caution
  *
- * Generation date: 2014/06/20 04:29:38
+ * Generation date: 2014/06/27 05:43:29
  */
-class Version20140620162916 extends AbstractMigration
+class Version20140627174305 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
@@ -19,11 +19,11 @@ class Version20140620162916 extends AbstractMigration
                 id INT NOT NULL, 
                 item_id INT DEFAULT NULL, 
                 attempt_id INT DEFAULT NULL, 
-                content LONGTEXT NOT NULL, 
+                content TEXT NOT NULL, 
+                PRIMARY KEY(id), 
                 INDEX IDX_D0B3344126F525E (item_id), 
-                INDEX IDX_D0B3344B191BE6B (attempt_id), 
-                PRIMARY KEY(id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                INDEX IDX_D0B3344B191BE6B (attempt_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_attempt (
@@ -32,31 +32,31 @@ class Version20140620162916 extends AbstractMigration
                 user_id INT DEFAULT NULL, 
                 test_attempt_id INT DEFAULT NULL, 
                 created_at DATETIME NOT NULL, 
-                position INT DEFAULT NULL, 
+                `position` INT DEFAULT NULL, 
+                PRIMARY KEY(id), 
                 INDEX IDX_228E85D1E934951A (exercise_id), 
                 INDEX IDX_228E85D1A76ED395 (user_id), 
-                INDEX IDX_228E85D1CAA20852 (test_attempt_id), 
-                PRIMARY KEY(id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                INDEX IDX_228E85D1CAA20852 (test_attempt_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_item (
                 id INT NOT NULL, 
                 exercise_id INT DEFAULT NULL, 
                 type VARCHAR(255) NOT NULL, 
-                content LONGTEXT NOT NULL, 
-                INDEX IDX_F5D1234E934951A (exercise_id), 
-                PRIMARY KEY(id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                content TEXT NOT NULL, 
+                PRIMARY KEY(id), 
+                INDEX IDX_F5D1234E934951A (exercise_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_stored_exercise (
                 id INT NOT NULL, 
                 exercise_model_id INT DEFAULT NULL, 
-                content LONGTEXT NOT NULL, 
-                INDEX IDX_7270807A7F19170F (exercise_model_id), 
-                PRIMARY KEY(id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                content TEXT NOT NULL, 
+                PRIMARY KEY(id), 
+                INDEX IDX_7270807A7F19170F (exercise_model_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_knowledge (
@@ -67,83 +67,85 @@ class Version20140620162916 extends AbstractMigration
                 owner_id INT NOT NULL, 
                 type VARCHAR(255) NOT NULL, 
                 title VARCHAR(255) NOT NULL, 
-                content LONGTEXT DEFAULT NULL, 
-                draft TINYINT(1) NOT NULL, 
-                complete TINYINT(1) NOT NULL, 
-                public TINYINT(1) DEFAULT NULL, 
-                archived TINYINT(1) NOT NULL, 
+                content TEXT DEFAULT NULL, 
+                draft BOOLEAN NOT NULL, 
+                complete BOOLEAN NOT NULL, 
+                public BOOLEAN DEFAULT NULL, 
+                archived BOOLEAN NOT NULL, 
+                PRIMARY KEY(id), 
                 INDEX IDX_465F3A83727ACA70 (parent_id), 
                 INDEX IDX_465F3A833AB8C0BA (fork_from_id), 
                 INDEX IDX_465F3A83F675F31B (author_id), 
-                INDEX IDX_465F3A837E3C61F9 (owner_id), 
-                PRIMARY KEY(id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                INDEX IDX_465F3A837E3C61F9 (owner_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_knowledge_knowledge_requirement (
                 knowledge_id INT NOT NULL, 
                 required_id INT NOT NULL, 
+                PRIMARY KEY(knowledge_id, required_id), 
                 INDEX IDX_67A0678CE7DC6902 (knowledge_id), 
-                INDEX IDX_67A0678CDD3DFC3F (required_id), 
-                PRIMARY KEY(knowledge_id, required_id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                INDEX IDX_67A0678CDD3DFC3F (required_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_knowledge_metadata (
                 meta_key VARCHAR(255) NOT NULL, 
                 knowledge_id INT NOT NULL, 
                 meta_value VARCHAR(255) NOT NULL, 
-                INDEX IDX_269D7264E7DC6902 (knowledge_id), 
-                PRIMARY KEY(meta_key, knowledge_id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                PRIMARY KEY(meta_key, knowledge_id), 
+                INDEX IDX_269D7264E7DC6902 (knowledge_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_model (
                 id INT NOT NULL, 
+                resourcenode_id INT DEFAULT NULL, 
                 parent_id INT DEFAULT NULL, 
                 fork_from_id INT DEFAULT NULL, 
                 author_id INT NOT NULL, 
                 owner_id INT NOT NULL, 
                 type VARCHAR(255) NOT NULL, 
                 title VARCHAR(255) NOT NULL, 
-                content LONGTEXT DEFAULT NULL, 
-                draft TINYINT(1) NOT NULL, 
-                complete TINYINT(1) NOT NULL, 
-                public TINYINT(1) NOT NULL, 
-                archived TINYINT(1) DEFAULT NULL, 
+                content TEXT DEFAULT NULL, 
+                draft BOOLEAN NOT NULL, 
+                complete BOOLEAN NOT NULL, 
+                public BOOLEAN NOT NULL, 
+                archived BOOLEAN DEFAULT NULL, 
+                PRIMARY KEY(id), 
+                UNIQUE INDEX UNIQ_C3EFD3877C292AE (resourcenode_id), 
                 INDEX IDX_C3EFD38727ACA70 (parent_id), 
                 INDEX IDX_C3EFD383AB8C0BA (fork_from_id), 
                 INDEX IDX_C3EFD38F675F31B (author_id), 
-                INDEX IDX_C3EFD387E3C61F9 (owner_id), 
-                PRIMARY KEY(id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                INDEX IDX_C3EFD387E3C61F9 (owner_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_model_resource_requirement (
                 model_id INT NOT NULL, 
                 required_resource_id INT NOT NULL, 
+                PRIMARY KEY(model_id, required_resource_id), 
                 INDEX IDX_34BBE44E7975B7E7 (model_id), 
-                INDEX IDX_34BBE44EC971F1B5 (required_resource_id), 
-                PRIMARY KEY(model_id, required_resource_id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                INDEX IDX_34BBE44EC971F1B5 (required_resource_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_model_knowledge_requirement (
                 model_id INT NOT NULL, 
                 required_knowledge_id INT NOT NULL, 
+                PRIMARY KEY(model_id, required_knowledge_id), 
                 INDEX IDX_5CD51F8C7975B7E7 (model_id), 
-                INDEX IDX_5CD51F8C1793B92A (required_knowledge_id), 
-                PRIMARY KEY(model_id, required_knowledge_id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                INDEX IDX_5CD51F8C1793B92A (required_knowledge_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_model_metadata (
                 meta_key VARCHAR(255) NOT NULL, 
                 exercise_model_id INT NOT NULL, 
                 meta_value VARCHAR(255) NOT NULL, 
-                INDEX IDX_1FCD0C517F19170F (exercise_model_id), 
-                PRIMARY KEY(meta_key, exercise_model_id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                PRIMARY KEY(meta_key, exercise_model_id), 
+                INDEX IDX_1FCD0C517F19170F (exercise_model_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_resource (
@@ -154,54 +156,54 @@ class Version20140620162916 extends AbstractMigration
                 owner_id INT NOT NULL, 
                 type VARCHAR(255) NOT NULL, 
                 title VARCHAR(255) NOT NULL, 
-                content LONGTEXT DEFAULT NULL, 
-                draft TINYINT(1) NOT NULL, 
-                complete TINYINT(1) NOT NULL, 
-                public TINYINT(1) NOT NULL, 
-                archived TINYINT(1) NOT NULL, 
+                content TEXT DEFAULT NULL, 
+                draft BOOLEAN NOT NULL, 
+                complete BOOLEAN NOT NULL, 
+                public BOOLEAN NOT NULL, 
+                archived BOOLEAN NOT NULL, 
+                PRIMARY KEY(id), 
                 INDEX IDX_E9AEB0BE727ACA70 (parent_id), 
                 INDEX IDX_E9AEB0BE3AB8C0BA (fork_from_id), 
                 INDEX IDX_E9AEB0BEF675F31B (author_id), 
-                INDEX IDX_E9AEB0BE7E3C61F9 (owner_id), 
-                PRIMARY KEY(id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                INDEX IDX_E9AEB0BE7E3C61F9 (owner_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_resource_knowledge_requirement (
                 resource_id INT NOT NULL, 
                 required_knowledge_id INT NOT NULL, 
-                INDEX IDX_79D9E3BE89329D25 (resource_id), 
-                INDEX IDX_79D9E3BE1793B92A (required_knowledge_id), 
                 PRIMARY KEY(
                     resource_id, required_knowledge_id
-                )
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                ), 
+                INDEX IDX_79D9E3BE89329D25 (resource_id), 
+                INDEX IDX_79D9E3BE1793B92A (required_knowledge_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_resource_resource_requirement (
                 resource_id INT NOT NULL, 
                 required_id INT NOT NULL, 
+                PRIMARY KEY(resource_id, required_id), 
                 INDEX IDX_579576FC89329D25 (resource_id), 
-                INDEX IDX_579576FCDD3DFC3F (required_id), 
-                PRIMARY KEY(resource_id, required_id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                INDEX IDX_579576FCDD3DFC3F (required_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_resource_metadata (
                 meta_key VARCHAR(255) NOT NULL, 
                 resource_id INT NOT NULL, 
                 meta_value VARCHAR(255) NOT NULL, 
-                INDEX IDX_115B5EA589329D25 (resource_id), 
-                PRIMARY KEY(meta_key, resource_id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                PRIMARY KEY(meta_key, resource_id), 
+                INDEX IDX_115B5EA589329D25 (resource_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_test (
                 id INT NOT NULL, 
                 test_model_id INT DEFAULT NULL, 
-                INDEX IDX_C8394926EC16BCB1 (test_model_id), 
-                PRIMARY KEY(id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                PRIMARY KEY(id), 
+                INDEX IDX_C8394926EC16BCB1 (test_model_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_test_attempt (
@@ -209,41 +211,41 @@ class Version20140620162916 extends AbstractMigration
                 test_id INT DEFAULT NULL, 
                 user_id INT DEFAULT NULL, 
                 created_at DATETIME NOT NULL, 
+                PRIMARY KEY(id), 
                 INDEX IDX_783E4D1F1E5D0459 (test_id), 
-                INDEX IDX_783E4D1FA76ED395 (user_id), 
-                PRIMARY KEY(id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                INDEX IDX_783E4D1FA76ED395 (user_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_test_model (
                 id INT NOT NULL, 
                 author_id INT DEFAULT NULL, 
                 title VARCHAR(255) NOT NULL, 
-                INDEX IDX_CB243285F675F31B (author_id), 
-                PRIMARY KEY(id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                PRIMARY KEY(id), 
+                INDEX IDX_CB243285F675F31B (author_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_test_model_position (
                 test_model_id INT NOT NULL, 
                 exercise_model_id INT NOT NULL, 
-                position INT NOT NULL, 
-                INDEX IDX_C31B436DEC16BCB1 (test_model_id), 
-                INDEX IDX_C31B436D7F19170F (exercise_model_id), 
+                `position` INT NOT NULL, 
                 PRIMARY KEY(
                     test_model_id, exercise_model_id
-                )
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                ), 
+                INDEX IDX_C31B436DEC16BCB1 (test_model_id), 
+                INDEX IDX_C31B436D7F19170F (exercise_model_id)
+            )
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_test_position (
                 test_id INT NOT NULL, 
                 exercise_id INT NOT NULL, 
-                position INT NOT NULL, 
+                `position` INT NOT NULL, 
+                PRIMARY KEY(test_id, exercise_id), 
                 INDEX IDX_6F95FF221E5D0459 (test_id), 
-                INDEX IDX_6F95FF22E934951A (exercise_id), 
-                PRIMARY KEY(test_id, exercise_id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
+                INDEX IDX_6F95FF22E934951A (exercise_id)
+            )
         ");
         $this->addSql("
             ALTER TABLE claire_exercise_answer 
@@ -321,6 +323,11 @@ class Version20140620162916 extends AbstractMigration
             ALTER TABLE claire_exercise_knowledge_metadata 
             ADD CONSTRAINT FK_269D7264E7DC6902 FOREIGN KEY (knowledge_id) 
             REFERENCES claire_exercise_knowledge (id)
+        ");
+        $this->addSql("
+            ALTER TABLE claire_exercise_model 
+            ADD CONSTRAINT FK_C3EFD3877C292AE FOREIGN KEY (resourcenode_id) 
+            REFERENCES claro_resource_node (id)
         ");
         $this->addSql("
             ALTER TABLE claire_exercise_model 

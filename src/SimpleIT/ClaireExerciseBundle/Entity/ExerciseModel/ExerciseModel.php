@@ -2,6 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel;
 
+use Claroline\CoreBundle\Entity\Resource\ResourceNode;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
@@ -32,6 +33,11 @@ class ExerciseModel extends SharedEntity
      * @var Collection
      */
     private $requiredKnowledges;
+
+    /**
+     * @var string
+     */
+    protected $name = 'exercise model';
 
     /**
      * Constructor

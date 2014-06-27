@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseBundle\Migrations\oci8;
+namespace SimpleIT\ClaireExerciseBundle\Migrations\sqlsrv;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
@@ -8,85 +8,19 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated migration based on mapping information: modify it with caution
  *
- * Generation date: 2014/06/20 04:29:32
+ * Generation date: 2014/06/27 05:43:31
  */
-class Version20140620162916 extends AbstractMigration
+class Version20140627174305 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
         $this->addSql("
-            DROP SEQUENCE acl_classes_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE acl_security_identities_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE acl_object_identities_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE acl_entries_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_resource_type_custom_action_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_link_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_log_workspace_widget_config_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_log_desktop_widget_config_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_widget_display_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE simple_text_dekstop_widget_config_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE simple_text_workspace_widget_config_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_forum_options_id_seq
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_answer_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_attempt_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_item_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_stored_exercise_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_knowledge_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_model_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_resource_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_test_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_test_attempt_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_test_model_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
             CREATE TABLE claire_exercise_answer (
-                id NUMBER(10) NOT NULL, 
-                item_id NUMBER(10) DEFAULT NULL, 
-                attempt_id NUMBER(10) DEFAULT NULL, 
-                content CLOB NOT NULL, 
-                PRIMARY KEY(id)
+                id INT NOT NULL, 
+                item_id INT, 
+                attempt_id INT, 
+                content VARCHAR(MAX) NOT NULL, 
+                PRIMARY KEY (id)
             )
         ");
         $this->addSql("
@@ -97,13 +31,13 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_attempt (
-                id NUMBER(10) NOT NULL, 
-                exercise_id NUMBER(10) DEFAULT NULL, 
-                user_id NUMBER(10) DEFAULT NULL, 
-                test_attempt_id NUMBER(10) DEFAULT NULL, 
-                created_at TIMESTAMP(0) NOT NULL, 
-                position NUMBER(10) DEFAULT NULL, 
-                PRIMARY KEY(id)
+                id INT NOT NULL, 
+                exercise_id INT, 
+                user_id INT, 
+                test_attempt_id INT, 
+                created_at DATETIME2(6) NOT NULL, 
+                position INT, 
+                PRIMARY KEY (id)
             )
         ");
         $this->addSql("
@@ -117,11 +51,11 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_item (
-                id NUMBER(10) NOT NULL, 
-                exercise_id NUMBER(10) DEFAULT NULL, 
-                type VARCHAR2(255) NOT NULL, 
-                content CLOB NOT NULL, 
-                PRIMARY KEY(id)
+                id INT NOT NULL, 
+                exercise_id INT, 
+                type NVARCHAR(255) NOT NULL, 
+                content VARCHAR(MAX) NOT NULL, 
+                PRIMARY KEY (id)
             )
         ");
         $this->addSql("
@@ -129,10 +63,10 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_stored_exercise (
-                id NUMBER(10) NOT NULL, 
-                exercise_model_id NUMBER(10) DEFAULT NULL, 
-                content CLOB NOT NULL, 
-                PRIMARY KEY(id)
+                id INT NOT NULL, 
+                exercise_model_id INT, 
+                content VARCHAR(MAX) NOT NULL, 
+                PRIMARY KEY (id)
             )
         ");
         $this->addSql("
@@ -140,19 +74,19 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_knowledge (
-                id NUMBER(10) NOT NULL, 
-                parent_id NUMBER(10) DEFAULT NULL, 
-                fork_from_id NUMBER(10) DEFAULT NULL, 
-                author_id NUMBER(10) NOT NULL, 
-                owner_id NUMBER(10) NOT NULL, 
-                type VARCHAR2(255) NOT NULL, 
-                title VARCHAR2(255) NOT NULL, 
-                content CLOB DEFAULT NULL, 
-                draft NUMBER(1) NOT NULL, 
-                complete NUMBER(1) NOT NULL, 
-                \"public\" NUMBER(1) DEFAULT NULL, 
-                archived NUMBER(1) NOT NULL, 
-                PRIMARY KEY(id)
+                id INT NOT NULL, 
+                parent_id INT, 
+                fork_from_id INT, 
+                author_id INT NOT NULL, 
+                owner_id INT NOT NULL, 
+                type NVARCHAR(255) NOT NULL, 
+                title NVARCHAR(255) NOT NULL, 
+                content VARCHAR(MAX), 
+                draft BIT NOT NULL, 
+                complete BIT NOT NULL, 
+                [public] BIT, 
+                archived BIT NOT NULL, 
+                PRIMARY KEY (id)
             )
         ");
         $this->addSql("
@@ -169,9 +103,9 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_knowledge_knowledge_requirement (
-                knowledge_id NUMBER(10) NOT NULL, 
-                required_id NUMBER(10) NOT NULL, 
-                PRIMARY KEY(knowledge_id, required_id)
+                knowledge_id INT NOT NULL, 
+                required_id INT NOT NULL, 
+                PRIMARY KEY (knowledge_id, required_id)
             )
         ");
         $this->addSql("
@@ -182,10 +116,10 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_knowledge_metadata (
-                meta_key VARCHAR2(255) NOT NULL, 
-                knowledge_id NUMBER(10) NOT NULL, 
-                meta_value VARCHAR2(255) NOT NULL, 
-                PRIMARY KEY(meta_key, knowledge_id)
+                meta_key NVARCHAR(255) NOT NULL, 
+                knowledge_id INT NOT NULL, 
+                meta_value NVARCHAR(255) NOT NULL, 
+                PRIMARY KEY (meta_key, knowledge_id)
             )
         ");
         $this->addSql("
@@ -193,20 +127,25 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_model (
-                id NUMBER(10) NOT NULL, 
-                parent_id NUMBER(10) DEFAULT NULL, 
-                fork_from_id NUMBER(10) DEFAULT NULL, 
-                author_id NUMBER(10) NOT NULL, 
-                owner_id NUMBER(10) NOT NULL, 
-                type VARCHAR2(255) NOT NULL, 
-                title VARCHAR2(255) NOT NULL, 
-                content CLOB DEFAULT NULL, 
-                draft NUMBER(1) NOT NULL, 
-                complete NUMBER(1) NOT NULL, 
-                \"public\" NUMBER(1) NOT NULL, 
-                archived NUMBER(1) DEFAULT NULL, 
-                PRIMARY KEY(id)
+                id INT NOT NULL, 
+                resourcenode_id INT, 
+                parent_id INT, 
+                fork_from_id INT, 
+                author_id INT NOT NULL, 
+                owner_id INT NOT NULL, 
+                type NVARCHAR(255) NOT NULL, 
+                title NVARCHAR(255) NOT NULL, 
+                content VARCHAR(MAX), 
+                draft BIT NOT NULL, 
+                complete BIT NOT NULL, 
+                [public] BIT NOT NULL, 
+                archived BIT, 
+                PRIMARY KEY (id)
             )
+        ");
+        $this->addSql("
+            CREATE UNIQUE INDEX UNIQ_C3EFD3877C292AE ON claire_exercise_model (resourcenode_id) 
+            WHERE resourcenode_id IS NOT NULL
         ");
         $this->addSql("
             CREATE INDEX IDX_C3EFD38727ACA70 ON claire_exercise_model (parent_id)
@@ -222,9 +161,9 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_model_resource_requirement (
-                model_id NUMBER(10) NOT NULL, 
-                required_resource_id NUMBER(10) NOT NULL, 
-                PRIMARY KEY(model_id, required_resource_id)
+                model_id INT NOT NULL, 
+                required_resource_id INT NOT NULL, 
+                PRIMARY KEY (model_id, required_resource_id)
             )
         ");
         $this->addSql("
@@ -235,9 +174,9 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_model_knowledge_requirement (
-                model_id NUMBER(10) NOT NULL, 
-                required_knowledge_id NUMBER(10) NOT NULL, 
-                PRIMARY KEY(model_id, required_knowledge_id)
+                model_id INT NOT NULL, 
+                required_knowledge_id INT NOT NULL, 
+                PRIMARY KEY (model_id, required_knowledge_id)
             )
         ");
         $this->addSql("
@@ -248,10 +187,10 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_model_metadata (
-                meta_key VARCHAR2(255) NOT NULL, 
-                exercise_model_id NUMBER(10) NOT NULL, 
-                meta_value VARCHAR2(255) NOT NULL, 
-                PRIMARY KEY(meta_key, exercise_model_id)
+                meta_key NVARCHAR(255) NOT NULL, 
+                exercise_model_id INT NOT NULL, 
+                meta_value NVARCHAR(255) NOT NULL, 
+                PRIMARY KEY (meta_key, exercise_model_id)
             )
         ");
         $this->addSql("
@@ -259,19 +198,19 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_resource (
-                id NUMBER(10) NOT NULL, 
-                parent_id NUMBER(10) DEFAULT NULL, 
-                fork_from_id NUMBER(10) DEFAULT NULL, 
-                author_id NUMBER(10) NOT NULL, 
-                owner_id NUMBER(10) NOT NULL, 
-                type VARCHAR2(255) NOT NULL, 
-                title VARCHAR2(255) NOT NULL, 
-                content CLOB DEFAULT NULL, 
-                draft NUMBER(1) NOT NULL, 
-                complete NUMBER(1) NOT NULL, 
-                \"public\" NUMBER(1) NOT NULL, 
-                archived NUMBER(1) NOT NULL, 
-                PRIMARY KEY(id)
+                id INT NOT NULL, 
+                parent_id INT, 
+                fork_from_id INT, 
+                author_id INT NOT NULL, 
+                owner_id INT NOT NULL, 
+                type NVARCHAR(255) NOT NULL, 
+                title NVARCHAR(255) NOT NULL, 
+                content VARCHAR(MAX), 
+                draft BIT NOT NULL, 
+                complete BIT NOT NULL, 
+                [public] BIT NOT NULL, 
+                archived BIT NOT NULL, 
+                PRIMARY KEY (id)
             )
         ");
         $this->addSql("
@@ -288,9 +227,9 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_resource_knowledge_requirement (
-                resource_id NUMBER(10) NOT NULL, 
-                required_knowledge_id NUMBER(10) NOT NULL, 
-                PRIMARY KEY(
+                resource_id INT NOT NULL, 
+                required_knowledge_id INT NOT NULL, 
+                PRIMARY KEY (
                     resource_id, required_knowledge_id
                 )
             )
@@ -303,9 +242,9 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_resource_resource_requirement (
-                resource_id NUMBER(10) NOT NULL, 
-                required_id NUMBER(10) NOT NULL, 
-                PRIMARY KEY(resource_id, required_id)
+                resource_id INT NOT NULL, 
+                required_id INT NOT NULL, 
+                PRIMARY KEY (resource_id, required_id)
             )
         ");
         $this->addSql("
@@ -316,10 +255,10 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_resource_metadata (
-                meta_key VARCHAR2(255) NOT NULL, 
-                resource_id NUMBER(10) NOT NULL, 
-                meta_value VARCHAR2(255) NOT NULL, 
-                PRIMARY KEY(meta_key, resource_id)
+                meta_key NVARCHAR(255) NOT NULL, 
+                resource_id INT NOT NULL, 
+                meta_value NVARCHAR(255) NOT NULL, 
+                PRIMARY KEY (meta_key, resource_id)
             )
         ");
         $this->addSql("
@@ -327,9 +266,9 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_test (
-                id NUMBER(10) NOT NULL, 
-                test_model_id NUMBER(10) DEFAULT NULL, 
-                PRIMARY KEY(id)
+                id INT NOT NULL, 
+                test_model_id INT, 
+                PRIMARY KEY (id)
             )
         ");
         $this->addSql("
@@ -337,11 +276,11 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_test_attempt (
-                id NUMBER(10) NOT NULL, 
-                test_id NUMBER(10) DEFAULT NULL, 
-                user_id NUMBER(10) DEFAULT NULL, 
-                created_at TIMESTAMP(0) NOT NULL, 
-                PRIMARY KEY(id)
+                id INT NOT NULL, 
+                test_id INT, 
+                user_id INT, 
+                created_at DATETIME2(6) NOT NULL, 
+                PRIMARY KEY (id)
             )
         ");
         $this->addSql("
@@ -352,10 +291,10 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_test_model (
-                id NUMBER(10) NOT NULL, 
-                author_id NUMBER(10) DEFAULT NULL, 
-                title VARCHAR2(255) NOT NULL, 
-                PRIMARY KEY(id)
+                id INT NOT NULL, 
+                author_id INT, 
+                title NVARCHAR(255) NOT NULL, 
+                PRIMARY KEY (id)
             )
         ");
         $this->addSql("
@@ -363,10 +302,10 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_test_model_position (
-                test_model_id NUMBER(10) NOT NULL, 
-                exercise_model_id NUMBER(10) NOT NULL, 
-                position NUMBER(10) NOT NULL, 
-                PRIMARY KEY(
+                test_model_id INT NOT NULL, 
+                exercise_model_id INT NOT NULL, 
+                position INT NOT NULL, 
+                PRIMARY KEY (
                     test_model_id, exercise_model_id
                 )
             )
@@ -379,10 +318,10 @@ class Version20140620162916 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_test_position (
-                test_id NUMBER(10) NOT NULL, 
-                exercise_id NUMBER(10) NOT NULL, 
-                position NUMBER(10) NOT NULL, 
-                PRIMARY KEY(test_id, exercise_id)
+                test_id INT NOT NULL, 
+                exercise_id INT NOT NULL, 
+                position INT NOT NULL, 
+                PRIMARY KEY (test_id, exercise_id)
             )
         ");
         $this->addSql("
@@ -467,6 +406,11 @@ class Version20140620162916 extends AbstractMigration
             ALTER TABLE claire_exercise_knowledge_metadata 
             ADD CONSTRAINT FK_269D7264E7DC6902 FOREIGN KEY (knowledge_id) 
             REFERENCES claire_exercise_knowledge (id)
+        ");
+        $this->addSql("
+            ALTER TABLE claire_exercise_model 
+            ADD CONSTRAINT FK_C3EFD3877C292AE FOREIGN KEY (resourcenode_id) 
+            REFERENCES claro_resource_node (id)
         ");
         $this->addSql("
             ALTER TABLE claire_exercise_model 
@@ -731,72 +675,6 @@ class Version20140620162916 extends AbstractMigration
         $this->addSql("
             ALTER TABLE claire_exercise_test_model_position 
             DROP CONSTRAINT FK_C31B436DEC16BCB1
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_answer_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_attempt_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_item_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_stored_exercise_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_knowledge_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_model_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_resource_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_test_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_test_attempt_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_test_model_id_seq
-        ");
-        $this->addSql("
-            CREATE SEQUENCE acl_classes_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE acl_security_identities_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE acl_object_identities_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE acl_entries_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_resource_type_custom_action_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_link_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_log_workspace_widget_config_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_log_desktop_widget_config_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_widget_display_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE simple_text_dekstop_widget_config_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE simple_text_workspace_widget_config_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_forum_options_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
         ");
         $this->addSql("
             DROP TABLE claire_exercise_answer
