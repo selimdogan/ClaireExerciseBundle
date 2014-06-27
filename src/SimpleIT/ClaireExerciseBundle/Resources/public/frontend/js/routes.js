@@ -52,13 +52,21 @@ mainApp.config(
             $stateProvider.state('learner', {
                 url: '/learner/',
                 templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-index.html'
-                //,controller: 'learnerController'
             });
 
-            $stateProvider.state('item', {
-                url: '/learner/attempt/:attemptId/item/:itemId',
+            $stateProvider.state('attempt.item', {
+                url: '/item/:itemId',
                 templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-item.html'
-                //,controller: 'learnerController'
+            });
+
+            $stateProvider.state('attempt', {
+                url: '/learner/attempt/:attemptId',
+                templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-exercise.html'
+            });
+
+            $stateProvider.state('modelTry', {
+                url: '/learner/model/:modelId/try',
+                controller: 'modelTryController'
             });
         }
     ]

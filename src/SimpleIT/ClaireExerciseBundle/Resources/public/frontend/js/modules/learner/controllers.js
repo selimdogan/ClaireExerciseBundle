@@ -8,12 +8,9 @@ itemControllers.controller('itemController', ['$scope', 'Item', 'Answer', '$rout
     function ($scope, Item, Answer, $routeParams, $location, $stateParams) {
 
         $scope.section = 'item';
+        $scope.imageUrl = BASE_CONFIG.urls.images;
 
-        if ($scope.$parent.section === undefined) {
-            $scope.parentSection = '';
-        } else {
-            $scope.parentSection = $scope.$parent.section;
-        }
+        console.log('item loading...');
 
         // retrieve item
         $scope.item = Item.get({itemId: $stateParams.itemId, attemptId: $stateParams.attemptId},
@@ -51,7 +48,6 @@ itemControllers.controller('itemController', ['$scope', 'Item', 'Answer', '$rout
 
         // correction
         $scope.displayCorrection = function (item) {
-            console.log(item);
             for (i = 0; i < $scope.drop.length; ++i) {
                 $scope.solution[i] = item['content'].mobile_parts[
                     item['content'].solutions[i]
@@ -87,5 +83,51 @@ itemControllers.controller('itemController', ['$scope', 'Item', 'Answer', '$rout
         $scope.dropSuccessHandlerField = function ($event, fieldNumber) {
             $scope.drop[fieldNumber] = null;
         };
+    }]);
+
+var exerciseControllers = angular.module('exerciseControllers', ['ui.router']);
+
+exerciseControllers.controller('exerciseController', ['$scope', '$state', 'Exercise', 'Attempt', 'Item', '$routeParams', '$location', '$stateParams',
+    function ($scope, $state, Exercise, Attempt, Item, $routeParams, $location, $stateParams) {
+
+        $scope.section = 'exercise';
+
+        // retrieve attempt
+        attempt = Attempt.get({attemptId: $stateParams.attemptId},
+            function (attempt) {
+                // when data loaded
+                console.log(attempt);
+                $scope.exercise = Exercise.get({exerciseId: attempt.exercise},
+                    function () {
+                        // when data loaded
+                        console.log($scope.exercise);
+                        $scope.items = Item.query({attemptId: $stateParams.attemptId},
+                            function () {
+                                // when data loaded
+                                console.log($scope.items);
+
+                                // inclure le premier item
+                                $state.go('attempt.item',
+                                    {
+                                        attemptId: $stateParams.attemptId,
+                                        itemId: $scope.items[0].item_id
+                                    });
+                            });
+
+                    });
+            });
+    }]);
+
+var modelTryControllers = angular.module('modelTryControllers', ['ui.router']);
+
+modelTryControllers.controller('modelTryController', ['$scope', 'Model', 'Item', 'Answer', '$routeParams', '$location', '$stateParams',
+    function ($scope, Model, Item, Answer, $routeParams, $location, $stateParams) {
+        // create exercise from model
+        exercise = Model.$try({modelId: $stateParams.modelId},
+            function (exercise) {
+                // créer une tentative pour l'exercice
+                // rediriger vers la page pour y répondre
+            });
+
     }]);
 
