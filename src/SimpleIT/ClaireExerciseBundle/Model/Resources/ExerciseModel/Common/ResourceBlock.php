@@ -38,6 +38,13 @@ abstract class ResourceBlock
     protected $resourceConstraint = null;
 
     /**
+     * @var bool $isList
+     * @Serializer\Type("boolean")
+     * @Serializer\Groups({"details", "exercise_model_storage"})
+     */
+    protected $isList;
+
+    /**
      * Test if the block is a list of designated resources or a constraint to
      * find resources
      *
@@ -45,7 +52,27 @@ abstract class ResourceBlock
      */
     public function isList()
     {
-        return is_null($this->resourceConstraint);
+        return $this->isList;
+    }
+
+    /**
+     * Set is_list
+     *
+     * @param mixed $is_list
+     */
+    public function setIsList($is_list)
+    {
+        $this->isList = $is_list;
+    }
+
+    /**
+     * Get is_list
+     *
+     * @return mixed
+     */
+    public function getIsList()
+    {
+        return $this->isList;
     }
 
     /**
