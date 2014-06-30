@@ -161,7 +161,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-6">
-                                        <h5><strong>Clé de métadonnée</strong></h5>
+                                        <h5>Clé de métadonnée</h5>
                                         <input type="text" ng-model="pair_blocks.pair_meta_key" class="form-control" ui-on-Drop="onDropMetadataKey($event,$data,pair_blocks)"/>
                                     </div>
                                     <div class="col-xs-6">
@@ -249,8 +249,54 @@
                                     </div>
                                 </tab>
                                 <tab heading="Sélectionner par contraintes">
-                                    <div class="panel-body panel panel-primary">
-
+                                    <div class="panel-body panel panel-primary" data-ng-init="initResourceConstraints(pair_blocks)">
+                                        <div>
+                                            <label>Type de ressource</label><br>
+                                            <div class="btn-group">
+                                                <button class="btn btn-info" ng-model="pair_blocks.resourceConstraint.type" btn-radio="'text'">
+                                                    <span class="glyphicon glyphicon-font"></span>
+                                                </button>
+                                                <button class="btn btn-info" ng-model="pair_blocks.resourceConstraint.type" btn-radio="'picture'">
+                                                    <span class="glyphicon glyphicon-picture"></span>
+                                                </button>
+                                            </div>
+                                        </div><br>
+                                        <div>
+                                            <label>Liste des containtes</label><br>
+                                            <div class="panel-group">
+                                                <div class="panel panel-info" data-ng-repeat="metadataConstraint in pair_blocks.resourceConstraint.metadataConstraints track by $index">
+                                                    <div class="row">
+                                                        <div class="panel-heading">
+                                                            <input type="text" ng-model="metadataConstraint.key" class="form-control" placeholder="Clé">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="panel panel-info">
+                                                    <div class="panel-heading">
+                                            <span data-ng-click="modelAddBlockResourceConstraint(pair_blocks.resourceConstraint.metadataConstraints)"
+                                                  class="glyphicon glyphicon-plus"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label>Ressources exclue</label>
+                                            <div class="row">
+                                                <div ng-repeat="resIdExcluded in pair_blocks.resourceConstraint.excluded track by $index">
+                                                    <div class="col-xs-5">
+                                                        <input type="text" ng-model="resIdExcluded.id" class="form-control" disabled>
+                                                    </div>
+                                                    <div class="col-xs-1"><span data-ng-click="modelRemoveField(pair_blocks.resourceConstraint.excluded, $index)"
+                                                                                class="glyphicon glyphicon-remove"></span></div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-5"><input id="modelAddResIdExcluded" type="text" value=""
+                                                                             placeholder="ex: 13" class="form-control"></div>
+                                                <div class="col-xs-1"><span data-ng-click="modelAddBlockResourceExcluded(pair_blocks.resourceConstraint.excluded, '#modelAddResIdExcluded')"
+                                                                            class="glyphicon glyphicon-plus"></span></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </tab>
                             </tabset>
@@ -276,7 +322,7 @@
 
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h4><strong>Mots-clés</strong></h4>
+                    <h4>Mots-clés</h4>
                     <div class="row">
                         <div ng-repeat="keyword in model.keywords track by $index">
                             <div class="col-xs-5">

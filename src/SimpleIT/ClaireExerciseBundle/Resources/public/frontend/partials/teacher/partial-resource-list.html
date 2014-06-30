@@ -8,24 +8,89 @@
                         <div class="col-xs-10">
                             <h4><strong>Mes ressources&nbsp;<span class="caret"></span></strong></h4>
                         </div>
-                        <div class="col-xs-1">
-                        </div>
-                        <div class="col-xs-1 text-center" data-ng-click="createResource()">
-                            <h4><strong><span class="glyphicon glyphicon-plus"></span></strong></h4>
-                        </div>
                     </div>
                 </accordion-heading>
-                <div>
-                    <input ng-model="search.$">
-                    <input ng-model="search.type">
-                    <input ng-model="search.title">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <h4><strong>Recherche</strong></h4>
+                        <input type="text" placeholder="rechercher" ng-model="$parent.$parent.filters.search">
+                        <h4><strong>Filtrer par types</strong></h4>
+                        <div class="btn-group">
+                            <button class="btn btn-success" ng-model="$parent.$parent.filters.type.text" btn-checkbox-true="'text'" btn-checkbox-false="''" btn-checkbox>
+                                <span class="glyphicon glyphicon-font"></span>
+                            </button>
+                            <button class="btn btn-success" ng-model="$parent.$parent.filters.type.multiple_choice_question" btn-checkbox-true="'multiple-choice-question'" btn-checkbox-false="''" btn-checkbox>
+                                <span class="glyphicon glyphicon-check"></span>
+                            </button>
+                            <button class="btn btn-success" ng-model="$parent.$parent.filters.type.picture" btn-checkbox-true="'picture'" btn-checkbox-false="''" btn-checkbox>
+                                <span class="glyphicon glyphicon-picture"></span>
+                            </button>
+                            <button class="btn btn-success" ng-model="$parent.$parent.filters.type.open_ended_question" btn-checkbox-true="'open-ended-question'" btn-checkbox-false="''" btn-checkbox>
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
+                            <button class="btn btn-success" ng-model="$parent.$parent.filters.type.sequence" btn-checkbox-true="'sequence'" btn-checkbox-false="''" btn-checkbox>
+                                <span class="glyphicon glyphicon-sort-by-order"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <h4><strong>Mots-clés</strong></h4>
+                        <div class="row">
+                            <div class="panel panel-success">
+                                <br>
+                                <div ng-repeat="keyword in filters.keywords track by $index">
+                                    <div class="col-xs-3">
+                                        <input type="text" ng-model="keyword" class="form-control" disabled>
+                                    </div>
+                                    <div class="col-xs-1"><span data-ng-click="resourceRemoveField(filters.keywords, $index)"
+                                                                class="glyphicon glyphicon-remove"></span></div>
+                                </div>
+                                <div class="col-xs-3"><input id="resourceAddKeyword" type="text" value=""
+                                                             placeholder="nouveau mot-clé" class="form-control"></div>
+                                <div class="col-xs-1"><span data-ng-click="resourceAddKeywordsField(filters.keywords)"
+                                                            class="glyphicon glyphicon-plus"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-4">
+                        <h4><strong>Méta-données</strong></h4>
+                        <div class="row">
+                            <div class="panel panel-success">
+                                <br>
+                                <div ng-repeat="meta in filters.metadata track by $index">
+                                    <div class="col-xs-5">
+                                        <input type="text" ng-model="meta.key" class="form-control" disabled>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <input type="text" ng-model="meta.value" class="form-control" disabled>
+                                    </div>
+                                    <div class="col-xs-1"><span data-ng-click="resourceRemoveField(filters.metadata, $index)"
+                                                                class="glyphicon glyphicon-remove"></span></div>
+                                </div>
+                                <div class="">
+                                    <div class="col-xs-5"><input id="resourceAddMetadataKey" type="text" value=""
+                                                                 placeholder="nouvelle clé" class="form-control"></div>
+                                    <div class="col-xs-6"><input id="resourceAddMetadataValue" type="text" value=""
+                                                                 placeholder="nouvelle valeur" class="form-control"></div>
+                                    <div class="col-xs-1"><span data-ng-click="resourceAddMetadataField(filters.metadata)"
+                                                                class="glyphicon glyphicon-plus"></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-1"></div>
                 </div>
+            </accordion-group>
+            <accordion-group class="panel panel-success">
+                <accordion-heading class="panel-heading">
+                    <h4><strong><span class="glyphicon glyphicon-plus"></span></strong></h4>
+                </accordion-heading>
             </accordion-group>
         </accordion>
 
-
         <accordion close-others="true">
-            <accordion-group class="panel panel-success" ng-repeat="resource in resources | filter:search">
+            <accordion-group class="panel panel-success" ng-repeat="resource in resources | filter:filters.search | myFilters:filters">
                 <accordion-heading class="panel-heading">
                     <div class="row" ui-draggable="true" drag="resource">
                         <div class="col-xs-1" ng-switch="resource.type">

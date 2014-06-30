@@ -9,6 +9,18 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
 
         $scope.section = 'resource';
 
+        $scope.filters = {
+            search: '',
+            type: {
+                multiple_choice_question: 'multiple-choice-question'
+                ,text: 'text'
+                ,picture: 'picture'
+                ,open_ended_question: 'open-ended-question'
+                ,sequence: 'sequence'
+            },
+            keywords: [],
+            metadata: []
+        };
 
         if($scope.$parent.section === undefined){$scope.parentSection = '';}else{$scope.parentSection = $scope.$parent.section;}
 
@@ -49,10 +61,14 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
 
     }]);
 
-resourceControllers.controller('resourceListController', ['$scope', 'Resource', '$location', function($scope, Resource, $location) {
+resourceControllers.controller('resourceListController', ['$scope', 'Resource', '$location', '$http', function($scope, Resource, $location, $http) {
 
     // retrieve resources
-    $scope.resources = Resource.query();
+    //$scope.resources = Resource.query(function(){console.log($scope.resources);});
+
+    $http.get('http://claroline/app_dev.php/claire_exercise/api/resources').success(function(data){
+        $scope.resources = data;
+    });
 
     // delete resource method
     $scope.deleteResource = function (resource) {
@@ -63,10 +79,73 @@ resourceControllers.controller('resourceListController', ['$scope', 'Resource', 
 
     // create resource method
     $scope.createTextResource = function () {
-        Resource.save($scope.newTextResource);
+        Resource.save($scope.newTextResource, function(data){
+            console.log(data);
+        });
     };
 
 }]);
+
+resourceControllers.filter('filterByType', function () {
+    return function (collection, types) {
+        var items = [];
+        angular.forEach(collection, function (value) {
+            if (types[value.type] == 'multiple-choice-question' || types[value.type] == 'text' || types[value.type] == 'picture' || types[value.type] == 'sequence' || types[value.type] == 'open-ended-question') {
+                items.push(value);
+            }
+        });
+        return items;
+    };
+});
+
+resourceControllers.filter('myFilters', function () {
+    return function (collection, filters) {
+        var items = [];
+        var ids = [];
+        angular.forEach(collection, function (value) {
+            angular.forEach(filters.type, function(type){
+                if(value.type == type){
+                    if(filters.keywords.length){
+                        if(value.keywords.length){
+                            angular.forEach(filters.keywords, function(keyword){
+                                if($.inArray(keyword, value.keywords) != -1){
+                                    if(filters.metadata.length){
+                                        if(value.metadata.length){
+                                            angular.forEach(filters.metadata, function(meta1){
+                                                angular.forEach(value.metadata, function(meta2){
+                                                    if(meta1.key.toLowerCase() == meta2.key.toLowerCase() && meta1.value.toLowerCase() == meta2.value.toLowerCase()){if($.inArray(value.id, ids) == -1){items.push(value); ids.push(value.id)}}
+                                                    if(meta1.key.toLowerCase() == meta2.key.toLowerCase() && meta1.value == ''){if($.inArray(value.id, ids) == -1){items.push(value); ids.push(value.id)}}
+                                                    if(meta1.value.toLowerCase() == meta2.value.toLowerCase() && meta1.key == ''){if($.inArray(value.id, ids) == -1){items.push(value); ids.push(value.id)}}
+                                                });
+                                            });
+                                        }
+                                    }else{
+                                        if($.inArray(value.id, ids) == -1){items.push(value); ids.push(value.id)}
+                                    }
+                                }
+                            });
+                        }
+                    }else{
+                        if(filters.metadata.length){
+                            if(value.metadata.length){
+                                angular.forEach(filters.metadata, function(meta1){
+                                    angular.forEach(value.metadata, function(meta2){
+                                        if(meta1.key.toLowerCase() == meta2.key.toLowerCase() && meta1.value.toLowerCase() == meta2.value.toLowerCase()){if($.inArray(value.id, ids) == -1){items.push(value); ids.push(value.id)}}
+                                        if(meta1.key.toLowerCase() == meta2.key.toLowerCase() && meta1.value == ''){if($.inArray(value.id, ids) == -1){items.push(value); ids.push(value.id)}}
+                                        if(meta1.value.toLowerCase() == meta2.value.toLowerCase() && meta1.key == ''){if($.inArray(value.id, ids) == -1){items.push(value); ids.push(value.id)}}
+                                    });
+                                });
+                            }
+                        }else{
+                            if($.inArray(value.id, ids) == -1){items.push(value); ids.push(value.id)}
+                        }
+                    }
+                }
+            });
+        });
+        return items;
+    };
+});
 
 resourceControllers.controller('resourceDisplayController', ['$scope', 'Resource', '$location', '$stateParams', function($scope, Resource, $location, $stateParams) {
 
@@ -124,7 +203,7 @@ modelControllers.controller('modelController', ['$scope', '$routeParams', '$loca
         };
 
         $scope.modelAddKeywordsField = function (collection){
-            var keyword = $("#modelAddKeyword");
+            var keyword = $('#modelAddKeyword');
             collection.push(keyword[0].value);
             keyword[0].value = '';
         }
@@ -149,8 +228,42 @@ modelControllers.controller('modelController', ['$scope', '$routeParams', '$loca
             collection.splice(collection.length, 0, {"id": id});
         }
 
+        $scope.modelAddBlockResourceExcluded = function (collection, selector){
+            var val = $(selector);
+            collection.splice(collection.length, 0, {"id": val[0].value});
+            val[0].value = '';
+        }
+
+        $scope.modelAddBlockResourceConstraint = function ($collection){
+            if($collection === undefined){console.log($collection);$collection = [];console.log($collection)}
+            var newElement = {
+                "key": '',
+                "values": [],
+                "comparator": ''
+            };
+            $collection.splice($collection.length, 0, newElement);
+        }
+
+        $scope.modelAddBlockResourceConstraintValue = function (collection){
+            collection.push('');
+        }
+
         $scope.modelRemoveField = function (collection, index){
             collection.splice(index, 1);
+        }
+
+        $scope.initResourceConstraints = function(pair_blocks){
+            if(!pair_blocks.hasOwnProperty('resourceConstraint')){
+                pair_blocks.resourceConstraint = {type: 'text'};
+                pair_blocks.resourceConstraint.metadataConstraints = [];
+                pair_blocks.resourceConstraint.excluded = [];
+            }
+            if(!pair_blocks.resourceConstraint.hasOwnProperty('metadataConstraints')){
+                pair_blocks.resourceConstraint.metadataConstraints = [];
+            }
+            if(!pair_blocks.resourceConstraint.hasOwnProperty('excluded')){
+                pair_blocks.resourceConstraint.excluded = [];
+            }
         }
 
     }]);

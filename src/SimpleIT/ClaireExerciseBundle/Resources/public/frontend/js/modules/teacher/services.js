@@ -10,6 +10,7 @@ resourceServices.factory('Resource', ['$resource',
             {
                  update: {method: 'PUT', headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}}
                 ,save: {method: 'POST', headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}}
+                //,'getData':  {method:'GET', isArray:false}
             }
         );
 
