@@ -35,11 +35,6 @@ class ExerciseModel extends SharedEntity
     private $requiredKnowledges;
 
     /**
-     * @var string
-     */
-    protected $name = 'exercise model';
-
-    /**
      * Constructor
      */
     public function __construct()
@@ -127,5 +122,33 @@ class ExerciseModel extends SharedEntity
     public function getForkFrom()
     {
         return $this->forkFrom;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getTitle();
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->setTitle($name);
+    }
+
+    /**
+     * Delete resource node
+     */
+    public function deleteResourceNode()
+    {
+        $this->resourceNode = null;
     }
 }

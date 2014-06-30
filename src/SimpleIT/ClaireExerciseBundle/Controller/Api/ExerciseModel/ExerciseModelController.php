@@ -2,24 +2,24 @@
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\ExerciseModel;
 
 use Doctrine\DBAL\DBALException;
+use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiConflictException;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
-use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
-use SimpleIT\ClaireExerciseBundle\Model\Api\ApiDeletedResponse;
-use SimpleIT\ClaireExerciseBundle\Model\Api\ApiEditedResponse;
-use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
-use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
-use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\FilterException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiDeletedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiEditedResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResourceFactory;
-use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -107,6 +107,7 @@ class ExerciseModelController extends ApiController
     {
         try {
             $userId = $this->getUserId();
+            $user = $this->get('simple_it.exercise.user')->get($userId);
 
             $this->validateResource($modelResource, array('create', 'Default'));
 
@@ -118,6 +119,21 @@ class ExerciseModelController extends ApiController
                 (
                     $modelResource
                 );
+
+            // create the claroline ResourceNode for this model
+            $workspace = $user->getPersonalWorkspace();
+            $this->get('claroline.manager.resource_manager')->create(
+                $model,
+                $this->get('claroline.manager.resource_manager')->getResourceTypeByName(
+                    'claire_exercise_model'
+                ),
+                $user,
+                $workspace,
+                $this->get('doctrine.orm.entity_manager')->getRepository
+                    (
+                        'ClarolineCoreBundle:Resource\ResourceNode'
+                    )->findWorkspaceRoot($workspace)
+            );
 
             $modelResource = ExerciseModelResourceFactory::create($model);
 
@@ -211,6 +227,22 @@ class ExerciseModelController extends ApiController
                 $exerciseModelId
             );
 
+            // create the claroline ResourceNode for this model
+            $user = $this->get('simple_it.exercise.user')->get($this->getUserId());
+            $workspace = $user->getPersonalWorkspace();
+            $this->get('claroline.manager.resource_manager')->create(
+                $model,
+                $this->get('claroline.manager.resource_manager')->getResourceTypeByName(
+                    'claire_exercise_model'
+                ),
+                $user,
+                $workspace,
+                $this->get('doctrine.orm.entity_manager')->getRepository
+                    (
+                        'ClarolineCoreBundle:Resource\ResourceNode'
+                    )->findWorkspaceRoot($workspace)
+            );
+
             $modelResource = ExerciseModelResourceFactory::create($model);
 
             return new ApiCreatedResponse($modelResource, array("details", 'Default'));
@@ -238,6 +270,22 @@ class ExerciseModelController extends ApiController
                 $this->getUserId()
             );
 
+            // create the claroline ResourceNode for this model
+            $user = $this->get('simple_it.exercise.user')->get($this->getUserId());
+            $workspace = $user->getPersonalWorkspace();
+            $this->get('claroline.manager.resource_manager')->create(
+                $model,
+                $this->get('claroline.manager.resource_manager')->getResourceTypeByName(
+                    'claire_exercise_model'
+                ),
+                $user,
+                $workspace,
+                $this->get('doctrine.orm.entity_manager')->getRepository
+                    (
+                        'ClarolineCoreBundle:Resource\ResourceNode'
+                    )->findWorkspaceRoot($workspace)
+            );
+
             $modelResource = ExerciseModelResourceFactory::create($model);
 
             return new ApiCreatedResponse($modelResource, array("details", 'Default'));
@@ -263,6 +311,22 @@ class ExerciseModelController extends ApiController
             $model = $this->get('simple_it.exercise.exercise_model')->import(
                 $this->getUserId(),
                 $exerciseModelId
+            );
+
+            // create the claroline ResourceNode for this model
+            $user = $this->get('simple_it.exercise.user')->get($this->getUserId());
+            $workspace = $user->getPersonalWorkspace();
+            $this->get('claroline.manager.resource_manager')->create(
+                $model,
+                $this->get('claroline.manager.resource_manager')->getResourceTypeByName(
+                    'claire_exercise_model'
+                ),
+                $user,
+                $workspace,
+                $this->get('doctrine.orm.entity_manager')->getRepository
+                    (
+                        'ClarolineCoreBundle:Resource\ResourceNode'
+                    )->findWorkspaceRoot($workspace)
             );
 
             $modelResource = ExerciseModelResourceFactory::create($model);

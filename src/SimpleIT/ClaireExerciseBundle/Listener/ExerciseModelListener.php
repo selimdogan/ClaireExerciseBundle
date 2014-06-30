@@ -2,7 +2,11 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Listener;
 
+use Claroline\CoreBundle\Event\CopyResourceEvent;
+use Claroline\CoreBundle\Event\CreateFormResourceEvent;
 use Claroline\CoreBundle\Event\CustomActionResourceEvent;
+use Claroline\CoreBundle\Event\DeleteResourceEvent;
+use Claroline\CoreBundle\Event\OpenResourceEvent;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -42,6 +46,79 @@ class ExerciseModelListener implements ContainerAwareInterface
         $route = $this->container->get('router')->generate('frontend_index');
         $route .= '#/learner/model/' . $model->getId() . '/try';
         $event->setResponse(new RedirectResponse($route));
+        $event->stopPropagation();
+    }
+
+    /**
+     * On open, open claire to edit the exercise model
+     *
+     * @param OpenResourceEvent $event
+     */
+    public function onOpen(OpenResourceEvent $event)
+    {
+        /** @var ExerciseModel $model */
+        $model = $event->getResource();
+
+        //Redirection to the controller
+        $route = $this->container->get('router')->generate('frontend_index');
+        $route .= '#/teacher/model/' . $model->getId();
+        $event->setResponse(new RedirectResponse($route));
+        $event->stopPropagation();
+    }
+
+    /**
+     * On create form, go to the claire exercise model browser.
+     *
+     * @param CreateFormResourceEvent $event
+     */
+    public function onCreateForm(CreateFormResourceEvent $event)
+    {
+        //Redirection to the controller
+        $route = $this->container->get('router')->generate('frontend_index');
+        $route .= '#/teacher/model';
+        $event->setResponseContent(new RedirectResponse($route));
+        $event->stopPropagation();
+    }
+
+    /**
+     * On delete. Archive exercise model
+     *
+     * @param DeleteResourceEvent $event
+     */
+    public function onDelete(DeleteResourceEvent $event)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+
+        /** @var ExerciseModel $exerciseModel */
+        $exerciseModel = $this->container->get('simple_it.exercise.exercise_model')->get(
+            $event->getResource()->getId()
+        );
+
+        $resourceNode = $exerciseModel->getResourceNode();
+        $exerciseModel->deleteResourceNode();
+        $exerciseModel->setArchived(true);
+        $em->remove($resourceNode);
+
+        $em->flush();
+        exit();
+    }
+
+    /**
+     * Copy an exercise model
+     *
+     * @param CopyResourceEvent $event
+     */
+    public function onCopy(CopyResourceEvent $event)
+    {
+        $original = $event->getResource();
+
+        /** @var ExerciseModel $copy */
+        $copy = $this->container->get('simple_it.exercise.exercise_model')->duplicate(
+            $original->getId(),
+            $this->container->get('security.context')->getToken()->getUser()->getId()
+        );
+
+        $event->setCopy($copy);
         $event->stopPropagation();
     }
 }
