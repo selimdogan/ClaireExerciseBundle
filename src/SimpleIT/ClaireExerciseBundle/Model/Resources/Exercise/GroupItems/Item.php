@@ -72,13 +72,6 @@ class Item extends CommonItem implements Markable
     private $answers = array();
 
     /**
-     * @var float
-     * @Serializer\Type("float")
-     * @Serializer\Groups({"details", "corrected", "item"})
-     */
-    private $mark = null;
-
-    /**
      * Add an object in the group.
      *
      * @param ExerciseObject $object
@@ -242,35 +235,5 @@ class Item extends CommonItem implements Markable
     public function setObjects($objects)
     {
         $this->objects = $objects;
-    }
-
-    /**
-     * Check if the Markable has a mark
-     *
-     * @return boolean
-     */
-    public function isMarked()
-    {
-        return !is_null($this->mark);
-    }
-
-    /**
-     * Get mark
-     *
-     * @return float
-     */
-    public function getMark()
-    {
-        return $this->mark;
-    }
-
-    /**
-     * Set mark
-     *
-     * @param float $mark
-     */
-    public function setMark($mark)
-    {
-        $this->mark = $mark;
     }
 }

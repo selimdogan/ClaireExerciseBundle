@@ -30,6 +30,11 @@ class Answer
     private $attempt;
 
     /**
+     * @var float
+     */
+    private $mark;
+
+    /**
      * Get content
      *
      * @return string
@@ -107,5 +112,25 @@ class Answer
     public function getAttempt()
     {
         return $this->attempt;
+    }
+
+    /**
+     * Set mark
+     *
+     * @param float $mark
+     */
+    public function setMark($mark)
+    {
+        $this->mark = $mark;
+    }
+
+    /**
+     * Get mark
+     *
+     * @return float
+     */
+    public function getMark()
+    {
+        return $this->mark;
     }
 }

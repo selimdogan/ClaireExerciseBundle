@@ -4,7 +4,6 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\AnswerFactory;
-use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 use SimpleIT\ClaireExerciseBundle\Exception\AnswerAlreadyExistsException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
@@ -102,7 +101,7 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
      * @param int            $itemId
      * @param AnswerResource $answerResource
      * @param int            $attemptId
-     * @param int           $userId
+     * @param int            $userId
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\AnswerAlreadyExistsException
      * @return ItemResource
@@ -138,7 +137,17 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
         $this->em->persist($answer);
         $this->em->flush();
 
-        return $this->itemService->findItemAndCorrectionByAttempt($itemId, $attemptId, $userId);
+        $itemResource = $this->itemService->findItemAndCorrectionByAttempt(
+            $itemId,
+            $attemptId,
+            $userId
+        );
+
+        $answer->setMark($itemResource->getContent()->getMark());
+        $this->em->flush();
+
+        return $itemResource;
+
     }
 
     /**

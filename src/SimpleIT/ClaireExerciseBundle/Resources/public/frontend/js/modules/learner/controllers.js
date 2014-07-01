@@ -4,8 +4,8 @@
 
 var itemControllers = angular.module('itemControllers', ['ui.router']);
 
-itemControllers.controller('itemController', ['$scope', 'Item', 'Answer', '$routeParams', '$location', '$stateParams',
-    function ($scope, Item, Answer, $routeParams, $location, $stateParams) {
+itemControllers.controller('itemController', ['$scope', '$state', 'Item', 'Answer', '$routeParams', '$location', '$stateParams',
+    function ($scope, $state, Item, Answer, $routeParams, $location, $stateParams) {
 
         $scope.section = 'item';
         $scope.imageUrl = BASE_CONFIG.urls.images.uploads;
@@ -18,20 +18,14 @@ itemControllers.controller('itemController', ['$scope', 'Item', 'Answer', '$rout
             function () {
                 // when data loaded
                 console.log('item loaded');
-                for (i = 0; i < $scope.item['content'].mobile_parts.length; ++i) {
-                    $scope.drop[i] = null;
-                    $scope.solution[i] = null;
-                    $scope.item['content'].mobile_parts[i].id = i;
-                }
-                if ($scope.item['corrected'] == true) {
-                    $scope.fillLearnerAnswers();
-                    $scope.displayCorrection($scope.item);
+                if ($scope.item.type == 'pair-items') {
+                    $state.go('attempt.item.pair-items');
                 }
             });
+    }]);
 
-        // init answer array
-        $scope.drop = [];
-        $scope.solution = [];
+itemControllers.controller('pairItemsController', ['$scope', 'Item', 'Answer', '$routeParams', '$location', '$stateParams',
+    function ($scope, Item, Answer, $routeParams, $location, $stateParams) {
 
         // post answer
         $scope.saveAnswer = function () {
@@ -58,6 +52,8 @@ itemControllers.controller('itemController', ['$scope', 'Item', 'Answer', '$rout
                     item['content'].answers[i] == item['content'].solutions[i];
             }
             $scope.item.corrected = true;
+            $scope.item['content']['comment'] = item['content']['comment'];
+            $scope.item['content']['mark'] = item['content']['mark'];
         };
 
         // display learner answers
@@ -85,6 +81,19 @@ itemControllers.controller('itemController', ['$scope', 'Item', 'Answer', '$rout
         $scope.dropSuccessHandlerField = function ($event, fieldNumber) {
             $scope.drop[fieldNumber] = null;
         };
+
+        // init answer array
+        $scope.drop = [];
+        $scope.solution = [];
+        for (i = 0; i < $scope.item['content'].mobile_parts.length; ++i) {
+            $scope.drop[i] = null;
+            $scope.solution[i] = null;
+            $scope.item['content'].mobile_parts[i].id = i;
+        }
+        if ($scope.item['corrected'] == true) {
+            $scope.fillLearnerAnswers();
+            $scope.displayCorrection($scope.item);
+        }
     }]);
 
 var exerciseControllers = angular.module('exerciseControllers', ['ui.router']);
@@ -109,13 +118,14 @@ exerciseControllers.controller('exerciseController', ['$scope', '$state', 'Exerc
                                 console.log('items loaded.');
 
                                 // inclure le premier item
-                                $state.go('attempt.item',
-                                    {
-                                        attemptId: $stateParams.attemptId,
-                                        itemId: $scope.items[0].item_id
-                                    });
+                                if ($state['current'].name == 'attempt') {
+                                    $state.go('attempt.item',
+                                        {
+                                            attemptId: $stateParams.attemptId,
+                                            itemId: $scope.items[0].item_id
+                                        });
+                                }
                             });
-
                     });
             });
     }]);

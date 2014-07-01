@@ -186,6 +186,18 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     }
 
     /**
+     * Get models that the user attempted
+     *
+     * @param int $userId
+     *
+     * @return array
+     */
+    public function getAllByUserWhoAttempted($userId)
+    {
+        return $this->entityRepository->findAllByUserWhoAttempted($userId);
+    }
+
+    /**
      * Compute the requirements of the entity from the resource content (if empty,
      * requirements are not changed).
      * The model can be imported if owned by another user. Content of the resource is updated in

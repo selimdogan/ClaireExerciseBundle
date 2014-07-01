@@ -11,7 +11,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\Markable;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class Item extends CommonItem implements Markable
+class Item extends CommonItem
 {
     /**
      * @var array $objects An array of ExerciseObject
@@ -73,43 +73,6 @@ class Item extends CommonItem implements Markable
      * @Serializer\Groups({"details", "corrected"})
      */
     private $answers = array();
-
-    /**
-     * @var float
-     * @Serializer\Type("float")
-     * @Serializer\Groups({"details", "corrected"})
-     */
-    private $mark = null;
-
-    /**
-     * Check if the Markable has a mark
-     *
-     * @return boolean
-     */
-    public function isMarked()
-    {
-        return !is_null($this->mark);
-    }
-
-    /**
-     * Get mark
-     *
-     * @return float
-     */
-    public function getMark()
-    {
-        return $this->mark;
-    }
-
-    /**
-     * Set mark
-     *
-     * @param float $mark
-     */
-    public function setMark($mark)
-    {
-        $this->mark = $mark;
-    }
 
     /**
      * Get solution

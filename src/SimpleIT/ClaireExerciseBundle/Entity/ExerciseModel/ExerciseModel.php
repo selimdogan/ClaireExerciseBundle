@@ -27,6 +27,12 @@ class ExerciseModel extends SharedEntity
     /**
      * @var Collection
      */
+    private $exercises;
+
+    /**
+    /**
+     * @var Collection
+     */
     private $requiredExerciseResources;
 
     /**
@@ -42,6 +48,7 @@ class ExerciseModel extends SharedEntity
         parent::__construct();
         $this->requiredExerciseResources = new ArrayCollection();
         $this->requiredKnowledges = new ArrayCollection();
+        $this->exercises = new ArrayCollection();
     }
 
     /**
@@ -150,5 +157,25 @@ class ExerciseModel extends SharedEntity
     public function deleteResourceNode()
     {
         $this->resourceNode = null;
+    }
+
+    /**
+     * Set exercises
+     *
+     * @param \Doctrine\Common\Collections\Collection $exercises
+     */
+    public function setExercises($exercises)
+    {
+        $this->exercises = $exercises;
+    }
+
+    /**
+     * Get exercises
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExercises()
+    {
+        return $this->exercises;
     }
 }

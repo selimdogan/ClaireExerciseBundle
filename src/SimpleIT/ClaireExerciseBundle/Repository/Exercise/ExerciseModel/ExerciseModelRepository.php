@@ -32,6 +32,29 @@ class ExerciseModelRepository extends SharedEntityRepository
     }
 
     /**
+     * Find the models attempted by the user, and the answers
+     *
+     * @param $userId
+     *
+     * @return array
+     */
+    public function findAllByUserWhoAttempted($userId)
+    {
+        $qb = $this->createQueryBuilder('em')
+            ->select('em, e, at, an');
+
+        $qb->leftJoin('em.exercises', 'e');
+        $qb->leftJoin('e.attempts', 'at');
+        $qb->leftJoin('at.answers', 'an');
+
+        $qb->where($qb->expr()->eq('at.user', $userId));
+
+        $qb->addOrderBy('em.id');
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
      * Get the join that reduce the number of requests.
      *
      * @return array

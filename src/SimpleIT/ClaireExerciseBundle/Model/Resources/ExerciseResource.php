@@ -76,6 +76,13 @@ class ExerciseResource
     private $title;
 
     /**
+     * @var array
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\AttemptResource>")
+     * @Serializer\Groups({"details"})
+     */
+    private $attempts;
+
+    /**
      * Set content
      *
      * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise $content
@@ -173,6 +180,26 @@ class ExerciseResource
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set attempts
+     *
+     * @param array $attempts
+     */
+    public function setAttempts($attempts)
+    {
+        $this->attempts = $attempts;
+    }
+
+    /**
+     * Get attempts
+     *
+     * @return array
+     */
+    public function getAttempts()
+    {
+        return $this->attempts;
     }
 
     /**

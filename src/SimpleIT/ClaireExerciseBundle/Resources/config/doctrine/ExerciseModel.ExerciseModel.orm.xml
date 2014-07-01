@@ -14,9 +14,8 @@
         <field name="public" column="public" type="boolean" nullable="false"/>
         <field name="archived" column="archived" type="boolean" nullable="true"/>
 
-        <one-to-one field="resourceNode"
-                    target-entity="Claroline\CoreBundle\Entity\Resource\ResourceNode">
-            <join-column name="resourcenode_id" referenced-column-name="id" />
+        <one-to-one field="resourceNode" target-entity="Claroline\CoreBundle\Entity\Resource\ResourceNode">
+            <join-column name="resourcenode_id" referenced-column-name="id"/>
         </one-to-one>
 
         <one-to-many field="children" target-entity="ExerciseModel" mapped-by="parent"/>
@@ -26,6 +25,12 @@
             <cascade>
                 <cascade-persist/>
                 <cascade-remove/>
+            </cascade>
+        </one-to-many>
+
+        <one-to-many target-entity="SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise" mapped-by="exerciseModel" field="exercises">
+            <cascade>
+                <cascade-persist/>
             </cascade>
         </one-to-many>
 
