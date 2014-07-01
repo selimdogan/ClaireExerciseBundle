@@ -38,6 +38,11 @@ api_domain_knowledges:
     resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/knowledge.yml"
     prefix:   /api/knowledges/
 
+
+api_domain_users:
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/user.yml"
+    prefix:   /api/users/
+
 frontend:
     resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/frontend/frontend.yml"
     prefix:   /front/
