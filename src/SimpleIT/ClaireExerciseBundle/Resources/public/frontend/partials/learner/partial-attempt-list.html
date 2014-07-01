@@ -34,8 +34,11 @@
                             <span class="glyphicon glyphicon-th-list" style="font-size: 260%"></span>
                         </div>
                     </div>
-                    <div class="col-xs-10">
+                    <div class="col-xs-7">
                         <h4><strong>{{ model.title }}</strong></h4>
+                    </div>
+                    <div class="col-xs-3">
+                        <h4><strong>{{ users[model.owner].first_name }}</strong></h4>
                     </div>
                     <div
                         class="col-xs-1 text-center" ng-click="tryModel(model)">

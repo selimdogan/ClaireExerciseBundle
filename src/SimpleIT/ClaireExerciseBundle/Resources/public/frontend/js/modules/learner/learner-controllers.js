@@ -1,7 +1,7 @@
 var learnerControllers = angular.module('learnerControllers', ['ui.router']);
 
-learnerControllers.controller('learnerController', ['$scope', 'AttemptByExercise', 'ExerciseByModel', 'AttemptList', '$routeParams', '$location', '$stateParams',
-    function ($scope, AttemptByExercise, ExerciseByModel, AttemptList, $routeParams, $location, $stateParams) {
+learnerControllers.controller('learnerController', ['$scope', 'User', 'AttemptByExercise', 'ExerciseByModel', 'AttemptList', '$routeParams', '$location', '$stateParams',
+    function ($scope, User, AttemptByExercise, ExerciseByModel, AttemptList, $routeParams, $location, $stateParams) {
         $scope.section = 'attempts';
         $scope.imageUrl = BASE_CONFIG.urls.images.uploads;
         $scope.imageExoUrl = BASE_CONFIG.urls.images.exercise;
@@ -14,6 +14,7 @@ learnerControllers.controller('learnerController', ['$scope', 'AttemptByExercise
                 function () {
                     // when data loaded
                     console.log('attempts loaded');
+                    $scope.loadUsers();
                 });
         } else {
             $scope.models = [];
@@ -21,9 +22,27 @@ learnerControllers.controller('learnerController', ['$scope', 'AttemptByExercise
                 function () {
                     // when data loaded
                     console.log('attempts loaded');
+                    $scope.loadUsers();
                 });
 
         }
+
+        $scope.loadUsers = function () {
+            userIds = [];
+            for (i = 0; i < $scope.models.length; ++i) {
+                if (userIds.indexOf($scope.models[i].author) == -1) {
+                    userIds.push($scope.models[i].author);
+                }
+                if (userIds.indexOf($scope.models[i].owner) == -1) {
+                    userIds.push($scope.models[i].owner);
+                }
+            }
+
+            $scope.users = [];
+            for (i = 0; i < userIds.length; ++i) {
+                $scope.users[userIds[i]] = User.get({userId: userIds[i]});
+            }
+        };
 
         $scope.viewAttempt = function (attempt) {
             $location.path("/learner/attempt/" + attempt.id);

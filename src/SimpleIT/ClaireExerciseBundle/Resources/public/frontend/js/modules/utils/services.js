@@ -1,6 +1,6 @@
 var userServices = angular.module('userServices', ['ngResource']);
 
-userServices.factory('Resource', ['$resource',
+userServices.factory('User', ['$resource',
     function ($resource) {
 
         return $resource(
