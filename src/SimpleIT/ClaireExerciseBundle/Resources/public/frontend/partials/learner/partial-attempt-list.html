@@ -1,4 +1,4 @@
-<div class="panel-body" data-ng-controller="attemptListController">
+<div class="panel-body" data-ng-controller="learnerController">
 
     <accordion>
         <accordion-group class="panel panel-primary">
@@ -38,7 +38,7 @@
                         <h4><strong>{{ model.title }}</strong></h4>
                     </div>
                     <div
-                        class="col-xs-1 text-center" ng-click="tryAgainExercise(model)">
+                        class="col-xs-1 text-center" ng-click="tryModel(model)">
                         Nouvelle tentative
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                                         <h4>Exercice {{ $index + 1 }}</h4>
                                     </div>
                                     <div
-                                        class="col-xs-1 text-center" ng-click="tryAgainExercise(exercise)">
+                                        class="col-xs-1 text-center" ng-click="tryExercise(exercise)">
                                         Nouvelle tentative
                                     </div>
                                 </div>

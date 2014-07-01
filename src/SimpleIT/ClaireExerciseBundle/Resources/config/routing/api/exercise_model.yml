@@ -176,10 +176,3 @@ api_exercise_list_by_exercise_model:
     requirements:
         _format: json
         exerciseModelId: \d+
-
-api_exercise_model_list_by_user_attempted:
-    pattern:  /attempted
-    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseModel/ExerciseModelAttempted:list }
-    methods: [GET]
-    requirements:
-        _format: json

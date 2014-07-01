@@ -33,7 +33,7 @@
     <script src="{{ asset('bundles/simpleitclaireexercise/frontend/js/modules/teacher/services.js') }}"></script>
 
     <!-- learner assets -->
-    <script src="{{ asset('bundles/simpleitclaireexercise/frontend/js/modules/learner/controllers.js') }}"></script>
+    <script src="{{ asset('bundles/simpleitclaireexercise/frontend/js/modules/learner/learner-controllers.js') }}"></script>
     <script src="{{ asset('bundles/simpleitclaireexercise/frontend/js/modules/learner/item-controllers.js') }}"></script>
     <script src="{{ asset('bundles/simpleitclaireexercise/frontend/js/modules/learner/services.js') }}"></script>
 
@@ -44,6 +44,7 @@
                 api: {
                     resources: "{{ path('api_exercise_resource_list') }}",
                     models: "{{ path('api_exercise_model_list') }}",
+                    attemptedModels: "{{ path('api_exercise_attempted_model_list') }}",
                     attempts: "{{ path('api_attempt_list') }}",
                     exercises: "{{ path('api_exercise_list') }}"
                 },
@@ -77,11 +78,6 @@
             <ul class="nav navbar-nav">
                 <li><a ui-sref="model">Modèles d'exercices</a></li>
                 <li><a ui-sref="resource">Resources</a></li>
-                <li><a href class="navbar-brand"><i class="glyphicon glyphicon-user pull-right"></i></a>
-                </li>
-                <li>
-                    <a href class="navbar-brand" ng-model="toggleResourceList" data-ng-click="togglePanelResourceList()"><i class="glyphicon glyphicon-list-alt"></i></a>
-                </li>
             </ul>
         </div>
     </nav>

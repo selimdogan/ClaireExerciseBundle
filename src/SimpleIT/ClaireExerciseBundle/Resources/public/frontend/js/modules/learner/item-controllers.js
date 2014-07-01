@@ -1,3 +1,38 @@
+var attemptControllers = angular.module('attemptControllers', ['ui.router']);
+
+attemptControllers.controller('attemptController', ['$scope', '$state', 'Exercise', 'Attempt', 'Item', '$routeParams', '$location', '$stateParams',
+    function ($scope, $state, Exercise, Attempt, Item, $routeParams, $location, $stateParams) {
+
+        $scope.section = 'attempt';
+
+        console.log('loading attempt...');
+        // retrieve attempt
+        attempt = Attempt.get({attemptId: $stateParams.attemptId},
+            function (attempt) {
+                // when data loaded
+                console.log('loading exercise...');
+                $scope.exercise = Exercise.get({exerciseId: attempt.exercise},
+                    function () {
+                        // when data loaded
+                        console.log('loading list of items...');
+                        $scope.items = Item.query({attemptId: $stateParams.attemptId},
+                            function () {
+                                // when data loaded
+                                console.log('items loaded.');
+
+                                if ($state['current'].name == 'attempt') {
+                                    // inclure le premier item
+                                    $state.go('attempt.item',
+                                        {
+                                            attemptId: $stateParams.attemptId,
+                                            itemId: $scope.items[0].item_id
+                                        });
+                                }
+                            });
+                    });
+            });
+    }]);
+
 var itemControllers = angular.module('itemControllers', ['ui.router']);
 
 itemControllers.controller('itemController', ['$scope', '$state', 'Item', 'Answer', '$routeParams', '$location', '$stateParams',
@@ -63,7 +98,7 @@ itemControllers.controller('pairItemsController', ['$scope', 'Item', 'Answer', '
 
         // back button
         $scope.backToList = function () {
-            $location.path("/learner");
+            $location.path("/learner/models/");
         };
 
         // drag and drop

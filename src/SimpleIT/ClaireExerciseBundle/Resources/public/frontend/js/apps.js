@@ -11,16 +11,15 @@ var mainApp = angular.module('mainApp',
         'resourceServices',
         'modelControllers',
         'modelServices',
-        'modelTryControllers',
-        'modelTryServices',
-        'itemControllers',
-        'itemServices',
-        'exerciseControllers',
         'exerciseServices',
+        'exerciseByModelServices',
+        'attemptByExerciseServices',
         'answerServices',
-        'exerciseByAttemptServices',
         'attemptServices',
         'attemptListServices',
-        'attemptListControllers'
+        'itemServices',
+        'itemControllers',
+        'attemptControllers',
+        'learnerControllers'
     ]
 );

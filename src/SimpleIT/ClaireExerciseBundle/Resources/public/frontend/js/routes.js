@@ -50,7 +50,7 @@ mainApp.config(
             // learner's routes
 
             $stateProvider.state('learner', {
-                url: '/learner',
+                url: '/learner/models/:modelId',
                 templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-attempt-list.html'
             });
 
@@ -66,16 +66,6 @@ mainApp.config(
 
             $stateProvider.state('attempt.item.pair-items', {
                 templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-pair-items.html'
-            });
-
-            $stateProvider.state('modelTry', {
-                url: '/learner/model/:modelId/try',
-                controller: 'modelTryController'
-            });
-
-            $stateProvider.state('exerciseTry', {
-                url: '/learner/exercise/:exerciseId/try',
-                controller: 'exerciseTryController'
             });
         }
     ]
