@@ -228,27 +228,34 @@ modelControllers.controller('modelController', ['$scope', '$routeParams', '$loca
         }
 
         $scope.modelAddBlockResourceField = function (collection, id){
-            collection.splice(collection.length, 0, {"id": id});
+            var isAlreadyAdded = false;
+            angular.forEach(collection, function(res){
+                if(res.id == id){isAlreadyAdded = true;}
+            });
+            if(!isAlreadyAdded){
+                collection.splice(collection.length, 0, {"id": id});
+            }
         }
 
-        $scope.modelAddBlockResourceExcluded = function (collection, selector){
-            var val = $(selector);
-            collection.splice(collection.length, 0, {"id": val[0].value});
-            val[0].value = '';
-        }
-
-        $scope.modelAddBlockResourceConstraint = function ($collection){
-            if($collection === undefined){console.log($collection);$collection = [];console.log($collection)}
-            var newElement = {
-                "key": '',
-                "values": [],
-                "comparator": ''
-            };
-            $collection.splice($collection.length, 0, newElement);
+        $scope.modelAddBlockResourceConstraint = function (collection, type){
+            if(collection === undefined){collection = [];}
+            var newElement;
+            if(type == 'exists'){
+                newElement = {"key": '',"values": [],"comparator": 'exists'};
+            }else if(type == 'in'){
+                newElement = {"key": '',"values": [],"comparator": 'in'};
+            }else if(type == 'between'){
+                newElement = {"key": '',"values": ['', ''],"comparator": 'between'};
+            }else{
+                newElement = {"key": '',"values": [''],"comparator": type};
+            }
+            collection.splice(collection.length, 0, newElement);
         }
 
         $scope.modelAddBlockResourceConstraintValue = function (collection){
-            collection.push('');
+            var constrainsInValue = $('#constrainsInValue');
+            collection.push(constrainsInValue[0].value);
+            constrainsInValue[0].value = '';
         }
 
         $scope.modelRemoveField = function (collection, index){
@@ -305,7 +312,11 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
     };
 
     $scope.onDropResourceToBlock = function(event,resource,collection){
-        $scope.modelAddBlockResourceField(collection, resource.id);
+        if($scope.model.type == 'pair-items'){
+            if(resource.type == 'text' || resource.type == 'picture'){
+                $scope.modelAddBlockResourceField(collection, resource.id);
+            }
+        }
     }
 
     $scope.onDropMetadataKey = function(event,metakey,field){
@@ -313,11 +324,19 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
     }
 
     $scope.onDropDocument = function(event,resource,documents){
-        $scope.modelAddBlockResourceField(documents, resource.id);
+        if($scope.model.type == 'pair-items'){
+            if(resource.type == 'text' || resource.type == 'picture'){
+                $scope.modelAddBlockResourceField(documents, resource.id);
+            }
+        }
     }
 
     $scope.getResourceInfo = function(blockid, resourceid){
         $scope.usedResources[blockid][resourceid] = Resource.get({id:resourceid});
+    }
+
+    $scope.getExcludedResourceInfo = function(blockid, resourceid){
+        $scope.excludedResources[blockid][resourceid] = Resource.get({id:resourceid});
     }
 
     $scope.getDocumentInfo = function(documentId){
