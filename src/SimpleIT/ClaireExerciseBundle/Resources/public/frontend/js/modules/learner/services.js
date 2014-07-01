@@ -88,3 +88,13 @@ exerciseByAttemptServices.factory('ExerciseByAttempt', ['$resource',
         );
 
     }]);
+
+var attemptListServices = angular.module('attemptListServices', ['ngResource']);
+
+attemptListServices.factory('AttemptList', ['$resource',
+    function ($resource) {
+        return $resource(
+            BASE_CONFIG.urls.api.models + 'attempted'
+        );
+
+    }]);
