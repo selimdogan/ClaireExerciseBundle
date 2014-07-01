@@ -11,6 +11,7 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
 
         $scope.filters = {
             search: '',
+            archived: false,
             type: {
                 multiple_choice_question: 'multiple-choice-question'
                 ,text: 'text'
@@ -86,25 +87,13 @@ resourceControllers.controller('resourceListController', ['$scope', 'Resource', 
 
 }]);
 
-resourceControllers.filter('filterByType', function () {
-    return function (collection, types) {
-        var items = [];
-        angular.forEach(collection, function (value) {
-            if (types[value.type] == 'multiple-choice-question' || types[value.type] == 'text' || types[value.type] == 'picture' || types[value.type] == 'sequence' || types[value.type] == 'open-ended-question') {
-                items.push(value);
-            }
-        });
-        return items;
-    };
-});
-
 resourceControllers.filter('myFilters', function () {
     return function (collection, filters) {
         var items = [];
         var ids = [];
         angular.forEach(collection, function (value) {
             angular.forEach(filters.type, function(type){
-                if(value.type == type){
+                if(value.type == type && ((filters.archived && value.archived) || !value.archived)){
                     if(filters.keywords.length){
                         if(value.keywords.length){
                             angular.forEach(filters.keywords, function(keyword){
@@ -178,6 +167,20 @@ modelControllers.controller('modelController', ['$scope', '$routeParams', '$loca
     function($scope, $routeParams, $location) {
 
         $scope.section = 'model';
+
+        $scope.filters = {
+            search: '',
+            archived: false,
+            type: {
+                multiple_choice: 'multiple-choice'
+                ,pair_items: 'pair-items'
+                ,order_items: 'order-items'
+                ,open_ended_question: 'open-ended-question'
+                ,group_items: 'group-items'
+            },
+            keywords: [],
+            metadata: []
+        };
 
         $scope.newPairItemsModel = {
             "type": "pair-items",
@@ -290,6 +293,7 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
 
     $scope.usedDocuments = [];
     $scope.usedResources = [];
+    $scope.excludedResources = [];
 
     $scope.updateModel = function () {
         delete $scope.model.id;
