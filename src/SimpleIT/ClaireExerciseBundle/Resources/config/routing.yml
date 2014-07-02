@@ -50,4 +50,4 @@ frontend:
 
 api_upload:
     resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/upload.yml"
-    prefix:   /
+    prefix:   /api/
