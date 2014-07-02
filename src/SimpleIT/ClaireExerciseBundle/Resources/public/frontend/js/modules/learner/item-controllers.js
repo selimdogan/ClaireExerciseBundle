@@ -5,6 +5,9 @@ attemptControllers.controller('attemptController', ['$scope', '$state', 'Exercis
 
         $scope.imageUrl = BASE_CONFIG.urls.images.uploads;
         $scope.imageExoUrl = BASE_CONFIG.urls.images.exercise;
+        $scope.navBarUrl = BASE_CONFIG.urls.partials.learner + '/fragment-nav-bar.html';
+
+        $scope.validable = false;
 
         console.log('loading attempt...');
         // retrieve attempt
@@ -20,28 +23,31 @@ attemptControllers.controller('attemptController', ['$scope', '$state', 'Exercis
                             function () {
                                 // when data loaded
                                 console.log('items loaded.');
-
-                                // inclure le premier item
-                                $scope.currentItemId = $scope.items[0].item_id;
-
-                                console.log('item loading...');
-
-                                // retrieve item
-                                $scope.item = Item.get({itemId: $scope.currentItemId, attemptId: $stateParams.attemptId},
-                                    function () {
-                                        // when data loaded
-                                        console.log('item loaded');
-                                        if ($scope.item.type == 'pair-items') {
-                                            $state.go('attempt.pair-items');
-                                        } else if ($scope.item.type == 'multiple-choice') {
-                                            $state.go('attempt.multiple-choice');
-                                        }
-                                    });
+                                $scope.gotoItem(0);
                             });
                     });
             });
 
-        // TODO - buttons to navigate in items
+        $scope.gotoItem = function (index) {
+            console.log('item ' + $scope.items[index].item_id + ' loading...');
+
+            // retrieve item
+            $scope.item = Item.get({itemId: $scope.items[index].item_id, attemptId: $stateParams.attemptId},
+                function () {
+                    // when data loaded
+                    console.log('item loaded');
+                    if ($scope.item.type == 'pair-items') {
+                        $state.go('attempt.pair-items', {itemId: index}, {location: false});
+                    } else if ($scope.item.type == 'multiple-choice') {
+                        $state.go('attempt.multiple-choice', {itemId: index}, {location: false});
+                    }
+                });
+        };
+
+        $scope.saveAnswer = function () {
+            console.log('Methode du parent');
+        };
+
     }]);
 
 var itemControllers = angular.module('itemControllers', ['ui.router']);
@@ -51,6 +57,7 @@ itemControllers.controller('pairItemsController', ['$scope', 'Answer', '$routePa
 
         // post answer
         $scope.saveAnswer = function () {
+            $scope.validable = false;
             answer = new Answer;
             answer.content = [];
 
@@ -58,7 +65,7 @@ itemControllers.controller('pairItemsController', ['$scope', 'Answer', '$routePa
                 answer.content.push($scope.drop[i].id);
             }
 
-            item = answer.$save({itemId: $scope.currentItemId, attemptId: $stateParams.attemptId},
+            item = answer.$save({itemId: $scope.item.item_id, attemptId: $stateParams.attemptId},
                 function (item) {
                     $scope.displayCorrection(item)
                 });
@@ -89,6 +96,7 @@ itemControllers.controller('pairItemsController', ['$scope', 'Answer', '$routePa
         // drag and drop
         $scope.onDropList = function ($event, $data, array) {
             array.push($data);
+            $scope.validable = false;
         };
 
         $scope.onDropField = function ($event, $data, fieldNumber) {
@@ -97,6 +105,9 @@ itemControllers.controller('pairItemsController', ['$scope', 'Answer', '$routePa
 
         $scope.dropSuccessHandler = function ($event, index, array) {
             array.splice(index, 1);
+            if ($scope.item['content'].mobile_parts.length == 0) {
+                $scope.validable = true;
+            }
         };
 
         $scope.dropSuccessHandlerField = function ($event, fieldNumber) {
@@ -122,6 +133,8 @@ itemControllers.controller('multipleChoiceController', ['$scope', 'Answer', '$ro
 
         // post answer
         $scope.saveAnswer = function () {
+            $scope.validable = false;
+
             answer = new Answer;
             answer.content = [];
 
@@ -135,7 +148,9 @@ itemControllers.controller('multipleChoiceController', ['$scope', 'Answer', '$ro
                 answer.content.push(val);
             }
 
-            item = answer.$save({itemId: $scope.currentItemId, attemptId: $stateParams.attemptId},
+            console.log($scope.item.item_id);
+
+            item = answer.$save({itemId: $scope.item.item_id, attemptId: $stateParams.attemptId},
                 function (item) {
                     $scope.displayCorrection(item)
                 });
@@ -161,6 +176,7 @@ itemControllers.controller('multipleChoiceController', ['$scope', 'Answer', '$ro
         // init answer array
         $scope.tick = [];
         $scope.solution = [];
+        console.log('reinit...');
         for (i = 0; i < $scope.item['content'].propositions.length; ++i) {
             $scope.tick[i] = false;
             $scope.solution[i] = null;
@@ -169,5 +185,7 @@ itemControllers.controller('multipleChoiceController', ['$scope', 'Answer', '$ro
         if ($scope.item['corrected'] == true) {
             $scope.fillLearnerAnswers();
             $scope.displayCorrection($scope.item);
+        } else {
+            $scope.validable = true;
         }
     }]);
