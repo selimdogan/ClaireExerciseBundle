@@ -16,7 +16,11 @@ userServices.factory('Upload', ['$resource',
     function ($resource) {
 
         return $resource(
-            BASE_CONFIG.urls.api.upload
+            BASE_CONFIG.urls.api.uploads,
+            {},
+            {
+                save: {method: 'POST'}
+            }
         );
 
     }]);
