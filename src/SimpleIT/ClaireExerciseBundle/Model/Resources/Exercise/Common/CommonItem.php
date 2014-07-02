@@ -16,7 +16,7 @@ use JMS\Serializer\Annotation as Serializer;
  *    "open-ended-question": "SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OpenEndedQuestion\Question"
  * })
  */
-abstract class CommonItem
+abstract class CommonItem implements Markable
 {
     /**
      * @var string $comment A comment linked with the question which will be displayed after the
@@ -37,6 +37,13 @@ abstract class CommonItem
      * @Serializer\Exclude
      */
     protected $explanation;
+
+    /**
+     * @var float
+     * @Serializer\Type("float")
+     * @Serializer\Groups({"details", "corrected"})
+     */
+    protected $mark = null;
 
     /**
      * Set allRight
@@ -96,5 +103,35 @@ abstract class CommonItem
     public function getComment()
     {
         return $this->comment;
+    }
+
+    /**
+     * Set mark
+     *
+     * @param float $mark
+     */
+    public function setMark($mark)
+    {
+        $this->mark = $mark;
+    }
+
+    /**
+     * Get mark
+     *
+     * @return float
+     */
+    public function getMark()
+    {
+        return $this->mark;
+    }
+
+    /**
+     * Check if the Markable has a mark
+     *
+     * @return boolean
+     */
+    public function isMarked()
+    {
+        return !is_null($this->mark);
     }
 }

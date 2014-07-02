@@ -17,14 +17,15 @@ abstract class ExerciseModelResourceFactory extends SharedResourceFactory
      * Create an ExerciseModel Resource collection
      *
      * @param array $exerciseModels
+     * @param bool  $links
      *
      * @return array
      */
-    public static function createCollection(array $exerciseModels)
+    public static function createCollection(array $exerciseModels, $links = false)
     {
         $exerciseModelResources = array();
         foreach ($exerciseModels as $exerciseModel) {
-            $exerciseModelResources[] = self::create($exerciseModel);
+            $exerciseModelResources[] = self::create($exerciseModel, $links);
         }
 
         return $exerciseModelResources;
@@ -34,10 +35,11 @@ abstract class ExerciseModelResourceFactory extends SharedResourceFactory
      * Create an ExerciseModel Resource
      *
      * @param ExerciseModel $exerciseModel
+     * @param bool          $links
      *
      * @return ExerciseModelResource
      */
-    public static function create(ExerciseModel $exerciseModel)
+    public static function create(ExerciseModel $exerciseModel, $links = false)
     {
         $exerciseModelResource = new ExerciseModelResource();
         parent::fill($exerciseModelResource, $exerciseModel);
@@ -57,6 +59,16 @@ abstract class ExerciseModelResourceFactory extends SharedResourceFactory
                 $rn[] = $req->getId();
             }
             $exerciseModelResource->setRequiredKnowledges($rn);
+
+        if ($links)
+        {
+            $exercises = array();
+            foreach ($exerciseModel->getExercises() as $ex)
+            {
+                $exercises[] = ExerciseResourceFactory::create($ex, true);
+            }
+            $exerciseModelResource->setExercises($exercises);
+        }
 
         return $exerciseModelResource;
     }

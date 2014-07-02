@@ -72,7 +72,7 @@ class AnswerByItemByAttemptController extends ApiController
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(AnswerResource::RESOURCE_NAME);
         } catch (InvalidAnswerException $iae) {
-            throw new ApiBadRequestException(AnswerResource::RESOURCE_NAME);
+            throw new ApiBadRequestException($iae->getMessage());
         } catch (AnswerAlreadyExistsException $aaee) {
             throw new ApiBadRequestException($aaee->getMessage());
         }

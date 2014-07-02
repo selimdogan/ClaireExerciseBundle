@@ -34,6 +34,14 @@ class AnswerResource
     private $content;
 
     /**
+     * @var float
+     * @Serializer\Type("float")
+     * @Serializer\Groups({"details"})
+     * @Assert\Blank()
+     */
+    private $mark;
+
+    /**
      * Set id
      *
      * @param int $id
@@ -71,5 +79,25 @@ class AnswerResource
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * Set mark
+     *
+     * @param float $mark
+     */
+    public function setMark($mark)
+    {
+        $this->mark = $mark;
+    }
+
+    /**
+     * Get mark
+     *
+     * @return float
+     */
+    public function getMark()
+    {
+        return $this->mark;
     }
 }

@@ -31,48 +31,11 @@ class Question extends CommonItem implements Markable
     private $propositions = array();
 
     /**
-     * @var float
-     * @Serializer\Type("float")
-     * @Serializer\Groups({"details", "corrected", "item"})
-     */
-    private $mark = null;
-
-    /**
      * @var boolean
      * @Serializer\Type("boolean")
      * @Serializer\Groups({"details", "corrected", "item"})
      */
     private $doNotShuffle;
-
-    /**
-     * Check if the Markable has a mark
-     *
-     * @return boolean
-     */
-    public function isMarked()
-    {
-        return !is_null($this->mark);
-    }
-
-    /**
-     * Get mark
-     *
-     * @return float
-     */
-    public function getMark()
-    {
-        return $this->mark;
-    }
-
-    /**
-     * Set mark
-     *
-     * @param float $mark
-     */
-    public function setMark($mark)
-    {
-        $this->mark = $mark;
-    }
 
     /**
      * Shuffle the order of the propositions

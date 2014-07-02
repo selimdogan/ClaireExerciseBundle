@@ -50,9 +50,12 @@ abstract class AnswerResourceFactory
                 }
             )
             ->build();
+
+        /** @var AnswerResource $answerResource */
         $answerResource = $serializer->deserialize($answer->getContent(), $class, 'json');
 
         $answerResource->setId($answer->getId());
+        $answerResource->setMark($answer->getMark());
 
         return $answerResource;
     }

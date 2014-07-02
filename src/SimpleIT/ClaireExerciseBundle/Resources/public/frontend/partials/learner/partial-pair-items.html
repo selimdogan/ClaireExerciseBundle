@@ -1,4 +1,4 @@
-<div data-ng-controller="itemController" class="container">
+<div data-ng-controller="pairItemsController" class="container">
 
     <div class="row panel panel-group"
          ui-on-Drop="onDropList($event,$data,item.content.mobile_parts)"
@@ -69,12 +69,12 @@
                 </div>
             </div>
             <div class="col-xs-1">
-                    <div ng-if="solution[$index] != null && !solution[$index].right">
-                        <img ng-src="{{ imageExoUrl }}/wrong.png"/>
-                    </div>
-                    <div ng-if="solution[$index] != null && solution[$index].right">
-                        <img ng-src="{{ imageExoUrl }}/right.png"/>
-                    </div>
+                <div ng-if="solution[$index] != null && !solution[$index].right">
+                    <img ng-src="{{ imageExoUrl }}/wrong.png"/>
+                </div>
+                <div ng-if="solution[$index] != null && solution[$index].right">
+                    <img ng-src="{{ imageExoUrl }}/right.png"/>
+                </div>
             </div>
             <div class="col-xs-2">
                 <div class="span" style="min-width: 50px">
@@ -95,8 +95,15 @@
         </div>
     </div>
 
-    <div>
-        <button ng-if="!item.corrected" ng-click="saveAnswer()" class="btn btn-primary">Valider</button>
+    <div class="row">
+        <div ng-hide="!item.corrected" class="score">
+            Votre score: {{ item.content.mark | number:0 }} %
+        </div>
+    </div>
+
+    <div class="navbar navbar-inverse navbar-fixed-bottom" style="margin-bottom:60px; padding-left: 20px">
+        <button back-Button class="btn btn-primary">Retour</button>
+        <button ng-hide="item.corrected" ng-click="saveAnswer()" class="btn btn-primary">Valider</button>
     </div>
 
 </div>

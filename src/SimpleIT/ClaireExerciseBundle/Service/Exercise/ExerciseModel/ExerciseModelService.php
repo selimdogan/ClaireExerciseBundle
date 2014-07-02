@@ -3,6 +3,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\NonUniqueResultException;
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModelFactory;
@@ -183,6 +184,36 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
         $model = $this->computeRequirements($modelResource, $model);
 
         return $model;
+    }
+
+    /**
+     * Get models that the user attempted
+     *
+     * @param int $userId
+     *
+     * @return array
+     */
+    public function getAllByUserWhoAttempted($userId)
+    {
+        return $this->entityRepository->findAllByUserWhoAttempted($userId);
+    }
+
+    /**
+     * Get model filled with attempts
+     *
+     * @param int $userId
+     * @param int $modelId
+     *
+     * @return ExerciseModel
+     */
+    public function getAllByUserWhoAttemptedByModel($userId, $modelId)
+    {
+        try {
+        return $this->entityRepository->findAllByUserWhoAttemptedByModel($userId, $modelId);
+        } catch (NonUniqueResultException $e)
+        {
+            return $this->get($modelId);
+        }
     }
 
     /**

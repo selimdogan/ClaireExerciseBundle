@@ -38,10 +38,11 @@ abstract class ExerciseResourceFactory
      * Create an Exercise Resource
      *
      * @param StoredExercise $exercise
+     * @param bool           $links
      *
      * @return ExerciseResource
      */
-    public static function create(StoredExercise $exercise)
+    public static function create(StoredExercise $exercise, $links = false)
     {
         $exerciseResource = new ExerciseResource();
         $exerciseResource->setId($exercise->getId());
@@ -66,6 +67,16 @@ abstract class ExerciseResourceFactory
         );
 
         $exerciseResource->setContent($content);
+
+        if ($links)
+        {
+            $attempts = array();
+            foreach ($exercise->getAttempts() as $attempt)
+            {
+                $attempts[] = AttemptResourceFactory::create($attempt, true);
+            }
+            $exerciseResource->setAttempts($attempts);
+        }
 
         return $exerciseResource;
     }

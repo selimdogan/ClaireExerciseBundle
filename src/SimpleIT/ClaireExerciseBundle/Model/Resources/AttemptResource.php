@@ -58,6 +58,13 @@ class AttemptResource
     private $position;
 
     /**
+     * @var array
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource>")
+     * @Serializer\Groups({"details"})
+     */
+    private $answers;
+
+    /**
      * Set createdAt
      *
      * @param \DateTime $createdAt
@@ -175,5 +182,25 @@ class AttemptResource
     public function getPosition()
     {
         return $this->position;
+    }
+
+    /**
+     * Set answers
+     *
+     * @param array $answers
+     */
+    public function setAnswers($answers)
+    {
+        $this->answers = $answers;
+    }
+
+    /**
+     * Get answers
+     *
+     * @return array
+     */
+    public function getAnswers()
+    {
+        return $this->answers;
     }
 }

@@ -2,13 +2,10 @@
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
 use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
-use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
-use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
-use SimpleIT\ClaireExerciseBundle\Exception\InvalidAnswerException;
-use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
@@ -66,36 +63,6 @@ class AnswerByItemController extends ApiController
 
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(AnswerResource::RESOURCE_NAME);
-        }
-    }
-
-    /**
-     * Answer action. Create an answer for the given stored exercise.
-     *
-     * @param int $itemId
-     * @param AnswerResource $answerResource
-     *
-     * @throws ApiBadRequestException
-     * @throws ApiNotFoundException
-     * @return ApiResponse
-     */
-    public function createAction($itemId, AnswerResource $answerResource)
-    {
-        try {
-            $this->validateResource($answerResource, array('create', 'Default'));
-
-            // send to the answer service in order to create the answer
-            $answer = $this->get('simple_it.exercise.answer')
-                ->add($itemId, $answerResource);
-
-            $answerResource = AnswerResourceFactory::create($answer);
-
-            return new ApiCreatedResponse($answerResource, array("details", 'Default'));
-
-        } catch (NonExistingObjectException $neoe) {
-            throw new ApiNotFoundException(AnswerResource::RESOURCE_NAME);
-        } catch (InvalidAnswerException $iae) {
-            throw new ApiBadRequestException(AnswerResource::RESOURCE_NAME);
         }
     }
 }

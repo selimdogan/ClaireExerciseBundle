@@ -73,8 +73,7 @@ class ExerciseModelController extends ApiController
         try {
             $exerciseModels = $this->get('simple_it.exercise.exercise_model')->getAll(
                 $collectionInformation,
-                $userId = $this->getUserId()
-
+                $this->getUserId()
             );
 
             $exerciseModelResources = $this->get(

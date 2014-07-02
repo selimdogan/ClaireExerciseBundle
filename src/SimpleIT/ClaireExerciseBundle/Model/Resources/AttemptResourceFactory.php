@@ -33,10 +33,11 @@ abstract class AttemptResourceFactory
      * Create an AttemptResource
      *
      * @param Attempt $attempt
+     * @param bool    $links
      *
      * @return AttemptResource
      */
-    public static function create(Attempt $attempt)
+    public static function create(Attempt $attempt, $links = false)
     {
         $attemptResource = new AttemptResource();
         $attemptResource->setId($attempt->getId());
@@ -55,6 +56,16 @@ abstract class AttemptResourceFactory
         }
 
         $attemptResource->setPosition($attempt->getPosition());
+
+        if ($links)
+        {
+            $answers = array();
+            foreach ($attempt->getAnswers() as $answer)
+            {
+                $answers[] = AnswerResourceFactory::create($answer);
+            }
+            $attemptResource->setAnswers($answers);
+        }
 
         return $attemptResource;
     }

@@ -2,6 +2,8 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
 use Claroline\CoreBundle\Entity\User;
 
@@ -43,6 +45,11 @@ class Attempt
     private $user;
 
     /**
+     * @var Collection $answers
+     */
+    private $answers;
+
+    /**
      * Set createdAt
      *
      * @param \DateTime $createdAt
@@ -50,6 +57,7 @@ class Attempt
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+        $this->answers = new ArrayCollection();
     }
 
     /**
@@ -160,5 +168,25 @@ class Attempt
     public function getPosition()
     {
         return $this->position;
+    }
+
+    /**
+     * Set answers
+     *
+     * @param \Doctrine\Common\Collections\Collection $answers
+     */
+    public function setAnswers($answers)
+    {
+        $this->answers = $answers;
+    }
+
+    /**
+     * Get answers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAnswers()
+    {
+        return $this->answers;
     }
 }

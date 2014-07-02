@@ -4,7 +4,6 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\AnswerFactory;
-use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 use SimpleIT\ClaireExerciseBundle\Exception\AnswerAlreadyExistsException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
@@ -102,25 +101,20 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
      * @param int            $itemId
      * @param AnswerResource $answerResource
      * @param int            $attemptId
-     * @param int           $userId
+     * @param int            $userId
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\AnswerAlreadyExistsException
      * @return ItemResource
      */
-    public function add($itemId, AnswerResource $answerResource, $attemptId = null, $userId = null)
+    public function add($itemId, AnswerResource $answerResource, $attemptId, $userId)
     {
         // Get the item and the attempt
-        /** @var Item $item */
-        if (!is_null($attemptId)) {
-            if (count($this->getAll($itemId, $attemptId)) > 0) {
-                throw new AnswerAlreadyExistsException();
-            }
-            $attempt = $this->attemptService->get($attemptId, $userId);
-            $item = $this->itemService->getByAttempt($itemId, $attemptId);
-        } else {
-            $item = $this->itemService->get($itemId);
-            $attempt = null;
+        if (count($this->getAll($itemId, $attemptId)) > 0) {
+            throw new AnswerAlreadyExistsException();
         }
+        $attempt = $this->attemptService->get($attemptId, $userId);
+        /** @var Item $item */
+        $item = $this->itemService->getByAttempt($itemId, $attemptId);
 
         $this->exerciseService->validateAnswer($item, $answerResource);
 
@@ -138,7 +132,17 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
         $this->em->persist($answer);
         $this->em->flush();
 
-        return $this->itemService->findItemAndCorrectionByAttempt($itemId, $attemptId, $userId);
+        $itemResource = $this->itemService->findItemAndCorrectionByAttempt(
+            $itemId,
+            $attemptId,
+            $userId
+        );
+
+        $answer->setMark($itemResource->getContent()->getMark());
+        $this->em->flush();
+
+        return $itemResource;
+
     }
 
     /**

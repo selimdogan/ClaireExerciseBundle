@@ -12,6 +12,12 @@
 
         <field name="position" column="position" type="integer" nullable="true"/>
 
+        <one-to-many target-entity="SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer" mapped-by="attempt" field="answers">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
         <many-to-one target-entity="SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise" field="exercise" inversed-by="attempts">
             <join-column name="exercise_id" referenced-column-name="id" on-delete="CASCADE"/>
         </many-to-one>

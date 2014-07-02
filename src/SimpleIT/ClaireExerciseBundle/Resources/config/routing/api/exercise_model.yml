@@ -176,4 +176,3 @@ api_exercise_list_by_exercise_model:
     requirements:
         _format: json
         exerciseModelId: \d+
-

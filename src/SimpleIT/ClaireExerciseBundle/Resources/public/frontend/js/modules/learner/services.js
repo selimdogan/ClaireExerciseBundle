@@ -53,9 +53,9 @@ attemptServices.factory('Attempt', ['$resource',
     }]);
 
 
-var modelTryServices = angular.module('modelTryServices', ['ngResource']);
+var exerciseByModelServices = angular.module('exerciseByModelServices', ['ngResource']);
 
-modelTryServices.factory('ModelTry', ['$resource',
+exerciseByModelServices.factory('ExerciseByModel', ['$resource',
     function ($resource) {
 
         return $resource(
@@ -71,9 +71,9 @@ modelTryServices.factory('ModelTry', ['$resource',
 
     }]);
 
-var exerciseByAttemptServices = angular.module('exerciseByAttemptServices', ['ngResource']);
+var attemptByExerciseServices = angular.module('attemptByExerciseServices', ['ngResource']);
 
-exerciseByAttemptServices.factory('ExerciseByAttempt', ['$resource',
+attemptByExerciseServices.factory('AttemptByExercise', ['$resource',
     function ($resource) {
 
         return $resource(
@@ -85,6 +85,16 @@ exerciseByAttemptServices.factory('ExerciseByAttempt', ['$resource',
                     headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
                 }
             }
+        );
+
+    }]);
+
+var attemptListServices = angular.module('attemptListServices', ['ngResource']);
+
+attemptListServices.factory('AttemptList', ['$resource',
+    function ($resource) {
+        return $resource(
+            BASE_CONFIG.urls.api.attemptedModels + ':modelId'
         );
 
     }]);

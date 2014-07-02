@@ -168,6 +168,13 @@ class ExerciseModelResource extends SharedResource
     protected $forkFrom;
 
     /**
+     * @var array
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource>")
+     * @Serializer\Groups({"details"})
+     */
+    protected $exercises;
+
+    /**
      * Set content
      *
      * @param \SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel $content
@@ -225,6 +232,26 @@ class ExerciseModelResource extends SharedResource
     public function getRequiredKnowledges()
     {
         return $this->requiredKnowledges;
+    }
+
+    /**
+     * Set exercises
+     *
+     * @param array $exercises
+     */
+    public function setExercises($exercises)
+    {
+        $this->exercises = $exercises;
+    }
+
+    /**
+     * Get exercises
+     *
+     * @return array
+     */
+    public function getExercises()
+    {
+        return $this->exercises;
     }
 
     /**

@@ -2,6 +2,10 @@ api_exercise_models:
     resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/exercise_model.yml"
     prefix:   /api/exercise-models/
 
+api_attempted_exercise_models:
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/attempted_model.yml"
+    prefix:   /api/attempted-models/
+
 api_exercises:
     resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/exercise.yml"
     prefix:   /api/exercises/

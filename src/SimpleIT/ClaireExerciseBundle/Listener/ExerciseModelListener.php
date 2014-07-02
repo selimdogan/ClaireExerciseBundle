@@ -44,7 +44,7 @@ class ExerciseModelListener implements ContainerAwareInterface
 
         //Redirection to the controller
         $route = $this->container->get('router')->generate('frontend_index');
-        $route .= '#/learner/model/' . $model->getId() . '/try';
+        $route .= '#/learner/models/' . $model->getId();
         $event->setResponse(new RedirectResponse($route));
         $event->stopPropagation();
     }
