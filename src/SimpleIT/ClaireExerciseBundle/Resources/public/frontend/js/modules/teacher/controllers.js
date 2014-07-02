@@ -54,7 +54,8 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
             "metadata": [],
             "keywords": [],
             "content": {
-                "source": ""
+                "source": "img1.jpeg",
+                "object_type": "picture"
             },
             "required_exercise_resources": null,
             "required_knowledges": null
