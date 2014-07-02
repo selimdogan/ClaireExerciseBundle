@@ -9,3 +9,14 @@ userServices.factory('User', ['$resource',
         );
 
     }]);
+
+var uploadServices = angular.module('uploadServices', ['ngResource']);
+
+userServices.factory('Upload', ['$resource',
+    function ($resource) {
+
+        return $resource(
+            BASE_CONFIG.urls.api.upload
+        );
+
+    }]);

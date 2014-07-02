@@ -1,4 +1,3 @@
-
 var mainApp = angular.module('mainApp',
     [
         'ngRoute',
@@ -20,6 +19,7 @@ var mainApp = angular.module('mainApp',
         'attemptServices',
         'attemptListServices',
         'itemServices',
+        'uploadServices',
         'itemControllers',
         'attemptControllers',
         'learnerControllers'
