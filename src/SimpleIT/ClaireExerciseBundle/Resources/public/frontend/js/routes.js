@@ -62,6 +62,10 @@ mainApp.config(
             $stateProvider.state('attempt.pair-items', {
                 templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-pair-items.html'
             });
+
+            $stateProvider.state('attempt.multiple-choice', {
+                templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-multiple-choice.html'
+            });
         }
     ]
 );

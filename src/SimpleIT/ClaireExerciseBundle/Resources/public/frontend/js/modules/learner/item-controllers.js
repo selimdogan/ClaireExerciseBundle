@@ -22,17 +22,19 @@ attemptControllers.controller('attemptController', ['$scope', '$state', 'Exercis
                                 console.log('items loaded.');
 
                                 // inclure le premier item
-                                $state.currentItem = $scope.items[0].item_id;
+                                $scope.currentItemId = $scope.items[0].item_id;
 
                                 console.log('item loading...');
 
                                 // retrieve item
-                                $scope.item = Item.get({itemId: $state.currentItem, attemptId: $stateParams.attemptId},
+                                $scope.item = Item.get({itemId: $scope.currentItemId, attemptId: $stateParams.attemptId},
                                     function () {
                                         // when data loaded
                                         console.log('item loaded');
                                         if ($scope.item.type == 'pair-items') {
                                             $state.go('attempt.pair-items');
+                                        } else if ($scope.item.type == 'multiple-choice') {
+                                            $state.go('attempt.multiple-choice');
                                         }
                                     });
                             });
@@ -44,8 +46,8 @@ attemptControllers.controller('attemptController', ['$scope', '$state', 'Exercis
 
 var itemControllers = angular.module('itemControllers', ['ui.router']);
 
-itemControllers.controller('pairItemsController', ['$scope', 'Item', 'Answer', '$routeParams', '$location', '$stateParams',
-    function ($scope, Item, Answer, $routeParams, $location, $stateParams) {
+itemControllers.controller('pairItemsController', ['$scope', 'Answer', '$routeParams', '$location', '$stateParams',
+    function ($scope, Answer, $routeParams, $location, $stateParams) {
 
         // post answer
         $scope.saveAnswer = function () {
@@ -56,7 +58,7 @@ itemControllers.controller('pairItemsController', ['$scope', 'Item', 'Answer', '
                 answer.content.push($scope.drop[i].id);
             }
 
-            item = answer.$save({itemId: $stateParams.itemId, attemptId: $stateParams.attemptId},
+            item = answer.$save({itemId: $scope.currentItemId, attemptId: $stateParams.attemptId},
                 function (item) {
                     $scope.displayCorrection(item)
                 });
@@ -72,7 +74,6 @@ itemControllers.controller('pairItemsController', ['$scope', 'Item', 'Answer', '
                     item['content'].answers[i] == item['content'].solutions[i];
             }
             $scope.item.corrected = true;
-            $scope.item['content']['comment'] = item['content']['comment'];
             $scope.item['content']['mark'] = item['content']['mark'];
         };
 
@@ -110,6 +111,61 @@ itemControllers.controller('pairItemsController', ['$scope', 'Item', 'Answer', '
             $scope.solution[i] = null;
             $scope.item['content'].mobile_parts[i].id = i;
         }
+        if ($scope.item['corrected'] == true) {
+            $scope.fillLearnerAnswers();
+            $scope.displayCorrection($scope.item);
+        }
+    }]);
+
+itemControllers.controller('multipleChoiceController', ['$scope', 'Answer', '$routeParams', '$location', '$stateParams',
+    function ($scope, Answer, $routeParams, $location, $stateParams) {
+
+        // post answer
+        $scope.saveAnswer = function () {
+            answer = new Answer;
+            answer.content = [];
+
+            for (i = 0; i < $scope.tick.length; ++i) {
+                if ($scope.tick[i]) {
+                    val = 1;
+                } else {
+                    val = 0;
+                }
+
+                answer.content.push(val);
+            }
+
+            item = answer.$save({itemId: $scope.currentItemId, attemptId: $stateParams.attemptId},
+                function (item) {
+                    $scope.displayCorrection(item)
+                });
+        };
+
+        // correction
+        $scope.displayCorrection = function (item) {
+            for (i = 0; i < $scope.tick.length; ++i) {
+                $scope.solution[i] = item['content'].propositions[i]['right'];
+            }
+            $scope.item.corrected = true;
+            $scope.item['content']['comment'] = item['content']['comment'];
+            $scope.item['content']['mark'] = item['content']['mark'];
+        };
+
+        // display learner answers
+        $scope.fillLearnerAnswers = function () {
+            for (i = 0; i < $scope.tick.length; ++i) {
+                $scope.tick[i] = $scope.item['content'].propositions[i].ticked;
+            }
+        };
+
+        // init answer array
+        $scope.tick = [];
+        $scope.solution = [];
+        for (i = 0; i < $scope.item['content'].propositions.length; ++i) {
+            $scope.tick[i] = false;
+            $scope.solution[i] = null;
+        }
+
         if ($scope.item['corrected'] == true) {
             $scope.fillLearnerAnswers();
             $scope.displayCorrection($scope.item);
