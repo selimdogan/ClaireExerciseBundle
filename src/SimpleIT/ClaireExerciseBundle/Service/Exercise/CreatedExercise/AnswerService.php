@@ -106,20 +106,15 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\AnswerAlreadyExistsException
      * @return ItemResource
      */
-    public function add($itemId, AnswerResource $answerResource, $attemptId = null, $userId = null)
+    public function add($itemId, AnswerResource $answerResource, $attemptId, $userId)
     {
         // Get the item and the attempt
-        /** @var Item $item */
-        if (!is_null($attemptId)) {
-            if (count($this->getAll($itemId, $attemptId)) > 0) {
-                throw new AnswerAlreadyExistsException();
-            }
-            $attempt = $this->attemptService->get($attemptId, $userId);
-            $item = $this->itemService->getByAttempt($itemId, $attemptId);
-        } else {
-            $item = $this->itemService->get($itemId);
-            $attempt = null;
+        if (count($this->getAll($itemId, $attemptId)) > 0) {
+            throw new AnswerAlreadyExistsException();
         }
+        $attempt = $this->attemptService->get($attemptId, $userId);
+        /** @var Item $item */
+        $item = $this->itemService->getByAttempt($itemId, $attemptId);
 
         $this->exerciseService->validateAnswer($item, $answerResource);
 

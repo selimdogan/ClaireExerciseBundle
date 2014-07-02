@@ -3,7 +3,6 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\CreatedExercise;
 
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
-use SimpleIT\ClaireExerciseBundle\Exception\AnswerAlreadyExistsException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
 
 /**
@@ -19,11 +18,11 @@ interface AnswerServiceInterface
      * @param int            $itemId
      * @param AnswerResource $answerResource
      * @param int            $attemptId
+     * @param int            $userId
      *
-     * @throws AnswerAlreadyExistsException
      * @return Answer
      */
-    public function add($itemId, AnswerResource $answerResource, $attemptId = null);
+    public function add($itemId, AnswerResource $answerResource, $attemptId, $userId);
 
     /**
      * Get all answers for an item
