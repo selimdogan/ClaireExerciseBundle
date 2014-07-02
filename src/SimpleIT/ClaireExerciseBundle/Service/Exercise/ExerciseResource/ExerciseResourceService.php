@@ -196,8 +196,10 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
                 $ownerId
             );
             $reqResources = array();
-            foreach ($resourceResource->getRequiredExerciseResources() as $reqRes) {
-                $reqResources[] = $this->get($reqRes);
+            if ($resourceResource->getRequiredExerciseResources() !== null) {
+                foreach ($resourceResource->getRequiredExerciseResources() as $reqRes) {
+                    $reqResources[] = $this->get($reqRes);
+                }
             }
             $exerciseResource->setRequiredExerciseResources(new ArrayCollection($reqResources));
 
@@ -208,8 +210,10 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
                 $ownerId
             );
             $reqKnowledges = array();
-            foreach ($resourceResource->getRequiredKnowledges() as $reqKnowledge) {
-                $reqKnowledges[] = $this->knowledgeService->get($reqKnowledge);
+            if ($resourceResource->getRequiredKnowledges() !== null) {
+                foreach ($resourceResource->getRequiredKnowledges() as $reqKnowledge) {
+                    $reqKnowledges[] = $this->knowledgeService->get($reqKnowledge);
+                }
             }
             $exerciseResource->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
         }

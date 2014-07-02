@@ -9,13 +9,26 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
 
         $scope.section = 'resource';
 
+        $scope.filters = {
+            search: '',
+            archived: false,
+            type: {
+                multiple_choice_question: ''
+                ,text: 'text'
+                ,picture: 'picture'
+                ,open_ended_question: ''
+                ,sequence: ''
+            },
+            keywords: [],
+            metadata: []
+        };
 
         if($scope.$parent.section === undefined){$scope.parentSection = '';}else{$scope.parentSection = $scope.$parent.section;}
 
         // new resource text
         $scope.newTextResource = {
             "type": "text",
-            "title": "Titre de la ressource",
+            "title": "nouvelle ressource",
             "public": true,
             "archived": false,
             "draft": false,
@@ -25,6 +38,24 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
             "content": {
                 "text": "Texte de la resource",
                 "object_type": "text"
+            },
+            "required_exercise_resources": null,
+            "required_knowledges": null
+        };
+
+        // new resource picture
+        $scope.newPictureResource = {
+            "type": "picture",
+            "title": "nouvelle ressource",
+            "public": true,
+            "archived": false,
+            "draft": false,
+            "complete": null,
+            "metadata": [],
+            "keywords": [],
+            "content": {
+                "source": "img1.jpeg",
+                "object_type": "picture"
             },
             "required_exercise_resources": null,
             "required_knowledges": null
@@ -49,24 +80,81 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
 
     }]);
 
-resourceControllers.controller('resourceListController', ['$scope', 'Resource', '$location', function($scope, Resource, $location) {
+resourceControllers.controller('resourceListController', ['$scope', 'Resource', '$location', '$http', function($scope, Resource, $location, $http) {
 
     // retrieve resources
     $scope.resources = Resource.query();
 
     // delete resource method
     $scope.deleteResource = function (resource) {
-        resource.$delete(function () {
-            $location.path("/resource");
+        resource.$delete({id:resource.id}, function () {
+            $scope.resources = Resource.query();
         });
     };
 
     // create resource method
-    $scope.createTextResource = function () {
-        Resource.save($scope.newTextResource);
+    $scope.createResource = function (type) {
+        if(type == 'text'){
+            Resource.save($scope.newTextResource, function(data){
+                $location.path('/teacher/resource/'+data.id)
+            });
+        }else if(type == 'picture'){
+            Resource.save($scope.newPictureResource, function(data){
+                $location.path('/teacher/resource/'+data.id)
+            });
+        }
     };
 
 }]);
+
+resourceControllers.filter('myFilters', function () {
+    return function (collection, filters) {
+        var items = [];
+        var ids = [];
+        angular.forEach(collection, function (value) {
+            angular.forEach(filters.type, function(type){
+                if(value.type == type && ((filters.archived && value.archived) || !value.archived)){
+                    if(filters.keywords.length){
+                        if(value.keywords.length){
+                            angular.forEach(filters.keywords, function(keyword){
+                                if($.inArray(keyword, value.keywords) != -1){
+                                    if(filters.metadata.length){
+                                        if(value.metadata.length){
+                                            angular.forEach(filters.metadata, function(meta1){
+                                                angular.forEach(value.metadata, function(meta2){
+                                                    if(meta1.key.toLowerCase() == meta2.key.toLowerCase() && meta1.value.toLowerCase() == meta2.value.toLowerCase()){if($.inArray(value.id, ids) == -1){items.push(value); ids.push(value.id)}}
+                                                    if(meta1.key.toLowerCase() == meta2.key.toLowerCase() && meta1.value == ''){if($.inArray(value.id, ids) == -1){items.push(value); ids.push(value.id)}}
+                                                    if(meta1.value.toLowerCase() == meta2.value.toLowerCase() && meta1.key == ''){if($.inArray(value.id, ids) == -1){items.push(value); ids.push(value.id)}}
+                                                });
+                                            });
+                                        }
+                                    }else{
+                                        if($.inArray(value.id, ids) == -1){items.push(value); ids.push(value.id)}
+                                    }
+                                }
+                            });
+                        }
+                    }else{
+                        if(filters.metadata.length){
+                            if(value.metadata.length){
+                                angular.forEach(filters.metadata, function(meta1){
+                                    angular.forEach(value.metadata, function(meta2){
+                                        if(meta1.key.toLowerCase() == meta2.key.toLowerCase() && meta1.value.toLowerCase() == meta2.value.toLowerCase()){if($.inArray(value.id, ids) == -1){items.push(value); ids.push(value.id)}}
+                                        if(meta1.key.toLowerCase() == meta2.key.toLowerCase() && meta1.value == ''){if($.inArray(value.id, ids) == -1){items.push(value); ids.push(value.id)}}
+                                        if(meta1.value.toLowerCase() == meta2.value.toLowerCase() && meta1.key == ''){if($.inArray(value.id, ids) == -1){items.push(value); ids.push(value.id)}}
+                                    });
+                                });
+                            }
+                        }else{
+                            if($.inArray(value.id, ids) == -1){items.push(value); ids.push(value.id)}
+                        }
+                    }
+                }
+            });
+        });
+        return items;
+    };
+});
 
 resourceControllers.controller('resourceDisplayController', ['$scope', 'Resource', '$location', '$stateParams', function($scope, Resource, $location, $stateParams) {
 
@@ -100,9 +188,23 @@ modelControllers.controller('modelController', ['$scope', '$routeParams', '$loca
 
         $scope.section = 'model';
 
+        $scope.filters = {
+            search: '',
+            archived: false,
+            type: {
+                multiple_choice: ''
+                ,pair_items: 'pair-items'
+                ,order_items: ''
+                ,open_ended_question: ''
+                ,group_items: ''
+            },
+            keywords: [],
+            metadata: []
+        };
+
         $scope.newPairItemsModel = {
             "type": "pair-items",
-            "title": "new Appariement",
+            "title": "nouvel appariement",
             "public": true,
             "archived": false,
             "draft": false,
@@ -124,7 +226,7 @@ modelControllers.controller('modelController', ['$scope', '$routeParams', '$loca
         };
 
         $scope.modelAddKeywordsField = function (collection){
-            var keyword = $("#modelAddKeyword");
+            var keyword = $('#modelAddKeyword');
             collection.push(keyword[0].value);
             keyword[0].value = '';
         }
@@ -146,11 +248,52 @@ modelControllers.controller('modelController', ['$scope', '$routeParams', '$loca
         }
 
         $scope.modelAddBlockResourceField = function (collection, id){
-            collection.splice(collection.length, 0, {"id": id});
+            var isAlreadyAdded = false;
+            angular.forEach(collection, function(res){
+                if(res.id == id){isAlreadyAdded = true;}
+            });
+            if(!isAlreadyAdded){
+                collection.splice(collection.length, 0, {"id": id});
+            }
+        }
+
+        $scope.modelAddBlockResourceConstraint = function (collection, type){
+            if(collection === undefined){collection = [];}
+            var newElement;
+            if(type == 'exists'){
+                newElement = {"key": '',"values": [],"comparator": 'exists'};
+            }else if(type == 'in'){
+                newElement = {"key": '',"values": [],"comparator": 'in'};
+            }else if(type == 'between'){
+                newElement = {"key": '',"values": ['', ''],"comparator": 'between'};
+            }else{
+                newElement = {"key": '',"values": [''],"comparator": type};
+            }
+            collection.splice(collection.length, 0, newElement);
+        }
+
+        $scope.modelAddBlockResourceConstraintValue = function (collection){
+            var constrainsInValue = $('#constrainsInValue');
+            collection.push(constrainsInValue[0].value);
+            constrainsInValue[0].value = '';
         }
 
         $scope.modelRemoveField = function (collection, index){
             collection.splice(index, 1);
+        }
+
+        $scope.initResourceConstraints = function(pair_blocks){
+            if(!pair_blocks.hasOwnProperty('resourceConstraint')){
+                pair_blocks.resourceConstraint = {type: 'text'};
+                pair_blocks.resourceConstraint.metadataConstraints = [];
+                pair_blocks.resourceConstraint.excluded = [];
+            }
+            if(!pair_blocks.resourceConstraint.hasOwnProperty('metadataConstraints')){
+                pair_blocks.resourceConstraint.metadataConstraints = [];
+            }
+            if(!pair_blocks.resourceConstraint.hasOwnProperty('excluded')){
+                pair_blocks.resourceConstraint.excluded = [];
+            }
         }
 
     }]);
@@ -160,13 +303,17 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
     $scope.models = Model.query();
 
     $scope.deleteModel = function (model) {
-        model.$delete(function () {
-            $location.path("/model");
+        model.$delete({id:model.id}, function () {
+            $scope.models = Model.query();
         });
     };
 
-    $scope.createModel = function () {
-        Model.save($scope.newPairItemsModel);
+    $scope.createModel = function (type) {
+        if(type == 'pair-items'){
+            Model.save($scope.newPairItemsModel, function(data){
+                $location.path('/teacher/model/'+data.id)
+            });
+        }
     };
 
 }]);
@@ -177,6 +324,7 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
 
     $scope.usedDocuments = [];
     $scope.usedResources = [];
+    $scope.excludedResources = [];
 
     $scope.updateModel = function () {
         delete $scope.model.id;
@@ -188,7 +336,11 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
     };
 
     $scope.onDropResourceToBlock = function(event,resource,collection){
-        $scope.modelAddBlockResourceField(collection, resource.id);
+        if($scope.model.type == 'pair-items'){
+            if(resource.type == 'text' || resource.type == 'picture'){
+                $scope.modelAddBlockResourceField(collection, resource.id);
+            }
+        }
     }
 
     $scope.onDropMetadataKey = function(event,metakey,field){
@@ -196,14 +348,30 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
     }
 
     $scope.onDropDocument = function(event,resource,documents){
-        $scope.modelAddBlockResourceField(documents, resource.id);
+        if($scope.model.type == 'pair-items'){
+            if(resource.type == 'text' || resource.type == 'picture'){
+                $scope.modelAddBlockResourceField(documents, resource.id);
+            }
+        }
     }
 
     $scope.getResourceInfo = function(blockid, resourceid){
         $scope.usedResources[blockid][resourceid] = Resource.get({id:resourceid});
     }
 
+    $scope.getExcludedResourceInfo = function(blockid, resourceid){
+        $scope.excludedResources[blockid][resourceid] = Resource.get({id:resourceid});
+    }
+
     $scope.getDocumentInfo = function(documentId){
         $scope.usedDocuments[documentId] = Resource.get({id:documentId});
+    }
+
+    $scope.getMobilPart = function(collection, key){
+        var returnValue = '';
+        angular.forEach(collection.metadata, function (meta) {
+            if(meta.key == key){returnValue = meta.value;}
+        });
+        if(returnValue != ''){return collection.title+' ('+returnValue+')'}else{return collection.title;}
     }
 }]);
