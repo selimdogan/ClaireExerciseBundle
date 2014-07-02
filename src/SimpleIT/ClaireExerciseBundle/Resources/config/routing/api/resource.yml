@@ -60,14 +60,6 @@ api_exercise_resource_import:
         _format: json
         resourceId: \d+
 
-api_exercise_resource_upload_image:
-    pattern:  /{resourceId}/upload-image
-    defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/Resource:uploadImage }
-    methods: [POST]
-    requirements:
-        _format: json
-        resourceId: \d+
-
 api_exercise_resource_add_required_resource:
     pattern:  /{resourceId}/required-resources/{reqResId}
     defaults: { _controller: SimpleITClaireExerciseBundle:Api/ExerciseResource/RequiredResourceByResource:add }

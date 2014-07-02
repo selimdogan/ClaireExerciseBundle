@@ -97,13 +97,10 @@
 
     <div class="row">
         <div ng-hide="!item.corrected" class="score">
-            Votre score: {{ item.content.mark | number:0 }} %
+            Votre score: {{ item.content.mark | number:0 }}%
         </div>
     </div>
 
-    <div class="navbar navbar-inverse navbar-fixed-bottom" style="margin-bottom:60px; padding-left: 20px">
-        <button back-Button class="btn btn-primary">Retour</button>
-        <button ng-hide="item.corrected" ng-click="saveAnswer()" class="btn btn-primary">Valider</button>
-    </div>
+    <ng-include src="navBarUrl"></ng-include>
 
 </div>

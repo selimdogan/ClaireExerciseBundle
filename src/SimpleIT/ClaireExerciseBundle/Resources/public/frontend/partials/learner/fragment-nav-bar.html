@@ -1,0 +1,14 @@
+<div class="navbar navbar-inverse navbar-fixed-bottom" style="margin-bottom:60px; padding-left: 20px">
+    <div class="col-xs-5">
+        <button back-Button class="btn btn-primary">Retour</button>
+        <button ng-hide="!validable" ng-click="saveAnswer()" class="btn btn-primary">Valider</button>
+    </div>
+
+    <div class="col-xs-7">
+        <button ng-if="items.length > 1"
+                ng-repeat="it in items track by $index"
+                ng-click="gotoItem($index)" class="btn btn-primary">
+            {{ $index + 1 }}
+        </button>
+    </div>
+</div>

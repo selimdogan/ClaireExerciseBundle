@@ -43,6 +43,11 @@ api_domain_users:
     resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/user.yml"
     prefix:   /api/users/
 
+
 frontend:
     resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/frontend/frontend.yml"
     prefix:   /front/
+
+api_upload:
+    resource: "@SimpleITClaireExerciseBundle/Resources/config/routing/api/upload.yml"
+    prefix:   /

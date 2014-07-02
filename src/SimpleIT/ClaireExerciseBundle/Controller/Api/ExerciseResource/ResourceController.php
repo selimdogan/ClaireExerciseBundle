@@ -264,25 +264,12 @@ class ResourceController extends ApiController
      * Upload an image in a picture resource (no resource update)
      *
      * @param Request $request
-     * @param int     $resourceId
      *
      * @return JsonResponse
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException
      */
-    public function uploadImageAction(Request $request, $resourceId)
+    public function uploadImageAction(Request $request)
     {
-        $userId = $this->getUserId();
-        /** @var ResourceResource $resource */
-        $resource = $this->get('simple_it.exercise.exercise_resource')->getContentFullResource
-            (
-                $resourceId,
-                $userId
-            );
-
-        if ($resource->getType() !== CommonResource::PICTURE) {
-            throw new ApiBadRequestException('The resource is not a picture');
-        }
-
         /** @var UploadedFile $tmpFile */
         $tmpFile = $request->files->get('file');
         $fileName = $tmpFile->getClientOriginalName();
@@ -297,8 +284,9 @@ class ResourceController extends ApiController
 
         // copy the file
         $tmpFile->move(
-            $this->container->getParameter('claroline.param.uploads_directory') . DIRECTORY_SEPARATOR
-            . 'claire_exercise',
+            $this->container->getParameter(
+                'claroline.param.uploads_directory'
+            ) . DIRECTORY_SEPARATOR . 'claire_exercise',
             $hashName
         );
 
