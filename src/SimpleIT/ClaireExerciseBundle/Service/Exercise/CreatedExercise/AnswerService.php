@@ -105,7 +105,7 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
      * @param int           $userId
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\AnswerAlreadyExistsException
-     * @return Answer
+     * @return ItemResource
      */
     public function add($itemId, AnswerResource $answerResource, $attemptId = null, $userId = null)
     {
@@ -138,7 +138,7 @@ class AnswerService extends TransactionalService implements AnswerServiceInterfa
         $this->em->persist($answer);
         $this->em->flush();
 
-        return $answer;
+        return $this->itemService->findItemAndCorrectionByAttempt($itemId, $attemptId, $userId);
     }
 
     /**

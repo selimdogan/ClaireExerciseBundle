@@ -29,9 +29,8 @@ abstract class SharedResourceFactory
     /**
      * @param SharedResource $resource
      * @param SharedEntity   $entity
-     * @param bool           $light
      */
-    protected static function fill(&$resource, $entity, $light = false)
+    protected static function fill(&$resource, $entity)
     {
         $resource->setId($entity->getId());
         $resource->setType($entity->getType());
@@ -68,26 +67,24 @@ abstract class SharedResourceFactory
         $resource->setMetadata($metadataArray);
         $resource->setKeywords($keywordArray);
 
-        if (!$light) {
-            // content
-            if ($entity->getContent() !== null) {
-                $serializer = SerializerBuilder::create()
-                    ->addDefaultHandlers()
-                    ->configureHandlers(
-                        function (HandlerRegistry $registry) {
-                            $registry->registerSubscribingHandler(
-                                new AbstractClassForExerciseHandler()
-                            );
-                        }
-                    )
-                    ->build();
-                $content = $serializer->deserialize(
-                    $entity->getContent(),
-                    $resource->getClass(),
-                    'json'
-                );
-                $resource->setContent($content);
-            }
+        // content
+        if ($entity->getContent() !== null) {
+            $serializer = SerializerBuilder::create()
+                ->addDefaultHandlers()
+                ->configureHandlers(
+                    function (HandlerRegistry $registry) {
+                        $registry->registerSubscribingHandler(
+                            new AbstractClassForExerciseHandler()
+                        );
+                    }
+                )
+                ->build();
+            $content = $serializer->deserialize(
+                $entity->getContent(),
+                $resource->getClass(),
+                'json'
+            );
+            $resource->setContent($content);
         }
     }
 
@@ -96,25 +93,24 @@ abstract class SharedResourceFactory
      *
      * @param SharedEntity $entity
      * @param string       $type
-     * @param bool         $light
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException
      * @return SharedResource
      */
-    public static function createFromEntity($entity, $type, $light = false)
+    public static function createFromEntity($entity, $type)
     {
         switch ($type) {
             case self::EXERCISE_MODEL:
                 /** @var ExerciseModel $entity */
-                $resource = ExerciseModelResourceFactory::create($entity, $light);
+                $resource = ExerciseModelResourceFactory::create($entity);
                 break;
             case self::RESOURCE:
                 /** @var \SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource $entity */
-                $resource = ResourceResourceFactory::create($entity, $light);
+                $resource = ResourceResourceFactory::create($entity);
                 break;
             case self::KNOWLEDGE:
                 /** @var Knowledge $entity */
-                $resource = KnowledgeResourceFactory::create($entity, $light);
+                $resource = KnowledgeResourceFactory::create($entity);
                 break;
             default:
                 throw new InvalidTypeException('Unknown type:' . $type);

@@ -5,6 +5,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\DBALException;
 use JMS\Serializer\SerializationContext;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntityMetadataFactory;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
@@ -579,7 +580,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
         /** @var SharedResource $resource */
         foreach ($resources as &$resource) {
             if ($resource->getContent() === null) {
-                $resource = $this->getContentFullResourceFromResource($resource, true);
+                $resource = $this->getContentFullResourceFromResource($resource);
             }
         }
 
@@ -592,12 +593,11 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * parent), the content of the resource is filled with the parent content
      *
      * @param SharedResource $resource
-     * @param bool           $light
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException
      * @return SharedResource
      */
-    private function getContentFullResourceFromResource(SharedResource $resource, $light = false)
+    private function getContentFullResourceFromResource(SharedResource $resource)
     {
         $entity = $this->get($resource->getId());
 
@@ -610,8 +610,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
 
         $parentResource = SharedResourceFactory::createFromEntity(
             $entity,
-            static::ENTITY_TYPE,
-            $light
+            static::ENTITY_TYPE
         );
         $resource->setContent($parentResource->getContent());
         $resource->setMetadata($parentResource->getMetadata());
@@ -663,6 +662,11 @@ abstract class SharedEntityService extends TransactionalService implements Share
 
         $entity = clone($parent);
         $entity->setId(null);
+        if (get_class($entity) === 'SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel')
+        {
+            /** @var ExerciseModel $entity */
+            $entity->deleteResourceNode();
+        }
         $entity->setContent(null);
         $entity->setArchived(false);
         $entity->setOwner($owner);
@@ -693,7 +697,13 @@ abstract class SharedEntityService extends TransactionalService implements Share
         }
 
         $entity = clone($original);
+        $entity->setForkFrom($original);
         $entity->setId(null);
+        if (get_class($entity) === 'SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel')
+        {
+            /** @var ExerciseModel $entity */
+            $entity->deleteResourceNode();
+        }
         $this->em->persist($entity);
         $this->em->flush();
 
@@ -735,6 +745,11 @@ abstract class SharedEntityService extends TransactionalService implements Share
         // clone original
         $entity = clone($original);
         $entity->setId(null);
+        if (get_class($entity) === 'SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel')
+        {
+            /** @var ExerciseModel $entity */
+            $entity->deleteResourceNode();
+        }
         $entity->setOwner($this->userService->get($ownerId));
         $entity->setForkFrom($original);
 

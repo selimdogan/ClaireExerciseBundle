@@ -15,6 +15,12 @@
             </cascade>
         </one-to-many>
 
+        <one-to-many target-entity="SimpleIT\ClaireExerciseBundle\Entity\Test\Test" mapped-by="testModel" field="tests">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
         <many-to-one target-entity="Claroline\CoreBundle\Entity\User" field="author">
             <join-column name="author_id" referenced-column-name="id"/>
         </many-to-one>

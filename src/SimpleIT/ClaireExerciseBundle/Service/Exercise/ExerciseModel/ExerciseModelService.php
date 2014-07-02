@@ -911,19 +911,21 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     {
         $reqKno = array();
 
-        /** @var LocalFormula $formula */
-        foreach ($modelResource->getContent()->getFormulas() as $formula) {
-            if ($import) {
-                $requiredId = $this->knowledgeService->importOrLink(
-                    $ownerId,
-                    $formula->getFormulaId()
-                );
-                $formula->setFormulaId($requiredId);
-            } else {
-                $requiredId = $formula->getFormulaId();
-            }
+        if ($modelResource->getContent()->getFormulas() !== null) {
+            /** @var LocalFormula $formula */
+            foreach ($modelResource->getContent()->getFormulas() as $formula) {
+                if ($import) {
+                    $requiredId = $this->knowledgeService->importOrLink(
+                        $ownerId,
+                        $formula->getFormulaId()
+                    );
+                    $formula->setFormulaId($requiredId);
+                } else {
+                    $requiredId = $formula->getFormulaId();
+                }
 
-            $reqKno[] = $requiredId;
+                $reqKno[] = $requiredId;
+            }
         }
 
         $modelResource->setRequiredKnowledges(array_unique($reqKno));
@@ -1131,13 +1133,11 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     {
         $entity->setPublic(true);
 
-        foreach($entity->getRequiredExerciseResources() as $resource)
-        {
+        foreach ($entity->getRequiredExerciseResources() as $resource) {
             $this->exerciseResourceService->makePublic($resource);
         }
 
-        foreach ($entity->getRequiredKnowledges() as $knowledge)
-        {
+        foreach ($entity->getRequiredKnowledges() as $knowledge) {
             $this->knowledgeService->makePublic($knowledge);
         }
     }
