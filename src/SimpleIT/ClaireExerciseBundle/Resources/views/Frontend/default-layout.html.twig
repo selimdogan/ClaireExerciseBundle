@@ -28,6 +28,9 @@
     <script src="{{ asset('bundles/simpleitclaireexercise/frontend/js/directives.js') }}"></script>
     <script src="{{ asset('bundles/simpleitclaireexercise/frontend/js/routes.js') }}"></script>
 
+    <!-- utils assets -->
+    <script src="{{ asset('bundles/simpleitclaireexercise/frontend/js/modules/utils/services.js') }}"></script>
+
     <!-- teacher assets -->
     <script src="{{ asset('bundles/simpleitclaireexercise/frontend/js/modules/teacher/controllers.js') }}"></script>
     <script src="{{ asset('bundles/simpleitclaireexercise/frontend/js/modules/teacher/services.js') }}"></script>
@@ -42,11 +45,18 @@
             urls: {
                 api: {
                     resources: "{{ path('api_exercise_resource_list') }}",
-                    models: "{{ path('api_exercise_model_list') }}"
+                    models: "{{ path('api_exercise_model_list') }}",
+                    attempts: "{{ path('api_attempt_list') }}",
+                    exercises: "{{ path('api_exercise_list') }}",
+                    users: "{{ path('api_user_list') }}"
                 },
                 partials: {
                     teacher: "{{ asset('bundles/simpleitclaireexercise/frontend/partials/teacher') }}",
                     learner: "{{ asset('bundles/simpleitclaireexercise/frontend/partials/learner') }}"
+                },
+                images: {
+                    uploads: "{{ asset('uploads/claire_exercise/') }}",
+                    exercise: "{{ asset('bundles/simpleitclaireexercise/images/exercise/') }}"
                 }
             },
             language: 'fr'
@@ -57,42 +67,50 @@
 </head>
 <body ng-controller="mainController">
 
-    <div id="header">
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="navbar-header">
-                <a class="navbar-brand" ui-sref="#">Apprenants</a>
-                <ul class="nav navbar-nav">
-                    <li><a ui-sref="learner">Exercices</a></li>
-                </ul>
+<div id="header">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="navbar-header">
+            <a class="navbar-brand" ui-sref="#">Apprenants</a>
+            <ul class="nav navbar-nav">
+                <li><a ui-sref="learner">Exercices</a></li>
+            </ul>
+        </div>
+        <div class="navbar-header">
+            <a class="navbar-brand" ui-sref="#">Enseignants</a>
+            <ul class="nav navbar-nav">
+                <li><a ui-sref="model">Modèles d'exercices</a></li>
+                <li><a ui-sref="resource">Resources</a></li>
+                <li><a href class="navbar-brand"><i class="glyphicon glyphicon-user pull-right"></i></a>
+                </li>
+                <li>
+                    <a href class="navbar-brand" ng-model="toggleResourceList" data-ng-click="togglePanelResourceList()"><i class="glyphicon glyphicon-list-alt"></i></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+</div>
+
+<div id="content">
+
+    <div ui-view></div>
+
+</div>
+
+<div id="footer">
+    <div class="col-xs-12 navbar navbar-inverse navbar-fixed-bottom">
+        <div class="row" id="bottomNav">
+            <div class="col-xs-4 text-center">
+                <a back-Button href><i class="glyphicon glyphicon-circle-arrow-left"></i><br></a>
             </div>
-            <div class="navbar-header">
-                <a class="navbar-brand" ui-sref="#">Enseignants</a>
-                <ul class="nav navbar-nav">
-                    <li><a ui-sref="model">Modèles d'exercices</a></li>
-                    <li><a ui-sref="resource">Resources</a></li>
-                    <li><a href class="navbar-brand"><i class="glyphicon glyphicon-user pull-right"></i></a></li>
-                    <li><a href class="navbar-brand" ng-model="toggleResourceList" data-ng-click="togglePanelResourceList()"><i class="glyphicon glyphicon-list-alt"></i></a></li>
-                </ul>
-            </div>
-        </nav>
-
-    </div>
-
-    <div id="content">
-
-        <div ui-view></div>
-
-    </div>
-
-    <div id="footer">
-        <div class="col-xs-12 navbar navbar-inverse navbar-fixed-bottom">
-            <div class="row" id="bottomNav">
-                <div class="col-xs-4 text-center"><a back-Button href><i class="glyphicon glyphicon-circle-arrow-left"></i><br></a></div>
-                <div class="col-xs-4 text-center"><a href ui-sref="model"><i class="glyphicon glyphicon-th-large"></i><br></a></div>
-                <div class="col-xs-4 text-right"><a next-Button href><i class="glyphicon glyphicon-circle-arrow-right"></i><br></a></div>
+            <div class="col-xs-4 text-center">
+                <a href ui-sref="model"><i class="glyphicon glyphicon-th-large"></i><br></a></div>
+            <div class="col-xs-4 text-right">
+                <a next-Button href><i class="glyphicon glyphicon-circle-arrow-right"></i><br></a>
             </div>
         </div>
     </div>
+</div>
 
 </body>
 </html>

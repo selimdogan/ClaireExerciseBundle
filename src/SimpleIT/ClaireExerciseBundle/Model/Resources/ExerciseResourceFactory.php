@@ -28,7 +28,7 @@ abstract class ExerciseResourceFactory
     {
         $exerciseResources = array();
         foreach ($exercises as $exercise) {
-            $exerciseResources[] = self::create($exercise, true);
+            $exerciseResources[] = self::create($exercise);
         }
 
         return $exerciseResources;
@@ -38,11 +38,10 @@ abstract class ExerciseResourceFactory
      * Create an Exercise Resource
      *
      * @param StoredExercise $exercise
-     * @param bool           $light
      *
      * @return ExerciseResource
      */
-    public static function create(StoredExercise $exercise, $light = false)
+    public static function create(StoredExercise $exercise)
     {
         $exerciseResource = new ExerciseResource();
         $exerciseResource->setId($exercise->getId());
@@ -50,25 +49,23 @@ abstract class ExerciseResourceFactory
         $exerciseResource->setType($exercise->getExerciseModel()->getType());
         $exerciseResource->setTitle($exercise->getExerciseModel()->getTitle());
 
-        if (!$light) {
-            $serializer = SerializerBuilder::create()
-                ->addDefaultHandlers()
-                ->configureHandlers(
-                    function (HandlerRegistry $registry) {
-                        $registry->registerSubscribingHandler(
-                            new AbstractClassForExerciseHandler()
-                        );
-                    }
-                )
-                ->build();
-            $content = $serializer->deserialize(
-                $exercise->getContent(),
-                ExerciseResource::getClass($exercise->getExerciseModel()->getType()),
-                'json'
-            );
+        $serializer = SerializerBuilder::create()
+            ->addDefaultHandlers()
+            ->configureHandlers(
+                function (HandlerRegistry $registry) {
+                    $registry->registerSubscribingHandler(
+                        new AbstractClassForExerciseHandler()
+                    );
+                }
+            )
+            ->build();
+        $content = $serializer->deserialize(
+            $exercise->getContent(),
+            ExerciseResource::getClass($exercise->getExerciseModel()->getType()),
+            'json'
+        );
 
-            $exerciseResource->setContent($content);
-        }
+        $exerciseResource->setContent($content);
 
         return $exerciseResource;
     }

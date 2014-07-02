@@ -1,0 +1,102 @@
+<div data-ng-controller="itemController" class="container">
+
+    <div class="row panel panel-group"
+         ui-on-Drop="onDropList($event,$data,item.content.mobile_parts)"
+         title="Déposez ces objets dans les cases ci dessous afin de constituer les bonnes paires.">
+        <div class="row">
+            <div class="span">
+                Objets à glisser-déposer :
+            </div>
+            <div></div>
+        </div>
+        <div class="row" style="min-height: 50px">
+            <div ng-if="!item.corrected" class="panel panel-primary span"
+                 ng-repeat="mobilePart in item.content.mobile_parts track by $index"
+                 ui-draggable="true" drag="mobilePart"
+                 on-drop-success="dropSuccessHandler($event,$index,item.content.mobile_parts)"
+                >
+                <div ng-if="mobilePart.object_type == 'text'">
+                    {{ mobilePart.text }}
+                </div>
+                <div ng-if="mobilePart.object_type == 'picture'">
+                    <img ng-src="{{ imageUrl }}/{{ mobilePart.source }}"
+                         style="height: 100px; width: auto"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="row" ng-repeat="fixPart in item.content.fix_parts track by $index">
+            <div class="col-xs-4">
+                <div class="span panel panel-primary">
+                    <div ng-if="fixPart.object_type == 'text'">
+                        {{ fixPart.text }}
+                    </div>
+                    <div ng-if="fixPart.object_type == 'picture'">
+                        <img ng-src="{{ imageUrl }}/{{ fixPart.source }}"
+                             style="height: 100px; width: auto"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="span panel panel-primary">
+                    <div ng-if="drop[$index] == null" ui-on-Drop="onDropField($event,$data,$index)"
+                         style="min-height: 50px; min-width: 60px">
+                    </div>
+                    <div ng-if="drop[$index] !== null">
+                        <div ng-if="!item.corrected"
+                             ui-draggable="true" drag="drop[$index]"
+                             on-drop-success="dropSuccessHandlerField($event,$index)">
+                            <div ng-if="drop[$index].object_type == 'text'">
+                                {{ drop[$index].text }}
+                            </div>
+                            <div ng-if="drop[$index].object_type == 'picture'">
+                                <img ng-src="{{ imageUrl }}/{{ drop[$index].source }}"
+                                     style="height: 100px; width: auto"/>
+                            </div>
+                        </div>
+                        <div ng-if="item.corrected">
+                            <div ng-if="drop[$index].object_type == 'text'">
+                                {{ drop[$index].text }}
+                            </div>
+                            <div ng-if="drop[$index].object_type == 'picture'">
+                                <img ng-src="{{ imageUrl }}/{{ drop[$index].source }}"
+                                     style="height: 100px; width: auto"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-1">
+                    <div ng-if="solution[$index] != null && !solution[$index].right">
+                        <img ng-src="{{ imageExoUrl }}/wrong.png"/>
+                    </div>
+                    <div ng-if="solution[$index] != null && solution[$index].right">
+                        <img ng-src="{{ imageExoUrl }}/right.png"/>
+                    </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="span" style="min-width: 50px">
+                    <div ng-if="solution[$index] != null && !solution[$index].right"
+                         class="panel panel-danger">
+                        <div ng-if="solution[$index].object_type == 'text'">
+                            {{ solution[$index].text }}
+                        </div>
+                        <div ng-if="solution[$index].object_type == 'picture'">
+                            <img ng-src="{{ imageUrl }}/{{ solution[$index].source }}"
+                                 style="height: 100px; width: auto"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-2">
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <button ng-if="!item.corrected" ng-click="saveAnswer()" class="btn btn-primary">Valider</button>
+    </div>
+
+</div>

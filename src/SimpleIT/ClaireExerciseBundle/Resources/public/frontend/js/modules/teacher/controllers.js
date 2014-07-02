@@ -13,11 +13,11 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
             search: '',
             archived: false,
             type: {
-                multiple_choice_question: 'multiple-choice-question'
+                multiple_choice_question: ''
                 ,text: 'text'
                 ,picture: 'picture'
-                ,open_ended_question: 'open-ended-question'
-                ,sequence: 'sequence'
+                ,open_ended_question: ''
+                ,sequence: ''
             },
             keywords: [],
             metadata: []
@@ -28,7 +28,7 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
         // new resource text
         $scope.newTextResource = {
             "type": "text",
-            "title": "Titre de la ressource",
+            "title": "nouvelle ressource",
             "public": true,
             "archived": false,
             "draft": false,
@@ -38,6 +38,23 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
             "content": {
                 "text": "Texte de la resource",
                 "object_type": "text"
+            },
+            "required_exercise_resources": null,
+            "required_knowledges": null
+        };
+
+        // new resource picture
+        $scope.newPictureResource = {
+            "type": "picture",
+            "title": "nouvelle ressource",
+            "public": true,
+            "archived": false,
+            "draft": false,
+            "complete": null,
+            "metadata": [],
+            "keywords": [],
+            "content": {
+                "source": ""
             },
             "required_exercise_resources": null,
             "required_knowledges": null
@@ -65,24 +82,26 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
 resourceControllers.controller('resourceListController', ['$scope', 'Resource', '$location', '$http', function($scope, Resource, $location, $http) {
 
     // retrieve resources
-    //$scope.resources = Resource.query(function(){console.log($scope.resources);});
-
-    $http.get('http://claroline/app_dev.php/claire_exercise/api/resources').success(function(data){
-        $scope.resources = data;
-    });
+    $scope.resources = Resource.query();
 
     // delete resource method
     $scope.deleteResource = function (resource) {
-        resource.$delete(function () {
-            $location.path("/resource");
+        resource.$delete({id:resource.id}, function () {
+            $scope.resources = Resource.query();
         });
     };
 
     // create resource method
-    $scope.createTextResource = function () {
-        Resource.save($scope.newTextResource, function(data){
-            console.log(data);
-        });
+    $scope.createResource = function (type) {
+        if(type == 'text'){
+            Resource.save($scope.newTextResource, function(data){
+                $location.path('/teacher/resource/'+data.id)
+            });
+        }else if(type == 'picture'){
+            Resource.save($scope.newPictureResource, function(data){
+                $location.path('/teacher/resource/'+data.id)
+            });
+        }
     };
 
 }]);
@@ -172,11 +191,11 @@ modelControllers.controller('modelController', ['$scope', '$routeParams', '$loca
             search: '',
             archived: false,
             type: {
-                multiple_choice: 'multiple-choice'
+                multiple_choice: ''
                 ,pair_items: 'pair-items'
-                ,order_items: 'order-items'
-                ,open_ended_question: 'open-ended-question'
-                ,group_items: 'group-items'
+                ,order_items: ''
+                ,open_ended_question: ''
+                ,group_items: ''
             },
             keywords: [],
             metadata: []
@@ -184,7 +203,7 @@ modelControllers.controller('modelController', ['$scope', '$routeParams', '$loca
 
         $scope.newPairItemsModel = {
             "type": "pair-items",
-            "title": "new Appariement",
+            "title": "nouvel appariement",
             "public": true,
             "archived": false,
             "draft": false,
@@ -283,13 +302,17 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
     $scope.models = Model.query();
 
     $scope.deleteModel = function (model) {
-        model.$delete(function () {
-            $location.path("/model");
+        model.$delete({id:model.id}, function () {
+            $scope.models = Model.query();
         });
     };
 
-    $scope.createModel = function () {
-        Model.save($scope.newPairItemsModel);
+    $scope.createModel = function (type) {
+        if(type == 'pair-items'){
+            Model.save($scope.newPairItemsModel, function(data){
+                $location.path('/teacher/model/'+data.id)
+            });
+        }
     };
 
 }]);

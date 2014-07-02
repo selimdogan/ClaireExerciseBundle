@@ -14,6 +14,11 @@
         <field name="public" column="public" type="boolean" nullable="false"/>
         <field name="archived" column="archived" type="boolean" nullable="true"/>
 
+        <one-to-one field="resourceNode"
+                    target-entity="Claroline\CoreBundle\Entity\Resource\ResourceNode">
+            <join-column name="resourcenode_id" referenced-column-name="id" />
+        </one-to-one>
+
         <one-to-many field="children" target-entity="ExerciseModel" mapped-by="parent"/>
         <one-to-many field="forkedBy" target-entity="ExerciseModel" mapped-by="forkFrom"/>
 

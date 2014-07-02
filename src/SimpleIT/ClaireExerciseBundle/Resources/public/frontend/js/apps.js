@@ -7,9 +7,19 @@ var mainApp = angular.module('mainApp',
         'ui.router',
         'ngDragDrop',
         'mainAppControllers',
+        'userServices',
         'resourceControllers',
         'resourceServices',
         'modelControllers',
-        'modelServices'
+        'modelServices',
+        'modelTryControllers',
+        'modelTryServices',
+        'itemControllers',
+        'itemServices',
+        'exerciseControllers',
+        'exerciseServices',
+        'answerServices',
+        'exerciseByAttemptServices',
+        'attemptServices'
     ]
 );

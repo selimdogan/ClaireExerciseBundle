@@ -1,0 +1,21 @@
+<div data-ng-controller="exerciseController" class="container">
+
+    <div class="row">
+        <div class="row">
+            <h4>{{ exercise.title }}</h4>
+        </div>
+        <div class="row">
+            <div>
+                <strong>Consigne</strong> : {{ exercise.content.wording }}
+            </div>
+        </div>
+    </div>
+
+    <div ui-view>
+    </div>
+
+    <div class="navbar navbar-inverse navbar-fixed-bottom" style="margin-bottom:60px; padding-left: 20px">
+        <button back-Button class="btn btn-primary">Retour</button>
+    </div>
+
+</div>

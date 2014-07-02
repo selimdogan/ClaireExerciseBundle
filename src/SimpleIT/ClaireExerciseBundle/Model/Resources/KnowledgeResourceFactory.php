@@ -24,7 +24,7 @@ abstract class KnowledgeResourceFactory extends SharedResourceFactory
     {
         $knowledgeResources = array();
         foreach ($knowledges as $knowledge) {
-            $knowledgeResources[] = self::create($knowledge, true);
+            $knowledgeResources[] = self::create($knowledge);
         }
 
         return $knowledgeResources;
@@ -34,28 +34,24 @@ abstract class KnowledgeResourceFactory extends SharedResourceFactory
      * Create a KnowledgeResource
      *
      * @param Knowledge $knowledge
-     * @param bool      $light
      *
      * @return KnowledgeResource
      */
-    public static function create(Knowledge $knowledge, $light = false)
+    public static function create(Knowledge $knowledge)
     {
         $knowledgeResource = new KnowledgeResource();
         parent::fill(
             $knowledgeResource,
-            $knowledge,
-            $light
+            $knowledge
         );
 
-        if (!$light) {
-            // knowledge requirements
-            $requirements = array();
-            foreach ($knowledge->getRequiredKnowledges() as $req) {
-                /** @var Knowledge $req */
-                $requirements[] = $req->getId();
-            }
-            $knowledgeResource->setRequiredKnowledges($requirements);
+        // knowledge requirements
+        $requirements = array();
+        foreach ($knowledge->getRequiredKnowledges() as $req) {
+            /** @var Knowledge $req */
+            $requirements[] = $req->getId();
         }
+        $knowledgeResource->setRequiredKnowledges($requirements);
 
         return $knowledgeResource;
     }
