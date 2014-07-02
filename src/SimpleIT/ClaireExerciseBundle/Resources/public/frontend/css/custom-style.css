@@ -45,3 +45,13 @@ option {
     margin-top: 222px;
     overflow: auto;
 }
+
+.col-centered {
+    display:inline-block;
+    float:none;
+    /* reset the text-align */
+    text-align:left;
+    /* inline-block space fix */
+    margin-right:1%;
+    margin-left:1%;
+}

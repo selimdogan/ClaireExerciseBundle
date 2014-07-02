@@ -6,45 +6,59 @@
                 <div class="panel panel-success">
                     <div class="panel-heading">
                         <div class="row">
-                            <div class="col-xs-2">
-                                <span class="glyphicon glyphicon-th-list" style="font-size: 920%"></span>
+                            <div class="col-centered" ng-switch="resource.type">
+                                <div ng-switch-when="text">
+                                    <span class="glyphicon glyphicon-font" style="font-size: 920%"></span>
+                                </div>
+                                <div ng-switch-when="picture">
+                                    <span class="glyphicon glyphicon-picture" style="font-size: 920%"></span>
+                                </div>
+                                <div ng-switch-when="multiple-choice-question">
+                                    <span class="glyphicon glyphicon-check" style="font-size: 920%"></span>
+                                </div>
+                                <div ng-switch-when="open-ended-question">
+                                    <span class="glyphicon glyphicon-question-sign" style="font-size: 920%"></span>
+                                </div>
+                                <div ng-switch-when="sequence">
+                                    <span class="glyphicon glyphicon-random" style="font-size: 920%"></span>
+                                </div>
                             </div>
-                            <div class="col-xs-4">
-                                <h4><strong>Titre</strong></h4>
+                            <div class="col-xs-4 col-centered">
+                                <h4>Titre</h4>
                                 <input type="text" ng-model="resource.title" class="form-control"/>
-                                <h4><strong>Intitulé</strong></h4>
+                                <h4>Intitulé</h4>
                                 <input type="text" ng-model="resource.content.wording" class="form-control"/>
                             </div>
-                            <div class="col-xs-4">
-                                <h4><strong>Auteur</strong></h4>
+                            <div class="col-centered">
+                                <h4>Auteur</h4>
                                 <input type="text" ng-model="resource.author" class="form-control" disabled>
-                                <h4><strong>Propriétaire</strong></h4>
+                                <h4>Propriétaire</h4>
                                 <input type="text" ng-model="resource.owner" class="form-control" disabled>
                             </div>
-                            <div class="col-xs-2">
+                            <div class="col-centered">
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" ng-model="resource.public">
-                                        <h4><strong>Partagé</strong></h4>
+                                        <h4>Partagé</h4>
                                     </label>
                                 </div>
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" ng-model="resource.archived">
-                                        <h4><strong>Archivé</strong></h4>
+                                        <h4>Archivé</h4>
                                     </label>
                                 </div>
                                 <div>&nbsp;</div>
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" ng-model="resource.draft">
-                                        <h4><strong>Brouillon</strong></h4>
+                                        <h4>Brouillon</h4>
                                     </label>
                                 </div>
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" ng-model="resource.complete">
-                                        <h4><strong>Complet</strong></h4>
+                                        <h4>Complet</h4>
                                     </label>
                                 </div>
                             </div>
@@ -62,14 +76,14 @@
 
                         <div class="panel panel-success">
                             <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-11">
-                                        <h4><strong>Texte</strong></h4>
+                                <div>
+                                    <div class="col-centered">
+                                        <h4>Texte</h4>
                                     </div>
-                                    <div class="col-xs-1"></div>
+                                    <div class="col-centered"></div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-xs-5">
+                                <div>
+                                    <div class="col-centered">
                                         <input type="text" ng-model="resource.content.text" class="form-control">
                                     </div>
                                 </div>
@@ -82,7 +96,7 @@
                             <div class="panel-heading">
                                 <div class="row">
                                     <div class="col-xs-11">
-                                        <h4><strong>Image</strong></h4>
+                                        <h4>Image</h4>
                                     </div>
                                     <div class="col-xs-1"></div>
                                 </div>
@@ -98,7 +112,7 @@
 
                 <div class="panel panel-success">
                     <div class="panel-heading">
-                        <h4><strong>Mots-clés</strong></h4>
+                        <h4>Mots-clés</h4>
                         <div class="row">
                             <div ng-repeat="keyword in resource.keywords track by $index">
                                 <div class="col-xs-5">
@@ -119,7 +133,7 @@
 
                 <div class="panel panel-success">
                     <div class="panel-heading">
-                        <h4><strong>Méta-données</strong></h4>
+                        <h4>Méta-données</h4>
                         <div class="row">
                             <div ng-repeat="meta in resource.metadata track by $index">
                                 <div class="col-xs-5">
