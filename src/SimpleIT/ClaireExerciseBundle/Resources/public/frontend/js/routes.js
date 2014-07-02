@@ -56,15 +56,10 @@ mainApp.config(
 
             $stateProvider.state('attempt', {
                 url: '/learner/attempt/:attemptId',
-                templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-exercise.html'
+                templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-attempt.html'
             });
 
-            $stateProvider.state('attempt.item', {
-                url: '/item/:itemId',
-                templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-item.html'
-            });
-
-            $stateProvider.state('attempt.item.pair-items', {
+            $stateProvider.state('attempt.pair-items', {
                 templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-pair-items.html'
             });
         }

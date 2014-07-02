@@ -3,7 +3,8 @@ var attemptControllers = angular.module('attemptControllers', ['ui.router']);
 attemptControllers.controller('attemptController', ['$scope', '$state', 'Exercise', 'Attempt', 'Item', '$routeParams', '$location', '$stateParams',
     function ($scope, $state, Exercise, Attempt, Item, $routeParams, $location, $stateParams) {
 
-        $scope.section = 'attempt';
+        $scope.imageUrl = BASE_CONFIG.urls.images.uploads;
+        $scope.imageExoUrl = BASE_CONFIG.urls.images.exercise;
 
         console.log('loading attempt...');
         // retrieve attempt
@@ -20,40 +21,28 @@ attemptControllers.controller('attemptController', ['$scope', '$state', 'Exercis
                                 // when data loaded
                                 console.log('items loaded.');
 
-                                if ($state['current'].name == 'attempt') {
-                                    // inclure le premier item
-                                    $state.go('attempt.item',
-                                        {
-                                            attemptId: $stateParams.attemptId,
-                                            itemId: $scope.items[0].item_id
-                                        });
-                                }
+                                // inclure le premier item
+                                $state.currentItem = $scope.items[0].item_id;
+
+                                console.log('item loading...');
+
+                                // retrieve item
+                                $scope.item = Item.get({itemId: $state.currentItem, attemptId: $stateParams.attemptId},
+                                    function () {
+                                        // when data loaded
+                                        console.log('item loaded');
+                                        if ($scope.item.type == 'pair-items') {
+                                            $state.go('attempt.pair-items');
+                                        }
+                                    });
                             });
                     });
             });
+
+        // TODO - buttons to navigate in items
     }]);
 
 var itemControllers = angular.module('itemControllers', ['ui.router']);
-
-itemControllers.controller('itemController', ['$scope', '$state', 'Item', 'Answer', '$routeParams', '$location', '$stateParams',
-    function ($scope, $state, Item, Answer, $routeParams, $location, $stateParams) {
-
-        $scope.section = 'item';
-        $scope.imageUrl = BASE_CONFIG.urls.images.uploads;
-        $scope.imageExoUrl = BASE_CONFIG.urls.images.exercise;
-
-        console.log('item loading...');
-
-        // retrieve item
-        $scope.item = Item.get({itemId: $stateParams.itemId, attemptId: $stateParams.attemptId},
-            function () {
-                // when data loaded
-                console.log('item loaded');
-                if ($scope.item.type == 'pair-items') {
-                    $state.go('attempt.item.pair-items');
-                }
-            });
-    }]);
 
 itemControllers.controller('pairItemsController', ['$scope', 'Item', 'Answer', '$routeParams', '$location', '$stateParams',
     function ($scope, Item, Answer, $routeParams, $location, $stateParams) {
@@ -94,11 +83,6 @@ itemControllers.controller('pairItemsController', ['$scope', 'Item', 'Answer', '
                     $scope.item['content'].answers[i]
                     ];
             }
-        };
-
-        // back button
-        $scope.backToList = function () {
-            $location.path("/learner/models/");
         };
 
         // drag and drop
