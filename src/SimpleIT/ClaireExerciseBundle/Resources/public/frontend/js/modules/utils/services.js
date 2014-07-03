@@ -19,7 +19,7 @@ userServices.factory('Upload', ['$resource',
             BASE_CONFIG.urls.api.uploads,
             {},
             {
-                save: {method: 'POST'}
+                upload: {method: 'POST', headers: {enctype:'multipart/form-data'}}
             }
         );
 

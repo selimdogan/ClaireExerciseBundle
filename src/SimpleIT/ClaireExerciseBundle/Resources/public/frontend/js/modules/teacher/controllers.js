@@ -78,15 +78,6 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
             collection.splice(index, 1);
         }
 
-        /*
-        $scope.getName = function(id){
-         var tmp = User.get({userId:id}, function(data){
-         return data.user_name;
-         });
-
-        }
-        */
-
     }]);
 
 resourceControllers.controller('resourceListController', ['$scope', 'Resource', '$location', '$http', 'User', function($scope, Resource, $location, $http, User) {
@@ -177,7 +168,7 @@ resourceControllers.filter('myFilters', function () {
     };
 });
 
-resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 'Upload', '$location', '$stateParams', 'User', function($scope, Resource, Upload, $location, $stateParams, User) {
+resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 'Upload', '$location', '$stateParams', 'User', '$upload', function($scope, Resource, Upload, $location, $stateParams, User, $upload) {
 
     $scope.users = [];
 
@@ -202,14 +193,21 @@ resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 
         $scope.resource.$update({id:$stateParams.resourceid},function (resource) {});
     };
 
-    $scope.setFiles = function(elem){
-        console.log($(elem));
-        var fileName = $(elem)[0].files[0];
-        Upload.save(fileName, function(data){
-            console.log(data);
+    $scope.onFileSelect = function($files) {
+        var file = $files[0];
+        $scope.upload = $upload.upload({
+            url: BASE_CONFIG.urls.api.uploads,
+            method: 'POST',
+            // withCredentials: true,
+            data: {myObj: $scope.myModelObj},
+            file: file
+        }).progress(function(evt) {
+            console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+        }).success(function(data, status, headers, config) {
+            // file is uploaded successfully
+            $scope.resource.content.source = data.fileName;
         });
-        //$scope.resource.content.source = $(elem).value;
-    }
+    };
 
 }]);
 

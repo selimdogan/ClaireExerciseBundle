@@ -22,6 +22,7 @@ var mainApp = angular.module('mainApp',
         'uploadServices',
         'itemControllers',
         'attemptControllers',
-        'learnerControllers'
+        'learnerControllers',
+        'angularFileUpload'
     ]
 );
