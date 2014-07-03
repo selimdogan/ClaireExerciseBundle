@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseBundle\Migrations\ibm_db2;
+namespace SimpleIT\ClaireExerciseBundle\Migrations\pdo_ibm;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
@@ -8,9 +8,9 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated migration based on mapping information: modify it with caution
  *
- * Generation date: 2014/06/27 05:43:24
+ * Generation date: 2014/07/03 09:12:41
  */
-class Version20140627174305 extends AbstractMigration
+class Version20140703091125 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
@@ -20,6 +20,7 @@ class Version20140627174305 extends AbstractMigration
                 item_id INTEGER DEFAULT NULL, 
                 attempt_id INTEGER DEFAULT NULL, 
                 content CLOB(1M) NOT NULL, 
+                mark DOUBLE PRECISION DEFAULT NULL, 
                 PRIMARY KEY(id)
             )
         ");

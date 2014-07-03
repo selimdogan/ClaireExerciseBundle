@@ -2,13 +2,14 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel;
 
+use Claroline\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModelFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
-use Claroline\CoreBundle\Entity\User;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
@@ -195,7 +196,11 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      */
     public function getAllByUserWhoAttempted($userId)
     {
-        return $this->entityRepository->findAllByUserWhoAttempted($userId);
+        try {
+            return $this->entityRepository->findAllByUserWhoAttempted($userId);
+        } catch (NoResultException $e) {
+            return $this->getAll(null, $userId);
+        }
     }
 
     /**
@@ -209,9 +214,10 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     public function getAllByUserWhoAttemptedByModel($userId, $modelId)
     {
         try {
-        return $this->entityRepository->findAllByUserWhoAttemptedByModel($userId, $modelId);
-        } catch (NonUniqueResultException $e)
-        {
+            return $this->entityRepository->findAllByUserWhoAttemptedByModel($userId, $modelId);
+        } catch (NonUniqueResultException $e) {
+            return $this->get($modelId);
+        } catch (NoResultException $e) {
             return $this->get($modelId);
         }
     }

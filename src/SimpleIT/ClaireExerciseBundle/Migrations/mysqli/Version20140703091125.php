@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseBundle\Migrations\pdo_mysql;
+namespace SimpleIT\ClaireExerciseBundle\Migrations\mysqli;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
@@ -8,9 +8,9 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated migration based on mapping information: modify it with caution
  *
- * Generation date: 2014/06/27 05:43:17
+ * Generation date: 2014/07/03 09:12:52
  */
-class Version20140627174305 extends AbstractMigration
+class Version20140703091125 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
@@ -20,6 +20,7 @@ class Version20140627174305 extends AbstractMigration
                 item_id INT DEFAULT NULL, 
                 attempt_id INT DEFAULT NULL, 
                 content LONGTEXT NOT NULL, 
+                mark DOUBLE PRECISION DEFAULT NULL, 
                 INDEX IDX_D0B3344126F525E (item_id), 
                 INDEX IDX_D0B3344B191BE6B (attempt_id), 
                 PRIMARY KEY(id)
