@@ -24,16 +24,18 @@
                                 </div>
                             </div>
                             <div class="col-xs-4 col-centered">
-                                <h4>Titre</h4>
-                                <input type="text" ng-model="resource.title" class="form-control"/>
-                                <h4>Intitulé</h4>
-                                <input type="text" ng-model="resource.content.wording" class="form-control"/>
-                            </div>
-                            <div class="col-centered">
-                                <h4>Auteur</h4>
-                                <input type="text" ng-model="users[resource.author]" class="form-control" disabled>
-                                <h4>Propriétaire</h4>
-                                <input type="text" ng-model="users[resource.owner]" class="form-control" disabled>
+                                <div class="col-xs-12">
+                                    <h4>Titre</h4>
+                                    <input type="text" ng-model="resource.title" class="form-control"/>
+                                </div>
+                                <div class="col-xs-6">
+                                    <h4>Auteur</h4>
+                                    <input type="text" ng-model="users[resource.author]" class="form-control" disabled>
+                                </div>
+                                <div class="col-xs-6">
+                                    <h4>Propriétaire</h4>
+                                    <input type="text" ng-model="users[resource.owner]" class="form-control" disabled>
+                                </div>
                             </div>
                             <div class="col-xs-4 col-centered">
                                 <div>
