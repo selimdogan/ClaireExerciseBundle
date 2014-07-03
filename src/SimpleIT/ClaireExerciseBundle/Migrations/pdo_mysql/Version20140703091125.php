@@ -16,7 +16,7 @@ class Version20140703091125 extends AbstractMigration
     {
         $this->addSql("
             CREATE TABLE claire_exercise_answer (
-                id INT NOT NULL, 
+                id INT NOT NULL AUTO_INCREMENT,
                 item_id INT DEFAULT NULL, 
                 attempt_id INT DEFAULT NULL, 
                 content LONGTEXT NOT NULL, 
@@ -28,7 +28,7 @@ class Version20140703091125 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_attempt (
-                id INT NOT NULL, 
+                id INT NOT NULL AUTO_INCREMENT,
                 exercise_id INT DEFAULT NULL, 
                 user_id INT DEFAULT NULL, 
                 test_attempt_id INT DEFAULT NULL, 
@@ -42,7 +42,7 @@ class Version20140703091125 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_item (
-                id INT NOT NULL, 
+                id INT NOT NULL AUTO_INCREMENT,
                 exercise_id INT DEFAULT NULL, 
                 type VARCHAR(255) NOT NULL, 
                 content LONGTEXT NOT NULL, 
@@ -52,7 +52,7 @@ class Version20140703091125 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_stored_exercise (
-                id INT NOT NULL, 
+                id INT NOT NULL AUTO_INCREMENT,
                 exercise_model_id INT DEFAULT NULL, 
                 content LONGTEXT NOT NULL, 
                 INDEX IDX_7270807A7F19170F (exercise_model_id), 
@@ -61,7 +61,7 @@ class Version20140703091125 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_knowledge (
-                id INT NOT NULL, 
+                id INT NOT NULL AUTO_INCREMENT,
                 parent_id INT DEFAULT NULL, 
                 fork_from_id INT DEFAULT NULL, 
                 author_id INT NOT NULL, 
@@ -100,7 +100,7 @@ class Version20140703091125 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_model (
-                id INT NOT NULL, 
+                id INT NOT NULL AUTO_INCREMENT,
                 resourcenode_id INT DEFAULT NULL, 
                 parent_id INT DEFAULT NULL, 
                 fork_from_id INT DEFAULT NULL, 
@@ -150,7 +150,7 @@ class Version20140703091125 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_resource (
-                id INT NOT NULL, 
+                id INT NOT NULL AUTO_INCREMENT,
                 parent_id INT DEFAULT NULL, 
                 fork_from_id INT DEFAULT NULL, 
                 author_id INT NOT NULL, 
@@ -200,7 +200,7 @@ class Version20140703091125 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_test (
-                id INT NOT NULL, 
+                id INT NOT NULL AUTO_INCREMENT,
                 test_model_id INT DEFAULT NULL, 
                 INDEX IDX_C8394926EC16BCB1 (test_model_id), 
                 PRIMARY KEY(id)
@@ -208,7 +208,7 @@ class Version20140703091125 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_test_attempt (
-                id INT NOT NULL, 
+                id INT NOT NULL AUTO_INCREMENT,
                 test_id INT DEFAULT NULL, 
                 user_id INT DEFAULT NULL, 
                 created_at DATETIME NOT NULL, 
@@ -219,7 +219,7 @@ class Version20140703091125 extends AbstractMigration
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_test_model (
-                id INT NOT NULL, 
+                id INT NOT NULL AUTO_INCREMENT,
                 author_id INT DEFAULT NULL, 
                 title VARCHAR(255) NOT NULL, 
                 INDEX IDX_CB243285F675F31B (author_id), 
