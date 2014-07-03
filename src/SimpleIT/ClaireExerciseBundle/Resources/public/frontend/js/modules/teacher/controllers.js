@@ -78,12 +78,33 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
             collection.splice(index, 1);
         }
 
+        /*
+        $scope.getName = function(id){
+         var tmp = User.get({userId:id}, function(data){
+         return data.user_name;
+         });
+
+        }
+        */
+
     }]);
 
-resourceControllers.controller('resourceListController', ['$scope', 'Resource', '$location', '$http', function($scope, Resource, $location, $http) {
+resourceControllers.controller('resourceListController', ['$scope', 'Resource', '$location', '$http', 'User', function($scope, Resource, $location, $http, User) {
+    $scope.users = [];
 
     // retrieve resources
-    $scope.resources = Resource.query();
+    $scope.resources = Resource.query(function(data){
+        angular.forEach(data, function(res){
+            User.get({userId:res.author}, function(user){
+                $scope.users[user.id] =  user.user_name;
+            });
+        });
+        angular.forEach(data, function(res){
+            User.get({userId:res.owner}, function(user){
+                $scope.users[user.id] =  user.user_name;
+            });
+        });
+    });
 
     // delete resource method
     $scope.deleteResource = function (resource) {
@@ -156,16 +177,19 @@ resourceControllers.filter('myFilters', function () {
     };
 });
 
-resourceControllers.controller('resourceDisplayController', ['$scope', 'Resource', '$location', '$stateParams', function($scope, Resource, $location, $stateParams) {
+resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 'Upload', '$location', '$stateParams', 'User', function($scope, Resource, Upload, $location, $stateParams, User) {
 
-    $scope.resource = Resource.get({id:$stateParams.resourceid});
-
-}]);
-
-resourceControllers.controller('resourceEditController', ['$scope', 'Resource', '$location', '$stateParams', function($scope, Resource, $location, $stateParams) {
+    $scope.users = [];
 
     // retrieve resource
-    $scope.resource = Resource.get({id:$stateParams.resourceid});
+    $scope.resource = Resource.get({id:$stateParams.resourceid}, function(res){
+        User.get({userId:res.author}, function(user){
+            $scope.users[user.id] =  user.user_name;
+        })
+        User.get({userId:res.owner}, function(user){
+            $scope.users[user.id] =  user.user_name;
+        })
+    });
 
     // update resource method
     $scope.updateResource = function () {
@@ -177,6 +201,15 @@ resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 
         delete $scope.resource.required_knowledges;
         $scope.resource.$update({id:$stateParams.resourceid},function (resource) {});
     };
+
+    $scope.setFiles = function(elem){
+        console.log($(elem));
+        var fileName = $(elem)[0].files[0];
+        Upload.save(fileName, function(data){
+            console.log(data);
+        });
+        //$scope.resource.content.source = $(elem).value;
+    }
 
 }]);
 
@@ -298,9 +331,22 @@ modelControllers.controller('modelController', ['$scope', '$routeParams', '$loca
 
     }]);
 
-modelControllers.controller('modelListController', ['$scope', 'Model', '$location', function($scope, Model, $location) {
+modelControllers.controller('modelListController', ['$scope', 'Model', '$location', 'User', function($scope, Model, $location, User) {
 
-    $scope.models = Model.query();
+    $scope.users = [];
+
+    $scope.models = Model.query(function(model){
+        angular.forEach(model, function(model){
+            User.get({userId:model.author}, function(user){
+                $scope.users[user.id] =  user.user_name;
+            });
+        });
+        angular.forEach(model, function(model){
+            User.get({userId:model.owner}, function(user){
+                $scope.users[user.id] =  user.user_name;
+            });
+        });
+    });
 
     $scope.deleteModel = function (model) {
         model.$delete({id:model.id}, function () {
@@ -318,9 +364,15 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
 
 }]);
 
-modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', function($scope, Model, Resource, $location, $stateParams) {
+modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function($scope, Model, Resource, $location, $stateParams, User) {
 
-    $scope.model = Model.get({id:$stateParams.modelid});
+    $scope.users = [];
+
+    $scope.model = Model.get({id:$stateParams.modelid}, function(model){
+        User.get({userId:model.author}, function(user){
+            $scope.users[user.id] =  user.user_name;
+        })
+    });
 
     $scope.usedDocuments = [];
     $scope.usedResources = [];

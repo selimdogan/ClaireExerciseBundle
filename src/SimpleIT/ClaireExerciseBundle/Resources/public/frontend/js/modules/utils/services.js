@@ -4,7 +4,7 @@ userServices.factory('User', ['$resource',
     function ($resource) {
 
         return $resource(
-            BASE_CONFIG.urls.api.users + ':userId',
+            BASE_CONFIG.urls.api.users +':userId',
             { 'userId': '@userId'}
         );
 

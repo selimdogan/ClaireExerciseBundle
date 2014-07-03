@@ -31,35 +31,42 @@
                         </div>
                         <div class="col-centered">
                             <h4>Auteur</h4>
-                            <input type="text" ng-model="model.author" class="form-control" disabled>
+                            <input type="text" ng-model="users[model.author]" class="form-control" disabled>
                             <h4>Propriétaire</h4>
-                            <input type="text" ng-model="model.owner" class="form-control" disabled>
+                            <input type="text" ng-model="users[model.owner]" class="form-control" disabled>
                         </div>
-                        <div class="col-centered">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" ng-model="model.public">
+                        <div class="col-xs-4 col-centered">
+                            <div>
+                                <div class="col-centered">
+                                    <span class="glyphicon" ng-class="{'glyphicon-check': model.public, 'glyphicon-unchecked': !model.public}" data-ng-click="model.public=!model.public"></span>
+                                </div>
+                                <div class="col-centered">
                                     <h4>Partagé</h4>
-                                </label>
+                                </div>
                             </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" ng-model="model.archived">
+                            <div>
+                                <div class="col-centered">
+                                    <span class="glyphicon" ng-class="{'glyphicon-check': model.archived, 'glyphicon-unchecked': !model.archived}" data-ng-click="model.archived=!model.archived"></span>
+                                </div>
+                                <div class="col-centered">
                                     <h4>Archivé</h4>
-                                </label>
+                                </div>
                             </div>
-                            <div>&nbsp;</div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" ng-model="model.draft">
+                            <div>
+                                <div class="col-centered">
+                                    <span class="glyphicon" ng-class="{'glyphicon-check': model.draft, 'glyphicon-unchecked': !model.draft}" data-ng-click="model.draft=!model.draft"></span>
+                                </div>
+                                <div class="col-centered">
                                     <h4>Brouillon</h4>
-                                </label>
+                                </div>
                             </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" ng-model="model.complete">
+                            <div>
+                                <div class="col-centered">
+                                    <span class="glyphicon" ng-class="{'glyphicon-check': model.complete, 'glyphicon-unchecked': !model.complete}" data-ng-click="model.complete=!model.complete"></span>
+                                </div>
+                                <div class="col-centered">
                                     <h4>Complet</h4>
-                                </label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -122,8 +129,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-4">
-                                        <small>Auteur: {{ usedDocuments[documentId.id].author }}</small><br>
-                                        <small>Propriétaire: {{ usedDocuments[documentId.id].owner }}</small>
+                                        <small>Auteur: {{ users[usedDocuments[documentId.id].author] }}</small><br>
+                                        <small>Propriétaire: {{ users[usedDocuments[documentId.id].owner] }}</small>
                                     </div>
                                     <div class="col-xs-4">
                                         <small>Partagé:&nbsp;
@@ -230,8 +237,8 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-xs-4">
-                                                        <small>Auteur: {{ usedResources[$parent.$parent.$parent.$index][blockResourceId.id].author }}</small><br>
-                                                        <small>Propriétaire: {{ usedResources[$parent.$parent.$parent.$index][blockResourceId.id].owner }}</small>
+                                                        <small>Auteur: {{ users[usedResources[$parent.$parent.$parent.$index][blockResourceId.id].author] }}</small><br>
+                                                        <small>Propriétaire: {{ users[usedResources[$parent.$parent.$parent.$index][blockResourceId.id].owner] }}</small>
                                                     </div>
                                                     <div class="col-xs-4">
                                                         <small>Partagé:&nbsp;
@@ -476,8 +483,8 @@
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-xs-4">
-                                                                <small>Auteur: {{ excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].author }}</small><br>
-                                                                <small>Propriétaire: {{ excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].owner }}</small>
+                                                                <small>Auteur: {{ users[excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].author] }}</small><br>
+                                                                <small>Propriétaire: {{ users[excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].owner] }}</small>
                                                             </div>
                                                             <div class="col-xs-4">
                                                                 <small>Partagé:&nbsp;

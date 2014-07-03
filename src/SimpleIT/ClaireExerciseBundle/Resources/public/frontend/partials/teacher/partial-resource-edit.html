@@ -31,35 +31,42 @@
                             </div>
                             <div class="col-centered">
                                 <h4>Auteur</h4>
-                                <input type="text" ng-model="resource.author" class="form-control" disabled>
+                                <input type="text" ng-model="users[resource.author]" class="form-control" disabled>
                                 <h4>Propriétaire</h4>
-                                <input type="text" ng-model="resource.owner" class="form-control" disabled>
+                                <input type="text" ng-model="users[resource.owner]" class="form-control" disabled>
                             </div>
-                            <div class="col-centered">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" ng-model="resource.public">
+                            <div class="col-xs-4 col-centered">
+                                <div>
+                                    <div class="col-centered">
+                                        <span class="glyphicon" ng-class="{'glyphicon-check': resource.public, 'glyphicon-unchecked': !resource.public}" data-ng-click="resource.public=!resource.public"></span>
+                                    </div>
+                                    <div class="col-centered">
                                         <h4>Partagé</h4>
-                                    </label>
+                                    </div>
                                 </div>
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" ng-model="resource.archived">
+                                <div>
+                                    <div class="col-centered">
+                                        <span class="glyphicon" ng-class="{'glyphicon-check': resource.archived, 'glyphicon-unchecked': !resource.archived}" data-ng-click="resource.archived=!resource.archived"></span>
+                                    </div>
+                                    <div class="col-centered">
                                         <h4>Archivé</h4>
-                                    </label>
+                                    </div>
                                 </div>
-                                <div>&nbsp;</div>
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" ng-model="resource.draft">
+                                <div>
+                                    <div class="col-centered">
+                                        <span class="glyphicon" ng-class="{'glyphicon-check': resource.draft, 'glyphicon-unchecked': !resource.draft}" data-ng-click="resource.draft=!resource.draft"></span>
+                                    </div>
+                                    <div class="col-centered">
                                         <h4>Brouillon</h4>
-                                    </label>
+                                    </div>
                                 </div>
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" ng-model="resource.complete">
+                                <div>
+                                    <div class="col-centered">
+                                        <span class="glyphicon" ng-class="{'glyphicon-check': resource.complete, 'glyphicon-unchecked': !resource.complete}" data-ng-click="resource.complete=!resource.complete"></span>
+                                    </div>
+                                    <div class="col-centered">
                                         <h4>Complet</h4>
-                                    </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -76,14 +83,13 @@
 
                         <div class="panel panel-success">
                             <div class="panel-heading">
-                                <div>
-                                    <div class="col-centered">
+                                <div class="row">
+                                    <div class="col-xs-5">
                                         <h4>Texte</h4>
                                     </div>
-                                    <div class="col-centered"></div>
                                 </div>
-                                <div>
-                                    <div class="col-centered">
+                                <div class="row">
+                                    <div class="col-xs-5">
                                         <input type="text" ng-model="resource.content.text" class="form-control">
                                     </div>
                                 </div>
@@ -102,7 +108,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-5"><input type="text" ng-model="resource.content.source" class="form-control"></div>
-                                    <div class="col-xs-5"><input type="file" name="file" /></div>
+                                    <div class="col-xs-5"><input type="file" name="file" ng-model-instant onchange="angular.element(this).scope().setFiles(this)"/></div>
                                 </div>
                                 <img ng-src="{{BASE_CONFIG.urls.images.uploads}}/{{resource.content.source}}"/>
                             </div>
