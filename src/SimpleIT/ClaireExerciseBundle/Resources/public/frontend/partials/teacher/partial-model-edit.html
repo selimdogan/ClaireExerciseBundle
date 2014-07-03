@@ -176,7 +176,7 @@
                                 <div class="row">
                                     <div class="col-xs-6">
                                         <h5>Clé de métadonnée</h5>
-                                        <input type="text" ng-model="pair_blocks.pair_meta_key" class="form-control" ui-on-Drop="onDropMetadataKey($event,$data,pair_blocks)"/>
+                                        <input type="text" ng-model="pair_blocks.pair_meta_key" class="form-control" ui-on-Drop="onDropMetadataKey($event,$data,pair_blocks,'pair_meta_key')"/>
                                     </div>
                                     <div class="col-xs-6">
                                         <h5>Nombre d'occurence</h5>
@@ -292,7 +292,7 @@
                                                             <div ng-switch-when="exists" class="row">
                                                                 <div class="col-xs-10">
                                                                     <h5>Teste l'existance de la clé de méta-données</h5>
-                                                                    <input type="text" ng-model="metadataConstraint.key" class="form-control" placeholder="Clé">
+                                                                    <input type="text" ng-model="metadataConstraint.key" class="form-control" placeholder="Clé" ui-on-Drop="onDropMetadataKey($event,$data,metadataConstraint,'key')">
                                                                 </div>
                                                                 <div class="col-xs-2">
                                                                     <span data-ng-click="modelRemoveField(pair_blocks.resourceConstraint.metadataConstraints, $index)"
@@ -302,7 +302,7 @@
                                                             <div ng-switch-when="between" class="row">
                                                                 <div class="col-xs-10">
                                                                     <h5>Indiquez une clé de méta-données</h5>
-                                                                    <input type="text" ng-model="metadataConstraint.key" class="form-control" placeholder="Clé">
+                                                                    <input type="text" ng-model="metadataConstraint.key" class="form-control" placeholder="Clé" ui-on-Drop="onDropMetadataKey($event,$data,metadataConstraint,'key')">
                                                                 </div>
                                                                 <div class="col-xs-2">
                                                                     <span data-ng-click="modelRemoveField(pair_blocks.resourceConstraint.metadataConstraints, $index)"
@@ -318,7 +318,7 @@
                                                             <div ng-switch-when="in" class="row">
                                                                 <div class="col-xs-10">
                                                                     <h5>Indiquez une clé de méta-données</h5>
-                                                                    <input type="text" ng-model="metadataConstraint.key" class="form-control" placeholder="Clé">
+                                                                    <input type="text" ng-model="metadataConstraint.key" class="form-control" placeholder="Clé" ui-on-Drop="onDropMetadataKey($event,$data,metadataConstraint,'key')">
                                                                 </div>
                                                                 <div class="col-xs-2">
                                                                     <span data-ng-click="modelRemoveField(pair_blocks.resourceConstraint.metadataConstraints, $index)"
@@ -349,7 +349,7 @@
                                                             <div ng-switch-when="gt" class="row">
                                                                 <div class="col-xs-10">
                                                                     <h5>Indiquez une clé de méta-données</h5>
-                                                                    <input type="text" ng-model="metadataConstraint.key" class="form-control" placeholder="Clé">
+                                                                    <input type="text" ng-model="metadataConstraint.key" class="form-control" placeholder="Clé" ui-on-Drop="onDropMetadataKey($event,$data,metadataConstraint,'key')">
                                                                 </div>
                                                                 <div class="col-xs-2">
                                                                     <span data-ng-click="modelRemoveField(pair_blocks.resourceConstraint.metadataConstraints, $index)"
@@ -363,7 +363,7 @@
                                                             <div ng-switch-when="gte" class="row">
                                                                 <div class="col-xs-10">
                                                                     <h5>Indiquez une clé de méta-données</h5>
-                                                                    <input type="text" ng-model="metadataConstraint.key" class="form-control" placeholder="Clé">
+                                                                    <input type="text" ng-model="metadataConstraint.key" class="form-control" placeholder="Clé" ui-on-Drop="onDropMetadataKey($event,$data,metadataConstraint,'key')">
                                                                 </div>
                                                                 <div class="col-xs-2">
                                                                     <span data-ng-click="modelRemoveField(pair_blocks.resourceConstraint.metadataConstraints, $index)"
@@ -377,7 +377,7 @@
                                                             <div ng-switch-when="lt" class="row">
                                                                 <div class="col-xs-10">
                                                                     <h5>Indiquez une clé de méta-données</h5>
-                                                                    <input type="text" ng-model="metadataConstraint.key" class="form-control" placeholder="Clé">
+                                                                    <input type="text" ng-model="metadataConstraint.key" class="form-control" placeholder="Clé" ui-on-Drop="onDropMetadataKey($event,$data,metadataConstraint,'key')">
                                                                 </div>
                                                                 <div class="col-xs-2">
                                                                     <span data-ng-click="modelRemoveField(pair_blocks.resourceConstraint.metadataConstraints, $index)"
@@ -391,7 +391,7 @@
                                                             <div ng-switch-when="lte" class="row">
                                                                 <div class="col-xs-10">
                                                                     <h5>Indiquez une clé de méta-données</h5>
-                                                                    <input type="text" ng-model="metadataConstraint.key" class="form-control" placeholder="Clé">
+                                                                    <input type="text" ng-model="metadataConstraint.key" class="form-control" placeholder="Clé" ui-on-Drop="onDropMetadataKey($event,$data,metadataConstraint,'key')">
                                                                 </div>
                                                                 <div class="col-xs-2">
                                                                     <span data-ng-click="modelRemoveField(pair_blocks.resourceConstraint.metadataConstraints, $index)"
@@ -407,8 +407,7 @@
                                                 </div>
                                                 <div class="panel panel-info">
                                                     <div class="panel-heading">
-                                                        <span data-ng-click="modelAddBlockResourceConstraint(pair_blocks.resourceConstraint.metadataConstraints)"
-                                                        class="glyphicon glyphicon-plus"></span>&nbsp;
+                                                        <span class="glyphicon glyphicon-plus"></span>&nbsp;
                                                         <div class="btn-group">
                                                             <button class="btn btn-info" data-ng-click="modelAddBlockResourceConstraint(pair_blocks.resourceConstraint.metadataConstraints, 'exists')">
                                                                 &exist;

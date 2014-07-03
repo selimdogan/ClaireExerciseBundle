@@ -343,8 +343,8 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
         }
     }
 
-    $scope.onDropMetadataKey = function(event,metakey,field){
-        field.pair_meta_key = metakey;
+    $scope.onDropMetadataKey = function(event,metakey,collection,field){
+        collection[field] = metakey;
     }
 
     $scope.onDropDocument = function(event,resource,documents){
