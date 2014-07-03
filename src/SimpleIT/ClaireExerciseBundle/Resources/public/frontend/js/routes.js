@@ -4,7 +4,7 @@ mainApp.config(
 
             $resourceProvider.defaults.stripTrailingSlashes = false;
 
-            $urlRouterProvider.otherwise('/model');
+            $urlRouterProvider.otherwise('/learner/models/');
 
             // Teacher's routes
 
@@ -49,7 +49,7 @@ mainApp.config(
 
             // learner's routes
 
-            $stateProvider.state('learner', {
+            $stateProvider.state('attempt-list', {
                 url: '/learner/models/:modelId',
                 templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-attempt-list.html'
             });
