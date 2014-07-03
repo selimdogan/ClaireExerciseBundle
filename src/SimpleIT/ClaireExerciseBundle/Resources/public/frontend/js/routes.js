@@ -9,7 +9,7 @@ mainApp.config(
             // Teacher's routes
 
             $stateProvider.state('model', { // /contacts?myParam1&myParam2
-                url: '/teacher/model',
+                url: '/learner/models/',
                 templateUrl: BASE_CONFIG.urls.partials.teacher + '/partial-model-list.html'
                 //,controller: 'modelListController'
             });

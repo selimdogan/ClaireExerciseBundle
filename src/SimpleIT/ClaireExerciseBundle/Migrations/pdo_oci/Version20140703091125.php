@@ -15,30 +15,6 @@ class Version20140703091125 extends AbstractMigration
     public function up(Schema $schema)
     {
         $this->addSql("
-            DROP SEQUENCE claro_resource_type_custom_action_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_link_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_log_workspace_widget_config_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_log_desktop_widget_config_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_widget_display_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE simple_text_dekstop_widget_config_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE simple_text_workspace_widget_config_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_forum_options_id_seq
-        ");
-        $this->addSql("
             CREATE SEQUENCE claire_exercise_answer_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
         ");
         $this->addSql("
@@ -759,30 +735,6 @@ class Version20140703091125 extends AbstractMigration
         ");
         $this->addSql("
             DROP SEQUENCE claire_exercise_test_model_id_seq
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_resource_type_custom_action_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_link_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_log_workspace_widget_config_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_log_desktop_widget_config_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_widget_display_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE simple_text_dekstop_widget_config_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE simple_text_workspace_widget_config_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_forum_options_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
         ");
         $this->addSql("
             DROP TABLE claire_exercise_answer
