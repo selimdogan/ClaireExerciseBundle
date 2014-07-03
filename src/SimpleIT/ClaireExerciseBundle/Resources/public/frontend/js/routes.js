@@ -4,7 +4,7 @@ mainApp.config(
 
             $resourceProvider.defaults.stripTrailingSlashes = false;
 
-            $urlRouterProvider.otherwise('/teacher/model');
+            $urlRouterProvider.otherwise('/learner/models/');
 
             // Teacher's routes
 
