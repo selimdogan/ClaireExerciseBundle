@@ -1,60 +1,51 @@
 <div data-ng-controller="multipleChoiceController" class="container">
 
-    <div class="row panel panel-group">
-        <div class="col-xs-12">
-            {{ item.content.question }}
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="row" ng-repeat="proposition in item.content.propositions track by $index">
+    <div class="panel">
+        <div class="panel-heading">
             <div class="col-xs-6">
-                <label for="prop[$index]">
-                    {{ proposition.text }}
-                </label>
+                <strong>{{ item.content.question }}</strong>
             </div>
-
-            <div class="col-xs-1">
-                <div class="checkbox">
-                    <input id="prop[$index]" type="checkbox" ng-model="tick[$index]">
-                </div>
-            </div>
-
-            <div class="col-xs-1">
-                <div ng-if="solution[$index] != null && solution[$index] != tick[$index]">
-                    <img ng-src="{{ imageExoUrl }}/wrong.png"/>
-                </div>
-                <div ng-if="solution[$index] != null && solution[$index] == tick[$index]">
-                    <img ng-src="{{ imageExoUrl }}/right.png"/>
-                </div>
-            </div>
-
-            <div class="col-xs-1">
-                <div ng-if="solution[$index] != null">
-                    <div ng-if="solution[$index] != tick[$index]" class="panel panel-danger">
-                        <div class="checkbox">
-                            <input type="checkbox" ng-model="solution[$index]">
-                        </div>
-                    </div>
-                    <div ng-if="solution[$index] == tick[$index]" class="panel">
-                        <div class="checkbox">
-                            <input type="checkbox" ng-model="solution[$index]">
-                        </div>
-                    </div>
-                </div>
+            <div class="col-xs-6 solution" ng-if="item.corrected">
+                <strong>Solution</strong>
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div ng-hide="!item.corrected" class="MCComment">
-            {{ item.content.comment }}
-        </div>
-    </div>
+        <div class="panel-body">
+            <div class="row" ng-repeat="proposition in item.content.propositions track by $index">
+                <div class="col-xs-6">
+                    <div class="checkbox-exo checkbox-exo-question"
+                         data-ng-class="{'good-answer': item.corrected && solution[$index] == tick[$index],'wrong-answer': item.corrected && solution[$index] != tick[$index]}">
+                        <label>
+                            <input type="checkbox" ng-model="tick[$index]"
+                                   ng-disabled="item.corrected">
+                            {{ proposition.text }}
+                        </label>
+                    </div>
+                </div>
 
-    <div class="row">
-        <div ng-hide="!item.corrected" class="score">
-            Votre score: {{ item.content.mark | number:0 }}%
+                <div class="col-xs-6" ng-if="item.corrected">
+                    <div class="checkbox-exo solution"
+                         ng-class="solution[$index] ? 'right-prop' : 'wrong-prop'">
+                        <label>
+                            <input type="checkbox" ng-model="solution[$index]" disabled>
+                            {{ proposition.text }}
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="panel-body">
+                <div ng-hide="!item.corrected" class="MCComment">
+                    <strong>Commentaire :</strong> {{ item.content.comment }}
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <div ng-hide="!item.corrected">
+                    <strong>Votre score :</strong> {{ item.content.mark | number:0 }}%
+                </div>
+            </div>
         </div>
     </div>
 

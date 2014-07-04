@@ -14,7 +14,7 @@
                         Votre réponse
                     </div>
                 </div>
-                <div class="col-xs-3">
+                <div class="col-xs-3 solution">
                     <div ng-if="item.corrected">
                         Solution
                     </div>
@@ -38,15 +38,16 @@
 
                 <!--drop zone-->
                 <div class="col-xs-3">
+                    <!-- empty -->
                     <div ng-if="drop[$index] == null" ui-on-Drop="onDropField($event,$data,$index)">
-                        <div ng-if="item.content.mobile_parts[0].object_type == 'picture'"
-                             class="etiquette img-etiquette etiquette-empty">
-                        </div>
-                        <div ng-if="item.content.mobile_parts[0].object_type == 'text'"
-                             class="etiquette txt-etiquette etiquette-empty">
+                        <div class="etiquette etiquette-empty"
+                             data-ng-class="{'img-etiquette': item.content.mobile_parts[0].object_type == 'picture', 'txt-etiquette': item.content.mobile_parts[0].object_type == 'text'}">
                         </div>
                     </div>
+
+                    <!--not empty-->
                     <div ng-if="drop[$index] != null">
+                        <!--not corrected-->
                         <div ng-if="!item.corrected"
                              ui-draggable="true" drag="drop[$index]"
                              on-drop-success="dropSuccessHandlerField($event,$index)">
@@ -59,25 +60,18 @@
                                      class="etiquette img-etiquette"/>
                             </div>
                         </div>
-                        <div ng-if="item.corrected && !solution[$index].right">
+
+                        <!--corrected-->
+                        <div ng-if="item.corrected">
                             <div ng-if="drop[$index].object_type == 'text'"
-                                 class="etiquette txt-etiquette etiquette-wrong">
+                                 class="etiquette txt-etiquette"
+                                 data-ng-class="{'etiquette-wrong': !solution[$index].right, 'etiquette-right': solution[$index].right}">
                                 {{ drop[$index].text }}
                             </div>
-                            <div ng-if="drop[$index].object_type == 'picture'">
-                                <img ng-src="{{ imageUrl }}/{{ drop[$index].source }}"
-                                     class="etiquette img-etiquette etiquette-wrong"/>
-                            </div>
-                        </div>
-                        <div ng-if="item.corrected && solution[$index].right">
-                            <div ng-if="drop[$index].object_type == 'text'"
-                                 class="etiquette txt-etiquette etiquette-right">
-                                {{ drop[$index].text }}
-                            </div>
-                            <div ng-if="drop[$index].object_type == 'picture'">
-                                <img ng-src="{{ imageUrl }}/{{ drop[$index].source }}"
-                                     class="etiquette img-etiquette etiquette-right"/>
-                            </div>
+                            <img ng-if="drop[$index].object_type == 'picture'"
+                                 ng-src="{{ imageUrl }}/{{ drop[$index].source }}"
+                                 class="etiquette img-etiquette"
+                                 data-ng-class="{'etiquette-wrong': !solution[$index].right, 'etiquette-right': solution[$index].right}"/>
                         </div>
                     </div>
                 </div>
@@ -138,7 +132,7 @@
 
     <div class="row">
         <div ng-hide="!item.corrected">
-            <strong>Votre score:</strong> {{ item.content.mark | number:0 }}%
+            <strong>Votre score :</strong> {{ item.content.mark | number:0 }}%
         </div>
     </div>
 
