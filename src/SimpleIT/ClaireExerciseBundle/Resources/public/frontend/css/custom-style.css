@@ -55,3 +55,34 @@ option {
     margin-right:1%;
     margin-left:1%;
 }
+
+.etiquette {
+    border:1px solid #428bca;
+    border-radius:4px;
+    box-shadow:0 2px 2px rgba(0,0,0,.05);
+}
+
+.txt-etiquette {
+    min-height: 34px;
+    padding: 6px;
+    border:1px solid #428bca;
+}
+
+.img-etiquette {
+    height: 100px;
+    width: auto;
+    padding: 0;
+}
+
+.etiquette-wrong {
+    border:5px solid #e1000a;
+}
+
+.etiquette-right {
+    border:5px solid #009d0a;
+}
+
+.etiquette-empty {
+    border:1px dotted #948a91;
+    min-width: 100px;
+}

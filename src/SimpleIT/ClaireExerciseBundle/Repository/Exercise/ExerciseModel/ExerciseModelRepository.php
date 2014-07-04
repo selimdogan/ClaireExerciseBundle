@@ -72,7 +72,7 @@ class ExerciseModelRepository extends SharedEntityRepository
         $qb->leftJoin('at.answers', 'an');
 
         $qb->andWhere($qb->expr()->eq('em.id', $modelId));
-        $qb->where($qb->expr()->eq('at.user', $userId));
+        $qb->andWhere($qb->expr()->eq('at.user', $userId));
 
         return $qb->getQuery()->getSingleResult();
     }

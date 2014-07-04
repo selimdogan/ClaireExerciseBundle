@@ -55,7 +55,11 @@
                 </accordion-heading>
                 <div class="row">
                     <div class="col-xs-11">
-                        <accordion ng-repeat="exercise in model.exercises track by $index">
+                        <div ng-if="model.exercises.length == 0">
+                            Aucun exercice pour ce modèle
+                        </div>
+                        <accordion ng-if="model.exercises.length > 0"
+                            ng-repeat="exercise in model.exercises track by $index">
                             <accordion-group class="panel">
                                 <accordion-heading class="panel panel-heading">
                                     <div class="row">

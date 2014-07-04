@@ -48,9 +48,13 @@ mainApp.config(
 
 
             // learner's routes
+            $stateProvider.state('all-attempt-list', {
+                url: '/learner/models/',
+                templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-attempt-list.html'
+            });
 
             $stateProvider.state('attempt-list', {
-                url: '/learner/models/:modelId',
+                url: '/learner/model/:modelId',
                 templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-attempt-list.html'
             });
 
