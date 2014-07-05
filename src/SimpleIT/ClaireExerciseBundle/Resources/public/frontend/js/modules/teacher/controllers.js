@@ -184,6 +184,20 @@ resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 
 
     // update resource method
     $scope.updateResource = function () {
+
+        var keyword = $("#resourceAddKeyword");
+        if(keyword[0].value != ''){
+            $scope.resource.keywords.push(keyword[0].value);
+            keyword[0].value = '';
+        }
+
+        var key = $("#resourceAddMetadataKey"), val = $("#resourceAddMetadataValue");
+        if(key[0].value != '' && val[0].value != ''){
+            var newElement = {key: key[0].value, value: val[0].value};
+            $scope.resource.metadata.splice( $scope.resource.metadata.length, 0, newElement);
+            key[0].value = ''; val[0].value = '';
+        }
+
         delete $scope.resource.id;
         delete $scope.resource.type;
         delete $scope.resource.author;
@@ -377,6 +391,20 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
     $scope.excludedResources = [];
 
     $scope.updateModel = function () {
+
+        var keyword = $("#modelAddKeyword");
+        if(keyword[0].value != ''){
+            $scope.model.keywords.push(keyword[0].value);
+            keyword[0].value = '';
+        }
+
+        var key = $("#modelAddMetadataKey"), val = $("#modelAddMetadataValue");
+        if(key[0].value != '' && val[0].value != ''){
+            var newElement = {key: key[0].value, value: val[0].value};
+            $scope.model.metadata.splice( $scope.model.metadata.length, 0, newElement);
+            key[0].value = ''; val[0].value = '';
+        }
+
         delete $scope.model.id;
         delete $scope.model.author;
         delete $scope.model.owner;
