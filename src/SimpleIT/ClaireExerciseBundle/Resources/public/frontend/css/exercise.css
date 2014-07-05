@@ -85,3 +85,8 @@
 .checkbox-exo[disabled] {
     cursor: not-allowed;
 }
+
+.btn-active {
+    font-size: larger;
+    font-weight: bold;
+}

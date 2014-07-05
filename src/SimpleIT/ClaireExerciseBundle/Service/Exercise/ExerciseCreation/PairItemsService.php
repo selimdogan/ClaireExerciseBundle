@@ -353,4 +353,20 @@ class PairItemsService extends ExerciseCreationService
             }
         }
     }
+
+    /**
+     * Return an item without solution
+     *
+     * @param ItemResource $itemResource
+     *
+     * @return ItemResource
+     */
+    public function noSolutionItem($itemResource)
+    {
+        /** @var \SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems\Item $content */
+        $content = $itemResource->getContent();
+        $content->setSolutions(null);
+
+        return $itemResource;
+    }
 }

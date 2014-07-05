@@ -57,11 +57,15 @@ interface ItemServiceInterface
     /**
      * Get all items by attempt Id
      *
-     * @param int $attemptId
+     * @param int                   $attemptId
+     * @param int                   $userId
      *
      * @return array
      */
-    public function getAllByAttempt($attemptId = null);
+    public function getAllByAttempt(
+        $attemptId,
+        $userId
+    );
 
     /**
      * Find an item and its correction

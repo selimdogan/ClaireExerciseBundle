@@ -7,7 +7,8 @@
     <div class="col-xs-7">
         <button ng-if="items.length > 1"
                 ng-repeat="it in items track by $index"
-                ng-click="gotoItem($index)" class="btn btn-primary">
+                ng-click="gotoItem($index)" class="btn"
+                data-ng-class="{'btn-primary': !it.corrected, 'btn-active': it.item_id == item.item_id}">
             {{ $index + 1 }}
         </button>
     </div>

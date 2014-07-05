@@ -53,4 +53,13 @@ interface ExerciseCreationServiceInterface
      * @throws \LogicException
      */
     public function validateAnswer(Item $itemEntity, array $answer);
+
+    /**
+     * Return an item without solution
+     *
+     * @param ItemResource $itemResource
+     *
+     * @return ItemResource
+     */
+    public function noSolutionItem($itemResource);
 }

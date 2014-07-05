@@ -132,6 +132,21 @@ class ExerciseService extends TransactionalService implements ExerciseServiceInt
     }
 
     /**
+     * Return an item without solution
+     *
+     * @param ItemResource $itemResource
+     *
+     * @return ItemResource
+     */
+    public function noSolutionItem($itemResource)
+    {
+        // depending on the type of the item, call the service
+        $service = $this->getServiceFromType($itemResource->getType());
+
+        return $service->noSolutionItem($itemResource);
+    }
+
+    /**
      * Generate an exercise from the id of the model
      *
      * @param ExerciseModel $exerciseModel

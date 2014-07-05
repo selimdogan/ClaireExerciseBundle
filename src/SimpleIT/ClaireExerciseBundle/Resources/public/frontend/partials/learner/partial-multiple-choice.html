@@ -36,7 +36,8 @@
             </div>
 
             <div class="panel-body">
-                <div ng-hide="!item.corrected" class="MCComment">
+                <div ng-hide="!item.corrected || item.content.comment == null"
+                     class="MCComment">
                     <strong>Commentaire :</strong> {{ item.content.comment }}
                 </div>
             </div>

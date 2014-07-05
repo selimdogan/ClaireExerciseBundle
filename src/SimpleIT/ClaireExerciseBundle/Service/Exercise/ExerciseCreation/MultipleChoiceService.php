@@ -394,4 +394,26 @@ class MultipleChoiceService extends ExerciseCreationService
             }
         }
     }
+
+    /**
+     * Return an item without solution
+     *
+     * @param ItemResource $itemResource
+     *
+     * @return ItemResource
+     */
+    public function noSolutionItem($itemResource) {
+        /** @var Question $content */
+        $content = $itemResource->getContent();
+
+        $content->setComment(null);
+
+        /** @var Proposition $prop */
+        foreach ($content->getPropositions() as $prop)
+        {
+            $prop->setRight(null);
+        }
+
+        return $itemResource;
+    }
 }

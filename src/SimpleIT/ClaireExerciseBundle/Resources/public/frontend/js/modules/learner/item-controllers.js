@@ -29,23 +29,14 @@ attemptControllers.controller('attemptController', ['$scope', '$state', 'Exercis
             });
 
         $scope.gotoItem = function (index) {
-            console.log('item ' + $scope.items[index].item_id + ' loading...');
-
-            // retrieve item
-            $scope.item = Item.get({itemId: $scope.items[index].item_id, attemptId: $stateParams.attemptId},
-                function () {
-                    // when data loaded
-                    console.log('item loaded');
-                    if ($scope.item.type == 'pair-items') {
-                        $state.go('attempt.pair-items', {itemId: index}, {location: false});
-                    } else if ($scope.item.type == 'multiple-choice') {
-                        $state.go('attempt.multiple-choice', {itemId: index}, {location: false});
-                    }
-                });
-        };
-
-        $scope.saveAnswer = function () {
-            console.log('Methode du parent');
+            // switch item
+            $scope.item = $scope.items[index];
+            // when data loaded
+            if ($scope.item.type == 'pair-items') {
+                $state.go('attempt.pair-items', {itemId: index}, {location: false});
+            } else if ($scope.item.type == 'multiple-choice') {
+                $state.go('attempt.multiple-choice', {itemId: index}, {location: false});
+            }
         };
 
     }]);
@@ -67,6 +58,7 @@ itemControllers.controller('pairItemsController', ['$scope', 'Answer', '$routePa
 
             item = answer.$save({itemId: $scope.item.item_id, attemptId: $stateParams.attemptId},
                 function (item) {
+                    $scope.items[$stateParams.itemId] = item;
                     $scope.displayCorrection(item)
                 });
         };
@@ -152,6 +144,7 @@ itemControllers.controller('multipleChoiceController', ['$scope', 'Answer', '$ro
 
             item = answer.$save({itemId: $scope.item.item_id, attemptId: $stateParams.attemptId},
                 function (item) {
+                    $scope.items[$stateParams.itemId] = item;
                     $scope.displayCorrection(item)
                 });
         };
