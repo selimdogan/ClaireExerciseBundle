@@ -120,8 +120,8 @@
 
                             </div>
                             <div class="col-xs-1">
-                                                    <span data-ng-click="modelRemoveField(model.content.documents, $index)"
-                                                          class="glyphicon glyphicon-remove"></span>
+                                <span data-ng-click="$event.stopPropagation();modelRemoveField(model.content.documents, $index)"
+                                      class="glyphicon glyphicon-remove"></span>
                             </div>
                         </div>
                     </accordion-heading>
@@ -183,17 +183,20 @@
             <h4>Bloc d'appariement&nbsp;<span class="caret"></span></h4>
         </div>
         <div class="col-xs-1">
-            <span data-ng-click="modelRemoveField(model.content.pair_blocks, $index)" class="glyphicon glyphicon-remove"></span>
+            <span data-ng-click="$event.stopPropagation();modelRemoveField(model.content.pair_blocks, $index)" class="glyphicon glyphicon-remove"></span>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-6">
             <h5>Clé de métadonnée</h5>
-            <input type="text" ng-model="pair_blocks.pair_meta_key" class="form-control" ui-on-Drop="onDropMetadataKey($event,$data,pair_blocks,'pair_meta_key')"/>
+            <input ng-click="$event.stopPropagation();"
+                   type="text" ng-model="pair_blocks.pair_meta_key"
+                   class="form-control" ui-on-Drop="onDropMetadataKey($event,$data,pair_blocks,'pair_meta_key')"/>
         </div>
         <div class="col-xs-6">
             <h5>Nombre d'occurence</h5>
-            <input type="text" ng-model="pair_blocks.number_of_occurrences" class="form-control"/>
+            <input type="text" ng-click="$event.stopPropagation();"
+                   ng-model="pair_blocks.number_of_occurrences" class="form-control"/>
         </div>
     </div>
 </accordion-heading>
@@ -234,7 +237,7 @@
 
                         </div>
                         <div class="col-xs-1">
-                                                    <span data-ng-click="modelRemoveField(pair_blocks.resources, $index)"
+                                                    <span data-ng-click="$event.stopPropagation();modelRemoveField(pair_blocks.resources, $index)"
                                                           class="glyphicon glyphicon-remove"></span>
                         </div>
                     </div>
@@ -491,7 +494,7 @@
 
                         </div>
                         <div class="col-xs-1">
-                                                        <span data-ng-click="modelRemoveField(pair_blocks.resourceConstraint.excluded, $index)"
+                                                        <span data-ng-click="$event.stopPropagation();modelRemoveField(pair_blocks.resourceConstraint.excluded, $index)"
                                                               class="glyphicon glyphicon-remove"></span>
                         </div>
                     </div>

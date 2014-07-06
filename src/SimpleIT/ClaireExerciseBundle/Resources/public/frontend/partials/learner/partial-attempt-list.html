@@ -46,7 +46,7 @@
                         <div class="col-xs-1">
                             <h4>
                                 <span class="glyphicon glyphicon-repeat"
-                                      ng-click="tryModel(model)"
+                                      ng-click="$event.stopPropagation();tryModel(model)"
                                       title="Nouvelle tentative pour ce modèle">
                                 </span>
                             </h4>
@@ -69,7 +69,7 @@
                                         <div class="col-xs-1">
                                             <h4>
                                             <span class="glyphicon glyphicon-repeat"
-                                                  ng-click="tryExercise(exercise)"
+                                                  ng-click="$event.stopPropagation();tryExercise(exercise)"
                                                   title="Nouvelle tentative pour cet exercice">
                                         </span>
                                             </h4>

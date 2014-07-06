@@ -131,7 +131,7 @@
                                     <span ng-switch-when="model" ui-sref="modelEdit.resourceEdit({ resourceid:resource.id })" class="glyphicon glyphicon-edit"></span>
                                     <span ng-switch-default ui-sref="resourceEdit({ resourceid:resource.id })" class="glyphicon glyphicon-edit"></span>
                                 </ng-switch>&nbsp;&nbsp;
-                                <span ng-click="deleteResource(resource)" class="glyphicon glyphicon-remove"></span>
+                                <span ng-click="$event.stopPropagation();deleteResource(resource)" class="glyphicon glyphicon-remove"></span>
                             </h4>
                         </div>
                     </div>
