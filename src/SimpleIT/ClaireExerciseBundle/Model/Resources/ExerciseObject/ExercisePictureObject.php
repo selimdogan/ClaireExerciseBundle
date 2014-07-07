@@ -16,7 +16,7 @@ class ExercisePictureObject extends ExerciseObject
     /**
      * @var string $source The source of the picture
      * @Serializer\Type("string")
-     * @Serializer\Groups({"details", "corrected", "not_corrected", "item_storage", "exercise", "exercise_storage"})
+     * @Serializer\Groups({"details", "corrected", "not_corrected", "item_storage", "exercise_storage", "exercise"})
      */
     private $source;
 

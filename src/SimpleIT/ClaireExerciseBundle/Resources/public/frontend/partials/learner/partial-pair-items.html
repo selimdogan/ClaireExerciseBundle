@@ -21,71 +21,72 @@
                 </div>
             </div>
 
-            <div class="panel-body row"
-                 ng-repeat="fixPart in item.content.fix_parts track by $index"
-                 style="margin-top: 10px">
-                <div class="col-xs-5">
-                    <div>
-                        <div ng-if="fixPart.object_type == 'text'" class="etiquette txt-etiquette">
-                            {{ fixPart.text }}
-                        </div>
-                        <div ng-if="fixPart.object_type == 'picture'">
-                            <img ng-src="{{ imageUrl }}/{{ fixPart.source }}"
-                                 class="etiquette img-etiquette"/>
-                        </div>
-                    </div>
-                </div>
-
-                <!--drop zone-->
-                <div class="col-xs-3">
-                    <!-- empty -->
-                    <div ng-if="drop[$index] == null" ui-on-Drop="onDropField($event,$data,$index)">
-                        <div class="etiquette etiquette-empty"
-                             data-ng-class="{'img-etiquette': item.content.mobile_parts[0].object_type == 'picture', 'txt-etiquette': item.content.mobile_parts[0].object_type == 'text'}">
-                        </div>
-                    </div>
-
-                    <!--not empty-->
-                    <div ng-if="drop[$index] != null">
-                        <!--not corrected-->
-                        <div ng-if="!item.corrected"
-                             ui-draggable="true" drag="drop[$index]"
-                             on-drop-success="dropSuccessHandlerField($event,$index)">
-                            <div ng-if="drop[$index].object_type == 'text'"
-                                 class="etiquette txt-etiquette">
-                                {{ drop[$index].text }}
+            <div class="panel-body">
+                <div class="row"
+                     ng-repeat="fixPart in item.content.fix_parts track by $index">
+                    <div class="col-xs-5" style="margin-bottom: 10px">
+                        <div>
+                            <div ng-if="fixPart.object_type == 'text'" class="etiquette txt-etiquette">
+                                {{ fixPart.text }}
                             </div>
-                            <div ng-if="drop[$index].object_type == 'picture'">
-                                <img ng-src="{{ imageUrl }}/{{ drop[$index].source }}"
+                            <div ng-if="fixPart.object_type == 'picture'">
+                                <img ng-src="{{ imageUrl }}/{{ fixPart.source }}"
                                      class="etiquette img-etiquette"/>
                             </div>
                         </div>
+                    </div>
 
-                        <!--corrected-->
-                        <div ng-if="item.corrected">
-                            <div ng-if="drop[$index].object_type == 'text'"
-                                 class="etiquette txt-etiquette"
-                                 data-ng-class="{'etiquette-wrong': !solution[$index].right, 'etiquette-right': solution[$index].right}">
-                                {{ drop[$index].text }}
+                    <!--drop zone-->
+                    <div class="col-xs-3">
+                        <!-- empty -->
+                        <div ng-if="drop[$index] == null" ui-on-Drop="onDropField($event,$data,$index)">
+                            <div class="etiquette etiquette-empty"
+                                 data-ng-class="{'img-etiquette': item.content.mobile_parts[0].object_type == 'picture', 'txt-etiquette': item.content.mobile_parts[0].object_type == 'text'}">
                             </div>
-                            <img ng-if="drop[$index].object_type == 'picture'"
-                                 ng-src="{{ imageUrl }}/{{ drop[$index].source }}"
-                                 class="etiquette img-etiquette"
-                                 data-ng-class="{'etiquette-wrong': !solution[$index].right, 'etiquette-right': solution[$index].right}"/>
+                        </div>
+
+                        <!--not empty-->
+                        <div ng-if="drop[$index] != null">
+                            <!--not corrected-->
+                            <div ng-if="!item.corrected"
+                                 ui-draggable="true" drag="drop[$index]"
+                                 on-drop-success="dropSuccessHandlerField($event,$index)">
+                                <div ng-if="drop[$index].object_type == 'text'"
+                                     class="etiquette txt-etiquette">
+                                    {{ drop[$index].text }}
+                                </div>
+                                <div ng-if="drop[$index].object_type == 'picture'">
+                                    <img ng-src="{{ imageUrl }}/{{ drop[$index].source }}"
+                                         class="etiquette img-etiquette"/>
+                                </div>
+                            </div>
+
+                            <!--corrected-->
+                            <div ng-if="item.corrected">
+                                <div ng-if="drop[$index].object_type == 'text'"
+                                     class="etiquette txt-etiquette"
+                                     data-ng-class="{'etiquette-wrong': !solution[$index].right, 'etiquette-right': solution[$index].right}">
+                                    {{ drop[$index].text }}
+                                </div>
+                                <img ng-if="drop[$index].object_type == 'picture'"
+                                     ng-src="{{ imageUrl }}/{{ drop[$index].source }}"
+                                     class="etiquette img-etiquette"
+                                     data-ng-class="{'etiquette-wrong': !solution[$index].right, 'etiquette-right': solution[$index].right}"/>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- correction -->
-                <div class="col-xs-3">
-                    <div ng-if="solution[$index] != null && !solution[$index].right">
-                        <div ng-if="solution[$index].object_type == 'text'"
-                             class="etiquette txt-etiquette">
-                            {{ solution[$index].text }}
-                        </div>
-                        <div ng-if="solution[$index].object_type == 'picture'">
-                            <img ng-src="{{ imageUrl }}/{{ solution[$index].source }}"
-                                 class="etiquette img-etiquette"/>
+                    <!-- correction -->
+                    <div class="col-xs-3">
+                        <div ng-if="solution[$index] != null && !solution[$index].right">
+                            <div ng-if="solution[$index].object_type == 'text'"
+                                 class="etiquette txt-etiquette">
+                                {{ solution[$index].text }}
+                            </div>
+                            <div ng-if="solution[$index].object_type == 'picture'">
+                                <img ng-src="{{ imageUrl }}/{{ solution[$index].source }}"
+                                     class="etiquette img-etiquette"/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -93,9 +94,8 @@
         </div>
 
         <div class="col-xs-3">
-            <div class="panel"
+            <div class="panel object-list"
                  ng-if="!item.corrected"
-                 style="background-color: #f4f4f4"
                  ui-on-Drop="onDropList($event,$data,item.content.mobile_parts)"
                  title="Déposez ces objets dans les cases ci dessous afin de constituer les bonnes paires.">
                 <div class="panel-heading">
@@ -104,13 +104,13 @@
                 <div class="panel-body">
                     <div ng-if="item.corrected || item.content.mobile_parts.length == 0">
                         <div ng-if="drop[0].object_type == 'text'"
-                             class="span etiquette txt-etiquette etiquette-empty">
+                             class="etiquette txt-etiquette etiquette-empty">
                         </div>
                         <div ng-if="drop[0].object_type == 'picture'"
-                             class="span etiquette img-etiquette etiquette-empty">
+                             class="etiquette img-etiquette etiquette-empty">
                         </div>
                     </div>
-                    <div ng-if="!item.corrected" class="span" style="margin: 6px"
+                    <div ng-if="!item.corrected" style="margin: 6px"
                          ng-repeat="mobilePart in item.content.mobile_parts track by $index"
                          ui-draggable="true" drag="mobilePart"
                          on-drop-success="dropSuccessHandler($event,$index,item.content.mobile_parts)"

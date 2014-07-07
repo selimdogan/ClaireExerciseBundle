@@ -90,3 +90,16 @@
     font-size: larger;
     font-weight: bold;
 }
+
+.exercise-doc {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.object-list {
+    background-color: #f4f4f4
+}
+
+.on-drag-hover {
+    background-color: #89d1ff;
+}
