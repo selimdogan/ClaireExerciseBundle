@@ -1,7 +1,7 @@
 var attemptControllers = angular.module('attemptControllers', ['ui.router']);
 
-attemptControllers.controller('attemptController', ['$scope', '$state', 'Exercise', 'Attempt', 'Item', '$routeParams', '$location', '$stateParams',
-    function ($scope, $state, Exercise, Attempt, Item, $routeParams, $location, $stateParams) {
+attemptControllers.controller('attemptController', ['$scope', '$state', 'AttemptByExercise', 'ExerciseByModel', 'Exercise', 'Attempt', 'Item', '$routeParams', '$location', '$stateParams',
+    function ($scope, $state, AttemptByExercise, ExerciseByModel, Exercise, Attempt, Item, $routeParams, $location, $stateParams) {
 
         $scope.imageUrl = BASE_CONFIG.urls.images.uploads;
         $scope.imageExoUrl = BASE_CONFIG.urls.images.exercise;
@@ -37,6 +37,29 @@ attemptControllers.controller('attemptController', ['$scope', '$state', 'Exercis
             } else if ($scope.item.type == 'multiple-choice') {
                 $state.go('attempt.multiple-choice', {itemId: index}, {location: false});
             }
+        };
+
+        $scope.viewAttempt = function (attempt) {
+            $location.path("/learner/attempt/" + attempt.id);
+        };
+
+        $scope.tryExercise = function (exercise) {
+            // create attempt from exercise
+            console.log('create attempt...');
+            attempt = AttemptByExercise.create({exerciseId: exercise.id},
+                function (attempt) {
+                    console.log('redirection');
+                    $scope.viewAttempt(attempt);
+                });
+        };
+
+        $scope.tryModel = function (modelId) {
+            // create exercise from model
+            console.log('create exercise...');
+            exercise = ExerciseByModel.try({modelId: modelId},
+                function (exercise) {
+                    $scope.tryExercise(exercise);
+                });
         };
 
     }]);
