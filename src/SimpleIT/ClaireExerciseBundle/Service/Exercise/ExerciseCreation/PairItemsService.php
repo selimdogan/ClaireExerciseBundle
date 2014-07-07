@@ -7,15 +7,20 @@ use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use Claroline\CoreBundle\Entity\User;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidAnswerException;
+use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\ExerciseTextFactory;
 use SimpleIT\ClaireExerciseBundle\Model\ModelObject\ObjectIdFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonItem;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems\Exercise;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems\Item as ResItem;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\Model;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\PairBlock;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExercisePictureObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseTextObject;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
@@ -185,7 +190,40 @@ class PairItemsService extends ExerciseCreationService
         /*
          * Look for similar objects and allow all the possible answers
          */
-        // TODO
+        $revMP = array();
+        /** @var ExerciseObject $mobPart */
+        foreach ($item->getMobileParts() as $key => $mobPart) {
+            if ($mobPart->getType() === CommonResource::TEXT) {
+                /** @var ExerciseTextObject $mobPart */
+                $value = $mobPart->getText();
+            } elseif ($mobPart->getType() === CommonResource::PICTURE) {
+                /** @var ExercisePictureObject $mobPart */
+                $value = $mobPart->getSource();
+            } else {
+                throw new InvalidTypeException('Invalid exercise object type:' . $item->getMobileParts(
+                ));
+            }
+            $revMP[$value][] = $key;
+        }
+
+        $solutions = array();
+        foreach ($item->getSolutions() as $key => $sol) {
+            /** @var ExerciseObject $mp */
+            $mp = $item->getMobileParts()[$sol[0]];
+            if ($mp->getType() === CommonResource::TEXT) {
+                /** @var ExerciseTextObject $mp */
+                $value = $mp->getText();
+            } elseif ($mp->getType() === CommonResource::PICTURE) {
+                /** @var ExercisePictureObject $mp */
+                $value = $mp->getSource();
+            } else {
+                throw new InvalidTypeException('Invalid exercise object type:' . $item->getMobileParts(
+                ));
+            }
+
+            $solutions[$key] = $revMP[$value];
+        }
+        $item->setSolutions($solutions);
 
         // shuffle the order of the pairs
         $item->shufflePairs();
