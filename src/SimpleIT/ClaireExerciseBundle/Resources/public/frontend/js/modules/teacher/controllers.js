@@ -261,6 +261,7 @@ modelControllers.controller('modelController', ['$scope', '$routeParams', '$loca
                 "documents": [],
                 "pair_blocks": [
                     {
+                        "is_list": true,
                         "number_of_occurrences": 0,
                         "resources": [],
                         "pair_meta_key": ""
@@ -328,16 +329,16 @@ modelControllers.controller('modelController', ['$scope', '$routeParams', '$loca
         }
 
         $scope.initResourceConstraints = function(pair_blocks){
-            if(!pair_blocks.hasOwnProperty('resourceConstraint')){
-                pair_blocks.resourceConstraint = {type: 'text'};
-                pair_blocks.resourceConstraint.metadataConstraints = [];
-                pair_blocks.resourceConstraint.excluded = [];
+            if(!pair_blocks.hasOwnProperty('resource_constraint')){
+                pair_blocks.resource_constraint = {type: ''};
+                pair_blocks.resource_constraint.metadata_constraints = [];
+                pair_blocks.resource_constraint.excluded = [];
             }
-            if(!pair_blocks.resourceConstraint.hasOwnProperty('metadataConstraints')){
-                pair_blocks.resourceConstraint.metadataConstraints = [];
+            if(!pair_blocks.resource_constraint.hasOwnProperty('metadata_constraints')){
+                pair_blocks.resource_constraint.metadata_constraints = [];
             }
-            if(!pair_blocks.resourceConstraint.hasOwnProperty('excluded')){
-                pair_blocks.resourceConstraint.excluded = [];
+            if(!pair_blocks.resource_constraint.hasOwnProperty('excluded')){
+                pair_blocks.resource_constraint.excluded = [];
             }
         }
 
