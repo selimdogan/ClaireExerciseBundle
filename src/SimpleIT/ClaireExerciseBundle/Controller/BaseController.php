@@ -1,5 +1,5 @@
 <?php
-namespace SimpleIT\ClaireExerciseBundle\Controller\Api;
+namespace SimpleIT\ClaireExerciseBundle\Controller;
 
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\Exception\InsufficientAuthenticationExceptio
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-abstract class ApiController extends Controller
+abstract class BaseController extends Controller
 {
     /**
      * Get the current user's id

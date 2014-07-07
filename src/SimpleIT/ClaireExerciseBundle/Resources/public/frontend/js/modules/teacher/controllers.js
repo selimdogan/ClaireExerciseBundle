@@ -292,7 +292,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
             "metadata": [],
             "keywords": [],
             "content": {
-                "wording": "1",
+                "wording": "Consigne de l'exercice",
                 "documents": [],
                 "pair_blocks": [
                     {

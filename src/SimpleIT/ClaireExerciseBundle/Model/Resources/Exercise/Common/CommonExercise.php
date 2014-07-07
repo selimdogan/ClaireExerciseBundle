@@ -53,7 +53,7 @@ abstract class CommonExercise
 
     /**
      * @var array $documents An array of ExerciseObject
-     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseTextObject>")
+     * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject>")
      * @Serializer\Groups({"details", "exercise", "exercise_storage"})
      */
     protected $documents = array();

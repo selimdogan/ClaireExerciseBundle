@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\Test;
 
-use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\BaseController;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class TestAttemptController extends ApiController
+class TestAttemptController extends BaseController
 {
     /**
      * Get a specific Attempt resource

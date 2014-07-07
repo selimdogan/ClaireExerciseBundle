@@ -3,7 +3,7 @@ namespace SimpleIT\ClaireExerciseBundle\Controller\Api\DomainKnowledge;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\DBALException;
-use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\BaseController;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiConflictException;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class MetadataByKnowledgeController extends ApiController
+class MetadataByKnowledgeController extends BaseController
 {
     /**
      * Get all metadata

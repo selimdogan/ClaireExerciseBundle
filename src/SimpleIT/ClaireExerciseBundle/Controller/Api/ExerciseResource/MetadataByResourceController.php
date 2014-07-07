@@ -10,7 +10,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiDeletedResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiEditedResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
-use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\BaseController;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata;
 use SimpleIT\ClaireExerciseBundle\Entity\ResourceMetadataFactory;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class MetadataByResourceController extends ApiController
+class MetadataByResourceController extends BaseController
 {
     /**
      * Get all metadata

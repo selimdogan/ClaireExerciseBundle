@@ -1,15 +1,14 @@
 <?php
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
-use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\BaseController;
+use SimpleIT\ClaireExerciseBundle\Exception\AnswerAlreadyExistsException;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
-use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
-use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
-use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
-use SimpleIT\ClaireExerciseBundle\Exception\AnswerAlreadyExistsException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidAnswerException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
 
@@ -18,7 +17,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class AnswerByItemByAttemptController extends ApiController
+class AnswerByItemByAttemptController extends BaseController
 {
     /**
      * List the answers fot this item

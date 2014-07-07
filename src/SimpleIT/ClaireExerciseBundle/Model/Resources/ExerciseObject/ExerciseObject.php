@@ -9,8 +9,8 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  * @Serializer\Discriminator(field = "object_type", map = {
- *    "picture": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExercisePictureObject",
- *    "text": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseTextObject",
+ *    "picture":  "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExercisePictureObject",
+ *    "text":     "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseTextObject",
  *    "sequence": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseSequenceObject"
  * })
  */

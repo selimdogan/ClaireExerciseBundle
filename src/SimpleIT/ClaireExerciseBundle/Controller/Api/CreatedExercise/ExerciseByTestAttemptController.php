@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
-use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\BaseController;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
@@ -14,7 +14,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResourceFactory;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseByTestAttemptController extends ApiController
+class ExerciseByTestAttemptController extends BaseController
 {
     /**
      * List all the Exercises for a test attempt

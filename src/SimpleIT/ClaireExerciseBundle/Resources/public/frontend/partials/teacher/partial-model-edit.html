@@ -203,9 +203,9 @@
 
                             <tabset type="pills">
                                 <tab>
-                                    <tab-heading>
+                                    <tab-heading title="Lister explicitement les ressources">
                                         <span class="glyphicon" ng-class="{'glyphicon-check': pair_blocks.is_list, 'glyphicon-unchecked': !pair_blocks.is_list}" data-ng-click="pair_blocks.is_list=!pair_blocks.is_list"></span>
-                                        Lister les ressources
+                                        Liste
                                     </tab-heading>
                                     <div class="panel-body panel panel-primary" collapse="context.pair_items.pair_blocks.resources.collapse" ui-on-Drop="onDropResourceToBlock($event,$data,pair_blocks.resources)">
                                         <accordion close-others="true">
@@ -289,9 +289,10 @@
                                     </div>
                                 </tab>
                                 <tab>
-                                    <tab-heading>
+                                    <tab-heading
+                                        title="Sélectionner les ressources par contraintes.">
                                         <span class="glyphicon" ng-class="{'glyphicon-check': !pair_blocks.is_list, 'glyphicon-unchecked': pair_blocks.is_list}" data-ng-click="pair_blocks.is_list=!pair_blocks.is_list"></span>
-                                        Sélectionner par contraintes
+                                        Contraintes
                                     </tab-heading>
                                     <div class="panel-body panel panel-primary" data-ng-init="initResourceConstraints(pair_blocks)">
                                         <div>
@@ -632,10 +633,21 @@
 
                 <div class="navbar">
                     <button back-Button class="btn btn-primary">Retour</button>
-                    <button ng-click="updateModel()" class="btn btn-primary">Sauvegarder</button>
-                    <button ng-disabled="!model.complete || modelChanged"
+                    <button ng-if="BASE_CONFIG.currentUserId == model.owner"
+                            ng-click="updateModel()" class="btn btn-primary">
+                        Sauvegarder
+                    </button>
+                    <button ng-if="BASE_CONFIG.currentUserId == model.owner"
+                            ng-disabled="!model.complete"
                             ng-click="saveAndTry(model)" class="btn btn-primary"
-                            title="Sauvegarder puis essayer le modèle">Essayer
+                            title="Sauvegarder puis essayer le modèle">
+                        Essayer
+                    </button>
+                    <button ng-if="BASE_CONFIG.currentUserId != model.owner"
+                            ng-disabled="!model.complete"
+                            ng-click="tryModel(model)" class="btn btn-primary"
+                            title="Essayer le modèle">
+                        Essayer
                     </button>
                 </div>
 

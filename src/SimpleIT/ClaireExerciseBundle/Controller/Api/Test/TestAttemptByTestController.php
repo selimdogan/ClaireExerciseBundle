@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\Test;
 
-use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\BaseController;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class TestAttemptByTestController extends ApiController
+class TestAttemptByTestController extends BaseController
 {
     /**
      * Create a test attempt for a test

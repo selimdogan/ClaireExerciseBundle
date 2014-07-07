@@ -2,6 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel;
 
+use Claroline\CoreBundle\Entity\Resource\ResourceNode;
 use Claroline\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\NonUniqueResultException;
@@ -183,6 +184,16 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     {
         parent::updateFromSharedResource($modelResource, $model, 'exercise_model_storage');
         $model = $this->computeRequirements($modelResource, $model);
+
+        if (!is_null($modelResource->getTitle())) {
+            /** @var ResourceNode $resourceNode */
+            $resourceNode = $model->getResourceNode();
+            if ($resourceNode !== null) {
+                $resourceNode->setName($modelResource->getTitle());
+            }
+        }
+
+        $this->em->flush();
 
         return $model;
     }

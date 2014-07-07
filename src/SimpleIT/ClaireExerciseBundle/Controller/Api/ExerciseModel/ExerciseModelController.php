@@ -2,7 +2,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\ExerciseModel;
 
 use Doctrine\DBAL\DBALException;
-use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\BaseController;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiConflictException;
@@ -28,7 +28,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseModelController extends ApiController
+class ExerciseModelController extends BaseController
 {
     /**
      * Get a specific exerciseModel resource
