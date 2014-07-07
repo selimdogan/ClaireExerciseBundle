@@ -340,10 +340,18 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
             }
         }
 
-        $scope.modelAddBlockResourceConstraint = function (collection, type) {
-            if (collection === undefined) {
-                collection = [];
+        $scope.modelAddBlockResourceConstraint = function (pair_blocks, type) {
+            console.log("clik");
+
+            if (typeof pair_blocks.resource_constraint === "undefined") {
+                pair_blocks.resource_constraint = {"metadata_constraints": []};
+                console.log("resource_constraint undefined");
             }
+            if (typeof pair_blocks.resource_constraint.metadata_constraints === "undefined") {
+                pair_blocks.resource_constraint.metadata_constraints = [];
+                console.log("metadata_constraints undefined");
+            }
+
             var newElement;
             if (type == 'exists') {
                 newElement = {"key": '', "values": [], "comparator": 'exists'};
@@ -354,7 +362,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
             } else {
                 newElement = {"key": '', "values": [''], "comparator": type};
             }
-            collection.splice(collection.length, 0, newElement);
+            pair_blocks.resource_constraint.metadata_constraints.splice(pair_blocks.resource_constraint.metadata_constraints.length, 0, newElement);
         }
 
         $scope.modelAddBlockResourceConstraintValue = function (collection) {

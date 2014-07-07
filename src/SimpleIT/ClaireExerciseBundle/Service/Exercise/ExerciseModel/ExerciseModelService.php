@@ -581,6 +581,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
 
         if (count($block->getResources()) == 0 && $block->getResourceConstraint() === null) {
             return false;
+        } elseif ($block->getIsList() && count($block->getResources()) == 0) {
+            return false;
         }
 
         /** @var ObjectId $resource */
@@ -590,8 +592,11 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
             }
         }
 
-        if ($block->getResourceConstraint() !== null
-            && !$this->checkConstraintsComplete($block->getResourceConstraint(), $resourceTypes)
+        if (!$block->getIsList() &&
+            (
+                $block->getResourceConstraint() == null ||
+                !$this->checkConstraintsComplete($block->getResourceConstraint(), $resourceTypes)
+            )
         ) {
             return false;
         }
