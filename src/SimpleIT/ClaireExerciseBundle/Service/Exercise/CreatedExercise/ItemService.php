@@ -132,17 +132,15 @@ class ItemService extends TransactionalService implements ItemServiceInterface
             )
         );
 
-        // If no correction to do (no user's answer found), return the item
+        // If no correction to do (no user's answer found), return the item with no solution
         if (is_null($answer)) {
             $itemResource = ItemResourceFactory::create($item);
             $itemResource->setCorrected(false);
 
-            return $itemResource;
+            return $this->exerciseService->noSolutionItem($itemResource);
         }
 
         /** @var Answer $answer */
-
-        // set corrected to true (it is returned)
 
         // correct it with the exercise service
         return $this->exerciseService->correctItem($answer);
@@ -185,24 +183,25 @@ class ItemService extends TransactionalService implements ItemServiceInterface
     /**
      * Get all items by attempt Id
      *
-     * @param CollectionInformation $collectionInformation
-     * @param int                   $attemptId
-     * @param int                   $userId
+     * @param int $attemptId
+     * @param int $userId
      *
      * @return array
      */
     public function getAllByAttempt(
-        $collectionInformation = null,
-        $attemptId = null,
-        $userId = null
+        $attemptId,
+        $userId
     )
     {
-        $attempt = null;
-        if (!is_null($attemptId)) {
-            $attempt = $this->attemptService->get($attemptId, $userId);
+        $attempt = $this->attemptService->get($attemptId, $userId);
+
+        $items = array();
+        /** @var Item $item */
+        foreach ($attempt->getExercise()->getItems() as $item) {
+            $items[] = $this->findItemAndCorrectionByAttempt($item->getId(), $attemptId, $userId);
         }
 
-        return $this->itemRepository->findAllByAttempt($attempt, $collectionInformation);
+        return $items;
     }
 
     /**

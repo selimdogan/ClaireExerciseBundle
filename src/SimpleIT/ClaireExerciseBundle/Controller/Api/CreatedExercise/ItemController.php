@@ -19,8 +19,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class ItemController extends ApiController
 {
     /**
-     * View action. View an item with its solution. User's answer (is exists) is added inside to
-     * make the correction possible.
+     * View action. View an item with its solution.
      *
      * @param int $itemId
      *
@@ -33,7 +32,7 @@ class ItemController extends ApiController
             // Call to the item service to get the item and its correction if there is one
             $item = $this->get('simple_it.exercise.item')->get($itemId);
 
-            $itemResource = ItemResourceFactory::create($item, false);
+            $itemResource = ItemResourceFactory::create($item);
 
             return new ApiGotResponse($itemResource, array("not_corrected", 'Default'));
 

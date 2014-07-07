@@ -8,5 +8,5 @@ plugin:
           is_exportable: false
           icon: res_exo.png
           actions:
-            - name: try
-              menu_name: try_menu
+            - name: edition
+              menu_name: edit

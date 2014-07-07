@@ -1,17 +1,18 @@
 <div data-ng-controller="attemptController" class="container">
 
-    <div class="row">
-        <div class="row">
+    <div class="panel">
+        <div class="panel-heading">
             <h4>{{ exercise.title }}</h4>
         </div>
-        <div class="row">
+        <div class="panel-body">
             <div>
                 <strong>Consigne</strong> : {{ exercise.content.wording }}
             </div>
         </div>
-    </div>
-
-    <div ui-view>
+        <div class="panel-body">
+            <div ui-view>
+            </div>
+        </div>
     </div>
 
 </div>

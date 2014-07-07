@@ -236,4 +236,21 @@ class OpenEndedQuestionService extends ExerciseCreationService
             throw new InvalidAnswerException('Invalid number of objects in the answer');
         }
     }
+
+    /**
+     * Return an item without solution
+     *
+     * @param ItemResource $itemResource
+     *
+     * @return ItemResource
+     */
+    public function noSolutionItem($itemResource)
+    {
+        /** @var Question $content */
+        $content = $itemResource->getContent();
+        $content->setComment(null);
+        $content->setSolutions(null);
+
+        return $itemResource;
+    }
 }

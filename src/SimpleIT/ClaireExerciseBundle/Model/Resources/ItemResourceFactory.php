@@ -36,19 +36,15 @@ abstract class ItemResourceFactory
      * Create an Exercise Resource
      *
      * @param Item $item
-     * @param null $corrected
-     * @param bool $light   Light version of the resource
      *
      * @return ItemResource
      */
-    public static function create(Item $item, $corrected = null)
+    public static function create(Item $item)
     {
         $itemResource = new ItemResource();
 
         $itemResource->setItemId($item->getId());
         $itemResource->setType($item->getType());
-
-        $itemResource->setCorrected($corrected);
 
         $serializer = SerializerBuilder::create()
             ->addDefaultHandlers()

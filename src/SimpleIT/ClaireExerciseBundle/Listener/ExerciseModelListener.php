@@ -37,14 +37,14 @@ class ExerciseModelListener implements ContainerAwareInterface
      *
      * @param CustomActionResourceEvent $event
      */
-    public function onTry(CustomActionResourceEvent $event)
+    public function onEdit(CustomActionResourceEvent $event)
     {
         /** @var ExerciseModel $model */
         $model = $event->getResource();
 
         //Redirection to the controller
         $route = $this->container->get('router')->generate('frontend_index');
-        $route .= '#/learner/models/' . $model->getId();
+        $route .= '#/teacher/model/' . $model->getId();
         $event->setResponse(new RedirectResponse($route));
         $event->stopPropagation();
     }
@@ -61,7 +61,7 @@ class ExerciseModelListener implements ContainerAwareInterface
 
         //Redirection to the controller
         $route = $this->container->get('router')->generate('frontend_index');
-        $route .= '#/teacher/model/' . $model->getId();
+        $route .= '#/learner/models/' . $model->getId();
         $event->setResponse(new RedirectResponse($route));
         $event->stopPropagation();
     }

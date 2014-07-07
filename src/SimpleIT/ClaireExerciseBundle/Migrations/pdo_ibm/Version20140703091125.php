@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleIT\ClaireExerciseBundle\Migrations\drizzle_pdo_mysql;
+namespace SimpleIT\ClaireExerciseBundle\Migrations\pdo_ibm;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
@@ -8,244 +8,327 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated migration based on mapping information: modify it with caution
  *
- * Generation date: 2014/06/27 05:43:29
+ * Generation date: 2014/07/03 09:12:41
  */
-class Version20140627174305 extends AbstractMigration
+class Version20140703091125 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
         $this->addSql("
             CREATE TABLE claire_exercise_answer (
-                id INT NOT NULL, 
-                item_id INT DEFAULT NULL, 
-                attempt_id INT DEFAULT NULL, 
-                content TEXT NOT NULL, 
-                PRIMARY KEY(id), 
-                INDEX IDX_D0B3344126F525E (item_id), 
-                INDEX IDX_D0B3344B191BE6B (attempt_id)
+                id INTEGER NOT NULL, 
+                item_id INTEGER DEFAULT NULL, 
+                attempt_id INTEGER DEFAULT NULL, 
+                content CLOB(1M) NOT NULL, 
+                mark DOUBLE PRECISION DEFAULT NULL, 
+                PRIMARY KEY(id)
             )
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_D0B3344126F525E ON claire_exercise_answer (item_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_D0B3344B191BE6B ON claire_exercise_answer (attempt_id)
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_attempt (
-                id INT NOT NULL, 
-                exercise_id INT DEFAULT NULL, 
-                user_id INT DEFAULT NULL, 
-                test_attempt_id INT DEFAULT NULL, 
-                created_at DATETIME NOT NULL, 
-                `position` INT DEFAULT NULL, 
-                PRIMARY KEY(id), 
-                INDEX IDX_228E85D1E934951A (exercise_id), 
-                INDEX IDX_228E85D1A76ED395 (user_id), 
-                INDEX IDX_228E85D1CAA20852 (test_attempt_id)
+                id INTEGER NOT NULL, 
+                exercise_id INTEGER DEFAULT NULL, 
+                user_id INTEGER DEFAULT NULL, 
+                test_attempt_id INTEGER DEFAULT NULL, 
+                created_at TIMESTAMP(0) NOT NULL, 
+                \"position\" INTEGER DEFAULT NULL, 
+                PRIMARY KEY(id)
             )
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_228E85D1E934951A ON claire_exercise_attempt (exercise_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_228E85D1A76ED395 ON claire_exercise_attempt (user_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_228E85D1CAA20852 ON claire_exercise_attempt (test_attempt_id)
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_item (
-                id INT NOT NULL, 
-                exercise_id INT DEFAULT NULL, 
-                type VARCHAR(255) NOT NULL, 
-                content TEXT NOT NULL, 
-                PRIMARY KEY(id), 
-                INDEX IDX_F5D1234E934951A (exercise_id)
+                id INTEGER NOT NULL, 
+                exercise_id INTEGER DEFAULT NULL, 
+                \"type\" VARCHAR(255) NOT NULL, 
+                content CLOB(1M) NOT NULL, 
+                PRIMARY KEY(id)
             )
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_F5D1234E934951A ON claire_exercise_item (exercise_id)
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_stored_exercise (
-                id INT NOT NULL, 
-                exercise_model_id INT DEFAULT NULL, 
-                content TEXT NOT NULL, 
-                PRIMARY KEY(id), 
-                INDEX IDX_7270807A7F19170F (exercise_model_id)
+                id INTEGER NOT NULL, 
+                exercise_model_id INTEGER DEFAULT NULL, 
+                content CLOB(1M) NOT NULL, 
+                PRIMARY KEY(id)
             )
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_7270807A7F19170F ON claire_exercise_stored_exercise (exercise_model_id)
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_knowledge (
-                id INT NOT NULL, 
-                parent_id INT DEFAULT NULL, 
-                fork_from_id INT DEFAULT NULL, 
-                author_id INT NOT NULL, 
-                owner_id INT NOT NULL, 
-                type VARCHAR(255) NOT NULL, 
+                id INTEGER NOT NULL, 
+                parent_id INTEGER DEFAULT NULL, 
+                fork_from_id INTEGER DEFAULT NULL, 
+                author_id INTEGER NOT NULL, 
+                owner_id INTEGER NOT NULL, 
+                \"type\" VARCHAR(255) NOT NULL, 
                 title VARCHAR(255) NOT NULL, 
-                content TEXT DEFAULT NULL, 
-                draft BOOLEAN NOT NULL, 
-                complete BOOLEAN NOT NULL, 
-                public BOOLEAN DEFAULT NULL, 
-                archived BOOLEAN NOT NULL, 
-                PRIMARY KEY(id), 
-                INDEX IDX_465F3A83727ACA70 (parent_id), 
-                INDEX IDX_465F3A833AB8C0BA (fork_from_id), 
-                INDEX IDX_465F3A83F675F31B (author_id), 
-                INDEX IDX_465F3A837E3C61F9 (owner_id)
+                content CLOB(1M) DEFAULT NULL, 
+                draft SMALLINT NOT NULL, 
+                complete SMALLINT NOT NULL, 
+                \"public\" SMALLINT DEFAULT NULL, 
+                archived SMALLINT NOT NULL, 
+                PRIMARY KEY(id)
             )
         ");
         $this->addSql("
+            CREATE INDEX IDX_465F3A83727ACA70 ON claire_exercise_knowledge (parent_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_465F3A833AB8C0BA ON claire_exercise_knowledge (fork_from_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_465F3A83F675F31B ON claire_exercise_knowledge (author_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_465F3A837E3C61F9 ON claire_exercise_knowledge (owner_id)
+        ");
+        $this->addSql("
             CREATE TABLE claire_exercise_knowledge_knowledge_requirement (
-                knowledge_id INT NOT NULL, 
-                required_id INT NOT NULL, 
-                PRIMARY KEY(knowledge_id, required_id), 
-                INDEX IDX_67A0678CE7DC6902 (knowledge_id), 
-                INDEX IDX_67A0678CDD3DFC3F (required_id)
+                knowledge_id INTEGER NOT NULL, 
+                required_id INTEGER NOT NULL, 
+                PRIMARY KEY(knowledge_id, required_id)
             )
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_67A0678CE7DC6902 ON claire_exercise_knowledge_knowledge_requirement (knowledge_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_67A0678CDD3DFC3F ON claire_exercise_knowledge_knowledge_requirement (required_id)
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_knowledge_metadata (
                 meta_key VARCHAR(255) NOT NULL, 
-                knowledge_id INT NOT NULL, 
+                knowledge_id INTEGER NOT NULL, 
                 meta_value VARCHAR(255) NOT NULL, 
-                PRIMARY KEY(meta_key, knowledge_id), 
-                INDEX IDX_269D7264E7DC6902 (knowledge_id)
+                PRIMARY KEY(meta_key, knowledge_id)
             )
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_269D7264E7DC6902 ON claire_exercise_knowledge_metadata (knowledge_id)
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_model (
-                id INT NOT NULL, 
-                resourcenode_id INT DEFAULT NULL, 
-                parent_id INT DEFAULT NULL, 
-                fork_from_id INT DEFAULT NULL, 
-                author_id INT NOT NULL, 
-                owner_id INT NOT NULL, 
-                type VARCHAR(255) NOT NULL, 
+                id INTEGER NOT NULL, 
+                resourcenode_id INTEGER DEFAULT NULL, 
+                parent_id INTEGER DEFAULT NULL, 
+                fork_from_id INTEGER DEFAULT NULL, 
+                author_id INTEGER NOT NULL, 
+                owner_id INTEGER NOT NULL, 
+                \"type\" VARCHAR(255) NOT NULL, 
                 title VARCHAR(255) NOT NULL, 
-                content TEXT DEFAULT NULL, 
-                draft BOOLEAN NOT NULL, 
-                complete BOOLEAN NOT NULL, 
-                public BOOLEAN NOT NULL, 
-                archived BOOLEAN DEFAULT NULL, 
-                PRIMARY KEY(id), 
-                UNIQUE INDEX UNIQ_C3EFD3877C292AE (resourcenode_id), 
-                INDEX IDX_C3EFD38727ACA70 (parent_id), 
-                INDEX IDX_C3EFD383AB8C0BA (fork_from_id), 
-                INDEX IDX_C3EFD38F675F31B (author_id), 
-                INDEX IDX_C3EFD387E3C61F9 (owner_id)
+                content CLOB(1M) DEFAULT NULL, 
+                draft SMALLINT NOT NULL, 
+                complete SMALLINT NOT NULL, 
+                \"public\" SMALLINT NOT NULL, 
+                archived SMALLINT DEFAULT NULL, 
+                PRIMARY KEY(id)
             )
+        ");
+        $this->addSql("
+            CREATE UNIQUE INDEX UNIQ_C3EFD3877C292AE ON claire_exercise_model (resourcenode_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_C3EFD38727ACA70 ON claire_exercise_model (parent_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_C3EFD383AB8C0BA ON claire_exercise_model (fork_from_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_C3EFD38F675F31B ON claire_exercise_model (author_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_C3EFD387E3C61F9 ON claire_exercise_model (owner_id)
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_model_resource_requirement (
-                model_id INT NOT NULL, 
-                required_resource_id INT NOT NULL, 
-                PRIMARY KEY(model_id, required_resource_id), 
-                INDEX IDX_34BBE44E7975B7E7 (model_id), 
-                INDEX IDX_34BBE44EC971F1B5 (required_resource_id)
+                model_id INTEGER NOT NULL, 
+                required_resource_id INTEGER NOT NULL, 
+                PRIMARY KEY(model_id, required_resource_id)
             )
         ");
         $this->addSql("
+            CREATE INDEX IDX_34BBE44E7975B7E7 ON claire_exercise_model_resource_requirement (model_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_34BBE44EC971F1B5 ON claire_exercise_model_resource_requirement (required_resource_id)
+        ");
+        $this->addSql("
             CREATE TABLE claire_exercise_model_knowledge_requirement (
-                model_id INT NOT NULL, 
-                required_knowledge_id INT NOT NULL, 
-                PRIMARY KEY(model_id, required_knowledge_id), 
-                INDEX IDX_5CD51F8C7975B7E7 (model_id), 
-                INDEX IDX_5CD51F8C1793B92A (required_knowledge_id)
+                model_id INTEGER NOT NULL, 
+                required_knowledge_id INTEGER NOT NULL, 
+                PRIMARY KEY(model_id, required_knowledge_id)
             )
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_5CD51F8C7975B7E7 ON claire_exercise_model_knowledge_requirement (model_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_5CD51F8C1793B92A ON claire_exercise_model_knowledge_requirement (required_knowledge_id)
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_model_metadata (
                 meta_key VARCHAR(255) NOT NULL, 
-                exercise_model_id INT NOT NULL, 
+                exercise_model_id INTEGER NOT NULL, 
                 meta_value VARCHAR(255) NOT NULL, 
-                PRIMARY KEY(meta_key, exercise_model_id), 
-                INDEX IDX_1FCD0C517F19170F (exercise_model_id)
+                PRIMARY KEY(meta_key, exercise_model_id)
             )
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_1FCD0C517F19170F ON claire_exercise_model_metadata (exercise_model_id)
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_resource (
-                id INT NOT NULL, 
-                parent_id INT DEFAULT NULL, 
-                fork_from_id INT DEFAULT NULL, 
-                author_id INT NOT NULL, 
-                owner_id INT NOT NULL, 
-                type VARCHAR(255) NOT NULL, 
+                id INTEGER NOT NULL, 
+                parent_id INTEGER DEFAULT NULL, 
+                fork_from_id INTEGER DEFAULT NULL, 
+                author_id INTEGER NOT NULL, 
+                owner_id INTEGER NOT NULL, 
+                \"type\" VARCHAR(255) NOT NULL, 
                 title VARCHAR(255) NOT NULL, 
-                content TEXT DEFAULT NULL, 
-                draft BOOLEAN NOT NULL, 
-                complete BOOLEAN NOT NULL, 
-                public BOOLEAN NOT NULL, 
-                archived BOOLEAN NOT NULL, 
-                PRIMARY KEY(id), 
-                INDEX IDX_E9AEB0BE727ACA70 (parent_id), 
-                INDEX IDX_E9AEB0BE3AB8C0BA (fork_from_id), 
-                INDEX IDX_E9AEB0BEF675F31B (author_id), 
-                INDEX IDX_E9AEB0BE7E3C61F9 (owner_id)
+                content CLOB(1M) DEFAULT NULL, 
+                draft SMALLINT NOT NULL, 
+                complete SMALLINT NOT NULL, 
+                \"public\" SMALLINT NOT NULL, 
+                archived SMALLINT NOT NULL, 
+                PRIMARY KEY(id)
             )
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_E9AEB0BE727ACA70 ON claire_exercise_resource (parent_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_E9AEB0BE3AB8C0BA ON claire_exercise_resource (fork_from_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_E9AEB0BEF675F31B ON claire_exercise_resource (author_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_E9AEB0BE7E3C61F9 ON claire_exercise_resource (owner_id)
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_resource_knowledge_requirement (
-                resource_id INT NOT NULL, 
-                required_knowledge_id INT NOT NULL, 
+                resource_id INTEGER NOT NULL, 
+                required_knowledge_id INTEGER NOT NULL, 
                 PRIMARY KEY(
                     resource_id, required_knowledge_id
-                ), 
-                INDEX IDX_79D9E3BE89329D25 (resource_id), 
-                INDEX IDX_79D9E3BE1793B92A (required_knowledge_id)
+                )
             )
         ");
         $this->addSql("
+            CREATE INDEX IDX_79D9E3BE89329D25 ON claire_exercise_resource_knowledge_requirement (resource_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_79D9E3BE1793B92A ON claire_exercise_resource_knowledge_requirement (required_knowledge_id)
+        ");
+        $this->addSql("
             CREATE TABLE claire_exercise_resource_resource_requirement (
-                resource_id INT NOT NULL, 
-                required_id INT NOT NULL, 
-                PRIMARY KEY(resource_id, required_id), 
-                INDEX IDX_579576FC89329D25 (resource_id), 
-                INDEX IDX_579576FCDD3DFC3F (required_id)
+                resource_id INTEGER NOT NULL, 
+                required_id INTEGER NOT NULL, 
+                PRIMARY KEY(resource_id, required_id)
             )
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_579576FC89329D25 ON claire_exercise_resource_resource_requirement (resource_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_579576FCDD3DFC3F ON claire_exercise_resource_resource_requirement (required_id)
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_resource_metadata (
                 meta_key VARCHAR(255) NOT NULL, 
-                resource_id INT NOT NULL, 
+                resource_id INTEGER NOT NULL, 
                 meta_value VARCHAR(255) NOT NULL, 
-                PRIMARY KEY(meta_key, resource_id), 
-                INDEX IDX_115B5EA589329D25 (resource_id)
+                PRIMARY KEY(meta_key, resource_id)
             )
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_115B5EA589329D25 ON claire_exercise_resource_metadata (resource_id)
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_test (
-                id INT NOT NULL, 
-                test_model_id INT DEFAULT NULL, 
-                PRIMARY KEY(id), 
-                INDEX IDX_C8394926EC16BCB1 (test_model_id)
+                id INTEGER NOT NULL, 
+                test_model_id INTEGER DEFAULT NULL, 
+                PRIMARY KEY(id)
             )
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_C8394926EC16BCB1 ON claire_exercise_test (test_model_id)
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_test_attempt (
-                id INT NOT NULL, 
-                test_id INT DEFAULT NULL, 
-                user_id INT DEFAULT NULL, 
-                created_at DATETIME NOT NULL, 
-                PRIMARY KEY(id), 
-                INDEX IDX_783E4D1F1E5D0459 (test_id), 
-                INDEX IDX_783E4D1FA76ED395 (user_id)
+                id INTEGER NOT NULL, 
+                test_id INTEGER DEFAULT NULL, 
+                user_id INTEGER DEFAULT NULL, 
+                created_at TIMESTAMP(0) NOT NULL, 
+                PRIMARY KEY(id)
             )
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_783E4D1F1E5D0459 ON claire_exercise_test_attempt (test_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_783E4D1FA76ED395 ON claire_exercise_test_attempt (user_id)
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_test_model (
-                id INT NOT NULL, 
-                author_id INT DEFAULT NULL, 
+                id INTEGER NOT NULL, 
+                author_id INTEGER DEFAULT NULL, 
                 title VARCHAR(255) NOT NULL, 
-                PRIMARY KEY(id), 
-                INDEX IDX_CB243285F675F31B (author_id)
+                PRIMARY KEY(id)
             )
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_CB243285F675F31B ON claire_exercise_test_model (author_id)
         ");
         $this->addSql("
             CREATE TABLE claire_exercise_test_model_position (
-                test_model_id INT NOT NULL, 
-                exercise_model_id INT NOT NULL, 
-                `position` INT NOT NULL, 
+                test_model_id INTEGER NOT NULL, 
+                exercise_model_id INTEGER NOT NULL, 
+                \"position\" INTEGER NOT NULL, 
                 PRIMARY KEY(
                     test_model_id, exercise_model_id
-                ), 
-                INDEX IDX_C31B436DEC16BCB1 (test_model_id), 
-                INDEX IDX_C31B436D7F19170F (exercise_model_id)
+                )
             )
         ");
         $this->addSql("
+            CREATE INDEX IDX_C31B436DEC16BCB1 ON claire_exercise_test_model_position (test_model_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_C31B436D7F19170F ON claire_exercise_test_model_position (exercise_model_id)
+        ");
+        $this->addSql("
             CREATE TABLE claire_exercise_test_position (
-                test_id INT NOT NULL, 
-                exercise_id INT NOT NULL, 
-                `position` INT NOT NULL, 
-                PRIMARY KEY(test_id, exercise_id), 
-                INDEX IDX_6F95FF221E5D0459 (test_id), 
-                INDEX IDX_6F95FF22E934951A (exercise_id)
+                test_id INTEGER NOT NULL, 
+                exercise_id INTEGER NOT NULL, 
+                \"position\" INTEGER NOT NULL, 
+                PRIMARY KEY(test_id, exercise_id)
             )
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_6F95FF221E5D0459 ON claire_exercise_test_position (test_id)
+        ");
+        $this->addSql("
+            CREATE INDEX IDX_6F95FF22E934951A ON claire_exercise_test_position (exercise_id)
         ");
         $this->addSql("
             ALTER TABLE claire_exercise_answer 

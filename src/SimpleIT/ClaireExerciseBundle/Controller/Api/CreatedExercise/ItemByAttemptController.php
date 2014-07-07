@@ -34,13 +34,7 @@ class ItemByAttemptController extends ApiController
             $itemResource = $this->get('simple_it.exercise.item')
                 ->findItemAndCorrectionByAttempt($itemId, $attemptId, $this->getUserId());
 
-            if ($itemResource->getCorrected()) {
-                $groups = array("corrected", 'Default');
-            } else {
-                $groups = array("not_corrected", 'Default');
-            }
-
-            return new ApiGotResponse($itemResource, $groups);
+            return new ApiGotResponse($itemResource, array('details', 'Default'));
 
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(ItemResource::RESOURCE_NAME);
@@ -50,24 +44,20 @@ class ItemByAttemptController extends ApiController
     /**
      * Get all items
      *
-     * @param CollectionInformation $collectionInformation
-     * @param int                   $attemptId    Attempt id
+     * @param int $attemptId    Attempt id
      *
      * @throws ApiNotFoundException
      * @return ApiGotResponse
      */
-    public function listAction(CollectionInformation $collectionInformation, $attemptId)
+    public function listAction($attemptId)
     {
         try {
-            $items = $this->get('simple_it.exercise.item')->getAllByAttempt(
-                $collectionInformation,
+            $itemResources = $this->get('simple_it.exercise.item')->getAllByAttempt(
                 $attemptId,
                 $this->getUserId()
             );
 
-            $itemResources = ItemResourceFactory::createCollection($items);
-
-            return new ApiGotResponse($itemResources, array('list', 'Default'));
+            return new ApiGotResponse($itemResources, array('details', 'Default'));
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(ItemResource::RESOURCE_NAME);
         }

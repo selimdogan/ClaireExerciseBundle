@@ -18,7 +18,7 @@
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
-            <tag name="kernel.event_listener" event="try_menu_claire_exercise_model" method="onTry" priority="0"/>
+            <tag name="kernel.event_listener" event="edit_claire_exercise_model" method="onEdit" priority="0"/>
             <tag name="kernel.event_listener" event="create_form_claire_exercise_model" method="onCreateForm" priority="0"/>
             <tag name="kernel.event_listener" event="open_claire_exercise_model" method="onOpen" priority="0"/>
             <tag name="kernel.event_listener" event="delete_claire_exercise_model" method="onDelete" priority="0"/>

@@ -88,7 +88,7 @@
             <accordion-group class="panel panel-primary">
                 <accordion-heading class="panel-heading">
                     <div class="col-centered">
-                        <h4><span class="glyphicon glyphicon-plus"></span>&nbsp;Créer un modèle d'exercice&nbsp;<span class="caret"></span></h4>
+                        <h4><span class="glyphicon glyphicon-plus"></span>&nbsp;Créer un modèle d'exercices&nbsp;<span class="caret"></span></h4>
                     </div>
                 </accordion-heading>
                 <div class="list-group">
@@ -128,7 +128,8 @@
                         <div class="col-centered pull-right">
                             <h4>
                                 <span ui-sref="modelEdit({ modelid:model.id })" class="glyphicon glyphicon-edit"></span>
-                                <span ng-click="deleteModel(model)" class="glyphicon glyphicon-remove"></span>
+                                <span ng-click="$event.stopPropagation();tryModel(model)" class="glyphicon glyphicon-repeat"></span>
+                                <span ng-click="$event.stopPropagation();deleteModel(model)" class="glyphicon glyphicon-remove"></span>
                             </h4>
                         </div>
                     </div>

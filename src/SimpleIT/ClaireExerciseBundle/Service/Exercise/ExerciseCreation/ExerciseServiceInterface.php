@@ -42,4 +42,13 @@ interface ExerciseServiceInterface
      * @param AnswerResource $answerResource
      */
     public function validateAnswer(Item $item, AnswerResource $answerResource);
+
+    /**
+     * Return an item without solution
+     *
+     * @param ItemResource $itemResource
+     *
+     * @return ItemResource
+     */
+    public function noSolutionItem($itemResource);
 }
