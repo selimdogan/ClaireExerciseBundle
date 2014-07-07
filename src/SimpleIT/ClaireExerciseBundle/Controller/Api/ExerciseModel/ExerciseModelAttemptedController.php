@@ -2,7 +2,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\ExerciseModel;
 
 use Doctrine\DBAL\DBALException;
-use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\BaseController;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseModelAttemptedController extends ApiController
+class ExerciseModelAttemptedController extends BaseController
 {
     /**
      * Get a specific exerciseModel resource

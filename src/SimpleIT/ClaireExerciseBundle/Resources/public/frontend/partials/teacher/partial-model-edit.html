@@ -633,10 +633,21 @@
 
                 <div class="navbar">
                     <button back-Button class="btn btn-primary">Retour</button>
-                    <button ng-click="updateModel()" class="btn btn-primary">Sauvegarder</button>
-                    <button ng-disabled="!model.complete || modelChanged"
+                    <button ng-if="BASE_CONFIG.currentUserId == model.owner"
+                            ng-click="updateModel()" class="btn btn-primary">
+                        Sauvegarder
+                    </button>
+                    <button ng-if="BASE_CONFIG.currentUserId == model.owner"
+                            ng-disabled="!model.complete"
                             ng-click="saveAndTry(model)" class="btn btn-primary"
-                            title="Sauvegarder puis essayer le modèle">Essayer
+                            title="Sauvegarder puis essayer le modèle">
+                        Essayer
+                    </button>
+                    <button ng-if="BASE_CONFIG.currentUserId != model.owner"
+                            ng-disabled="!model.complete"
+                            ng-click="tryModel(model)" class="btn btn-primary"
+                            title="Essayer le modèle">
+                        Essayer
                     </button>
                 </div>
 

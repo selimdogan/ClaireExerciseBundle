@@ -65,7 +65,8 @@
                     exercise: "{{ asset('bundles/simpleitclaireexercise/images/exercise/') }}"
                 }
             },
-            language: 'fr'
+            language: 'fr',
+            currentUserId: {{ currentUserId }}
         };
         angular.module('mainApp').value('BASE_CONFIG', BASE_CONFIG);
     </script>

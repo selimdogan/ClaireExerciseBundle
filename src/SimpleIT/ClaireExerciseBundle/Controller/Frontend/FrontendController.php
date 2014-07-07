@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Frontend;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use SimpleIT\ClaireExerciseBundle\Controller\BaseController;
 use Symfony\Component\Security\Core\Exception\InsufficientAuthenticationException;
 
 /**
@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\Exception\InsufficientAuthenticationExceptio
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class FrontendController extends Controller
+class FrontendController extends BaseController
 {
     /**
      * Render front application
@@ -20,14 +20,11 @@ class FrontendController extends Controller
      */
     public function indexAction()
     {
-        if ($this->get('security.context')->isGranted('ROLE_USER')) {
-            return $this->render(
-                'SimpleITClaireExerciseBundle:Frontend:default-layout.html.twig',
-                array()
-            );
-        } else {
-            throw new InsufficientAuthenticationException();
-        }
+        $userId = $this->getUserId();
 
+        return $this->render(
+            'SimpleITClaireExerciseBundle:Frontend:default-layout.html.twig',
+            array('currentUserId' => $userId)
+        );
     }
 } 

@@ -2,7 +2,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 
-use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\BaseController;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
@@ -17,7 +17,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class ExerciseByExerciseModelController extends ApiController
+class ExerciseByExerciseModelController extends BaseController
 {
     /**
      * Generate an exercise from the model id

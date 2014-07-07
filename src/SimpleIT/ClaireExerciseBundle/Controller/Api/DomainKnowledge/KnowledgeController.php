@@ -11,7 +11,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Api\ApiEditedResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
 use SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException;
-use SimpleIT\ClaireExerciseBundle\Controller\Api\ApiController;
+use SimpleIT\ClaireExerciseBundle\Controller\BaseController;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Baptiste Cablé <baptiste.cable@liris.cnrs.fr>
  */
-class KnowledgeController extends ApiController
+class KnowledgeController extends BaseController
 {
     /**
      * View action. View a knowledge.
