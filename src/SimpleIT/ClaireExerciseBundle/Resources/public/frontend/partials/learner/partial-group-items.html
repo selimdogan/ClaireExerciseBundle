@@ -1,0 +1,136 @@
+<div data-ng-controller="groupItemsController" class="container">
+
+    <div class="panel object-list"
+         ng-if="!item.corrected"
+         ui-on-Drop="onDropList($event,$data,item.content.objects)"
+         title="Déposez ces objets dans les cases ci dessous afin de les regrouper.">
+        <div class="panel-heading">
+            Objets à glisser-déposer :
+        </div>
+        <div class="panel-body">
+            <span ng-if="item.content.objects.length == 0">
+                <span ng-if="drop[0].object_type == 'text'"
+                      class="etiquette txt-etiquette etiquette-empty">
+                </span>
+                <span ng-if="drop[0].object_type == 'picture'"
+                      class="etiquette img-etiquette etiquette-empty">
+                </span>
+            </span>
+            <span ng-if="!item.corrected" style="margin: 6px"
+                  ng-repeat="object in item.content.objects track by $index"
+                  ui-draggable="true" drag="object"
+                  on-drop-success="dropSuccessHandler($event,$index,item.content.objects)"
+                >
+                <span ng-if="object.object_type == 'text'"
+                      class="etiquette txt-etiquette">
+                    {{ object.text }}
+                </span>
+                <span ng-if="object.object_type == 'picture'">
+                    <img ng-src="{{ imageUrl }}/{{ object.source }}"
+                         class="etiquette img-etiquette"/>
+                </span>
+            </span>
+        </div>
+    </div>
+
+    <div class="panel-body">
+        <div class="row">
+
+            <!--drop zone-->
+            <div class="col-xs-{{ 12 / groups.length | number:0}} panel etiquette"
+                 style="margin: 0; text-align: center"
+                 ng-repeat="group in groups track by $index"
+                 ui-on-Drop="onDropList($event,$data,group.objects)">
+
+                <div class="panel-heading">
+
+                    <!--group name-->
+                    <div ng-if="dgn == 'show'">
+                        <strong>{{ item.content.groups[$index] }}</strong>
+                    </div>
+                    <div ng-if="dgn == 'hide'">
+                        Groupe {{ $index + 1 }}
+                    </div>
+                    <div ng-if="dgn == 'ask' && !item.corrected">
+                            Groupe :
+                            <input type="text" ng-model="group.name"
+                                   style="width: 100px;height: 30px;margin-top: 7px">
+                    </div>
+                    <div ng-if="dgn == 'ask' && item.corrected">
+                        <span class="etiquette txt-etiquette"
+                             data-ng-class="{'etiquette-wrong': group.name != group.goodName, 'etiquette-right': group.name == group.goodName}">
+                            {{ group.name }}
+                        </span>
+                        <span class="etiquette txt-etiquette"
+                             ng-if="group.name != group.goodName">
+                            {{ group.goodName }}
+                        </span>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div ng-if="group.objects.length == 0">
+                        <div class="etiquette txt-etiquette etiquette-empty">
+                        </div>
+                    </div>
+
+                    <!--when exercise-->
+                    <span ng-if="!item.corrected"
+                         ng-repeat="object in group.objects track by $index"
+                         ui-draggable="true" drag="object"
+                         on-drop-success="dropSuccessHandler($event,$index,group.objects)"
+                        >
+                        <span ng-if="object.object_type == 'text'"
+                             class="etiquette txt-etiquette">
+                            {{ object.text }}
+                        </span>
+                        <span ng-if="object.object_type == 'picture'">
+                            <img ng-src="{{ imageUrl }}/{{ object.source }}"
+                                 class="etiquette img-etiquette"/>
+                        </span>
+                    </span>
+
+                    <!--when correction-->
+                    <span ng-repeat="object in group.objects track by $index"
+                         ng-if="item.corrected">
+                        <span ng-if="object.object_type == 'text'"
+                             class="etiquette txt-etiquette"
+                             data-ng-class="{'etiquette-wrong': !object.right, 'etiquette-right': object.right}">
+                            {{ object.text }}
+                        </span>
+                        <span ng-if="object.object_type == 'picture'">
+                            <img ng-src="{{ imageUrl }}/{{ object.source }}"
+                                 class="etiquette img-etiquette"
+                                 data-ng-class="{'etiquette-wrong': !object.right, 'etiquette-right': object.right}"/>
+                        </span>
+                    </span>
+                </div>
+
+                <!--solution-->
+                <div class="panel-body">
+                    <div ng-if="solutions[$index].obj.length > 0"
+                        class="solution">Solution</div>
+                    <span ng-repeat="object in solutions[$index].obj track by $index">
+                        <span ng-if="object.object_type == 'text'"
+                             class="etiquette txt-etiquette">
+                            {{ object.text }}
+                        </span>
+                        <span ng-if="object.object_type == 'picture'">
+                            <img ng-src="{{ imageUrl }}/{{ object.source }}"
+                                 class="etiquette img-etiquette"/>
+                        </span>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div ng-hide="!item.corrected">
+            <strong>Votre score :</strong> {{ item.content.mark | number:0 }}%
+        </div>
+    </div>
+
+    <ng-include src="navBarUrl"></ng-include>
+
+</div>

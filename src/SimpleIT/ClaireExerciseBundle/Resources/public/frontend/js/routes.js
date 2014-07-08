@@ -68,6 +68,11 @@ mainApp.config(
                 templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-pair-items.html'
             });
 
+            $stateProvider.state('attempt.group-items', {
+                url: '/group-items/:itemId',
+                templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-group-items.html'
+            });
+
             $stateProvider.state('attempt.multiple-choice', {
                 url: '/multiple-choice/:itemId',
                 templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-multiple-choice.html'

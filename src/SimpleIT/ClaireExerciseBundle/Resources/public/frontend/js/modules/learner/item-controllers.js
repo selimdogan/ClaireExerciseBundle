@@ -34,6 +34,8 @@ attemptControllers.controller('attemptController', ['$scope', '$state', 'Attempt
             // when data loaded
             if ($scope.item.type == 'pair-items') {
                 $state.go('attempt.pair-items', {itemId: index}, {location: false});
+            } else if ($scope.item.type == 'group-items') {
+                $state.go('attempt.group-items', {itemId: index}, {location: false});
             } else if ($scope.item.type == 'multiple-choice') {
                 $state.go('attempt.multiple-choice', {itemId: index}, {location: false});
             }
@@ -203,5 +205,121 @@ itemControllers.controller('multipleChoiceController', ['$scope', 'Answer', '$ro
             $scope.displayCorrection($scope.item);
         } else {
             $scope.validable = true;
+        }
+    }]);
+
+itemControllers.controller('groupItemsController', ['$scope', 'Answer', '$routeParams', '$location', '$stateParams',
+    function ($scope, Answer, $routeParams, $location, $stateParams) {
+
+        // post answer
+        $scope.saveAnswer = function () {
+            $scope.validable = false;
+            var answer = new Answer;
+            answer.content = {"obj": []};
+            if ($scope.dgn === 'ask') {
+                answer.content.gr = [];
+            }
+
+            for (var i = 0; i < $scope.groups.length; ++i) {
+                // objects
+                for (var j = 0; j < $scope.groups[i].objects.length; ++j) {
+                    answer.content.obj[$scope.groups[i].objects[j].id] = i;
+                }
+
+                // group names
+                if ($scope.dgn === 'ask') {
+                    answer.content.gr[i] = $scope.groups[i].name;
+                }
+            }
+
+
+            console.log(answer);
+
+            item = answer.$save({itemId: $scope.item.item_id, attemptId: $stateParams.attemptId},
+                function (item) {
+                    $scope.items[$stateParams.itemId] = item;
+                    $scope.displayCorrection(item)
+                });
+        };
+
+        // correction
+        $scope.displayCorrection = function (item) {
+            $scope.item.corrected = true;
+            $scope.item['content']['mark'] = item['content']['mark'];
+
+            console.log($scope.solutions);
+
+            for (var i = 0; i < $scope.groups.length; ++i) {
+                for (var j = 0; j < $scope.groups[i].objects.length; ++j) {
+                    if (item['content'].solutions[$scope.groups[i].objects[j].id] === i) {
+                        $scope.groups[i].objects[j].right = true;
+                    } else {
+                        $scope.solutions[
+                            item['content'].solutions[$scope.groups[i].objects[j].id]
+                            ].obj.push($scope.groups[i].objects[j]);
+                        $scope.groups[i].objects[j].right = false;
+                    }
+                }
+
+                // group names
+                if ($scope.dgn == 'ask') {
+                    $scope.groups[i].goodName = item['content'].groups[i];
+                }
+            }
+
+
+        };
+
+        // display learner answers
+        $scope.fillLearnerAnswers = function () {
+            for (i = 0; i < $scope.item['content'].answers.obj.length; ++i) {
+                $scope.groups[
+                    $scope.item['content'].answers.obj[i]
+                    ].objects.push($scope.item['content'].objects[i]);
+            }
+
+            // group names
+            if ($scope.dgn == 'ask')
+            {
+                for (i = 0; i < $scope.item['content'].answers.gr.length; ++i) {
+                    $scope.groups[i].name = $scope.item['content'].answers.gr[i];
+                }
+            }
+        };
+
+        // drag and drop
+        $scope.onDropList = function ($event, $data, array) {
+            array.push($data);
+        };
+
+        $scope.dropSuccessHandler = function ($event, index, array) {
+            array.splice(index, 1);
+            $scope.validable = ($scope.item['content'].objects.length == 0);
+        };
+
+        // init groups and solution
+        $scope.groups = [];
+        $scope.solutions = [];
+        $scope.dgn = $scope.item['content'].display_group_names;
+        for (i = 0; i < $scope.item['content'].groups.length; ++i) {
+            $scope.groups[i] = {objects: []};
+            if ($scope.dgn === 'show') {
+                $scope.groups[i].name = $scope.item['content'].groups[i];
+            }
+            else {
+                $scope.groups[i].name = null;
+            }
+            $scope.solutions[i] = {"obj": [], "gr": []};
+        }
+
+        // init objects
+        for (i = 0; i < $scope.item['content'].objects.length; ++i) {
+            $scope.item['content'].objects[i].id = i;
+        }
+
+        // corrected?
+        if ($scope.item['corrected'] == true) {
+            $scope.fillLearnerAnswers();
+            $scope.displayCorrection($scope.item);
         }
     }]);

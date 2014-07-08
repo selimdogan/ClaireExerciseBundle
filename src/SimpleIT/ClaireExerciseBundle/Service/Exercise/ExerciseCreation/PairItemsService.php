@@ -2,16 +2,15 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
+use Claroline\CoreBundle\Entity\User;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
-use Claroline\CoreBundle\Entity\User;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidAnswerException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\ExerciseTextFactory;
 use SimpleIT\ClaireExerciseBundle\Model\ModelObject\ObjectIdFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonItem;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems\Exercise;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems\Item as ResItem;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
