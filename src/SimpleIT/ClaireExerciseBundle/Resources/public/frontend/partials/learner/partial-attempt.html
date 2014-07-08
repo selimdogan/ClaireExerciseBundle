@@ -18,7 +18,10 @@
                         {{ doc.text }}
                     </div>
                     <div ng-if="doc.object_type == 'picture'">
-                        <img ng-src="{{ imageUrl }}{{ doc.source }}" style="height: 100px"/>
+                        <a href="{{ imageUrl }}{{ doc.source }}"
+                           data-lightbox="doc" data-title="Document annexe">
+                            <img ng-src="{{ imageUrl }}{{ doc.source }}" style="height: 100px"/>
+                        </a>
                     </div>
                 </div>
             </div>

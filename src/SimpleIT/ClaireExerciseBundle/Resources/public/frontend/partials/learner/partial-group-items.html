@@ -26,8 +26,11 @@
                     {{ object.text }}
                 </span>
                 <span ng-if="object.object_type == 'picture'">
-                    <img ng-src="{{ imageUrl }}{{ object.source }}"
-                         class="etiquette img-etiquette"/>
+                    <a href="{{ imageUrl }}{{ object.source }}"
+                       data-lightbox="mobile" data-title="Image à placer">
+                        <img ng-src="{{ imageUrl }}{{ object.source }}"
+                             class="etiquette img-etiquette"/>
+                    </a>
                 </span>
             </span>
         </div>
@@ -52,17 +55,17 @@
                         Groupe {{ $index + 1 }}
                     </div>
                     <div ng-if="dgn == 'ask' && !item.corrected">
-                            Groupe :
-                            <input type="text" ng-model="group.name"
-                                   style="width: 100px;height: 30px;margin-top: 7px">
+                        Groupe :
+                        <input type="text" ng-model="group.name"
+                               style="width: 100px;height: 30px;margin-top: 7px">
                     </div>
                     <div ng-if="dgn == 'ask' && item.corrected">
                         <span class="etiquette txt-etiquette"
-                             data-ng-class="{'etiquette-wrong': group.name != group.goodName, 'etiquette-right': group.name == group.goodName}">
+                              data-ng-class="{'etiquette-wrong': group.name != group.goodName, 'etiquette-right': group.name == group.goodName}">
                             {{ group.name }}
                         </span>
                         <span class="etiquette txt-etiquette"
-                             ng-if="group.name != group.goodName">
+                              ng-if="group.name != group.goodName">
                             {{ group.goodName }}
                         </span>
                     </div>
@@ -75,32 +78,38 @@
 
                     <!--when exercise-->
                     <span ng-if="!item.corrected"
-                         ng-repeat="object in group.objects track by $index"
-                         ui-draggable="true" drag="object"
-                         on-drop-success="dropSuccessHandler($event,$index,group.objects)"
+                          ng-repeat="object in group.objects track by $index"
+                          ui-draggable="true" drag="object"
+                          on-drop-success="dropSuccessHandler($event,$index,group.objects)"
                         >
                         <span ng-if="object.object_type == 'text'"
-                             class="etiquette txt-etiquette">
+                              class="etiquette txt-etiquette">
                             {{ object.text }}
                         </span>
                         <span ng-if="object.object_type == 'picture'">
-                            <img ng-src="{{ imageUrl }}{{ object.source }}"
-                                 class="etiquette img-etiquette"/>
+                            <a href="{{ imageUrl }}{{ object.source }}"
+                               data-lightbox="placed" data-title="Image placée">
+                                <img ng-src="{{ imageUrl }}{{ object.source }}"
+                                     class="etiquette img-etiquette"/>
+                            </a>
                         </span>
                     </span>
 
                     <!--when correction-->
                     <span ng-repeat="object in group.objects track by $index"
-                         ng-if="item.corrected">
+                          ng-if="item.corrected">
                         <span ng-if="object.object_type == 'text'"
-                             class="etiquette txt-etiquette"
-                             data-ng-class="{'etiquette-wrong': !object.right, 'etiquette-right': object.right}">
+                              class="etiquette txt-etiquette"
+                              data-ng-class="{'etiquette-wrong': !object.right, 'etiquette-right': object.right}">
                             {{ object.text }}
                         </span>
                         <span ng-if="object.object_type == 'picture'">
-                            <img ng-src="{{ imageUrl }}{{ object.source }}"
-                                 class="etiquette img-etiquette"
-                                 data-ng-class="{'etiquette-wrong': !object.right, 'etiquette-right': object.right}"/>
+                            <a href="{{ imageUrl }}{{ object.source }}"
+                               data-lightbox="placed" data-title="Image placée">
+                                <img ng-src="{{ imageUrl }}{{ object.source }}"
+                                     class="etiquette img-etiquette"
+                                     data-ng-class="{'etiquette-wrong': !object.right, 'etiquette-right': object.right}"/>
+                            </a>
                         </span>
                     </span>
                 </div>
@@ -108,15 +117,19 @@
                 <!--solution-->
                 <div class="panel-body">
                     <div ng-if="solutions[$index].obj.length > 0"
-                        class="solution">Solution</div>
+                         class="solution">Solution
+                    </div>
                     <span ng-repeat="object in solutions[$index].obj track by $index">
                         <span ng-if="object.object_type == 'text'"
-                             class="etiquette txt-etiquette">
+                              class="etiquette txt-etiquette">
                             {{ object.text }}
                         </span>
                         <span ng-if="object.object_type == 'picture'">
-                            <img ng-src="{{ imageUrl }}{{ object.source }}"
-                                 class="etiquette img-etiquette"/>
+                            <a href="{{ imageUrl }}{{ object.source }}"
+                               data-lightbox="correction" data-title="Correction">
+                                <img ng-src="{{ imageUrl }}{{ object.source }}"
+                                     class="etiquette img-etiquette"/>
+                            </a>
                         </span>
                     </span>
                 </div>
