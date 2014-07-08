@@ -102,7 +102,8 @@
         </accordion>
 
         <accordion close-others="true">
-            <accordion-group class="panel panel-primary" ng-repeat="model in models | filter:filters.search | myFilters:filters">
+            <accordion-group class="panel panel-primary"
+                             ng-repeat="model in models | filter:filters.search | myFilters:filters">
                 <accordion-heading class="panel-heading">
                     <div ui-draggable="true" drag="model">
                         <div class="col-centered" ng-switch="model.type">
@@ -127,9 +128,16 @@
                         </div>
                         <div class="col-centered pull-right">
                             <h4>
-                                <span ui-sref="modelEdit({ modelid:model.id })" class="glyphicon glyphicon-edit"></span>
+                                <span
+                                    ng-if="model.type == 'pair-items' && model.owner == BASE_CONFIG.currentUserId"
+                                      ui-sref="modelEdit({ modelid:model.id })"
+                                      class="glyphicon glyphicon-edit"></span>
+                                <span ng-if="model.type == 'pair-items' && model.owner != BASE_CONFIG.currentUserId"
+                                      ui-sref="modelEdit({ modelid:model.id })"
+                                      class="glyphicon glyphicon-eye-open"></span>
                                 <span ng-click="$event.stopPropagation();tryModel(model)" class="glyphicon glyphicon-repeat"></span>
-                                <span ng-click="$event.stopPropagation();deleteModel(model)" class="glyphicon glyphicon-remove"></span>
+                                <span ng-if="model.type == 'pair-items'"
+                                    ng-click="$event.stopPropagation();deleteModel(model)" class="glyphicon glyphicon-remove"></span>
                             </h4>
                         </div>
                     </div>

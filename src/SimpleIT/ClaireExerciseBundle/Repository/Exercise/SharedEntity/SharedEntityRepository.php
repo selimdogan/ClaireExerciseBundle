@@ -236,6 +236,7 @@ abstract class SharedEntityRepository extends BaseRepository
                     }
                 }
             } else {
+                $qb->orderBy('entity.public');
                 $qb->addOrderBy('entity.id');
             }
         }
