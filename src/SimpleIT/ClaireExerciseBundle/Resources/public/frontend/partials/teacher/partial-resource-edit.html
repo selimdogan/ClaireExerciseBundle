@@ -29,8 +29,8 @@
                                     <input type="text" ng-model="resource.title" class="form-control" ng-required/>
                                 </div>
                                 <!--<div class="col-xs-6">-->
-                                    <!--<h4>Auteur</h4>-->
-                                    <!--<input type="text" ng-model="users[resource.author]" class="form-control" disabled>-->
+                                <!--<h4>Auteur</h4>-->
+                                <!--<input type="text" ng-model="users[resource.author]" class="form-control" disabled>-->
                                 <!--</div>-->
                                 <div class="col-xs-4">
                                     <h4>Propriétaire</h4>
@@ -48,20 +48,20 @@
                                     </div>
                                 </div>
                                 <!--DEMO<div>-->
-                                    <!--<div class="col-centered">-->
-                                        <!--<span class="glyphicon" ng-class="{'glyphicon-check': resource.archived, 'glyphicon-unchecked': !resource.archived}" data-ng-click="resource.archived=!resource.archived"></span>-->
-                                    <!--</div>-->
-                                    <!--<div class="col-centered">-->
-                                        <!--<h4>Archivé</h4>-->
-                                    <!--</div>-->
+                                <!--<div class="col-centered">-->
+                                <!--<span class="glyphicon" ng-class="{'glyphicon-check': resource.archived, 'glyphicon-unchecked': !resource.archived}" data-ng-click="resource.archived=!resource.archived"></span>-->
+                                <!--</div>-->
+                                <!--<div class="col-centered">-->
+                                <!--<h4>Archivé</h4>-->
+                                <!--</div>-->
                                 <!--</div>-->
                                 <!--<div>-->
-                                    <!--<div class="col-centered">-->
-                                        <!--<span class="glyphicon" ng-class="{'glyphicon-check': resource.draft, 'glyphicon-unchecked': !resource.draft}" data-ng-click="resource.draft=!resource.draft"></span>-->
-                                    <!--</div>-->
-                                    <!--<div class="col-centered">-->
-                                        <!--<h4>Brouillon</h4>-->
-                                    <!--</div>-->
+                                <!--<div class="col-centered">-->
+                                <!--<span class="glyphicon" ng-class="{'glyphicon-check': resource.draft, 'glyphicon-unchecked': !resource.draft}" data-ng-click="resource.draft=!resource.draft"></span>-->
+                                <!--</div>-->
+                                <!--<div class="col-centered">-->
+                                <!--<h4>Brouillon</h4>-->
+                                <!--</div>-->
                                 <!--</div>-->
                                 <div>
                                     <div class="col-centered">
@@ -110,9 +110,14 @@
                                     <div class="col-xs-1"></div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-xs-5"><input type="file" ng-file-select="onFileSelect($files)"></div>
+                                    <div class="col-xs-5">
+                                        <input type="file" ng-file-select="onFileSelect($files)">
+                                    </div>
                                 </div>
-                                <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{resource.content.source}}"/>
+                                <a href="{{BASE_CONFIG.urls.images.uploads}}{{resource.content.source}}"
+                                   data-lightbox="res" data-title="La ressource">
+                                    <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{resource.content.source}}"/>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -122,20 +127,24 @@
                 <div class="panel panel-success">
                     <div class="panel-heading">
                         <h4>Mots-clés</h4>
+
                         <div class="row">
                             <div ng-repeat="keyword in resource.keywords track by $index">
                                 <div class="col-xs-5">
                                     <input type="text" ng-model="keyword" class="form-control" disabled>
                                 </div>
                                 <div class="col-xs-1"><span data-ng-click="resourceRemoveField(resource.keywords, $index)"
-                                                            class="glyphicon glyphicon-remove"></span></div>
+                                                            class="glyphicon glyphicon-remove"></span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-5"><input id="resourceAddKeyword" type="text" value=""
-                                                         placeholder="nouveau mot-clé" class="form-control"></div>
+                            <div class="col-xs-5">
+                                <input id="resourceAddKeyword" type="text" value=""
+                                       placeholder="nouveau mot-clé" class="form-control"></div>
                             <div class="col-xs-1"><span data-ng-click="resourceAddKeywordsField(resource.keywords)"
-                                                        class="glyphicon glyphicon-plus"></span></div>
+                                                        class="glyphicon glyphicon-plus"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -143,25 +152,30 @@
                 <div class="panel panel-success">
                     <div class="panel-heading">
                         <h4>Méta-données</h4>
+
                         <div class="row">
                             <div ng-repeat="meta in resource.metadata track by $index">
                                 <div class="col-xs-5">
-                                    <input type="text" ng-model="meta.key" class="form-control" >
+                                    <input type="text" ng-model="meta.key" class="form-control">
                                 </div>
                                 <div class="col-xs-6">
-                                    <input type="text" ng-model="meta.value" class="form-control" >
+                                    <input type="text" ng-model="meta.value" class="form-control">
                                 </div>
                                 <div class="col-xs-1"><span data-ng-click="resourceRemoveField(resource.metadata, $index)"
-                                                            class="glyphicon glyphicon-remove"></span></div>
+                                                            class="glyphicon glyphicon-remove"></span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-5"><input id="resourceAddMetadataKey" type="text" value=""
-                                                         placeholder="nouvelle clé" class="form-control"></div>
-                            <div class="col-xs-6"><input id="resourceAddMetadataValue" type="text" value=""
-                                                         placeholder="nouvelle valeur" class="form-control"></div>
+                            <div class="col-xs-5">
+                                <input id="resourceAddMetadataKey" type="text" value=""
+                                       placeholder="nouvelle clé" class="form-control"></div>
+                            <div class="col-xs-6">
+                                <input id="resourceAddMetadataValue" type="text" value=""
+                                       placeholder="nouvelle valeur" class="form-control"></div>
                             <div class="col-xs-1"><span data-ng-click="resourceAddMetadataField(resource.metadata)"
-                                                        class="glyphicon glyphicon-plus"></span></div>
+                                                        class="glyphicon glyphicon-plus"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -169,10 +183,12 @@
                 <div class="navbar">
                     <button back-Button class="btn btn-success">Retour</button>
                     <button ng-if="resource.owner == BASE_CONFIG.currentUserId"
-                        ng-click="updateResource()" class="btn btn-success">Sauvegarder</button>
+                            ng-click="updateResource()" class="btn btn-success">Sauvegarder
+                    </button>
                     <button ng-if="resource.owner == BASE_CONFIG.currentUserId"
-                        ng-click="deleteResource(resource)" back-Button
-                        class="btn btn-danger pull-right">Supprimer</button>
+                            ng-click="deleteResource(resource)" back-Button
+                            class="btn btn-danger pull-right">Supprimer
+                    </button>
                 </div>
 
             </div>
