@@ -3,39 +3,37 @@
 
         <div class="col-xs-12">
             <div class="panel-body">
-                <div class="panel panel-primary">
+                <div class="panel panel-primary" style="margin-bottom: 0">
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-centered" ng-switch="model.type">
                                 <div ng-switch-when="multiple-choice">
-                                    <span class="glyphicon glyphicon-check" style="font-size: 920%"></span>
+                                    <span class="glyphicon glyphicon-check" style="font-size:500%"></span>
                                 </div>
                                 <div ng-switch-when="open-ended-question">
-                                    <span class="glyphicon glyphicon-question-sign" style="font-size: 920%"></span>
+                                    <span class="glyphicon glyphicon-question-sign" style="font-size: 500%"></span>
                                 </div>
                                 <div ng-switch-when="pair-items">
-                                    <span class="glyphicon glyphicon-random" style="font-size: 920%"></span>
+                                    <span class="glyphicon glyphicon-random" style="font-size: 500%"></span>
                                 </div>
                                 <div ng-switch-when="order-items">
-                                    <span class="glyphicon glyphicon-sort" style="font-size: 920%"></span>
+                                    <span class="glyphicon glyphicon-sort" style="font-size: 500%"></span>
                                 </div>
                                 <div ng-switch-when="group-items">
-                                    <span class="glyphicon glyphicon-link" style="font-size: 920%"></span>
+                                    <span class="glyphicon glyphicon-link" style="font-size: 500%"></span>
                                 </div>
                             </div>
                             <div class="col-xs-4 col-centered">
                                 <h4>Titre</h4>
                                 <input type="text" ng-model="model.title" class="form-control"/>
-                                <h4>Consigne</h4>
-                                <input type="text" ng-model="model.content.wording" class="form-control"/>
                             </div>
                             <div class="col-centered">
-                                <h4>Auteur</h4>
-                                <input type="text" ng-model="users[model.author]" class="form-control" disabled>
+                                <!--<h4>Auteur</h4>-->
+                                <!--<input type="text" ng-model="users[model.author]" class="form-control" disabled>-->
                                 <h4>Propriétaire</h4>
                                 <input type="text" ng-model="users[model.owner]" class="form-control" disabled>
                             </div>
-                            <div class="col-xs-4 col-centered">
+                            <div class="col-xs-2 col-centered">
                                 <div>
                                     <div class="col-centered">
                                         <span class="glyphicon" ng-class="{'glyphicon-check': model.public, 'glyphicon-unchecked': !model.public}" data-ng-click="model.public=!model.public"></span>
@@ -44,22 +42,22 @@
                                         <h4>Partagé</h4>
                                     </div>
                                 </div>
-                                <div>
-                                    <div class="col-centered">
-                                        <span class="glyphicon" ng-class="{'glyphicon-check': model.archived, 'glyphicon-unchecked': !model.archived}" data-ng-click="model.archived=!model.archived"></span>
-                                    </div>
-                                    <div class="col-centered">
-                                        <h4>Archivé</h4>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="col-centered">
-                                        <span class="glyphicon" ng-class="{'glyphicon-check': model.draft, 'glyphicon-unchecked': !model.draft}" data-ng-click="model.draft=!model.draft"></span>
-                                    </div>
-                                    <div class="col-centered">
-                                        <h4>Brouillon</h4>
-                                    </div>
-                                </div>
+                                <!--<div>-->
+                                    <!--<div class="col-centered">-->
+                                        <!--<span class="glyphicon" ng-class="{'glyphicon-check': model.archived, 'glyphicon-unchecked': !model.archived}" data-ng-click="model.archived=!model.archived"></span>-->
+                                    <!--</div>-->
+                                    <!--<div class="col-centered">-->
+                                        <!--<h4>Archivé</h4>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div>-->
+                                    <!--<div class="col-centered">-->
+                                        <!--<span class="glyphicon" ng-class="{'glyphicon-check': model.draft, 'glyphicon-unchecked': !model.draft}" data-ng-click="model.draft=!model.draft"></span>-->
+                                    <!--</div>-->
+                                    <!--<div class="col-centered">-->
+                                        <!--<h4>Brouillon</h4>-->
+                                    <!--</div>-->
+                                <!--</div>-->
                                 <div>
                                     <div class="col-centered">
                                         <span class="glyphicon" ng-class="{'glyphicon-check': model.complete, 'glyphicon-unchecked': !model.complete}"></span>
@@ -75,7 +73,8 @@
             </div>
         </div>
 
-        <div ng-class="{'col-xs-4': !$parent.toggleResourceList, 'col-xs-12': $parent.toggleResourceList}">
+        <div
+            ng-class="{'col-xs-5': !$parent.toggleResourceList, 'col-xs-12': $parent.toggleResourceList}">
             <div class="panel-body">
 
             <accordion>
@@ -83,7 +82,7 @@
                     <accordion-heading class="panel-heading">
                         <div class="row">
                             <div class="col-xs-11" data-ng-click="">
-                                <h4>Documents&nbsp;<span class="caret"></span></h4>
+                                Documents&nbsp;<span class="caret"></span>
                             </div>
                             <div class="col-xs-1">
                                 <span data-ng-click="" class="glyphicon glyphicon-plus"></span>
@@ -173,6 +172,16 @@
                 </accordion-group>
             </accordion>
 
+            <accordion>
+                <accordion-group class="panel panel-primary">
+                    <accordion-heading class="panel-heading">
+                        Consigne&nbsp;<span class="caret"></span>
+                    </accordion-heading>
+                        <!--<input type="text" ng-model="model.content.wording"/>-->
+                        <textarea class="span5" rows="5" placeholder="Consigne de l'exercice"></textarea>
+                </accordion-group>
+            </accordion>
+
             <div ng-switch="model.type">
                 <div ng-switch-when="pair-items">
                     <accordion close-others="true">
@@ -180,7 +189,7 @@
                             <accordion-heading class="panel-heading">
                                 <div class="row" data-ng-init="usedResources.push([])">
                                     <div class="col-xs-11">
-                                        <h4>Bloc d'appariement&nbsp;<span class="caret"></span></h4>
+                                        Bloc d'appariement&nbsp;<span class="caret"></span>
                                     </div>
                                     <div class="col-xs-1">
                                         <span data-ng-click="$event.stopPropagation();modelRemoveField(model.content.pair_blocks, $index)" class="glyphicon glyphicon-remove"></span>
@@ -584,7 +593,7 @@
 
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h4>Mots-clés</h4>
+                        Mots-clés
 
                         <div class="row">
                             <div ng-repeat="keyword in model.keywords track by $index">
@@ -606,7 +615,7 @@
 
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h4>Méta-données</h4>
+                        Méta-données
 
                         <div class="row">
                             <div ng-repeat="meta in model.metadata track by $index">
@@ -657,19 +666,20 @@
         <script>
             $(function () {
                 var window_height = $(window).height(),
-                    content_height = window_height - 386; // 484
+                    content_height = window_height - 190; // 484
 
                 $('.scrollContainer').height(content_height);
             });
 
             $(window).resize(function () {
                 var window_height = $(window).height(),
-                    content_height = window_height - 386;
+                    content_height = window_height - 190;
                 $('.scrollContainer').height(content_height);
             });
         </script>
 
-        <div class="scrollContainer" style="right:0;" ng-class="{'col-xs-8': !$parent.toggleResourceList, 'hide': $parent.toggleResourceList}">
+        <div class="scrollContainer"
+             ng-class="{'col-xs-8': !$parent.toggleResourceList, 'hide': $parent.toggleResourceList}">
             <div ui-view>
                 <div data-ng-include="BASE_CONFIG.urls.partials.teacher+'/partial-resource-list.html'"></div>
             </div>

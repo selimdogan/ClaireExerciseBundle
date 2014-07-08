@@ -42,8 +42,11 @@ option {
 
 .scrollContainer {
     position: fixed;
-    margin-top: 222px;
+    margin-top: 135px;
     overflow: auto;
+    right:0;
+    padding-left: 80px;
+    padding-right: 0
 }
 
 .col-centered {
