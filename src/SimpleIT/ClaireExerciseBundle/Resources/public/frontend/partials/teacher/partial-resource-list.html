@@ -147,11 +147,16 @@
                             <div class="col-centered pull-right">
                                 <h4>
                                     <ng-switch on="parentSection">
-                                        <span ng-switch-when="model" ui-sref="modelEdit.resourceEdit({ resourceid:resource.id })" class="glyphicon glyphicon-edit"></span>
-                                        <span ng-switch-default ui-sref="resourceEdit({ resourceid:resource.id })" class="glyphicon glyphicon-edit"></span>
+                                        <span ng-switch-when="model" ui-sref="modelEdit.resourceEdit({ resourceid:resource.id })"
+                                              class="glyphicon"
+                                            data-ng-class="{'glyphicon-edit': resource.owner == BASE_CONFIG.currentUserId, 'glyphicon-eye-open': resource.owner != BASE_CONFIG.currentUserId}"></span>
+                                        <span ng-switch-default ui-sref="resourceEdit({ resourceid:resource.id })"
+                                              class="glyphicon"
+                                              data-ng-class="{'glyphicon-edit': resource.owner == BASE_CONFIG.currentUserId, 'glyphicon-eye-open': resource.owner != BASE_CONFIG.currentUserId}"></span>
                                     </ng-switch>
                                     &nbsp;&nbsp;
-                                    <span ng-click="$event.stopPropagation();deleteResource(resource)" class="glyphicon glyphicon-remove"></span>
+                                    <span ng-if="resource.owner == BASE_CONFIG.currentUserId"
+                                        ng-click="$event.stopPropagation();deleteResource(resource)" class="glyphicon glyphicon-remove"></span>
                                 </h4>
                             </div>
                             <div class="row" style="margin-left: 3px">

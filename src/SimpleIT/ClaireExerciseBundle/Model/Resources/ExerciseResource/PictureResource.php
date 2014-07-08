@@ -16,7 +16,6 @@ class PictureResource extends CommonResource
      * @var string $source The source of the picture
      * @Serializer\Type("string")
      * @Serializer\Groups({"details", "resource_storage", "resource_list", "owner_resource_list"})
-     * @Assert\NotBlank(groups={"create"})
      */
     private $source;
 

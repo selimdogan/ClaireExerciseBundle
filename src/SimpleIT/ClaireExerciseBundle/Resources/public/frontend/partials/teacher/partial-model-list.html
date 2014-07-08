@@ -153,7 +153,7 @@
                                       ui-sref="modelEdit({ modelid:model.id })"
                                       class="glyphicon glyphicon-eye-open"></span>
                                 <span ng-click="$event.stopPropagation();tryModel(model)" class="glyphicon glyphicon-repeat"></span>
-                                <span ng-if="model.type == 'pair-items'"
+                                <span ng-if="model.owner == BASE_CONFIG.currentUserId"
                                       ng-click="$event.stopPropagation();deleteModel(model)" class="glyphicon glyphicon-remove"></span>
                             </h4>
                         </div>

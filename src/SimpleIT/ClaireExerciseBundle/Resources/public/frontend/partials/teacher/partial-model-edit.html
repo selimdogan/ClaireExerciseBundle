@@ -656,6 +656,9 @@
                             title="Essayer le modèle">
                         Essayer
                     </button>
+                    <button ng-if="BASE_CONFIG.currentUserId == model.owner"
+                            ng-click="deleteModel(model)" back-Button
+                            class="btn btn-danger pull-right">Supprimer</button>
                 </div>
 
             </div>

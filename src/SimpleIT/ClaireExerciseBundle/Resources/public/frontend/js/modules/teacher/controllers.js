@@ -54,7 +54,7 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
             "metadata": [],
             "keywords": [],
             "content": {
-                "source": "img1.jpeg",
+                "source": null,
                 "object_type": "picture"
             },
             "required_exercise_resources": null,
@@ -260,6 +260,13 @@ resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 
                 // file is uploaded successfully
                 $scope.resource.content.source = data.fileName;
             });
+    };
+
+    // delete resource method
+    $scope.deleteResource = function (resource) {
+        resource.$delete({id: resource.id}, function () {
+
+        });
     };
 
 }]);
@@ -543,4 +550,9 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
             return collection.title;
         }
     }
+
+    $scope.deleteModel = function (model) {
+        model.$delete({id: model.id}, function () {
+        });
+    };
 }]);
