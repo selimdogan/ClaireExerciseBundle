@@ -127,7 +127,7 @@
                                 <span class="glyphicon glyphicon-font" style="font-size: 320%"></span>
                             </div>
                             <div ng-switch-when="picture">
-                                <img ng-src="{{BASE_CONFIG.urls.images.uploads}}/{{resource.content.source}}" style="width: 55px; height: 55px;"/>
+                                <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{resource.content.source}}" style="width: 55px; height: 55px;"/>
                             </div>
                             <div ng-switch-when="multiple-choice-question">
                                 <span class="glyphicon glyphicon-check" style="font-size: 320%"></span>

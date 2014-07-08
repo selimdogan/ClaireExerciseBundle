@@ -26,7 +26,7 @@
                     {{ object.text }}
                 </span>
                 <span ng-if="object.object_type == 'picture'">
-                    <img ng-src="{{ imageUrl }}/{{ object.source }}"
+                    <img ng-src="{{ imageUrl }}{{ object.source }}"
                          class="etiquette img-etiquette"/>
                 </span>
             </span>
@@ -84,7 +84,7 @@
                             {{ object.text }}
                         </span>
                         <span ng-if="object.object_type == 'picture'">
-                            <img ng-src="{{ imageUrl }}/{{ object.source }}"
+                            <img ng-src="{{ imageUrl }}{{ object.source }}"
                                  class="etiquette img-etiquette"/>
                         </span>
                     </span>
@@ -98,7 +98,7 @@
                             {{ object.text }}
                         </span>
                         <span ng-if="object.object_type == 'picture'">
-                            <img ng-src="{{ imageUrl }}/{{ object.source }}"
+                            <img ng-src="{{ imageUrl }}{{ object.source }}"
                                  class="etiquette img-etiquette"
                                  data-ng-class="{'etiquette-wrong': !object.right, 'etiquette-right': object.right}"/>
                         </span>
@@ -115,7 +115,7 @@
                             {{ object.text }}
                         </span>
                         <span ng-if="object.object_type == 'picture'">
-                            <img ng-src="{{ imageUrl }}/{{ object.source }}"
+                            <img ng-src="{{ imageUrl }}{{ object.source }}"
                                  class="etiquette img-etiquette"/>
                         </span>
                     </span>

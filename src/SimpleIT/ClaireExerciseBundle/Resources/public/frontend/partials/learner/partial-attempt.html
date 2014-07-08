@@ -18,7 +18,7 @@
                         {{ doc.text }}
                     </div>
                     <div ng-if="doc.object_type == 'picture'">
-                        <img ng-src="{{ imageUrl }}/{{ doc.source }}" style="height: 100px"/>
+                        <img ng-src="{{ imageUrl }}{{ doc.source }}" style="height: 100px"/>
                     </div>
                 </div>
             </div>
