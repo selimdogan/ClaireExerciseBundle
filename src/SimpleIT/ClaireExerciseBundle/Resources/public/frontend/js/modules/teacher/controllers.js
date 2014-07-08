@@ -85,7 +85,8 @@ resourceControllers.controller('resourceListController', ['$scope', 'Resource', 
     $scope.users = [];
 
     // retrieve resources
-    $scope.resources = Resource.query(function (data) {
+// DEMO    $scope.resources = Resource.query(function (data) {
+    $scope.resources = Resource.query({owner: BASE_CONFIG.currentUserId}, function (data) {
         angular.forEach(data, function (res) {
             User.get({userId: res.author}, function (user) {
                 $scope.users[user.id] = user.user_name;
