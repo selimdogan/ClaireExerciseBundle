@@ -15,9 +15,8 @@
                 <div class="col-xs-6">
                     <div class="checkbox-exo checkbox-exo-question"
                          data-ng-class="{'good-answer': item.corrected && solution[$index] == tick[$index],'wrong-answer': item.corrected && solution[$index] != tick[$index]}">
-                        <label>
-                            <input type="checkbox" ng-model="tick[$index]"
-                                   ng-disabled="item.corrected">
+                        <label data-ng-click="tickAction($index)">
+                            <span class="glyphicon" ng-class="{'glyphicon-check': tick[$index], 'glyphicon-unchecked': !tick[$index]}"></span>
                             {{ proposition.text }}
                         </label>
                     </div>
@@ -27,7 +26,7 @@
                     <div class="checkbox-exo solution"
                          ng-class="solution[$index] ? 'right-prop' : 'wrong-prop'">
                         <label>
-                            <input type="checkbox" ng-model="solution[$index]" disabled>
+                            <span class="glyphicon" ng-class="{'glyphicon-check': solution[$index], 'glyphicon-unchecked': !solution[$index]}"></span>
                             {{ proposition.text }}
                         </label>
                     </div>

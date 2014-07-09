@@ -191,6 +191,12 @@ itemControllers.controller('multipleChoiceController', ['$scope', 'Answer', '$ro
             }
         };
 
+        $scope.tickAction = function (index) {
+            if (!$scope.item.corrected) {
+                $scope.tick[index] = !$scope.tick[index];
+            }
+        };
+
         // init answer array
         $scope.tick = [];
         $scope.solution = [];
