@@ -121,8 +121,8 @@
         <accordion close-others="true">
             <accordion-group class="panel panel-success" ng-repeat="resource in resources | filter:filters.search | myFilters:filters">
                 <accordion-heading class="panel-heading" style="padding-bottom: 0">
-                    <div class="row" ui-draggable="true" drag="resource">
-                        <div class="col-xs-1" ng-switch="resource.type">
+                    <div class="row">
+                        <div class="col-xs-1" ng-switch="resource.type" ui-draggable="true" drag="resource">
                             <div ng-switch-when="text">
                                 <span class="glyphicon glyphicon-font" style="font-size: 320%"></span>
                             </div>
@@ -141,10 +141,10 @@
                         </div>
 
                         <div class="col-xs-11">
-                            <div class="col-centered">
+                            <div class="col-centered" ui-draggable="true" drag="resource">
                                 {{ resource.title }}&nbsp;<span class="caret"></span>
                             </div>
-                            <div class="col-centered pull-right">
+                            <div class="col-centered pull-right" ui-draggable="true" drag="resource">
                                 <h4>
                                     <ng-switch on="parentSection">
                                         <span ng-switch-when="model" ui-sref="modelEdit.resourceEdit({ resourceid:resource.id })"

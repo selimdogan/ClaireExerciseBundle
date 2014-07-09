@@ -498,7 +498,7 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
         delete $scope.model.owner;
         delete $scope.model.required_exercise_resources;
         delete $scope.model.required_knowledges;
-    }
+    };
 
     $scope.updateModel = function () {
         $scope.preUpdate();
@@ -512,11 +512,12 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                 $scope.modelAddBlockResourceField(collection, resource.id);
             }
         }
-    }
+    };
 
     $scope.onDropMetadataKey = function (event, metakey, collection, field) {
         collection[field] = metakey;
-    }
+        console.log(metakey);
+    };
 
     $scope.onDropDocument = function (event, resource, documents) {
         if ($scope.model.type == 'pair-items') {
@@ -524,19 +525,19 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                 $scope.modelAddBlockResourceField(documents, resource.id);
             }
         }
-    }
+    };
 
     $scope.getResourceInfo = function (blockid, resourceid) {
         $scope.usedResources[blockid][resourceid] = Resource.get({id: resourceid});
-    }
+    };
 
     $scope.getExcludedResourceInfo = function (blockid, resourceid) {
         $scope.excludedResources[blockid][resourceid] = Resource.get({id: resourceid});
-    }
+    };
 
     $scope.getDocumentInfo = function (documentId) {
         $scope.usedDocuments[documentId] = Resource.get({id: documentId});
-    }
+    };
 
     $scope.getMobilPart = function (collection, key) {
         var returnValue = '';
@@ -550,7 +551,7 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
         } else {
             return collection.title;
         }
-    }
+    };
 
     $scope.deleteModel = function (model) {
         model.$delete({id: model.id}, function () {
