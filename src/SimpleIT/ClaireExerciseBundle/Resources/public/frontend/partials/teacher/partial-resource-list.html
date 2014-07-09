@@ -10,23 +10,24 @@
                 </accordion-heading>
                 <div class="col-centered">
                     <h4>Recherche</h4>
-                    <input type="text" placeholder="rechercher" ng-model="$parent.$parent.filters.search">
-                    <h4>Filtrer par types</h4>
+                    <input type="text" placeholder="rechercher" ng-model="$parent.$parent.filters.search"
+                           title="Rechercher dans le titre, les métadonnées et les mots-clés du modèle">
+                    <h4>Filtrer par type</h4>
 
                     <div class="btn-group">
-                        <button class="btn btn-success" ng-model="$parent.$parent.filters.type.text" btn-checkbox-true="'text'" btn-checkbox-false="''" btn-checkbox>
-                            <span title="Texte" class="glyphicon glyphicon-font"></span>
+                        <button class="btn btn-success" title="Texte" ng-model="$parent.$parent.filters.type.text" btn-checkbox-true="'text'" btn-checkbox-false="''" btn-checkbox>
+                            <span class="glyphicon glyphicon-font"></span>
                         </button>
-                        <button class="btn btn-success" ng-model="$parent.$parent.filters.type.multiple_choice_question" btn-checkbox-true="'multiple-choice-question'" btn-checkbox-false="''" btn-checkbox>
-                            <span title="Question de QCM" class="glyphicon glyphicon-check"></span>
+                        <button class="btn btn-success" title="Question de QCM" ng-model="$parent.$parent.filters.type.multiple_choice_question" btn-checkbox-true="'multiple-choice-question'" btn-checkbox-false="''" btn-checkbox>
+                            <span class="glyphicon glyphicon-check"></span>
                         </button>
-                        <button class="btn btn-success" ng-model="$parent.$parent.filters.type.picture" btn-checkbox-true="'picture'" btn-checkbox-false="''" btn-checkbox>
+                        <button class="btn btn-success" title="Image" ng-model="$parent.$parent.filters.type.picture" btn-checkbox-true="'picture'" btn-checkbox-false="''" btn-checkbox>
                             <span class="glyphicon glyphicon-picture"></span>
                         </button>
-                        <button class="btn btn-success" ng-model="$parent.$parent.filters.type.open_ended_question" btn-checkbox-true="'open-ended-question'" btn-checkbox-false="''" btn-checkbox>
-                            <span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign"></span>
+                        <button class="btn btn-success" title="Question à réponse courte ouverte" ng-model="$parent.$parent.filters.type.open_ended_question" btn-checkbox-true="'open-ended-question'" btn-checkbox-false="''" btn-checkbox>
+                            <span class="glyphicon glyphicon-question-sign"></span>
                         </button>
-                        <button class="btn btn-success" ng-model="$parent.$parent.filters.type.sequence" btn-checkbox-true="'sequence'" btn-checkbox-false="''" btn-checkbox>
+                        <button class="btn btn-success" title="sequence" ng-model="$parent.$parent.filters.type.sequence" btn-checkbox-true="'sequence'" btn-checkbox-false="''" btn-checkbox>
                             <span class="glyphicon glyphicon-sort-by-order"></span>
                         </button>
                     </div>
@@ -34,7 +35,8 @@
 
                     <div class="btn-group">
                         <button class="btn btn-success" ng-model="$parent.$parent.filters.archived" btn-checkbox-true="'true'" btn-checkbox-false="'false'" btn-checkbox>
-                            <span class="glyphicon glyphicon-folder-close"></span>
+                            <span class="glyphicon glyphicon-folder-close"
+                                title="Archivé"></span>
                         </button>
                     </div>
                 </div>
@@ -42,7 +44,7 @@
                 <div class="col-centered">
                     <h4>Mots-clés</h4>
 
-                    <div class="row">
+                    <div class="row" title="Recherche sur les mots-clés">
                         <div class="panel panel-success">
                             <br>
 
@@ -51,23 +53,26 @@
                                     <input type="text" ng-model="keyword" class="form-control" disabled>
                                 </div>
                                 <div class="col-xs-2"><span data-ng-click="resourceRemoveField(filters.keywords, $index)"
-                                                            class="glyphicon glyphicon-remove"></span>
+                                                            class="glyphicon glyphicon-remove"
+                                                            title="Supprimer ce filtre"></span>
                                 </div>
                             </div>
                             <div class="col-xs-10">
                                 <input id="resourceAddKeyword" type="text" value=""
                                        placeholder="nouveau mot-clé" class="form-control"></div>
                             <div class="col-xs-2"><span data-ng-click="resourceAddKeywordsField(filters.keywords)"
-                                                        class="glyphicon glyphicon-plus"></span>
+                                                        class="glyphicon glyphicon-plus"
+                                                        title="Ajouter ce filtre"></span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-centered">&nbsp;&nbsp;</div>
                 <div class="col-centered">
-                    <h4>Méta-données</h4>
+                    <h4>Métadonnées</h4>
 
-                    <div class="row">
+                    <div class="row"
+                         title="Recherche sur des métédonnées : saisir le couple clé/valeur recherché, ou seulement la clé ou seulement la valeur">
                         <div class="panel panel-success">
                             <br>
 
@@ -79,7 +84,8 @@
                                     <input type="text" ng-model="meta.value" class="form-control" disabled>
                                 </div>
                                 <div class="col-xs-1"><span data-ng-click="resourceRemoveField(filters.metadata, $index)"
-                                                            class="glyphicon glyphicon-remove"></span>
+                                                            class="glyphicon glyphicon-remove"
+                                                            title="Supprimer ce filtre"></span>
                                 </div>
                             </div>
                             <div class="">
@@ -90,7 +96,8 @@
                                     <input id="resourceAddMetadataValue" type="text" value=""
                                            placeholder="nouvelle valeur" class="form-control"></div>
                                 <div class="col-xs-1"><span data-ng-click="resourceAddMetadataField(filters.metadata)"
-                                                            class="glyphicon glyphicon-plus"></span>
+                                                            class="glyphicon glyphicon-plus"
+                                                            title="Ajouter ce filtre"></span>
                                 </div>
                             </div>
                         </div>
@@ -149,26 +156,32 @@
                                     <ng-switch on="parentSection">
                                         <span ng-switch-when="model" ui-sref="modelEdit.resourceEdit({ resourceid:resource.id })"
                                               class="glyphicon"
-                                            data-ng-class="{'glyphicon-edit': resource.owner == BASE_CONFIG.currentUserId, 'glyphicon-eye-open': resource.owner != BASE_CONFIG.currentUserId}"></span>
+                                              data-ng-class="{'glyphicon-edit': resource.owner == BASE_CONFIG.currentUserId, 'glyphicon-eye-open': resource.owner != BASE_CONFIG.currentUserId}"
+                                              title="Editer cette ressource"></span>
                                         <span ng-switch-default ui-sref="resourceEdit({ resourceid:resource.id })"
                                               class="glyphicon"
-                                              data-ng-class="{'glyphicon-edit': resource.owner == BASE_CONFIG.currentUserId, 'glyphicon-eye-open': resource.owner != BASE_CONFIG.currentUserId}"></span>
+                                              data-ng-class="{'glyphicon-edit': resource.owner == BASE_CONFIG.currentUserId, 'glyphicon-eye-open': resource.owner != BASE_CONFIG.currentUserId}"
+                                              title="Editer cette ressource"></span>
                                     </ng-switch>
                                     &nbsp;&nbsp;
                                     <span ng-if="resource.owner == BASE_CONFIG.currentUserId"
-                                        ng-click="$event.stopPropagation();deleteResource(resource)" class="glyphicon glyphicon-remove"></span>
+                                        ng-click="$event.stopPropagation();deleteResource(resource)" class="glyphicon glyphicon-remove"
+                                        title="Supprimer cette ressource"></span>
                                 </h4>
                             </div>
                             <div class="row" style="margin-left: 3px">
                                 <div style="margin: 1% 1% 0;">
-                                    <label class="panel panel-success" data-ng-repeat="meta in resource.metadata track by $index" style="margin: 2px;">
+                                    <label
+                                        class="panel panel-success" title="Métadonnée de ce modèle"
+                                           data-ng-repeat="meta in resource.metadata track by $index" style="margin: 2px;">
                                         &nbsp;<span ui-draggable="true" drag="meta.key">{{ meta.key }}</span>:&nbsp;<span>{{ meta.value }}</span>&nbsp;
                                     </label>
-                                    <label class="panel panel-success" data-ng-repeat="keyword in resource.keywords track by $index" style="margin: 2px;">
+                                    <label class="panel panel-success"
+                                           title="Mot-clé de ce modèle"
+                                           data-ng-repeat="keyword in resource.keywords track by $index" style="margin: 2px;">
                                         &nbsp;{{ keyword }}&nbsp;
                                     </label>
                                 </div>
-
                             </div>
                         </div>
                     </div>
