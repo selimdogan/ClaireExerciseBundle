@@ -80,13 +80,16 @@
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="text-align: right">
         <div class="navbar-header">
             <ul class="nav navbar-brand">
-                <li><a ui-sref="all-attempt-list">Mes tentatives</a></li>
-                <li><a ui-sref="model">Mes modèles d'exercices</a></li>
-                <li><a ui-sref="resource">Mes resources</a></li>
+                <li><a ui-sref="all-attempt-list"
+                       title="Consulter les exercices que vous avez généré, revoir vos réponse ou réessayer les exercices">Mes tentatives</a></li>
+                <li><a ui-sref="model"
+                       title="Liste des modèles d'exercices que vous possédez ou auxquels vous avez accès">Mes modèles d'exercices</a></li>
+                <li><a ui-sref="resource"
+                       title="Liste des ressources que vous possédez ou auxquels vous avez accès">Mes ressources</a></li>
             </ul>
         </div>
         <span>
-        <a href="{{ path('claro_desktop_open') }}">
+        <a href="{{ path('claro_desktop_open') }}" title="Retour à Claroline">
             <img src="{{ asset('bundles/clarolinecore/images/logos/clarolineconnect.png') }}"
                  style="margin-right:20px;margin-top:12px;height: 32px">
         </a></span>

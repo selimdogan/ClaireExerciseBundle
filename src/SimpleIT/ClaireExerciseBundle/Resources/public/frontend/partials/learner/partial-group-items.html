@@ -71,7 +71,7 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <div ng-if="group.objects.length == 0">
+                    <div ng-if="group.objects.length == 0" title="Déposez les objets ici">
                         <div class="etiquette txt-etiquette etiquette-empty">
                         </div>
                     </div>
@@ -81,7 +81,7 @@
                           ng-repeat="object in group.objects track by $index"
                           ui-draggable="true" drag="object"
                           on-drop-success="dropSuccessHandler($event,$index,group.objects)"
-                        >
+                          title="Déposez les objets ici">
                         <span ng-if="object.object_type == 'text'"
                               class="etiquette txt-etiquette">
                             {{ object.text }}
@@ -97,7 +97,8 @@
 
                     <!--when correction-->
                     <span ng-repeat="object in group.objects track by $index"
-                          ng-if="item.corrected">
+                          ng-if="item.corrected"
+                          title="Ce que vous avez répondu">
                         <span ng-if="object.object_type == 'text'"
                               class="etiquette txt-etiquette"
                               data-ng-class="{'etiquette-wrong': !object.right, 'etiquette-right': object.right}">
@@ -121,7 +122,8 @@
                     </div>
                     <span ng-repeat="object in solutions[$index].obj track by $index">
                         <span ng-if="object.object_type == 'text'"
-                              class="etiquette txt-etiquette">
+                              class="etiquette txt-etiquette"
+                              title="Cet objet aurait du être placé dans ce groupe">
                             {{ object.text }}
                         </span>
                         <span ng-if="object.object_type == 'picture'">

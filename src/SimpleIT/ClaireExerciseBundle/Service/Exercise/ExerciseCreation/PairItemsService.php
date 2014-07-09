@@ -149,6 +149,10 @@ class PairItemsService extends ExerciseCreationService
             }
         }
 
+        if ($mark < 0) {
+            $mark = 0;
+        }
+
         $item->setMark($mark);
     }
 

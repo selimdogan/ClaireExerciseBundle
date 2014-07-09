@@ -26,10 +26,12 @@
                      ng-repeat="fixPart in item.content.fix_parts track by $index">
                     <div class="col-xs-5" style="margin-bottom: 10px">
                         <div>
-                            <div ng-if="fixPart.object_type == 'text'" class="etiquette txt-etiquette">
+                            <div ng-if="fixPart.object_type == 'text'" class="etiquette txt-etiquette"
+                                 title="Partie fixe de la paire à laquelle vous devez associer une partie mobile">
                                 {{ fixPart.text }}
                             </div>
-                            <div ng-if="fixPart.object_type == 'picture'">
+                            <div ng-if="fixPart.object_type == 'picture'"
+                                 title="Partie fixe de la paire à laquelle vous devez associer une partie mobile. Cliquez pour agrandir.">
                                 <a href="{{ imageUrl }}{{ fixPart.source }}"
                                    data-lightbox="imageFix" data-title="Partie fixe">
                                     <img ng-src="{{ imageUrl }}{{ fixPart.source }}"
@@ -42,14 +44,15 @@
                     <!--drop zone-->
                     <div class="col-xs-3">
                         <!-- empty -->
-                        <div ng-if="drop[$index] == null" ui-on-Drop="onDropField($event,$data,$index)">
+                        <div ng-if="drop[$index] == null" ui-on-Drop="onDropField($event,$data,$index)"
+                            title="Déposer une partie mobile ici">
                             <div class="etiquette etiquette-empty"
                                  data-ng-class="{'img-etiquette': item.content.mobile_parts[0].object_type == 'picture', 'txt-etiquette': item.content.mobile_parts[0].object_type == 'text'}">
                             </div>
                         </div>
 
                         <!--not empty-->
-                        <div ng-if="drop[$index] != null">
+                        <div ng-if="drop[$index] != null" title="Votre proposition de réponse">
                             <!--not corrected-->
                             <div ng-if="!item.corrected"
                                  ui-draggable="true" drag="drop[$index]"
@@ -68,7 +71,7 @@
                             </div>
 
                             <!--corrected-->
-                            <div ng-if="item.corrected">
+                            <div ng-if="item.corrected" title="Votre proposition de réponse">
                                 <div ng-if="drop[$index].object_type == 'text'"
                                      class="etiquette txt-etiquette"
                                      data-ng-class="{'etiquette-wrong': !solution[$index].right, 'etiquette-right': solution[$index].right}">
@@ -87,7 +90,8 @@
 
                     <!-- correction -->
                     <div class="col-xs-3">
-                        <div ng-if="solution[$index] != null && !solution[$index].right">
+                        <div ng-if="solution[$index] != null && !solution[$index].right"
+                             title="La bonne réponse attendue">
                             <div ng-if="solution[$index].object_type == 'text'"
                                  class="etiquette txt-etiquette">
                                 {{ solution[$index].text }}

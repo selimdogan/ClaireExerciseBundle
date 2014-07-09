@@ -8,19 +8,20 @@
                         <div class="row">
                             <div class="col-centered" ng-switch="model.type">
                                 <div ng-switch-when="multiple-choice">
-                                    <span class="glyphicon glyphicon-check" style="font-size:500%"></span>
+                                    <span title="QCM" class="glyphicon glyphicon-check" style="font-size:500%"></span>
                                 </div>
                                 <div ng-switch-when="open-ended-question">
-                                    <span class="glyphicon glyphicon-question-sign" style="font-size: 500%"></span>
+                                    <span class="glyphicon glyphicon-question-sign" style="font-size: 500%"
+                                        title="Question à réponse courte ouverte"></span>
                                 </div>
                                 <div ng-switch-when="pair-items">
-                                    <span class="glyphicon glyphicon-random" style="font-size: 500%"></span>
+                                    <span title="Exercice d'appariement" class="glyphicon glyphicon-random" style="font-size: 500%"></span>
                                 </div>
                                 <div ng-switch-when="order-items">
-                                    <span class="glyphicon glyphicon-sort" style="font-size: 500%"></span>
+                                    <span title="Exercice d'ordonnancement" class="glyphicon glyphicon-sort" style="font-size: 500%"></span>
                                 </div>
                                 <div ng-switch-when="group-items">
-                                    <span class="glyphicon glyphicon-link" style="font-size: 500%"></span>
+                                    <span title="Exercice de groupement" class="glyphicon glyphicon-link" style="font-size: 500%"></span>
                                 </div>
                             </div>
                             <div class="col-xs-4 col-centered">
@@ -96,16 +97,17 @@
                                     <div class="row">
                                         <div class="col-xs-2" ng-switch="usedDocuments[documentId.id].type">
                                             <div ng-switch-when="text">
-                                                <span class="glyphicon glyphicon-font" style="font-size: 260%"></span>
+                                                <span title="Texte" class="glyphicon glyphicon-font" style="font-size: 260%"></span>
                                             </div>
                                             <div ng-switch-when="picture">
-                                                <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{usedDocuments[documentId.id].content.source}}" style="width: 40px; height: 40px;"/>
+                                                <img title="Image" ng-src="{{BASE_CONFIG.urls.images.uploads}}{{usedDocuments[documentId.id].content.source}}" style="width: 40px; height: 40px;"/>
                                             </div>
                                             <div ng-switch-when="multiple-choice-question">
-                                                <span class="glyphicon glyphicon-check" style="font-size: 260%"></span>
+                                                <span title="QCM" class="glyphicon glyphicon-check" style="font-size: 260%"></span>
                                             </div>
                                             <div ng-switch-when="open-ended-question">
-                                                <span class="glyphicon glyphicon-question-sign" style="font-size: 260%"></span>
+                                                <span class="glyphicon glyphicon-question-sign" title="Question à réponse courte ouverte"
+                                                      style="font-size: 260%"></span>
                                             </div>
                                             <div ng-switch-when="sequence">
                                                 <span class="glyphicon glyphicon-sort-by-order" style="font-size: 260%"></span>
@@ -224,16 +226,18 @@
                                                     <div class="row">
                                                         <div class="col-xs-2" ng-switch="usedResources[$parent.$parent.$parent.$index][blockResourceId.id].type">
                                                             <div ng-switch-when="text">
-                                                                <span class="glyphicon glyphicon-font" style="font-size: 260%"></span>
+                                                                <span title="Texte" class="glyphicon glyphicon-font" style="font-size: 260%"></span>
                                                             </div>
                                                             <div ng-switch-when="picture">
                                                                 <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{usedResources[$parent.$parent.$parent.$index][blockResourceId.id].content.source}}" style="width: 40px; height: 40px;"/>
                                                             </div>
                                                             <div ng-switch-when="multiple-choice-question">
-                                                                <span class="glyphicon glyphicon-check" style="font-size: 260%"></span>
+                                                                <span title="QCM" class="glyphicon glyphicon-check" style="font-size: 260%"></span>
                                                             </div>
                                                             <div ng-switch-when="open-ended-question">
-                                                                <span class="glyphicon glyphicon-question-sign" style="font-size: 260%"></span>
+                                                                <span class="glyphicon glyphicon-question-sign"
+                                                                      title="Question à réponse courte ouverte"
+                                                                      style="font-size: 260%"></span>
                                                             </div>
                                                             <div ng-switch-when="sequence">
                                                                 <span class="glyphicon glyphicon-sort-by-order" style="font-size: 260%"></span>
@@ -310,7 +314,7 @@
 
                                             <div class="btn-group">
                                                 <button class="btn btn-info" ng-model="pair_blocks.resource_constraint.type" btn-radio="'text'">
-                                                    <span class="glyphicon glyphicon-font"></span>
+                                                    <span title="Texte" class="glyphicon glyphicon-font"></span>
                                                 </button>
                                                 <button class="btn btn-info" ng-model="pair_blocks.resource_constraint.type" btn-radio="'picture'">
                                                     <span class="glyphicon glyphicon-picture"></span>
@@ -496,16 +500,16 @@
                                                             <div class="row">
                                                                 <div class="col-xs-2" ng-switch="excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].type">
                                                                     <div ng-switch-when="text">
-                                                                        <span class="glyphicon glyphicon-font" style="font-size: 260%"></span>
+                                                                        <span title="Texte" class="glyphicon glyphicon-font" style="font-size: 260%"></span>
                                                                     </div>
                                                                     <div ng-switch-when="picture">
                                                                         <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].content.source}}" style="width: 40px; height: 40px;"/>
                                                                     </div>
                                                                     <div ng-switch-when="multiple-choice-question">
-                                                                        <span class="glyphicon glyphicon-check" style="font-size: 260%"></span>
+                                                                        <span title="QCM" class="glyphicon glyphicon-check" style="font-size: 260%"></span>
                                                                     </div>
                                                                     <div ng-switch-when="open-ended-question">
-                                                                        <span class="glyphicon glyphicon-question-sign" style="font-size: 260%"></span>
+                                                                        <span class="glyphicon glyphicon-question-sign" title="Question à réponse courte ouverte" style="font-size: 260%"></span>
                                                                     </div>
                                                                     <div ng-switch-when="sequence">
                                                                         <span class="glyphicon glyphicon-sort-by-order" style="font-size: 260%"></span>
@@ -681,7 +685,7 @@
         </script>
 
         <div class="scrollContainer"
-             ng-class="{'col-xs-8': !$parent.toggleResourceList, 'hide': $parent.toggleResourceList}">
+             ng-class="{'col-xs-7': !$parent.toggleResourceList, 'hide': $parent.toggleResourceList}">
             <div ui-view>
                 <div data-ng-include="BASE_CONFIG.urls.partials.teacher+'/partial-resource-list.html'"></div>
             </div>

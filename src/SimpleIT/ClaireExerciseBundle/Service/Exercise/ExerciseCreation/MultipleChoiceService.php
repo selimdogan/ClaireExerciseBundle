@@ -366,6 +366,10 @@ class MultipleChoiceService extends ExerciseCreationService
             }
         }
 
+        if ($mark < 0) {
+            $mark = 0;
+        }
+
         $question->setMark($mark);
     }
 

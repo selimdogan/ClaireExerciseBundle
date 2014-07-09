@@ -15,19 +15,19 @@
 
             <div class="btn-group">
                 <button class="btn btn-primary" ng-model="$parent.$parent.filters.type.multiple_choice" btn-checkbox-true="'multiple-choice'" btn-checkbox-false="''" btn-checkbox>
-                    <span class="glyphicon glyphicon-check"></span>
+                    <span title="QCM" class="glyphicon glyphicon-check"></span>
                 </button>
                 <button class="btn btn-primary" ng-model="$parent.$parent.filters.type.pair_items" btn-checkbox-true="'pair-items'" btn-checkbox-false="''" btn-checkbox>
-                    <span class="glyphicon glyphicon-random"></span>
+                    <span title="Exercice d'appariement" class="glyphicon glyphicon-random"></span>
                 </button>
                 <button class="btn btn-primary" ng-model="$parent.$parent.filters.type.order_items" btn-checkbox-true="'order-items'" btn-checkbox-false="''" btn-checkbox>
-                    <span class="glyphicon glyphicon-sort"></span>
+                    <span title="Exercice d'ordonnancement" class="glyphicon glyphicon-sort"></span>
                 </button>
                 <button class="btn btn-primary" ng-model="$parent.$parent.filters.type.open_ended_question" btn-checkbox-true="'open-ended-question'" btn-checkbox-false="''" btn-checkbox>
-                    <span class="glyphicon glyphicon-question-sign"></span>
+                    <span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign"></span>
                 </button>
                 <button class="btn btn-primary" ng-model="$parent.$parent.filters.type.group_items" btn-checkbox-true="'group-items'" btn-checkbox-false="''" btn-checkbox>
-                    <span class="glyphicon glyphicon-link"></span>
+                    <span title="Exercice de groupement" class="glyphicon glyphicon-link"></span>
                 </button>
             </div>
             <h4>Filtrer par état</h4>
@@ -106,12 +106,12 @@
         </accordion-heading>
         <div class="list-group">
             <div>
-                <a href class="list-group-item" data-ng-click="createModel('pair-items')"><span class="glyphicon glyphicon-random"></span>&nbsp;Créer un exercice d'appariement</a>
+                <a href class="list-group-item" data-ng-click="createModel('pair-items')"><span title="Exercice d'appariement" class="glyphicon glyphicon-random"></span>&nbsp;Créer un exercice d'appariement</a>
             </div>
-            <!--<div><a href class="list-group-item"><span class="glyphicon glyphicon-sort"></span>&nbsp;Créer un exercice d'ordonancement</a></div>
-            <div><a href class="list-group-item"><span class="glyphicon glyphicon-link"></span>&nbsp;Créer un exercice de groupement</a></div>
-            <div><a href class="list-group-item"><span class="glyphicon glyphicon-check"></span>&nbsp;Créer un questionaire à choix multiple</a></div>
-            <div><a href class="list-group-item"><span class="glyphicon glyphicon-question-sign"></span>&nbsp;Créer un questionaire à réponse courte</a></div>-->
+            <!--<div><a href class="list-group-item"><span title="Exercice d'ordonnancement" class="glyphicon glyphicon-sort"></span>&nbsp;Créer un exercice d'ordonancement</a></div>
+            <div><a href class="list-group-item"><span title="Exercice de groupement" class="glyphicon glyphicon-link"></span>&nbsp;Créer un exercice de groupement</a></div>
+            <div><a href class="list-group-item"><span title="QCM" class="glyphicon glyphicon-check"></span>&nbsp;Créer un questionaire à choix multiple</a></div>
+            <div><a href class="list-group-item"><span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign"></span>&nbsp;Créer un questionaire à réponse courte</a></div>-->
         </div>
     </accordion-group>
 </accordion>
@@ -123,19 +123,19 @@
             <div class="row" ui-draggable="true" drag="model">
                 <div class="col-xs-1" ng-switch="model.type">
                     <div ng-switch-when="multiple-choice">
-                        <span class="glyphicon glyphicon-check" style="font-size: 320%"></span>
+                        <span title="QCM" class="glyphicon glyphicon-check" style="font-size: 320%"></span>
                     </div>
                     <div ng-switch-when="open-ended-question">
-                        <span class="glyphicon glyphicon-question-sign" style="font-size: 320%"></span>
+                        <span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign" style="font-size: 320%"></span>
                     </div>
                     <div ng-switch-when="pair-items">
-                        <span class="glyphicon glyphicon-random" style="font-size: 320%"></span>
+                        <span title="Exercice d'appariement" class="glyphicon glyphicon-random" style="font-size: 320%"></span>
                     </div>
                     <div ng-switch-when="order-items">
-                        <span class="glyphicon glyphicon-sort" style="font-size: 320%"></span>
+                        <span title="Exercice d'ordonnancement" class="glyphicon glyphicon-sort" style="font-size: 320%"></span>
                     </div>
                     <div ng-switch-when="group-items">
-                        <span class="glyphicon glyphicon-link" style="font-size: 320%"></span>
+                        <span title="Exercice de groupement" class="glyphicon glyphicon-link" style="font-size: 320%"></span>
                     </div>
                 </div>
 
@@ -148,13 +148,17 @@
                                 <span
                                     ng-if="model.type == 'pair-items' && model.owner == BASE_CONFIG.currentUserId"
                                     ui-sref="modelEdit({ modelid:model.id })"
-                                    class="glyphicon glyphicon-edit"></span>
+                                    class="glyphicon glyphicon-edit"
+                                    title="Editer ce modèle"></span>
                                 <span ng-if="model.type == 'pair-items' && model.owner != BASE_CONFIG.currentUserId"
                                       ui-sref="modelEdit({ modelid:model.id })"
-                                      class="glyphicon glyphicon-eye-open"></span>
-                                <span ng-click="$event.stopPropagation();tryModel(model)" class="glyphicon glyphicon-repeat"></span>
+                                      class="glyphicon glyphicon-eye-open"
+                                      title="Voir ce modèle (édition impossible)"></span>
+                                <span ng-click="$event.stopPropagation();tryModel(model)" class="glyphicon glyphicon-repeat"
+                                      title="Essayer de répondre à un exercice pour ce modèle"></span>
                                 <span ng-if="model.owner == BASE_CONFIG.currentUserId"
-                                      ng-click="$event.stopPropagation();deleteModel(model)" class="glyphicon glyphicon-remove"></span>
+                                      ng-click="$event.stopPropagation();deleteModel(model)" class="glyphicon glyphicon-remove"
+                                      title="Supprimer ce modèle"></span>
                             </h4>
                         </div>
                     <div class="row">

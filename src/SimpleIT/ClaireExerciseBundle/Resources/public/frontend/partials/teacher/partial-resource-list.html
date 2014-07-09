@@ -15,16 +15,16 @@
 
                     <div class="btn-group">
                         <button class="btn btn-success" ng-model="$parent.$parent.filters.type.text" btn-checkbox-true="'text'" btn-checkbox-false="''" btn-checkbox>
-                            <span class="glyphicon glyphicon-font"></span>
+                            <span title="Texte" class="glyphicon glyphicon-font"></span>
                         </button>
                         <button class="btn btn-success" ng-model="$parent.$parent.filters.type.multiple_choice_question" btn-checkbox-true="'multiple-choice-question'" btn-checkbox-false="''" btn-checkbox>
-                            <span class="glyphicon glyphicon-check"></span>
+                            <span title="Question de QCM" class="glyphicon glyphicon-check"></span>
                         </button>
                         <button class="btn btn-success" ng-model="$parent.$parent.filters.type.picture" btn-checkbox-true="'picture'" btn-checkbox-false="''" btn-checkbox>
                             <span class="glyphicon glyphicon-picture"></span>
                         </button>
                         <button class="btn btn-success" ng-model="$parent.$parent.filters.type.open_ended_question" btn-checkbox-true="'open-ended-question'" btn-checkbox-false="''" btn-checkbox>
-                            <span class="glyphicon glyphicon-question-sign"></span>
+                            <span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign"></span>
                         </button>
                         <button class="btn btn-success" ng-model="$parent.$parent.filters.type.sequence" btn-checkbox-true="'sequence'" btn-checkbox-false="''" btn-checkbox>
                             <span class="glyphicon glyphicon-sort-by-order"></span>
@@ -109,10 +109,10 @@
                         <a data-ng-click="createResource('picture')" href class="list-group-item"><span class="glyphicon glyphicon-picture"></span>&nbsp;Créer une image</a>
                     </div>
                     <div>
-                        <a data-ng-click="createResource('text')" href class="list-group-item"><span class="glyphicon glyphicon-font"></span>&nbsp;Créer un texte</a>
+                        <a data-ng-click="createResource('text')" href class="list-group-item"><span title="Texte" class="glyphicon glyphicon-font"></span>&nbsp;Créer un texte</a>
                     </div>
-                    <!--<div><a href class="list-group-item"><span class="glyphicon glyphicon-check"></span>&nbsp;Créer une question à choix multiple</a></div>
-                    <div><a href class="list-group-item"><span class="glyphicon glyphicon-question-sign"></span>&nbsp;Créer une question à réponse courte</a></div>
+                    <!--<div><a href class="list-group-item"><span title="Question de QCM" class="glyphicon glyphicon-check"></span>&nbsp;Créer une question à choix multiple</a></div>
+                    <div><a href class="list-group-item"><span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign"></span>&nbsp;Créer une question à réponse courte</a></div>
                     <div><a href class="list-group-item"><span class="glyphicon glyphicon-sort-by-order"></span>&nbsp;Créer une séquence</a></div>-->
                 </div>
             </accordion-group>
@@ -124,16 +124,16 @@
                     <div class="row">
                         <div class="col-xs-1" ng-switch="resource.type" ui-draggable="true" drag="resource">
                             <div ng-switch-when="text">
-                                <span class="glyphicon glyphicon-font" style="font-size: 320%"></span>
+                                <span title="Texte" class="glyphicon glyphicon-font" style="font-size: 320%"></span>
                             </div>
                             <div ng-switch-when="picture">
                                 <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{resource.content.source}}" style="width: 55px; height: 55px;"/>
                             </div>
                             <div ng-switch-when="multiple-choice-question">
-                                <span class="glyphicon glyphicon-check" style="font-size: 320%"></span>
+                                <span title="Question de QCM" class="glyphicon glyphicon-check" style="font-size: 320%"></span>
                             </div>
                             <div ng-switch-when="open-ended-question">
-                                <span class="glyphicon glyphicon-question-sign" style="font-size: 320%"></span>
+                                <span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign" style="font-size: 320%"></span>
                             </div>
                             <div ng-switch-when="sequence">
                                 <span class="glyphicon glyphicon-sort-by-order" style="font-size: 320%"></span>
