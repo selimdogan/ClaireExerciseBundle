@@ -87,16 +87,7 @@ resourceControllers.controller('resourceListController', ['$scope', 'Resource', 
     // retrieve resources
 // DEMO    $scope.resources = Resource.query(function (data) {
     $scope.resources = Resource.query({owner: BASE_CONFIG.currentUserId}, function (data) {
-        angular.forEach(data, function (res) {
-            User.get({userId: res.author}, function (user) {
-                $scope.users[user.id] = user.user_name;
-            });
-        });
-        angular.forEach(data, function (res) {
-            User.get({userId: res.owner}, function (user) {
-                $scope.users[user.id] = user.user_name;
-            });
-        });
+        $scope.loadUsers();
     });
 
     // delete resource method
@@ -116,6 +107,24 @@ resourceControllers.controller('resourceListController', ['$scope', 'Resource', 
             Resource.save($scope.newPictureResource, function (data) {
                 $location.path('/teacher/resource/' + data.id)
             });
+        }
+    };
+
+    // load only once every necessary user
+    $scope.loadUsers = function () {
+        userIds = [];
+        for (i = 0; i < $scope.resources.length; ++i) {
+            if (userIds.indexOf($scope.resources[i].author) == -1) {
+                userIds.push($scope.resources[i].author);
+            }
+            if (userIds.indexOf($scope.resources[i].owner) == -1) {
+                userIds.push($scope.resources[i].owner);
+            }
+        }
+
+        $scope.users = [];
+        for (i = 0; i < userIds.length; ++i) {
+            $scope.users[userIds[i]] = User.get({userId: userIds[i]});
         }
     };
 
@@ -427,16 +436,7 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
     $scope.users = [];
 
     $scope.models = Model.query(function (model) {
-        angular.forEach(model, function (model) {
-            User.get({userId: model.author}, function (user) {
-                $scope.users[user.id] = user.user_name;
-            });
-        });
-        angular.forEach(model, function (model) {
-            User.get({userId: model.owner}, function (user) {
-                $scope.users[user.id] = user.user_name;
-            });
-        });
+        $scope.loadUsers();
     });
 
     $scope.deleteModel = function (model) {
@@ -450,6 +450,23 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
             Model.save($scope.newPairItemsModel, function (data) {
                 $location.path('/teacher/model/' + data.id)
             });
+        }
+    };
+
+    $scope.loadUsers = function () {
+        userIds = [];
+        for (i = 0; i < $scope.models.length; ++i) {
+            if (userIds.indexOf($scope.models[i].author) == -1) {
+                userIds.push($scope.models[i].author);
+            }
+            if (userIds.indexOf($scope.models[i].owner) == -1) {
+                userIds.push($scope.models[i].owner);
+            }
+        }
+
+        $scope.users = [];
+        for (i = 0; i < userIds.length; ++i) {
+            $scope.users[userIds[i]] = User.get({userId: userIds[i]});
         }
     };
 
