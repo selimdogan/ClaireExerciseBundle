@@ -109,3 +109,11 @@
 .modelMD {
     color: #428bca;
 }
+
+.fixPanel {
+    position: fixed;
+    right:20px;
+    overflow: auto;
+    padding-left: 0;
+    padding-right: 0
+}
