@@ -85,10 +85,11 @@ resourceControllers.controller('resourceListController', ['$scope', 'Resource', 
     $scope.users = [];
 
     // retrieve resources
-// DEMO    $scope.resources = Resource.query(function (data) {
-    $scope.resources = Resource.query({owner: BASE_CONFIG.currentUserId}, function (data) {
-        $scope.loadUsers();
-    });
+    if ($scope.parentSection !== 'model') {
+        $scope.resources = Resource.query(function (data) {
+            $scope.loadUsers();
+        });
+    }
 
     // delete resource method
     $scope.deleteResource = function (resource) {
@@ -475,12 +476,7 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
 modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
 
     $scope.users = [];
-
-    $scope.model = Model.get({id: $stateParams.modelid}, function (model) {
-        User.get({userId: model.author}, function (user) {
-            $scope.users[user.id] = user.user_name;
-        })
-    });
+    $scope.model = Model.get({id: $stateParams.modelid});
 
     $scope.usedDocuments = [];
     $scope.usedResources = [];
@@ -545,7 +541,7 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
     };
 
     $scope.getResourceInfo = function (blockid, resourceid) {
-        $scope.usedResources[blockid][resourceid] = Resource.get({id: resourceid});
+        $scope.usedResources[blockid][resourceid] = $scope.resources[resourceid];
     };
 
     $scope.getExcludedResourceInfo = function (blockid, resourceid) {
@@ -573,5 +569,33 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
     $scope.deleteModel = function (model) {
         model.$delete({id: model.id}, function () {
         });
+    };
+
+    Resource.query(function (data) {
+        $scope.loadUsers(data);
+        $scope.resources = [];
+        for (var i = 0; i < data.length; ++i) {
+            $scope.resources[data[i].id] = data[i];
+        }
+    });
+
+    // load only once every necessary user
+    $scope.loadUsers = function (resourcesData) {
+        userIds = [];
+        for (i = 0; i < resourcesData.length; ++i) {
+            if (userIds.indexOf(resourcesData[i].author) == -1) {
+                userIds.push(resourcesData[i].author);
+            }
+            if (userIds.indexOf(resourcesData[i].owner) == -1) {
+                userIds.push(resourcesData[i].owner);
+            }
+        }
+
+        for (i = 0; i < userIds.length; ++i) {
+            $scope.users[userIds[i]] = User.get({userId: userIds[i]},
+                function () {
+                    console.log($scope.users);
+                });
+        }
     };
 }]);

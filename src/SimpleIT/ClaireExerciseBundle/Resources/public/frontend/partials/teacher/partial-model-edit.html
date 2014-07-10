@@ -33,7 +33,8 @@
                         <!--<h4>Auteur</h4>-->
                         <!--<input type="text" ng-model="users[model.author]" class="form-control" disabled>-->
                         <h4>Propriétaire</h4>
-                        <input type="text" ng-model="users[model.owner]" class="form-control" disabled>
+                        <input type="text" ng-model="users[model.owner].user_name"
+                               class="form-control" disabled>
                     </div>
                     <div class="col-xs-2 col-centered">
                         <div title="Ce modèle est-il partagé avec les autres auteurs ?">
@@ -269,9 +270,9 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-4">
-                        <small>Auteur: {{ users[usedResources[$parent.$parent.$parent.$index][blockResourceId.id].author] }}</small>
+                        <small>Auteur: {{ users[usedResources[$parent.$parent.$parent.$index][blockResourceId.id].author].user_name }}</small>
                         <br>
-                        <small>Propriétaire: {{ users[usedResources[$parent.$parent.$parent.$index][blockResourceId.id].owner] }}</small>
+                        <small>Propriétaire: {{ users[usedResources[$parent.$parent.$parent.$index][blockResourceId.id].owner].user_name }}</small>
                     </div>
                     <div class="col-xs-4">
                         <small>Partagé:&nbsp;
