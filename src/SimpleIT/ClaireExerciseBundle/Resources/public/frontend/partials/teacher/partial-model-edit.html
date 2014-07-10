@@ -106,15 +106,15 @@
         </accordion-heading>
         <div class="panel-body panel panel-primary" collapse="context.pair_items.pair_blocks.resources.collapse" ui-on-Drop="onDropDocument($event,$data,model.content.documents)">
             <accordion close-others="true">
-                <accordion-group class="panel panel-success" data-ng-repeat="documentId in model.content.documents track by $index" class="row" data-ng-init="getDocumentInfo(documentId.id)">
+                <accordion-group class="panel panel-success" data-ng-repeat="documentId in model.content.documents track by $index" class="row">
                     <accordion-heading class="panel-heading">
                         <div class="row">
-                            <div class="col-xs-2" ng-switch="usedDocuments[documentId.id].type">
+                            <div class="col-xs-2" ng-switch="resources[documentId.id].type">
                                 <div ng-switch-when="text">
                                     <span title="Texte" class="glyphicon glyphicon-font" style="font-size: 260%"></span>
                                 </div>
                                 <div ng-switch-when="picture">
-                                    <img title="Image" ng-src="{{BASE_CONFIG.urls.images.uploads}}{{usedDocuments[documentId.id].content.source}}" style="width: 40px; height: 40px;"/>
+                                    <img title="Image" ng-src="{{BASE_CONFIG.urls.images.uploads}}{{resources[documentId.id].content.source}}" style="width: 40px; height: 40px;"/>
                                 </div>
                                 <div ng-switch-when="multiple-choice-question">
                                     <span title="QCM" class="glyphicon glyphicon-check" style="font-size: 260%"></span>
@@ -128,7 +128,7 @@
                                 </div>
                             </div>
                             <div class="col-xs-8">
-                                <h4>{{ usedDocuments[documentId.id].title }}&nbsp;<span class="caret"></span>
+                                <h4>{{ resources[documentId.id].title }}&nbsp;<span class="caret"></span>
                                 </h4>
                             </div>
                             <div class="col-xs-1">
@@ -142,25 +142,25 @@
                     </accordion-heading>
                     <div class="row">
                         <div class="col-xs-12">
-                            <small>ID: {{ usedDocuments[documentId.id].id }}</small>
+                            <small>ID: {{ resources[documentId.id].id }}</small>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-4">
-                            <small>Auteur: {{ users[usedDocuments[documentId.id].author].user_name }}</small>
+                            <small>Auteur: {{ users[resources[documentId.id].author].user_name }}</small>
                             <br>
-                            <small>Propriétaire: {{ users[usedDocuments[documentId.id].owner].user_name }}</small>
+                            <small>Propriétaire: {{ users[resources[documentId.id].owner].user_name }}</small>
                         </div>
                         <div class="col-xs-4">
                             <small>Partagé:&nbsp;
-                                <ng-switch on="usedDocuments[documentId.id].public">
+                                <ng-switch on="resources[documentId.id].public">
                                     <span ng-switch-when="true">Oui</span>
                                     <span ng-switch-when="false">Non</span>
                                 </ng-switch>
                             </small>
                             <br>
                             <small>Archivé:&nbsp;
-                                <ng-switch on="usedDocuments[documentId.id].archived">
+                                <ng-switch on="resources[documentId.id].archived">
                                     <span ng-switch-when="true">Oui</span>
                                     <span ng-switch-when="false">Non</span>
                                 </ng-switch>
@@ -168,14 +168,14 @@
                         </div>
                         <div class="col-xs-4">
                             <small>Brouillon:&nbsp;
-                                <ng-switch on="usedDocuments[documentId.id].draft">
+                                <ng-switch on="resources[documentId.id].draft">
                                     <span ng-switch-when="true">Oui</span>
                                     <span ng-switch-when="false">Non</span>
                                 </ng-switch>
                             </small>
                             <br>
                             <small>Complet:&nbsp;
-                                <ng-switch on="usedDocuments[documentId.id].complete">
+                                <ng-switch on="resources[documentId.id].complete">
                                     <span ng-switch-when="true">Oui</span>
                                     <span ng-switch-when="false">Non</span>
                                 </ng-switch>
@@ -193,7 +193,7 @@
 <accordion close-others="true">
 <accordion-group class="panel panel-primary" data-ng-repeat="pair_block in model.content.pair_blocks track by $index">
 <accordion-heading class="panel-heading">
-    <div class="row" data-ng-init="usedResources.push([])"
+    <div class="row"
          title="Un bloc désigne un ensemble de ressources dont une partie sera tirée aléatoirement lors de la génération d'exercices">
         <div class="col-xs-11">
             Bloc d'appariement&nbsp;<span class="caret"></span>
@@ -231,12 +231,12 @@
             <accordion-group class="panel panel-success" data-ng-repeat="blockResourceId in pair_block.resources track by $index" class="row" data-ng-init="getResourceInfo($parent.$index, blockResourceId.id)">
                 <accordion-heading class="panel-heading">
                     <div class="row">
-                        <div class="col-xs-2" ng-switch="usedResources[$parent.$parent.$parent.$index][blockResourceId.id].type">
+                        <div class="col-xs-2" ng-switch="resources[blockResourceId.id].type">
                             <div ng-switch-when="text">
                                 <span title="Texte" class="glyphicon glyphicon-font" style="font-size: 260%"></span>
                             </div>
                             <div ng-switch-when="picture">
-                                <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{usedResources[$parent.$parent.$parent.$index][blockResourceId.id].content.source}}" style="width: 40px; height: 40px;"/>
+                                <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{resources[blockResourceId.id].content.source}}" style="width: 40px; height: 40px;"/>
                             </div>
                             <div ng-switch-when="multiple-choice-question">
                                 <span title="QCM" class="glyphicon glyphicon-check" style="font-size: 260%"></span>
@@ -251,7 +251,7 @@
                             </div>
                         </div>
                         <div class="col-xs-8">
-                            <h4>{{ getMobilPart(usedResources[$parent.$parent.$parent.$index][blockResourceId.id], pair_block.pair_meta_key) }}&nbsp;<span class="caret"></span>
+                            <h4>{{ getMobilPart(resources[blockResourceId.id], pair_block.pair_meta_key) }}&nbsp;<span class="caret"></span>
                             </h4>
                         </div>
                         <div class="col-xs-1">
@@ -265,25 +265,25 @@
                 </accordion-heading>
                 <div class="row">
                     <div class="col-xs-12">
-                        <small>ID: {{ usedResources[$parent.$parent.$parent.$index][blockResourceId.id].id }}</small>
+                        <small>ID: {{ resources[blockResourceId.id].id }}</small>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-4">
-                        <small>Auteur: {{ users[usedResources[$parent.$parent.$parent.$index][blockResourceId.id].author].user_name }}</small>
+                        <small>Auteur: {{ users[resources[blockResourceId.id].author].user_name }}</small>
                         <br>
-                        <small>Propriétaire: {{ users[usedResources[$parent.$parent.$parent.$index][blockResourceId.id].owner].user_name }}</small>
+                        <small>Propriétaire: {{ users[resources[blockResourceId.id].owner].user_name }}</small>
                     </div>
                     <div class="col-xs-4">
                         <small>Partagé:&nbsp;
-                            <ng-switch on="usedResources[$parent.$parent.$parent.$index][blockResourceId.id].public">
+                            <ng-switch on="resources[blockResourceId.id].public">
                                 <span ng-switch-when="true">Oui</span>
                                 <span ng-switch-when="false">Non</span>
                             </ng-switch>
                         </small>
                         <br>
                         <small>Archivé:&nbsp;
-                            <ng-switch on="usedResources[$parent.$parent.$parent.$index][blockResourceId.id].archived">
+                            <ng-switch on="resources[blockResourceId.id].archived">
                                 <span ng-switch-when="true">Oui</span>
                                 <span ng-switch-when="false">Non</span>
                             </ng-switch>
@@ -291,14 +291,14 @@
                     </div>
                     <div class="col-xs-4">
                         <small>Brouillon:&nbsp;
-                            <ng-switch on="usedResources[$parent.$parent.$parent.$index][blockResourceId.id].draft">
+                            <ng-switch on="resources[blockResourceId.id].draft">
                                 <span ng-switch-when="true">Oui</span>
                                 <span ng-switch-when="false">Non</span>
                             </ng-switch>
                         </small>
                         <br>
                         <small>Complet:&nbsp;
-                            <ng-switch on="usedResources[$parent.$parent.$parent.$index][blockResourceId.id].complete">
+                            <ng-switch on="resources[blockResourceId.id].complete">
                                 <span ng-switch-when="true">Oui</span>
                                 <span ng-switch-when="false">Non</span>
                             </ng-switch>
@@ -507,12 +507,12 @@
             <accordion-group class="panel panel-success" data-ng-repeat="blockResourceId in pair_block.resource_constraint.excluded track by $index" class="row" data-ng-init="getExcludedResourceInfo($parent.$index, blockResourceId.id)">
                 <accordion-heading class="panel-heading">
                     <div class="row">
-                        <div class="col-xs-2" ng-switch="excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].type">
+                        <div class="col-xs-2" ng-switch="resources[blockResourceId.id].type">
                             <div ng-switch-when="text">
                                 <span title="Texte" class="glyphicon glyphicon-font" style="font-size: 260%"></span>
                             </div>
                             <div ng-switch-when="picture">
-                                <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].content.source}}" style="width: 40px; height: 40px;"/>
+                                <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{resources[blockResourceId.id].content.source}}" style="width: 40px; height: 40px;"/>
                             </div>
                             <div ng-switch-when="multiple-choice-question">
                                 <span title="QCM" class="glyphicon glyphicon-check" style="font-size: 260%"></span>
@@ -525,7 +525,7 @@
                             </div>
                         </div>
                         <div class="col-xs-8">
-                            <h4>{{ excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].title }}&nbsp;<span class="caret"></span>
+                            <h4>{{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>
                             </h4>
                         </div>
                         <div class="col-xs-1">
@@ -539,25 +539,25 @@
                 </accordion-heading>
                 <div class="row">
                     <div class="col-xs-12">
-                        <small>ID: {{ excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].id }}</small>
+                        <small>ID: {{ resources[blockResourceId.id].id }}</small>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-4">
-                        <small>Auteur: {{ users[excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].author].user_name }}</small>
+                        <small>Auteur: {{ users[resources[blockResourceId.id].author].user_name }}</small>
                         <br>
-                        <small>Propriétaire: {{ users[excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].owner].user_name }}</small>
+                        <small>Propriétaire: {{ users[resources[blockResourceId.id].owner].user_name }}</small>
                     </div>
                     <div class="col-xs-4">
                         <small>Partagé:&nbsp;
-                            <ng-switch on="excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].public">
+                            <ng-switch on="resources[blockResourceId.id].public">
                                 <span ng-switch-when="true">Oui</span>
                                 <span ng-switch-when="false">Non</span>
                             </ng-switch>
                         </small>
                         <br/>
                         <small>Archivé:&nbsp;
-                            <ng-switch on="excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].archived">
+                            <ng-switch on="resources[blockResourceId.id].archived">
                                 <span ng-switch-when="true">Oui</span>
                                 <span ng-switch-when="false">Non</span>
                             </ng-switch>
@@ -565,14 +565,14 @@
                     </div>
                     <div class="col-xs-4">
                         <small>Brouillon:&nbsp;
-                            <ng-switch on="excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].draft">
+                            <ng-switch on="resources[blockResourceId.id].draft">
                                 <span ng-switch-when="true">Oui</span>
                                 <span ng-switch-when="false">Non</span>
                             </ng-switch>
                         </small>
                         <br/>
                         <small>Complet:&nbsp;
-                            <ng-switch on="excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].complete">
+                            <ng-switch on="resources[blockResourceId.id].complete">
                                 <span ng-switch-when="true">Oui</span>
                                 <span ng-switch-when="false">Non</span>
                             </ng-switch>

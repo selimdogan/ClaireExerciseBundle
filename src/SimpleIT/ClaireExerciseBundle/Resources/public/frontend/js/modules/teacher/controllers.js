@@ -265,7 +265,6 @@ resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 
             $scope.resource.$update({id: $stateParams.resourceid}, function (resource) {
                 if (typeof $scope.resources === "object") {
                     $scope.resources[resource.id] = resource;
-                    console.log($scope.resources);
                 }
             });
         };
@@ -291,7 +290,6 @@ resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 
             resource.$delete({id: resource.id}, function () {
                 if (typeof $scope.resources === "object") {
                     delete $scope.resources[resource.id];
-                    console.log($scope.resources);
                 }
             });
         };
@@ -515,10 +513,6 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
         });
     });
 
-    $scope.usedDocuments = [];
-    $scope.usedResources = [];
-    $scope.excludedResources = [];
-
     $scope.saveAndTry = function () {
         $scope.preUpdate();
         $scope.model.$update({id: $stateParams.modelid}, function (model) {
@@ -566,7 +560,6 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
 
     $scope.onDropMetadataKey = function (event, metakey, collection, field) {
         collection[field] = metakey;
-        console.log(metakey);
     };
 
     $scope.onDropDocument = function (event, resource, documents) {
@@ -575,18 +568,6 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                 $scope.modelAddBlockResourceField(documents, resource.id);
             }
         }
-    };
-
-    $scope.getResourceInfo = function (blockid, resourceid) {
-        $scope.usedResources[blockid][resourceid] = $scope.resources[resourceid];
-    };
-
-    $scope.getExcludedResourceInfo = function (blockid, resourceid) {
-        $scope.excludedResources[blockid][resourceid] = $scope.resources[resourceid];
-    };
-
-    $scope.getDocumentInfo = function (documentId) {
-        $scope.usedDocuments[documentId] = $scope.resources[documentId];
     };
 
     $scope.getMobilPart = function (collection, key) {
