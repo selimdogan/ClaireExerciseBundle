@@ -110,7 +110,7 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
                     $scope.resources[data[i].id] = data[i];
                 }
 
-                $scope.loadUsers($scope, $scope.resources);
+                $scope.loadUsers($scope, data);
             });
         }
 
@@ -461,7 +461,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
 
 modelControllers.controller('modelListController', ['$scope', 'Model', '$location', function ($scope, Model, $location) {
 
-    $scope.models = Model.query(function (model) {
+    $scope.models = Model.query(function () {
         $scope.loadUsers($scope, $scope.models);
     });
 
