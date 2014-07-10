@@ -4,8 +4,8 @@
 
 var resourceControllers = angular.module('resourceControllers', ['ui.router']);
 
-resourceControllers.controller('resourceController', ['$scope', '$routeParams', '$location',
-    function ($scope, $routeParams, $location) {
+resourceControllers.controller('resourceController', ['$scope', '$routeParams', '$location', 'User',
+    function ($scope, $routeParams, $location, User) {
 
         $scope.section = 'resource';
 
@@ -65,7 +65,7 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
             var keyword = $("#resourceAddKeyword");
             collection.push(keyword[0].value);
             keyword[0].value = '';
-        }
+        };
 
         $scope.resourceAddMetadataField = function (collection) {
             var key = $("#resourceAddMetadataKey"), val = $("#resourceAddMetadataValue");
@@ -73,63 +73,77 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
             collection.splice(collection.length, 0, newElement);
             key[0].value = '';
             val[0].value = '';
-        }
+        };
 
         $scope.resourceRemoveField = function (collection, index) {
             collection.splice(index, 1);
-        }
+        };
 
+        // load only once every necessary user
+        $scope.loadUsers = function (targetScope, resourcesData) {
+            targetScope.users = [];
+            var userIds = [];
+            for (var i = 0; i < resourcesData.length; ++i) {
+                if (userIds.indexOf(resourcesData[i].author) == -1) {
+                    userIds.push(resourcesData[i].author);
+                }
+                if (userIds.indexOf(resourcesData[i].owner) == -1) {
+                    userIds.push(resourcesData[i].owner);
+                }
+            }
+
+            for (i = 0; i < userIds.length; ++i) {
+                targetScope.users[userIds[i]] = User.get({userId: userIds[i]});
+            }
+        };
     }]);
 
-resourceControllers.controller('resourceListController', ['$scope', 'Resource', '$location', '$http', 'User', function ($scope, Resource, $location, $http, User) {
+resourceControllers.controller('resourceListController', ['$scope', '$state', 'Resource',
+    function ($scope, $state, Resource) {
 
-    // retrieve resources
-    if ($scope.parentSection !== 'model') {
-        $scope.resources = Resource.query(function (data) {
-            $scope.users = [];
-            $scope.loadUsers();
-        });
-    }
+        // retrieve resources
+        if ($scope.parentSection !== 'model') {
+            Resource.query(function (data) {
+                // load an id indexed array of the resources
+                $scope.resources = [];
+                for (var i = 0; i < data.length; ++i) {
+                    $scope.resources[data[i].id] = data[i];
+                }
 
-    // delete resource method
-    $scope.deleteResource = function (resource) {
-        resource.$delete({id: resource.id}, function () {
-            $scope.resources = Resource.query();
-        });
-    };
-
-    // create resource method
-    $scope.createResource = function (type) {
-        if (type == 'text') {
-            Resource.save($scope.newTextResource, function (data) {
-                $location.path('/teacher/resource/' + data.id)
-            });
-        } else if (type == 'picture') {
-            Resource.save($scope.newPictureResource, function (data) {
-                $location.path('/teacher/resource/' + data.id)
+                $scope.loadUsers($scope, $scope.resources);
             });
         }
-    };
 
-    // load only once every necessary user
-    $scope.loadUsers = function () {
-        userIds = [];
-        for (i = 0; i < $scope.resources.length; ++i) {
-            if (userIds.indexOf($scope.resources[i].author) == -1) {
-                userIds.push($scope.resources[i].author);
+        // delete resource method
+        $scope.deleteResource = function (resource) {
+            resource.$delete({id: resource.id}, function () {
+                delete $scope.resources[resource.id];
+            });
+        };
+
+        // create resource method
+        $scope.createResource = function (type) {
+            if (type == 'text') {
+                Resource.save($scope.newTextResource, function (data) {
+                    $scope.resources[data.id] = data;
+                    if ($scope.parentSection === 'model') {
+                        $state.go('modelEdit.resourceEdit', {resourceid: data.id});
+                    } else {
+                        $state.go('resourceEdit', {resourceid: data.id});
+                    }
+                });
+            } else if (type == 'picture') {
+                Resource.save($scope.newPictureResource, function (data) {
+                    $scope.resources[data.id] = data;
+                    if ($scope.parentSection === 'model') {
+                        $state.go('modelEdit.resourceEdit', {resourceid: data.id});
+                    } else {
+                        $state.go('resourceEdit', {resourceid: data.id});
+                    }
+                });
             }
-            if (userIds.indexOf($scope.resources[i].owner) == -1) {
-                userIds.push($scope.resources[i].owner);
-            }
-        }
-
-        $scope.users = [];
-        for (i = 0; i < userIds.length; ++i) {
-            $scope.users[userIds[i]] = User.get({userId: userIds[i]});
-        }
-    };
-
-}]);
+        };
+    }]);
 
 resourceControllers.filter('myFilters', function () {
     return function (collection, filters) {
@@ -216,77 +230,79 @@ resourceControllers.filter('myFilters', function () {
     };
 });
 
-resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 'Upload', '$location', '$stateParams', 'User', '$upload', function ($scope, Resource, Upload, $location, $stateParams, User, $upload) {
-
-    $scope.users = [];
-
-    // retrieve resource
-    $scope.resource = Resource.get({id: $stateParams.resourceid}, function (res) {
-        User.get({userId: res.author}, function (user) {
-            $scope.users[user.id] = user.user_name;
-        })
-        User.get({userId: res.owner}, function (user) {
-            $scope.users[user.id] = user.user_name;
-        })
-    });
-
-    // update resource method
-    $scope.updateResource = function () {
-
-        var keyword = $("#resourceAddKeyword");
-        if (keyword[0].value != '') {
-            $scope.resource.keywords.push(keyword[0].value);
-            keyword[0].value = '';
-        }
-
-        var key = $("#resourceAddMetadataKey"), val = $("#resourceAddMetadataValue");
-        if (key[0].value != '' && val[0].value != '') {
-            var newElement = {key: key[0].value, value: val[0].value};
-            $scope.resource.metadata.splice($scope.resource.metadata.length, 0, newElement);
-            key[0].value = '';
-            val[0].value = '';
-        }
-
-        delete $scope.resource.id;
-        delete $scope.resource.type;
-        delete $scope.resource.author;
-        delete $scope.resource.owner;
-        delete $scope.resource.required_exercise_resources;
-        delete $scope.resource.required_knowledges;
-        $scope.resource.$update({id: $stateParams.resourceid}, function (resource) {
+resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 'Upload', '$location', '$stateParams', 'User', '$upload',
+    function ($scope, Resource, Upload, $location, $stateParams, User, $upload) {
+        // retrieve resource
+        $scope.resource = Resource.get({id: $stateParams.resourceid}, function (res) {
+            if (typeof $scope.users === "undefined") {
+                $scope.loadUsers($scope, [res]);
+            }
         });
-    };
 
-    $scope.onFileSelect = function ($files) {
-        var file = $files[0];
-        $scope.upload = $upload.upload({
-            url: BASE_CONFIG.urls.api.uploads,
-            method: 'POST',
-            // withCredentials: true,
-            data: {myObj: $scope.myModelObj},
-            file: file
-        }).progress(function (evt) {
-                console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-            }).success(function (data, status, headers, config) {
-                // file is uploaded successfully
-                $scope.resource.content.source = data.fileName;
+        // update resource method
+        $scope.updateResource = function () {
+
+            var keyword = $("#resourceAddKeyword");
+            if (keyword[0].value != '') {
+                $scope.resource.keywords.push(keyword[0].value);
+                keyword[0].value = '';
+            }
+
+            var key = $("#resourceAddMetadataKey"), val = $("#resourceAddMetadataValue");
+            if (key[0].value != '' && val[0].value != '') {
+                var newElement = {key: key[0].value, value: val[0].value};
+                $scope.resource.metadata.splice($scope.resource.metadata.length, 0, newElement);
+                key[0].value = '';
+                val[0].value = '';
+            }
+
+            delete $scope.resource.id;
+            delete $scope.resource.type;
+            delete $scope.resource.author;
+            delete $scope.resource.owner;
+            delete $scope.resource.required_exercise_resources;
+            delete $scope.resource.required_knowledges;
+            $scope.resource.$update({id: $stateParams.resourceid}, function (resource) {
+                if (typeof $scope.resources === "object") {
+                    $scope.resources[resource.id] = resource;
+                    console.log($scope.resources);
+                }
             });
-    };
+        };
 
-    // delete resource method
-    $scope.deleteResource = function (resource) {
-        resource.$delete({id: resource.id}, function () {
+        $scope.onFileSelect = function ($files) {
+            var file = $files[0];
+            $scope.upload = $upload.upload({
+                url: BASE_CONFIG.urls.api.uploads,
+                method: 'POST',
+                // withCredentials: true,
+                data: {myObj: $scope.myModelObj},
+                file: file
+            }).progress(function (evt) {
+                    console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+                }).success(function (data, status, headers, config) {
+                    // file is uploaded successfully
+                    $scope.resource.content.source = data.fileName;
+                });
+        };
 
-        });
-    };
+        // delete resource method
+        $scope.deleteResource = function (resource) {
+            resource.$delete({id: resource.id}, function () {
+                if (typeof $scope.resources === "object") {
+                    delete $scope.resources[resource.id];
+                    console.log($scope.resources);
+                }
+            });
+        };
 
-}]);
+    }]);
 
 
 var modelControllers = angular.module('modelControllers', ['ui.router']);
 
-modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'AttemptByExercise', '$routeParams', '$location',
-    function ($scope, ExerciseByModel, AttemptByExercise, $routeParams, $location) {
+modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'AttemptByExercise', '$routeParams', '$location', 'User',
+    function ($scope, ExerciseByModel, AttemptByExercise, $routeParams, $location, User) {
 
         $scope.section = 'model';
 
@@ -423,14 +439,30 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                 });
         };
 
+        // load only once every necessary user
+        $scope.loadUsers = function (targetScope, resourcesData) {
+            targetScope.users = [];
+            var userIds = [];
+            for (var i = 0; i < resourcesData.length; ++i) {
+                if (userIds.indexOf(resourcesData[i].author) == -1) {
+                    userIds.push(resourcesData[i].author);
+                }
+                if (userIds.indexOf(resourcesData[i].owner) == -1) {
+                    userIds.push(resourcesData[i].owner);
+                }
+            }
+
+            for (i = 0; i < userIds.length; ++i) {
+                targetScope.users[userIds[i]] = User.get({userId: userIds[i]});
+            }
+        };
+
     }]);
 
-modelControllers.controller('modelListController', ['$scope', 'Model', '$location', 'User', function ($scope, Model, $location, User) {
-
-    $scope.users = [];
+modelControllers.controller('modelListController', ['$scope', 'Model', '$location', function ($scope, Model, $location) {
 
     $scope.models = Model.query(function (model) {
-        $scope.loadUsers();
+        $scope.loadUsers($scope, $scope.models);
     });
 
     $scope.deleteModel = function (model) {
@@ -446,29 +478,9 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
             });
         }
     };
-
-    $scope.loadUsers = function () {
-        userIds = [];
-        for (i = 0; i < $scope.models.length; ++i) {
-            if (userIds.indexOf($scope.models[i].author) == -1) {
-                userIds.push($scope.models[i].author);
-            }
-            if (userIds.indexOf($scope.models[i].owner) == -1) {
-                userIds.push($scope.models[i].owner);
-            }
-        }
-
-        $scope.users = [];
-        for (i = 0; i < userIds.length; ++i) {
-            $scope.users[userIds[i]] = User.get({userId: userIds[i]});
-        }
-    };
-
 }]);
 
 modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
-
-    $scope.users = [];
 
     // load resources
     Resource.query(function (data) {
@@ -479,7 +491,7 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
         }
 
         // load users
-        $scope.loadUsers(data);
+        $scope.loadUsers($scope, data);
 
         // load model
         $scope.model = Model.get({id: $stateParams.modelid}, function () {
@@ -594,25 +606,5 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
     $scope.deleteModel = function (model) {
         model.$delete({id: model.id}, function () {
         });
-    };
-
-    // load only once every necessary user
-    $scope.loadUsers = function (resourcesData) {
-        userIds = [];
-        for (i = 0; i < resourcesData.length; ++i) {
-            if (userIds.indexOf(resourcesData[i].author) == -1) {
-                userIds.push(resourcesData[i].author);
-            }
-            if (userIds.indexOf(resourcesData[i].owner) == -1) {
-                userIds.push(resourcesData[i].owner);
-            }
-        }
-
-        for (i = 0; i < userIds.length; ++i) {
-            $scope.users[userIds[i]] = User.get({userId: userIds[i]},
-                function () {
-                    console.log($scope.users);
-                });
-        }
     };
 }]);
