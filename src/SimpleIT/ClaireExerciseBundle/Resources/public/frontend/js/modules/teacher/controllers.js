@@ -82,11 +82,11 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
     }]);
 
 resourceControllers.controller('resourceListController', ['$scope', 'Resource', '$location', '$http', 'User', function ($scope, Resource, $location, $http, User) {
-    $scope.users = [];
 
     // retrieve resources
     if ($scope.parentSection !== 'model') {
         $scope.resources = Resource.query(function (data) {
+            $scope.users = [];
             $scope.loadUsers();
         });
     }
@@ -341,6 +341,10 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
             var newElement = {
                 "number_of_occurrences": 0,
                 "resources": [],
+                "resource_constraint": {
+                    "metadata_constraints": [],
+                    "excluded": []
+                },
                 "pair_meta_key": ""
             };
             collection.splice(collection.length, 0, newElement);
@@ -359,17 +363,6 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
         }
 
         $scope.modelAddBlockResourceConstraint = function (pair_blocks, type) {
-            console.log("clik");
-
-            if (typeof pair_blocks.resource_constraint === "undefined") {
-                pair_blocks.resource_constraint = {"metadata_constraints": []};
-                console.log("resource_constraint undefined");
-            }
-            if (typeof pair_blocks.resource_constraint.metadata_constraints === "undefined") {
-                pair_blocks.resource_constraint.metadata_constraints = [];
-                console.log("metadata_constraints undefined");
-            }
-
             var newElement;
             if (type == 'exists') {
                 newElement = {"key": '', "values": [], "comparator": 'exists'};
@@ -476,7 +469,39 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
 modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
 
     $scope.users = [];
-    $scope.model = Model.get({id: $stateParams.modelid});
+
+    // load resources
+    Resource.query(function (data) {
+        // load an id indexed array of the resources
+        $scope.resources = [];
+        for (var i = 0; i < data.length; ++i) {
+            $scope.resources[data[i].id] = data[i];
+        }
+
+        // load users
+        $scope.loadUsers(data);
+
+        // load model
+        $scope.model = Model.get({id: $stateParams.modelid}, function () {
+            // fill each blovk with empty constraints
+            for (i = 0; i < $scope.model.content.pair_blocks.length; ++i) {
+                if (typeof $scope.model.content.pair_blocks[i].resource_constraint === "undefined") {
+                    $scope.model.content.pair_blocks[i].resource_constraint = {
+                        "metadata_constraints": [],
+                        "excluded": []
+                    };
+                }
+                if (typeof $scope.model.content.pair_blocks[i].resource_constraint.metadata_constraints === "undefined") {
+                    $scope.model.content.pair_blocks[i].resource_constraint.metadata_constraints = [];
+                }
+                if (typeof $scope.model.content.pair_blocks[i].resource_constraint.excluded === "undefined") {
+                    $scope.model.content.pair_blocks[i].resource_constraint.excluded = [];
+                }
+            }
+
+
+        });
+    });
 
     $scope.usedDocuments = [];
     $scope.usedResources = [];
@@ -545,11 +570,11 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
     };
 
     $scope.getExcludedResourceInfo = function (blockid, resourceid) {
-        $scope.excludedResources[blockid][resourceid] = Resource.get({id: resourceid});
+        $scope.excludedResources[blockid][resourceid] = $scope.resources[resourceid];
     };
 
     $scope.getDocumentInfo = function (documentId) {
-        $scope.usedDocuments[documentId] = Resource.get({id: documentId});
+        $scope.usedDocuments[documentId] = $scope.resources[documentId];
     };
 
     $scope.getMobilPart = function (collection, key) {
@@ -570,14 +595,6 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
         model.$delete({id: model.id}, function () {
         });
     };
-
-    Resource.query(function (data) {
-        $scope.loadUsers(data);
-        $scope.resources = [];
-        for (var i = 0; i < data.length; ++i) {
-            $scope.resources[data[i].id] = data[i];
-        }
-    });
 
     // load only once every necessary user
     $scope.loadUsers = function (resourcesData) {

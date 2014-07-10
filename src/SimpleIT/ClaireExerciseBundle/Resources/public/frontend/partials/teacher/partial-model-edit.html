@@ -80,6 +80,17 @@
     ng-class="{'col-xs-5': !$parent.toggleResourceList, 'col-xs-12': $parent.toggleResourceList}">
 <div class="panel-body">
 
+<accordion>
+    <accordion-group class="panel panel-primary">
+        <accordion-heading class="panel-heading">
+            Consigne&nbsp;<span class="caret"></span>
+        </accordion-heading>
+        <!--<input type="text" ng-model="model.content.wording"/>-->
+        <textarea class="span5" rows="5" placeholder="Consigne de l'exercice"
+                  ng-model="model.content.wording"></textarea>
+    </accordion-group>
+</accordion>
+
 <accordion
     title="Documents annexes à présenter à l'apprenant après la consigne lors de la résolution d'un exercice. Il peut s'agir de texte ou d'image. Ajouter-les en les glissant depuis la liste des ressource.">
     <accordion-group class="panel panel-primary">
@@ -136,9 +147,9 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-4">
-                            <small>Auteur: {{ users[usedDocuments[documentId.id].author] }}</small>
+                            <small>Auteur: {{ users[usedDocuments[documentId.id].author].user_name }}</small>
                             <br>
-                            <small>Propriétaire: {{ users[usedDocuments[documentId.id].owner] }}</small>
+                            <small>Propriétaire: {{ users[usedDocuments[documentId.id].owner].user_name }}</small>
                         </div>
                         <div class="col-xs-4">
                             <small>Partagé:&nbsp;
@@ -177,21 +188,10 @@
     </accordion-group>
 </accordion>
 
-<accordion>
-    <accordion-group class="panel panel-primary">
-        <accordion-heading class="panel-heading">
-            Consigne&nbsp;<span class="caret"></span>
-        </accordion-heading>
-        <!--<input type="text" ng-model="model.content.wording"/>-->
-        <textarea class="span5" rows="5" placeholder="Consigne de l'exercice"
-                  ng-model="model.content.wording"></textarea>
-    </accordion-group>
-</accordion>
-
 <div ng-switch="model.type">
 <div ng-switch-when="pair-items">
 <accordion close-others="true">
-<accordion-group class="panel panel-primary" data-ng-repeat="pair_blocks in model.content.pair_blocks track by $index">
+<accordion-group class="panel panel-primary" data-ng-repeat="pair_block in model.content.pair_blocks track by $index">
 <accordion-heading class="panel-heading">
     <div class="row" data-ng-init="usedResources.push([])"
          title="Un bloc désigne un ensemble de ressources dont une partie sera tirée aléatoirement lors de la génération d'exercices">
@@ -207,14 +207,14 @@
              title="La clé de métadonnée utilisée pour constituer la partie mobile des paires">
             <h5>Clé de métadonnée</h5>
             <input ng-click="$event.stopPropagation();"
-                   type="text" ng-model="pair_blocks.pair_meta_key"
-                   class="form-control" ui-on-Drop="onDropMetadataKey($event,$data,pair_blocks,'pair_meta_key')"/>
+                   type="text" ng-model="pair_block.pair_meta_key"
+                   class="form-control" ui-on-Drop="onDropMetadataKey($event,$data,pair_block,'pair_meta_key')"/>
         </div>
         <div class="col-xs-6"
              title="Le nombre de ressources à utiliser parmi celles de ce bloc pour constituer des paires lors de la génération de l'exercice">
             <h5>Nombre de paires</h5>
             <input type="text" ng-click="$event.stopPropagation();"
-                   ng-model="pair_blocks.number_of_occurrences" class="form-control"/>
+                   ng-model="pair_block.number_of_occurrences" class="form-control"/>
         </div>
     </div>
 </accordion-heading>
@@ -223,12 +223,12 @@
 <tab>
     <tab-heading
         title="Lister explicitement les ressources. Pensez à cocher la case si c'est le choix que vous retenez. Vous pouvez tout de même sauvegarder des informations dans l'autre onglet.">
-        <span class="glyphicon" ng-class="{'glyphicon-check': pair_blocks.is_list, 'glyphicon-unchecked': !pair_blocks.is_list}" data-ng-click="pair_blocks.is_list=!pair_blocks.is_list"></span>
+        <span class="glyphicon" ng-class="{'glyphicon-check': pair_block.is_list, 'glyphicon-unchecked': !pair_block.is_list}" data-ng-click="pair_block.is_list=!pair_block.is_list"></span>
         Liste
     </tab-heading>
-    <div class="panel-body panel panel-primary" collapse="context.pair_items.pair_blocks.resources.collapse" ui-on-Drop="onDropResourceToBlock($event,$data,pair_blocks.resources)">
+    <div class="panel-body panel panel-primary" collapse="context.pair_items.pair_blocks.resources.collapse" ui-on-Drop="onDropResourceToBlock($event,$data,pair_block.resources)">
         <accordion close-others="true">
-            <accordion-group class="panel panel-success" data-ng-repeat="blockResourceId in pair_blocks.resources track by $index" class="row" data-ng-init="getResourceInfo($parent.$index, blockResourceId.id)">
+            <accordion-group class="panel panel-success" data-ng-repeat="blockResourceId in pair_block.resources track by $index" class="row" data-ng-init="getResourceInfo($parent.$index, blockResourceId.id)">
                 <accordion-heading class="panel-heading">
                     <div class="row">
                         <div class="col-xs-2" ng-switch="usedResources[$parent.$parent.$parent.$index][blockResourceId.id].type">
@@ -251,14 +251,14 @@
                             </div>
                         </div>
                         <div class="col-xs-8">
-                            <h4>{{ getMobilPart(usedResources[$parent.$parent.$parent.$index][blockResourceId.id], pair_blocks.pair_meta_key) }}&nbsp;<span class="caret"></span>
+                            <h4>{{ getMobilPart(usedResources[$parent.$parent.$parent.$index][blockResourceId.id], pair_block.pair_meta_key) }}&nbsp;<span class="caret"></span>
                             </h4>
                         </div>
                         <div class="col-xs-1">
 
                         </div>
                         <div class="col-xs-1">
-                                                                                    <span data-ng-click="$event.stopPropagation();modelRemoveField(pair_blocks.resources, $index)"
+                                                                                    <span data-ng-click="$event.stopPropagation();modelRemoveField(pair_block.resources, $index)"
                                                                                           class="glyphicon glyphicon-remove"></span>
                         </div>
                     </div>
@@ -312,18 +312,18 @@
 <tab>
 <tab-heading
     title="Sélectionner les ressources par contraintes. Pensez à cocher la case si c'est le choix que vous retenez. Vous pouvez tout de même sauvegarder des informations dans l'autre onglet.">
-    <span class="glyphicon" ng-class="{'glyphicon-check': !pair_blocks.is_list, 'glyphicon-unchecked': pair_blocks.is_list}" data-ng-click="pair_blocks.is_list=!pair_blocks.is_list"></span>
+    <span class="glyphicon" ng-class="{'glyphicon-check': !pair_block.is_list, 'glyphicon-unchecked': pair_block.is_list}" data-ng-click="pair_block.is_list=!pair_block.is_list"></span>
     Contraintes
 </tab-heading>
-<div class="panel-body panel panel-primary" data-ng-init="initResourceConstraints(pair_blocks)">
+<div class="panel-body panel panel-primary" data-ng-init="initResourceConstraints(pair_block)">
 <div>
     <label>Type de ressource</label><br>
 
     <div class="btn-group">
-        <button title="Texte" class="btn btn-info" ng-model="pair_blocks.resource_constraint.type" btn-radio="'text'">
+        <button title="Texte" class="btn btn-info" ng-model="pair_block.resource_constraint.type" btn-radio="'text'">
             <span class="glyphicon glyphicon-font"></span>
         </button>
-        <button class="btn btn-info" ng-model="pair_blocks.resource_constraint.type" btn-radio="'picture'"
+        <button class="btn btn-info" ng-model="pair_block.resource_constraint.type" btn-radio="'picture'"
             title="Image">
             <span class="glyphicon glyphicon-picture"></span>
         </button>
@@ -335,7 +335,7 @@
     <label>Liste des containtes</label><br>
 
     <div class="panel-group">
-        <div class="panel panel-info" data-ng-repeat="metadata_constraint in pair_blocks.resource_constraint.metadata_constraints track by $index">
+        <div class="panel panel-info" data-ng-repeat="metadata_constraint in pair_block.resource_constraint.metadata_constraints track by $index">
             <div class="panel-heading">
                 <ng-switch on="metadata_constraint.comparator">
                     <div ng-switch-when="exists" class="row">
@@ -344,7 +344,7 @@
                             <input type="text" ng-model="metadata_constraint.key" class="form-control" placeholder="Clé" ui-on-Drop="onDropMetadataKey($event,$data,metadata_constraint,'key')">
                         </div>
                         <div class="col-xs-2">
-                                                                                                            <span data-ng-click="modelRemoveField(pair_blocks.resource_constraint.metadata_constraints, $index)"
+                                                                                                            <span data-ng-click="modelRemoveField(pair_block.resource_constraint.metadata_constraints, $index)"
                                                                                                                   class="glyphicon glyphicon-remove col-centered pull-right"></span>
                         </div>
                     </div>
@@ -354,7 +354,7 @@
                             <input type="text" ng-model="metadata_constraint.key" class="form-control" placeholder="Clé" ui-on-Drop="onDropMetadataKey($event,$data,metadata_constraint,'key')">
                         </div>
                         <div class="col-xs-2">
-                                                                                                            <span data-ng-click="modelRemoveField(pair_blocks.resource_constraint.metadata_constraints, $index)"
+                                                                                                            <span data-ng-click="modelRemoveField(pair_block.resource_constraint.metadata_constraints, $index)"
                                                                                                                   class="glyphicon glyphicon-remove col-centered pull-right"></span>
                         </div>
                         <div class="col-xs-12">
@@ -370,7 +370,7 @@
                             <input type="text" ng-model="metadata_constraint.key" class="form-control" placeholder="Clé" ui-on-Drop="onDropMetadataKey($event,$data,metadata_constraint,'key')">
                         </div>
                         <div class="col-xs-2">
-                                                                                                            <span data-ng-click="modelRemoveField(pair_blocks.resource_constraint.metadata_constraints, $index)"
+                                                                                                            <span data-ng-click="modelRemoveField(pair_block.resource_constraint.metadata_constraints, $index)"
                                                                                                                   class="glyphicon glyphicon-remove col-centered pull-right"></span>
                         </div>
                         <div class="col-xs-12">
@@ -401,7 +401,7 @@
                             <input type="text" ng-model="metadata_constraint.key" class="form-control" placeholder="Clé" ui-on-Drop="onDropMetadataKey($event,$data,metadata_constraint,'key')">
                         </div>
                         <div class="col-xs-2">
-                                                                                                            <span data-ng-click="modelRemoveField(pair_blocks.resource_constraint.metadata_constraints, $index)"
+                                                                                                            <span data-ng-click="modelRemoveField(pair_block.resource_constraint.metadata_constraints, $index)"
                                                                                                                   class="glyphicon glyphicon-remove col-centered pull-right"></span>
                         </div>
                         <div class="col-xs-12">
@@ -415,7 +415,7 @@
                             <input type="text" ng-model="metadata_constraint.key" class="form-control" placeholder="Clé" ui-on-Drop="onDropMetadataKey($event,$data,metadata_constraint,'key')">
                         </div>
                         <div class="col-xs-2">
-                                                                                                            <span data-ng-click="modelRemoveField(pair_blocks.resource_constraint.metadata_constraints, $index)"
+                                                                                                            <span data-ng-click="modelRemoveField(pair_block.resource_constraint.metadata_constraints, $index)"
                                                                                                                   class="glyphicon glyphicon-remove col-centered pull-right"></span>
                         </div>
                         <div class="col-xs-12">
@@ -429,7 +429,7 @@
                             <input type="text" ng-model="metadata_constraint.key" class="form-control" placeholder="Clé" ui-on-Drop="onDropMetadataKey($event,$data,metadata_constraint,'key')">
                         </div>
                         <div class="col-xs-2">
-                                                                                                            <span data-ng-click="modelRemoveField(pair_blocks.resource_constraint.metadata_constraints, $index)"
+                                                                                                            <span data-ng-click="modelRemoveField(pair_block.resource_constraint.metadata_constraints, $index)"
                                                                                                                   class="glyphicon glyphicon-remove col-centered pull-right"></span>
                         </div>
                         <div class="col-xs-12">
@@ -443,7 +443,7 @@
                             <input type="text" ng-model="metadata_constraint.key" class="form-control" placeholder="Clé" ui-on-Drop="onDropMetadataKey($event,$data,metadata_constraint,'key')">
                         </div>
                         <div class="col-xs-2">
-                                                                                                            <span data-ng-click="modelRemoveField(pair_blocks.resource_constraint.metadata_constraints, $index)"
+                                                                                                            <span data-ng-click="modelRemoveField(pair_block.resource_constraint.metadata_constraints, $index)"
                                                                                                                   class="glyphicon glyphicon-remove col-centered pull-right"></span>
                         </div>
                         <div class="col-xs-12">
@@ -461,37 +461,37 @@
                 <div class="btn-group">
                     <button class="btn btn-info"
                             title="La clé de métadonnée existe"
-                            data-ng-click="modelAddBlockResourceConstraint(pair_blocks, 'exists')">
+                            data-ng-click="modelAddBlockResourceConstraint(pair_block, 'exists')">
                         &exist;
                     </button>
                     <button class="btn btn-info"
                             title="La métadonnée prend pour valeur..."
-                            data-ng-click="modelAddBlockResourceConstraint(pair_blocks, 'in')">
+                            data-ng-click="modelAddBlockResourceConstraint(pair_block, 'in')">
                         &isin;
                     </button>
                     <button class="btn btn-info"
                             title="La métadonnée est plus grand que..."
-                            data-ng-click="modelAddBlockResourceConstraint(pair_blocks, 'gt')">
+                            data-ng-click="modelAddBlockResourceConstraint(pair_block, 'gt')">
                         &gt;
                     </button>
                     <button class="btn btn-info"
                             title="La métadonnée est plus grand ou égale à..."
-                            data-ng-click="modelAddBlockResourceConstraint(pair_blocks, 'gte')">
+                            data-ng-click="modelAddBlockResourceConstraint(pair_block, 'gte')">
                         &ge;
                     </button>
                     <button class="btn btn-info"
                             title="La métadonnée est plus petite que..."
-                            data-ng-click="modelAddBlockResourceConstraint(pair_blocks, 'lt')">
+                            data-ng-click="modelAddBlockResourceConstraint(pair_block, 'lt')">
                         &lt;
                     </button>
                     <button class="btn btn-info"
                             title="La métadonnée est plus petite ou égale à..."
-                            data-ng-click="modelAddBlockResourceConstraint(pair_blocks, 'lte')">
+                            data-ng-click="modelAddBlockResourceConstraint(pair_block, 'lte')">
                         &le;
                     </button>
                     <button class="btn btn-info"
                             title="La métadonnée est comprise entre..."
-                            data-ng-click="modelAddBlockResourceConstraint(pair_blocks, 'between')">
+                            data-ng-click="modelAddBlockResourceConstraint(pair_block, 'between')">
                         &lt;..&lt;
                     </button>
                 </div>
@@ -502,9 +502,9 @@
 <div data-ng-init="excludedResources.push([])">
     <label>Ressources exclues</label>
 
-    <div class="panel-body panel panel-primary" ui-on-Drop="onDropResourceToBlock($event,$data,pair_blocks.resource_constraint.excluded)">
+    <div class="panel-body panel panel-primary" ui-on-Drop="onDropResourceToBlock($event,$data,pair_block.resource_constraint.excluded)">
         <accordion close-others="true">
-            <accordion-group class="panel panel-success" data-ng-repeat="blockResourceId in pair_blocks.resource_constraint.excluded track by $index" class="row" data-ng-init="getExcludedResourceInfo($parent.$index, blockResourceId.id)">
+            <accordion-group class="panel panel-success" data-ng-repeat="blockResourceId in pair_block.resource_constraint.excluded track by $index" class="row" data-ng-init="getExcludedResourceInfo($parent.$index, blockResourceId.id)">
                 <accordion-heading class="panel-heading">
                     <div class="row">
                         <div class="col-xs-2" ng-switch="excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].type">
@@ -532,7 +532,7 @@
 
                         </div>
                         <div class="col-xs-1">
-                                                                                                <span data-ng-click="$event.stopPropagation();modelRemoveField(pair_blocks.resource_constraint.excluded, $index)"
+                                                                                                <span data-ng-click="$event.stopPropagation();modelRemoveField(pair_block.resource_constraint.excluded, $index)"
                                                                                                       class="glyphicon glyphicon-remove"></span>
                         </div>
                     </div>
@@ -544,9 +544,9 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-4">
-                        <small>Auteur: {{ users[excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].author] }}</small>
+                        <small>Auteur: {{ users[excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].author].user_name }}</small>
                         <br>
-                        <small>Propriétaire: {{ users[excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].owner] }}</small>
+                        <small>Propriétaire: {{ users[excludedResources[$parent.$parent.$parent.$index][blockResourceId.id].owner].user_name }}</small>
                     </div>
                     <div class="col-xs-4">
                         <small>Partagé:&nbsp;
