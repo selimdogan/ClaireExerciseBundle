@@ -121,6 +121,9 @@ class OrderItemsService extends ExerciseCreationService
             }
         }
 
+        if ($mark < 0) {
+            $mark = 0;
+        }
         $item->setMark($mark);
     }
 

@@ -686,7 +686,12 @@ class GroupItemsService extends ExerciseCreationService
             }
         }
 
-        $item->setMark($pointsForName + $pointsForGrouping);
+        $mark = $pointsForName + $pointsForGrouping;
+        if ($mark < 0) {
+            $mark = 0;
+        }
+
+        $item->setMark($mark);
     }
 
     /**

@@ -42,8 +42,11 @@ option {
 
 .scrollContainer {
     position: fixed;
-    margin-top: 222px;
+    margin-top: 135px;
     overflow: auto;
+    right:0;
+    padding-left: 0;
+    padding-right: 0
 }
 
 .col-centered {
@@ -54,4 +57,10 @@ option {
     /* inline-block space fix */
     margin-right:1%;
     margin-left:1%;
+}
+
+.research {
+    vertical-align:top;
+    margin-right: 20px;
+    margin-left: 20px;
 }

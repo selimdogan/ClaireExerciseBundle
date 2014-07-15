@@ -218,6 +218,10 @@ class OpenEndedQuestionService extends ExerciseCreationService
             $mark = 0;
         }
 
+        if ($mark < 0) {
+            $mark = 0;
+        }
+
         $question->setMark($mark);
     }
 

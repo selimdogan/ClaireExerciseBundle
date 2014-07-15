@@ -54,7 +54,7 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
             "metadata": [],
             "keywords": [],
             "content": {
-                "source": "img1.jpeg",
+                "source": null,
                 "object_type": "picture"
             },
             "required_exercise_resources": null,
@@ -85,17 +85,9 @@ resourceControllers.controller('resourceListController', ['$scope', 'Resource', 
     $scope.users = [];
 
     // retrieve resources
-    $scope.resources = Resource.query(function (data) {
-        angular.forEach(data, function (res) {
-            User.get({userId: res.author}, function (user) {
-                $scope.users[user.id] = user.user_name;
-            });
-        });
-        angular.forEach(data, function (res) {
-            User.get({userId: res.owner}, function (user) {
-                $scope.users[user.id] = user.user_name;
-            });
-        });
+// DEMO    $scope.resources = Resource.query(function (data) {
+    $scope.resources = Resource.query({owner: BASE_CONFIG.currentUserId}, function (data) {
+        $scope.loadUsers();
     });
 
     // delete resource method
@@ -115,6 +107,24 @@ resourceControllers.controller('resourceListController', ['$scope', 'Resource', 
             Resource.save($scope.newPictureResource, function (data) {
                 $location.path('/teacher/resource/' + data.id)
             });
+        }
+    };
+
+    // load only once every necessary user
+    $scope.loadUsers = function () {
+        userIds = [];
+        for (i = 0; i < $scope.resources.length; ++i) {
+            if (userIds.indexOf($scope.resources[i].author) == -1) {
+                userIds.push($scope.resources[i].author);
+            }
+            if (userIds.indexOf($scope.resources[i].owner) == -1) {
+                userIds.push($scope.resources[i].owner);
+            }
+        }
+
+        $scope.users = [];
+        for (i = 0; i < userIds.length; ++i) {
+            $scope.users[userIds[i]] = User.get({userId: userIds[i]});
         }
     };
 
@@ -260,6 +270,13 @@ resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 
                 // file is uploaded successfully
                 $scope.resource.content.source = data.fileName;
             });
+    };
+
+    // delete resource method
+    $scope.deleteResource = function (resource) {
+        resource.$delete({id: resource.id}, function () {
+
+        });
     };
 
 }]);
@@ -420,16 +437,7 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
     $scope.users = [];
 
     $scope.models = Model.query(function (model) {
-        angular.forEach(model, function (model) {
-            User.get({userId: model.author}, function (user) {
-                $scope.users[user.id] = user.user_name;
-            });
-        });
-        angular.forEach(model, function (model) {
-            User.get({userId: model.owner}, function (user) {
-                $scope.users[user.id] = user.user_name;
-            });
-        });
+        $scope.loadUsers();
     });
 
     $scope.deleteModel = function (model) {
@@ -443,6 +451,23 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
             Model.save($scope.newPairItemsModel, function (data) {
                 $location.path('/teacher/model/' + data.id)
             });
+        }
+    };
+
+    $scope.loadUsers = function () {
+        userIds = [];
+        for (i = 0; i < $scope.models.length; ++i) {
+            if (userIds.indexOf($scope.models[i].author) == -1) {
+                userIds.push($scope.models[i].author);
+            }
+            if (userIds.indexOf($scope.models[i].owner) == -1) {
+                userIds.push($scope.models[i].owner);
+            }
+        }
+
+        $scope.users = [];
+        for (i = 0; i < userIds.length; ++i) {
+            $scope.users[userIds[i]] = User.get({userId: userIds[i]});
         }
     };
 
@@ -491,7 +516,7 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
         delete $scope.model.owner;
         delete $scope.model.required_exercise_resources;
         delete $scope.model.required_knowledges;
-    }
+    };
 
     $scope.updateModel = function () {
         $scope.preUpdate();
@@ -505,11 +530,12 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                 $scope.modelAddBlockResourceField(collection, resource.id);
             }
         }
-    }
+    };
 
     $scope.onDropMetadataKey = function (event, metakey, collection, field) {
         collection[field] = metakey;
-    }
+        console.log(metakey);
+    };
 
     $scope.onDropDocument = function (event, resource, documents) {
         if ($scope.model.type == 'pair-items') {
@@ -517,19 +543,19 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                 $scope.modelAddBlockResourceField(documents, resource.id);
             }
         }
-    }
+    };
 
     $scope.getResourceInfo = function (blockid, resourceid) {
         $scope.usedResources[blockid][resourceid] = Resource.get({id: resourceid});
-    }
+    };
 
     $scope.getExcludedResourceInfo = function (blockid, resourceid) {
         $scope.excludedResources[blockid][resourceid] = Resource.get({id: resourceid});
-    }
+    };
 
     $scope.getDocumentInfo = function (documentId) {
         $scope.usedDocuments[documentId] = Resource.get({id: documentId});
-    }
+    };
 
     $scope.getMobilPart = function (collection, key) {
         var returnValue = '';
@@ -543,5 +569,10 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
         } else {
             return collection.title;
         }
-    }
+    };
+
+    $scope.deleteModel = function (model) {
+        model.$delete({id: model.id}, function () {
+        });
+    };
 }]);

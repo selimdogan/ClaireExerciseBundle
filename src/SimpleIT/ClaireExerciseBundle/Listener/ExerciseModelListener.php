@@ -50,7 +50,7 @@ class ExerciseModelListener implements ContainerAwareInterface
     }
 
     /**
-     * On open, open claire to edit the exercise model
+     * On open, open claire to attempt list for this model
      *
      * @param OpenResourceEvent $event
      */
@@ -61,7 +61,7 @@ class ExerciseModelListener implements ContainerAwareInterface
 
         //Redirection to the controller
         $route = $this->container->get('router')->generate('frontend_index');
-        $route .= '#/learner/models/' . $model->getId();
+        $route .= '#/learner/model/' . $model->getId();
         $event->setResponse(new RedirectResponse($route));
         $event->stopPropagation();
     }
