@@ -135,10 +135,10 @@
                     </div>
                     <div class="row">
                         <div style="margin: 1%;">
-                            <label class="panel panel-success" data-ng-repeat="meta in model.metadata track by $index" style="margin: 2px;">
+                            <label class="panel-primary" data-ng-repeat="meta in model.metadata track by $index" style="margin: 2px;">
                                 &nbsp;<span ui-draggable="true" drag="meta.key">{{ meta.key }}</span>:&nbsp;<span>{{ meta.value }}</span>&nbsp;
                             </label>
-                            <label class="panel panel-success" data-ng-repeat="keyword in model.keywords track by $index" style="margin: 2px;">
+                            <label class="panel-primary" data-ng-repeat="keyword in model.keywords track by $index" style="margin: 2px;">
                                 &nbsp;{{ keyword }}&nbsp;
                             </label>
                         </div>

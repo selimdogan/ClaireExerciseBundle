@@ -8,19 +8,19 @@
                         <div class="row">
                             <div class="col-centered" ng-switch="model.type">
                                 <div ng-switch-when="multiple-choice">
-                                    <span class="glyphicon glyphicon-check" style="font-size: 920%"></span>
+                                    <span class="glyphicon glyphicon-check" style="font-size: 300%"></span>
                                 </div>
                                 <div ng-switch-when="open-ended-question">
-                                    <span class="glyphicon glyphicon-question-sign" style="font-size: 920%"></span>
+                                    <span class="glyphicon glyphicon-question-sign" style="font-size: 300%"></span>
                                 </div>
                                 <div ng-switch-when="pair-items">
-                                    <span class="glyphicon glyphicon-random" style="font-size: 920%"></span>
+                                    <span class="glyphicon glyphicon-random" style="font-size: 300%"></span>
                                 </div>
                                 <div ng-switch-when="order-items">
-                                    <span class="glyphicon glyphicon-sort" style="font-size: 920%"></span>
+                                    <span class="glyphicon glyphicon-sort" style="font-size: 300%"></span>
                                 </div>
                                 <div ng-switch-when="group-items">
-                                    <span class="glyphicon glyphicon-link" style="font-size: 920%"></span>
+                                    <span class="glyphicon glyphicon-link" style="font-size: 300%"></span>
                                 </div>
                             </div>
                             <div class="col-xs-4 col-centered">
@@ -30,44 +30,36 @@
                                 <input type="text" ng-model="model.content.wording" class="form-control"/>
                             </div>
                             <div class="col-centered">
-                                <h4>Auteur</h4>
-                                <input type="text" ng-model="users[model.author]" class="form-control" disabled>
-                                <h4>Propriétaire</h4>
-                                <input type="text" ng-model="users[model.owner]" class="form-control" disabled>
+                                <h4>Auteur: </h4>{{ users[model.author] }}
+                            </div>
+                            <div class="col-centered">
+                                <h4>Propriétaire: </h4>{{ users[model.owner] }}
                             </div>
                             <div class="col-xs-4 col-centered">
-                                <div>
                                     <div class="col-centered">
                                         <span class="glyphicon" ng-class="{'glyphicon-check': model.public, 'glyphicon-unchecked': !model.public}" data-ng-click="model.public=!model.public"></span>
                                     </div>
                                     <div class="col-centered">
                                         <h4>Partagé</h4>
                                     </div>
-                                </div>
-                                <div>
                                     <div class="col-centered">
                                         <span class="glyphicon" ng-class="{'glyphicon-check': model.archived, 'glyphicon-unchecked': !model.archived}" data-ng-click="model.archived=!model.archived"></span>
                                     </div>
                                     <div class="col-centered">
                                         <h4>Archivé</h4>
                                     </div>
-                                </div>
-                                <div>
                                     <div class="col-centered">
                                         <span class="glyphicon" ng-class="{'glyphicon-check': model.draft, 'glyphicon-unchecked': !model.draft}" data-ng-click="model.draft=!model.draft"></span>
                                     </div>
                                     <div class="col-centered">
                                         <h4>Brouillon</h4>
                                     </div>
-                                </div>
-                                <div>
                                     <div class="col-centered">
                                         <span class="glyphicon" ng-class="{'glyphicon-check': model.complete, 'glyphicon-unchecked': !model.complete}"></span>
                                     </div>
                                     <div class="col-centered">
                                         <h4>Complet</h4>
                                     </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -657,14 +649,14 @@
         <script>
             $(function () {
                 var window_height = $(window).height(),
-                    content_height = window_height - 386; // 484
+                    content_height = window_height - 280; // 484
 
                 $('.scrollContainer').height(content_height);
             });
 
             $(window).resize(function () {
                 var window_height = $(window).height(),
-                    content_height = window_height - 386;
+                    content_height = window_height - 280;
                 $('.scrollContainer').height(content_height);
             });
         </script>
