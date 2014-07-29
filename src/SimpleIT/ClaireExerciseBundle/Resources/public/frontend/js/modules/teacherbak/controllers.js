@@ -9,19 +9,11 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
 
         $scope.section = 'resource';
 
-        console.log($scope.$parent.subsection);
-
-        function FirstController($scope) {
-            $scope.$on('subSection', function(event, args) {
-                console.log(args);
-            });
-        }
-
         $scope.filters = {
             search: '',
             archived: false,
             type: {
-                multiple_choice_question: 'multiple-choice-question', text: 'text', picture: 'picture', open_ended_question: 'open-ended-question', sequence: ''
+                multiple_choice_question: '', text: 'text', picture: 'picture', open_ended_question: '', sequence: ''
             },
             keywords: [],
             metadata: []
@@ -33,85 +25,40 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
             $scope.parentSection = $scope.$parent.section;
         }
 
-        $scope.resourceContext = {
-            "newResources": {
-                "text": {
-                    "type": "text",
-                    "title": "Nouvelle ressource",
-                    "public": false,
-                    "archived": false,
-                    "draft": false,
-                    "complete": null,
-                    "metadata": [],
-                    "keywords": [],
-                    "content": {
-                        "text": "Texte de la resource",
-                        "object_type": "text"
-                    },
-                    "required_exercise_resources": null,
-                    "required_knowledges": null
-                },
-                "picture": {
-                    "type": "picture",
-                    "title": "Nouvelle ressource",
-                    "public": false,
-                    "archived": false,
-                    "draft": false,
-                    "complete": null,
-                    "metadata": [],
-                    "keywords": [],
-                    "content": {
-                        "source": null,
-                        "object_type": "picture"
-                    },
-                    "required_exercise_resources": null,
-                    "required_knowledges": null
-                },
-                "multiple_choice_question": {
-                    "type": "multiple-choice-question",
-                    "title": "Nouvelle ressource",
-                    "public": false,
-                    "archived": false,
-                    "draft": false,
-                    "complete": null,
-                    "metadata": [],
-                    "keywords": [],
-                    "content": {
-                        "do_not_shuffle": true,
-                        "question": "Question ressource QCM",
-                        "propositions": [
-                            {
-                                "text": "Bonne réponse",
-                                "right": true
-                            }
-                        ],
-                        "comment": "Commentaire",
-                        "max_number_of_propositions": 0,
-                        "max_number_of_right_propositions": 0,
-                        "object_type": "multiple_choice_question"
-                    },
-                    "required_exercise_resources": null,
-                    "required_knowledges": null
-                },
-                "open_ended_question": {
-                    "type": "open-ended-question",
-                    "title": "Nouvelle ressource",
-                    "public": false,
-                    "archived": false,
-                    "draft": false,
-                    "complete": null,
-                    "metadata": [],
-                    "keywords": [],
-                    "content": {
-                        "question": "Question à réponse courte",
-                        "solutions": ["Exemple de solution"],
-                        "comment": "Commantaire",
-                        "object_type": "open_ended_question"
-                    },
-                    "required_exercise_resources": null,
-                    "required_knowledges": null
-                }
-            }
+        // new resource text
+        $scope.newTextResource = {
+            "type": "text",
+            "title": "nouvelle ressource",
+            "public": false,
+            "archived": false,
+            "draft": false,
+            "complete": null,
+            "metadata": [],
+            "keywords": [],
+            "content": {
+                "text": "Texte de la resource",
+                "object_type": "text"
+            },
+            "required_exercise_resources": null,
+            "required_knowledges": null
+        };
+
+        // new resource picture
+        $scope.newPictureResource = {
+            "type": "picture",
+            "title": "nouvelle ressource",
+            "public": false,
+            "archived": false,
+            "draft": false,
+            "complete": null,
+            "metadata": [],
+            "keywords": [],
+            "content": {
+                "source": null,
+                "object_type": "picture"
+            },
+            "required_exercise_resources": null,
+            "required_knowledges": null
         };
 
         $scope.resourceAddKeywordsField = function (collection) {
@@ -153,20 +100,12 @@ resourceControllers.controller('resourceListController', ['$scope', 'Resource', 
     // create resource method
     $scope.createResource = function (type) {
         if (type == 'text') {
-            Resource.save($scope.resourceContext.newResources.text, function (data) {
-                $location.path('/teacher/resource/' + data.id);
+            Resource.save($scope.newTextResource, function (data) {
+                $location.path('/teacher/resource/' + data.id)
             });
         } else if (type == 'picture') {
-            Resource.save($scope.resourceContext.newResources.picture, function (data) {
-                $location.path('/teacher/resource/' + data.id);
-            });
-        } else if (type == 'multiple-choice-question') {
-            Resource.save($scope.resourceContext.newResources.multiple_choice_question, function (data) {
-                $location.path('/teacher/resource/' + data.id);
-            });
-        } else if (type == 'open-ended-question') {
-            Resource.save($scope.resourceContext.newResources.open_ended_question, function (data) {
-                $location.path('/teacher/resource/' + data.id);
+            Resource.save($scope.newPictureResource, function (data) {
+                $location.path('/teacher/resource/' + data.id)
             });
         }
     };
@@ -340,21 +279,6 @@ resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 
         });
     };
 
-    $scope.removeFromCollection = function(collection, index){
-        collection.splice(index, 1);
-    }
-
-    $scope.addProposition = function(collection){
-        var newProposition = {"text": "Nouvelle proposition","right": false};
-        collection.splice(collection.length, 0, newProposition);
-    }
-
-    $scope.addSolution = function(collection){
-        var newSolution = $('#resourceAddSolution');
-        collection.push(newSolution[0].value);
-        newSolution[0].value = '';
-    }
-
 }]);
 
 
@@ -369,124 +293,33 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
             search: '',
             archived: false,
             type: {
-                multiple_choice: 'multiple-choice', pair_items: 'pair-items', order_items: '', open_ended_question: '', group_items: 'group-items'
+                multiple_choice: '', pair_items: 'pair-items', order_items: '', open_ended_question: '', group_items: ''
             },
             keywords: [],
             metadata: []
         };
 
-        $scope.modelContext = {
-            "newModel": {
-                "pair_items": {
-                    "type": "pair-items",
-                    "title": "nouvel appariement",
-                    "public": false,
-                    "archived": false,
-                    "draft": false,
-                    "complete": null,
-                    "metadata": [],
-                    "keywords": [],
-                    "content": {
-                        "wording": "Consigne de l'exercice",
-                        "documents": [],
-                        "pair_blocks": [
-                            {
-                                "is_list": true,
-                                "number_of_occurrences": 0,
-                                "resources": [],
-                                "pair_meta_key": ""
-                            }
-                        ],
-                        "exercise_model_type": "pair-items"
-                    }
-                },
-                "sub_pair_items": {
-                    "block_field": {
+        $scope.newPairItemsModel = {
+            "type": "pair-items",
+            "title": "nouvel appariement",
+            "public": false,
+            "archived": false,
+            "draft": false,
+            "complete": null,
+            "metadata": [],
+            "keywords": [],
+            "content": {
+                "wording": "Consigne de l'exercice",
+                "documents": [],
+                "pair_blocks": [
+                    {
                         "is_list": true,
                         "number_of_occurrences": 0,
                         "resources": [],
                         "pair_meta_key": ""
                     }
-                },
-                "block_constraint": {
-                    "exists": {"key": '', "values": [], "comparator": 'exists'},
-                    "in": {"key": '', "values": [], "comparator": 'in'},
-                    "between": {"key": '', "values": ['', ''], "comparator": 'between'},
-                    "other": {"key": '', "values": [''], "comparator": ''}
-                },
-                "multiple_choice": {
-                    "type": "multiple-choice",
-                    "title": "Nouvelle ressource",
-                    "public": false,
-                    "archived": false,
-                    "draft": false,
-                    "complete": null,
-                    "metadata": [],
-                    "keywords": [],
-                    "content": {
-                        "wording": "consigne",
-                        "documents": [],
-                        "question_blocks": [
-                            {
-                                "number_of_occurrences": 0,
-                                "resources": [],
-                                "is_list": true,
-                                "max_number_of_propositions": 0,
-                                "max_number_of_right_propositions": 0
-                            }
-                        ],
-                        "shuffle_questions_order": true,
-                        "exercise_model_type": "multiple-choice"
-                    },
-                    "required_exercise_resources": null,
-                    "required_knowledges": null
-                },
-                "sub_multiple_choice": {
-                    "block_field": {
-                        "number_of_occurrences": 0,
-                        "resources": [],
-                        "is_list": true,
-                        "max_number_of_propositions": 0,
-                        "max_number_of_right_propositions": 0
-                    }
-                },
-                "group_items": {
-                    "type": "group-items",
-                    "title": "Nouvelle ressource",
-                    "public": true,
-                    "archived": false,
-                    "draft": false,
-                    "complete": null,
-                    "metadata": [],
-                    "keywords": [],
-                    "content": {
-                        "wording": "Consigne",
-                        "documents": [],
-                        "object_blocks": [
-                            {
-                                "number_of_occurrences": 0,
-                                "resources": [],
-                                "is_list": true
-                            }
-                        ],
-                        "display_group_names": "ask",
-                        "classif_constr": {
-                            "other": "own",
-                            "meta_keys": [],
-                            "groups": []
-                        },
-                        "exercise_model_type": "group-items"
-                    },
-                    "required_exercise_resources": null,
-                    "required_knowledges": null
-                },
-                "sub_group_items": {
-                    "block_field": {
-                        "number_of_occurrences": 0,
-                        "resources": [],
-                        "is_list": true
-                    }
-                }
+                ],
+                "exercise_model_type": "pair-items"
             }
         };
 
@@ -504,6 +337,16 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
             val[0].value = '';
         }
 
+        $scope.modelAddBlockField = function (collection) {
+            var newElement = {
+                "is_list": true,
+                "number_of_occurrences": 0,
+                "resources": [],
+                "pair_meta_key": ""
+            };
+            collection.splice(collection.length, 0, newElement);
+        }
+
         $scope.modelAddBlockResourceField = function (collection, id) {
             var isAlreadyAdded = false;
             angular.forEach(collection, function (res) {
@@ -516,28 +359,29 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
             }
         }
 
-        $scope.modelAddBlockResourceConstraint = function (block, type) {
-            if (typeof block.resource_constraint === "undefined") {
-                block.resource_constraint = {"metadata_constraints": []};
+        $scope.modelAddBlockResourceConstraint = function (pair_blocks, type) {
+            console.log("clik");
+
+            if (typeof pair_blocks.resource_constraint === "undefined") {
+                pair_blocks.resource_constraint = {"metadata_constraints": []};
                 console.log("resource_constraint undefined");
             }
-            if (typeof block.resource_constraint.metadata_constraints === "undefined") {
-                block.resource_constraint.metadata_constraints = [];
+            if (typeof pair_blocks.resource_constraint.metadata_constraints === "undefined") {
+                pair_blocks.resource_constraint.metadata_constraints = [];
                 console.log("metadata_constraints undefined");
             }
 
             var newElement;
             if (type == 'exists') {
-                newElement = $scope.modelContext.newModel.block_constraint.exists;
+                newElement = {"key": '', "values": [], "comparator": 'exists'};
             } else if (type == 'in') {
-                newElement = $scope.modelContext.newModel.block_constraint.in;
+                newElement = {"key": '', "values": [], "comparator": 'in'};
             } else if (type == 'between') {
-                newElement = $scope.modelContext.newModel.block_constraint.between;
+                newElement = {"key": '', "values": ['', ''], "comparator": 'between'};
             } else {
-                newElement = $scope.modelContext.newModel.block_constraint.other;
-                newElement.comparator = type;
+                newElement = {"key": '', "values": [''], "comparator": type};
             }
-            block.resource_constraint.metadata_constraints.splice(block.resource_constraint.metadata_constraints.length, 0, newElement);
+            pair_blocks.resource_constraint.metadata_constraints.splice(pair_blocks.resource_constraint.metadata_constraints.length, 0, newElement);
         }
 
         $scope.modelAddBlockResourceConstraintValue = function (collection) {
@@ -550,22 +394,37 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
             collection.splice(index, 1);
         }
 
+        $scope.initResourceConstraints = function(pair_blocks){
+            if(!pair_blocks.hasOwnProperty('resource_constraint')){
+                pair_blocks.resource_constraint = {type: ''};
+                pair_blocks.resource_constraint.metadata_constraints = [];
+                pair_blocks.resource_constraint.excluded = [];
+            }
+            if(!pair_blocks.resource_constraint.hasOwnProperty('metadata_constraints')){
+                pair_blocks.resource_constraint.metadata_constraints = [];
+            }
+            if(!pair_blocks.resource_constraint.hasOwnProperty('excluded')){
+                pair_blocks.resource_constraint.excluded = [];
+            }
+        }
+
         $scope.viewAttempt = function (attempt) {
             $location.path("/learner/attempt/" + attempt.id);
         };
 
         $scope.tryExercise = function (exercise) {
             // create attempt from exercise
-            //console.log('create attempt...');
+            console.log('create attempt...');
             attempt = AttemptByExercise.create({exerciseId: exercise.id},
                 function (attempt) {
+                    console.log('redirection');
                     $scope.viewAttempt(attempt);
                 });
         };
 
         $scope.tryModel = function (model) {
             // create exercise from model
-            //console.log('create exercise...');
+            console.log('create exercise...');
             exercise = ExerciseByModel.try({modelId: model.id},
                 function (exercise) {
                     $scope.tryExercise(exercise);
@@ -590,15 +449,7 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
 
     $scope.createModel = function (type) {
         if (type == 'pair-items') {
-            Model.save($scope.modelContext.newModel.pair_items, function (data) {
-                $location.path('/teacher/model/' + data.id)
-            });
-        }else if (type == 'multiple-choice') {
-            Model.save($scope.modelContext.newModel.multiple_choice, function (data) {
-                $location.path('/teacher/model/' + data.id)
-            });
-        }else if (type == 'group-items') {
-            Model.save($scope.modelContext.newModel.group_items, function (data) {
+            Model.save($scope.newPairItemsModel, function (data) {
                 $location.path('/teacher/model/' + data.id)
             });
         }
@@ -626,21 +477,16 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
 modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
 
     $scope.users = [];
-    $scope.usedResources = [];
-    $scope.excludedResources = [];
 
     $scope.model = Model.get({id: $stateParams.modelid}, function (model) {
         User.get({userId: model.author}, function (user) {
             $scope.users[user.id] = user.user_name;
         })
-        SecondController($scope, model.type);
-        //$scope.subsection = model.type;
     });
 
-    function SecondController($scope, args) {
-        console.log('emit' + args);
-        $scope.$emit('subSection', args);
-    }
+    $scope.usedDocuments = [];
+    $scope.usedResources = [];
+    $scope.excludedResources = [];
 
     $scope.saveAndTry = function () {
         $scope.preUpdate();
@@ -675,29 +521,29 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
 
     $scope.updateModel = function () {
         $scope.preUpdate();
-            $scope.model.$update({id: $stateParams.modelid}, function (model) {
+        $scope.model.$update({id: $stateParams.modelid}, function (model) {
         });
+    };
+
+    $scope.onDropResourceToBlock = function (event, resource, collection) {
+        if ($scope.model.type == 'pair-items') {
+            if (resource.type == 'text' || resource.type == 'picture') {
+                $scope.modelAddBlockResourceField(collection, resource.id);
+            }
+        }
     };
 
     $scope.onDropMetadataKey = function (event, metakey, collection, field) {
         collection[field] = metakey;
+        console.log(metakey);
     };
-
-    $scope.deleteModel = function (model) {
-        model.$delete({id: model.id}, function () {
-        });
-    };
-
-    $scope.usedDocuments = [];
 
     $scope.onDropDocument = function (event, resource, documents) {
-        if (resource.type == 'text' || resource.type == 'picture') {
-            $scope.modelAddBlockResourceField(documents, resource.id);
+        if ($scope.model.type == 'pair-items') {
+            if (resource.type == 'text' || resource.type == 'picture') {
+                $scope.modelAddBlockResourceField(documents, resource.id);
+            }
         }
-    };
-
-    $scope.getDocumentInfo = function (documentId) {
-        $scope.usedDocuments[documentId] = Resource.get({id: documentId});
     };
 
     $scope.getResourceInfo = function (blockid, resourceid) {
@@ -706,6 +552,10 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
 
     $scope.getExcludedResourceInfo = function (blockid, resourceid) {
         $scope.excludedResources[blockid][resourceid] = Resource.get({id: resourceid});
+    };
+
+    $scope.getDocumentInfo = function (documentId) {
+        $scope.usedDocuments[documentId] = Resource.get({id: documentId});
     };
 
     $scope.getMobilPart = function (collection, key) {
@@ -722,6 +572,11 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
         }
     };
 
+    $scope.deleteModel = function (model) {
+        model.$delete({id: model.id}, function () {
+        });
+    };
+
     $scope.openFirstBlocks = {};
     $scope.openFirst = function(selector, index){
         if(!$scope.openFirstBlocks.hasOwnProperty(selector)){
@@ -733,98 +588,4 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
             $scope.openFirstBlocks[selector].splice(index, 0, false);
         }
     }
-
-}]);
-
-modelControllers.controller('modelEditPairItemsController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
-
-    $scope.modelAddBlockField = function (collection) {
-        collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_pair_items.block_field);
-    }
-
-    $scope.onDropResourceToBlock = function (event, resource, collection) {
-        if ($scope.model.type == 'pair-items') {
-            if (resource.type == 'text' || resource.type == 'picture') {
-                $scope.modelAddBlockResourceField(collection, resource.id);
-            }
-        }
-    };
-
-    $scope.initResourceConstraints = function(block){
-        if(!block.hasOwnProperty('resource_constraint')){
-            block.resource_constraint = {};
-        }
-        if(!block.resource_constraint.hasOwnProperty('type')){
-            block.resource_constraint.type = 'text';
-        }
-        if(!block.resource_constraint.hasOwnProperty('metadata_constraints')){
-            block.resource_constraint.metadata_constraints = [];
-        }
-        if(!block.resource_constraint.hasOwnProperty('excluded')){
-            block.resource_constraint.excluded = [];
-        }
-    }
-
-}]);
-
-modelControllers.controller('modelEditMultipleChoiceController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
-
-    $scope.modelAddBlockField = function (collection) {
-        collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_multiple_choice.block_field);
-    }
-
-    $scope.onDropResourceToBlock = function (event, resource, collection) {
-        if ($scope.model.type == 'multiple-choice') {
-            if (resource.type == 'text' || resource.type == 'picture' || resource.type == 'multiple-choice-question') {
-                $scope.modelAddBlockResourceField(collection, resource.id);
-            }
-        }
-    };
-
-    $scope.initResourceConstraints = function(block){
-        if(!block.hasOwnProperty('resource_constraint')){
-            block.resource_constraint = {};
-        }
-        if(!block.resource_constraint.hasOwnProperty('type')){
-            block.resource_constraint.type = 'multiple-choice-question';
-        }
-        if(!block.resource_constraint.hasOwnProperty('metadata_constraints')){
-            block.resource_constraint.metadata_constraints = [];
-        }
-        if(!block.resource_constraint.hasOwnProperty('excluded')){
-            block.resource_constraint.excluded = [];
-        }
-    }
-
-}]);
-
-modelControllers.controller('modelEditGroupItemsController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
-
-    $scope.modelAddBlockField = function (collection) {
-        collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_group_items.block_field);
-    }
-
-    $scope.onDropResourceToBlock = function (event, resource, collection) {
-        if ($scope.model.type == 'group-items') {
-            if (resource.type == 'text' || resource.type == 'picture') {
-                $scope.modelAddBlockResourceField(collection, resource.id);
-            }
-        }
-    };
-
-    $scope.initResourceConstraints = function(block){
-        if(!block.hasOwnProperty('resource_constraint')){
-            block.resource_constraint = {};
-        }
-        if(!block.resource_constraint.hasOwnProperty('type')){
-            block.resource_constraint.type = 'text';
-        }
-        if(!block.resource_constraint.hasOwnProperty('metadata_constraints')){
-            block.resource_constraint.metadata_constraints = [];
-        }
-        if(!block.resource_constraint.hasOwnProperty('excluded')){
-            block.resource_constraint.excluded = [];
-        }
-    }
-
 }]);
