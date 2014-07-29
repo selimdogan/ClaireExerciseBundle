@@ -262,7 +262,10 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
             );
             $reqResources = array();
             foreach ($modelResource->getRequiredExerciseResources() as $reqRes) {
-                $reqResources[] = $this->exerciseResourceService->get($reqRes);
+                try {
+                    $reqResources[] = $this->exerciseResourceService->get($reqRes);
+                } catch (\Exception $e) {
+                }
             }
             $model->setRequiredExerciseResources(new ArrayCollection($reqResources));
 
@@ -274,7 +277,10 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
             );
             $reqKnowledges = array();
             foreach ($modelResource->getRequiredKnowledges() as $reqKnowledge) {
-                $reqKnowledges[] = $this->knowledgeService->get($reqKnowledge);
+                try {
+                    $reqKnowledges[] = $this->knowledgeService->get($reqKnowledge);
+                } catch (\Exception $e) {
+                }
             }
             $model->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
         }
