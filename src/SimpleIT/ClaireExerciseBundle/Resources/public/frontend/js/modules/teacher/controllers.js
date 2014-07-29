@@ -9,14 +9,6 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
 
         $scope.section = 'resource';
 
-        console.log($scope.$parent.subsection);
-
-        function FirstController($scope) {
-            $scope.$on('subSection', function(event, args) {
-                console.log(args);
-            });
-        }
-
         $scope.filters = {
             search: '',
             archived: false,
@@ -26,6 +18,34 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
             keywords: [],
             metadata: []
         };
+
+        $scope.$parent.$watch("subSection", function(newValue, oldValue) {
+            if(newValue == 'pair-items'){
+                $scope.filters.type.multiple_choice_question = '';
+                $scope.filters.type.text = 'text';
+                $scope.filters.type.picture = 'picture';
+                $scope.filters.type.open_ended_question = '';
+                $scope.filters.type.sequence = '';
+            }else if(newValue == 'multiple-choice'){
+                $scope.filters.type.multiple_choice_question = 'multiple-choice-question';
+                $scope.filters.type.text = '';
+                $scope.filters.type.picture = '';
+                $scope.filters.type.open_ended_question = '';
+                $scope.filters.type.sequence = '';
+            }else if(newValue == 'group-items'){
+                $scope.filters.type.multiple_choice_question = '';
+                $scope.filters.type.text = 'text';
+                $scope.filters.type.picture = 'picture';
+                $scope.filters.type.open_ended_question = '';
+                $scope.filters.type.sequence = '';
+            }else if(newValue == 'sequence'){
+                $scope.filters.type.multiple_choice_question = '';
+                $scope.filters.type.text = '';
+                $scope.filters.type.picture = '';
+                $scope.filters.type.open_ended_question = '';
+                $scope.filters.type.sequence = '';
+            }
+        });
 
         if ($scope.$parent.section === undefined) {
             $scope.parentSection = '';
@@ -365,6 +385,8 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
 
         $scope.section = 'model';
 
+        $scope.subSection;
+
         $scope.filters = {
             search: '',
             archived: false,
@@ -633,14 +655,8 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
         User.get({userId: model.author}, function (user) {
             $scope.users[user.id] = user.user_name;
         })
-        SecondController($scope, model.type);
-        //$scope.subsection = model.type;
+        $scope.$parent.subSection = model.type;
     });
-
-    function SecondController($scope, args) {
-        console.log('emit' + args);
-        $scope.$emit('subSection', args);
-    }
 
     $scope.saveAndTry = function () {
         $scope.preUpdate();
