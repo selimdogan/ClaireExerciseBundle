@@ -37,6 +37,13 @@ class Model extends CommonModel
     private $objectBlocks = array();
 
     /**
+     * @var bool $isSequence
+     * @Serializer\Type("boolean")
+     * @Serializer\Groups({"details", "exercise_model_storage"})
+     */
+    protected $isSequence;
+
+    /**
      * @var boolean $giveFirst Precise if the first element must be revealed in the exercise
      * @Serializer\Type("boolean")
      * @Serializer\Groups({"details", "exercise_model_storage"})
@@ -63,26 +70,6 @@ class Model extends CommonModel
      * @Serializer\Groups({"details", "exercise_model_storage"})
      */
     private $showValues = null;
-
-    /**
-     * Indicates if the exercise content is an object list.
-     *
-     * @return boolean True if the model contains an object list as sequence
-     */
-    public function isObjectList()
-    {
-        return !empty($this->objectBlocks);
-    }
-
-    /**
-     * Indicates if the exercise content is a sequence object.
-     *
-     * @return boolean True if the model contains a sequence object
-     */
-    public function isSequenceObject()
-    {
-        return !is_null($this->sequenceBlock);
-    }
 
     /**
      * Get sequenceBlock
@@ -227,5 +214,25 @@ class Model extends CommonModel
     public function getShowValues()
     {
         return $this->showValues;
+    }
+
+    /**
+     * Set isSequence
+     *
+     * @param boolean $isSequence
+     */
+    public function setIsSequence($isSequence)
+    {
+        $this->isSequence = $isSequence;
+    }
+
+    /**
+     * Get isSequence
+     *
+     * @return boolean
+     */
+    public function getIsSequence()
+    {
+        return $this->isSequence;
     }
 }

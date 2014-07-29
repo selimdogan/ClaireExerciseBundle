@@ -158,11 +158,11 @@ class OrderItemsService extends ExerciseCreationService
         $solutions = array();
 
         // If object list
-        if ($model->isObjectList()) {
-            $this->exerciseFromObjList($model, $solutions, $objects, $owner);
-        } // Else (sequence)
-        else {
+        if ($model->getIsSequence()) {
             $this->exerciseFromSequence($model, $solutions, $objects, $owner);
+        }
+        else {
+            $this->exerciseFromObjList($model, $solutions, $objects, $owner);
         }
 
         // add the objects and the solution
