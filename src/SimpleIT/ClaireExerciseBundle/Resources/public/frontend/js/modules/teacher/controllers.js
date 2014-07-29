@@ -9,14 +9,6 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
 
         $scope.section = 'resource';
 
-//        console.log($scope.$parent.subsection);
-
-        function FirstController($scope) {
-            $scope.$on('subSection', function (event, args) {
-                console.log(args);
-            });
-        }
-
         $scope.filters = {
             search: '',
             archived: false,
@@ -26,6 +18,34 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
             keywords: [],
             metadata: []
         };
+
+        $scope.$parent.$watch("subSection", function (newValue, oldValue) {
+            if (newValue == 'pair-items') {
+                $scope.filters.type.multiple_choice_question = '';
+                $scope.filters.type.text = 'text';
+                $scope.filters.type.picture = 'picture';
+                $scope.filters.type.open_ended_question = '';
+                $scope.filters.type.sequence = '';
+            } else if (newValue == 'multiple-choice') {
+                $scope.filters.type.multiple_choice_question = 'multiple-choice-question';
+                $scope.filters.type.text = '';
+                $scope.filters.type.picture = '';
+                $scope.filters.type.open_ended_question = '';
+                $scope.filters.type.sequence = '';
+            } else if (newValue == 'group-items') {
+                $scope.filters.type.multiple_choice_question = '';
+                $scope.filters.type.text = 'text';
+                $scope.filters.type.picture = 'picture';
+                $scope.filters.type.open_ended_question = '';
+                $scope.filters.type.sequence = '';
+            } else if (newValue == 'sequence') {
+                $scope.filters.type.multiple_choice_question = '';
+                $scope.filters.type.text = '';
+                $scope.filters.type.picture = '';
+                $scope.filters.type.open_ended_question = '';
+                $scope.filters.type.sequence = '';
+            }
+        });
 
         if ($scope.$parent.section === undefined) {
             $scope.parentSection = '';
@@ -390,6 +410,8 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
 
         $scope.section = 'model';
 
+        $scope.subSection;
+
         $scope.filters = {
             search: '',
             archived: false,
@@ -554,16 +576,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
             }
         };
 
-        $scope.modelAddBlockResourceConstraint = function (block, type) {
-            if (typeof block.resource_constraint === "undefined") {
-                block.resource_constraint = {"metadata_constraints": []};
-                console.log("resource_constraint undefined");
-            }
-            if (typeof block.resource_constraint.metadata_constraints === "undefined") {
-                block.resource_constraint.metadata_constraints = [];
-                console.log("metadata_constraints undefined");
-            }
-
+        $scope.modelAddBlockResourceConstraint = function (metadata_constraints, type) {
             var newElement;
             if (type == 'exists') {
                 newElement = $scope.modelContext.newModel.block_constraint.exists;
@@ -575,7 +588,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                 newElement = $scope.modelContext.newModel.block_constraint.other;
                 newElement.comparator = type;
             }
-            block.resource_constraint.metadata_constraints.splice(block.resource_constraint.metadata_constraints.length, 0, newElement);
+            metadata_constraints.splice(metadata_constraints.length, 0, newElement);
         };
 
         $scope.modelAddBlockResourceConstraintValue = function (collection) {
@@ -674,22 +687,37 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
             // load model
             $scope.model = Model.get({id: $stateParams.modelid}, function () {
                 // fill each block with empty constraints
-                for (i = 0; i < $scope.model.content.pair_blocks.length; ++i) {
-                    if (typeof $scope.model.content.pair_blocks[i].resource_constraint === "undefined") {
-                        $scope.model.content.pair_blocks[i].resource_constraint = {
-                            "metadata_constraints": [],
-                            "excluded": []
-                        };
-                    }
-                    if (typeof $scope.model.content.pair_blocks[i].resource_constraint.metadata_constraints === "undefined") {
-                        $scope.model.content.pair_blocks[i].resource_constraint.metadata_constraints = [];
-                    }
-                    if (typeof $scope.model.content.pair_blocks[i].resource_constraint.excluded === "undefined") {
-                        $scope.model.content.pair_blocks[i].resource_constraint.excluded = [];
-                    }
-                }
+                $scope.fillBlockConstraints($scope.model);
+                $scope.$parent.subSection = $scope.model.type;
             });
         });
+
+        $scope.fillBlockConstraints = function (model) {
+            console.log(model);
+            switch (model.type) {
+                case 'pair-items': $scope.fillConstraints(model.content.pair_blocks);break;
+                case 'order-items': $scope.fillConstraints(model.content.object_blocks);break;
+                case 'group-items': $scope.fillConstraints(model.content.object_blocks);break;
+                case 'multiple-choice': $scope.fillConstraints(model.content.question_blocks);break;
+            }
+        };
+
+        $scope.fillConstraints = function (blocks) {
+            for (i = 0; i < blocks.length; ++i) {
+                if (typeof blocks[i].resource_constraint === "undefined") {
+                    blocks[i].resource_constraint = {
+                        "metadata_constraints": [],
+                        "excluded": []
+                    };
+                }
+                if (typeof blocks[i].resource_constraint.metadata_constraints === "undefined") {
+                    blocks[i].resource_constraint.metadata_constraints = [];
+                }
+                if (typeof blocks[i].resource_constraint.excluded === "undefined") {
+                    blocks[i].resource_constraint.excluded = [];
+                }
+            }
+        };
 
         $scope.saveAndTry = function () {
             $scope.preUpdate();
@@ -745,7 +773,7 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
             }
         };
 
-        $scope.getMobilPart = function (collection, key) {
+        $scope.getMobilePart = function (collection, key) {
             var returnValue = '';
             angular.forEach(collection.metadata, function (meta) {
                 if (meta.key == key) {

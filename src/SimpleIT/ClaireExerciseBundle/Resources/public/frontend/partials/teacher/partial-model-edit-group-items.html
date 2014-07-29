@@ -58,7 +58,7 @@
                             </div>
                         </div>
                         <div class="col-xs-8">
-                            <h4>{{ getMobilPart(usedResources[$parent.$parent.$parent.$index][blockResourceId.id],
+                            <h4>{{ getMobilePart(usedResources[$parent.$parent.$parent.$index][blockResourceId.id],
                                 object_block.pair_meta_key) }}&nbsp;<span class="caret"></span>
                             </h4>
                         </div>
@@ -463,26 +463,14 @@
 Sélection par contraintes
 </span>
 </accordion-group>
-
-<div class="panel panel-primary">
-    <div class="panel-heading" data-ng-click="modelAddBlockField(model.content.object_blocks)">
-        <div class="row">
-            <div class="col-xs-1">
-                <span class="glyphicon glyphicon-plus"></span>
-            </div>
-            <div class="col-xs-10"></div>
-            <div class="col-xs-1"></div>
-        </div>
-    </div>
-</div>
-
 </accordion>
 
-<accordion> <!-- close-others="true" -->
+<accordion>
     <accordion-group class="panel panel-primary" is-open="true">
         <accordion-heading class="panel-heading">
             <div class="row">
                 <div class="col-xs-6">
+                    
                 </div>
             </div>
         </accordion-heading>
