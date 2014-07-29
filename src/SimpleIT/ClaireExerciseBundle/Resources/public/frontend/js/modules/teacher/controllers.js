@@ -688,15 +688,8 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                         $scope.model.content.pair_blocks[i].resource_constraint.excluded = [];
                     }
                 }
-
-                SecondController($scope, $scope.model.type);
             });
         });
-
-        function SecondController($scope, args) {
-            console.log('emit' + args);
-            $scope.$emit('subSection', args);
-        }
 
         $scope.saveAndTry = function () {
             $scope.preUpdate();
