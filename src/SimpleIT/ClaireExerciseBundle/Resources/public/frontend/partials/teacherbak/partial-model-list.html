@@ -126,8 +126,8 @@
                     class="glyphicon glyphicon-random"></span>&nbsp;Créer un modèle d'exercices d'appariement</a>
             </div>
             <div><a href class="list-group-item"><span title="Exercice d'ordonnancement" class="glyphicon glyphicon-sort"></span>&nbsp;Créer un exercice d'ordonancement</a></div>
-            <div><a href data-ng-click="createModel('group-items')" class="list-group-item"><span title="Exercice de groupement" class="glyphicon glyphicon-link"></span>&nbsp;Créer un exercice de groupement</a></div>
-            <div><a href data-ng-click="createModel('multiple-choice')" class="list-group-item"><span title="QCM" class="glyphicon glyphicon-check"></span>&nbsp;Créer un questionaire à choix multiple</a></div>
+            <div><a href class="list-group-item"><span title="Exercice de groupement" class="glyphicon glyphicon-link"></span>&nbsp;Créer un exercice de groupement</a></div>
+            <div><a href class="list-group-item"><span title="QCM" class="glyphicon glyphicon-check"></span>&nbsp;Créer un questionaire à choix multiple</a></div>
             <div><a href class="list-group-item"><span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign"></span>&nbsp;Créer un questionaire à réponse courte</a></div>
         </div>
     </accordion-group>
@@ -164,12 +164,12 @@
                         <h4>
                                 <span ng-click="$event.stopPropagation();tryModel(model)" class="glyphicon glyphicon-repeat"
                                       title="Essayer de répondre à un exercice pour ce modèle"></span>
-                                 <span ng-if="model.owner != BASE_CONFIG.currentUserId"
+                                 <span ng-if="model.type == 'pair-items' && model.owner != BASE_CONFIG.currentUserId"
                                   ui-sref="modelEdit({ modelid:model.id })"
                                   class="glyphicon glyphicon-eye-open"
                                   title="Voir ce modèle (édition impossible)"></span>
                                 <span
-                                    ng-if="model.owner == BASE_CONFIG.currentUserId"
+                                    ng-if="model.type == 'pair-items' && model.owner == BASE_CONFIG.currentUserId"
                                     ui-sref="modelEdit({ modelid:model.id })"
                                     class="glyphicon glyphicon-edit"
                                     title="Editer ce modèle"></span>
@@ -216,23 +216,39 @@
         </div>
         <div class="col-centered" ng-switch="model.type">
             <div ng-switch-when="multiple-choice">
-                <label>Type de modèle&nbsp;:&nbsp;</label>QCM
+                <span title="QCM" class="glyphicon glyphicon-check" style="font-size: 320%"></span>
             </div>
             <div ng-switch-when="open-ended-question">
-                <label>Type de modèle&nbsp;:&nbsp;</label>Question à réponse courte ouverte
+                <span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign" style="font-size: 320%"></span>
             </div>
             <div ng-switch-when="pair-items">
-                <label>Type de modèle&nbsp;:&nbsp;</label>Appariement
+                <label>Type de modèle&nbsp;:&nbsp;</label>
+                Appariement
             </div>
             <div ng-switch-when="order-items">
-                <label>Type de modèle&nbsp;:&nbsp;</label>Exercice d'ordonnancement
+                <span title="Exercice d'ordonnancement" class="glyphicon glyphicon-sort" style="font-size: 320%"></span>
             </div>
             <div ng-switch-when="group-items">
-                <label>Type de modèle&nbsp;:&nbsp;</label>Exercice de groupement
+                <span title="Exercice de groupement" class="glyphicon glyphicon-link" style="font-size: 320%"></span>
             </div>
         </div>
-        <div class="col-centered">
-            <label>Consigne du modèle d'exercice&nbsp;:&nbsp;</label>{{ model.content.wording }}
+        <div class="col-centered" ng-switch="model.type">
+            <div ng-switch-when="multiple-choice">
+                <span title="QCM" class="glyphicon glyphicon-check" style="font-size: 320%"></span>
+            </div>
+            <div ng-switch-when="open-ended-question">
+                <span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign" style="font-size: 320%"></span>
+            </div>
+            <div ng-switch-when="pair-items">
+                <label>Consigne du modèle d'exercice&nbsp;:&nbsp;</label>
+                {{ model.content.wording }}
+            </div>
+            <div ng-switch-when="order-items">
+                <span title="Exercice d'ordonnancement" class="glyphicon glyphicon-sort" style="font-size: 320%"></span>
+            </div>
+            <div ng-switch-when="group-items">
+                <span title="Exercice de groupement" class="glyphicon glyphicon-link" style="font-size: 320%"></span>
+            </div>
         </div>
     </accordion-group>
 </accordion>

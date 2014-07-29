@@ -123,8 +123,8 @@
             <div>
                 <a data-ng-click="createResource('text')" href class="list-group-item"><span title="Texte" class="glyphicon glyphicon-font"></span>&nbsp;Créer un texte</a>
             </div>
-            <div><a data-ng-click="createResource('multiple-choice-question')" href class="list-group-item"><span title="Question de QCM" class="glyphicon glyphicon-check"></span>&nbsp;Créer une question à choix multiple</a></div>
-            <div><a data-ng-click="createResource('open-ended-question')" href class="list-group-item"><span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign"></span>&nbsp;Créer une question à réponse courte</a></div>
+            <div><a href class="list-group-item"><span title="Question de QCM" class="glyphicon glyphicon-check"></span>&nbsp;Créer une question à choix multiple</a></div>
+            <div><a href class="list-group-item"><span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign"></span>&nbsp;Créer une question à réponse courte</a></div>
             <div><a href class="list-group-item"><span class="glyphicon glyphicon-sort-by-order"></span>&nbsp;Créer une séquence</a></div>
         </div>
     </accordion-group>
@@ -192,69 +192,42 @@
             </div>
         </accordion-heading>
         <div class="col-centered">
-            <label>Auteur&nbsp;:&nbsp;</label>{{ users[resource.author].user_name }}
+            <small>Auteur: {{ users[resource.author].user_name }}</small>
+            <br>
+            <small>Propriétaire: {{ users[resource.owner].user_name }}</small>
         </div>
         <div class="col-centered">
-            <label>Propriétaire&nbsp;:&nbsp;</label>{{ users[resource.owner].user_name }}
+            <small>Partagé:&nbsp;
+                <ng-switch on="resource.public">
+                    <span ng-switch-when="true">Oui</span>
+                    <span ng-switch-when="false">Non</span>
+                </ng-switch>
+            </small>
+            <br>
+            <small>Archivé:&nbsp;
+                <ng-switch on="resource.archived">
+                    <span ng-switch-when="true">Oui</span>
+                    <span ng-switch-when="false">Non</span>
+                </ng-switch>
+            </small>
         </div>
         <div class="col-centered">
-            <label>Partagé&nbsp;:&nbsp;</label>
-            <ng-switch on="resource.public">
-                <span ng-switch-when="true">Oui</span>
-                <span ng-switch-when="false">Non</span>
-            </ng-switch>
-        </div>
-        <div class="col-centered">
-            <label>Complet&nbsp;:&nbsp;</label>
-            <ng-switch on="resource.complete">
-                <span ng-switch-when="true">Oui</span>
-                <span ng-switch-when="false">Non</span>
-            </ng-switch>
-        </div>
-        <div class="col-centered" ng-switch="resource.type">
-            <div ng-switch-when="text">
-                <label>Type de ressource&nbsp;:&nbsp;</label>Texte
-            </div>
-            <div ng-switch-when="picture">
-                <label>Type de ressource&nbsp;:&nbsp;</label>Image
-            </div>
-            <div ng-switch-when="multiple-choice-question">
-                <label>Type de ressource&nbsp;:&nbsp;</label>Question de QCM
-            </div>
-            <div ng-switch-when="open-ended-question">
-                <label>Type de ressource&nbsp;:&nbsp;</label>Question à réponse courte ouverte
-            </div>
-            <div ng-switch-when="sequence">
-                <label>Type de ressource&nbsp;:&nbsp;</label>Séquence
-            </div>
-        </div>
-        <div class="col-centered" ng-switch="resource.type">
-            <div ng-switch-when="text">
-                <label>Contenu&nbsp;:&nbsp;</label>{{ resource.content.text }}
-            </div>
-            <div ng-switch-when="picture">
-                <label>Contenu&nbsp;:&nbsp;</label>
-                <a href="{{BASE_CONFIG.urls.images.uploads}}{{resource.content.source}}"
-                   data-lightbox="res" data-title="La ressource">
-                    <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{resource.content.source}}"/>
-                </a>
-            </div>
-            <div ng-switch-when="multiple-choice-question">
-                <label>Question&nbsp;:&nbsp;</label>{{ resource.content.question }}
-            </div>
-            <div ng-switch-when="open-ended-question">
-                <label>Question&nbsp;:&nbsp;</label>{{ resource.content.question }}
-            </div>
-        </div>
-        <div class="col-centered" ng-switch="resource.type">
-            <div ng-switch-when="multiple-choice-question">
-                <label>Commentaire&nbsp;:&nbsp;</label>{{ resource.content.comment }}
-            </div>
-            <div ng-switch-when="open-ended-question">
-                <label>Commentaire&nbsp;:&nbsp;</label>{{ resource.content.comment }}
-            </div>
+            <small>Brouillon:&nbsp;
+                <ng-switch on="resource.draft">
+                    <span ng-switch-when="true">Oui</span>
+                    <span ng-switch-when="false">Non</span>
+                </ng-switch>
+            </small>
+            <br>
+            <small>Complet:&nbsp;
+                <ng-switch on="resource.complete">
+                    <span ng-switch-when="true">Oui</span>
+                    <span ng-switch-when="false">Non</span>
+                </ng-switch>
+            </small>
         </div>
     </accordion-group>
 </accordion>
+
 </div>
 </div>
