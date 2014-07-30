@@ -1,4 +1,20 @@
 <?php
+/*
+ * This file is part of CLAIRE.
+ *
+ * CLAIRE is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * CLAIRE is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with CLAIRE. If not, see <http://www.gnu.org/licenses/>
+ */
 
 namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems;
 
@@ -37,6 +53,13 @@ class Model extends CommonModel
     private $objectBlocks = array();
 
     /**
+     * @var bool $isSequence
+     * @Serializer\Type("boolean")
+     * @Serializer\Groups({"details", "exercise_model_storage"})
+     */
+    protected $isSequence;
+
+    /**
      * @var boolean $giveFirst Precise if the first element must be revealed in the exercise
      * @Serializer\Type("boolean")
      * @Serializer\Groups({"details", "exercise_model_storage"})
@@ -63,26 +86,6 @@ class Model extends CommonModel
      * @Serializer\Groups({"details", "exercise_model_storage"})
      */
     private $showValues = null;
-
-    /**
-     * Indicates if the exercise content is an object list.
-     *
-     * @return boolean True if the model contains an object list as sequence
-     */
-    public function isObjectList()
-    {
-        return !empty($this->objectBlocks);
-    }
-
-    /**
-     * Indicates if the exercise content is a sequence object.
-     *
-     * @return boolean True if the model contains a sequence object
-     */
-    public function isSequenceObject()
-    {
-        return !is_null($this->sequenceBlock);
-    }
 
     /**
      * Get sequenceBlock
@@ -227,5 +230,25 @@ class Model extends CommonModel
     public function getShowValues()
     {
         return $this->showValues;
+    }
+
+    /**
+     * Set isSequence
+     *
+     * @param boolean $isSequence
+     */
+    public function setIsSequence($isSequence)
+    {
+        $this->isSequence = $isSequence;
+    }
+
+    /**
+     * Get isSequence
+     *
+     * @return boolean
+     */
+    public function getIsSequence()
+    {
+        return $this->isSequence;
     }
 }

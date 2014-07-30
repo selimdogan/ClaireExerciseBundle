@@ -1,4 +1,20 @@
 <?php
+/*
+ * This file is part of CLAIRE.
+ *
+ * CLAIRE is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * CLAIRE is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with CLAIRE. If not, see <http://www.gnu.org/licenses/>
+ */
 
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity;
 
@@ -98,7 +114,7 @@ class SharedMetadataRepository extends BaseRepository
         if (count($entity->getMetadata()) > 0) {
             $qb = $this->createQueryBuilder('m');
             $qb->delete(get_class($entity->getMetadata()[0]), 'm');
-            $qb->where($qb->expr()->eq('m.'.static::ENTITY_NAME, $entity->getId()));
+            $qb->where($qb->expr()->eq('m.' . static::ENTITY_NAME, $entity->getId()));
             $qb->getQuery()->getResult();
         }
     }

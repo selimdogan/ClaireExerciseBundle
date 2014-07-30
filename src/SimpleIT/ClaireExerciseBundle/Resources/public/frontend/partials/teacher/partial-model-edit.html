@@ -33,7 +33,8 @@
                         <!--<h4>Auteur</h4>-->
                         <!--<input type="text" ng-model="users[model.author]" class="form-control" disabled>-->
                         <h4>Propriétaire</h4>
-                        <input type="text" ng-model="users[model.owner]" class="form-control" disabled>
+                        <input type="text" ng-model="users[model.owner].user_name"
+                               class="form-control" disabled>
                     </div>
                     <div class="col-xs-2 col-centered">
                         <div title="Ce modèle est-il partagé avec les autres auteurs ?" data-ng-click="model.public=!model.public">
@@ -79,6 +80,17 @@
     ng-class="{'col-xs-5': !$parent.toggleResourceList, 'col-xs-12': $parent.toggleResourceList}">
 <div class="panel-body">
 
+<accordion>
+    <accordion-group class="panel panel-primary">
+        <accordion-heading class="panel-heading">
+            Consigne&nbsp;<span class="caret"></span>
+        </accordion-heading>
+        <!--<input type="text" ng-model="model.content.wording"/>-->
+        <textarea class="span5" rows="5" placeholder="Consigne de l'exercice"
+                  ng-model="model.content.wording"></textarea>
+    </accordion-group>
+</accordion>
+
 <accordion
     title="Documents annexes à présenter à l'apprenant après la consigne lors de la résolution d'un exercice. Il peut s'agir de texte ou d'image. Ajouter-les en les glissant depuis la liste des ressource.">
     <accordion-group class="panel panel-primary">
@@ -94,15 +106,15 @@
         </accordion-heading>
         <div class="panel-body panel panel-primary" collapse="context.pair_items.pair_blocks.resources.collapse" ui-on-Drop="onDropDocument($event,$data,model.content.documents)">
             <accordion close-others="true">
-                <accordion-group class="panel panel-success" data-ng-repeat="documentId in model.content.documents track by $index" class="row" data-ng-init="getDocumentInfo(documentId.id)">
+                <accordion-group class="panel panel-success" data-ng-repeat="documentId in model.content.documents track by $index" class="row">
                     <accordion-heading class="panel-heading">
                         <div class="row">
-                            <div class="col-xs-2" ng-switch="usedDocuments[documentId.id].type">
+                            <div class="col-xs-2" ng-switch="resources[documentId.id].type">
                                 <div ng-switch-when="text">
                                     <span title="Texte" class="glyphicon glyphicon-font" style="font-size: 260%"></span>
                                 </div>
                                 <div ng-switch-when="picture">
-                                    <img title="Image" ng-src="{{BASE_CONFIG.urls.images.uploads}}{{usedDocuments[documentId.id].content.source}}" style="width: 40px; height: 40px;"/>
+                                    <img title="Image" ng-src="{{BASE_CONFIG.urls.images.uploads}}{{resources[documentId.id].content.source}}" style="width: 40px; height: 40px;"/>
                                 </div>
                                 <div ng-switch-when="multiple-choice-question">
                                     <span title="QCM" class="glyphicon glyphicon-check" style="font-size: 260%"></span>
@@ -116,7 +128,7 @@
                                 </div>
                             </div>
                             <div class="col-xs-8">
-                                <h4>{{ usedDocuments[documentId.id].title }}&nbsp;<span class="caret"></span>
+                                <h4>{{ resources[documentId.id].title }}&nbsp;<span class="caret"></span>
                                 </h4>
                             </div>
                             <div class="col-xs-1">
@@ -129,52 +141,52 @@
                         </div>
                     </accordion-heading>
                     <div class="col-centered">
-                        <label>ID&nbsp;:&nbsp;</label>{{ usedDocuments[documentId.id].id }}
+                        <label>ID&nbsp;:&nbsp;</label>{{ resources[documentId.id].id }}
                     </div>
                     <div class="col-centered">
-                        <label>Auteur&nbsp;:&nbsp;</label>{{ users[usedDocuments[documentId.id].author] }}
+                        <label>Auteur&nbsp;:&nbsp;</label>{{ users[resources[documentId.id].author].user_name }}
                     </div>
                     <div class="col-centered">
-                        <label>Propriétaire&nbsp;:&nbsp;</label>{{ users[usedDocuments[documentId.id].owner] }}
+                        <label>Propriétaire&nbsp;:&nbsp;</label>{{ users[resources[documentId.id].owner].user_name }}
                     </div>
                     <div class="col-centered">
                         <label>Partagé&nbsp;:&nbsp;</label>
-                        <ng-switch on="usedDocuments[documentId.id].public">
+                        <ng-switch on="resources[documentId.id].public">
                             <span ng-switch-when="true">Oui</span>
                             <span ng-switch-when="false">Non</span>
                         </ng-switch>
                     </div>
                     <div class="col-centered">
                         <label>Complet&nbsp;:&nbsp;</label>
-                        <ng-switch on="usedDocuments[documentId.id].complete">
+                        <ng-switch on="resources[documentId.id].complete">
                             <span ng-switch-when="true">Oui</span>
                             <span ng-switch-when="false">Non</span>
                         </ng-switch>
                     </div>
-                    <div class="col-centered" ng-switch="usedDocuments[documentId.id].type">
+                    <div class="col-centered" ng-switch="resources[documentId.id].type">
                         <div ng-switch-when="text">
-                            <label>Contenu&nbsp;:&nbsp;</label>{{ usedDocuments[documentId.id].content.text }}
+                            <label>Contenu&nbsp;:&nbsp;</label>{{ resources[documentId.id].content.text }}
                         </div>
                         <div ng-switch-when="picture">
                             <label>Contenu&nbsp;:&nbsp;</label>
-                            <a href="{{BASE_CONFIG.urls.images.uploads}}{{usedDocuments[documentId.id].content.source}}"
+                            <a href="{{BASE_CONFIG.urls.images.uploads}}{{resources[documentId.id].content.source}}"
                                data-lightbox="res" data-title="La ressource">
-                                <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{usedDocuments[documentId.id].content.source}}"/>
+                                <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{resources[documentId.id].content.source}}"/>
                             </a>
                         </div>
                         <div ng-switch-when="multiple-choice-question">
-                            <label>Question&nbsp;:&nbsp;</label>{{ usedDocuments[documentId.id].content.question }}
+                            <label>Question&nbsp;:&nbsp;</label>{{ resources[documentId.id].content.question }}
                         </div>
                         <div ng-switch-when="open-ended-question">
-                            <label>Question&nbsp;:&nbsp;</label>{{ usedDocuments[documentId.id].content.question }}
+                            <label>Question&nbsp;:&nbsp;</label>{{ resources[documentId.id].content.question }}
                         </div>
                     </div>
-                    <div class="col-centered" ng-switch="usedDocuments[documentId.id].type">
+                    <div class="col-centered" ng-switch="resources[documentId.id].type">
                         <div ng-switch-when="multiple-choice-question">
-                            <label>Commentaire&nbsp;:&nbsp;</label>{{ usedDocuments[documentId.id].content.comment }}
+                            <label>Commentaire&nbsp;:&nbsp;</label>{{ resources[documentId.id].content.comment }}
                         </div>
                         <div ng-switch-when="open-ended-question">
-                            <label>Commentaire&nbsp;:&nbsp;</label>{{ usedDocuments[documentId.id].content.comment }}
+                            <label>Commentaire&nbsp;:&nbsp;</label>{{ resources[documentId.id].content.comment }}
                         </div>
                     </div>
                 </accordion-group>

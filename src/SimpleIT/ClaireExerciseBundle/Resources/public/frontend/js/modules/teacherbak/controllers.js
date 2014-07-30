@@ -558,7 +558,7 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
         $scope.usedDocuments[documentId] = Resource.get({id: documentId});
     };
 
-    $scope.getMobilPart = function (collection, key) {
+    $scope.getMobilePart = function (collection, key) {
         var returnValue = '';
         angular.forEach(collection.metadata, function (meta) {
             if (meta.key == key) {
