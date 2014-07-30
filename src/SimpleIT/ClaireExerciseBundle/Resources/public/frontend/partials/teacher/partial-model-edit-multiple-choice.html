@@ -17,7 +17,8 @@
 <accordion>
     <accordion-group class="panel panel-primary" name="accordionBlock"
                      data-ng-repeat="block in model.content.question_blocks track by $index"
-                     ng-init="openFirst('accordionBlock', $index)" is-open="openFirstBlocks.accordionBlock[$index]">
+                     ng-init="openFirst('accordionBlock', $index); metadata_constraints = block.resource_constraint.metadata_constraints"
+                     is-open="openFirstBlocks.accordionBlock[$index]">
         <accordion-heading class="panel-heading">
             <div class="row"
                  title="Un bloc désigne un ensemble de ressources dont une partie sera tirée aléatoirement lors de la génération d'exercices">

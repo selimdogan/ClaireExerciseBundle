@@ -165,8 +165,6 @@ itemControllers.controller('multipleChoiceController', ['$scope', 'Answer', '$ro
                 answer.content.push(val);
             }
 
-            console.log($scope.item.item_id);
-
             item = answer.$save({itemId: $scope.item.item_id, attemptId: $stateParams.attemptId},
                 function (item) {
                     $scope.items[$stateParams.itemId] = item;
@@ -238,9 +236,6 @@ itemControllers.controller('groupItemsController', ['$scope', 'Answer', '$routeP
                 }
             }
 
-
-            console.log(answer);
-
             item = answer.$save({itemId: $scope.item.item_id, attemptId: $stateParams.attemptId},
                 function (item) {
                     $scope.items[$stateParams.itemId] = item;
@@ -252,8 +247,6 @@ itemControllers.controller('groupItemsController', ['$scope', 'Answer', '$routeP
         $scope.displayCorrection = function (item) {
             $scope.item.corrected = true;
             $scope.item['content']['mark'] = item['content']['mark'];
-
-            console.log($scope.solutions);
 
             for (var i = 0; i < $scope.groups.length; ++i) {
                 for (var j = 0; j < $scope.groups[i].objects.length; ++j) {
@@ -272,8 +265,6 @@ itemControllers.controller('groupItemsController', ['$scope', 'Answer', '$routeP
                     $scope.groups[i].goodName = item['content'].groups[i];
                 }
             }
-
-
         };
 
         // display learner answers
@@ -285,8 +276,7 @@ itemControllers.controller('groupItemsController', ['$scope', 'Answer', '$routeP
             }
 
             // group names
-            if ($scope.dgn == 'ask')
-            {
+            if ($scope.dgn == 'ask') {
                 for (i = 0; i < $scope.item['content'].answers.gr.length; ++i) {
                     $scope.groups[i].name = $scope.item['content'].answers.gr[i];
                 }

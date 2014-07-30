@@ -693,12 +693,19 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
         });
 
         $scope.fillBlockConstraints = function (model) {
-            console.log(model);
             switch (model.type) {
-                case 'pair-items': $scope.fillConstraints(model.content.pair_blocks);break;
-                case 'order-items': $scope.fillConstraints(model.content.object_blocks);break;
-                case 'group-items': $scope.fillConstraints(model.content.object_blocks);break;
-                case 'multiple-choice': $scope.fillConstraints(model.content.question_blocks);break;
+                case 'pair-items':
+                    $scope.fillConstraints(model.content.pair_blocks);
+                    break;
+                case 'order-items':
+                    $scope.fillConstraints(model.content.object_blocks);
+                    break;
+                case 'group-items':
+                    $scope.fillConstraints(model.content.object_blocks);
+                    break;
+                case 'multiple-choice':
+                    $scope.fillConstraints(model.content.question_blocks);
+                    break;
             }
         };
 
