@@ -52,7 +52,7 @@ class AnswerByItemByAttemptController extends BaseController
             $answers = $this->get('simple_it.exercise.answer')->getAll(
                 $itemId,
                 $attemptId,
-                $this->getUserIdIfNoCreator()
+                $this->getUserId()
             );
 
             $answerResources = AnswerResourceFactory::createCollection($answers);

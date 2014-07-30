@@ -72,7 +72,7 @@ class AttemptController extends BaseController
     {
         $attempts = $this->get('simple_it.exercise.attempt')->getAll(
             $collectionInformation,
-            $this->getUserIdIfNoCreator()
+            $this->getUserId()
         );
 
         $attemptsResources = AttemptResourceFactory::createCollection($attempts);

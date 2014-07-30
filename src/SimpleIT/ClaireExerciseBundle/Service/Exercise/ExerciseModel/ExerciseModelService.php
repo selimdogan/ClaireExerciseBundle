@@ -20,6 +20,8 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel;
 
 use Claroline\CoreBundle\Entity\Resource\ResourceNode;
 use Claroline\CoreBundle\Entity\User;
+use Claroline\CoreBundle\Manager\ResourceManager;
+use Claroline\CoreBundle\Repository\ResourceNodeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -92,6 +94,16 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     private $knowledgeService;
 
     /**
+     * @var ResourceManager
+     */
+    private $resourceManager;
+
+    /**
+     * @var ResourceNodeRepository
+     */
+    private $resourceNodeRepository;
+
+    /**
      * Set exerciseResourceService
      *
      * @param ExerciseResourceServiceInterface $exerciseResourceService
@@ -109,6 +121,26 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     public function setKnowledgeService($knowledgeService)
     {
         $this->knowledgeService = $knowledgeService;
+    }
+
+    /**
+     * Set resourceManager
+     *
+     * @param \Claroline\CoreBundle\Manager\ResourceManager $resourceManager
+     */
+    public function setResourceManager($resourceManager)
+    {
+        $this->resourceManager = $resourceManager;
+    }
+
+    /**
+     * Set resourceNodeRepository
+     *
+     * @param \Claroline\CoreBundle\Repository\ResourceNodeRepository $resourceNodeRepository
+     */
+    public function setResourceNodeRepository($resourceNodeRepository)
+    {
+        $this->resourceNodeRepository = $resourceNodeRepository;
     }
 
     /**
@@ -183,7 +215,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     }
 
     /**
-     * Update an entity object from a Resource (no saving).
+     * Update an entity object from a Resource.
      * Only the fields that are not null in the resource are taken in account to edit the entity.
      * The id of an entity can never be modified (ignored if not null)
      *
@@ -200,6 +232,18 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     {
         parent::updateFromSharedResource($modelResource, $model, 'exercise_model_storage');
         $model = $this->computeRequirements($modelResource, $model);
+
+        if ($modelResource->getArchived() === true && $model->getArchived() === false) {
+            $model->setArchived(true);
+            $rn = $model->getResourceNode();
+            $model->deleteResourceNode();
+            $this->resourceManager->delete($rn);
+        }
+
+        if ($modelResource->getArchived() === false && $model->getArchived() === true) {
+            $model->setArchived(false);
+            $this->createClarolineResourceNode($model->getOwner(), $model);
+        }
 
         if (!is_null($modelResource->getTitle())) {
             /** @var ResourceNode $resourceNode */
@@ -1215,5 +1259,26 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
         foreach ($entity->getRequiredKnowledges() as $knowledge) {
             $this->knowledgeService->makePublic($knowledge);
         }
+    }
+
+    /**
+     * Create the claroline resource node associated to the model
+     *
+     * @param User $user
+     * @param ExerciseModel $model
+     */
+    public function createClarolineResourceNode($user, $model)
+    {
+        $workspace = $user->getPersonalWorkspace();
+        $this->resourceManager->create(
+            $model,
+            $this->resourceManager->getResourceTypeByName('claire_exercise_model'),
+            $user,
+            $workspace,
+            $this->em->getRepository
+                (
+                    'ClarolineCoreBundle:Resource\ResourceNode'
+                )->findWorkspaceRoot($workspace)
+        );
     }
 }

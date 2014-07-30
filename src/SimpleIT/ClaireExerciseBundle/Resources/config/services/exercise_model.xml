@@ -45,6 +45,9 @@
             <call method="setKnowledgeService">
                 <argument type="service" id="simple_it.exercise.knowledge"/>
             </call>
+            <call method="setResourceManager">
+                <argument type="service" id="claroline.manager.resource_manager"/>
+            </call>
         </service>
 
         <service id="simple_it.exercise.exercise_model_metadata" class="%simple_it.exercise.exercise_model_metadata.class%">

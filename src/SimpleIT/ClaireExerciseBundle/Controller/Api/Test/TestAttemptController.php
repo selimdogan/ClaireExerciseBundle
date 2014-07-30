@@ -48,7 +48,7 @@ class TestAttemptController extends BaseController
         try {
             $testAttempt = $this->get('simple_it.exercise.test_attempt')->get(
                 $testAttemptId,
-                $this->getUserIdIfNoCreator()
+                $this->getUserId()
             );
             $testAttemptResource = TestAttemptResourceFactory::create($testAttempt);
 
@@ -76,7 +76,7 @@ class TestAttemptController extends BaseController
             $testAttempts = $this->get('simple_it.exercise.test_attempt')->getAll
                 (
                     $collectionInformation,
-                    $this->getUserIdIfNoCreator()
+                    $this->getUserId()
                 );
 
             $testAttemptResources = TestAttemptResourceFactory::createCollection($testAttempts);

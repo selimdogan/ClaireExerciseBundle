@@ -45,20 +45,6 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * Get the current user's id or null if she/he is a creator
-     *
-     * @return int
-     */
-    protected function getUserIdIfNoCreator()
-    {
-        if (!$this->get('security.context')->isGranted('ROLE_WS_CREATOR')) {
-            return $this->getUserId();
-        } else {
-            return null;
-        }
-    }
-
-    /**
      * Validate a resource
      *
      * @param mixed   $resource         Resource to validate
