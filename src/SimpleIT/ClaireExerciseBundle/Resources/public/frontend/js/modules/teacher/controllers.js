@@ -44,6 +44,12 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
                 $scope.filters.type.picture = '';
                 $scope.filters.type.open_ended_question = '';
                 $scope.filters.type.sequence = '';
+            } else if (newValue == 'open-ended-question') {
+                $scope.filters.type.multiple_choice_question = '';
+                $scope.filters.type.text = '';
+                $scope.filters.type.picture = '';
+                $scope.filters.type.open_ended_question = 'open-ended-question';
+                $scope.filters.type.sequence = '';
             }
         });
 
@@ -434,7 +440,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
             search: '',
             archived: false,
             type: {
-                multiple_choice: 'multiple-choice', pair_items: 'pair-items', order_items: '', open_ended_question: '', group_items: 'group-items'
+                multiple_choice: 'multiple-choice', pair_items: 'pair-items', order_items: '', open_ended_question: 'open-ended-question', group_items: 'group-items'
             },
             keywords: [],
             metadata: []
@@ -551,6 +557,31 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                         "resources": [],
                         "is_list": true
                     }
+                },
+                "open_ended_question": {
+                    "type": "open-ended-question",
+                    "title": "Nouvelle ressource",
+                    "public": false,
+                    "archived": false,
+                    "draft": false,
+                    "complete": null,
+                    "metadata": [],
+                    "keywords": [],
+                    "content": {
+                        "wording": "consigne",
+                        "documents": [],
+                        "question_blocks": [
+                            {
+                                "number_of_occurrences": 0,
+                                "resources": [],
+                                "is_list": true
+                            }
+                        ],
+                        "shuffle_questions_order": true,
+                        "exercise_model_type": "open-ended-question"
+                    },
+                    "required_exercise_resources": null,
+                    "required_knowledges": null
                 }
             }
         };
@@ -703,6 +734,10 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
                 Model.save($scope.modelContext.newModel.group_items, function (data) {
                     $location.path('/teacher/model/' + data.id)
                 });
+            } else if (type == 'open-ended-question') {
+                Model.save($scope.modelContext.newModel.open_ended_question, function (data) {
+                    $location.path('/teacher/model/' + data.id)
+                });
             }
         };
     }]);
@@ -741,6 +776,9 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                     $scope.fillConstraints(model.content.object_blocks);
                     break;
                 case 'multiple-choice':
+                    $scope.fillConstraints(model.content.question_blocks);
+                    break;
+                case 'open-ended-question':
                     $scope.fillConstraints(model.content.question_blocks);
                     break;
             }
@@ -916,6 +954,52 @@ modelControllers.controller('modelEditGroupItemsController', ['$scope', 'Model',
     $scope.onDropResourceToBlock = function (event, resource, collection) {
         if ($scope.model.type == 'group-items') {
             if (resource.type == 'text' || resource.type == 'picture') {
+                $scope.modelAddBlockResourceField(collection, resource.id);
+            }
+        }
+    };
+
+    $scope.initResourceConstraints = function (block) {
+        if (!block.hasOwnProperty('resource_constraint')) {
+            block.resource_constraint = {};
+        }
+        if (!block.resource_constraint.hasOwnProperty('type')) {
+            block.resource_constraint.type = 'text';
+        }
+        if (!block.resource_constraint.hasOwnProperty('metadata_constraints')) {
+            block.resource_constraint.metadata_constraints = [];
+        }
+        if (!block.resource_constraint.hasOwnProperty('excluded')) {
+            block.resource_constraint.excluded = [];
+        }
+    }
+
+    $scope.modelAddBlockResourceConstraint = function (metadata_constraints, type) {
+        var newElement;
+        if (type == 'exists') {
+            newElement = $scope.$parent.modelContext.newModel.block_constraint.exists;
+        } else if (type == 'in') {
+            newElement = $scope.$parent.modelContext.newModel.block_constraint.in;
+        } else if (type == 'between') {
+            newElement = $scope.$parent.modelContext.newModel.block_constraint.between;
+        } else {
+            newElement = $scope.$parent.modelContext.newModel.block_constraint.other;
+            newElement.comparator = type;
+        }
+        metadata_constraints.splice(metadata_constraints.length, 0, newElement);
+    };
+
+}]);
+
+modelControllers.controller('modelEditOpenEndedQuestionController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
+
+    $scope.modelAddBlockField = function (collection) {
+        collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_group_items.block_field);
+    }
+
+    $scope.onDropResourceToBlock = function (event, resource, collection) {
+        if ($scope.model.type == 'open-ended-question') {
+            if (resource.type == 'open-ended-question') {
                 $scope.modelAddBlockResourceField(collection, resource.id);
             }
         }
