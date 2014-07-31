@@ -49,7 +49,7 @@ class AnswerByItemController extends BaseController
             $answers = $this->get('simple_it.exercise.answer')->getAll(
                 $itemId,
                 null,
-                $this->getUserIdIfNoCreator()
+                $this->getUserId()
             );
 
             $answerResources = AnswerResourceFactory::createCollection($answers);

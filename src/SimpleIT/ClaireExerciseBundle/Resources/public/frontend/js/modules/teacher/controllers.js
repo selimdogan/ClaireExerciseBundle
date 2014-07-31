@@ -194,6 +194,24 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
             });
         };
 
+        $scope.archiveResource = function (resource) {
+            console.log('archiving...');
+            var archived = new Resource;
+            archived.archived = true;
+            archived.$update({id: model.id}, function () {
+                resource.archived = true;
+            });
+        };
+
+        $scope.restoreResource = function (resource) {
+            console.log('restoring...');
+            var archived = new Resource;
+            archived.archived = false;
+            archived.$update({id: model.id}, function () {
+                resource.archived = false;
+            });
+        };
+
         // create resource method
         $scope.createResource = function (type) {
             if (type == 'text') {
@@ -641,34 +659,53 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
 
     }]);
 
-modelControllers.controller('modelListController', ['$scope', 'Model', '$location', function ($scope, Model, $location) {
+modelControllers.controller('modelListController', ['$scope', 'Model', '$location',
+    function ($scope, Model, $location) {
 
-    $scope.models = Model.query(function () {
-        $scope.loadUsers($scope, $scope.models);
-    });
-
-    $scope.deleteModel = function (model) {
-        model.$delete({id: model.id}, function () {
-            $scope.models = Model.query();
+        $scope.models = Model.query(function () {
+            $scope.loadUsers($scope, $scope.models);
         });
-    };
 
-    $scope.createModel = function (type) {
-        if (type == 'pair-items') {
-            Model.save($scope.modelContext.newModel.pair_items, function (data) {
-                $location.path('/teacher/model/' + data.id)
+        $scope.deleteModel = function (model) {
+            model.$delete({id: model.id}, function () {
+                $scope.models = Model.query();
             });
-        } else if (type == 'multiple-choice') {
-            Model.save($scope.modelContext.newModel.multiple_choice, function (data) {
-                $location.path('/teacher/model/' + data.id)
+        };
+
+        $scope.archiveModel = function (model) {
+            console.log('archiving...');
+            var archived = new Model;
+            archived.archived = true;
+            archived.$update({id: model.id}, function () {
+                model.archived = true;
             });
-        } else if (type == 'group-items') {
-            Model.save($scope.modelContext.newModel.group_items, function (data) {
-                $location.path('/teacher/model/' + data.id)
+        };
+
+        $scope.restoreModel = function (model) {
+            console.log('restoring...');
+            var archived = new Model;
+            archived.archived = false;
+            archived.$update({id: model.id}, function () {
+                model.archived = false;
             });
-        }
-    };
-}]);
+        };
+
+        $scope.createModel = function (type) {
+            if (type == 'pair-items') {
+                Model.save($scope.modelContext.newModel.pair_items, function (data) {
+                    $location.path('/teacher/model/' + data.id)
+                });
+            } else if (type == 'multiple-choice') {
+                Model.save($scope.modelContext.newModel.multiple_choice, function (data) {
+                    $location.path('/teacher/model/' + data.id)
+                });
+            } else if (type == 'group-items') {
+                Model.save($scope.modelContext.newModel.group_items, function (data) {
+                    $location.path('/teacher/model/' + data.id)
+                });
+            }
+        };
+    }]);
 
 modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User',
     function ($scope, Model, Resource, $location, $stateParams, User) {

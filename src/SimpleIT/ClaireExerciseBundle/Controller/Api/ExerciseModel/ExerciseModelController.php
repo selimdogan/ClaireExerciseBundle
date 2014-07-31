@@ -245,19 +245,7 @@ class ExerciseModelController extends BaseController
 
             // create the claroline ResourceNode for this model
             $user = $this->get('simple_it.exercise.user')->get($this->getUserId());
-            $workspace = $user->getPersonalWorkspace();
-            $this->get('claroline.manager.resource_manager')->create(
-                $model,
-                $this->get('claroline.manager.resource_manager')->getResourceTypeByName(
-                    'claire_exercise_model'
-                ),
-                $user,
-                $workspace,
-                $this->get('doctrine.orm.entity_manager')->getRepository
-                    (
-                        'ClarolineCoreBundle:Resource\ResourceNode'
-                    )->findWorkspaceRoot($workspace)
-            );
+            $this->createClarolineResourceNode($user, $model);
 
             $modelResource = ExerciseModelResourceFactory::create($model);
 
@@ -288,19 +276,7 @@ class ExerciseModelController extends BaseController
 
             // create the claroline ResourceNode for this model
             $user = $this->get('simple_it.exercise.user')->get($this->getUserId());
-            $workspace = $user->getPersonalWorkspace();
-            $this->get('claroline.manager.resource_manager')->create(
-                $model,
-                $this->get('claroline.manager.resource_manager')->getResourceTypeByName(
-                    'claire_exercise_model'
-                ),
-                $user,
-                $workspace,
-                $this->get('doctrine.orm.entity_manager')->getRepository
-                    (
-                        'ClarolineCoreBundle:Resource\ResourceNode'
-                    )->findWorkspaceRoot($workspace)
-            );
+            $this->createClarolineResourceNode($user, $model);
 
             $modelResource = ExerciseModelResourceFactory::create($model);
 
@@ -331,19 +307,7 @@ class ExerciseModelController extends BaseController
 
             // create the claroline ResourceNode for this model
             $user = $this->get('simple_it.exercise.user')->get($this->getUserId());
-            $workspace = $user->getPersonalWorkspace();
-            $this->get('claroline.manager.resource_manager')->create(
-                $model,
-                $this->get('claroline.manager.resource_manager')->getResourceTypeByName(
-                    'claire_exercise_model'
-                ),
-                $user,
-                $workspace,
-                $this->get('doctrine.orm.entity_manager')->getRepository
-                    (
-                        'ClarolineCoreBundle:Resource\ResourceNode'
-                    )->findWorkspaceRoot($workspace)
-            );
+            $this->createClarolineResourceNode($user, $model);
 
             $modelResource = ExerciseModelResourceFactory::create($model);
 

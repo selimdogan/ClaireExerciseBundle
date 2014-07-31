@@ -80,7 +80,7 @@ class TestAttemptByTestController extends BaseController
         try {
             $testAttempts = $this->get('simple_it.exercise.test_attempt')->getAll(
                 $collectionInformation,
-                $this->getUserIdIfNoCreator(),
+                $this->getUserId(),
                 $testId
             );
 

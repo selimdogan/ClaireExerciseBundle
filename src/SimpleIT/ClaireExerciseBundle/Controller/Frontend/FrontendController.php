@@ -38,9 +38,16 @@ class FrontendController extends BaseController
     {
         $userId = $this->getUserId();
 
-        return $this->render(
-            'SimpleITClaireExerciseBundle:Frontend:default-layout.html.twig',
-            array('currentUserId' => $userId)
-        );
+        if ($this->get('security.context')->isGranted('ROLE_WS_CREATOR')) {
+            return $this->render(
+                'SimpleITClaireExerciseBundle:Frontend:manager-layout.html.twig',
+                array('currentUserId' => $userId)
+            );
+        } else {
+            return $this->render(
+                'SimpleITClaireExerciseBundle:Frontend:user-layout.html.twig',
+                array('currentUserId' => $userId)
+            );
+        }
     }
 } 

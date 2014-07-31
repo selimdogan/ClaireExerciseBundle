@@ -50,7 +50,7 @@ class AttemptByTestAttemptController extends BaseController
         try {
             $attempts = $this->get('simple_it.exercise.attempt')->getAll(
                 $collectionInformation,
-                $this->getUserIdIfNoCreator(),
+                $this->getUserId(),
                 null,
                 $testAttemptId
             );

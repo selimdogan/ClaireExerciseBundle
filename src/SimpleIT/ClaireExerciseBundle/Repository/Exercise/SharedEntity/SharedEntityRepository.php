@@ -64,7 +64,7 @@ abstract class SharedEntityRepository extends BaseRepository
         $forkFrom = null,
         $isRoot = null,
         $isPointer = null,
-        $ignoreArchived = true,
+        $ignoreArchived = false,
         $publicExceptUser = null,
         $complete = null
     )
