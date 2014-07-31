@@ -102,7 +102,7 @@
 
                         <div class="col-xs-10">
                             <input type="text" placeholder="rechercher" ng-model="$parent.$parent.filters.search"
-                                   title="Rechercher dans le titre, les métadonnées et les mots-clés du modèle">
+                                   title="Rechercher dans le titre, les métadonnées et les mots-clés de la ressource">
                         </div>
                     </div>
                 </div>
@@ -159,30 +159,40 @@
                     <div class="col-centered pull-right" ui-draggable="true" drag="resource">
                         <h4>
                             <ng-switch on="parentSection">
-                                        <span ng-switch-when="model" ui-sref="modelEdit.resourceEdit({ resourceid:resource.id })"
-                                              class="glyphicon"
-                                              data-ng-class="{'glyphicon-edit': resource.owner == BASE_CONFIG.currentUserId, 'glyphicon-eye-open': resource.owner != BASE_CONFIG.currentUserId}"
-                                              title="Editer cette ressource"></span>
-                                        <span ng-switch-default ui-sref="resourceEdit({ resourceid:resource.id })"
-                                              class="glyphicon"
-                                              data-ng-class="{'glyphicon-edit': resource.owner == BASE_CONFIG.currentUserId, 'glyphicon-eye-open': resource.owner != BASE_CONFIG.currentUserId}"
-                                              title="Editer cette ressource"></span>
+                                <span ng-switch-when="model" ui-sref="modelEdit.resourceEdit({ resourceid:resource.id })"
+                                      class="glyphicon"
+                                      data-ng-class="{'glyphicon-edit': resource.owner == BASE_CONFIG.currentUserId, 'glyphicon-eye-open': resource.owner != BASE_CONFIG.currentUserId}"
+                                      title="Editer cette ressource"></span>
+                                <span ng-switch-default ui-sref="resourceEdit({ resourceid:resource.id })"
+                                      class="glyphicon"
+                                      data-ng-class="{'glyphicon-edit': resource.owner == BASE_CONFIG.currentUserId, 'glyphicon-eye-open': resource.owner != BASE_CONFIG.currentUserId}"
+                                      title="Editer cette ressource"></span>
                             </ng-switch>
                             &nbsp;&nbsp;
-                                    <span ng-if="resource.owner == BASE_CONFIG.currentUserId"
-                                          ng-click="$event.stopPropagation();deleteResource(resource)" class="glyphicon glyphicon-remove"
-                                          title="Supprimer cette ressource"></span>
+                            <span
+                                ng-if="resource.owner == BASE_CONFIG.currentUserId && !resource.archived"
+                                ng-click="$event.stopPropagation();archiveResource(resource)"
+                                class="glyphicon glyphicon-save"
+                                title="Archiver cette ressource"></span>
+                            <span
+                                ng-if="resource.owner == BASE_CONFIG.currentUserId && resource.archived"
+                                ng-click="$event.stopPropagation();restoreResource(resource)"
+                                class="glyphicon glyphicon-open"
+                                title="Restaurer cette ressource"></span>
+                            <span ng-if="resource.owner == BASE_CONFIG.currentUserId"
+                                  ng-click="$event.stopPropagation();deleteResource(resource)" class="glyphicon glyphicon-remove"
+                                  title="Supprimer cette ressource"></span>
                         </h4>
                     </div>
                     <div class="row" style="margin-left: 3px">
                         <div style="margin: 1% 1% 0;">
                             <label
-                                class="panel panel-success" title="Métadonnée de ce modèle"
+                                class="panel panel-success" title="Métadonnée de cette ressource"
                                 data-ng-repeat="meta in resource.metadata track by $index" style="margin: 2px;">
                                 &nbsp;<span ui-draggable="true" drag="meta.key">{{ meta.key }}</span>:&nbsp;<span>{{ meta.value }}</span>&nbsp;
                             </label>
                             <label class="panel panel-success"
-                                   title="Mot-clé de ce modèle"
+                                   title="Mot-clé de cette ressource"
                                    data-ng-repeat="keyword in resource.keywords track by $index" style="margin: 2px;">
                                 &nbsp;{{ keyword }}&nbsp;
                             </label>
