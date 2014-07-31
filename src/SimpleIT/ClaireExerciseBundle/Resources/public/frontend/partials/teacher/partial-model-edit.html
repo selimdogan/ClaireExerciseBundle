@@ -81,17 +81,6 @@
     ng-class="{'col-xs-5': !$parent.toggleResourceList, 'col-xs-12': $parent.toggleResourceList}">
 <div class="panel-body">
 
-<accordion>
-    <accordion-group class="panel panel-primary">
-        <accordion-heading class="panel-heading">
-            Consigne&nbsp;<span class="caret"></span>
-        </accordion-heading>
-        <!--<input type="text" ng-model="model.content.wording"/>-->
-        <textarea class="span5" rows="5" placeholder="Consigne de l'exercice"
-                  ng-model="model.content.wording"></textarea>
-    </accordion-group>
-</accordion>
-
 <accordion
     title="Documents annexes à présenter à l'apprenant après la consigne lors de la résolution d'un exercice. Il peut s'agir de texte ou d'image. Ajouter-les en les glissant depuis la liste des ressource.">
     <accordion-group class="panel panel-primary">
