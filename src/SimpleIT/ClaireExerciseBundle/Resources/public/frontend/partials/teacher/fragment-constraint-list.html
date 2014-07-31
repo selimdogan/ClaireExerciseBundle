@@ -62,7 +62,7 @@
                         </div>
                         <div class="col-xs-1">
                                 <span data-ng-click="modelAddBlockResourceConstraintValue(metadata_constraint.values)"
-                                      class="glyphicon glyphicon-plus"></span>
+                                      class="glyphicon glyphicon-ok"></span>
                         </div>
                     </div>
                 </div>
@@ -133,46 +133,48 @@
             </ng-switch>
         </div>
     </div>
-    <div class="panel panel-info">
-        <div class="panel-heading">
+    <div class="panel-group">
+        <div class="panel panel-info">
+            <div class="panel-heading">
                 <span class="glyphicon glyphicon-plus"
                       title="Choisissez le type de contrainte à ajouter"></span>&nbsp;
-            <div class="btn-group">
-                <button class="btn btn-info"
-                        title="La clé de métadonnée existe"
-                        data-ng-click="modelAddBlockResourceConstraint(metadata_constraints, 'exists')">
-                    &exist;
-                </button>
-                <button class="btn btn-info"
-                        title="La métadonnée prend pour valeur..."
-                        data-ng-click="modelAddBlockResourceConstraint(metadata_constraints, 'in')">
-                    &isin;
-                </button>
-                <button class="btn btn-info"
-                        title="La métadonnée est plus grand que..."
-                        data-ng-click="modelAddBlockResourceConstraint(metadata_constraints, 'gt')">
-                    &gt;
-                </button>
-                <button class="btn btn-info"
-                        title="La métadonnée est plus grand ou égale à..."
-                        data-ng-click="modelAddBlockResourceConstraint(metadata_constraints, 'gte')">
-                    &ge;
-                </button>
-                <button class="btn btn-info"
-                        title="La métadonnée est plus petite que..."
-                        data-ng-click="modelAddBlockResourceConstraint(metadata_constraints, 'lt')">
-                    &lt;
-                </button>
-                <button class="btn btn-info"
-                        title="La métadonnée est plus petite ou égale à..."
-                        data-ng-click="modelAddBlockResourceConstraint(metadata_constraints, 'lte')">
-                    &le;
-                </button>
-                <button class="btn btn-info"
-                        title="La métadonnée est comprise entre..."
-                        data-ng-click="modelAddBlockResourceConstraint(metadata_constraints, 'between')">
-                    &lt;..&lt;
-                </button>
+                <div class="btn-group">
+                    <button class="btn btn-info"
+                            title="La clé de métadonnée existe"
+                            data-ng-click="modelAddBlockResourceConstraint(metadata_constraints, 'exists')">
+                        &exist;
+                    </button>
+                    <button class="btn btn-info"
+                            title="La métadonnée prend pour valeur..."
+                            data-ng-click="modelAddBlockResourceConstraint(metadata_constraints, 'in')">
+                        &isin;
+                    </button>
+                    <button class="btn btn-info"
+                            title="La métadonnée est plus grand que..."
+                            data-ng-click="modelAddBlockResourceConstraint(metadata_constraints, 'gt')">
+                        &gt;
+                    </button>
+                    <button class="btn btn-info"
+                            title="La métadonnée est plus grand ou égale à..."
+                            data-ng-click="modelAddBlockResourceConstraint(metadata_constraints, 'gte')">
+                        &ge;
+                    </button>
+                    <button class="btn btn-info"
+                            title="La métadonnée est plus petite que..."
+                            data-ng-click="modelAddBlockResourceConstraint(metadata_constraints, 'lt')">
+                        &lt;
+                    </button>
+                    <button class="btn btn-info"
+                            title="La métadonnée est plus petite ou égale à..."
+                            data-ng-click="modelAddBlockResourceConstraint(metadata_constraints, 'lte')">
+                        &le;
+                    </button>
+                    <button class="btn btn-info"
+                            title="La métadonnée est comprise entre..."
+                            data-ng-click="modelAddBlockResourceConstraint(metadata_constraints, 'between')">
+                        &lt;..&lt;
+                    </button>
+                </div>
             </div>
         </div>
     </div>

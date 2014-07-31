@@ -899,4 +899,19 @@ modelControllers.controller('modelEditGroupItemsController', ['$scope', 'Model',
         }
     }
 
+    $scope.modelAddBlockResourceConstraint = function (metadata_constraints, type) {
+        var newElement;
+        if (type == 'exists') {
+            newElement = $scope.$parent.modelContext.newModel.block_constraint.exists;
+        } else if (type == 'in') {
+            newElement = $scope.$parent.modelContext.newModel.block_constraint.in;
+        } else if (type == 'between') {
+            newElement = $scope.$parent.modelContext.newModel.block_constraint.between;
+        } else {
+            newElement = $scope.$parent.modelContext.newModel.block_constraint.other;
+            newElement.comparator = type;
+        }
+        metadata_constraints.splice(metadata_constraints.length, 0, newElement);
+    };
+
 }]);
