@@ -1,7 +1,7 @@
 var attemptControllers = angular.module('attemptControllers', ['ui.router']);
 
-attemptControllers.controller('attemptController', ['$scope', '$state', 'AttemptByExercise', 'ExerciseByModel', 'Exercise', 'Attempt', 'Item', '$routeParams', '$location', '$stateParams',
-    function ($scope, $state, AttemptByExercise, ExerciseByModel, Exercise, Attempt, Item, $routeParams, $location, $stateParams) {
+attemptControllers.controller('attemptController', ['$scope', '$state', 'AttemptByExercise', 'ExerciseByModel', 'Exercise', 'Attempt', 'Item', '$routeParams', '$stateParams',
+    function ($scope, $state, AttemptByExercise, ExerciseByModel, Exercise, Attempt, Item, $routeParams, $stateParams) {
 
         $scope.imageUrl = BASE_CONFIG.urls.images.uploads;
         $scope.imageExoUrl = BASE_CONFIG.urls.images.exercise;
@@ -42,7 +42,7 @@ attemptControllers.controller('attemptController', ['$scope', '$state', 'Attempt
         };
 
         $scope.viewAttempt = function (attempt) {
-            $location.path("/learner/attempt/" + attempt.id);
+            $state.go('attempt', {attemptId: attempt.id}, {location: false});
         };
 
         $scope.tryExercise = function (exercise) {
