@@ -1,7 +1,7 @@
 <accordion>
     <accordion-group class="panel panel-primary" name="accordionBlock"
                      data-ng-repeat="block in model.content.object_blocks track by $index"
-                     ng-init="openFirst('accordionBlock', $index);"
+                     ng-init="openFirst('accordionBlock', $index); metadata_constraints = block.resource_constraint.metadata_constraints; blockTypes = ['picture', 'text']"
                      is-open="openFirstBlocks.accordionBlock[$index]">
         <accordion-heading class="panel-heading">
             <div class="row"

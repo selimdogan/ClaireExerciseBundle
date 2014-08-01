@@ -34,18 +34,18 @@
                         </div>
                         <div class="col-xs-8">
                             <ng-switch on="model.type">
-                            <h4 ng-switch-when="pair-items">
-                                {{ getMobilePart(resources[blockResourceId.id], block.pair_meta_key) }}&nbsp;<span class="caret"></span>
-                            </h4>
-                            <h4 ng-switch-when="multiple-choice">
-                                {{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>
-                            </h4>
-                            <h4 ng-switch-when="group-items">
-                                {{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>
-                            </h4>
-                            <h4 ng-switch-when="open-ended-question">
-                                {{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>
-                            </h4>
+                                <h4 ng-switch-when="pair-items">
+                                    {{ getMobilePart(resources[blockResourceId.id], block.pair_meta_key) }}&nbsp;<span class="caret"></span>
+                                </h4>
+                                <h4 ng-switch-when="multiple-choice">
+                                    {{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>
+                                </h4>
+                                <h4 ng-switch-when="group-items">
+                                    {{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>
+                                </h4>
+                                <h4 ng-switch-when="open-ended-question">
+                                    {{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>
+                                </h4>
                             </ng-switch>
                         </div>
                         <div class="col-xs-1">
@@ -124,20 +124,35 @@
         Contraintes
     </tab-heading>
     <div class="panel-body panel panel-primary" data-ng-init="initResourceConstraints(block)">
-        <div>
+        <div ng-if="blockTypes.length > 0">
             <label>Type de ressource</label><br>
 
             <div class="btn-group">
-                <button title="Texte" class="btn btn-info" ng-model="block.resource_constraint.type" btn-radio="'text'">
+                <!--<button class="btn btn-info"-->
+                        <!--ng-model="block.resource_constraint.type"-->
+                        <!--btn-radio="null"-->
+                        <!--title="N'importe">-->
+                    <!--&forall;-->
+                <!--</button>-->
+                <button ng-if="blockTypes.indexOf('text') !== -1"
+                        class="btn btn-info"
+                        ng-model="block.resource_constraint.type"
+                        btn-radio="'text'"
+                        title="Texte"
+                        uncheckable>
                     <span class="glyphicon glyphicon-font"></span>
                 </button>
-                <button class="btn btn-info" ng-model="block.resource_constraint.type" btn-radio="'picture'"
-                        title="Image">
+                <button ng-if="blockTypes.indexOf('picture') !== -1"
+                        class="btn btn-info"
+                        ng-model="block.resource_constraint.type"
+                        btn-radio="'picture'"
+                        title="Image"
+                        uncheckable>
                     <span class="glyphicon glyphicon-picture"></span>
                 </button>
             </div>
+            <br/>
         </div>
-        <br/>
 
         <div>
             <label>Liste des containtes</label><br>

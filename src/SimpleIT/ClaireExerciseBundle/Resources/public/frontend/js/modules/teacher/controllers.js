@@ -901,9 +901,6 @@ modelControllers.controller('modelEditPairItemsController', ['$scope', 'Model', 
         if (!block.hasOwnProperty('resource_constraint')) {
             block.resource_constraint = {};
         }
-        if (!block.resource_constraint.hasOwnProperty('type')) {
-            block.resource_constraint.type = 'text';
-        }
         if (!block.resource_constraint.hasOwnProperty('metadata_constraints')) {
             block.resource_constraint.metadata_constraints = [];
         }
