@@ -177,8 +177,8 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
         };
     }]);
 
-resourceControllers.controller('resourceListController', ['$scope', '$state', 'Resource',
-    function ($scope, $state, Resource) {
+resourceControllers.controller('resourceListController', ['$scope', '$state', 'Resource', 'ResourceDuplication',
+    function ($scope, $state, Resource, ResourceDuplication) {
 
         // retrieve resources
         if ($scope.parentSection !== 'model') {
@@ -215,6 +215,17 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
             archived.archived = false;
             archived.$update({id: model.id}, function () {
                 resource.archived = false;
+            });
+        };
+
+        $scope.duplicateResource = function (resource) {
+            ResourceDuplication.save({resourceId: resource.id}, function (data) {
+                $scope.resources[data.id] = data;
+                if ($scope.parentSection === 'model') {
+                    $state.go('modelEdit.resourceEdit', {resourceid: data.id});
+                } else {
+                    $state.go('resourceEdit', {resourceid: data.id});
+                }
             });
         };
 
@@ -487,7 +498,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                 },
                 "multiple_choice": {
                     "type": "multiple-choice",
-                    "title": "Nouvelle ressource",
+                    "title": "Nouveau QCM",
                     "public": false,
                     "archived": false,
                     "draft": false,
@@ -690,8 +701,8 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
 
     }]);
 
-modelControllers.controller('modelListController', ['$scope', 'Model', '$location',
-    function ($scope, Model, $location) {
+modelControllers.controller('modelListController', ['$scope', 'Model', 'ModelDuplication', '$location',
+    function ($scope, Model, ModelDuplication, $location) {
 
         $scope.models = Model.query(function () {
             $scope.loadUsers($scope, $scope.models);
@@ -739,6 +750,12 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
                     $location.path('/teacher/model/' + data.id)
                 });
             }
+        };
+
+        $scope.duplicateModel = function (model) {
+            ModelDuplication.save({modelId: model.id}, function (data) {
+                $location.path('/teacher/model/' + data.id)
+            });
         };
     }]);
 

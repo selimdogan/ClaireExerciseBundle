@@ -16,6 +16,22 @@ resourceServices.factory('Resource', ['$resource',
 
     }]);
 
+resourceServices.factory('ResourceDuplication', ['$resource',
+    function($resource){
+
+        return $resource(
+            BASE_CONFIG.urls.api.resources+':resourceId/duplicate',
+            { 'resourceId': '@resourceId'},
+            {
+                save: {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
+                }
+            }
+        );
+
+    }]);
+
 var modelServices = angular.module('modelServices', ['ngResource']);
 
 modelServices.factory('Model', ['$resource',
@@ -27,6 +43,22 @@ modelServices.factory('Model', ['$resource',
             {
                 'update': {method: 'PUT', params: {'id': '@id'}, headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}}
                 ,save: {method: 'POST', isArray: false, headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}}
+            }
+        );
+
+    }]);
+
+modelServices.factory('ModelDuplication', ['$resource',
+    function ($resource) {
+
+        return $resource(
+            BASE_CONFIG.urls.api.models + ':modelId/duplicate',
+            {'modelId': '@modelId'},
+            {
+                save: {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
+                }
             }
         );
 

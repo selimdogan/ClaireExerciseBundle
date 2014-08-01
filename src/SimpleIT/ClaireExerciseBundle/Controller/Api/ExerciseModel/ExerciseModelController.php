@@ -245,7 +245,10 @@ class ExerciseModelController extends BaseController
 
             // create the claroline ResourceNode for this model
             $user = $this->get('simple_it.exercise.user')->get($this->getUserId());
-            $this->createClarolineResourceNode($user, $model);
+            $this->get('simple_it.exercise.exercise_model')->createClarolineResourceNode(
+                $user,
+                $model
+            );
 
             $modelResource = ExerciseModelResourceFactory::create($model);
 
@@ -276,7 +279,10 @@ class ExerciseModelController extends BaseController
 
             // create the claroline ResourceNode for this model
             $user = $this->get('simple_it.exercise.user')->get($this->getUserId());
-            $this->createClarolineResourceNode($user, $model);
+            $this->get('simple_it.exercise.exercise_model')->createClarolineResourceNode(
+                $user,
+                $model
+            );
 
             $modelResource = ExerciseModelResourceFactory::create($model);
 
@@ -307,7 +313,10 @@ class ExerciseModelController extends BaseController
 
             // create the claroline ResourceNode for this model
             $user = $this->get('simple_it.exercise.user')->get($this->getUserId());
-            $this->createClarolineResourceNode($user, $model);
+            $this->get('simple_it.exercise.exercise_model')->createClarolineResourceNode(
+                $user,
+                $model
+            );
 
             $modelResource = ExerciseModelResourceFactory::create($model);
 

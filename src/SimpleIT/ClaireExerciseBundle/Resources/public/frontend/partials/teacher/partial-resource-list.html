@@ -163,6 +163,11 @@
                                       class="glyphicon"
                                       data-ng-class="{'glyphicon-edit': resource.owner == BASE_CONFIG.currentUserId, 'glyphicon-eye-open': resource.owner != BASE_CONFIG.currentUserId}"
                                       title="Editer cette ressource"></span>
+                                <span
+                                    ng-if="resource.owner == BASE_CONFIG.currentUserId"
+                                    ng-click="$event.stopPropagation();duplicateResource(resource)"
+                                    class="glyphicon glyphicon-plus"
+                                    title="Dupliquer cette ressource : créer une nouvelle ressource identique à celle-ci."></span>
                                 <span ng-switch-default ui-sref="resourceEdit({ resourceid:resource.id })"
                                       class="glyphicon"
                                       data-ng-class="{'glyphicon-edit': resource.owner == BASE_CONFIG.currentUserId, 'glyphicon-eye-open': resource.owner != BASE_CONFIG.currentUserId}"
