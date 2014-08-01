@@ -130,8 +130,8 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
                     "keywords": [],
                     "content": {
                         "question": "Question à réponse courte",
-                        "solutions": ["Exemple de solution"],
-                        "comment": "Commantaire",
+                        "solutions": [],
+                        "comment": "Commentaire",
                         "object_type": "open_ended_question"
                     },
                     "required_exercise_resources": null,
