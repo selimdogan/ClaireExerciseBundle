@@ -31,6 +31,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice\Questi
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\Model;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\QuestionBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
 
@@ -327,6 +328,7 @@ class MultipleChoiceService extends ExerciseCreationService
          */
         else {
             $oc = $questionBlock->getResourceConstraint();
+            $oc->setType(CommonResource::MULTIPLE_CHOICE_QUESTION);
             $blockQuestions = $this->exerciseResourceService
                 ->getExerciseObjectsFromConstraints(
                     $oc,

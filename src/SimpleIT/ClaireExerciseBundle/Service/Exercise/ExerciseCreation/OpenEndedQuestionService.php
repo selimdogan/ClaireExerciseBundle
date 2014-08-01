@@ -18,10 +18,10 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseCreation;
 
+use Claroline\CoreBundle\Entity\User;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
-use Claroline\CoreBundle\Entity\User;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidAnswerException;
 use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\OpenEndedQuestion;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AnswerResourceFactory;
@@ -33,6 +33,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestio
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 
 /**
  * Service which manages OpenEndedQuestion
@@ -187,6 +188,7 @@ class OpenEndedQuestionService extends ExerciseCreationService
         } // if the block is question constraints
         else {
             $oc = $questionBlock->getResourceConstraint();
+            $oc->setType(CommonResource::OPEN_ENDED_QUESTION);
             $blockQuestions = $this->exerciseResourceService
                 ->getExerciseObjectsFromConstraints(
                     $oc,
