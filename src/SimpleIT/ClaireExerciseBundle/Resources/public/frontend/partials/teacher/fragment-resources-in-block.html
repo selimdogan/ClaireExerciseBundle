@@ -41,7 +41,10 @@
                                     {{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>
                                 </h4>
                                 <h4 ng-switch-when="group-items">
-                                    {{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>
+                                    <!--{{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>-->
+                                    {{ resources[blockResourceId.id].title }}
+                                    ({{ findGroup(resources[blockResourceId.id]) }})
+                                    &nbsp;<span class="caret"></span>
                                 </h4>
                                 <h4 ng-switch-when="open-ended-question">
                                     {{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>

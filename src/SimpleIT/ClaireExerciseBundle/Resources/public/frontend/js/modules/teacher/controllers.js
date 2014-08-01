@@ -611,19 +611,6 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
             val[0].value = '';
         }
 
-//        $scope.modelAddBlockField = function (collection) {
-//            var newElement = {
-//                "number_of_occurrences": 0,
-//                "resources": [],
-//                "resource_constraint": {
-//                    "metadata_constraints": [],
-//                    "excluded": []
-//                },
-//                "pair_meta_key": ""
-//            };
-//            collection.splice(collection.length, 0, newElement);
-//        }
-
         $scope.modelAddBlockResourceField = function (collection, id) {
             var isAlreadyAdded = false;
             angular.forEach(collection, function (res) {
@@ -639,22 +626,20 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
         $scope.modelAddBlockResourceConstraint = function (metadata_constraints, type) {
             var newElement;
             if (type == 'exists') {
-                newElement = $scope.modelContext.newModel.block_constraint.exists;
+                newElement = jQuery.extend(true, {},$scope.modelContext.newModel.block_constraint.exists);
             } else if (type == 'in') {
-                newElement = $scope.modelContext.newModel.block_constraint.in;
+                newElement = jQuery.extend(true, {},$scope.modelContext.newModel.block_constraint.in);
             } else if (type == 'between') {
-                newElement = $scope.modelContext.newModel.block_constraint.between;
+                newElement = jQuery.extend(true, {},$scope.modelContext.newModel.block_constraint.between);
             } else {
-                newElement = $scope.modelContext.newModel.block_constraint.other;
+                newElement = jQuery.extend(true, {},$scope.modelContext.newModel.block_constraint.other);
                 newElement.comparator = type;
             }
             metadata_constraints.splice(metadata_constraints.length, 0, newElement);
         };
 
-        $scope.modelAddBlockResourceConstraintValue = function (collection) {
-            var constrainsInValue = $('#constrainsInValue');
-            collection.push(constrainsInValue[0].value);
-            constrainsInValue[0].value = '';
+        $scope.modelAddBlockResourceConstraintValue = function (collection, val) {
+            collection.push(val);
         };
 
         $scope.modelRemoveField = function (collection, index) {
@@ -898,111 +883,134 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                 $scope.openFirstBlocks[selector].splice(index, 0, false);
             }
         };
+
+        $scope.initResourceConstraints = function (block) {
+            if (!block.hasOwnProperty('resource_constraint')) {
+                block.resource_constraint = {};
+            }
+            if (!block.resource_constraint.hasOwnProperty('metadata_constraints')) {
+                block.resource_constraint.metadata_constraints = [];
+            }
+            if (!block.resource_constraint.hasOwnProperty('excluded')) {
+                block.resource_constraint.excluded = [];
+            }
+        };
     }]);
 
 modelControllers.controller('modelEditPairItemsController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
 
     $scope.modelAddBlockField = function (collection) {
         collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_pair_items.block_field);
-    }
-
-    $scope.onDropResourceToBlock = function (event, resource, collection) {
-        if ($scope.model.type == 'pair-items') {
-            if (resource.type == 'text' || resource.type == 'picture') {
-                $scope.modelAddBlockResourceField(collection, resource.id);
-            }
-        }
     };
 
-    $scope.initResourceConstraints = function (block) {
-        if (!block.hasOwnProperty('resource_constraint')) {
-            block.resource_constraint = {};
+    $scope.onDropResourceToBlock = function (event, resource, collection) {
+        if (resource.type == 'text' || resource.type == 'picture') {
+            $scope.modelAddBlockResourceField(collection, resource.id);
         }
-        if (!block.resource_constraint.hasOwnProperty('metadata_constraints')) {
-            block.resource_constraint.metadata_constraints = [];
-        }
-        if (!block.resource_constraint.hasOwnProperty('excluded')) {
-            block.resource_constraint.excluded = [];
-        }
-    }
-
+    };
 }]);
 
 modelControllers.controller('modelEditMultipleChoiceController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
 
     $scope.modelAddBlockField = function (collection) {
         collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_multiple_choice.block_field);
-    }
-
-    $scope.onDropResourceToBlock = function (event, resource, collection) {
-        if ($scope.model.type == 'multiple-choice') {
-            if (resource.type == 'text' || resource.type == 'picture' || resource.type == 'multiple-choice-question') {
-                $scope.modelAddBlockResourceField(collection, resource.id);
-            }
-        }
     };
 
-    $scope.initResourceConstraints = function (block) {
-        if (!block.hasOwnProperty('resource_constraint')) {
-            block.resource_constraint = {};
+    $scope.onDropResourceToBlock = function (event, resource, collection) {
+        if (resource.type == 'text' || resource.type == 'picture' || resource.type == 'multiple-choice-question') {
+            $scope.modelAddBlockResourceField(collection, resource.id);
         }
-        if (!block.resource_constraint.hasOwnProperty('type')) {
-            block.resource_constraint.type = 'multiple-choice-question';
-        }
-        if (!block.resource_constraint.hasOwnProperty('metadata_constraints')) {
-            block.resource_constraint.metadata_constraints = [];
-        }
-        if (!block.resource_constraint.hasOwnProperty('excluded')) {
-            block.resource_constraint.excluded = [];
-        }
-    }
-
+    };
 }]);
 
 modelControllers.controller('modelEditGroupItemsController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
 
     $scope.modelAddBlockField = function (collection) {
         collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_group_items.block_field);
-    }
+    };
 
     $scope.onDropResourceToBlock = function (event, resource, collection) {
-        if ($scope.model.type == 'group-items') {
-            if (resource.type == 'text' || resource.type == 'picture') {
-                $scope.modelAddBlockResourceField(collection, resource.id);
+        if (resource.type == 'text' || resource.type == 'picture') {
+            $scope.modelAddBlockResourceField(collection, resource.id);
+        }
+    };
+
+    $scope.findGroup = function (resource) {
+        // test all the groups
+        for (var i = 0; i < $scope.model.content.classif_constr.groups.length; ++i) {
+            var group = $scope.model.content.classif_constr.groups[i];
+            var belongs = true;
+
+            // test all the constaints
+            for (var j = 0; j < group.metadata_constraints.length; ++j) {
+                var mc = group.metadata_constraints[j];
+                var value = $scope.findMDValue(resource, mc.key);
+                if (value === null) {
+                    belongs = false;
+                }
+
+                switch (mc.comparator) {
+                    case 'in':
+                        var isIn = false;
+                        for (var k = 0; k < mc.values.length; ++k) {
+                            if (mc.values[k] === value) {
+                                isIn = true;
+                            }
+                        }
+
+                        if (isIn === false) {
+                            belongs = false;
+                        }
+                        break;
+
+                    case 'between':
+                        if (value < mc.values[0] || value > mc.values[1]) {
+                            belongs = false;
+                        }
+                        break;
+
+                    case 'lt':
+                        if (value >= mc.values[0]) {
+                            belongs = false;
+                        }
+                        break;
+
+                    case 'lte':
+                        if (value > mc.values[0]) {
+                            belongs = false;
+                        }
+                        break;
+
+                    case 'gt':
+                        if (value <= mc.values[0]) {
+                            belongs = false;
+                        }
+                        break;
+
+                    case 'gte':
+                        if (value < mc.values[0]) {
+                            belongs = false;
+                        }
+                        break;
+                }
+            }
+
+            if (belongs) {
+                return group.name;
             }
         }
+        return 'Autre';
     };
 
-    $scope.initResourceConstraints = function (block) {
-        if (!block.hasOwnProperty('resource_constraint')) {
-            block.resource_constraint = {};
+    $scope.findMDValue = function (resource, key) {
+        for (var i = 0; i < resource.metadata.length; ++i) {
+            if (resource.metadata[i].key === key) {
+                return resource.metadata[i].value;
+            }
         }
-        if (!block.resource_constraint.hasOwnProperty('type')) {
-            block.resource_constraint.type = 'text';
-        }
-        if (!block.resource_constraint.hasOwnProperty('metadata_constraints')) {
-            block.resource_constraint.metadata_constraints = [];
-        }
-        if (!block.resource_constraint.hasOwnProperty('excluded')) {
-            block.resource_constraint.excluded = [];
-        }
+
+        return null;
     }
-
-    $scope.modelAddBlockResourceConstraint = function (metadata_constraints, type) {
-        var newElement;
-        if (type == 'exists') {
-            newElement = $scope.$parent.modelContext.newModel.block_constraint.exists;
-        } else if (type == 'in') {
-            newElement = $scope.$parent.modelContext.newModel.block_constraint.in;
-        } else if (type == 'between') {
-            newElement = $scope.$parent.modelContext.newModel.block_constraint.between;
-        } else {
-            newElement = $scope.$parent.modelContext.newModel.block_constraint.other;
-            newElement.comparator = type;
-        }
-        metadata_constraints.splice(metadata_constraints.length, 0, newElement);
-    };
-
 }]);
 
 modelControllers.controller('modelEditOpenEndedQuestionController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
@@ -1012,41 +1020,9 @@ modelControllers.controller('modelEditOpenEndedQuestionController', ['$scope', '
     }
 
     $scope.onDropResourceToBlock = function (event, resource, collection) {
-        if ($scope.model.type == 'open-ended-question') {
-            if (resource.type == 'open-ended-question') {
-                $scope.modelAddBlockResourceField(collection, resource.id);
-            }
+        if (resource.type == 'open-ended-question') {
+            $scope.modelAddBlockResourceField(collection, resource.id);
         }
-    };
-
-    $scope.initResourceConstraints = function (block) {
-        if (!block.hasOwnProperty('resource_constraint')) {
-            block.resource_constraint = {};
-        }
-        if (!block.resource_constraint.hasOwnProperty('type')) {
-            block.resource_constraint.type = 'text';
-        }
-        if (!block.resource_constraint.hasOwnProperty('metadata_constraints')) {
-            block.resource_constraint.metadata_constraints = [];
-        }
-        if (!block.resource_constraint.hasOwnProperty('excluded')) {
-            block.resource_constraint.excluded = [];
-        }
-    }
-
-    $scope.modelAddBlockResourceConstraint = function (metadata_constraints, type) {
-        var newElement;
-        if (type == 'exists') {
-            newElement = $scope.$parent.modelContext.newModel.block_constraint.exists;
-        } else if (type == 'in') {
-            newElement = $scope.$parent.modelContext.newModel.block_constraint.in;
-        } else if (type == 'between') {
-            newElement = $scope.$parent.modelContext.newModel.block_constraint.between;
-        } else {
-            newElement = $scope.$parent.modelContext.newModel.block_constraint.other;
-            newElement.comparator = type;
-        }
-        metadata_constraints.splice(metadata_constraints.length, 0, newElement);
     };
 
 }]);

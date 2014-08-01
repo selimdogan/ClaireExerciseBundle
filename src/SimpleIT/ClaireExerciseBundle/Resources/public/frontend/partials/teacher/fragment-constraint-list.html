@@ -57,12 +57,12 @@
                     </div>
                     <div>
                         <div class="col-xs-5">
-                            <input type="text" id="constrainsInValue" value="" class="form-control"
+                            <input type="text" ng-model="newValue" class="form-control"
                                    placeholder="nouvelle valeur">
                         </div>
                         <div class="col-xs-1">
-                                <span data-ng-click="modelAddBlockResourceConstraintValue(metadata_constraint.values)"
-                                      class="glyphicon glyphicon-ok"></span>
+                            <span data-ng-click="metadata_constraint.values.push(newValue); newValue = ''"
+                                  class="glyphicon glyphicon-ok"></span>
                         </div>
                     </div>
                 </div>

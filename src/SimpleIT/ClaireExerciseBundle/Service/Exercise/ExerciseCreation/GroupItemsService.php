@@ -316,7 +316,7 @@ class GroupItemsService extends ExerciseCreationService
                     $belongs = false;
                 }
             } // Comparator error
-            else {
+            elseif ($comparator !== 'exists') {
                 throw new \LogicException("Invalid comparator type:" . $comparator);
             }
         }
