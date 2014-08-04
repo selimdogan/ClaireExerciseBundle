@@ -48,11 +48,15 @@
                     </div>
                     <div data-ng-repeat="value in metadata_constraint.values track by $index">
                         <div class="col-xs-5">
-                            <input type="text" ng-model="value" class="form-control" placeholder="valeur">
+                            <!--<div class="col-xs-5">-->
+                            <!--<input type="text" ng-model="value" class="form-control" >-->
+                            <div class="constraint-value">
+                                {{ value }}
+                            </div>
                         </div>
                         <div class="col-xs-1">
-                                <span data-ng-click="modelRemoveField(metadata_constraint.values, $index)"
-                                      class="glyphicon glyphicon-remove"></span>
+                            <span data-ng-click="modelRemoveField(metadata_constraint.values, $index)"
+                                  class="glyphicon glyphicon-remove"></span>
                         </div>
                     </div>
                     <div>
