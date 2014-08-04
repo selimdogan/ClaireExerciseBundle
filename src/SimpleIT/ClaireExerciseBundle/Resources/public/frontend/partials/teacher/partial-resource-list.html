@@ -6,15 +6,18 @@
         <accordion-heading class="panel-heading" style="padding-bottom: 0">
             <div class="col-centered">
                 <span class="glyphicon glyphicon-filter"></span>&nbsp;Filtrer mes ressources&nbsp;<span class="caret"></span>
+
             </div>
         </accordion-heading>
         <div class="col-centered research">
             <div>
                 <h5>Métadonnées</h5>
+
                 <div class="row"
                      title="Recherche sur des métédonnées : saisir le couple clé/valeur recherché, ou seulement la clé ou seulement la valeur">
                     <div class="panel panel-success">
                         <br>
+
                         <div ng-repeat="meta in filters.metadata track by $index">
                             <div class="col-xs-5">
                                 <input type="text" ng-model="meta.key" class="form-control" disabled>
@@ -46,6 +49,7 @@
             <div>
                 <div class="col-centered">
                     <h5>Filtrer par type</h5>
+
                     <div class="btn-group">
                         <button class="btn btn-success" title="Image" ng-model="$parent.$parent.filters.type.picture" btn-checkbox-true="'picture'" btn-checkbox-false="''" btn-checkbox>
                             <span class="glyphicon glyphicon-picture"></span>
@@ -70,6 +74,7 @@
         <div class="col-centered research">
             <div>
                 <h5>Mots-clés</h5>
+
                 <div class="row" title="Recherche sur les mots-clés">
                     <div class="panel panel-success">
                         <br>
@@ -110,6 +115,17 @@
         </div>
     </accordion-group>
 
+    <div class="btn-group pull-right" style="margin-left: 4px; margin-top: 4px">
+        <label class="btn btn-success"
+               ng-model="viewPrivate"
+               btn-radio="'private'"
+               ng-click="viewPrivateResources()">Privées</label>
+        <label class="btn btn-success"
+               ng-model="viewPrivate"
+               btn-radio="'public'"
+               ng-click="viewPublicResources()">Publiques</label>
+    </div>
+
     <accordion-group class="panel panel-success">
         <accordion-heading class="panel-heading">
             <div class="col-centered">
@@ -123,8 +139,12 @@
             <div>
                 <a data-ng-click="createResource('text')" href class="list-group-item"><span title="Texte" class="glyphicon glyphicon-font"></span>&nbsp;Créer un texte</a>
             </div>
-            <div><a data-ng-click="createResource('multiple-choice-question')" href class="list-group-item"><span title="Question de QCM" class="glyphicon glyphicon-check"></span>&nbsp;Créer une question à choix multiple</a></div>
-            <div><a data-ng-click="createResource('open-ended-question')" href class="list-group-item"><span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign"></span>&nbsp;Créer une question à réponse courte</a></div>
+            <div>
+                <a data-ng-click="createResource('multiple-choice-question')" href class="list-group-item"><span title="Question de QCM" class="glyphicon glyphicon-check"></span>&nbsp;Créer une question à choix multiple</a>
+            </div>
+            <div>
+                <a data-ng-click="createResource('open-ended-question')" href class="list-group-item"><span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign"></span>&nbsp;Créer une question à réponse courte</a>
+            </div>
             <!--<div><a href class="list-group-item"><span class="glyphicon glyphicon-sort-by-order"></span>&nbsp;Créer une séquence</a></div>-->
         </div>
     </accordion-group>

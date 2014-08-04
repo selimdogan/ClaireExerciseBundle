@@ -162,7 +162,7 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
         $scope.loadUsers = function (targetScope, resourcesData) {
             targetScope.users = [];
             var userIds = [];
-            for (var i = 0; i < resourcesData.length; ++i) {
+            for (i in resourcesData) {
                 if (userIds.indexOf(resourcesData[i].author) == -1) {
                     userIds.push(resourcesData[i].author);
                 }
@@ -180,16 +180,38 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
 resourceControllers.controller('resourceListController', ['$scope', '$state', 'Resource', 'ResourceDuplication',
     function ($scope, $state, Resource, ResourceDuplication) {
 
+        $scope.viewPrivate = 'private';
+
+        $scope.viewPrivateResources = function () {
+            $scope.resources = $scope.privateResources;
+        };
+
+        $scope.viewPublicResources = function () {
+            $scope.resources = $scope.publicResources;
+        };
+
         // retrieve resources
         if ($scope.parentSection !== 'model') {
-            Resource.query(function (data) {
+            Resource.query({owner: BASE_CONFIG.currentUserId},function (data) {
                 // load an id indexed array of the resources
-                $scope.resources = [];
+                $scope.privateResources = [];
                 for (var i = 0; i < data.length; ++i) {
-                    $scope.resources[data[i].id] = data[i];
+                    $scope.privateResources[data[i].id] = data[i];
                 }
+                $scope.resources = $scope.privateResources;
 
-                $scope.loadUsers($scope, data);
+                Resource.query({'public-except-user': BASE_CONFIG.currentUserId},function (data) {
+                    // load an id indexed array of the resources
+                    $scope.publicResources = [];
+                    for (var i = 0; i < data.length; ++i) {
+                        $scope.publicResources[data[i].id] = data[i];
+                    }
+
+                    var allResources = jQuery.extend({}, $scope.publicResources);
+                    allResources = jQuery.extend(allResources, $scope.privateResources);
+
+                    $scope.loadUsers($scope, allResources);
+                });
             });
         }
 
@@ -670,7 +692,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
         $scope.loadUsers = function (targetScope, resourcesData) {
             targetScope.users = [];
             var userIds = [];
-            for (var i = 0; i < resourcesData.length; ++i) {
+            for (i in resourcesData) {
                 if (userIds.indexOf(resourcesData[i].author) == -1) {
                     userIds.push(resourcesData[i].author);
                 }
@@ -747,23 +769,54 @@ modelControllers.controller('modelListController', ['$scope', 'Model', 'ModelDup
 modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User',
     function ($scope, Model, Resource, $location, $stateParams, User) {
 
-        // load resources
-        Resource.query(function (data) {
+//        // load resources
+//        Resource.query(function (data) {
+//            // load an id indexed array of the resources
+//            $scope.resources = [];
+//            for (var i = 0; i < data.length; ++i) {
+//                $scope.resources[data[i].id] = data[i];
+//            }
+//
+//            // load users
+//            $scope.loadUsers($scope, data);
+//
+//            // load model
+//            $scope.model = Model.get({id: $stateParams.modelid}, function () {
+//                // fill each block with empty constraints
+//                $scope.fillBlockConstraints($scope.model);
+//                $scope.$parent.subSection = $scope.model.type;
+//            });
+//        });
+
+        // retrieve resources
+        Resource.query({owner: BASE_CONFIG.currentUserId}, function (data) {
             // load an id indexed array of the resources
-            $scope.resources = [];
+            $scope.privateResources = [];
             for (var i = 0; i < data.length; ++i) {
-                $scope.resources[data[i].id] = data[i];
+                $scope.privateResources[data[i].id] = data[i];
             }
+            $scope.resources = $scope.privateResources;
 
-            // load users
-            $scope.loadUsers($scope, data);
+            Resource.query({'public-except-user': BASE_CONFIG.currentUserId}, function (data) {
+                // load an id indexed array of the resources
+                $scope.publicResources = [];
+                for (var i = 0; i < data.length; ++i) {
+                    $scope.publicResources[data[i].id] = data[i];
+                }
 
-            // load model
-            $scope.model = Model.get({id: $stateParams.modelid}, function () {
-                // fill each block with empty constraints
-                $scope.fillBlockConstraints($scope.model);
-                $scope.$parent.subSection = $scope.model.type;
+                // load users
+                $scope.allResources = jQuery.extend({}, $scope.publicResources);
+                $scope.allResources = jQuery.extend($scope.allResources, $scope.privateResources);
+                $scope.loadUsers($scope, $scope.allResources);
+
+                // load model
+                $scope.model = Model.get({id: $stateParams.modelid}, function () {
+                    // fill each block with empty constraints
+                    $scope.fillBlockConstraints($scope.model);
+                    $scope.$parent.subSection = $scope.model.type;
+                });
             });
+
         });
 
         $scope.fillBlockConstraints = function (model) {

@@ -5,12 +5,11 @@ resourceServices.factory('Resource', ['$resource',
 
         return $resource(
 
-            BASE_CONFIG.urls.api.resources+':id', //'http://claroline/app_dev.php/claire_exercise/api/resources/:id',
+            BASE_CONFIG.urls.api.resources+':id',
             { 'id': '@id'},
             {
                  update: {method: 'PUT', headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}}
                 ,save: {method: 'POST', headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}}
-                //,delete:  {method:'DELETE'}
             }
         );
 
