@@ -22,6 +22,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\DBALException;
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\Metadata;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntityMetadataFactory;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
@@ -774,6 +775,17 @@ abstract class SharedEntityService extends TransactionalService implements Share
         }
         $entity->setOwner($this->userService->get($ownerId));
         $entity->setForkFrom($original);
+
+        // metadata
+        $metadatas = array();
+        /** @var Metadata $md */
+        foreach ($original->getMetadata() as $md) {
+            $newMd = clone($md);
+            $newMd->setEntity($entity);
+            $metadatas[] = $newMd;
+            $this->em->persist($md);
+        }
+        $entity->setMetadata(new ArrayCollection($metadatas));
 
         return $this->importDetail($ownerId, $entity);
     }
