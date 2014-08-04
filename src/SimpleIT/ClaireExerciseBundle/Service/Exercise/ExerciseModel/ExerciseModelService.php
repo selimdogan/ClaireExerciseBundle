@@ -29,6 +29,7 @@ use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModelFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
@@ -469,7 +470,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                 array(
                     CommonResource::PICTURE,
                     CommonResource::TEXT
-                )
+                ),
+                $pairBlock->getPairMetaKey()
             )
             ) {
                 return false;
@@ -644,12 +646,14 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      *
      * @param ResourceBlock $block
      * @param array         $resourceTypes
+     * @param string        $metaKey
      *
      * @return boolean
      */
     private function checkBlockComplete(
         ResourceBlock $block,
-        array $resourceTypes
+        array $resourceTypes,
+        $metaKey = null
     )
     {
         if (!($block->getNumberOfOccurrences() > 0)) {
@@ -664,7 +668,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
 
         /** @var ObjectId $resource */
         foreach ($block->getResources() as $resource) {
-            if (!$this->checkObjectId($resource, $resourceTypes)) {
+            if (!$this->checkObjectId($resource, $resourceTypes, $metaKey)) {
                 return false;
             }
         }
@@ -725,12 +729,14 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      *
      * @param ObjectId $objectId
      * @param array    $resourceTypes
+     * @param string   $metaKey
      *
      * @return bool
      */
     private function checkObjectId(
         ObjectId $objectId,
-        array $resourceTypes = array()
+        array $resourceTypes = array(),
+        $metaKey = null
     )
     {
         if (is_null($objectId->getId())) {
@@ -744,6 +750,19 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
 
         if (!empty($resourceTypes) && !in_array($resource->getType(), $resourceTypes)) {
             return false;
+        }
+
+        if ($metaKey !== null) {
+            $found = false;
+            /** @var Metadata $md */
+            foreach ($resource->getMetadata() as $md) {
+                if ($md->getKey() === $metaKey) {
+                    $found = true;
+                }
+            }
+            if (!$found) {
+                return false;
+            }
         }
 
         return true;
@@ -1264,7 +1283,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     /**
      * Create the claroline resource node associated to the model
      *
-     * @param User $user
+     * @param User          $user
      * @param ExerciseModel $model
      */
     public function createClarolineResourceNode($user, $model)
