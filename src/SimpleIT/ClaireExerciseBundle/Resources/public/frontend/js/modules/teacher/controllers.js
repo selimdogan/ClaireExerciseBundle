@@ -177,8 +177,8 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
         };
     }]);
 
-resourceControllers.controller('resourceListController', ['$scope', '$state', 'Resource', 'ResourceDuplication',
-    function ($scope, $state, Resource, ResourceDuplication) {
+resourceControllers.controller('resourceListController', ['$scope', '$state', 'Resource',
+    function ($scope, $state, Resource) {
 
         $scope.viewPrivate = 'private';
 
@@ -192,7 +192,7 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
 
         // retrieve resources
         if ($scope.parentSection !== 'model') {
-            Resource.query({owner: BASE_CONFIG.currentUserId},function (data) {
+            Resource.query({owner: BASE_CONFIG.currentUserId}, function (data) {
                 // load an id indexed array of the resources
                 $scope.privateResources = [];
                 for (var i = 0; i < data.length; ++i) {
@@ -200,7 +200,7 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
                 }
                 $scope.resources = $scope.privateResources;
 
-                Resource.query({'public-except-user': BASE_CONFIG.currentUserId},function (data) {
+                Resource.query({'public-except-user': BASE_CONFIG.currentUserId}, function (data) {
                     // load an id indexed array of the resources
                     $scope.publicResources = [];
                     for (var i = 0; i < data.length; ++i) {
@@ -218,9 +218,21 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
         // delete resource method
         $scope.deleteResource = function (resource) {
             resource.$delete({id: resource.id}, function () {
-                delete $scope.resources[resource.id];
+                delete $scope.privateResources[resource.id];
             });
         };
+
+        $scope.importResource = function (resource) {
+            Resource.import({id: resource.id}, function (data) {
+                $scope.privateResources[data.id] = data;
+            });
+        }
+
+        $scope.subscribeResource = function (resource) {
+            Resource.subscribe({id: resource.id}, function (data) {
+                $scope.privateResources[data.id] = data;
+            });
+        }
 
         $scope.archiveResource = function (resource) {
             console.log('archiving...');
@@ -241,8 +253,8 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
         };
 
         $scope.duplicateResource = function (resource) {
-            ResourceDuplication.save({resourceId: resource.id}, function (data) {
-                $scope.resources[data.id] = data;
+            Resource.duplicate({id: resource.id}, function (data) {
+                $scope.privateResources[data.id] = data;
                 if ($scope.parentSection === 'model') {
                     $state.go('modelEdit.resourceEdit', {resourceid: data.id});
                 } else {
@@ -255,7 +267,7 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
         $scope.createResource = function (type) {
             if (type == 'text') {
                 Resource.save($scope.resourceContext.newResources.text, function (data) {
-                    $scope.resources[data.id] = data;
+                    $scope.privateResources[data.id] = data;
                     if ($scope.parentSection === 'model') {
                         $state.go('modelEdit.resourceEdit', {resourceid: data.id});
                     } else {
@@ -264,7 +276,7 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
                 });
             } else if (type == 'picture') {
                 Resource.save($scope.resourceContext.newResources.picture, function (data) {
-                    $scope.resources[data.id] = data;
+                    $scope.privateResources[data.id] = data;
                     if ($scope.parentSection === 'model') {
                         $state.go('modelEdit.resourceEdit', {resourceid: data.id});
                     } else {
@@ -273,7 +285,7 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
                 });
             } else if (type == 'multiple-choice-question') {
                 Resource.save($scope.resourceContext.newResources.multiple_choice_question, function (data) {
-                    $scope.resources[data.id] = data;
+                    $scope.privateResources[data.id] = data;
                     if ($scope.parentSection === 'model') {
                         $state.go('modelEdit.resourceEdit', {resourceid: data.id});
                     } else {
@@ -282,7 +294,7 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
                 });
             } else if (type == 'open-ended-question') {
                 Resource.save($scope.resourceContext.newResources.open_ended_question, function (data) {
-                    $scope.resources[data.id] = data;
+                    $scope.privateResources[data.id] = data;
                     if ($scope.parentSection === 'model') {
                         $state.go('modelEdit.resourceEdit', {resourceid: data.id});
                     } else {
@@ -411,8 +423,8 @@ resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 
             delete $scope.resource.required_exercise_resources;
             delete $scope.resource.required_knowledges;
             $scope.resource.$update({id: $stateParams.resourceid}, function (resource) {
-                if (typeof $scope.resources === "object") {
-                    $scope.resources[resource.id] = resource;
+                if (typeof $scope.privateResources === "object") {
+                    $scope.privateResources[resource.id] = resource;
                 }
             });
         };
@@ -436,8 +448,8 @@ resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 
         // delete resource method
         $scope.deleteResource = function (resource) {
             resource.$delete({id: resource.id}, function () {
-                if (typeof $scope.resources === "object") {
-                    delete $scope.resources[resource.id];
+                if (typeof $scope.privateResources === "object") {
+                    delete $scope.privateResources[resource.id];
                 }
             });
         };
@@ -648,13 +660,13 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
         $scope.modelAddBlockResourceConstraint = function (metadata_constraints, type) {
             var newElement;
             if (type == 'exists') {
-                newElement = jQuery.extend(true, {},$scope.modelContext.newModel.block_constraint.exists);
+                newElement = jQuery.extend(true, {}, $scope.modelContext.newModel.block_constraint.exists);
             } else if (type == 'in') {
-                newElement = jQuery.extend(true, {},$scope.modelContext.newModel.block_constraint.in);
+                newElement = jQuery.extend(true, {}, $scope.modelContext.newModel.block_constraint.in);
             } else if (type == 'between') {
-                newElement = jQuery.extend(true, {},$scope.modelContext.newModel.block_constraint.between);
+                newElement = jQuery.extend(true, {}, $scope.modelContext.newModel.block_constraint.between);
             } else {
-                newElement = jQuery.extend(true, {},$scope.modelContext.newModel.block_constraint.other);
+                newElement = jQuery.extend(true, {}, $scope.modelContext.newModel.block_constraint.other);
                 newElement.comparator = type;
             }
             metadata_constraints.splice(metadata_constraints.length, 0, newElement);
@@ -708,18 +720,65 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
 
     }]);
 
-modelControllers.controller('modelListController', ['$scope', 'Model', 'ModelDuplication', '$location',
-    function ($scope, Model, ModelDuplication, $location) {
+modelControllers.controller('modelListController', ['$scope', 'Model', '$location',
+    function ($scope, Model, $location) {
 
-        $scope.models = Model.query(function () {
-            $scope.loadUsers($scope, $scope.models);
+        $scope.viewPrivate = 'private';
+
+        $scope.viewPrivateModels = function () {
+            $scope.models = $scope.privateModels;
+        };
+
+        $scope.viewPublicModels = function () {
+            $scope.models = $scope.publicModels;
+        };
+
+        // retrieve models
+        Model.query({owner: BASE_CONFIG.currentUserId}, function (data) {
+            // load an id indexed array of the models
+            $scope.privateModels = [];
+            for (var i = 0; i < data.length; ++i) {
+                $scope.privateModels[data[i].id] = data[i];
+            }
+            $scope.models = $scope.privateModels;
+
+            Model.query({'public-except-user': BASE_CONFIG.currentUserId}, function (data) {
+                // load an id indexed array of the models
+                $scope.publicModels = [];
+                for (var i = 0; i < data.length; ++i) {
+                    $scope.publicModels[data[i].id] = data[i];
+                }
+
+                var allModels = jQuery.extend({}, $scope.publicModels);
+                allModels = jQuery.extend(allModels, $scope.privateModels);
+
+                $scope.loadUsers($scope, allModels);
+            });
         });
 
         $scope.deleteModel = function (model) {
             model.$delete({id: model.id}, function () {
-                $scope.models = Model.query();
+                delete $scope.privateModels[model.id];
             });
         };
+
+        $scope.duplicateModel = function (model) {
+            Model.duplicate({id: model.id}, function (data) {
+                $location.path('/teacher/model/' + data.id)
+            });
+        };
+
+        $scope.importModel = function (model) {
+            Model.import({id: model.id}, function (data) {
+                $scope.privateModels[data.id] = data;
+            });
+        }
+
+        $scope.subscribeModel = function (model) {
+            Model.subscribe({id: model.id}, function (data) {
+                $scope.privateModels[data.id] = data;
+            });
+        }
 
         $scope.archiveModel = function (model) {
             console.log('archiving...');
@@ -758,36 +817,10 @@ modelControllers.controller('modelListController', ['$scope', 'Model', 'ModelDup
                 });
             }
         };
-
-        $scope.duplicateModel = function (model) {
-            ModelDuplication.save({modelId: model.id}, function (data) {
-                $location.path('/teacher/model/' + data.id)
-            });
-        };
     }]);
 
 modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User',
     function ($scope, Model, Resource, $location, $stateParams, User) {
-
-//        // load resources
-//        Resource.query(function (data) {
-//            // load an id indexed array of the resources
-//            $scope.resources = [];
-//            for (var i = 0; i < data.length; ++i) {
-//                $scope.resources[data[i].id] = data[i];
-//            }
-//
-//            // load users
-//            $scope.loadUsers($scope, data);
-//
-//            // load model
-//            $scope.model = Model.get({id: $stateParams.modelid}, function () {
-//                // fill each block with empty constraints
-//                $scope.fillBlockConstraints($scope.model);
-//                $scope.$parent.subSection = $scope.model.type;
-//            });
-//        });
-
         // retrieve resources
         Resource.query({owner: BASE_CONFIG.currentUserId}, function (data) {
             // load an id indexed array of the resources
@@ -797,7 +830,7 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
             }
             $scope.resources = $scope.privateResources;
 
-            Resource.query({'public-except-user': BASE_CONFIG.currentUserId}, function (data) {
+            Resource.query({'public-except-user': BASE_CONFIG.currentUserId, 'is-root': 'true'}, function (data) {
                 // load an id indexed array of the resources
                 $scope.publicResources = [];
                 for (var i = 0; i < data.length; ++i) {

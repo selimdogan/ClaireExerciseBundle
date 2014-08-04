@@ -113,6 +113,18 @@
             </div>
         </div>
     </accordion-group>
+
+    <div class="btn-group pull-right" style="margin-left: 4px; margin-top: 4px">
+        <label class="btn btn-primary"
+               ng-model="viewPrivate"
+               btn-radio="'private'"
+               ng-click="viewPrivateModels()">Privés</label>
+        <label class="btn btn-primary"
+               ng-model="viewPrivate"
+               btn-radio="'public'"
+               ng-click="viewPublicModels()">Publics</label>
+    </div>
+
     <accordion-group class="panel panel-primary">
         <accordion-heading class="panel-heading">
             <div class="col-centered">
@@ -162,12 +174,14 @@
                     </div>
                     <div class="col-centered pull-right">
                         <h4>
-                            <span ng-click="$event.stopPropagation();tryModel(model)" class="glyphicon glyphicon-repeat"
+                            <span ng-click="$event.stopPropagation();tryModel(model)"
+                                  class="glyphicon glyphicon-repeat"
                                   title="Essayer de répondre à un exercice pour ce modèle"></span>
-                             <span ng-if="model.owner != BASE_CONFIG.currentUserId"
-                              ui-sref="modelEdit({ modelid:model.id })"
-                              class="glyphicon glyphicon-eye-open"
-                              title="Voir ce modèle (édition impossible)"></span>
+                            <span ng-if="model.owner != BASE_CONFIG.currentUserId"
+                                  ui-sref="modelEdit({ modelid:model.id })"
+                                  class="glyphicon glyphicon-eye-open"
+                                  title="Voir ce modèle (édition impossible)"></span>
+                            &nbsp;
                             <span
                                 ng-if="model.owner == BASE_CONFIG.currentUserId"
                                 ui-sref="modelEdit({ modelid:model.id })"
@@ -179,15 +193,26 @@
                                 class="glyphicon glyphicon-plus"
                                 title="Dupliquer ce modèle : créer un nouveau modèle identique à celui-ci."></span>
                             <span
-                                ng-if="model.owner == BASE_CONFIG.currentUserId && !model.archived"
-                                  ng-click="$event.stopPropagation();archiveModel(model)"
-                                  class="glyphicon glyphicon-save"
-                                  title="Archiver ce modèle"></span>
+                                ng-if="model.owner !== BASE_CONFIG.currentUserId"
+                                ng-click="$event.stopPropagation();importModel(model)"
+                                class="glyphicon glyphicon-log-in"
+                                title="Importer ce modèle : créer un nouveau modèle identique à celui-ci et dont vous êtes le propriétaire. Cette opération importe automatiquement les ressources publiques associées à ce modèle."></span>
+                            <span
+                                ng-if="model.owner !== BASE_CONFIG.currentUserId"
+                                ng-click="$event.stopPropagation();subscribeModel(model)"
+                                class="glyphicon glyphicon-share-alt"
+                                title="S'abonner à ce modèle : il fait à présent partie de vos modèles privés mais vous faites confiance à l'auteur. Vous bénéficierez des modifications qu'il apportera au modèle. Vous ne pourrez pas le modifier de votre côté. Il s'agit d'un raccourci vers le modèle d'un autre utilisateur."></span>
                             <span
                                 ng-if="model.owner == BASE_CONFIG.currentUserId && model.archived"
                                   ng-click="$event.stopPropagation();restoreModel(model)"
                                   class="glyphicon glyphicon-open"
                                   title="Restaurer ce modèle"></span>
+                            &nbsp;
+                            <span
+                                ng-if="model.owner == BASE_CONFIG.currentUserId && !model.archived"
+                                  ng-click="$event.stopPropagation();archiveModel(model)"
+                                  class="glyphicon glyphicon-save"
+                                  title="Archiver ce modèle"></span>
                             <span ng-if="model.owner == BASE_CONFIG.currentUserId"
                                   ng-click="$event.stopPropagation();deleteModel(model)" class="glyphicon glyphicon-remove"
                                   title="Supprimer ce modèle"></span>
