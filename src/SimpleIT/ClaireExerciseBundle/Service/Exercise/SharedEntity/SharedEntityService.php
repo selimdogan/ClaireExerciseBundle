@@ -692,6 +692,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
         $entity->setMetadata(new ArrayCollection());
         $entity->setForkFrom(null);
         $entity->setParent($parent);
+        $entity->setPublic(false);
 
         $this->em->persist($entity);
         $this->em->flush();
@@ -775,6 +776,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
         }
         $entity->setOwner($this->userService->get($ownerId));
         $entity->setForkFrom($original);
+        $entity->setPublic(false);
 
         // metadata
         $metadatas = array();
