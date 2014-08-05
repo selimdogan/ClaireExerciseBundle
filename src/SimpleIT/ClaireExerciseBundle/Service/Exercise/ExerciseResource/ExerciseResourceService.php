@@ -205,6 +205,9 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         $ownerId = null
     )
     {
+        $reqResources = array();
+        $reqKnowledges = array();
+
         if ($resourceResource->getContent() != null) {
             // required resources
             $resourceResource = $this->computeRequiredResourcesFromResource(
@@ -212,13 +215,11 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
                 $import,
                 $ownerId
             );
-            $reqResources = array();
             if ($resourceResource->getRequiredExerciseResources() !== null) {
                 foreach ($resourceResource->getRequiredExerciseResources() as $reqRes) {
                     $reqResources[] = $this->get($reqRes);
                 }
             }
-            $exerciseResource->setRequiredExerciseResources(new ArrayCollection($reqResources));
 
             // required knowledges
             $resourceResource = $this->computeRequiredKnowledgesFromResource(
@@ -226,13 +227,11 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
                 $import,
                 $ownerId
             );
-            $reqKnowledges = array();
             if ($resourceResource->getRequiredKnowledges() !== null) {
                 foreach ($resourceResource->getRequiredKnowledges() as $reqKnowledge) {
                     $reqKnowledges[] = $this->knowledgeService->get($reqKnowledge);
                 }
             }
-            $exerciseResource->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
         }
 
         if (!is_null($resourceResource->getMetadata())) {
@@ -241,11 +240,18 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
                 if (substr($md->getValue(), 0, 2) === '__') {
                     $rest = substr($md->getValue(), 2);
                     if (is_numeric($rest)) {
-//                    $newMd->setValue('__' . $this->importOrLink($ownerId, $rest));
+                        $reqResources[] = $this->get($rest);
                     }
                 }
             }
         }
+
+        $exerciseResource->setRequiredExerciseResources(
+            new ArrayCollection(array_unique($reqResources))
+        );
+        $exerciseResource->setRequiredKnowledges(
+            new ArrayCollection(array_unique($reqKnowledges))
+        );
 
         return $exerciseResource;
     }
@@ -706,5 +712,27 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         foreach ($entity->getRequiredKnowledges() as $knowledge) {
             $this->knowledgeService->makePublic($knowledge);
         }
+    }
+
+    /**
+     * Checks if an entity can be removed (is required)
+     *
+     * @param ExerciseResource $entity
+     *
+     * @return boolean
+     */
+    public function canBeRemoved($entity)
+    {
+        if (count($entity->getRequiredByResources()) > 0)
+        {
+            return false;
+        }
+
+        if (count($entity->getRequiredByModels()) > 0)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

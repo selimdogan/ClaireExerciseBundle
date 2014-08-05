@@ -169,6 +169,15 @@ interface SharedEntityServiceInterface
     public function remove($entityId, $userId);
 
     /**
+     * Checks if an entity can be removed (is required)
+     *
+     * @param $entity
+     *
+     * @return boolean
+     */
+    public function canBeRemoved($entity);
+
+    /**
      * Edit all the metadata of an entity. Old ones are removed and replaced by new ones.
      * Keywords must be set in the appropriate field of metadata.
      *

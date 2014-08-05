@@ -458,6 +458,11 @@ abstract class SharedEntityService extends TransactionalService implements Share
             throw new AccessDeniedException();
         }
 
+        if (!$this->canBeRemoved($entity))
+        {
+            throw new EntityDeletionException('This entity is needed and cannot be deleted');
+        }
+
         try {
             $this->entityRepository->delete($entity);
             $this->em->flush();
@@ -465,6 +470,11 @@ abstract class SharedEntityService extends TransactionalService implements Share
             throw new EntityDeletionException('This entity is needed and cannot be deleted');
         }
     }
+
+    /**
+     * @inheritdoc
+     */
+    abstract public function canBeRemoved($entity);
 
     /**
      * @inheritdoc

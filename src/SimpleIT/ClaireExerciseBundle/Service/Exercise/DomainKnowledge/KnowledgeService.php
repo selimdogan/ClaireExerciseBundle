@@ -305,4 +305,31 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
             $this->makePublic($knowledge);
         }
     }
+
+    /**
+     * Checks if an entity can be removed (is required)
+     *
+     * @param Knowledge $entity
+     *
+     * @return boolean
+     */
+    public function canBeRemoved($entity)
+    {
+        if (count($entity->getRequiredByResources()) > 0)
+        {
+            return false;
+        }
+
+        if (count($entity->getRequiredByModels()) > 0)
+        {
+            return false;
+        }
+
+        if (count($entity->getRequiredByKnowledges()) > 0)
+        {
+            return false;
+        }
+
+        return true;
+    }
 }

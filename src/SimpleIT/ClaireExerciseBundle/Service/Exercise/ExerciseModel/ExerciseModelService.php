@@ -1299,4 +1299,16 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                 )->findWorkspaceRoot($workspace)
         );
     }
+
+    /**
+     * Checks if an entity can be removed (is required)
+     *
+     * @param ExerciseModel $entity
+     *
+     * @return boolean
+     */
+    public function canBeRemoved($entity)
+    {
+        return true;
+    }
 }

@@ -50,6 +50,16 @@ class ExerciseResource extends SharedEntity
     private $requiredKnowledges;
 
     /**
+     * @var Collection
+     */
+    private $requiredByResources;
+
+    /**
+     * @var Collection
+     */
+    private $requiredByModels;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -57,6 +67,8 @@ class ExerciseResource extends SharedEntity
         parent::__construct();
         $this->requiredExerciseResources = new ArrayCollection();
         $this->requiredKnowledges = new ArrayCollection();
+        $this->requiredByResources = new ArrayCollection();
+        $this->requiredByModels = new ArrayCollection();
     }
 
     /**
@@ -157,5 +169,45 @@ class ExerciseResource extends SharedEntity
     public function getParent()
     {
         return $this->parent;
+    }
+
+    /**
+     * Set requiredByResources
+     *
+     * @param \Doctrine\Common\Collections\Collection $requiredByResources
+     */
+    public function setRequiredByResources($requiredByResources)
+    {
+        $this->requiredByResources = $requiredByResources;
+    }
+
+    /**
+     * Get requiredByResources
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRequiredByResources()
+    {
+        return $this->requiredByResources;
+    }
+
+    /**
+     * Set requiredByModels
+     *
+     * @param \Doctrine\Common\Collections\Collection $requiredByModels
+     */
+    public function setRequiredByModels($requiredByModels)
+    {
+        $this->requiredByModels = $requiredByModels;
+    }
+
+    /**
+     * Get requiredByModels
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRequiredByModels()
+    {
+        return $this->requiredByModels;
     }
 }
