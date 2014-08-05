@@ -802,7 +802,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
         MetadataConstraint $mdc
     )
     {
-        if ($mdc->getKey() == null || $mdc->getComparator() == null || $mdc->getValues() == null) {
+        if ($mdc->getKey() == null || $mdc->getComparator() == null) {
             return false;
         }
 
