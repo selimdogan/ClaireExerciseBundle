@@ -235,13 +235,14 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
             $exerciseResource->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
         }
 
-        /** @var MetadataResource $md */
-        foreach ($resourceResource->getMetadata() as $md)
-        {
-            if (substr($md->getValue(), 0, 2) === '__') {
-                $rest = substr($md->getValue(), 2);
-                if (is_numeric($rest)) {
-                    $newMd->setValue('__' . $this->importOrLink($ownerId, $rest));
+        if (!is_null($resourceResource->getMetadata())) {
+            /** @var MetadataResource $md */
+            foreach ($resourceResource->getMetadata() as $md) {
+                if (substr($md->getValue(), 0, 2) === '__') {
+                    $rest = substr($md->getValue(), 2);
+                    if (is_numeric($rest)) {
+//                    $newMd->setValue('__' . $this->importOrLink($ownerId, $rest));
+                    }
                 }
             }
         }

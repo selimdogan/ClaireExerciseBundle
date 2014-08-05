@@ -12,12 +12,12 @@
                 <accordion-heading class="panel-heading">
                     <div class="row">
                         <div class="col-xs-2"
-                             ng-switch="allResources[blockResourceId.id].type">
+                             ng-switch="resources[blockResourceId.id].type">
                             <div ng-switch-when="text">
                                 <span title="Texte" class="glyphicon glyphicon-font" style="font-size: 260%"></span>
                             </div>
                             <div ng-switch-when="picture">
-                                <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{allResources[blockResourceId.id].content.source}}"
+                                <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{resources[blockResourceId.id].content.source}}"
                                      style="width: 40px; height: 40px;"/>
                             </div>
                             <div ng-switch-when="multiple-choice-question">
@@ -35,19 +35,19 @@
                         <div class="col-xs-8">
                             <ng-switch on="model.type">
                                 <h4 ng-switch-when="pair-items">
-                                    {{ getMobilePart(allResources[blockResourceId.id], block.pair_meta_key) }}&nbsp;<span class="caret"></span>
+                                    {{ getMobilePart(resources[blockResourceId.id], block.pair_meta_key) }}&nbsp;<span class="caret"></span>
                                 </h4>
                                 <h4 ng-switch-when="multiple-choice">
-                                    {{ allResources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>
+                                    {{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>
                                 </h4>
                                 <h4 ng-switch-when="group-items">
-                                    <!--{{ allResources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>-->
-                                    {{ allResources[blockResourceId.id].title }}
-                                    ({{ findGroup(allResources[blockResourceId.id]) }})
+                                    <!--{{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>-->
+                                    {{ resources[blockResourceId.id].title }}
+                                    ({{ findGroup(resources[blockResourceId.id]) }})
                                     &nbsp;<span class="caret"></span>
                                 </h4>
                                 <h4 ng-switch-when="open-ended-question">
-                                    {{ allResources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>
+                                    {{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>
                                 </h4>
                             </ng-switch>
                         </div>
@@ -62,59 +62,59 @@
                 </accordion-heading>
                 <div class="col-centered">
                     <label>ID&nbsp;:&nbsp;</label>{{
-                    allResources[blockResourceId.id].id }}
+                    resources[blockResourceId.id].id }}
                 </div>
                 <div class="col-centered">
-                    <label>Auteur&nbsp;:&nbsp;</label>{{ users[allResources[blockResourceId.id].author].user_name }}
+                    <label>Auteur&nbsp;:&nbsp;</label>{{ users[resources[blockResourceId.id].author].user_name }}
                 </div>
                 <div class="col-centered">
-                    <label>Propriétaire&nbsp;:&nbsp;</label>{{ users[allResources[blockResourceId.id].owner].user_name }}
+                    <label>Propriétaire&nbsp;:&nbsp;</label>{{ users[resources[blockResourceId.id].owner].user_name }}
                 </div>
                 <div class="col-centered">
                     <label>Partagé&nbsp;:&nbsp;</label>
-                    <ng-switch on="allResources[blockResourceId.id].public">
+                    <ng-switch on="resources[blockResourceId.id].public">
                         <span ng-switch-when="true">Oui</span>
                         <span ng-switch-when="false">Non</span>
                     </ng-switch>
                 </div>
                 <div class="col-centered">
                     <label>Complet&nbsp;:&nbsp;</label>
-                    <ng-switch on="allResources[blockResourceId.id].complete">
+                    <ng-switch on="resources[blockResourceId.id].complete">
                         <span ng-switch-when="true">Oui</span>
                         <span ng-switch-when="false">Non</span>
                     </ng-switch>
                 </div>
                 <div class="col-centered"
-                     ng-switch="allResources[blockResourceId.id].type">
+                     ng-switch="resources[blockResourceId.id].type">
                     <div ng-switch-when="text">
                         <label>Contenu&nbsp;:&nbsp;</label>{{
-                        allResources[blockResourceId.id].content.text }}
+                        resources[blockResourceId.id].content.text }}
                     </div>
                     <div ng-switch-when="picture">
                         <label>Contenu&nbsp;:&nbsp;</label>
-                        <a href="{{BASE_CONFIG.urls.images.uploads}}{{allResources[blockResourceId.id].content.source}}"
+                        <a href="{{BASE_CONFIG.urls.images.uploads}}{{resources[blockResourceId.id].content.source}}"
                            data-lightbox="res" data-title="La ressource">
-                            <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{allResources[blockResourceId.id].content.source}}"/>
+                            <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{resources[blockResourceId.id].content.source}}"/>
                         </a>
                     </div>
                     <div ng-switch-when="multiple-choice-question">
                         <label>Question&nbsp;:&nbsp;</label>{{
-                        allResources[blockResourceId.id].content.question }}
+                        resources[blockResourceId.id].content.question }}
                     </div>
                     <div ng-switch-when="open-ended-question">
                         <label>Question&nbsp;:&nbsp;</label>{{
-                        allResources[blockResourceId.id].content.question }}
+                        resources[blockResourceId.id].content.question }}
                     </div>
                 </div>
                 <div class="col-centered"
-                     ng-switch="allResources[blockResourceId.id].type">
+                     ng-switch="resources[blockResourceId.id].type">
                     <div ng-switch-when="multiple-choice-question">
                         <label>Commentaire&nbsp;:&nbsp;</label>{{
-                        allResources[blockResourceId.id].content.comment }}
+                        resources[blockResourceId.id].content.comment }}
                     </div>
                     <div ng-switch-when="open-ended-question">
                         <label>Commentaire&nbsp;:&nbsp;</label>{{
-                        allResources[blockResourceId.id].content.comment }}
+                        resources[blockResourceId.id].content.comment }}
                     </div>
                 </div>
             </accordion-group>
@@ -174,12 +174,12 @@
                         <accordion-heading class="panel-heading">
                             <div class="row">
                                 <div class="col-xs-2"
-                                     ng-switch="allResources[blockResourceId.id].type">
+                                     ng-switch="resources[blockResourceId.id].type">
                                     <div ng-switch-when="text">
                                         <span title="Texte" class="glyphicon glyphicon-font" style="font-size: 260%"></span>
                                     </div>
                                     <div ng-switch-when="picture">
-                                        <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{allResources[blockResourceId.id].content.source}}"
+                                        <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{resources[blockResourceId.id].content.source}}"
                                              style="width: 40px; height: 40px;"/>
                                     </div>
                                     <div ng-switch-when="multiple-choice-question">
@@ -194,7 +194,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-8">
-                                    <h4>{{ allResources[blockResourceId.id].title
+                                    <h4>{{ resources[blockResourceId.id].title
                                         }}&nbsp;<span class="caret"></span>
                                     </h4>
                                 </div>
@@ -209,61 +209,61 @@
                         </accordion-heading>
                         <div class="col-centered">
                             <label>ID&nbsp;:&nbsp;</label>{{
-                            allResources[blockResourceId.id].id }}
+                            resources[blockResourceId.id].id }}
                         </div>
                         <div class="col-centered">
                             <label>Auteur&nbsp;:&nbsp;</label>{{
-                            users[allResources[blockResourceId.id].author] }}
+                            users[resources[blockResourceId.id].author] }}
                         </div>
                         <div class="col-centered">
                             <label>Propriétaire&nbsp;:&nbsp;</label>{{
-                            users[allResources[blockResourceId.id].owner] }}
+                            users[resources[blockResourceId.id].owner] }}
                         </div>
                         <div class="col-centered">
                             <label>Partagé&nbsp;:&nbsp;</label>
-                            <ng-switch on="allResources[blockResourceId.id].public">
+                            <ng-switch on="resources[blockResourceId.id].public">
                                 <span ng-switch-when="true">Oui</span>
                                 <span ng-switch-when="false">Non</span>
                             </ng-switch>
                         </div>
                         <div class="col-centered">
                             <label>Complet&nbsp;:&nbsp;</label>
-                            <ng-switch on="allResources[blockResourceId.id].complete">
+                            <ng-switch on="resources[blockResourceId.id].complete">
                                 <span ng-switch-when="true">Oui</span>
                                 <span ng-switch-when="false">Non</span>
                             </ng-switch>
                         </div>
                         <div class="col-centered"
-                             ng-switch="allResources[blockResourceId.id].type">
+                             ng-switch="resources[blockResourceId.id].type">
                             <div ng-switch-when="text">
                                 <label>Contenu&nbsp;:&nbsp;</label>{{
-                                allResources[blockResourceId.id].content.text }}
+                                resources[blockResourceId.id].content.text }}
                             </div>
                             <div ng-switch-when="picture">
                                 <label>Contenu&nbsp;:&nbsp;</label>
-                                <a href="{{BASE_CONFIG.urls.images.uploads}}{{allResources[blockResourceId.id].content.source}}"
+                                <a href="{{BASE_CONFIG.urls.images.uploads}}{{resources[blockResourceId.id].content.source}}"
                                    data-lightbox="res" data-title="La ressource">
-                                    <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{allResources[blockResourceId.id].content.source}}"/>
+                                    <img ng-src="{{BASE_CONFIG.urls.images.uploads}}{{resources[blockResourceId.id].content.source}}"/>
                                 </a>
                             </div>
                             <div ng-switch-when="multiple-choice-question">
                                 <label>Question&nbsp;:&nbsp;</label>{{
-                                allResources[blockResourceId.id].content.question }}
+                                resources[blockResourceId.id].content.question }}
                             </div>
                             <div ng-switch-when="open-ended-question">
                                 <label>Question&nbsp;:&nbsp;</label>{{
-                                allResources[blockResourceId.id].content.question }}
+                                resources[blockResourceId.id].content.question }}
                             </div>
                         </div>
                         <div class="col-centered"
-                             ng-switch="allResources[blockResourceId.id].type">
+                             ng-switch="resources[blockResourceId.id].type">
                             <div ng-switch-when="multiple-choice-question">
                                 <label>Commentaire&nbsp;:&nbsp;</label>{{
-                                allResources[blockResourceId.id].content.comment }}
+                                resources[blockResourceId.id].content.comment }}
                             </div>
                             <div ng-switch-when="open-ended-question">
                                 <label>Commentaire&nbsp;:&nbsp;</label>{{
-                                allResources[blockResourceId.id].content.comment }}
+                                resources[blockResourceId.id].content.comment }}
                             </div>
                         </div>
                     </accordion-group>
