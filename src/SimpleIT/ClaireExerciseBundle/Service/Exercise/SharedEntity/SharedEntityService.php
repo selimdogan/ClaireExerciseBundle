@@ -523,6 +523,20 @@ abstract class SharedEntityService extends TransactionalService implements Share
         ) {
             throw new AccessDeniedException();
         }
+
+        return $this->getContentFullResourceFromEntity($entity);
+    }
+
+    /**
+     * Get a resource view of the entity with a content. If the entity has a content,
+     * it just gets the resource view of the entity. If the entity has no content (and thus a
+     * parent), the content of the resource is filled with the parent content
+     *
+     * @param SharedEntity $entity
+     *
+     * @return SharedResource
+     */
+    public function getContentFullResourceFromEntity ($entity) {
         $resource = SharedResourceFactory::createFromEntity($entity, static::ENTITY_TYPE);
 
         return $this->getContentFullResourceFromResource($resource);

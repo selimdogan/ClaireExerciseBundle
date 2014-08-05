@@ -218,7 +218,9 @@ class ResourceController extends BaseController
                 $resourceId
             );
 
-            $resourceResource = ResourceResourceFactory::create($resource);
+            $resourceResource = $this->get('simple_it.exercise.exercise_resource')
+                ->getContentFullResourceFromEntity($resource);
+
 
             return new ApiCreatedResponse($resourceResource, array("details", 'Default'));
 
@@ -245,7 +247,8 @@ class ResourceController extends BaseController
                 $this->getUserId()
             );
 
-            $resourceResource = ResourceResourceFactory::create($resource);
+            $resourceResource = $this->get('simple_it.exercise.exercise_resource')
+                ->getContentFullResourceFromEntity($resource);
 
             return new ApiCreatedResponse($resourceResource, array("details", 'Default'));
 
@@ -272,7 +275,8 @@ class ResourceController extends BaseController
                 $resourceId
             );
 
-            $resourceResource = ResourceResourceFactory::create($resource);
+            $resourceResource = $this->get('simple_it.exercise.exercise_resource')
+                ->getContentFullResourceFromEntity($resource);
 
             return new ApiCreatedResponse($resourceResource, array("details", 'Default'));
 

@@ -250,7 +250,8 @@ class ExerciseModelController extends BaseController
                 $model
             );
 
-            $modelResource = ExerciseModelResourceFactory::create($model);
+            $modelResource = $this->get('simple_it.exercise.exercise_model')
+                ->getContentFullResourceFromEntity($model);
 
             return new ApiCreatedResponse($modelResource, array("details", 'Default'));
 
@@ -284,7 +285,8 @@ class ExerciseModelController extends BaseController
                 $model
             );
 
-            $modelResource = ExerciseModelResourceFactory::create($model);
+            $modelResource = $this->get('simple_it.exercise.exercise_model')
+                ->getContentFullResourceFromEntity($model);
 
             return new ApiCreatedResponse($modelResource, array("details", 'Default'));
 
@@ -318,7 +320,8 @@ class ExerciseModelController extends BaseController
                 $model
             );
 
-            $modelResource = ExerciseModelResourceFactory::create($model);
+            $modelResource = $this->get('simple_it.exercise.exercise_model')
+                ->getContentFullResourceFromEntity($model);
 
             return new ApiCreatedResponse($modelResource, array("details", 'Default'));
 

@@ -207,10 +207,10 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
                         $scope.publicResources[data[i].id] = data[i];
                     }
 
-                    var allResources = jQuery.extend({}, $scope.publicResources);
-                    allResources = jQuery.extend(allResources, $scope.privateResources);
+                    $scope.allResources = jQuery.extend({}, $scope.publicResources);
+                    $scope.allResources = jQuery.extend($scope.allResources, $scope.privateResources);
 
-                    $scope.loadUsers($scope, allResources);
+                    $scope.loadUsers($scope, $scope.allResources);
                 });
             });
         }
@@ -219,20 +219,25 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
         $scope.deleteResource = function (resource) {
             resource.$delete({id: resource.id}, function () {
                 delete $scope.privateResources[resource.id];
+                delete $scope.allResources[resource.id];
             });
         };
 
         $scope.importResource = function (resource) {
             Resource.import({id: resource.id}, function (data) {
                 $scope.privateResources[data.id] = data;
+                $scope.allResources[data.id] = data;
+                console.log(data);
             });
-        }
+        };
 
         $scope.subscribeResource = function (resource) {
             Resource.subscribe({id: resource.id}, function (data) {
                 $scope.privateResources[data.id] = data;
+                $scope.allResources[data.id] = data;
+                console.log(data);
             });
-        }
+        };
 
         $scope.archiveResource = function (resource) {
             console.log('archiving...');
@@ -255,6 +260,7 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
         $scope.duplicateResource = function (resource) {
             Resource.duplicate({id: resource.id}, function (data) {
                 $scope.privateResources[data.id] = data;
+                $scope.allResources[data.id] = data;
                 if ($scope.parentSection === 'model') {
                     $state.go('modelEdit.resourceEdit', {resourceid: data.id});
                 } else {
@@ -268,6 +274,7 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
             if (type == 'text') {
                 Resource.save($scope.resourceContext.newResources.text, function (data) {
                     $scope.privateResources[data.id] = data;
+                    $scope.allResources[data.id] = data;
                     if ($scope.parentSection === 'model') {
                         $state.go('modelEdit.resourceEdit', {resourceid: data.id});
                     } else {
@@ -277,6 +284,7 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
             } else if (type == 'picture') {
                 Resource.save($scope.resourceContext.newResources.picture, function (data) {
                     $scope.privateResources[data.id] = data;
+                    $scope.allResources[data.id] = data;
                     if ($scope.parentSection === 'model') {
                         $state.go('modelEdit.resourceEdit', {resourceid: data.id});
                     } else {
@@ -286,6 +294,7 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
             } else if (type == 'multiple-choice-question') {
                 Resource.save($scope.resourceContext.newResources.multiple_choice_question, function (data) {
                     $scope.privateResources[data.id] = data;
+                    $scope.allResources[data.id] = data;
                     if ($scope.parentSection === 'model') {
                         $state.go('modelEdit.resourceEdit', {resourceid: data.id});
                     } else {
@@ -295,6 +304,7 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
             } else if (type == 'open-ended-question') {
                 Resource.save($scope.resourceContext.newResources.open_ended_question, function (data) {
                     $scope.privateResources[data.id] = data;
+                    $scope.allResources[data.id] = data;
                     if ($scope.parentSection === 'model') {
                         $state.go('modelEdit.resourceEdit', {resourceid: data.id});
                     } else {
@@ -425,6 +435,7 @@ resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 
             $scope.resource.$update({id: $stateParams.resourceid}, function (resource) {
                 if (typeof $scope.privateResources === "object") {
                     $scope.privateResources[resource.id] = resource;
+                    $scope.allResources[resource.id] = resource;
                 }
             });
         };
@@ -450,6 +461,7 @@ resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 
             resource.$delete({id: resource.id}, function () {
                 if (typeof $scope.privateResources === "object") {
                     delete $scope.privateResources[resource.id];
+                    delete $scope.allResources[resource.id];
                 }
             });
         };
@@ -847,6 +859,22 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                     // fill each block with empty constraints
                     $scope.fillBlockConstraints($scope.model);
                     $scope.$parent.subSection = $scope.model.type;
+
+                    // determine accepted resource types
+                    switch ($scope.model.type) {
+                        case 'multiple-choice':
+                            $scope.acceptedTypes = ['multiple-choice-question'];
+                            break;
+                        case 'open-ended-question':
+                            $scope.acceptedTypes = ['open-ended-question'];
+                            break;
+                        case 'pair-items':
+                            $scope.acceptedTypes = ['picture', 'text'];
+                            break;
+                        case 'group-items':
+                            $scope.acceptedTypes = ['picture', 'text'];
+                            break;
+                    }
                 });
             });
 
@@ -981,7 +1009,25 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                 block.resource_constraint.excluded = [];
             }
         };
+
+        $scope.onDropResourceToBlock = function (event, resource, collection) {
+            if ($scope.acceptedTypes.indexOf(resource.type) != -1) {
+                if (resource.owner === BASE_CONFIG.currentUserId) {
+                    $scope.modelAddBlockResourceField(collection, resource.id);
+                } else {
+                    var dial = confirm("Pour utiliser cette ressource qui ne vous appartient pas, vous devez l'importer dans votre espace personnel. Pour cela, vous pouvez vous abonner à cette ressource. Vous bénéficierez des modifications apportées par l'auteur et ne pourrez la modifier de votre côté. Il faudrait pour cela l'importer.\n\nVoulez-vous vous abonner à cette ressource ?");
+                    if (dial == true) {
+                        Resource.subscribe({id: resource.id}, function (data) {
+                            $scope.privateResources[data.id] = data;
+                            $scope.allResources[data.id] = data;
+                            $scope.modelAddBlockResourceField(collection, data.id);
+                        });
+                    }
+                }
+            }
+        };
     }]);
+
 
 modelControllers.controller('modelEditPairItemsController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
 
@@ -989,11 +1035,7 @@ modelControllers.controller('modelEditPairItemsController', ['$scope', 'Model', 
         collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_pair_items.block_field);
     };
 
-    $scope.onDropResourceToBlock = function (event, resource, collection) {
-        if (resource.type == 'text' || resource.type == 'picture') {
-            $scope.modelAddBlockResourceField(collection, resource.id);
-        }
-    };
+
 }]);
 
 modelControllers.controller('modelEditMultipleChoiceController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
@@ -1001,24 +1043,12 @@ modelControllers.controller('modelEditMultipleChoiceController', ['$scope', 'Mod
     $scope.modelAddBlockField = function (collection) {
         collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_multiple_choice.block_field);
     };
-
-    $scope.onDropResourceToBlock = function (event, resource, collection) {
-        if (resource.type == 'text' || resource.type == 'picture' || resource.type == 'multiple-choice-question') {
-            $scope.modelAddBlockResourceField(collection, resource.id);
-        }
-    };
 }]);
 
 modelControllers.controller('modelEditGroupItemsController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
 
     $scope.modelAddBlockField = function (collection) {
         collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_group_items.block_field);
-    };
-
-    $scope.onDropResourceToBlock = function (event, resource, collection) {
-        if (resource.type == 'text' || resource.type == 'picture') {
-            $scope.modelAddBlockResourceField(collection, resource.id);
-        }
     };
 
     $scope.findGroup = function (resource) {
@@ -1104,11 +1134,5 @@ modelControllers.controller('modelEditOpenEndedQuestionController', ['$scope', '
     $scope.modelAddBlockField = function (collection) {
         collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_group_items.block_field);
     }
-
-    $scope.onDropResourceToBlock = function (event, resource, collection) {
-        if (resource.type == 'open-ended-question') {
-            $scope.modelAddBlockResourceField(collection, resource.id);
-        }
-    };
 
 }]);
