@@ -139,6 +139,18 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
             $knowledge->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
         }
 
+        // if public knowledge, set public all the requirements
+        if ($knowledge->getPublic()) {
+            /** @var Knowledge $reqKno */
+            foreach ($knowledge->getRequiredKnowledges() as $reqKno) {
+                if (!$reqKno->getPublic()) {
+                    $pubKnoRes = new KnowledgeResource();
+                    $pubKnoRes->setPublic(true);
+                    $this->updateFromResource($pubKnoRes, $reqKno);
+                }
+            }
+        }
+
         return $knowledge;
     }
 

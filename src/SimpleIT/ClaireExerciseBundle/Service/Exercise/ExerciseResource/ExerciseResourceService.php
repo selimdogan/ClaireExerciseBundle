@@ -20,6 +20,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\SerializationContext;
+use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResourceFactory;
@@ -42,6 +43,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\Sequ
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\SequenceElement;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\SequenceResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\TextResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId;
@@ -252,6 +254,26 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         $exerciseResource->setRequiredKnowledges(
             new ArrayCollection(array_unique($reqKnowledges))
         );
+
+        // if public resource, set public all the requirements
+        if ($exerciseResource->getPublic()) {
+            /** @var ExerciseResource $reqRes */
+            foreach ($exerciseResource->getRequiredExerciseResources() as $reqRes) {
+                if (!$reqRes->getPublic()) {
+                    $pubResRes = new ResourceResource();
+                    $pubResRes->setPublic(true);
+                    $this->updateFromResource($pubResRes, $reqRes);
+                }
+            }
+            /** @var Knowledge $reqKno */
+            foreach ($exerciseResource->getRequiredKnowledges() as $reqKno) {
+                if (!$reqKno->getPublic()) {
+                    $pubKnoRes = new KnowledgeResource();
+                    $pubKnoRes->setPublic(true);
+                    $this->knowledgeService->updateFromResource($pubKnoRes, $reqKno);
+                }
+            }
+        }
 
         return $exerciseResource;
     }
@@ -723,13 +745,11 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      */
     public function canBeRemoved($entity)
     {
-        if (count($entity->getRequiredByResources()) > 0)
-        {
+        if (count($entity->getRequiredByResources()) > 0) {
             return false;
         }
 
-        if (count($entity->getRequiredByModels()) > 0)
-        {
+        if (count($entity->getRequiredByModels()) > 0) {
             return false;
         }
 
