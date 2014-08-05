@@ -124,6 +124,10 @@
                ng-model="viewPrivate"
                btn-radio="'public'"
                ng-click="viewPublicResources()">Publiques</label>
+        <label class="btn btn-success"
+               data-ng-class="{'active': filters.archived, '': !filters.archived}"
+               ng-model="filters.archived"
+               ng-click="filters.archived = !filters.archived">Archivées</label>
     </div>
 
     <accordion-group class="panel panel-success">
