@@ -732,6 +732,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
 
         $entity = clone($original);
         $entity->setForkFrom($original);
+        $entity->setPublic(false);
         $entity->setId(null);
         if (get_class(
                 $entity
