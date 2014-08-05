@@ -42,6 +42,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\Sequ
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\SequenceElement;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\SequenceResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\TextResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
@@ -187,7 +188,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
 
     /**
      * Compute the requirements of the entity from the resource content (if content is empty,
-     * no change)
+     * no change) and from the metadata
      * The resource can be imported if owned by another user.
      *
      * @param ExerciseResource $exerciseResource
@@ -232,6 +233,17 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
                 }
             }
             $exerciseResource->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
+        }
+
+        /** @var MetadataResource $md */
+        foreach ($resourceResource->getMetadata() as $md)
+        {
+            if (substr($md->getValue(), 0, 2) === '__') {
+                $rest = substr($md->getValue(), 2);
+                if (is_numeric($rest)) {
+                    $newMd->setValue('__' . $this->importOrLink($ownerId, $rest));
+                }
+            }
         }
 
         return $exerciseResource;
@@ -672,7 +684,6 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         // requirement
         $entity = $this->computeRequirements($entity, $resource, true, $ownerId);
 
-        $this->em->persist($entity);
         $this->em->flush();
 
         return $entity;

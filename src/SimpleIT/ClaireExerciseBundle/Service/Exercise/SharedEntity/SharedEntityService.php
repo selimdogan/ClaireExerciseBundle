@@ -536,7 +536,8 @@ abstract class SharedEntityService extends TransactionalService implements Share
      *
      * @return SharedResource
      */
-    public function getContentFullResourceFromEntity ($entity) {
+    public function getContentFullResourceFromEntity($entity)
+    {
         $resource = SharedResourceFactory::createFromEntity($entity, static::ENTITY_TYPE);
 
         return $this->getContentFullResourceFromResource($resource);
@@ -741,6 +742,18 @@ abstract class SharedEntityService extends TransactionalService implements Share
             /** @var ExerciseModel $entity */
             $entity->deleteResourceNode();
         }
+
+        // metadata
+        $metadatas = array();
+        /** @var Metadata $md */
+        foreach ($original->getMetadata() as $md) {
+            $newMd = clone($md);
+            $newMd->setEntity($entity);
+            $metadatas[] = $newMd;
+            $this->em->persist($newMd);
+        }
+        $entity->setMetadata(new ArrayCollection($metadatas));
+
         $this->em->persist($entity);
         $this->em->flush();
 
@@ -793,14 +806,24 @@ abstract class SharedEntityService extends TransactionalService implements Share
         $entity->setForkFrom($original);
         $entity->setPublic(false);
 
+        $this->em->persist($entity);
+
         // metadata
         $metadatas = array();
         /** @var Metadata $md */
         foreach ($original->getMetadata() as $md) {
             $newMd = clone($md);
             $newMd->setEntity($entity);
+            $this->em->persist($newMd);
+
+            if (substr($newMd->getValue(), 0, 2) === '__') {
+                $rest = substr($newMd->getValue(), 2);
+                if (is_numeric($rest)) {
+                    $newMd->setValue('__' . $this->importOrLink($ownerId, $rest));
+                }
+            }
+
             $metadatas[] = $newMd;
-            $this->em->persist($md);
         }
         $entity->setMetadata(new ArrayCollection($metadatas));
 

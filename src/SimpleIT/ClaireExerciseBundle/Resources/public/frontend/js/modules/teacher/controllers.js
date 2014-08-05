@@ -225,9 +225,15 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
 
         $scope.importResource = function (resource) {
             Resource.import({id: resource.id}, function (data) {
-                $scope.privateResources[data.id] = data;
-                $scope.allResources[data.id] = data;
-                console.log(data);
+                Resource.query({owner: BASE_CONFIG.currentUserId}, function (data) {
+                    // load an id indexed array of the resources
+                    $scope.privateResources = [];
+                    for (var i = 0; i < data.length; ++i) {
+                        $scope.privateResources[data[i].id] = data[i];
+                    }
+                    $scope.allResources = jQuery.extend({}, $scope.publicResources);
+                    $scope.allResources = jQuery.extend($scope.allResources, $scope.privateResources);
+                });
             });
         };
 
@@ -235,7 +241,6 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
             Resource.subscribe({id: resource.id}, function (data) {
                 $scope.privateResources[data.id] = data;
                 $scope.allResources[data.id] = data;
-                console.log(data);
             });
         };
 

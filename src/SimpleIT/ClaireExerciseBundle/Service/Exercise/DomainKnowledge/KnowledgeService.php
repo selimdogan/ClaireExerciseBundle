@@ -287,8 +287,6 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
         // requirement
         $entity = $this->computeRequirements($resource, $entity, true, $ownerId);
 
-        $this->em->persist($entity);
-
         $this->em->flush();
 
         return $entity;

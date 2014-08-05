@@ -1112,7 +1112,6 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
             $this->serializer->jmsSerialize($resource->getContent(), 'json', $context)
         );
 
-        $this->em->persist($entity);
         $this->em->flush();
 
         return $entity;
