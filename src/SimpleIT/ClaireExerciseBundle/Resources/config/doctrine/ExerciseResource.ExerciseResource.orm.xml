@@ -40,7 +40,7 @@
             <join-column name="owner_id" referenced-column-name="id" nullable="false"/>
         </many-to-one>
 
-        <many-to-many target-entity="SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge" field="requiredKnowledges">
+        <many-to-many target-entity="SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge" field="requiredKnowledges" inversed-by="requiredByResources">
             <join-table name="claire_exercise_resource_knowledge_requirement">
                 <join-columns>
                     <join-column name="resource_id" referenced-column-name="id"/>
@@ -51,7 +51,7 @@
             </join-table>
         </many-to-many>
 
-        <many-to-many target-entity="ExerciseResource" field="requiredExerciseResources">
+        <many-to-many target-entity="ExerciseResource" field="requiredExerciseResources" inversed-by="requiredByResources">
             <join-table name="claire_exercise_resource_resource_requirement">
                 <join-columns>
                     <join-column name="resource_id" referenced-column-name="id"/>
@@ -61,6 +61,9 @@
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
+
+        <many-to-many target-entity="ExerciseResource" field="requiredByResources" mapped-by="requiredExerciseResources"/>
+        <many-to-many target-entity="SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel" field="requiredByModels" mapped-by="requiredExerciseResources"/>
 
     </entity>
 </doctrine-mapping>

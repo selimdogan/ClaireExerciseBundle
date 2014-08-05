@@ -20,6 +20,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\SerializationContext;
+use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResourceFactory;
@@ -42,6 +43,8 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\Sequ
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\SequenceElement;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\SequenceResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\TextResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
@@ -187,7 +190,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
 
     /**
      * Compute the requirements of the entity from the resource content (if content is empty,
-     * no change)
+     * no change) and from the metadata
      * The resource can be imported if owned by another user.
      *
      * @param ExerciseResource $exerciseResource
@@ -204,6 +207,9 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         $ownerId = null
     )
     {
+        $reqResources = array();
+        $reqKnowledges = array();
+
         if ($resourceResource->getContent() != null) {
             // required resources
             $resourceResource = $this->computeRequiredResourcesFromResource(
@@ -211,13 +217,11 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
                 $import,
                 $ownerId
             );
-            $reqResources = array();
             if ($resourceResource->getRequiredExerciseResources() !== null) {
                 foreach ($resourceResource->getRequiredExerciseResources() as $reqRes) {
                     $reqResources[] = $this->get($reqRes);
                 }
             }
-            $exerciseResource->setRequiredExerciseResources(new ArrayCollection($reqResources));
 
             // required knowledges
             $resourceResource = $this->computeRequiredKnowledgesFromResource(
@@ -225,13 +229,50 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
                 $import,
                 $ownerId
             );
-            $reqKnowledges = array();
             if ($resourceResource->getRequiredKnowledges() !== null) {
                 foreach ($resourceResource->getRequiredKnowledges() as $reqKnowledge) {
                     $reqKnowledges[] = $this->knowledgeService->get($reqKnowledge);
                 }
             }
-            $exerciseResource->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
+        }
+
+        if (!is_null($resourceResource->getMetadata())) {
+            /** @var MetadataResource $md */
+            foreach ($resourceResource->getMetadata() as $md) {
+                if (substr($md->getValue(), 0, 2) === '__') {
+                    $rest = substr($md->getValue(), 2);
+                    if (is_numeric($rest)) {
+                        $reqResources[] = $this->get($rest);
+                    }
+                }
+            }
+        }
+
+        $exerciseResource->setRequiredExerciseResources(
+            new ArrayCollection(array_unique($reqResources))
+        );
+        $exerciseResource->setRequiredKnowledges(
+            new ArrayCollection(array_unique($reqKnowledges))
+        );
+
+        // if public resource, set public all the requirements
+        if ($exerciseResource->getPublic()) {
+            /** @var ExerciseResource $reqRes */
+            foreach ($exerciseResource->getRequiredExerciseResources() as $reqRes) {
+                if (!$reqRes->getPublic()) {
+                    $pubResRes = new ResourceResource();
+                    $pubResRes->setPublic(true);
+                    $this->updateFromResource($pubResRes, $reqRes);
+                }
+            }
+            /** @var Knowledge $reqKno */
+            foreach ($exerciseResource->getRequiredKnowledges() as $reqKno) {
+                if (!$reqKno->getPublic()) {
+                    $pubKnoRes = new KnowledgeResource();
+                    $pubKnoRes->setPublic(true);
+                    $this->knowledgeService->updateFromResource($pubKnoRes, $reqKno);
+                }
+            }
         }
 
         return $exerciseResource;
@@ -672,7 +713,6 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         // requirement
         $entity = $this->computeRequirements($entity, $resource, true, $ownerId);
 
-        $this->em->persist($entity);
         $this->em->flush();
 
         return $entity;
@@ -694,5 +734,25 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         foreach ($entity->getRequiredKnowledges() as $knowledge) {
             $this->knowledgeService->makePublic($knowledge);
         }
+    }
+
+    /**
+     * Checks if an entity can be removed (is required)
+     *
+     * @param ExerciseResource $entity
+     *
+     * @return boolean
+     */
+    public function canBeRemoved($entity)
+    {
+        if (count($entity->getRequiredByResources()) > 0) {
+            return false;
+        }
+
+        if (count($entity->getRequiredByModels()) > 0) {
+            return false;
+        }
+
+        return true;
     }
 }

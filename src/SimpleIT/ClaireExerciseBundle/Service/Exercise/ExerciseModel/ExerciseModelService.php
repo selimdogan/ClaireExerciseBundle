@@ -26,6 +26,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use JMS\Serializer\SerializationContext;
+use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModelFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
@@ -60,10 +61,12 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\PairBl
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\MetadataConstraint;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ModelDocument;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseModel\ExerciseModelRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\KnowledgeServiceInterface;
 use
@@ -344,6 +347,26 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                 }
             }
             $model->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
+        }
+
+        // if public model, set public all the requirements
+        if ($model->getPublic()) {
+            /** @var ExerciseResource $reqRes */
+            foreach ($model->getRequiredExerciseResources() as $reqRes) {
+                if (!$reqRes->getPublic()) {
+                    $pubResRes = new ResourceResource();
+                    $pubResRes->setPublic(true);
+                    $this->exerciseResourceService->updateFromResource($pubResRes, $reqRes);
+                }
+            }
+            /** @var Knowledge $reqKno */
+            foreach ($model->getRequiredKnowledges() as $reqKno) {
+                if (!$reqKno->getPublic()) {
+                    $pubKnoRes = new KnowledgeResource();
+                    $pubKnoRes->setPublic(true);
+                    $this->knowledgeService->updateFromResource($pubKnoRes, $reqKno);
+                }
+            }
         }
 
         return $model;
@@ -1112,7 +1135,6 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
             $this->serializer->jmsSerialize($resource->getContent(), 'json', $context)
         );
 
-        $this->em->persist($entity);
         $this->em->flush();
 
         return $entity;
@@ -1299,5 +1321,17 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                     'ClarolineCoreBundle:Resource\ResourceNode'
                 )->findWorkspaceRoot($workspace)
         );
+    }
+
+    /**
+     * Checks if an entity can be removed (is required)
+     *
+     * @param ExerciseModel $entity
+     *
+     * @return boolean
+     */
+    public function canBeRemoved($entity)
+    {
+        return true;
     }
 }

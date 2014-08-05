@@ -139,6 +139,18 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
             $knowledge->setRequiredKnowledges(new ArrayCollection($reqKnowledges));
         }
 
+        // if public knowledge, set public all the requirements
+        if ($knowledge->getPublic()) {
+            /** @var Knowledge $reqKno */
+            foreach ($knowledge->getRequiredKnowledges() as $reqKno) {
+                if (!$reqKno->getPublic()) {
+                    $pubKnoRes = new KnowledgeResource();
+                    $pubKnoRes->setPublic(true);
+                    $this->updateFromResource($pubKnoRes, $reqKno);
+                }
+            }
+        }
+
         return $knowledge;
     }
 
@@ -287,8 +299,6 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
         // requirement
         $entity = $this->computeRequirements($resource, $entity, true, $ownerId);
 
-        $this->em->persist($entity);
-
         $this->em->flush();
 
         return $entity;
@@ -306,5 +316,32 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
         foreach ($entity->getRequiredKnowledges() as $knowledge) {
             $this->makePublic($knowledge);
         }
+    }
+
+    /**
+     * Checks if an entity can be removed (is required)
+     *
+     * @param Knowledge $entity
+     *
+     * @return boolean
+     */
+    public function canBeRemoved($entity)
+    {
+        if (count($entity->getRequiredByResources()) > 0)
+        {
+            return false;
+        }
+
+        if (count($entity->getRequiredByModels()) > 0)
+        {
+            return false;
+        }
+
+        if (count($entity->getRequiredByKnowledges()) > 0)
+        {
+            return false;
+        }
+
+        return true;
     }
 }
