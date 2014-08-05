@@ -802,7 +802,7 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
 modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User',
     function ($scope, Model, Resource, $location, $stateParams, User) {
 
-        var loadResources = function (after) {
+        var loadResources = function () {
             Resource.query({owner: BASE_CONFIG.currentUserId}, function (data) {
                 // load an id indexed array of the resources
                 var privateResources = [];
@@ -821,42 +821,33 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                     $scope.resources = jQuery.extend(publicResources, privateResources);
                     $scope.loadUsers($scope, $scope.resources);
 
-                    // after
-                    if (after !== null)
-                    {
-                        eval(after);
-                    }
+                    $scope.model = Model.get({id: $stateParams.modelid}, function () {
+                        // fill each block with empty constraints
+                        $scope.fillBlockConstraints($scope.model);
+                        $scope.$parent.subSection = $scope.model.type;
+
+                        // determine accepted resource types
+                        switch ($scope.model.type) {
+                            case 'multiple-choice':
+                                $scope.acceptedTypes = ['multiple-choice-question'];
+                                break;
+                            case 'open-ended-question':
+                                $scope.acceptedTypes = ['open-ended-question'];
+                                break;
+                            case 'pair-items':
+                                $scope.acceptedTypes = ['picture', 'text'];
+                                break;
+                            case 'group-items':
+                                $scope.acceptedTypes = ['picture', 'text'];
+                                break;
+                        }
+                    });
                 });
             });
         };
 
-        // load model
-        var loadModel = function () {
-            $scope.model = Model.get({id: $stateParams.modelid}, function () {
-                // fill each block with empty constraints
-                $scope.fillBlockConstraints($scope.model);
-                $scope.$parent.subSection = $scope.model.type;
-
-                // determine accepted resource types
-                switch ($scope.model.type) {
-                    case 'multiple-choice':
-                        $scope.acceptedTypes = ['multiple-choice-question'];
-                        break;
-                    case 'open-ended-question':
-                        $scope.acceptedTypes = ['open-ended-question'];
-                        break;
-                    case 'pair-items':
-                        $scope.acceptedTypes = ['picture', 'text'];
-                        break;
-                    case 'group-items':
-                        $scope.acceptedTypes = ['picture', 'text'];
-                        break;
-                }
-            });
-        };
-
         // initial loading
-        loadResources(loadModel);
+        loadResources();
 
         $scope.fillBlockConstraints = function (model) {
             switch (model.type) {

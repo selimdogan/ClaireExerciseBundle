@@ -68,10 +68,21 @@ class ExerciseResourceRepository extends SharedEntityRepository
     )
     {
         $qb = $this->createQueryBuilder('r')
+            ->leftJoin('r.children', 'c')
             ->select();
 
-        $qb->where($qb->expr()->eq('r.owner', $owner->getId()));
-        $qb->andWhere($qb->expr()->eq('r.archived', "false"));
+        $qb->where(
+            $qb->expr()->orX(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('r.owner', $owner->getId()),
+                    $qb->expr()->eq('r.archived', "false")
+                ),
+                $qb->expr()->andX(
+                    $qb->expr()->eq('c.owner', $owner->getId()),
+                    $qb->expr()->eq('c.archived', "false")
+                )
+            )
+        );
 
         // Type of the resources (if any specified)
         if ($objectConstraints->getType() != null) {
