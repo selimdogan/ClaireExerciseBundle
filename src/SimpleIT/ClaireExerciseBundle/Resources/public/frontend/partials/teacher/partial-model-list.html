@@ -146,8 +146,9 @@
 </accordion>
 
 <accordion close-others="true">
-    <accordion-group class="panel panel-primary"
-                     ng-repeat="model in models | filter:filters.search | myFilters:filters">
+    <accordion-group class="panel"
+                     ng-repeat="model in models | filter:filters.search | myFilters:filters"
+                     data-ng-class="{'panel-primary': model.parent == null, 'panel-model-subscribe': model.parent != null}">
         <accordion-heading class="panel-heading" style="padding-bottom: 0">
             <div class="row">
                 <div class="col-xs-1" ng-switch="model.type">
@@ -177,13 +178,14 @@
                             <span ng-click="$event.stopPropagation();tryModel(model)"
                                   class="glyphicon glyphicon-repeat"
                                   title="Essayer de répondre à un exercice pour ce modèle"></span>
-                            <span ng-if="model.owner != BASE_CONFIG.currentUserId"
+                            &nbsp;
+                            <span
+                                ng-if="model.owner != BASE_CONFIG.currentUserId || model.parent != null"
                                   ui-sref="modelEdit({ modelid:model.id })"
                                   class="glyphicon glyphicon-eye-open"
                                   title="Voir ce modèle (édition impossible)"></span>
-                            &nbsp;
                             <span
-                                ng-if="model.owner == BASE_CONFIG.currentUserId"
+                                ng-if="model.owner == BASE_CONFIG.currentUserId && model.parent == null"
                                 ui-sref="modelEdit({ modelid:model.id })"
                                 class="glyphicon glyphicon-edit"
                                 title="Editer ce modèle"></span>

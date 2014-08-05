@@ -151,7 +151,9 @@
 </accordion>
 
 <accordion close-others="true">
-    <accordion-group class="panel panel-success" ng-repeat="resource in resources | filter:filters.search | myFilters:filters">
+    <accordion-group class="panel"
+                     ng-repeat="resource in resources | filter:filters.search | myFilters:filters"
+                     data-ng-class="{'panel-success': resource.parent == null, 'panel-resource-subscribe': resource.parent != null}">
         <accordion-heading class="panel-heading" style="padding-bottom: 0">
             <div class="row">
                 <div class="col-xs-1" ng-switch="resource.type" ui-draggable="true" drag="resource">
@@ -182,13 +184,13 @@
                                 <span ng-switch-when="model"
                                       ui-sref="modelEdit.resourceEdit({ resourceid:resource.id })"
                                       class="glyphicon"
-                                      data-ng-class="{'glyphicon-edit': resource.owner == BASE_CONFIG.currentUserId, 'glyphicon-eye-open': resource.owner != BASE_CONFIG.currentUserId}"
-                                      title="Editer cette ressource"></span>
+                                      data-ng-class="{'glyphicon-edit': resource.owner == BASE_CONFIG.currentUserId && resource.parent == null, 'glyphicon-eye-open': resource.owner != BASE_CONFIG.currentUserId || resource.parent != null}"
+                                      title="Editer ou voir cette ressource"></span>
                                 <span ng-switch-default
                                       ui-sref="resourceEdit({ resourceid:resource.id })"
                                       class="glyphicon"
-                                      data-ng-class="{'glyphicon-edit': resource.owner == BASE_CONFIG.currentUserId, 'glyphicon-eye-open': resource.owner != BASE_CONFIG.currentUserId}"
-                                      title="Editer cette ressource"></span>
+                                      data-ng-class="{'glyphicon-edit': resource.owner == BASE_CONFIG.currentUserId && resource.parent == null, 'glyphicon-eye-open': resource.owner != BASE_CONFIG.currentUserId || resource.parent != null}"
+                                      title="Editer ou voir cette ressource"></span>
                             </ng-switch>
                             &nbsp;
                             <span

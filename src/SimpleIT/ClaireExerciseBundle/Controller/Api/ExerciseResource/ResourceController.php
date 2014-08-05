@@ -86,7 +86,11 @@ class ResourceController extends BaseController
                 $this->getUserId()
             );
 
-            $resourceResources = ResourceResourceFactory::createCollection($resources);
+            $resourceResources = $this->get(
+                'simple_it.exercise.exercise_resource'
+            )->getAllContentFullResourcesFromEntityList(
+                    $resources
+                );
 
             return new ApiGotResponse($resourceResources, array(
                 'details',
