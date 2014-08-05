@@ -12,6 +12,7 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
         $scope.filters = {
             search: '',
             archived: false,
+            public: false,
             type: {
                 multiple_choice_question: 'multiple-choice-question', text: 'text', picture: 'picture', open_ended_question: 'open-ended-question', sequence: ''
             },
@@ -303,7 +304,7 @@ resourceControllers.filter('myFilters', function () {
         var ids = [];
         angular.forEach(collection, function (value) {
             angular.forEach(filters.type, function (type) {
-                if (value.type == type && ((filters.archived && value.archived) || !value.archived)) {
+                if (value.type == type && ((filters.archived && value.archived) || !value.archived) && ((filters.public && value.public) || !value.public)) {
                     if (filters.keywords.length) {
                         if (value.keywords.length) {
                             angular.forEach(filters.keywords, function (keyword) {

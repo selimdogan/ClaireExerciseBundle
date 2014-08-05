@@ -117,13 +117,13 @@
 
     <div class="btn-group pull-right" style="margin-left: 4px; margin-top: 4px">
         <label class="btn btn-success"
-               ng-model="viewPrivate"
-               btn-radio="'private'"
-               ng-click="viewPrivateResources()">Privées</label>
+               ng-model="filters.public"
+               data-ng-class="{'active': !filters.public, '': filters.public}"
+               ng-click="filters.public = !filters.public">Privées</label> <!-- viewPrivateResources() -->
         <label class="btn btn-success"
-               ng-model="viewPrivate"
-               btn-radio="'public'"
-               ng-click="viewPublicResources()">Publiques</label>
+               ng-model="filters.public"
+               data-ng-class="{'active': filters.public, '': !filters.public}"
+               ng-click="filters.public = !filters.public">Publiques</label> <!-- viewPublicResources() -->
         <label class="btn btn-success"
                data-ng-class="{'active': filters.archived, '': !filters.archived}"
                ng-model="filters.archived"
