@@ -148,7 +148,7 @@
 <accordion close-others="true">
     <accordion-group class="panel"
                      ng-repeat="model in models | filter:filters.search | myFilters:filters"
-                     data-ng-class="{'panel-primary': model.parent == null, 'panel-model-subscribe': model.parent != null}">
+                     data-ng-class="{'panel-primary': model.parent == null, 'panel-model-subscribe': model.parent != null, 'archived': resource.archived}">
         <accordion-heading class="panel-heading" style="padding-bottom: 0">
             <div class="row">
                 <div class="col-xs-1" ng-switch="model.type">

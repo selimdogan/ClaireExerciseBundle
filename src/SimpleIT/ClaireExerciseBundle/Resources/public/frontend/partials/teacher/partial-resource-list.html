@@ -153,7 +153,7 @@
 <accordion close-others="true">
     <accordion-group class="panel"
                      ng-repeat="resource in resources | filter:filters.search | myFilters:filters"
-                     data-ng-class="{'panel-success': resource.parent == null, 'panel-resource-subscribe': resource.parent != null}">
+                     data-ng-class="{'panel-success': resource.parent == null, 'panel-resource-subscribe': resource.parent != null, 'archived': resource.archived}">
         <accordion-heading class="panel-heading" style="padding-bottom: 0">
             <div class="row">
                 <div class="col-xs-1" ng-switch="resource.type" ui-draggable="true" drag="resource">

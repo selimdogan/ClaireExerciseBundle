@@ -112,3 +112,7 @@ option {
 .panel-body {
     border-bottom-color: #3c763d
 }
+
+.archived {
+    opacity: 0.6;
+}
