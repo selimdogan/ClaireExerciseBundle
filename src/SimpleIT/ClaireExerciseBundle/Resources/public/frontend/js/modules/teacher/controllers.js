@@ -339,7 +339,7 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
     function ($scope, $modal, Resource, Upload, $location, $stateParams, User, $upload) {
         // retrieve resource
         if (typeof $scope.resources === "undefined") {
-            $scope.resource = 0;
+            $scope.resource = Resource.get({id: $stateParams.resourceid});
         } else {
             $scope.resource = $scope.resources[$stateParams.resourceid];
         }
@@ -413,24 +413,28 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
                 controller: 'resourceSelectListController',
                 size: 'lg',
                 resolve: {
-                    isSelectList: function () {
-                        return true;
+                    resources: function () {
+                        return $scope.resources;
+                    },
+                    users: function () {
+                        return $scope.users;
                     }
                 }
             });
 
             modalInstance.result.then(function (val) {
                 $scope.resourceAddMD.value = '__' + val;
-                console.log($scope.resourceAddMD.value);
             });
         };
 
     }]);
 
-resourceControllers.controller('resourceSelectListController', ['$scope', '$modalInstance', 'isSelectList',
-    function ($scope, $modalInstance, isSelectList) {
-        $scope.isSelectList = isSelectList;
+resourceControllers.controller('resourceSelectListController', ['$scope', '$modalInstance', 'resources', 'users',
+    function ($scope, $modalInstance, resources, users) {
+        $scope.isSelectList = true;
         $scope.BASE_CONFIG = BASE_CONFIG;
+        $scope.resources = resources;
+        $scope.users = users;
 
         $scope.selectResource = function (resource) {
             $modalInstance.close(resource.id);

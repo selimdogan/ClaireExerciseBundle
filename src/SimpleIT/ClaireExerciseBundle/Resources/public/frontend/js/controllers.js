@@ -4,15 +4,11 @@ mainAppControllers.controller('mainController', ['$scope', '$routeParams', '$loc
     function ($scope, $routeParams, $location, BASE_CONFIG, User, Resource) {
         // load only once every necessary user
         $scope.loadUsers = function (resourcesData) {
-            if (typeof $scope.users === 'undefined')
-            {
+            if (typeof $scope.users === 'undefined') {
                 $scope.users = [];
             }
+
             var userIds = [];
-            for (var key in $scope.users)
-            {
-                userIds.push(key);
-            }
 
             for (var i in resourcesData) {
                 if (userIds.indexOf(resourcesData[i].author) == -1) {
@@ -24,7 +20,9 @@ mainAppControllers.controller('mainController', ['$scope', '$routeParams', '$loc
             }
 
             for (i = 0; i < userIds.length; ++i) {
-                $scope.users[userIds[i]] = User.get({userId: userIds[i]});
+                if (typeof $scope.users[userIds[i]] === 'undefined') {
+                    $scope.users[userIds[i]] = User.get({userId: userIds[i]});
+                }
             }
         };
 
