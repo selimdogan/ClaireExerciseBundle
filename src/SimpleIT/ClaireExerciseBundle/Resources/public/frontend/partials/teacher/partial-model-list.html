@@ -116,13 +116,17 @@
 
     <div class="btn-group pull-right" style="margin-left: 4px; margin-top: 4px">
         <label class="btn btn-primary"
-               ng-model="viewPrivate"
-               btn-radio="'private'"
-               ng-click="viewPrivateModels()">Privés</label>
+               ng-model="filters.public"
+               data-ng-class="{'active': !filters.public, '': filters.public}"
+               ng-click="filters.public = !filters.public">Privées</label>
         <label class="btn btn-primary"
-               ng-model="viewPrivate"
-               btn-radio="'public'"
-               ng-click="viewPublicModels()">Publics</label>
+               ng-model="filters.public"
+               data-ng-class="{'active': filters.public, '': !filters.public}"
+               ng-click="filters.public = !filters.public">Publiques</label>
+        <label class="btn btn-primary"
+               data-ng-class="{'active': filters.archived, '': !filters.archived}"
+               ng-model="filters.archived"
+               ng-click="filters.archived = !filters.archived">Archivées</label>
     </div>
 
     <accordion-group class="panel panel-primary">
@@ -146,6 +150,16 @@
 </accordion>
 
 <accordion close-others="true">
+    <!--
+        The ng-repeat directive iterates on each item in a collection.
+        This collection is dynamically updated by filters. It works basically like unix pipes :)
+        Let's explains basically this directive value : << (1: model in models) | (2: filter:filters.search) | (3: myFilters:filters) >>
+        Each step are (1,2,3,..) are sequentially processed. Step 1 outputs will be step 2 inputs, and so on.
+            1.  Step 1 : The collection contains all models retrieved from the backend. The "models" object must be declared in the modelController scope first.
+            2.  Step 2 keeps models that contains as a key or as value the string present in the object filters.search field.
+                If this field is empty all models are given to step 3.
+            3. Step 3 give the current collection to a custom filtering function.
+    -->
     <accordion-group class="panel"
                      ng-repeat="model in models | filter:filters.search | myFilters:filters"
                      data-ng-class="{'panel-primary': model.parent == null, 'panel-model-subscribe': model.parent != null, 'archived': model.archived}">
