@@ -104,6 +104,10 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
         parent::updateFromSharedResource($knowledgeResource, $knowledge, 'knowledge_storage');
         $knowledge = $this->computeRequirements($knowledgeResource, $knowledge);
 
+        if (!is_null($knowledgeResource->getArchived())) {
+            $knowledge->setArchived($knowledgeResource->getArchived());
+        }
+
         return $knowledge;
     }
 

@@ -185,6 +185,10 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         parent::updateFromSharedResource($resourceResource, $exerciseResource, 'resource_storage');
         $exerciseResource = $this->computeRequirements($exerciseResource, $resourceResource);
 
+        if (!is_null($resourceResource->getArchived())) {
+            $exerciseResource->setArchived($resourceResource->getArchived());
+        }
+
         return $exerciseResource;
     }
 
