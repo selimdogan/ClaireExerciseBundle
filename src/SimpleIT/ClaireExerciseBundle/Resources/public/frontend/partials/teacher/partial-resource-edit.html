@@ -273,7 +273,7 @@
                 <div class="col-xs-5">
                     <input type="text" ng-model="meta.key" class="form-control">
                 </div>
-                <div class="col-xs-6">
+                <div class="col-xs-5">
                     <input type="text" ng-model="meta.value" class="form-control">
                 </div>
                 <div class="col-xs-1">
@@ -285,14 +285,19 @@
         </div>
         <div class="row">
             <div class="col-xs-5">
-                <input id="resourceAddMetadataKey" type="text" value=""
+                <input ng-model="resourceAddMD.key" type="text"
                        placeholder="nouvelle clé" class="form-control"></div>
-            <div class="col-xs-6">
-                <input id="resourceAddMetadataValue" type="text" value=""
-                       placeholder="nouvelle valeur" class="form-control"></div>
-            <div class="col-xs-1"><span data-ng-click="resourceAddMetadataField(resource.metadata)"
-                                        class="glyphicon glyphicon-ok"
-                                        title="Ajouter ce couple de métadonnées"></span>
+            <div class="col-xs-5">
+                <input ng-model="resourceAddMD.value" type="text"
+                       placeholder="nouvelle valeur" class="form-control">
+            </div>
+            <div class="col-xs-1">
+                <button class="btn btn-default" ng-click="openSelectResource()">Ressource...</button>
+            </div>
+            <div class="col-xs-1">
+                <span data-ng-click="resourceAddMetadataField(resource.metadata)"
+                      class="glyphicon glyphicon-ok"
+                      title="Ajouter ce couple de métadonnées"></span>
             </div>
         </div>
     </div>

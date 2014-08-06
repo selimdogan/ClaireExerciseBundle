@@ -222,6 +222,10 @@
                             <span ng-if="resource.owner == BASE_CONFIG.currentUserId"
                                   ng-click="$event.stopPropagation();deleteResource(resource)" class="glyphicon glyphicon-remove"
                                   title="Supprimer cette ressource"></span>
+                            <span ng-if="isSelectList == true"
+                                  ng-click="$event.stopPropagation();selectResource(resource)"
+                                  class="glyphicon glyphicon-ok"
+                                  title="Sélectionner cette ressource"></span>
                         </h4>
                     </div>
                     <div class="row" style="margin-left: 3px">

@@ -140,6 +140,8 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
             }
         };
 
+        $scope.resourceAddMD = {key: '', value: ''};
+
         $scope.resourceAddKeywordsField = function (collection) {
             var keyword = $("#resourceAddKeyword");
             collection.push(keyword[0].value);
@@ -147,11 +149,8 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
         };
 
         $scope.resourceAddMetadataField = function (collection) {
-            var key = $("#resourceAddMetadataKey"), val = $("#resourceAddMetadataValue");
-            var newElement = {key: key[0].value, value: val[0].value};
-            collection.splice(collection.length, 0, newElement);
-            key[0].value = '';
-            val[0].value = '';
+            collection.push($scope.resourceAddMD);
+            $scope.resourceAddMD = {key: '', value: ''};
         };
 
         $scope.resourceRemoveField = function (collection, index) {
@@ -382,8 +381,8 @@ resourceControllers.filter('myFilters', function () {
     };
 });
 
-resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 'Upload', '$location', '$stateParams', 'User', '$upload',
-    function ($scope, Resource, Upload, $location, $stateParams, User, $upload) {
+resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'Resource', 'Upload', '$location', '$stateParams', 'User', '$upload',
+    function ($scope, $modal, Resource, Upload, $location, $stateParams, User, $upload) {
         // retrieve resource
         $scope.resource = Resource.get({id: $stateParams.resourceid}, function (res) {
             if (typeof $scope.users === "undefined") {
@@ -400,12 +399,9 @@ resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 
                 keyword[0].value = '';
             }
 
-            var key = $("#resourceAddMetadataKey"), val = $("#resourceAddMetadataValue");
-            if (key[0].value != '' && val[0].value != '') {
-                var newElement = {key: key[0].value, value: val[0].value};
-                $scope.resource.metadata.splice($scope.resource.metadata.length, 0, newElement);
-                key[0].value = '';
-                val[0].value = '';
+            if ($scope.resourceAddMD.key != '' && $scope.resourceAddMD.value != '') {
+                $scope.resource.metadata.push($scope.resourceAddMD);
+                $scope.resourceAddMD = {key: '', value: ''};
             }
 
             delete $scope.resource.id;
@@ -448,19 +444,47 @@ resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 
 
         $scope.removeFromCollection = function (collection, index) {
             collection.splice(index, 1);
-        }
+        };
 
         $scope.addProposition = function (collection) {
             var newProposition = {"text": "Nouvelle proposition", "right": false};
             collection.splice(collection.length, 0, newProposition);
-        }
+        };
 
         $scope.addSolution = function (collection) {
             var newSolution = $('#resourceAddSolution');
             collection.push(newSolution[0].value);
             newSolution[0].value = '';
-        }
+        };
 
+        $scope.openSelectResource = function () {
+            var modalInstance = $modal.open({
+                templateUrl: BASE_CONFIG.urls.partials.teacher + '/partial-resource-list.html',
+                controller: 'resourceSelectListController',
+                size: 'lg',
+                resolve: {
+                    isSelectList: function () {
+                        return true;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (val) {
+                $scope.resourceAddMD.value = '__' + val;
+                console.log($scope.resourceAddMD.value);
+            });
+        };
+
+    }]);
+
+resourceControllers.controller('resourceSelectListController', ['$scope', '$modalInstance', 'isSelectList',
+    function ($scope, $modalInstance, isSelectList) {
+        $scope.isSelectList = isSelectList;
+        $scope.BASE_CONFIG = BASE_CONFIG;
+
+        $scope.selectResource = function (resource) {
+            $modalInstance.close(resource.id);
+        };
     }]);
 
 
@@ -470,8 +494,6 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
     function ($scope, ExerciseByModel, AttemptByExercise, $routeParams, $location, User) {
 
         $scope.section = 'model';
-
-        $scope.subSection;
 
         $scope.filters = {
             search: '',
