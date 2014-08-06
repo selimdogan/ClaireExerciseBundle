@@ -117,12 +117,15 @@
                 </div>
             </accordion-group>
 
-            <div class="btn-group pull-right" style="margin-left: 4px; margin-top: 4px">
-                <label class="btn btn-success"
+            <div class="btn-group" style="margin-left: 4px; margin-top: 4px"
+                 data-ng-class="{'pull-right': !isSelectResource}">
+                <label ng-if="!isSelectResource"
+                       class="btn btn-success"
                        ng-model="filters.public"
                        data-ng-class="{'active': !filters.public, '': filters.public}"
                        ng-click="filters.public = !filters.public">Privées</label>
-                <label class="btn btn-success"
+                <label ng-if="!isSelectResource"
+                       class="btn btn-success"
                        ng-model="filters.public"
                        data-ng-class="{'active': filters.public, '': !filters.public}"
                        ng-click="filters.public = !filters.public">Publiques</label>
@@ -132,7 +135,8 @@
                        ng-click="filters.archived = !filters.archived">Archivées</label>
             </div>
 
-            <accordion-group class="panel panel-success">
+            <accordion-group ng-if="!isSelectResource"
+                             class="panel panel-success">
                 <accordion-heading class="panel-heading">
                     <div class="col-centered">
                         <span class="glyphicon glyphicon-plus"></span>&nbsp;Créer une ressource&nbsp;<span class="caret"></span>

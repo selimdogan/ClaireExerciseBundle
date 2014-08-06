@@ -10,9 +10,9 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
         $scope.section = 'resource';
 
         /*
-        * Here is a contextual client-side object used to specify user's filters informations.
-        * These values are bi-directionnaly bata-binded to filters section fields in list views.
-        */
+         * Here is a contextual client-side object used to specify user's filters informations.
+         * These values are bi-directionnaly bata-binded to filters section fields in list views.
+         */
         $scope.filters = {
             search: '', // search field
             archived: false, // select archived resources or not (boolean)
@@ -148,6 +148,8 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
 
 resourceControllers.controller('resourceListController', ['$scope', '$state', 'Resource',
     function ($scope, $state, Resource) {
+        $scope.resourceContext = "list";
+
         // delete resource method
         $scope.deleteResource = function (resource) {
             resource.$delete({id: resource.id}, function () {
@@ -239,16 +241,16 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
     }]);
 
 /*
-    Filters, what for? Filters are used here to select specific resources in a collection of resources retrieved from the backend.
-    Parameters :
-        - String : specify here angular filter's name.
-        - Callback function : here is defined an anonymous function for filtering process.
+ Filters, what for? Filters are used here to select specific resources in a collection of resources retrieved from the backend.
+ Parameters :
+ - String : specify here angular filter's name.
+ - Callback function : here is defined an anonymous function for filtering process.
 
-        Filtering process function :
-            Parameters :
-                - Javascript Object : here is a collection of resources pre-filtered on keyword field value (cf. Partial-{model, resource}-list.html).
-                - Javascript Object : this object is initialized in {model, resource}Controller and contains specific attributs
-                                      such as archived, public or a collection of types that a user wants to see.
+ Filtering process function :
+ Parameters :
+ - Javascript Object : here is a collection of resources pre-filtered on keyword field value (cf. Partial-{model, resource}-list.html).
+ - Javascript Object : this object is initialized in {model, resource}Controller and contains specific attributs
+ such as archived, public or a collection of types that a user wants to see.
 
  */
 resourceControllers.filter('myFilters', function () {
@@ -260,7 +262,7 @@ resourceControllers.filter('myFilters', function () {
                 // remove archived items by default
                 if (value.type == type && ((filters.archived && value.archived) || !value.archived)) {
                     // remove public items by default. Allow to display private user's items or public only items.
-                    if ((filters.public && value.owner != BASE_CONFIG.currentUserId) || (!filters.public && value.owner == BASE_CONFIG.currentUserId)){
+                    if ((filters.public && value.owner != BASE_CONFIG.currentUserId) || (!filters.public && value.owner == BASE_CONFIG.currentUserId)) {
                         // Check if user specified keywords filter
                         if (filters.keywords.length) {
                             // Check if the current item as at least one keyword
@@ -307,7 +309,7 @@ resourceControllers.filter('myFilters', function () {
                                 });
                             }
                         } else {
-                        // User did not specify keyword filter
+                            // User did not specify keyword filter
                             // So check if user specify at least one metadata filter
                             if (filters.metadata.length) {
                                 // Check if the current item as at least one metadata
@@ -339,7 +341,7 @@ resourceControllers.filter('myFilters', function () {
                                     });
                                 }
                             } else {
-                            // User did not specity metadata filter
+                                // User did not specity metadata filter
                                 if ($.inArray(value.id, ids) == -1) {
                                     items.push(value);
                                     ids.push(value.id)
@@ -356,6 +358,8 @@ resourceControllers.filter('myFilters', function () {
 
 resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'Resource', 'Upload', '$location', '$stateParams', 'User', '$upload',
     function ($scope, $modal, Resource, Upload, $location, $stateParams, User, $upload) {
+        $scope.resourceContext = "resourceEdit";
+
         // retrieve resource
         if (typeof $scope.resources === "undefined") {
             $scope.editedResource = Resource.get({id: $stateParams.resourceid});
@@ -479,7 +483,8 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
 
 resourceControllers.controller('resourceSelectListController', ['$scope', '$modalInstance', 'resources', 'users',
     function ($scope, $modalInstance, resources, users) {
-        $scope.isSelectList = true;
+        $scope.isSelectResource = true;
+
         $scope.BASE_CONFIG = BASE_CONFIG;
         $scope.resources = resources;
         $scope.users = users;
