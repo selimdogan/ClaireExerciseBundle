@@ -240,7 +240,7 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
             console.log('restoring...');
             var archived = new Resource;
             archived.archived = false;
-            archived.$update({id: model.id}, function () {
+            archived.$update({id: resource.id}, function () {
                 resource.archived = false;
             });
         };
