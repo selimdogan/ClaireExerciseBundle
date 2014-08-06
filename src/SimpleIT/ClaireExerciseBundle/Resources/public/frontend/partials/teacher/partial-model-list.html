@@ -218,12 +218,12 @@
                                 ng-click="$event.stopPropagation();subscribeModel(model)"
                                 class="glyphicon glyphicon-share-alt"
                                 title="S'abonner à ce modèle : il fait à présent partie de vos modèles privés mais vous faites confiance à l'auteur. Vous bénéficierez des modifications qu'il apportera au modèle. Vous ne pourrez pas le modifier de votre côté. Il s'agit d'un raccourci vers le modèle d'un autre utilisateur."></span>
+                            &nbsp;
                             <span
                                 ng-if="model.owner == BASE_CONFIG.currentUserId && model.archived"
                                   ng-click="$event.stopPropagation();restoreModel(model)"
                                   class="glyphicon glyphicon-open"
                                   title="Restaurer ce modèle"></span>
-                            &nbsp;
                             <span
                                 ng-if="model.owner == BASE_CONFIG.currentUserId && !model.archived"
                                   ng-click="$event.stopPropagation();archiveModel(model)"

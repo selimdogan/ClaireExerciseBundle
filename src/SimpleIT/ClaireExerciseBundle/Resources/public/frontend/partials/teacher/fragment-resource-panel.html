@@ -52,12 +52,12 @@
                         ng-click="$event.stopPropagation();subscribeResource(resource)"
                         class="glyphicon glyphicon-share-alt"
                         title="S'abonner à cette ressource : elle fait à présent partie de vos ressources privées mais vous faites confiance à l'auteur. Vous bénéficierez des modifications qu'il apportera à la ressource. Vous ne pourrez pas la modifier de votre côté. Il s'agit d'un raccourci vers la ressource d'un autre utilisateur."></span>
+                    &nbsp;
                     <span
                         ng-if="resource.owner == BASE_CONFIG.currentUserId && resource.archived"
                         ng-click="$event.stopPropagation();restoreResource(resource)"
                         class="glyphicon glyphicon-open"
                         title="Restaurer cette ressource"></span>
-                    &nbsp;
                     <span
                         ng-if="resource.owner == BASE_CONFIG.currentUserId && !resource.archived"
                         ng-click="$event.stopPropagation();archiveResource(resource)"
