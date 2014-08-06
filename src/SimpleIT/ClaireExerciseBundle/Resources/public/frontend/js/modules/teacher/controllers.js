@@ -144,74 +144,10 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
                 }
             }
         };
-
-        $scope.resourceAddKeywordsField = function (collection) {
-            var keyword = $("#resourceAddKeyword");
-            collection.push(keyword[0].value);
-            keyword[0].value = '';
-        };
-
-        $scope.resourceAddMetadataField = function (collection) {
-            var key = $("#resourceAddMetadataKey"), val = $("#resourceAddMetadataValue");
-            var newElement = {key: key[0].value, value: val[0].value};
-            collection.splice(collection.length, 0, newElement);
-            key[0].value = '';
-            val[0].value = '';
-        };
-
-        $scope.resourceRemoveField = function (collection, index) {
-            collection.splice(index, 1);
-        };
-
-        // load only once every necessary user
-        $scope.loadUsers = function (targetScope, resourcesData) {
-            targetScope.users = [];
-            var userIds = [];
-            for (i in resourcesData) {
-                if (userIds.indexOf(resourcesData[i].author) == -1) {
-                    userIds.push(resourcesData[i].author);
-                }
-                if (userIds.indexOf(resourcesData[i].owner) == -1) {
-                    userIds.push(resourcesData[i].owner);
-                }
-            }
-
-            for (i = 0; i < userIds.length; ++i) {
-                targetScope.users[userIds[i]] = User.get({userId: userIds[i]});
-            }
-        };
     }]);
 
 resourceControllers.controller('resourceListController', ['$scope', '$state', 'Resource',
     function ($scope, $state, Resource) {
-
-        var loadData = function () {
-            if ($scope.parentSection !== 'model') {
-                Resource.query({owner: BASE_CONFIG.currentUserId}, function (data) {
-                    // load an id indexed array of the resources
-                    var privateResources = [];
-                    for (var i = 0; i < data.length; ++i) {
-                        privateResources[data[i].id] = data[i];
-                    }
-
-                    Resource.query({'public-except-user': BASE_CONFIG.currentUserId}, function (data) {
-                        // load an id indexed array of the resources
-                        var publicResources = [];
-                        for (var i = 0; i < data.length; ++i) {
-                            publicResources[data[i].id] = data[i];
-                        }
-
-                        $scope.resources = jQuery.extend(publicResources, privateResources);
-
-                        $scope.loadUsers($scope, $scope.resources);
-                    });
-                });
-            }
-        };
-
-        // initial loading
-        loadData();
-
         // delete resource method
         $scope.deleteResource = function (resource) {
             resource.$delete({id: resource.id}, function () {
@@ -221,7 +157,7 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
 
         $scope.importResource = function (resource) {
             Resource.import({id: resource.id}, function (data) {
-                loadData();
+                $scope.loadResourcesAndUsers();
             });
         };
 
@@ -418,42 +354,45 @@ resourceControllers.filter('myFilters', function () {
     };
 });
 
-resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 'Upload', '$location', '$stateParams', 'User', '$upload',
-    function ($scope, Resource, Upload, $location, $stateParams, User, $upload) {
+resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'Resource', 'Upload', '$location', '$stateParams', 'User', '$upload',
+    function ($scope, $modal, Resource, Upload, $location, $stateParams, User, $upload) {
         // retrieve resource
-        $scope.resource = Resource.get({id: $stateParams.resourceid}, function (res) {
-            if (typeof $scope.users === "undefined") {
-                $scope.loadUsers($scope, [res]);
-            }
-        });
+        if (typeof $scope.resources === "undefined") {
+            $scope.editedResource = Resource.get({id: $stateParams.resourceid});
+        } else {
+            $scope.editedResource = $scope.resources[$stateParams.resourceid];
+        }
+
+        // resource for md link
+        $scope.resource = null;
+        $scope.resourceAddMD = {key: '', value: ''};
 
         // update resource method
         $scope.updateResource = function () {
 
             var keyword = $("#resourceAddKeyword");
             if (keyword[0].value != '') {
-                $scope.resource.keywords.push(keyword[0].value);
+                $scope.editedResource.keywords.push(keyword[0].value);
                 keyword[0].value = '';
             }
 
-            var key = $("#resourceAddMetadataKey"), val = $("#resourceAddMetadataValue");
-            if (key[0].value != '' && val[0].value != '') {
-                var newElement = {key: key[0].value, value: val[0].value};
-                $scope.resource.metadata.splice($scope.resource.metadata.length, 0, newElement);
-                key[0].value = '';
-                val[0].value = '';
+            if ($scope.resourceAddMD.key != '' && $scope.resourceAddMD.value != '') {
+                $scope.editedResource.metadata.push($scope.resourceAddMD);
+                $scope.resourceAddMD = {key: '', value: ''};
             }
 
-            delete $scope.resource.id;
-            delete $scope.resource.type;
-            delete $scope.resource.author;
-            delete $scope.resource.owner;
-            delete $scope.resource.required_exercise_resources;
-            delete $scope.resource.required_knowledges;
-            $scope.resource.$update({id: $stateParams.resourceid}, function (resource) {
-                if (typeof $scope.resources === "object") {
-                    $scope.resources[resource.id] = resource;
-                }
+            var newResource = jQuery.extend(true, {}, $scope.editedResource);
+
+            delete newResource.id;
+            delete newResource.type;
+            delete newResource.author;
+            delete newResource.owner;
+            delete newResource.complete;
+            delete newResource.required_exercise_resources;
+            delete newResource.required_knowledges;
+
+            newResource.$update({id: $stateParams.resourceid}, function (resource) {
+                $scope.resources[resource.id] = resource;
             });
         };
 
@@ -469,34 +408,85 @@ resourceControllers.controller('resourceEditController', ['$scope', 'Resource', 
                     console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
                 }).success(function (data, status, headers, config) {
                     // file is uploaded successfully
-                    $scope.resource.content.source = data.fileName;
+                    $scope.editedResource.content.source = data.fileName;
                 });
         };
 
         // delete resource method
         $scope.deleteResource = function (resource) {
             resource.$delete({id: resource.id}, function () {
-                if (typeof $scope.resources === "object") {
-                    delete $scope.resources[resource.id];
-                }
+                delete $scope.resources[resource.id];
             });
         };
 
         $scope.removeFromCollection = function (collection, index) {
             collection.splice(index, 1);
-        }
+        };
 
         $scope.addProposition = function (collection) {
             var newProposition = {"text": "Nouvelle proposition", "right": false};
             collection.splice(collection.length, 0, newProposition);
-        }
+        };
 
         $scope.addSolution = function (collection) {
             var newSolution = $('#resourceAddSolution');
             collection.push(newSolution[0].value);
             newSolution[0].value = '';
-        }
+        };
 
+        $scope.resourceAddKeywordsField = function (collection) {
+            var keyword = $("#resourceAddKeyword");
+            collection.push(keyword[0].value);
+            keyword[0].value = '';
+        };
+
+        $scope.resourceAddMetadataField = function (collection) {
+            collection.push($scope.resourceAddMD);
+            $scope.resourceCancelMD();
+        };
+
+        $scope.resourceRemoveField = function (collection, index) {
+            collection.splice(index, 1);
+        };
+
+        $scope.resourceCancelMD = function () {
+            $scope.resourceAddMD = {key: '', value: ''};
+            $scope.resource = null;
+        };
+
+        $scope.openSelectResource = function () {
+            var modalInstance = $modal.open({
+                templateUrl: BASE_CONFIG.urls.partials.teacher + '/partial-resource-list.html',
+                controller: 'resourceSelectListController',
+                size: 'lg',
+                resolve: {
+                    resources: function () {
+                        return $scope.resources;
+                    },
+                    users: function () {
+                        return $scope.users;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (val) {
+                $scope.resourceAddMD.value = '__' + val;
+                $scope.resource = $scope.resources[val];
+            });
+        };
+
+    }]);
+
+resourceControllers.controller('resourceSelectListController', ['$scope', '$modalInstance', 'resources', 'users',
+    function ($scope, $modalInstance, resources, users) {
+        $scope.isSelectList = true;
+        $scope.BASE_CONFIG = BASE_CONFIG;
+        $scope.resources = resources;
+        $scope.users = users;
+
+        $scope.selectResource = function (resource) {
+            $modalInstance.close(resource.id);
+        };
     }]);
 
 
@@ -506,8 +496,6 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
     function ($scope, ExerciseByModel, AttemptByExercise, $routeParams, $location, User) {
 
         $scope.section = 'model';
-
-        $scope.subSection;
 
         /*
          * Here is a contextual client-side object used to specify user's filters informations.
@@ -732,25 +720,6 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                     $scope.tryExercise(exercise);
                 });
         };
-
-        // load only once every necessary user
-        $scope.loadUsers = function (targetScope, resourcesData) {
-            targetScope.users = [];
-            var userIds = [];
-            for (i in resourcesData) {
-                if (userIds.indexOf(resourcesData[i].author) == -1) {
-                    userIds.push(resourcesData[i].author);
-                }
-                if (userIds.indexOf(resourcesData[i].owner) == -1) {
-                    userIds.push(resourcesData[i].owner);
-                }
-            }
-
-            for (i = 0; i < userIds.length; ++i) {
-                targetScope.users[userIds[i]] = User.get({userId: userIds[i]});
-            }
-        };
-
     }]);
 
 modelControllers.controller('modelListController', ['$scope', 'Model', '$location',
@@ -773,7 +742,7 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
 
                 $scope.models = jQuery.extend(publicModels, privateModels);
 
-                $scope.loadUsers($scope, $scope.models);
+                $scope.loadUsers($scope.models);
             });
         });
 
@@ -843,52 +812,27 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
 modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User',
     function ($scope, Model, Resource, $location, $stateParams, User) {
 
-        var loadResources = function () {
-            Resource.query({owner: BASE_CONFIG.currentUserId}, function (data) {
-                // load an id indexed array of the resources
-                var privateResources = [];
-                for (var i = 0; i < data.length; ++i) {
-                    privateResources[data[i].id] = data[i];
-                }
+        $scope.model = Model.get({id: $stateParams.modelid}, function () {
+            // fill each block with empty constraints
+            $scope.fillBlockConstraints($scope.model);
+            $scope.$parent.subSection = $scope.model.type;
 
-                Resource.query({'public-except-user': BASE_CONFIG.currentUserId, 'is-root': 'true'}, function (data) {
-                    // load an id indexed array of the resources
-                    var publicResources = [];
-                    for (var i = 0; i < data.length; ++i) {
-                        publicResources[data[i].id] = data[i];
-                    }
-
-                    // load users
-                    $scope.resources = jQuery.extend(publicResources, privateResources);
-                    $scope.loadUsers($scope, $scope.resources);
-
-                    $scope.model = Model.get({id: $stateParams.modelid}, function () {
-                        // fill each block with empty constraints
-                        $scope.fillBlockConstraints($scope.model);
-                        $scope.$parent.subSection = $scope.model.type;
-
-                        // determine accepted resource types
-                        switch ($scope.model.type) {
-                            case 'multiple-choice':
-                                $scope.acceptedTypes = ['multiple-choice-question'];
-                                break;
-                            case 'open-ended-question':
-                                $scope.acceptedTypes = ['open-ended-question'];
-                                break;
-                            case 'pair-items':
-                                $scope.acceptedTypes = ['picture', 'text'];
-                                break;
-                            case 'group-items':
-                                $scope.acceptedTypes = ['picture', 'text'];
-                                break;
-                        }
-                    });
-                });
-            });
-        };
-
-        // initial loading
-        loadResources();
+            // determine accepted resource types
+            switch ($scope.model.type) {
+                case 'multiple-choice':
+                    $scope.acceptedTypes = ['multiple-choice-question'];
+                    break;
+                case 'open-ended-question':
+                    $scope.acceptedTypes = ['open-ended-question'];
+                    break;
+                case 'pair-items':
+                    $scope.acceptedTypes = ['picture', 'text'];
+                    break;
+                case 'group-items':
+                    $scope.acceptedTypes = ['picture', 'text'];
+                    break;
+            }
+        });
 
         $scope.fillBlockConstraints = function (model) {
             switch (model.type) {

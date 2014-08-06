@@ -116,3 +116,9 @@ option {
 .archived {
     opacity: 0.6;
 }
+
+.modal {
+    margin: 0;
+    top: 0;
+    width: 1000px;
+}
