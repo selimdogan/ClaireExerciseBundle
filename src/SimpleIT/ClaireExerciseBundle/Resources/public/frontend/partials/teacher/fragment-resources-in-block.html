@@ -8,6 +8,7 @@
          ui-on-Drop="onDropResourceToBlock($event,$data,block.resources)">
         <accordion close-others="true">
             <accordion-group class="panel panel-success"
+                             data-ng-class="{'panel-danger': model.type === 'pair-items' && getMobilePart(resources[blockResourceId.id], block.pair_meta_key) === ''}"
                              data-ng-repeat="blockResourceId in block.resources track by $index" class="row">
                 <accordion-heading class="panel-heading">
                     <div class="row">
@@ -35,7 +36,8 @@
                         <div class="col-xs-8">
                             <ng-switch on="model.type">
                                 <h4 ng-switch-when="pair-items">
-                                    {{ getMobilePart(resources[blockResourceId.id], block.pair_meta_key) }}&nbsp;<span class="caret"></span>
+                                    {{ resources[blockResourceId.id].title }}
+                                    ({{ getMobilePart(resources[blockResourceId.id],block.pair_meta_key) }})&nbsp;<span class="caret"></span>
                                 </h4>
                                 <h4 ng-switch-when="multiple-choice">
                                     {{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>
@@ -194,8 +196,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-8">
-                                    <h4>{{ resources[blockResourceId.id].title
-                                        }}&nbsp;<span class="caret"></span>
+                                    <h4>{{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>
                                     </h4>
                                 </div>
                                 <div class="col-xs-1">

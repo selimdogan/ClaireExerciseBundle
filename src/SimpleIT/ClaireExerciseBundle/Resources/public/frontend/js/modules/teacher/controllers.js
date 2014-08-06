@@ -4,7 +4,7 @@
 
 var resourceControllers = angular.module('resourceControllers', ['ui.router']);
 
-resourceControllers.controller('resourceController', ['$scope','$modal',
+resourceControllers.controller('resourceController', ['$scope', '$modal',
     function ($scope, $modal) {
 
         $scope.section = 'resource';
@@ -956,20 +956,6 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
             }
         };
 
-        $scope.getMobilePart = function (collection, key) {
-            var returnValue = '';
-            angular.forEach(collection.metadata, function (meta) {
-                if (meta.key == key) {
-                    returnValue = meta.value;
-                }
-            });
-            if (returnValue != '') {
-                return collection.title + ' (' + returnValue + ')'
-            } else {
-                return collection.title;
-            }
-        };
-
         $scope.openFirstBlocks = {};
 
         $scope.openFirst = function (selector, index) {
@@ -1019,7 +1005,15 @@ modelControllers.controller('modelEditPairItemsController', ['$scope', 'Model', 
         collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_pair_items.block_field);
     };
 
-
+    $scope.getMobilePart = function (collection, key) {
+        var returnValue = '';
+        angular.forEach(collection.metadata, function (meta) {
+            if (meta.key == key) {
+                returnValue = meta.value;
+            }
+        });
+        return returnValue;
+    };
 }]);
 
 modelControllers.controller('modelEditMultipleChoiceController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
