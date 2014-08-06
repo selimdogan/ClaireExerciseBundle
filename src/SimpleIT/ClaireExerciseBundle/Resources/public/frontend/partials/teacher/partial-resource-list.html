@@ -119,11 +119,11 @@
         <label class="btn btn-success"
                ng-model="filters.public"
                data-ng-class="{'active': !filters.public, '': filters.public}"
-               ng-click="filters.public = !filters.public">Privées</label> <!-- viewPrivateResources() -->
+               ng-click="filters.public = !filters.public">Privées</label>
         <label class="btn btn-success"
                ng-model="filters.public"
                data-ng-class="{'active': filters.public, '': !filters.public}"
-               ng-click="filters.public = !filters.public">Publiques</label> <!-- viewPublicResources() -->
+               ng-click="filters.public = !filters.public">Publiques</label>
         <label class="btn btn-success"
                data-ng-class="{'active': filters.archived, '': !filters.archived}"
                ng-model="filters.archived"
@@ -155,6 +155,16 @@
 </accordion>
 
 <accordion close-others="true">
+    <!--
+        The ng-repeat directive iterates on each item in a collection.
+        This collection is dynamically updated by filters. It works basically like unix pipes :)
+        Let's explains basically this directive value : << (1: resource in resources) | (2: filter:filters.search) | (3: myFilters:filters) >>
+        Each step are (1,2,3,..) are sequentially processed. Step 1 outputs will be step 2 inputs, and so on.
+            1.  Step 1 : The collection contains all resources retrieved from the backend. The "resources" object must be declared in the resourceController scope first.
+            2.  Step 2 keeps resources that contains as a key or as value the string present in the object filters.search field.
+                If this field is empty all models are given to step 3.
+            3. Step 3 give the current collection to a custom filtering function.
+    -->
     <accordion-group class="panel"
                      ng-repeat="resource in resources | filter:filters.search | myFilters:filters"
                      data-ng-class="{'panel-success': resource.parent == null, 'panel-resource-subscribe': resource.parent != null, 'archived': resource.archived}">

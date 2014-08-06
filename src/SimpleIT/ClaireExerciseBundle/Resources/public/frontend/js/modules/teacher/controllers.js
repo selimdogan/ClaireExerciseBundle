@@ -9,15 +9,19 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
 
         $scope.section = 'resource';
 
+        /*
+        * Here is a contextual client-side object used to specify user's filters informations.
+        * These values are bi-directionnaly bata-binded to filters section fields in list views.
+        */
         $scope.filters = {
-            search: '',
-            archived: false,
-            public: false,
-            type: {
+            search: '', // search field
+            archived: false, // select archived resources or not (boolean)
+            public: false, // select public resources or not (boolean)
+            type: { // resources types to be selected
                 multiple_choice_question: 'multiple-choice-question', text: 'text', picture: 'picture', open_ended_question: 'open-ended-question', sequence: ''
             },
-            keywords: [],
-            metadata: []
+            keywords: [], // list of keywords that a resource must have to be selected
+            metadata: [] // list of metadata objects that a resource must have to be selected
         };
 
         $scope.$parent.$watch("subSection", function (newValue, oldValue) {
@@ -298,88 +302,119 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
         };
     }]);
 
+/*
+    Filters, what for? Filters are used here to select specific resources in a collection of resources retrieved from the backend.
+    Parameters :
+        - String : specify here angular filter's name.
+        - Callback function : here is defined an anonymous function for filtering process.
+
+        Filtering process function :
+            Parameters :
+                - Javascript Object : here is a collection of resources pre-filtered on keyword field value (cf. Partial-{model, resource}-list.html).
+                - Javascript Object : this object is initialized in {model, resource}Controller and contains specific attributs
+                                      such as archived, public or a collection of types that a user wants to see.
+
+ */
 resourceControllers.filter('myFilters', function () {
     return function (collection, filters) {
-        var items = [];
-        var ids = [];
-        angular.forEach(collection, function (value) {
-            angular.forEach(filters.type, function (type) {
-                if (value.type == type && ((filters.archived && value.archived) || !value.archived) && ((filters.public && value.public) || !value.public)) {
-                    if (filters.keywords.length) {
-                        if (value.keywords.length) {
-                            angular.forEach(filters.keywords, function (keyword) {
-                                if ($.inArray(keyword, value.keywords) != -1) {
-                                    if (filters.metadata.length) {
-                                        if (value.metadata.length) {
-                                            angular.forEach(filters.metadata, function (meta1) {
-                                                angular.forEach(value.metadata, function (meta2) {
-                                                    if (meta1.key.toLowerCase() == meta2.key.toLowerCase() && meta1.value.toLowerCase() == meta2.value.toLowerCase()) {
-                                                        if ($.inArray(value.id, ids) == -1) {
-                                                            items.push(value);
-                                                            ids.push(value.id)
+        var items = []; // collection to be returned
+        var ids = []; // temporary IDs collection to maintain atomic items in collection to be returned
+        angular.forEach(collection, function (value) { // iterate on each item in given collection
+            angular.forEach(filters.type, function (type) { // iterate on each filter type specified by user to keep match users parameters.
+                // remove archived items by default
+                if (value.type == type && ((filters.archived && value.archived) || !value.archived)) {
+                    // remove public items by default. Allow to display private user's items or public only items.
+                    if ((filters.public && value.owner != BASE_CONFIG.currentUserId) || (!filters.public && value.owner == BASE_CONFIG.currentUserId)){
+                        // Check if user specified keywords filter
+                        if (filters.keywords.length) {
+                            // Check if the current item as at least one keyword
+                            if (value.keywords.length) {
+                                angular.forEach(filters.keywords, function (keyword) {
+                                    if ($.inArray(keyword, value.keywords) != -1) {
+                                        // So check if user specify at least one metadata filter
+                                        if (filters.metadata.length) {
+                                            // Check if the current item as at least one metadata
+                                            if (value.metadata.length) {
+                                                angular.forEach(filters.metadata, function (meta1) {
+                                                    angular.forEach(value.metadata, function (meta2) {
+                                                        // Metadata keys and values matchs
+                                                        if (meta1.key.toLowerCase() == meta2.key.toLowerCase() && meta1.value.toLowerCase() == meta2.value.toLowerCase()) {
+                                                            if ($.inArray(value.id, ids) == -1) {
+                                                                items.push(value);
+                                                                ids.push(value.id)
+                                                            }
                                                         }
-                                                    }
-                                                    if (meta1.key.toLowerCase() == meta2.key.toLowerCase() && meta1.value == '') {
-                                                        if ($.inArray(value.id, ids) == -1) {
-                                                            items.push(value);
-                                                            ids.push(value.id)
+                                                        // Metadata keys matchs
+                                                        if (meta1.key.toLowerCase() == meta2.key.toLowerCase() && meta1.value == '') {
+                                                            if ($.inArray(value.id, ids) == -1) {
+                                                                items.push(value);
+                                                                ids.push(value.id)
+                                                            }
                                                         }
-                                                    }
-                                                    if (meta1.value.toLowerCase() == meta2.value.toLowerCase() && meta1.key == '') {
-                                                        if ($.inArray(value.id, ids) == -1) {
-                                                            items.push(value);
-                                                            ids.push(value.id)
+                                                        // Metadata values matchs
+                                                        if (meta1.value.toLowerCase() == meta2.value.toLowerCase() && meta1.key == '') {
+                                                            if ($.inArray(value.id, ids) == -1) {
+                                                                items.push(value);
+                                                                ids.push(value.id)
+                                                            }
                                                         }
-                                                    }
+                                                    });
                                                 });
-                                            });
-                                        }
-                                    } else {
-                                        if ($.inArray(value.id, ids) == -1) {
-                                            items.push(value);
-                                            ids.push(value.id)
+                                            }
+                                        } else {
+                                            if ($.inArray(value.id, ids) == -1) {
+                                                items.push(value);
+                                                ids.push(value.id)
+                                            }
                                         }
                                     }
-                                }
-                            });
-                        }
-                    } else {
-                        if (filters.metadata.length) {
-                            if (value.metadata.length) {
-                                angular.forEach(filters.metadata, function (meta1) {
-                                    angular.forEach(value.metadata, function (meta2) {
-                                        if (meta1.key.toLowerCase() == meta2.key.toLowerCase() && meta1.value.toLowerCase() == meta2.value.toLowerCase()) {
-                                            if ($.inArray(value.id, ids) == -1) {
-                                                items.push(value);
-                                                ids.push(value.id)
-                                            }
-                                        }
-                                        if (meta1.key.toLowerCase() == meta2.key.toLowerCase() && meta1.value == '') {
-                                            if ($.inArray(value.id, ids) == -1) {
-                                                items.push(value);
-                                                ids.push(value.id)
-                                            }
-                                        }
-                                        if (meta1.value.toLowerCase() == meta2.value.toLowerCase() && meta1.key == '') {
-                                            if ($.inArray(value.id, ids) == -1) {
-                                                items.push(value);
-                                                ids.push(value.id)
-                                            }
-                                        }
-                                    });
                                 });
                             }
                         } else {
-                            if ($.inArray(value.id, ids) == -1) {
-                                items.push(value);
-                                ids.push(value.id)
+                        // User did not specify keyword filter
+                            // So check if user specify at least one metadata filter
+                            if (filters.metadata.length) {
+                                // Check if the current item as at least one metadata
+                                if (value.metadata.length) {
+                                    angular.forEach(filters.metadata, function (meta1) {
+                                        angular.forEach(value.metadata, function (meta2) {
+                                            // Metadata keys and values matchs
+                                            if (meta1.key.toLowerCase() == meta2.key.toLowerCase() && meta1.value.toLowerCase() == meta2.value.toLowerCase()) {
+                                                if ($.inArray(value.id, ids) == -1) {
+                                                    items.push(value);
+                                                    ids.push(value.id)
+                                                }
+                                            }
+                                            // Metadata keys matchs
+                                            if (meta1.key.toLowerCase() == meta2.key.toLowerCase() && meta1.value == '') {
+                                                if ($.inArray(value.id, ids) == -1) {
+                                                    items.push(value);
+                                                    ids.push(value.id)
+                                                }
+                                            }
+                                            // Metadata values matchs
+                                            if (meta1.value.toLowerCase() == meta2.value.toLowerCase() && meta1.key == '') {
+                                                if ($.inArray(value.id, ids) == -1) {
+                                                    items.push(value);
+                                                    ids.push(value.id)
+                                                }
+                                            }
+                                        });
+                                    });
+                                }
+                            } else {
+                            // User did not specity metadata filter
+                                if ($.inArray(value.id, ids) == -1) {
+                                    items.push(value);
+                                    ids.push(value.id)
+                                }
                             }
                         }
                     }
                 }
             });
         });
-        return items;
+        return items; // returns filtered collection
     };
 });
 
@@ -474,14 +509,19 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
 
         $scope.subSection;
 
+        /*
+         * Here is a contextual client-side object used to specify user's filters informations.
+         * These values are bi-directionnaly bata-binded to filters section fields in list views.
+         */
         $scope.filters = {
-            search: '',
-            archived: false,
-            type: {
+            search: '', // search field
+            archived: false, // select archived resources or not (boolean)
+            public: false, // select public resources or not (boolean)
+            type: { // resources types to be selected
                 multiple_choice: 'multiple-choice', pair_items: 'pair-items', order_items: '', open_ended_question: 'open-ended-question', group_items: 'group-items'
             },
-            keywords: [],
-            metadata: []
+            keywords: [], // list of keywords that a resource must have to be selected
+            metadata: [] // list of metadata objects that a resource must have to be selected
         };
 
         $scope.modelContext = {
