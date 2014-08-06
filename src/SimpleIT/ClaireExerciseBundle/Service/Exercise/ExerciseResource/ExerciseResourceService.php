@@ -249,10 +249,10 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         }
 
         $exerciseResource->setRequiredExerciseResources(
-            new ArrayCollection(array_unique($reqResources))
+            new ArrayCollection($reqResources)
         );
         $exerciseResource->setRequiredKnowledges(
-            new ArrayCollection(array_unique($reqKnowledges))
+            new ArrayCollection($reqKnowledges)
         );
 
         // if public resource, set public all the requirements

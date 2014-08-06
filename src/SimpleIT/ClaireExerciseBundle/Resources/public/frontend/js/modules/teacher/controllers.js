@@ -139,23 +139,6 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
                 }
             }
         };
-
-        $scope.resourceAddMD = {key: '', value: ''};
-
-        $scope.resourceAddKeywordsField = function (collection) {
-            var keyword = $("#resourceAddKeyword");
-            collection.push(keyword[0].value);
-            keyword[0].value = '';
-        };
-
-        $scope.resourceAddMetadataField = function (collection) {
-            collection.push($scope.resourceAddMD);
-            $scope.resourceAddMD = {key: '', value: ''};
-        };
-
-        $scope.resourceRemoveField = function (collection, index) {
-            collection.splice(index, 1);
-        };
     }]);
 
 resourceControllers.controller('resourceListController', ['$scope', '$state', 'Resource',
@@ -339,32 +322,40 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
     function ($scope, $modal, Resource, Upload, $location, $stateParams, User, $upload) {
         // retrieve resource
         if (typeof $scope.resources === "undefined") {
-            $scope.resource = Resource.get({id: $stateParams.resourceid});
+            $scope.editedResource = Resource.get({id: $stateParams.resourceid});
         } else {
-            $scope.resource = $scope.resources[$stateParams.resourceid];
+            $scope.editedResource = $scope.resources[$stateParams.resourceid];
         }
+
+        // resource for md link
+        $scope.resource = null;
+        $scope.resourceAddMD = {key: '', value: ''};
 
         // update resource method
         $scope.updateResource = function () {
 
             var keyword = $("#resourceAddKeyword");
             if (keyword[0].value != '') {
-                $scope.resource.keywords.push(keyword[0].value);
+                $scope.editedResource.keywords.push(keyword[0].value);
                 keyword[0].value = '';
             }
 
             if ($scope.resourceAddMD.key != '' && $scope.resourceAddMD.value != '') {
-                $scope.resource.metadata.push($scope.resourceAddMD);
+                $scope.editedResource.metadata.push($scope.resourceAddMD);
                 $scope.resourceAddMD = {key: '', value: ''};
             }
 
-            delete $scope.resource.id;
-            delete $scope.resource.type;
-            delete $scope.resource.author;
-            delete $scope.resource.owner;
-            delete $scope.resource.required_exercise_resources;
-            delete $scope.resource.required_knowledges;
-            $scope.resource.$update({id: $stateParams.resourceid}, function (resource) {
+            var newResource = jQuery.extend(true, {}, $scope.editedResource);
+
+            delete newResource.id;
+            delete newResource.type;
+            delete newResource.author;
+            delete newResource.owner;
+            delete newResource.complete;
+            delete newResource.required_exercise_resources;
+            delete newResource.required_knowledges;
+
+            newResource.$update({id: $stateParams.resourceid}, function (resource) {
                 $scope.resources[resource.id] = resource;
             });
         };
@@ -381,7 +372,7 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
                     console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
                 }).success(function (data, status, headers, config) {
                     // file is uploaded successfully
-                    $scope.resource.content.source = data.fileName;
+                    $scope.editedResource.content.source = data.fileName;
                 });
         };
 
@@ -407,6 +398,26 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
             newSolution[0].value = '';
         };
 
+        $scope.resourceAddKeywordsField = function (collection) {
+            var keyword = $("#resourceAddKeyword");
+            collection.push(keyword[0].value);
+            keyword[0].value = '';
+        };
+
+        $scope.resourceAddMetadataField = function (collection) {
+            collection.push($scope.resourceAddMD);
+            $scope.resourceCancelMD();
+        };
+
+        $scope.resourceRemoveField = function (collection, index) {
+            collection.splice(index, 1);
+        };
+
+        $scope.resourceCancelMD = function () {
+            $scope.resourceAddMD = {key: '', value: ''};
+            $scope.resource = null;
+        };
+
         $scope.openSelectResource = function () {
             var modalInstance = $modal.open({
                 templateUrl: BASE_CONFIG.urls.partials.teacher + '/partial-resource-list.html',
@@ -424,6 +435,7 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
 
             modalInstance.result.then(function (val) {
                 $scope.resourceAddMD.value = '__' + val;
+                $scope.resource = $scope.resources[val];
             });
         };
 
