@@ -78,7 +78,10 @@
                     <label
                         class="panel panel-success" title="Métadonnée de cette ressource"
                         data-ng-repeat="meta in resource.metadata track by $index" style="margin: 2px;">
-                        &nbsp;<span ui-draggable="true" drag="meta.key">{{ meta.key }}</span>:&nbsp;<span>{{ meta.value }}</span>&nbsp;
+                        &nbsp;<span ui-draggable="true" drag="meta.key">{{ meta.key }}</span>:&nbsp;<span ng-if="meta.value.substring(0,2) != '__' || isNan(meta.value.substring(2))">{{ meta.value }}</span>&nbsp;<span
+                            ng-if="meta.value.substring(0,2) == '__' && !isNan(meta.value.substring(2))"
+                            style="color: red"
+                            ng-click="$event.stopPropagation();viewResource(resources[meta.value.substring(2)])">{{ resources[meta.value.substring(2)].title }}</span>&nbsp;
                     </label>
                     <label class="panel panel-success"
                            title="Mot-clé de cette ressource"

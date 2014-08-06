@@ -4,8 +4,8 @@
 
 var resourceControllers = angular.module('resourceControllers', ['ui.router']);
 
-resourceControllers.controller('resourceController', ['$scope', '$routeParams', '$location', 'User',
-    function ($scope, $routeParams, $location, User) {
+resourceControllers.controller('resourceController', ['$scope','$modal',
+    function ($scope, $modal) {
 
         $scope.section = 'resource';
 
@@ -144,7 +144,33 @@ resourceControllers.controller('resourceController', ['$scope', '$routeParams', 
                 }
             }
         };
+
+        $scope.viewResource = function (resource) {
+            var modalInstance = $modal.open({
+                templateUrl: BASE_CONFIG.urls.partials.teacher + '/partial-resource-preview.html',
+                controller: 'resourceViewController',
+                size: 'lg',
+                resolve: {
+                    resource: function () {
+                        return resource;
+                    },
+                    users: function () {
+                        return $scope.users;
+                    }
+                }
+            });
+        };
     }]);
+
+resourceControllers.controller('resourceViewController', ['$scope', 'BASE_CONFIG', '$modalInstance', 'resource', 'users',
+    function ($scope, BASE_CONFIG, $modalInstance, resource, users) {
+        $scope.resourceContext = "resourceEdit";
+
+        $scope.BASE_CONFIG = BASE_CONFIG;
+        $scope.resource = resource;
+        $scope.users = users;
+    }]);
+
 
 resourceControllers.controller('resourceListController', ['$scope', '$state', 'Resource',
     function ($scope, $state, Resource) {
@@ -481,8 +507,8 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
 
     }]);
 
-resourceControllers.controller('resourceSelectListController', ['$scope', '$modalInstance', 'resources', 'users',
-    function ($scope, $modalInstance, resources, users) {
+resourceControllers.controller('resourceSelectListController', ['$scope', 'BASE_CONFIG', '$modalInstance', 'resources', 'users',
+    function ($scope, BASE_CONFIG, $modalInstance, resources, users) {
         $scope.isSelectResource = true;
 
         $scope.BASE_CONFIG = BASE_CONFIG;
