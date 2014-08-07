@@ -51,7 +51,8 @@ class ItemController extends BaseController
 
             $itemResource = ItemResourceFactory::create($item);
 
-            return new ApiGotResponse($itemResource, array("not_corrected", 'Default'));
+//            return new ApiGotResponse($itemResource, array("not_corrected", 'Default'));
+            return new ApiGotResponse($itemResource, array("details", 'Default'));
 
         } catch (NonExistingObjectException $neoe) {
             throw new ApiNotFoundException(ItemResource::RESOURCE_NAME);

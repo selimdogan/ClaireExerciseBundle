@@ -26,6 +26,11 @@ mainApp.config(
                 templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-pair-items.html'
             });
 
+            $stateProvider.state('attempt.order-items', {
+                url: '/order-items/:itemId',
+                templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-order-items.html'
+            });
+
             $stateProvider.state('attempt.group-items', {
                 url: '/group-items/:itemId',
                 templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-group-items.html'

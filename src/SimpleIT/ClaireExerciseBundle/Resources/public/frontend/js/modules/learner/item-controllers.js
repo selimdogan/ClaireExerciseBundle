@@ -34,6 +34,8 @@ attemptControllers.controller('attemptController', ['$scope', '$state', 'Attempt
             // when data loaded
             if ($scope.item.type == 'pair-items') {
                 $state.go('attempt.pair-items', {itemId: index}, {location: false});
+            } else if ($scope.item.type == 'order-items') {
+                $state.go('attempt.order-items', {itemId: index}, {location: false});
             } else if ($scope.item.type == 'group-items') {
                 $state.go('attempt.group-items', {itemId: index}, {location: false});
             } else if ($scope.item.type == 'multiple-choice') {
@@ -145,6 +147,123 @@ itemControllers.controller('pairItemsController', ['$scope', 'Answer', '$routePa
         }
     }]);
 
+itemControllers.controller('orderItemsController', ['$scope', 'Answer', '$routeParams', '$location', '$stateParams',
+    function ($scope, Answer, $routeParams, $location, $stateParams) {
+
+        // post answer
+        $scope.saveAnswer = function () {
+            $scope.validable = false;
+            var answer = new Answer;
+            answer.content = [];
+
+            for (i = 0; i < $scope.drops.length; ++i) {
+                answer.content.push($scope.drops[i].id);
+            }
+
+            console.log(answer);
+
+            answer.$save({itemId: $scope.item.item_id, attemptId: $stateParams.attemptId},
+                function (item) {
+                    $scope.items[$stateParams.itemId] = item;
+                    $scope.displayCorrection(item)
+                });
+        };
+
+        // correction
+        $scope.displayCorrection = function (item) {
+            $scope.right = true;
+
+            for (i = 0; i < $scope.drops.length; ++i) {
+                $scope.solution[i] = {
+                    object: item['content'].objects[
+                        item['content'].solutions[i]
+                        ],
+                    value: item['content'].values[
+                        item['content'].solutions[i]
+                        ]
+                };
+                if (item['content'].answers[i] != item['content'].solutions[i]) {
+                    $scope.right = false;
+                }
+            }
+            $scope.item.corrected = true;
+            $scope.item['content']['mark'] = item['content']['mark'];
+        };
+
+        // display learner answers
+        $scope.fillLearnerAnswers = function () {
+            for (i = 0; i < $scope.item['content'].answers.length; ++i) {
+                $scope.drops[i] = $scope.item['content'].objects[
+                    $scope.item['content'].answers[i]
+                    ];
+            }
+        };
+
+        // drag and drop
+        $scope.onDropList = function ($event, $data, array) {
+            array.push($data);
+            $scope.validable = false;
+        };
+
+        $scope.onDropField = function ($event, $data, fieldNumber) {
+            $scope.toDrop.id = fieldNumber;
+            $scope.toDrop.data = $data;
+        };
+
+        $scope.dropSuccessHandler = function ($event, index, array) {
+            array.splice(index, 1);
+            if ($scope.item['content'].objects.length == 0) {
+                $scope.validable = true;
+            }
+            resumeDND();
+        };
+
+        $scope.dropSuccessHandlerField = function ($event, fieldNumber) {
+            $scope.toDrag.id = fieldNumber;
+            resumeDND();
+        };
+
+        var resumeDND = function () {
+            if ($scope.toDrop.id !== null && $scope.toDrag.id !== null) {
+                if ($scope.toDrop.id < $scope.toDrag.id) {
+                    $scope.drops.splice($scope.toDrag.id, 1);
+                    $scope.drops.splice($scope.toDrop.id, 0, $scope.toDrop.data);
+                } else {
+                    $scope.drops.splice($scope.toDrop.id, 0, $scope.toDrop.data);
+                    $scope.drops.splice($scope.toDrag.id, 1);
+                }
+            } else {
+                if ($scope.toDrop.id !== null) {
+                    $scope.drops.splice($scope.toDrop.id, 0, $scope.toDrop.data);
+                } else {
+                    $scope.drops.splice($scope.toDrag.id, 1);
+                }
+            }
+
+            $scope.toDrop = {'id': null, 'data': null};
+            $scope.toDrag.id = null;
+        };
+
+        // init answer array
+        $scope.drops = [];
+        $scope.solution = [];
+        for (var i = 0; i < $scope.item['content'].objects.length; ++i) {
+            $scope.solution[i] = null;
+            $scope.item['content'].objects[i].id = i;
+        }
+        if ($scope.item['corrected'] == true) {
+            $scope.fillLearnerAnswers();
+            $scope.displayCorrection($scope.item);
+            console.log($scope.drops);
+            console.log($scope.corrected);
+            console.log($scope.solution);
+        }
+
+        // dnd init
+        $scope.toDrop = {'id': null, 'data': null};
+        $scope.toDrag = {'id': null};
+    }]);
+
 itemControllers.controller('multipleChoiceController', ['$scope', 'Answer', '$routeParams', '$location', '$stateParams',
     function ($scope, Answer, $routeParams, $location, $stateParams) {
 
@@ -174,7 +293,7 @@ itemControllers.controller('multipleChoiceController', ['$scope', 'Answer', '$ro
 
         // correction
         $scope.displayCorrection = function (item) {
-            for (i = 0; i < $scope.tick.length; ++i) {
+            for (var i = 0; i < $scope.tick.length; ++i) {
                 $scope.solution[i] = item['content'].propositions[i]['right'];
             }
             $scope.item.corrected = true;
@@ -184,7 +303,7 @@ itemControllers.controller('multipleChoiceController', ['$scope', 'Answer', '$ro
 
         // display learner answers
         $scope.fillLearnerAnswers = function () {
-            for (i = 0; i < $scope.tick.length; ++i) {
+            for (var i = 0; i < $scope.tick.length; ++i) {
                 $scope.tick[i] = $scope.item['content'].propositions[i].ticked;
             }
         };
@@ -236,7 +355,7 @@ itemControllers.controller('groupItemsController', ['$scope', 'Answer', '$routeP
                 }
             }
 
-            item = answer.$save({itemId: $scope.item.item_id, attemptId: $stateParams.attemptId},
+            answer.$save({itemId: $scope.item.item_id, attemptId: $stateParams.attemptId},
                 function (item) {
                     $scope.items[$stateParams.itemId] = item;
                     $scope.displayCorrection(item)

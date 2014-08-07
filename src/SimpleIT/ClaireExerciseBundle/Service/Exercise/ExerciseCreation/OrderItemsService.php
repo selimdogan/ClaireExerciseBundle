@@ -163,12 +163,11 @@ class OrderItemsService extends ExerciseCreationService
         $item = new ResItem();
         $exercise->setItem($item);
 
-        // set give first and last
-        $item->setGiveFirst($model->isGiveFirst());
-        $item->setGiveLast($model->isGiveLast());
-
-        // array of ExercisePair to collect all the pairs to add in form of ModelPair
+        // array of object
         $objects = array();
+
+        // array of values
+        $values = array();
 
         // array of solution
         $solutions = array();
@@ -177,17 +176,74 @@ class OrderItemsService extends ExerciseCreationService
         if ($model->getIsSequence()) {
             $this->exerciseFromSequence($model, $solutions, $objects, $owner);
         } else {
-            $this->exerciseFromObjList($model, $solutions, $objects, $owner);
+            $this->exerciseFromObjList($model, $solutions, $objects, $values, $owner);
         }
 
         // add the objects and the solution
         $item->setSolutions($solutions);
         $item->setObjects($objects);
 
-        // shuffle the order of the pairs
+        // values
+        if ($model->getShowValues())
+        {
+            $item->setValues($values);
+        }
+
+        // shuffle the order of the objects
         $item->shuffleObjects();
 
+        // set give first and last
+        if ($model->isGiveFirst()) {
+            $item->setGiveFirst($this->getFirst($item->getSolutions()));
+        } else {
+            $item->setGiveFirst(-1);
+        }
+        if ($model->isGiveLast()) {
+            $item->setGiveLast($this->getLast($item->getSolutions()));
+        } else {
+            $item->setGiveLast(-1);
+        }
+
         return $exercise;
+    }
+
+    /**
+     * Get the first object id of the solution
+     *
+     * @param $solutions
+     *
+     * @return mixed
+     */
+    private function getFirst($solutions)
+    {
+        if (is_array($solutions[0])) {
+            return $this->getFirst($solutions[0]);
+        } else {
+            return $solutions[0];
+        }
+    }
+
+    /**
+     * Get the last object id of the solution
+     *
+     * @param $solutions
+     *
+     * @return mixed
+     */
+    private function getLast($solutions)
+    {
+        $maxKey = 0;
+        foreach (array_keys($solutions) as $key) {
+            if (is_numeric($key) && $key > $maxKey) {
+                $maxKey = $key;
+            }
+        }
+
+        if (is_array($solutions[$maxKey])) {
+            return $this->getLast($solutions[$maxKey]);
+        } else {
+            return $solutions[$maxKey];
+        }
     }
 
     /**
@@ -440,12 +496,14 @@ class OrderItemsService extends ExerciseCreationService
      * @param Model $model
      * @param array $solutions
      * @param array $objects
+     * @param array $values
      * @param User  $owner
      */
     private function exerciseFromObjList(
         Model $model,
         array &$solutions,
         array &$objects,
+        array &$values,
         User $owner
     )
     {
@@ -464,6 +522,7 @@ class OrderItemsService extends ExerciseCreationService
         $objectsToAdd = array();
         foreach ($metaValues as $key => $mv) {
             $objectsToAdd[] = $objects[$key];
+            $values[] = $mv;
         }
         $objects = $objectsToAdd;
 
@@ -823,13 +882,13 @@ class OrderItemsService extends ExerciseCreationService
                     $owner
                 );
 
-            // add the ordering metavalue
-            foreach ($blockObjects as &$bo) {
-                /** @var ExerciseObject $bo */
-                $md = $bo->getMetadata();
-                $bo->setMetavalue($md[$ob->getMetaKey()]);
-            }
+        }
 
+        // add the ordering metavalue
+        foreach ($blockObjects as &$bo) {
+            /** @var ExerciseObject $bo */
+            $md = $bo->getMetadata();
+            $bo->setMetavalue($md[$ob->getMetaKey()]);
         }
 
         // If the value of a metadata field must be displayed instead of the object

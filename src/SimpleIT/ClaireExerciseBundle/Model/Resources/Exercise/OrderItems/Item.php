@@ -20,7 +20,6 @@ namespace SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OrderItems;
 
 use JMS\Serializer\Annotation as Serializer;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonItem;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\Markable;
 
 /**
  * Class Exercise
@@ -37,17 +36,15 @@ class Item extends CommonItem
     private $objects = array();
 
     /**
-     * @var boolean $giveFirst True if the first element must be given to the
-     *                         learner
-     * @Serializer\Type("boolean")
+     * @var boolean $giveFirst Id of the first or -1 if no help
+     * @Serializer\Type("integer")
      * @Serializer\Groups({"details", "corrected", "not_corrected", "item_storage"})
      */
     private $giveFirst;
 
     /**
-     * @var boolean $giveLast True if the last element must be given to the
-     *                         learner
-     * @Serializer\Type("boolean")
+     * @var boolean $giveLast Id of the last or -1 if no help
+     * @Serializer\Type("integer")
      * @Serializer\Groups({"details", "corrected", "not_corrected", "item_storage"})
      */
     private $giveLast;
@@ -77,7 +74,7 @@ class Item extends CommonItem
      *
      * @var array $solution
      * @Serializer\Type("array")
-     * @Serializer\Groups({"details", "corrected", "not_corrected", "item_storage"})
+     * @Serializer\Groups({"details", "corrected", "item_storage"})
      */
     private $solutions = array();
 
@@ -89,6 +86,15 @@ class Item extends CommonItem
      * @Serializer\Groups({"details", "corrected"})
      */
     private $answers = array();
+
+    /**
+     * The values used to sort the objects
+     *
+     * @var array
+     * @Serializer\Type("array")
+     * @Serializer\Groups({"details", "corrected", "item_storage"})
+     */
+    private $values = array();
 
     /**
      * Get solution
@@ -142,10 +148,12 @@ class Item extends CommonItem
 
         // create new arrays
         $newObjects = array();
+        $newValues = array();
 
         // fill the new object array with the shuffled keys
         foreach ($objKeys as $index => $key) {
             $newObjects[$index] = $this->objects[$key];
+            $newValues[$index] = $this->values[$key];
         }
 
         // modify the solution
@@ -153,6 +161,7 @@ class Item extends CommonItem
 
         // Copy in the exercise object arrays
         $this->objects = $newObjects;
+        $this->values = $newValues;
     }
 
     /**
@@ -250,5 +259,25 @@ class Item extends CommonItem
     public function setSolutions($solutions)
     {
         $this->solutions = $solutions;
+    }
+
+    /**
+     * Set values
+     *
+     * @param array $values
+     */
+    public function setValues($values)
+    {
+        $this->values = $values;
+    }
+
+    /**
+     * Get values
+     *
+     * @return array
+     */
+    public function getValues()
+    {
+        return $this->values;
     }
 }
