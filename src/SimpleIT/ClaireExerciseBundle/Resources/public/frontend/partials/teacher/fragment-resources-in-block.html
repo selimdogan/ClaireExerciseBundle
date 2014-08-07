@@ -8,7 +8,7 @@
          ui-on-Drop="onDropResourceToBlock($event,$data,block.resources)">
         <accordion close-others="true">
             <accordion-group class="panel panel-success"
-                             data-ng-class="{'panel-danger': model.type === 'pair-items' && getMobilePart(resources[blockResourceId.id], block.pair_meta_key) === ''}"
+                             data-ng-class="{'panel-danger': (model.type === 'pair-items' && getMobilePart(resources[blockResourceId.id], block.pair_meta_key) === '') || (model.type === 'order-items' && getOrderValue(resources[blockResourceId.id], block.meta_key) === '')}"
                              data-ng-repeat="blockResourceId in block.resources track by $index" class="row">
                 <accordion-heading class="panel-heading">
                     <div class="row">
@@ -38,6 +38,10 @@
                                 <h4 ng-switch-when="pair-items">
                                     {{ resources[blockResourceId.id].title }}
                                     ({{ getMobilePart(resources[blockResourceId.id],block.pair_meta_key) }})&nbsp;<span class="caret"></span>
+                                </h4>
+                                <h4 ng-switch-when="order-items">
+                                    {{ resources[blockResourceId.id].title }}
+                                    ({{ getOrderValue(resources[blockResourceId.id],block.meta_key) }})&nbsp;<span class="caret"></span>
                                 </h4>
                                 <h4 ng-switch-when="multiple-choice">
                                     {{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>

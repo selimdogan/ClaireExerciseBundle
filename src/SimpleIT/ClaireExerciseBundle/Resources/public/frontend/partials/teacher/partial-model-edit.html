@@ -207,16 +207,29 @@
 
 <div ng-switch="model.type">
     <div ng-switch-when="pair-items">
-        <div ng-include src="BASE_CONFIG.urls.partials.teacher+'/partial-model-edit-pair-items.html'" data-ng-controller="modelEditPairItemsController"></div>
+        <div ng-include
+             src="BASE_CONFIG.urls.partials.teacher+'/partial-model-edit-pair-items.html'"
+             data-ng-controller="modelEditPairItemsController"></div>
+    </div>
+    <div ng-switch-when="order-items">
+        <div ng-include
+             src="BASE_CONFIG.urls.partials.teacher+'/partial-model-edit-order-items.html'"
+             data-ng-controller="modelEditOrderItemsController"></div>
     </div>
     <div ng-switch-when="multiple-choice">
-        <div ng-include src="BASE_CONFIG.urls.partials.teacher+'/partial-model-edit-multiple-choice.html'" data-ng-controller="modelEditMultipleChoiceController"></div>
+        <div ng-include
+             src="BASE_CONFIG.urls.partials.teacher+'/partial-model-edit-multiple-choice.html'"
+             data-ng-controller="modelEditMultipleChoiceController"></div>
     </div>
     <div ng-switch-when="group-items">
-        <div ng-include src="BASE_CONFIG.urls.partials.teacher+'/partial-model-edit-group-items.html'" data-ng-controller="modelEditGroupItemsController"></div>
+        <div ng-include
+             src="BASE_CONFIG.urls.partials.teacher+'/partial-model-edit-group-items.html'"
+             data-ng-controller="modelEditGroupItemsController"></div>
     </div>
     <div ng-switch-when="open-ended-question">
-        <div ng-include src="BASE_CONFIG.urls.partials.teacher+'/partial-model-edit-open-ended-question.html'" data-ng-controller="modelEditOpenEndedQuestionController"></div>
+        <div ng-include
+             src="BASE_CONFIG.urls.partials.teacher+'/partial-model-edit-open-ended-question.html'"
+             data-ng-controller="modelEditOpenEndedQuestionController"></div>
     </div>
 </div>
 

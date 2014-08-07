@@ -10,8 +10,8 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
         $scope.section = 'resource';
 
         /*
-         * Here is a contextual client-side object used to specify user's filters informations.
-         * These values are bi-directionnaly bata-binded to filters section fields in list views.
+         * Here is a contextual client-side object used to specify user's filters information.
+         * These values are bi-directionally data-bound to filters section fields in list views.
          */
         $scope.filters = {
             search: '', // search field
@@ -24,7 +24,7 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
             metadata: [] // list of metadata objects that a resource must have to be selected
         };
 
-        $scope.$parent.$watch("subSection", function (newValue, oldValue) {
+        $scope.$parent.$watch("subSection", function (newValue) {
             if (newValue == 'pair-items') {
                 $scope.filters.type.multiple_choice_question = '';
                 $scope.filters.type.text = 'text';
@@ -58,7 +58,7 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
             }
         });
 
-        if ($scope.$parent.section === undefined) {
+        if (typeof $scope.$parent.section === 'undefined') {
             $scope.parentSection = '';
         } else {
             $scope.parentSection = $scope.$parent.section;
@@ -146,7 +146,7 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
         };
 
         $scope.viewResource = function (resource) {
-            var modalInstance = $modal.open({
+            $modal.open({
                 templateUrl: BASE_CONFIG.urls.partials.teacher + '/partial-resource-preview.html',
                 controller: 'resourceViewController',
                 size: 'lg',
@@ -184,7 +184,7 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
         };
 
         $scope.importResource = function (resource) {
-            Resource.import({id: resource.id}, function (data) {
+            Resource.import({id: resource.id}, function () {
                 $scope.loadResourcesAndUsers();
             });
         };
@@ -390,7 +390,7 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
         if (typeof $scope.resources === "undefined") {
             $scope.editedResource = Resource.get({id: $stateParams.resourceid});
         } else {
-            $scope.editedResource = $scope.resources[$stateParams.resourceid];
+            $scope.editedResource = jQuery.extend(true, {}, $scope.resources[$stateParams.resourceid]);
         }
 
         // resource for md link
@@ -436,7 +436,7 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
                 file: file
             }).progress(function (evt) {
                     console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-                }).success(function (data, status, headers, config) {
+                }).success(function (data) {
                     // file is uploaded successfully
                     $scope.editedResource.content.source = data.fileName;
                 });
@@ -523,21 +523,21 @@ resourceControllers.controller('resourceSelectListController', ['$scope', 'BASE_
 
 var modelControllers = angular.module('modelControllers', ['ui.router']);
 
-modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'AttemptByExercise', '$routeParams', '$location', 'User',
-    function ($scope, ExerciseByModel, AttemptByExercise, $routeParams, $location, User) {
+modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'AttemptByExercise', '$routeParams', '$location',
+    function ($scope, ExerciseByModel, AttemptByExercise, $routeParams, $location) {
 
         $scope.section = 'model';
 
         /*
-         * Here is a contextual client-side object used to specify user's filters informations.
-         * These values are bi-directionnaly bata-binded to filters section fields in list views.
+         * Here is a contextual client-side object used to specify user's filters information.
+         * These values are bi-directionally data-bound to filters section fields in list views.
          */
         $scope.filters = {
             search: '', // search field
             archived: false, // select archived resources or not (boolean)
             public: false, // select public resources or not (boolean)
             type: { // resources types to be selected
-                multiple_choice: 'multiple-choice', pair_items: 'pair-items', order_items: '', open_ended_question: 'open-ended-question', group_items: 'group-items'
+                multiple_choice: 'multiple-choice', pair_items: 'pair-items', order_items: 'order-items', open_ended_question: 'open-ended-question', group_items: 'group-items'
             },
             keywords: [], // list of keywords that a resource must have to be selected
             metadata: [] // list of metadata objects that a resource must have to be selected
@@ -545,6 +545,12 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
 
         $scope.modelContext = {
             "newModel": {
+                "block_constraint": {
+                    "exists": {"key": '', "values": [], "comparator": 'exists'},
+                    "in": {"key": '', "values": [], "comparator": 'in'},
+                    "between": {"key": '', "values": ['', ''], "comparator": 'between'},
+                    "other": {"key": '', "values": [''], "comparator": ''}
+                },
                 "pair_items": {
                     "type": "pair-items",
                     "title": "nouvel appariement",
@@ -573,14 +579,44 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                         "is_list": true,
                         "number_of_occurrences": 0,
                         "resources": [],
-                        "pair_meta_key": ""
+                        "meta_key": ""
                     }
                 },
-                "block_constraint": {
-                    "exists": {"key": '', "values": [], "comparator": 'exists'},
-                    "in": {"key": '', "values": [], "comparator": 'in'},
-                    "between": {"key": '', "values": ['', ''], "comparator": 'between'},
-                    "other": {"key": '', "values": [''], "comparator": ''}
+                "order_items": {
+                    "type": "order-items",
+                    "title": "nouvel ordonnancement",
+                    "public": false,
+                    "archived": false,
+                    "draft": false,
+                    "complete": null,
+                    "metadata": [],
+                    "keywords": [],
+                    "content": {
+                        "wording": "Consigne de l'exercice",
+                        "documents": [],
+                        "object_blocks": [
+                            {
+                                "is_list": true,
+                                "number_of_occurrences": 0,
+                                "resources": [],
+                                "meta_key": ""
+                            }
+                        ],
+                        "is_sequence": false,
+                        "give_first": false,
+                        "give_last": false,
+                        "order": "asc",
+                        "show_values": false,
+                        "exercise_model_type": "order-items"
+                    }
+                },
+                "sub_order_items": {
+                    "block_field": {
+                        "is_list": true,
+                        "number_of_occurrences": 0,
+                        "resources": [],
+                        "meta_key": ""
+                    }
                 },
                 "multiple_choice": {
                     "type": "multiple-choice",
@@ -687,7 +723,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
             var keyword = $('#modelAddKeyword');
             collection.push(keyword[0].value);
             keyword[0].value = '';
-        }
+        };
 
         $scope.modelAddMetadataField = function (collection) {
             var key = $("#modelAddMetadataKey"), val = $("#modelAddMetadataValue");
@@ -695,7 +731,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
             collection.splice(collection.length, 0, newElement);
             key[0].value = '';
             val[0].value = '';
-        }
+        };
 
         $scope.modelAddBlockResourceField = function (collection, id) {
             var isAlreadyAdded = false;
@@ -738,7 +774,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
 
         $scope.tryExercise = function (exercise) {
             // create attempt from exercise
-            attempt = AttemptByExercise.create({exerciseId: exercise.id},
+            AttemptByExercise.create({exerciseId: exercise.id},
                 function (attempt) {
                     $scope.viewAttempt(attempt);
                 });
@@ -746,7 +782,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
 
         $scope.tryModel = function (model) {
             // create exercise from model
-            exercise = ExerciseByModel.try({modelId: model.id},
+            ExerciseByModel.try({modelId: model.id},
                 function (exercise) {
                     $scope.tryExercise(exercise);
                 });
@@ -793,13 +829,13 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
             Model.import({id: model.id}, function (data) {
                 $scope.models[data.id] = data;
             });
-        }
+        };
 
         $scope.subscribeModel = function (model) {
             Model.subscribe({id: model.id}, function (data) {
                 $scope.models[data.id] = data;
             });
-        }
+        };
 
         $scope.archiveModel = function (model) {
             console.log('archiving...');
@@ -824,6 +860,10 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
                 Model.save($scope.modelContext.newModel.pair_items, function (data) {
                     $location.path('/teacher/model/' + data.id)
                 });
+            } else if (type == 'order-items') {
+                Model.save($scope.modelContext.newModel.order_items, function (data) {
+                    $location.path('/teacher/model/' + data.id)
+                });
             } else if (type == 'multiple-choice') {
                 Model.save($scope.modelContext.newModel.multiple_choice, function (data) {
                     $location.path('/teacher/model/' + data.id)
@@ -840,8 +880,8 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
         };
     }]);
 
-modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User',
-    function ($scope, Model, Resource, $location, $stateParams, User) {
+modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource', '$location', '$stateParams',
+    function ($scope, Model, Resource, $location, $stateParams) {
 
         $scope.model = Model.get({id: $stateParams.modelid}, function () {
             // fill each block with empty constraints
@@ -886,7 +926,7 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
         };
 
         $scope.fillConstraints = function (blocks) {
-            for (i = 0; i < blocks.length; ++i) {
+            for (var i = 0; i < blocks.length; ++i) {
                 if (typeof blocks[i].resource_constraint === "undefined") {
                     blocks[i].resource_constraint = {
                         "metadata_constraints": [],
@@ -999,118 +1039,140 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
     }]);
 
 
-modelControllers.controller('modelEditPairItemsController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
+modelControllers.controller('modelEditPairItemsController', ['$scope',
+    function ($scope) {
 
-    $scope.modelAddBlockField = function (collection) {
-        collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_pair_items.block_field);
-    };
+        $scope.modelAddBlockField = function (collection) {
+            collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_pair_items.block_field);
+        };
 
-    $scope.getMobilePart = function (collection, key) {
-        var returnValue = '';
-        angular.forEach(collection.metadata, function (meta) {
-            if (meta.key == key) {
-                returnValue = meta.value;
-            }
-        });
-        return returnValue;
-    };
-}]);
-
-modelControllers.controller('modelEditMultipleChoiceController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
-
-    $scope.modelAddBlockField = function (collection) {
-        collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_multiple_choice.block_field);
-    };
-}]);
-
-modelControllers.controller('modelEditGroupItemsController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
-
-    $scope.modelAddBlockField = function (collection) {
-        collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_group_items.block_field);
-    };
-
-    $scope.findGroup = function (resource) {
-        // test all the groups
-        for (var i = 0; i < $scope.model.content.classif_constr.groups.length; ++i) {
-            var group = $scope.model.content.classif_constr.groups[i];
-            var belongs = true;
-
-            // test all the constaints
-            for (var j = 0; j < group.metadata_constraints.length; ++j) {
-                var mc = group.metadata_constraints[j];
-                var value = $scope.findMDValue(resource, mc.key);
-                if (value === null) {
-                    belongs = false;
+        $scope.getMobilePart = function (collection, key) {
+            var returnValue = '';
+            angular.forEach(collection.metadata, function (meta) {
+                if (meta.key == key) {
+                    returnValue = meta.value;
                 }
+            });
+            return returnValue;
+        };
+    }]);
 
-                switch (mc.comparator) {
-                    case 'in':
-                        var isIn = false;
-                        for (var k = 0; k < mc.values.length; ++k) {
-                            if (mc.values[k] === value) {
-                                isIn = true;
+modelControllers.controller('modelEditOrderItemsController', ['$scope',
+    function ($scope) {
+
+        $scope.modelAddBlockField = function (collection) {
+            collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_order_items.block_field);
+        };
+
+        $scope.getOrderValue = function (collection, key) {
+            var returnValue = '';
+            angular.forEach(collection.metadata, function (meta) {
+                if (meta.key == key) {
+                    returnValue = meta.value;
+                }
+            });
+            return returnValue;
+        };
+    }]);
+
+modelControllers.controller('modelEditMultipleChoiceController', ['$scope',
+    function ($scope) {
+
+        $scope.modelAddBlockField = function (collection) {
+            collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_multiple_choice.block_field);
+        };
+    }]);
+
+modelControllers.controller('modelEditGroupItemsController', ['$scope',
+    function ($scope) {
+
+        $scope.modelAddBlockField = function (collection) {
+            collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_group_items.block_field);
+        };
+
+        $scope.findGroup = function (resource) {
+            // test all the groups
+            for (var i = 0; i < $scope.model.content.classif_constr.groups.length; ++i) {
+                var group = $scope.model.content.classif_constr.groups[i];
+                var belongs = true;
+
+                // test all the constaints
+                for (var j = 0; j < group.metadata_constraints.length; ++j) {
+                    var mc = group.metadata_constraints[j];
+                    var value = $scope.findMDValue(resource, mc.key);
+                    if (value === null) {
+                        belongs = false;
+                    }
+
+                    switch (mc.comparator) {
+                        case 'in':
+                            var isIn = false;
+                            for (var k = 0; k < mc.values.length; ++k) {
+                                if (mc.values[k] === value) {
+                                    isIn = true;
+                                }
                             }
-                        }
 
-                        if (isIn === false) {
-                            belongs = false;
-                        }
-                        break;
+                            if (isIn === false) {
+                                belongs = false;
+                            }
+                            break;
 
-                    case 'between':
-                        if (value < mc.values[0] || value > mc.values[1]) {
-                            belongs = false;
-                        }
-                        break;
+                        case 'between':
+                            if (value < mc.values[0] || value > mc.values[1]) {
+                                belongs = false;
+                            }
+                            break;
 
-                    case 'lt':
-                        if (value >= mc.values[0]) {
-                            belongs = false;
-                        }
-                        break;
+                        case 'lt':
+                            if (value >= mc.values[0]) {
+                                belongs = false;
+                            }
+                            break;
 
-                    case 'lte':
-                        if (value > mc.values[0]) {
-                            belongs = false;
-                        }
-                        break;
+                        case 'lte':
+                            if (value > mc.values[0]) {
+                                belongs = false;
+                            }
+                            break;
 
-                    case 'gt':
-                        if (value <= mc.values[0]) {
-                            belongs = false;
-                        }
-                        break;
+                        case 'gt':
+                            if (value <= mc.values[0]) {
+                                belongs = false;
+                            }
+                            break;
 
-                    case 'gte':
-                        if (value < mc.values[0]) {
-                            belongs = false;
-                        }
-                        break;
+                        case 'gte':
+                            if (value < mc.values[0]) {
+                                belongs = false;
+                            }
+                            break;
+                    }
+                }
+
+                if (belongs) {
+                    return group.name;
+                }
+            }
+            return 'Autre';
+        };
+
+        $scope.findMDValue = function (resource, key) {
+            for (var i = 0; i < resource.metadata.length; ++i) {
+                if (resource.metadata[i].key === key) {
+                    return resource.metadata[i].value;
                 }
             }
 
-            if (belongs) {
-                return group.name;
-            }
+            return null;
         }
-        return 'Autre';
-    };
+    }]);
 
-    $scope.findMDValue = function (resource, key) {
-        for (var i = 0; i < resource.metadata.length; ++i) {
-            if (resource.metadata[i].key === key) {
-                return resource.metadata[i].value;
-            }
+modelControllers.controller('modelEditOpenEndedQuestionController', ['$scope',
+    function ($scope) {
+
+        $scope.modelAddBlockField = function (collection) {
+            collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_group_items.block_field);
         }
 
-        return null;
-    }
-}]);
-
-modelControllers.controller('modelEditOpenEndedQuestionController', ['$scope', 'Model', 'Resource', '$location', '$stateParams', 'User', function ($scope, Model, Resource, $location, $stateParams, User) {
-
-    $scope.modelAddBlockField = function (collection) {
-        collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_group_items.block_field);
-    }
-
-}]);
+    }]);

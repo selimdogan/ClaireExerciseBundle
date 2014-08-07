@@ -14,35 +14,18 @@ learnerControllers.controller('learnerController', ['$scope', 'User', 'AttemptBy
                 function () {
                     // when data loaded
                     console.log('attempts loaded');
-                    $scope.loadUsers();
+                    $scope.loadUsers($scope.models);
                 });
         } else {
             $scope.models = [];
             $scope.models[0] = AttemptList.get({modelId: $stateParams.modelId},
                 function () {
                     // when data loaded
-                    console.log('attempts loaded');
-                    $scope.loadUsers();
+                    console.log('attempt loaded');
+                    $scope.loadUsers($scope.models);
                 });
 
         }
-
-        $scope.loadUsers = function () {
-            userIds = [];
-            for (i = 0; i < $scope.models.length; ++i) {
-                if (userIds.indexOf($scope.models[i].author) == -1) {
-                    userIds.push($scope.models[i].author);
-                }
-                if (userIds.indexOf($scope.models[i].owner) == -1) {
-                    userIds.push($scope.models[i].owner);
-                }
-            }
-
-            $scope.users = [];
-            for (i = 0; i < userIds.length; ++i) {
-                $scope.users[userIds[i]] = User.get({userId: userIds[i]});
-            }
-        };
 
         $scope.viewAttempt = function (attempt) {
             $location.path("/learner/attempt/" + attempt.id);

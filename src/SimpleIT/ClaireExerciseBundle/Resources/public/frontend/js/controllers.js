@@ -1,6 +1,6 @@
 var mainAppControllers = angular.module('mainAppControllers', ['ui.router']);
 
-mainAppControllers.controller('mainController', ['$scope', '$routeParams', '$location', 'BASE_CONFIG', 'User', 'Resource',
+mainAppControllers.controller('mainManagerController', ['$scope', '$routeParams', '$location', 'BASE_CONFIG', 'User', 'Resource',
     function ($scope, $routeParams, $location, BASE_CONFIG, User, Resource) {
         // load only once every necessary user
         $scope.loadUsers = function (resourcesData) {
@@ -11,15 +11,17 @@ mainAppControllers.controller('mainController', ['$scope', '$routeParams', '$loc
             var userIds = [];
 
             for (var i in resourcesData) {
-                if (userIds.indexOf(resourcesData[i].author) == -1) {
-                    userIds.push(resourcesData[i].author);
-                }
-                if (userIds.indexOf(resourcesData[i].owner) == -1) {
-                    userIds.push(resourcesData[i].owner);
+                if (resourcesData.hasOwnProperty(i) && i != "$promise" && i != "$resolved") {
+                    if (userIds.indexOf(resourcesData[i].author) == -1) {
+                        userIds.push(resourcesData[i].author);
+                    }
+                    if (userIds.indexOf(resourcesData[i].owner) == -1) {
+                        userIds.push(resourcesData[i].owner);
+                    }
                 }
             }
 
-            for (i = 0; i < userIds.length; ++i) {
+            for (i in userIds) {
                 if (typeof $scope.users[userIds[i]] === 'undefined') {
                     $scope.users[userIds[i]] = User.get({userId: userIds[i]});
                 }
@@ -33,6 +35,7 @@ mainAppControllers.controller('mainController', ['$scope', '$routeParams', '$loc
                 for (var i = 0; i < data.length; ++i) {
                     privateResources[data[i].id] = data[i];
                 }
+                $scope.resources = privateResources;
 
                 Resource.query({'public-except-user': BASE_CONFIG.currentUserId}, function (data) {
                     // load an id indexed array of the resources
@@ -50,5 +53,36 @@ mainAppControllers.controller('mainController', ['$scope', '$routeParams', '$loc
 
         // initial loading
         $scope.loadResourcesAndUsers();
+        $scope.BASE_CONFIG = BASE_CONFIG;
+    }]);
+
+mainAppControllers.controller('mainUserController', ['$scope', '$routeParams', '$location', 'BASE_CONFIG', 'User',
+    function ($scope, $routeParams, $location, BASE_CONFIG, User) {
+        // load only once every necessary user
+        $scope.loadUsers = function (resourcesData) {
+            if (typeof $scope.users === 'undefined') {
+                $scope.users = [];
+            }
+
+            var userIds = [];
+
+            for (var i in resourcesData) {
+                if (resourcesData.hasOwnProperty(i) && i != "$promise" && i != "$resolved") {
+                    if (userIds.indexOf(resourcesData[i].author) == -1) {
+                        userIds.push(resourcesData[i].author);
+                    }
+                    if (userIds.indexOf(resourcesData[i].owner) == -1) {
+                        userIds.push(resourcesData[i].owner);
+                    }
+                }
+            }
+
+            for (i in userIds) {
+                if (typeof $scope.users[userIds[i]] === 'undefined') {
+                    $scope.users[userIds[i]] = User.get({userId: userIds[i]});
+                }
+            }
+        };
+
         $scope.BASE_CONFIG = BASE_CONFIG;
     }]);
