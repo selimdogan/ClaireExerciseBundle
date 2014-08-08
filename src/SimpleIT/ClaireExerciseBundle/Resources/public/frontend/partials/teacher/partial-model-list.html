@@ -231,6 +231,7 @@
                             <span ng-if="model.owner == BASE_CONFIG.currentUserId && !model.removable"
                                   class="glyphicon glyphicon-remove"
                                   style="opacity: 0.3"
+                                  ng-click="$event.stopPropagation()"
                                   title="Supprimer ce modèle (impossible car des exercices ont été générés avec ; il est donc utilisé)"></span>
                         </h4>
                     </div>

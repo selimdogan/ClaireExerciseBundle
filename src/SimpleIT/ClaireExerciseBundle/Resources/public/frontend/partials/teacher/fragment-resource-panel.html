@@ -72,6 +72,7 @@
                         ng-if="resource.owner == BASE_CONFIG.currentUserId && resourceContext == 'list' && !isSelectResource && !resource.removable"
                           class="glyphicon glyphicon-remove"
                           style="opacity: 0.3"
+                          ng-click="$event.stopPropagation()"
                           title="Supprimer cette ressource (impossible car elle est utilisée)"></span>
 
                     <span ng-if="isSelectResource"
