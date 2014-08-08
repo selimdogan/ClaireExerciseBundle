@@ -79,6 +79,15 @@ abstract class ResourceResourceFactory extends SharedResourceFactory
         }
         $resourceResource->setRequiredKnowledges($requirements);
 
+        // removable
+        if (count($resource->getRequiredByModels()) > 0
+            || count($resource->getRequiredByResources()) > 0
+        ) {
+            $resourceResource->setRemovable(false);
+        } else {
+            $resourceResource->setRemovable(true);
+        }
+
         return $resourceResource;
     }
 }

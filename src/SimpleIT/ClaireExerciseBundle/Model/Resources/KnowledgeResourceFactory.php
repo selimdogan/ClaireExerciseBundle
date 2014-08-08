@@ -70,6 +70,16 @@ abstract class KnowledgeResourceFactory extends SharedResourceFactory
         }
         $knowledgeResource->setRequiredKnowledges($requirements);
 
+        // removable
+        if (count($knowledge->getRequiredByModels()) > 0
+            || count($knowledge->getRequiredByResources()) > 0
+            || count($knowledge->getRequiredByKnowledges()) > 0
+        ) {
+            $knowledgeResource->setRemovable(false);
+        } else {
+            $knowledgeResource->setRemovable(true);
+        }
+
         return $knowledgeResource;
     }
 }

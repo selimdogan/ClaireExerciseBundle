@@ -71,6 +71,11 @@ abstract class SharedResource
     protected $complete;
 
     /**
+     * @var boolean $removable
+     */
+    protected $removable;
+
+    /**
      * @var array
      */
     protected $metadata;
@@ -383,4 +388,23 @@ abstract class SharedResource
         return $this->keywords;
     }
 
+    /**
+     * Set removable
+     *
+     * @param boolean $removable
+     */
+    public function setRemovable($removable)
+    {
+        $this->removable = $removable;
+    }
+
+    /**
+     * Get removable
+     *
+     * @return boolean
+     */
+    public function getRemovable()
+    {
+        return $this->removable;
+    }
 }

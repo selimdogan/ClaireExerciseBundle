@@ -85,6 +85,13 @@ abstract class ExerciseModelResourceFactory extends SharedResourceFactory
             $exerciseModelResource->setExercises($exercises);
         }
 
+        // removable
+        if (count($exerciseModel->getExercises()) > 0) {
+            $exerciseModelResource->setRemovable(false);
+        } else {
+            $exerciseModelResource->setRemovable(true);
+        }
+
         return $exerciseModelResource;
     }
 }

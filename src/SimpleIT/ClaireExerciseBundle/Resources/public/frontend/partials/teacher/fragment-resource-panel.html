@@ -64,9 +64,16 @@
                         ng-click="$event.stopPropagation();archiveResource(resource)"
                         class="glyphicon glyphicon-save"
                         title="Archiver cette ressource"></span>
-                    <span ng-if="resource.owner == BASE_CONFIG.currentUserId && resourceContext == 'list' && !isSelectResource"
+                    <span
+                        ng-if="resource.owner == BASE_CONFIG.currentUserId && resourceContext == 'list' && !isSelectResource && resource.removable"
                           ng-click="$event.stopPropagation();deleteResource(resource)" class="glyphicon glyphicon-remove"
                           title="Supprimer cette ressource"></span>
+                    <span
+                        ng-if="resource.owner == BASE_CONFIG.currentUserId && resourceContext == 'list' && !isSelectResource && !resource.removable"
+                          class="glyphicon glyphicon-remove"
+                          style="opacity: 0.3"
+                          title="Supprimer cette ressource (impossible car elle est utilisée)"></span>
+
                     <span ng-if="isSelectResource"
                           ng-click="$event.stopPropagation();selectResource(resource)"
                           class="glyphicon glyphicon-ok"

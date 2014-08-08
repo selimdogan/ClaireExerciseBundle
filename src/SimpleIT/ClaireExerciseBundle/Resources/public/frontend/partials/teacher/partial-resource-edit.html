@@ -333,10 +333,11 @@
             title="Sauvegarder les modifications. Ne peut pas être annulé.">
         Sauvegarder
     </button>
-    <button ng-if="editedResource.owner == BASE_CONFIG.currentUserId"
+    <button ng-if="editedResource.owner == BASE_CONFIG.currentUserId && editedResource.removable"
             ng-click="deleteResource(editedResource)" back-Button
             class="btn btn-danger pull-right"
-            title="Supprimer cette ressource. Possible uniquement si cette ressource n'est pas utilisée par ailleurs.">Supprimer
+            title="Supprimer cette ressource. Possible uniquement si cette ressource n'est pas utilisée par ailleurs.">
+        Supprimer
     </button>
 </div>
 

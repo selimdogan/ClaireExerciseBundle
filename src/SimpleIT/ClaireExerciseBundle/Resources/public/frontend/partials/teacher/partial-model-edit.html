@@ -305,7 +305,7 @@
             title="Essayer le modèle">
         Essayer
     </button>
-    <button ng-if="BASE_CONFIG.currentUserId == model.owner"
+    <button ng-if="BASE_CONFIG.currentUserId == model.owner && model.removable"
             ng-click="deleteModel(model)" back-Button
             class="btn btn-danger pull-right"
             title="Supprimer ce modèle. Possible uniquement si aucun exercise n'a été généré à partir de ce modèle">

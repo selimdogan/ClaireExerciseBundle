@@ -114,6 +114,14 @@ class ResourceResource extends SharedResource
     protected $complete;
 
     /**
+     * @var boolean $removable
+     * @Serializer\Type("boolean")
+     * @Serializer\Groups({"details", "list", "resource_list"})
+     * @Assert\Null(groups={"create"})
+     */
+    protected $removable;
+
+    /**
      * @var array $requiredExerciseResources
      * @Serializer\Type("array")
      * @Serializer\Groups({"details"})
