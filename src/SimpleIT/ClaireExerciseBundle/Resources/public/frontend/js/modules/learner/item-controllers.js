@@ -384,7 +384,7 @@ itemControllers.controller('openEndedQuestionController', ['$scope', 'Answer', '
         // correction
         $scope.displayCorrection = function (item) {
             $scope.solutions = item['content'].solutions;
-            $scope.right = $scope.solutions.indexOf($scope.answer) != -1;
+            $scope.right = $scope.solutions.indexOf($scope.item['content'].answer) != -1;
 
             $scope.item.corrected = true;
             $scope.item['content']['comment'] = item['content']['comment'];

@@ -92,7 +92,7 @@ class OpenEndedQuestionService extends ExerciseCreationService
         }
 
         // Create and add the exercise questions
-        $this->addQuestionsToTheExercise($modelQuestionToAdd, $exercise, $owner);
+        $this->addQuestionsToTheExercise($modelQuestionToAdd, $exercise);
 
         // shuffle the order of the questions (if needed) and the propositions
         if ($model->isShuffleQuestionsOrder()) {
@@ -109,20 +109,17 @@ class OpenEndedQuestionService extends ExerciseCreationService
      *
      * @param array    $modelQuestionToAdd The array of questions
      * @param Exercise $exercise           The Exercise
-     * @param User     $owner
      */
     private function addQuestionsToTheExercise(
         array $modelQuestionToAdd,
-        Exercise &$exercise,
-        User $owner
+        Exercise &$exercise
     )
     {
         /** @var OpenEndedQuestion $modelQuestion */
         foreach ($modelQuestionToAdd as $modelQuestion) {
             // initialize the variables
-            $variables = $variables = $this->computeFormulaVariableValues(
-                $modelQuestion->getFormulas(),
-                $owner
+            $variables = $this->computeFormulaVariableValues(
+                $modelQuestion->getFormulas()
             );
 
             $exerciseQuestion = new Question();

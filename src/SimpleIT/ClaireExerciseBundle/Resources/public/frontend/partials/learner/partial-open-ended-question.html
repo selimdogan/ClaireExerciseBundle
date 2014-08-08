@@ -5,12 +5,17 @@
             <div class="col-xs-6">
                 <strong>{{ item.content.question }}</strong>
 
-                <div>Formats de réponse attendus :</div>
-                <ul>
-                    <li ng-repeat="format in item.content.answer_format track by $index">
-                        {{ format }}
-                    </li>
-                </ul>
+                <div ng-if="item.content.answer_format.length > 1">
+                    <div>Formats de réponse attendus :</div>
+                    <ul>
+                        <li ng-repeat="format in item.content.answer_format track by $index">
+                            {{ format }}
+                        </li>
+                    </ul>
+                </div>
+                <div ng-if="item.content.answer_format.length == 1">
+                    Formats de réponse attendus : {{ item.content.answer_format[0] }}
+                </div>
             </div>
             <div class="col-xs-6 solution" ng-if="item.corrected">
                 <strong ng-if="solutions.length == 1">Solution</strong>

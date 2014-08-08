@@ -141,12 +141,11 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
      * Compute the values of the formula: variable instantiation and equation resolution
      *
      * @param array $localFormulas
-     * @param User  $owner
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException
      * @return array
      */
-    protected function computeFormulaVariableValues($localFormulas, User $owner)
+    protected function computeFormulaVariableValues($localFormulas)
     {
         if (empty($localFormulas)) {
             return array();
@@ -158,11 +157,7 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
         foreach ($localFormulas as $localFormula) {
             if (!is_null($localFormula->getFormulaId())) {
                 $formula = KnowledgeResourceFactory::create(
-                    $this->knowledgeService->getByIdAndOwner
-                        (
-                            $localFormula->getFormulaId(),
-                            $owner->getId()
-                        )
+                    $this->knowledgeService->get($localFormula->getFormulaId())
                 )->getContent();
 
                 if (get_class($formula) != KnowledgeResource::FORMULA_CLASS) {
@@ -231,7 +226,7 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
     protected function parseStringWithVariables($string, $variables)
     {
         if (!empty($variables)) {
-            preg_match_all('#\$[a-z|A-Z|0-9]+#', $string, $foundVarNames);
+            preg_match_all('#\$[a-z|A-Z|0-9]+:[a-z|A-Z|0-9]+#', $string, $foundVarNames);
             foreach ($foundVarNames[0] as $varName) {
                 $shortName = substr($varName, 1);
                 if (isset($variables[$shortName])) {
