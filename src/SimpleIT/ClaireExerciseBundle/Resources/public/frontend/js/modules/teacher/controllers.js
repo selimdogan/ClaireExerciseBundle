@@ -691,6 +691,10 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                         "is_list": true
                     }
                 },
+                "group_items_group": {
+                    "name": "",
+                    "metadata_constraints": []
+                },
                 "open_ended_question": {
                     "type": "open-ended-question",
                     "title": "Nouvelle ressource",
@@ -1088,6 +1092,14 @@ modelControllers.controller('modelEditGroupItemsController', ['$scope',
 
         $scope.modelAddBlockField = function (collection) {
             collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_group_items.block_field);
+        };
+
+        $scope.addGroup = function () {
+            $scope.model.content.classif_constr.groups.splice(
+                $scope.model.content.classif_constr.groups.length,
+                0,
+                $scope.modelContext.newModel.group_items_group
+            );
         };
 
         $scope.findGroup = function (resource) {
