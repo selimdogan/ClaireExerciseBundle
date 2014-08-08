@@ -1,4 +1,4 @@
-<div data-ng-controller="groupItemsController" class="container">
+<div data-ng-controller="groupItemsController">
 
     <div class="panel object-list"
          ng-if="!item.corrected"
@@ -23,7 +23,7 @@
                 >
                 <span ng-if="object.object_type == 'text'"
                       class="etiquette txt-etiquette">
-                    {{ object.text }}
+                    <div ng-bind-html="to_trusted(object.text)"></div>
                 </span>
                 <span ng-if="object.object_type == 'picture'">
                     <a href="{{ imageUrl }}{{ object.source }}"
@@ -84,7 +84,7 @@
                           title="Déposez les objets ici">
                         <span ng-if="object.object_type == 'text'"
                               class="etiquette txt-etiquette">
-                            {{ object.text }}
+                            <div ng-bind-html="to_trusted(object.text)"></div>
                         </span>
                         <span ng-if="object.object_type == 'picture'">
                             <a href="{{ imageUrl }}{{ object.source }}"
@@ -102,7 +102,7 @@
                         <span ng-if="object.object_type == 'text'"
                               class="etiquette txt-etiquette"
                               data-ng-class="{'etiquette-wrong': !object.right, 'etiquette-right': object.right}">
-                            {{ object.text }}
+                            <div ng-bind-html="to_trusted(object.text)"></div>
                         </span>
                         <span ng-if="object.object_type == 'picture'">
                             <a href="{{ imageUrl }}{{ object.source }}"
@@ -124,7 +124,7 @@
                         <span ng-if="object.object_type == 'text'"
                               class="etiquette txt-etiquette"
                               title="Cet objet aurait du être placé dans ce groupe">
-                            {{ object.text }}
+                            <div ng-bind-html="to_trusted(object.text)"></div>
                         </span>
                         <span ng-if="object.object_type == 'picture'">
                             <a href="{{ imageUrl }}{{ object.source }}"

@@ -1,4 +1,4 @@
-<div data-ng-controller="orderItemsController" class="container">
+<div data-ng-controller="orderItemsController">
 
     <div class="row">
         <div nf-if="help != null"><strong>Aide :</strong> {{ help }}</div>
@@ -25,7 +25,7 @@
                          on-drop-success="dropSuccessHandlerField($event,$index)">
                         <div ng-if="drop.object_type == 'text'"
                              class="etiquette txt-etiquette">
-                            {{ drop.text }}
+                            <div ng-bind-html="to_trusted(drop.text)"></div>
                         </div>
                         <div ng-if="drop.object_type == 'picture'">
                             <a href="{{ imageUrl }}{{ drop.source }}"
@@ -54,7 +54,7 @@
                         <div ng-if="drop.object_type == 'text'"
                              class="etiquette txt-etiquette"
                              data-ng-class="{'etiquette-wrong': !right, 'etiquette-right': right}">
-                            {{ drop.text }}
+                            <div ng-bind-html="to_trusted(drop.text)"></div>
                         </div>
                         <div ng-if="drop.object_type == 'picture'">
                             <a href="{{ imageUrl }}{{ drop.source }}"
@@ -86,7 +86,7 @@
                     <div class="col-xs-9">
                         <div ng-if="object.object_type == 'text'"
                              class="etiquette txt-etiquette">
-                            {{ object.object.text }}
+                            <div ng-bind-html="to_trusted(object.object.text)"></div>
                         </div>
                         <div ng-if="object.object.object_type == 'picture'">
                             <a href="{{ imageUrl }}{{ object.object.source }}"
@@ -127,7 +127,7 @@
                         >
                         <div ng-if="mobileObject.object_type == 'text'"
                              class="etiquette txt-etiquette">
-                            {{ mobileObject.text }}
+                            <div ng-bind-html="to_trusted(mobileObject.text)"></div>
                         </div>
                         <div ng-if="mobileObject.object_type == 'picture'">
                             <a href="{{ imageUrl }}{{ mobileObject.source }}"

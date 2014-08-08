@@ -1,8 +1,8 @@
-<div data-ng-controller="pairItemsController" class="container">
+<div data-ng-controller="pairItemsController">
 
     <div class="row">
 
-        <div class="col-xs-9 panel">
+        <div class="col-xs-12 panel">
             <div class="panel-heading row" style="color: #888888">
                 <div class="col-xs-5">
                     <div>
@@ -28,7 +28,7 @@
                         <div>
                             <div ng-if="fixPart.object_type == 'text'" class="etiquette txt-etiquette"
                                  title="Partie fixe de la paire à laquelle vous devez associer une partie mobile">
-                                {{ fixPart.text }}
+                                <div ng-bind-html="to_trusted(fixPart.text)"></div>
                             </div>
                             <div ng-if="fixPart.object_type == 'picture'"
                                  title="Partie fixe de la paire à laquelle vous devez associer une partie mobile. Cliquez pour agrandir.">
@@ -59,7 +59,7 @@
                                  on-drop-success="dropSuccessHandlerField($event,$index)">
                                 <div ng-if="drop[$index].object_type == 'text'"
                                      class="etiquette txt-etiquette">
-                                    {{ drop[$index].text }}
+                                    <div ng-bind-html="to_trusted(drop[$index].text)"></div>
                                 </div>
                                 <div ng-if="drop[$index].object_type == 'picture'">
                                     <a href="{{ imageUrl }}{{ drop[$index].source }}"
@@ -75,7 +75,7 @@
                                 <div ng-if="drop[$index].object_type == 'text'"
                                      class="etiquette txt-etiquette"
                                      data-ng-class="{'etiquette-wrong': !solution[$index].right, 'etiquette-right': solution[$index].right}">
-                                    {{ drop[$index].text }}
+                                    <div ng-bind-html="to_trusted(drop[$index].text)"></div>
                                 </div>
                                 <a href="{{ imageUrl }}{{ drop[$index].source }}"
                                    data-lightbox="imageMobile" data-title="Partie mobile">
@@ -94,7 +94,7 @@
                              title="La bonne réponse attendue">
                             <div ng-if="solution[$index].object_type == 'text'"
                                  class="etiquette txt-etiquette">
-                                {{ solution[$index].text }}
+                                <div ng-bind-html="to_trusted(solution[$index].text)"></div>
                             </div>
                             <div ng-if="solution[$index].object_type == 'picture'">
                                 <a href="{{ imageUrl }}{{ solution[$index].source }}"
@@ -108,6 +108,7 @@
                 </div>
             </div>
         </div>
+
         <div class="col-xs-3 fixPanel">
             <div class="panel object-list"
                  ng-if="!item.corrected"
@@ -132,7 +133,7 @@
                         >
                         <div ng-if="mobilePart.object_type == 'text'"
                              class="etiquette txt-etiquette">
-                            {{ mobilePart.text }}
+                            <div ng-bind-html="to_trusted(mobilePart.text)"></div>
                         </div>
                         <div ng-if="mobilePart.object_type == 'picture'">
                             <a href="{{ imageUrl }}{{ mobilePart.source }}"

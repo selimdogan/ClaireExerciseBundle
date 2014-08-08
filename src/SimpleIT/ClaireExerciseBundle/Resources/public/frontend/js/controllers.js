@@ -1,7 +1,7 @@
 var mainAppControllers = angular.module('mainAppControllers', ['ui.router']);
 
-mainAppControllers.controller('mainManagerController', ['$scope', '$routeParams', '$location', 'BASE_CONFIG', 'User', 'Resource',
-    function ($scope, $routeParams, $location, BASE_CONFIG, User, Resource) {
+mainAppControllers.controller('mainManagerController', ['$scope', '$sce', '$routeParams', '$location', 'BASE_CONFIG', 'User', 'Resource',
+    function ($scope, $sce, $routeParams, $location, BASE_CONFIG, User, Resource) {
         // load only once every necessary user
         $scope.loadUsers = function (resourcesData) {
             if (typeof $scope.users === 'undefined') {
@@ -51,13 +51,17 @@ mainAppControllers.controller('mainManagerController', ['$scope', '$routeParams'
             });
         };
 
+        $scope.to_trusted = function(html_code) {
+            return $sce.trustAsHtml(html_code);
+        }
+
         // initial loading
         $scope.loadResourcesAndUsers();
         $scope.BASE_CONFIG = BASE_CONFIG;
     }]);
 
-mainAppControllers.controller('mainUserController', ['$scope', '$routeParams', '$location', 'BASE_CONFIG', 'User',
-    function ($scope, $routeParams, $location, BASE_CONFIG, User) {
+mainAppControllers.controller('mainUserController', ['$scope', '$sce', '$routeParams', '$location', 'BASE_CONFIG', 'User',
+    function ($scope, $sce, $routeParams, $location, BASE_CONFIG, User) {
         // load only once every necessary user
         $scope.loadUsers = function (resourcesData) {
             if (typeof $scope.users === 'undefined') {
@@ -83,6 +87,10 @@ mainAppControllers.controller('mainUserController', ['$scope', '$routeParams', '
                 }
             }
         };
+
+        $scope.to_trusted = function(html_code) {
+            return $sce.trustAsHtml(html_code);
+        }
 
         $scope.BASE_CONFIG = BASE_CONFIG;
     }]);
