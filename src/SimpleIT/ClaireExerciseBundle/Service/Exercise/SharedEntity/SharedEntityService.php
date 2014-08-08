@@ -30,8 +30,8 @@ use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\MissingIdException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResourceFactory;
@@ -41,7 +41,6 @@ use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedEntityR
 use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
 use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Service\User\UserService;
-use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -205,12 +204,11 @@ abstract class SharedEntityService extends TransactionalService implements Share
     )
     {
         // complete
-        $entity->setComplete(
-            $this->checkEntityComplete(
-                $sharedResource->getType(),
-                $sharedResource->getParent(),
-                $sharedResource->getContent()
-            )
+        $this->checkEntityComplete(
+            $entity,
+            $sharedResource->getType(),
+            $sharedResource->getParent(),
+            $sharedResource->getContent()
         );
 
         // author
@@ -371,16 +369,16 @@ abstract class SharedEntityService extends TransactionalService implements Share
             }
             // Check if the entity is complete with the new content
             $oldComplete = $entity->getComplete();
-            $newComplete = $this->checkEntityComplete(
+            $this->checkEntityComplete(
+                $entity,
                 $entity->getType(),
                 $parentId,
                 $content
             );
-            $entity->setComplete($newComplete);
 
             // update children if necessary
-            if ($oldComplete != $newComplete) {
-                $this->updateChildrenComplete($entity, $newComplete);
+            if ($oldComplete != $entity->getComplete()) {
+                $this->updateChildrenComplete($entity, $entity->getComplete());
             }
         }
     }
@@ -458,8 +456,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
             throw new AccessDeniedException();
         }
 
-        if (!$this->canBeRemoved($entity))
-        {
+        if (!$this->canBeRemoved($entity)) {
             throw new EntityDeletionException('This entity is needed and cannot be deleted');
         }
 
@@ -663,19 +660,15 @@ abstract class SharedEntityService extends TransactionalService implements Share
     /**
      * Check if the content of an entity is sufficient to use it to generate exercises.
      *
-     * @param string                                     $type
-     * @param int                                        $parentEntityId
-     * @param CommonModel|CommonResource|CommonKnowledge $content
+     * @param SharedEntity $entity
+     * @param string       $type
+     * @param int          $parentId
+     * @param              $content
      *
-     * @throws \LogicException
-     * @throws \SimpleIT\ClaireExerciseBundle\Exception\InvalidModelException
+     * @internal param \SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResource $resource
      * @return boolean True if the model is complete
      */
-    abstract protected function checkEntityComplete(
-        $type,
-        $parentEntityId,
-        $content
-    );
+    abstract protected function checkEntityComplete($entity, $type, $parentId, $content);
 
     /**
      * Throws an exception if the content does not match the type

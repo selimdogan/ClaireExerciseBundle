@@ -31,14 +31,6 @@ use JMS\Serializer\Annotation as Serializer;
 class ClassificationConstraints
 {
     /**
-     * The no-group objects are classified in a group which name is the value of
-     * the metadata
-     *
-     * @const OWN = "own"
-     */
-    const OWN = "own";
-
-    /**
      * The no-group objects are not used (can reduce the number of objects in
      * the exercise)
      *
@@ -61,14 +53,6 @@ class ClassificationConstraints
      * @Serializer\Groups({"details", "exercise_model_storage"})
      */
     private $other;
-
-    /**
-     * @var array $metaKey An array of strings, the metaKeys used to determine
-     *                     the groups.
-     * @Serializer\Type("array")
-     * @Serializer\Groups({"details", "exercise_model_storage"})
-     */
-    private $metaKeys = array();
 
     /**
      * @var array $groups An array of Group
@@ -95,36 +79,6 @@ class ClassificationConstraints
     public function setOther($other)
     {
         $this->other = $other;
-    }
-
-    /**
-     * Get metaKeys
-     *
-     * @return array
-     */
-    public function getMetaKeys()
-    {
-        return $this->metaKeys;
-    }
-
-    /**
-     * Add metaKey
-     *
-     * @param string $metaKey
-     */
-    public function addMetaKey($metaKey)
-    {
-        $this->metaKeys[] = $metaKey;
-    }
-
-    /**
-     * Set metaKeys
-     *
-     * @param array $metaKeys
-     */
-    public function setMetaKeys($metaKeys)
-    {
-        $this->metaKeys = $metaKeys;
     }
 
     /**

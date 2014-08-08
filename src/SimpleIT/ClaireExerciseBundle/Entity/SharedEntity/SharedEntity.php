@@ -71,6 +71,11 @@ abstract class SharedEntity extends AbstractResource
     protected $complete;
 
     /**
+     * @var string $completeError
+     */
+    protected $completeError;
+
+    /**
      * @var Collection
      */
     protected $children;
@@ -413,5 +418,25 @@ abstract class SharedEntity extends AbstractResource
     public function getDraft()
     {
         return $this->draft;
+    }
+
+    /**
+     * Set completeError
+     *
+     * @param string $completeError
+     */
+    public function setCompleteError($completeError)
+    {
+        $this->completeError = $completeError;
+    }
+
+    /**
+     * Get completeError
+     *
+     * @return string
+     */
+    public function getCompleteError()
+    {
+        return $this->completeError;
     }
 }

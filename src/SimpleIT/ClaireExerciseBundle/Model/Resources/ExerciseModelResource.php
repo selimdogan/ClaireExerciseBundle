@@ -109,6 +109,14 @@ class ExerciseModelResource extends SharedResource
     protected $complete;
 
     /**
+     * @var string $completeError
+     * @Serializer\Type("string")
+     * @Serializer\Groups({"details", "list", "exercise"})
+     * @Assert\NotBlank(groups={"create"})
+     */
+    protected $completeError;
+
+    /**
      * @var boolean $removable
      * @Serializer\Groups({"details", "list"})
      * @Serializer\Type("boolean")

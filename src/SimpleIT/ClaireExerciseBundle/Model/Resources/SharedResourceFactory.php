@@ -58,6 +58,7 @@ abstract class SharedResourceFactory
         $resource->setOwner($entity->getOwner()->getId());
         $resource->setDraft($entity->getDraft());
         $resource->setComplete($entity->getComplete());
+        $resource->setCompleteError($entity->getCompleteError());
 
         // Parent and fork from
         if (!is_null($entity->getParent())) {

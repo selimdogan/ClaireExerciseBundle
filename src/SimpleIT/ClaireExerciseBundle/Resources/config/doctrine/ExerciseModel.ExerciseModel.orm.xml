@@ -11,6 +11,7 @@
         <field name="content" column="content" type="text" nullable="true"/>
         <field name="draft" column="draft" type="boolean" nullable="false"/>
         <field name="complete" column="complete" type="boolean" nullable="false"/>
+        <field name="completeError" column="complete_error" type="string" nullable="true"/>
         <field name="public" column="public" type="boolean" nullable="false"/>
         <field name="archived" column="archived" type="boolean" nullable="true"/>
 

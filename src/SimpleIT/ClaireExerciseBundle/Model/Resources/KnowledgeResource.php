@@ -89,6 +89,14 @@ class KnowledgeResource extends SharedResource
     protected $complete;
 
     /**
+     * @var string $completeError
+     * @Serializer\Type("string")
+     * @Serializer\Groups({"details", "list", "knowledge_list"})
+     * @Assert\NotBlank(groups={"create"})
+     */
+    protected $completeError;
+
+    /**
      * @var boolean $removable
      * @Serializer\Type("boolean")
      * @Serializer\Groups({"details", "list", "knowledge_list"})

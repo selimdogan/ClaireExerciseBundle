@@ -185,30 +185,30 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
     /**
      * Check if the content of an exercise model is sufficient to generate exercises.
      *
-     * @param string          $type
-     * @param int             $parentEntityId
-     * @param CommonKnowledge $content
+     * @param Knowledge $entity
+     * @param string    $type
+     * @param int       $parentId
+     * @param           $content
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException
+     * @internal param \SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource $resource
      * @return boolean True if the model is complete
      */
-    protected function checkEntityComplete(
-        $type,
-        $parentEntityId,
-        $content
-    )
+    protected function checkEntityComplete($entity, $type, $parentId, $content)
     {
-        if ($parentEntityId === null) {
+        $errorCode = null;
+
+        if ($parentId === null) {
             switch ($type) {
                 case CommonKnowledge::FORMULA:
                     /** @var Formula $content */
                     try {
 
                         $this->formulaService->validateFormulaResource($content);
-
-                        return true;
+                        $errorCode = 'Formule invalide';
+                        $complete = true;
                     } catch (InvalidKnowledgeException $ike) {
-                        return false;
+                        $complete = false;
                     }
                     break;
                 default:
@@ -220,13 +220,19 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
             }
             try {
 
-                $parentEntity = $this->get($parentEntityId);
+                $parentEntity = $this->get($parentId);
             } catch (NonExistingObjectException $neoe) {
                 throw new InconsistentEntityException('The parent knowledge cannot be found.');
             }
 
-            return $parentEntity->getPublic();
+            $complete = $parentEntity->getPublic();
+            if (!$parentEntity->getPublic()) {
+                $errorCode = 101;
+            }
         }
+
+        $entity->setComplete($complete);
+        $entity->setCompleteError($errorCode);
     }
 
     /**
@@ -331,18 +337,15 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
      */
     public function canBeRemoved($entity)
     {
-        if (count($entity->getRequiredByResources()) > 0)
-        {
+        if (count($entity->getRequiredByResources()) > 0) {
             return false;
         }
 
-        if (count($entity->getRequiredByModels()) > 0)
-        {
+        if (count($entity->getRequiredByModels()) > 0) {
             return false;
         }
 
-        if (count($entity->getRequiredByKnowledges()) > 0)
-        {
+        if (count($entity->getRequiredByKnowledges()) > 0) {
             return false;
         }
 

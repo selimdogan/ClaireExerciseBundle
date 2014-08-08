@@ -71,6 +71,11 @@ abstract class SharedResource
     protected $complete;
 
     /**
+     * @var string $completeError
+     */
+    protected $completeError;
+
+    /**
      * @var boolean $removable
      */
     protected $removable;
@@ -406,5 +411,25 @@ abstract class SharedResource
     public function getRemovable()
     {
         return $this->removable;
+    }
+
+    /**
+     * Set completeError
+     *
+     * @param string $completeError
+     */
+    public function setCompleteError($completeError)
+    {
+        $this->completeError = $completeError;
+    }
+
+    /**
+     * Get completeError
+     *
+     * @return string
+     */
+    public function getCompleteError()
+    {
+        return $this->completeError;
     }
 }

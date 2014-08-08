@@ -212,7 +212,7 @@ class GroupItemsService extends ExerciseCreationService
 
             // if no group
             if ($count == 0) {
-                $groupName = $this->chooseGroup($classifConstr, $obj);
+                $groupName = $this->chooseGroup($classifConstr);
             } elseif ($count >= 2) {
                 $groupName = self::REJECT;
             }
@@ -228,23 +228,13 @@ class GroupItemsService extends ExerciseCreationService
      * Choose the group of a no-group-object
      *
      * @param ClassificationConstraints $classifConstr
-     * @param ExerciseObject            $obj
      *
      * @return int|string
      */
-    private function chooseGroup(ClassificationConstraints $classifConstr, ExerciseObject $obj)
+    private function chooseGroup(ClassificationConstraints $classifConstr)
     {
         $groupName = "";
         switch ($classifConstr->getOther()) {
-            case ClassificationConstraints::OWN:
-                foreach ($classifConstr->getMetaKeys() as $key) {
-                    if ($groupName != "") {
-                        $groupName .= "; ";
-                    }
-                    $groupName .= $key . " = " . $obj->getMetadataByKey($key);
-                }
-                break;
-
             case ClassificationConstraints::REJECT:
                 $groupName = self::REJECT;
                 break;
@@ -349,17 +339,6 @@ class GroupItemsService extends ExerciseCreationService
         else {
             // get the resource constraint
             $oc = $ob->getResourceConstraint();
-
-            // add the existence of the link meta key(s)
-            if (is_null($model->getClassifConstr())) {
-                $keyList = $ob->getClassifConstr()->getMetaKeys();
-            } else {
-                $keyList = $model->getClassifConstr()->getMetaKeys();
-            }
-
-            foreach ($keyList as $key) {
-                $oc->addExists($key);
-            }
 
             // add the existence of the meta to display, if there is one
             $mtd = $ob->getMetaToDisplay();

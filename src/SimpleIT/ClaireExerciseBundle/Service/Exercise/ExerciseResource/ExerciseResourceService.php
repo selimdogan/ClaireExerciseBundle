@@ -336,40 +336,40 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     /**
      * Check if the content of a resource is sufficient to use it to generate exercises.
      *
-     * @param string         $type
-     * @param int            $parentEntityId
-     * @param CommonResource $content
+     * @param ExerciseResource $entity
+     * @param string           $type
+     * @param int              $parentId
+     * @param CommonResource   $content
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException
+     * @internal param \SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource $resource
      * @return boolean True if the model is complete
      */
-    protected function checkEntityComplete(
-        $type,
-        $parentEntityId,
-        $content
-    )
+    protected function checkEntityComplete($entity, $type, $parentId, $content)
     {
-        if ($parentEntityId === null) {
+        $errorCode = null;
+
+        if ($parentId === null) {
             switch ($type) {
                 case CommonResource::PICTURE:
                     /** @var PictureResource $content */
-                    return $this->checkPictureComplete($content);
+                    $complete = $this->checkPictureComplete($content, $errorCode);
                     break;
                 case CommonResource::TEXT:
                     /** @var TextResource $content */
-                    return $this->checkTextComplete($content);
+                    $complete = $this->checkTextComplete($content, $errorCode);
                     break;
                 case CommonResource::OPEN_ENDED_QUESTION:
                     /** @var OpenEndedQuestionResource $content */
-                    return $this->checkOEQComplete($content);
+                    $complete = $this->checkOEQComplete($content, $errorCode);
                     break;
                 case CommonResource::MULTIPLE_CHOICE_QUESTION:
                     /** @var MultipleChoiceQuestionResource $content */
-                    return $this->checkMCQComplete($content);
+                    $complete = $this->checkMCQComplete($content, $errorCode);
                     break;
                 case CommonResource::SEQUENCE:
                     /** @var SequenceResource $content */
-                    return $this->checkSequenceComplete($content);
+                    $complete = $this->checkSequenceComplete($content, $errorCode);
                     break;
                 default:
                     throw new InconsistentEntityException('Invalid type');
@@ -380,59 +380,87 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
             }
             try {
 
-                $parentModel = $this->get($parentEntityId);
+                $parentModel = $this->get($parentId);
             } catch (NonExistingObjectException $neoe) {
                 throw new InconsistentEntityException('The parent model cannot be found.');
             }
 
-            return $parentModel->getPublic();
+            $complete = $parentModel->getPublic();
+            if (!$parentModel->getPublic()) {
+                $errorCode = 101;
+            }
         }
+
+        $entity->setComplete($complete);
+        $entity->setCompleteError($errorCode);
     }
 
     /**
      * Check if a picture resource is complete
      *
      * @param PictureResource $content
+     * @param string          $errorCode
      *
      * @return bool
      */
     private function checkPictureComplete(
-        PictureResource $content
+        PictureResource $content,
+        &$errorCode
     )
     {
-        return $content->getSource() !== null;
+        if ($content->getSource() === null) {
+            $errorCode = '801';
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Check if a text resource is complete
      *
      * @param TextResource $content
+     * @param string       $errorCode
      *
      * @return bool
      */
     private function checkTextComplete(
-        TextResource $content
+        TextResource $content,
+        &$errorCode
     )
     {
-        return $content->getText() !== null;
+        if ($content->getText() === null) {
+            $errorCode = '802';
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Check if an open ended question resource is complete
      *
      * @param OpenEndedQuestionResource $content
+     * @param string                    $errorCode
      *
      * @return bool
      */
     private function checkOEQComplete(
-        OpenEndedQuestionResource $content
+        OpenEndedQuestionResource $content,
+        &$errorCode
     )
     {
         if ($content->getQuestion() === null) {
+            $errorCode = '803';
+
             return false;
         }
 
         if ($content->getSolutions() === null || count($content->getSolutions()) == 0) {
+            $errorCode = '804';
+
             return false;
         }
 
@@ -443,24 +471,32 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * Check if a multiple choice question resource is complete
      *
      * @param MultipleChoiceQuestionResource $content
+     * @param string                         $errorCode
      *
      * @return bool
      */
     private function checkMCQComplete(
-        MultipleChoiceQuestionResource $content
+        MultipleChoiceQuestionResource $content,
+        &$errorCode
     )
     {
         if ($content->getQuestion() === null) {
+            $errorCode = '803';
+
             return false;
         }
 
         if ($content->getPropositions() === null || count($content->getPropositions()) == 0) {
+            $errorCode = '805';
+
             return false;
         }
 
         /** @var MultipleChoicePropositionResource $proposition */
         foreach ($content->getPropositions() as $proposition) {
             if ($proposition->getText() === null) {
+                $errorCode = '806';
+
                 return false;
             }
         }
@@ -472,20 +508,26 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * Check if a sequence resource is complete
      *
      * @param SequenceResource $content
+     * @param string           $errorCode
      *
      * @return bool
      */
     private function checkSequenceComplete(
-        SequenceResource $content
+        SequenceResource $content,
+        &$errorCode
     )
     {
         if ($content->getSequenceType() === null) {
+            $errorCode = '807';
+
             return false;
         }
 
         try {
             $content->validate();
         } catch (InvalidExerciseResourceException $ire) {
+            $errorCode = '808';
+
             return false;
         }
 

@@ -114,6 +114,14 @@ class ResourceResource extends SharedResource
     protected $complete;
 
     /**
+     * @var string $completeError
+     * @Serializer\Type("string")
+     * @Serializer\Groups({"details", "list", "resource_list"})
+     * @Assert\NotBlank(groups={"create"})
+     */
+    protected $completeError;
+
+    /**
      * @var boolean $removable
      * @Serializer\Type("boolean")
      * @Serializer\Groups({"details", "list", "resource_list"})

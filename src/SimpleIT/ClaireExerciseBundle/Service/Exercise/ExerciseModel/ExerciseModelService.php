@@ -375,40 +375,39 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     /**
      * Check if the content of an exercise model is sufficient to generate exercises.
      *
-     * @param string      $type
-     * @param int         $parentEntityId
-     * @param CommonModel $content
+     * @param ExerciseModel $entity
+     * @param string        $type
+     * @param int           $parentId
+     * @param               $content
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException
      * @return boolean True if the model is complete
      */
-    protected function checkEntityComplete(
-        $type,
-        $parentEntityId,
-        $content
-    )
+    protected function checkEntityComplete($entity, $type, $parentId, $content)
     {
-        if ($parentEntityId === null) {
+        $errorCode = null;
+
+        if ($parentId === null) {
             switch ($type) {
                 case CommonModel::MULTIPLE_CHOICE:
                     /** @var MultipleChoice $content */
-                    return $this->checkMCComplete($content);
+                    $complete = $this->checkMCComplete($content, $errorCode);
                     break;
                 case CommonModel::PAIR_ITEMS:
                     /** @var PairItems $content */
-                    return $this->checkPIComplete($content);
+                    $complete = $this->checkPIComplete($content, $errorCode);
                     break;
                 case CommonModel::GROUP_ITEMS:
                     /** @var GroupItems $content */
-                    return $this->checkGIComplete($content);
+                    $complete = $this->checkGIComplete($content, $errorCode);
                     break;
                 case CommonModel::ORDER_ITEMS:
                     /** @var OrderItems $content */
-                    return $this->checkOIComplete($content);
+                    $complete = $this->checkOIComplete($content, $errorCode);
                     break;
                 case CommonModel::OPEN_ENDED_QUESTION:
                     /** @var OpenEnded $content */
-                    return $this->checkOEQComplete($content);
+                    $complete = $this->checkOEQComplete($content, $errorCode);
                     break;
                 default:
                     throw new InconsistentEntityException('Invalid type');
@@ -419,31 +418,43 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
             }
             try {
 
-                $parentModel = $this->get($parentEntityId);
+                $parentModel = $this->get($parentId);
             } catch (NonExistingObjectException $neoe) {
                 throw new InconsistentEntityException('The parent model cannot be found.');
             }
 
-            return $parentModel->getPublic();
+            $complete = $parentModel->getPublic();
+            if (!$parentModel->getPublic()) {
+                $errorCode = 101;
+            }
         }
+
+        $entity->setComplete($complete);
+        $entity->setCompleteError($errorCode);
     }
 
     /**
      * Check if a multiple choice content is complete
      *
      * @param MultipleChoice $content
+     * @param string         $errorCode
      *
      * @return boolean
      */
     private function checkMCComplete(
-        MultipleChoice $content
+        MultipleChoice $content,
+        &$errorCode
     )
     {
         if (is_null($content->isShuffleQuestionsOrder())) {
+            $errorCode = '201';
+
             return false;
         }
         $questionBlocks = $content->getQuestionBlocks();
         if (!count($questionBlocks) > 0) {
+            $errorCode = '202';
+
             return false;
         }
         /** @var MCQuestionBlock $questionBlock */
@@ -451,12 +462,15 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
             if (!($questionBlock->getMaxNumberOfPropositions() >= 0
                 && $questionBlock->getMaxNumberOfRightPropositions() >= 0)
             ) {
+                $errorCode = '301';
+
                 return false;
             }
 
             if (!$this->checkBlockComplete(
                 $questionBlock,
-                array(CommonResource::MULTIPLE_CHOICE_QUESTION)
+                array(CommonResource::MULTIPLE_CHOICE_QUESTION),
+                $errorCode
             )
             ) {
                 return false;
@@ -470,21 +484,27 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Check if a pair items content is complete
      *
      * @param PairItems $content
+     * @param string    $errorCode
      *
      * @return bool
      */
     private function checkPIComplete(
-        PairItems $content
+        PairItems $content,
+        &$errorCode
     )
     {
         $pairBlocks = $content->getPairBlocks();
         if (!count($pairBlocks) > 0) {
+            $errorCode = '202';
+
             return false;
         }
 
         /** @var PairBlock $pairBlock */
         foreach ($pairBlocks as $pairBlock) {
             if ($pairBlock->getPairMetaKey() == null) {
+                $errorCode = '302';
+
                 return false;
             }
 
@@ -494,6 +514,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                     CommonResource::PICTURE,
                     CommonResource::TEXT
                 ),
+                $errorCode,
                 $pairBlock->getPairMetaKey()
             )
             ) {
@@ -508,23 +529,27 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Check if a group items model is complete
      *
      * @param GroupItems $content
+     * @param string     $errorCode
      *
      * @return bool
      */
     private function checkGIComplete(
-        GroupItems $content
+        GroupItems $content,
+        &$errorCode
     )
     {
         if ($content->getDisplayGroupNames() != GroupItems::ASK
             && $content->getDisplayGroupNames() != GroupItems::HIDE
             && $content->getDisplayGroupNames() != GroupItems::SHOW
         ) {
+            $errorCode = '203';
+
             return false;
         }
 
         $globalClassification = false;
         if ($content->getClassifConstr() != null) {
-            if (!$this->checkClassifConstr($content->getClassifConstr())) {
+            if (!$this->checkClassifConstr($content->getClassifConstr(), $errorCode)) {
                 return false;
             }
             $globalClassification = true;
@@ -532,6 +557,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
 
         $objectBlocks = $content->getObjectBlocks();
         if (!count($objectBlocks) > 0) {
+            $errorCode = '202';
+
             return false;
         }
 
@@ -540,7 +567,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
             if (!$globalClassification &&
                 (
                     $objectBlock->getClassifConstr() == null
-                    || !$this->checkClassifConstr($objectBlock->getClassifConstr())
+                    || !$this->checkClassifConstr($objectBlock->getClassifConstr(), $errorCode)
                 )
             ) {
                 return false;
@@ -551,7 +578,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                 array(
                     CommonResource::TEXT,
                     CommonResource::PICTURE
-                )
+                ),
+                $errorCode
             )
             ) {
                 return false;
@@ -565,14 +593,18 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Check if an order items model is complete
      *
      * @param OrderItems $content
+     * @param string     $errorCode
      *
      * @return bool
      */
     private function checkOIComplete(
-        OrderItems $content
+        OrderItems $content,
+        &$errorCode
     )
     {
         if ($content->isGiveFirst() === null || $content->isGiveLast() === null) {
+            $errorCode = '204';
+
             return false;
         }
 
@@ -580,37 +612,54 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
         $objectBlocks = $content->getObjectBlocks();
         // both cannot be empty or filled
         if (empty($sequenceBlock) == empty($objectBlocks)) {
+            $errorCode = '205';
+
             return false;
         }
 
         if ($sequenceBlock !== null) {
             if ($sequenceBlock->isKeepAll() === null) {
+                $errorCode = '303';
+
                 return false;
             }
 
             if (!$sequenceBlock->isKeepAll() &&
                 ($sequenceBlock->isUseFirst() === null || $sequenceBlock->isUseLast() === null)
             ) {
+                $errorCode = '304';
+
                 return false;
             }
 
-            if (!$this->checkBlockComplete($sequenceBlock, array(CommonResource::SEQUENCE))) {
+            if (!$this->checkBlockComplete(
+                $sequenceBlock,
+                array(CommonResource::SEQUENCE),
+                $errorCode
+            )
+            ) {
                 return false;
             }
         } else {
             if ($content->getOrder() != OrderItems::ASCENDENT
                 && $content->getOrder() != OrderItems::DESCENDENT
             ) {
+                $errorCode = '206';
+
                 return false;
             }
 
             if (is_null($content->getShowValues())) {
+                $errorCode = '207';
+
                 return false;
             }
 
             /** @var OIObjectBlock $objectBlock */
             foreach ($objectBlocks as $objectBlock) {
                 if ($objectBlock->getMetaKey() === null) {
+                    $errorCode = '305';
+
                     return false;
                 }
 
@@ -620,7 +669,9 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                     array(
                         CommonResource::PICTURE,
                         CommonResource::TEXT
-                    )
+                    ),
+                    $errorCode,
+                    $objectBlock->getMetaKey()
                 )
                 ) {
                     return false;
@@ -635,18 +686,24 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Check if an open ended question model is complete
      *
      * @param OpenEnded $content
+     * @param string    $errorCode
      *
      * @return bool
      */
     private function checkOEQComplete(
-        OpenEnded $content
+        OpenEnded $content,
+        &$errorCode
     )
     {
         if (is_null($content->isShuffleQuestionsOrder())) {
+            $errorCode = '201';
+
             return false;
         }
         $questionBlocks = $content->getQuestionBlocks();
         if (!count($questionBlocks) > 0) {
+            $errorCode = '202';
+
             return false;
         }
 
@@ -654,7 +711,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
         foreach ($questionBlocks as $questionBlock) {
             if (!$this->checkBlockComplete(
                 $questionBlock,
-                array(CommonResource::OPEN_ENDED_QUESTION)
+                array(CommonResource::OPEN_ENDED_QUESTION),
+                $errorCode
             )
             ) {
                 return false;
@@ -670,28 +728,36 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * @param ResourceBlock $block
      * @param array         $resourceTypes
      * @param string        $metaKey
+     * @param string        $errorCode
      *
      * @return boolean
      */
     private function checkBlockComplete(
         ResourceBlock $block,
         array $resourceTypes,
+        &$errorCode,
         $metaKey = null
     )
     {
         if (!($block->getNumberOfOccurrences() > 0)) {
+            $errorCode = '306';
+
             return false;
         }
 
         if (count($block->getResources()) == 0 && $block->getResourceConstraint() === null) {
+            $errorCode = '307';
+
             return false;
         } elseif ($block->getIsList() && count($block->getResources()) == 0) {
+            $errorCode = '308';
+
             return false;
         }
 
         /** @var ObjectId $resource */
         foreach ($block->getResources() as $resource) {
-            if (!$this->checkObjectId($resource, $resourceTypes, $metaKey)) {
+            if (!$this->checkObjectId($resource, $errorCode, $resourceTypes, $metaKey)) {
                 return false;
             }
         }
@@ -699,7 +765,11 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
         if (!$block->getIsList() &&
             (
                 $block->getResourceConstraint() == null ||
-                !$this->checkConstraintsComplete($block->getResourceConstraint(), $resourceTypes)
+                !$this->checkConstraintsComplete(
+                    $block->getResourceConstraint(),
+                    $errorCode,
+                    $resourceTypes
+                )
             )
         ) {
             return false;
@@ -713,33 +783,39 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      *
      * @param ObjectConstraints $resourceConstraints
      * @param array             $resourceTypes
+     * @param string            $errorCode
      *
      * @return boolean
      */
     private function checkConstraintsComplete(
         ObjectConstraints $resourceConstraints,
+        &$errorCode,
         array $resourceTypes = array()
     )
     {
         if (!empty($resourceTypes) && !is_null($resourceConstraints->getType()) &&
             !in_array($resourceConstraints->getType(), $resourceTypes)
         ) {
+            $errorCode = '401';
+
             return false;
         }
         if (count($resourceConstraints->getMetadataConstraints()) == 0) {
+            $errorCode = '402';
+
             return false;
         }
 
         /** @var MetadataConstraint $mdc */
         foreach ($resourceConstraints->getMetadataConstraints() as $mdc) {
-            if (!$this->checkMetadataConstraintComplete($mdc)) {
+            if (!$this->checkMetadataConstraintComplete($mdc, $errorCode)) {
                 return false;
             }
         }
 
         /** @var ObjectId $excluded */
         foreach ($resourceConstraints->getExcluded() as $excluded) {
-            if (!$this->checkObjectId($excluded)) {
+            if (!$this->checkObjectId($excluded, $errorCode)) {
                 return false;
             }
         }
@@ -753,25 +829,33 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * @param ObjectId $objectId
      * @param array    $resourceTypes
      * @param string   $metaKey
+     * @param string   $errorCode
      *
      * @return bool
      */
     private function checkObjectId(
         ObjectId $objectId,
+        &$errorCode,
         array $resourceTypes = array(),
         $metaKey = null
     )
     {
         if (is_null($objectId->getId())) {
+            $errorCode = '501';
+
             return false;
         }
         try {
             $resource = $this->exerciseResourceService->get($objectId->getId());
         } catch (NonExistingObjectException $neoe) {
+            $errorCode = '502';
+
             return false;
         }
 
         if (!empty($resourceTypes) && !in_array($resource->getType(), $resourceTypes)) {
+            $errorCode = '503';
+
             return false;
         }
 
@@ -784,6 +868,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                 }
             }
             if (!$found) {
+                $errorCode = '504';
+
                 return false;
             }
         }
@@ -795,14 +881,23 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Check if a metadata constraint is complete
      *
      * @param MetadataConstraint $mdc
+     * @param string             $errorCode
      *
      * @return bool
      */
     private function checkMetadataConstraintComplete(
-        MetadataConstraint $mdc
+        MetadataConstraint $mdc,
+        &$errorCode
     )
     {
-        if ($mdc->getKey() == null || $mdc->getComparator() == null) {
+        if ($mdc->getComparator() == null) {
+            $errorCode = '601';
+
+            return false;
+        }
+        if ($mdc->getKey() == null) {
+            $errorCode = '602';
+
             return false;
         }
 
@@ -813,21 +908,20 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Check if a classification constraint is complete
      *
      * @param ClassificationConstraints $classifConstr
+     * @param string                    $errorCode
      *
      * @return bool
      */
     private function checkClassifConstr(
-        ClassificationConstraints $classifConstr
+        ClassificationConstraints $classifConstr,
+        &$errorCode
     )
     {
         if ($classifConstr->getOther() != ClassificationConstraints::MISC
-            && $classifConstr->getOther() != ClassificationConstraints::OWN
             && $classifConstr->getOther() != ClassificationConstraints::REJECT
         ) {
-            return false;
-        }
+            $errorCode = '701';
 
-        if (count($classifConstr->getMetaKeys()) == 0) {
             return false;
         }
 
@@ -835,16 +929,20 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
         foreach ($classifConstr->getGroups() as $group) {
             $name = $group->getName();
             if (empty($name)) {
+                $errorCode = '702';
+
                 return false;
             }
 
             if (count($group->getMDConstraints()) == 0) {
+                $errorCode = '703';
+
                 return false;
             }
 
             /** @var MetadataConstraint $mdc */
             foreach ($group->getMDConstraints() as $mdc) {
-                if (!$this->checkMetadataConstraintComplete($mdc)) {
+                if (!$this->checkMetadataConstraintComplete($mdc, $errorCode)) {
                     return false;
                 }
             }

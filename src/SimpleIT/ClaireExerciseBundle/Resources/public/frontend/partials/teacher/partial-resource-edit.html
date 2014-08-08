@@ -67,7 +67,8 @@
                             <!--</div>-->
                         </div>
                         <div class="col-xs-6">
-                            <div title="Cette ressource est-elle valide, utilisable dans un exercice ?">
+                            <div
+                                title="Cette ressource est-elle valide, utilisable dans un exercice ? {{ completeError[editedResource.complete_error] }}">
                                 <div class="col-centered">
                                     <span class="glyphicon" ng-class="{'glyphicon-check': editedResource.complete, 'glyphicon-unchecked': !editedResource.complete}"></span>
                                 </div>

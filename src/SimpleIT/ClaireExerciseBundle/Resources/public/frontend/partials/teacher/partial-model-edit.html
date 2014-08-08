@@ -68,7 +68,8 @@
                             <!--</div>-->
                         </div>
                         <div class="col-xs-6">
-                            <div title="Ce modèle est-il valide pour générer des exercices ?">
+                            <div
+                                title="Ce modèle est-il valide pour générer des exercices ? {{ completeError[model.complete_error] }}">
                                 <div class="col-centered">
                                     <span class="glyphicon" ng-class="{'glyphicon-check': model.complete, 'glyphicon-unchecked': !model.complete}"></span>
                                 </div>
