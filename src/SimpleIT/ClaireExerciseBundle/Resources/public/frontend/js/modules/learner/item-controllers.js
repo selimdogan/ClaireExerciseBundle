@@ -40,6 +40,8 @@ attemptControllers.controller('attemptController', ['$scope', '$state', 'Attempt
                 $state.go('attempt.group-items', {itemId: index}, {location: false});
             } else if ($scope.item.type == 'multiple-choice') {
                 $state.go('attempt.multiple-choice', {itemId: index}, {location: false});
+            } else if ($scope.item.type == 'open-ended-question') {
+                $state.go('attempt.open-ended-question', {itemId: index}, {location: false});
             }
         };
 
@@ -356,6 +358,42 @@ itemControllers.controller('multipleChoiceController', ['$scope', 'Answer', '$ro
 
         if ($scope.item['corrected'] == true) {
             $scope.fillLearnerAnswers();
+            $scope.displayCorrection($scope.item);
+        } else {
+            $scope.validable = true;
+        }
+    }]);
+
+itemControllers.controller('openEndedQuestionController', ['$scope', 'Answer', '$routeParams', '$location', '$stateParams',
+    function ($scope, Answer, $routeParams, $location, $stateParams) {
+
+        // post answer
+        $scope.saveAnswer = function () {
+            $scope.validable = false;
+
+            var answer = new Answer;
+            answer.content = {answer: $scope.item['content'].answer};
+
+            answer.$save({itemId: $scope.item.item_id, attemptId: $stateParams.attemptId},
+                function (item) {
+                    $scope.items[$stateParams.itemId] = item;
+                    $scope.displayCorrection(item)
+                });
+        };
+
+        // correction
+        $scope.displayCorrection = function (item) {
+            $scope.solutions = item['content'].solutions;
+            $scope.right = $scope.solutions.indexOf($scope.answer) != -1;
+
+            $scope.item.corrected = true;
+            $scope.item['content']['comment'] = item['content']['comment'];
+            $scope.item['content']['mark'] = item['content']['mark'];
+        };
+
+        // init answer array
+        console.log('reinit...');
+        if ($scope.item['corrected'] == true) {
             $scope.displayCorrection($scope.item);
         } else {
             $scope.validable = true;

@@ -40,6 +40,11 @@ mainApp.config(
                 url: '/multiple-choice/:itemId',
                 templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-multiple-choice.html'
             });
+
+            $stateProvider.state('attempt.open-ended-question', {
+                url: '/open-ended-question/:itemId',
+                templateUrl: BASE_CONFIG.urls.partials.learner + '/partial-open-ended-question.html'
+            });
         }
     ]
 );

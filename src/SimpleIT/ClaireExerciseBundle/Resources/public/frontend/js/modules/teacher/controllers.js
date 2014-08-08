@@ -420,9 +420,11 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
             delete newResource.complete;
             delete newResource.required_exercise_resources;
             delete newResource.required_knowledges;
+            delete newResource.complete_error;
 
             newResource.$update({id: $stateParams.resourceid}, function (resource) {
                 $scope.resources[resource.id] = resource;
+                $scope.editedResource = resource;
             });
         };
 
@@ -948,8 +950,9 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
         };
 
         $scope.saveAndTry = function () {
-            $scope.preUpdate();
-            $scope.model.$update({id: $stateParams.modelid}, function (model) {
+            var newModel = $scope.preUpdate();
+            newModel.$update({id: $stateParams.modelid}, function (model) {
+                $scope.model = model;
                 if (model.complete) {
                     $scope.tryModel(model);
                 }
@@ -971,16 +974,23 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                 val[0].value = '';
             }
 
-            delete $scope.model.id;
-            delete $scope.model.author;
-            delete $scope.model.owner;
-            delete $scope.model.required_exercise_resources;
-            delete $scope.model.required_knowledges;
+            var newModel = new Model();
+            newModel = jQuery.extend(true, {}, $scope.model);
+
+            delete newModel.id;
+            delete newModel.author;
+            delete newModel.owner;
+            delete newModel.required_exercise_resources;
+            delete newModel.required_knowledges;
+            delete newModel.complete_error;
+
+            return newModel;
         };
 
         $scope.updateModel = function () {
-            $scope.preUpdate();
-            $scope.model.$update({id: $stateParams.modelid}, function (model) {
+            var newModel = $scope.preUpdate();
+            newModel.$update({id: $stateParams.modelid}, function (model) {
+                $scope.model = model;
             });
         };
 
