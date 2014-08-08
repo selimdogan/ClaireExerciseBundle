@@ -697,7 +697,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                 },
                 "open_ended_question": {
                     "type": "open-ended-question",
-                    "title": "Nouvelle ressource",
+                    "title": "Nouvelle question à réponse ouverte courte",
                     "public": false,
                     "archived": false,
                     "draft": false,

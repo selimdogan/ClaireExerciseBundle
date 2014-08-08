@@ -53,21 +53,21 @@
                             <h5>Filtrer par type</h5>
 
                             <div class="btn-group">
-                                <button class="btn btn-success" title="Image" ng-model="$parent.$parent.filters.type.picture" btn-checkbox-true="'picture'" btn-checkbox-false="''" btn-checkbox>
+                                <button class="btn" title="Image" ng-model="$parent.$parent.filters.type.picture" btn-checkbox-true="'picture'" btn-checkbox-false="''" btn-checkbox>
                                     <span class="glyphicon glyphicon-picture"></span>
                                 </button>
-                                <button class="btn btn-success" title="Texte" ng-model="$parent.$parent.filters.type.text" btn-checkbox-true="'text'" btn-checkbox-false="''" btn-checkbox>
+                                <button class="btn" title="Texte" ng-model="$parent.$parent.filters.type.text" btn-checkbox-true="'text'" btn-checkbox-false="''" btn-checkbox>
                                     <span class="glyphicon glyphicon-font"></span>
                                 </button>
-                                <button class="btn btn-success" title="Question de QCM" ng-model="$parent.$parent.filters.type.multiple_choice_question" btn-checkbox-true="'multiple-choice-question'" btn-checkbox-false="''" btn-checkbox>
+                                <button class="btn" title="Question de QCM" ng-model="$parent.$parent.filters.type.multiple_choice_question" btn-checkbox-true="'multiple-choice-question'" btn-checkbox-false="''" btn-checkbox>
                                     <span class="glyphicon glyphicon-check"></span>
                                 </button>
-                                <button class="btn btn-success" title="Question à réponse courte ouverte" ng-model="$parent.$parent.filters.type.open_ended_question" btn-checkbox-true="'open-ended-question'" btn-checkbox-false="''" btn-checkbox>
+                                <button class="btn" title="Question à réponse courte ouverte" ng-model="$parent.$parent.filters.type.open_ended_question" btn-checkbox-true="'open-ended-question'" btn-checkbox-false="''" btn-checkbox>
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </button>
-                                <button class="btn btn-success" title="sequence" ng-model="$parent.$parent.filters.type.sequence" btn-checkbox-true="'sequence'" btn-checkbox-false="''" btn-checkbox>
-                                    <span class="glyphicon glyphicon-sort-by-order"></span>
-                                </button>
+                                <!--<button class="btn" title="sequence" ng-model="$parent.$parent.filters.type.sequence" btn-checkbox-true="'sequence'" btn-checkbox-false="''" btn-checkbox>-->
+                                    <!--<span class="glyphicon glyphicon-sort-by-order"></span>-->
+                                <!--</button>-->
                             </div>
                         </div>
                     </div>
@@ -120,16 +120,16 @@
             <div class="btn-group" style="margin-left: 4px; margin-top: 4px"
                  data-ng-class="{'pull-right': !isSelectResource}">
                 <label ng-if="!isSelectResource"
-                       class="btn btn-success"
+                       class="btn"
                        ng-model="filters.public"
                        data-ng-class="{'active': !filters.public, '': filters.public}"
                        ng-click="filters.public = !filters.public">Privées</label>
                 <label ng-if="!isSelectResource"
-                       class="btn btn-success"
+                       class="btn"
                        ng-model="filters.public"
                        data-ng-class="{'active': filters.public, '': !filters.public}"
                        ng-click="filters.public = !filters.public">Publiques</label>
-                <label class="btn btn-success"
+                <label class="btn"
                        data-ng-class="{'active': filters.archived, '': !filters.archived}"
                        ng-model="filters.archived"
                        ng-click="filters.archived = !filters.archived">Archivées</label>
