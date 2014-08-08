@@ -40,7 +40,7 @@ class OpenEndedQuestionResource extends CommonResource
      * @var array $solutions An array of valid solutions
      * @Serializer\Type("array<string>")
      * @Serializer\Groups({"details", "resource_storage"})
-     * @Assert\NotBlank(groups={"create"})
+     * @Assert\NotNull(groups={"create"})
      */
     private $solutions = array();
 

@@ -164,7 +164,7 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
 
 resourceControllers.controller('resourceViewController', ['$scope', 'BASE_CONFIG', '$modalInstance', 'resource', 'users',
     function ($scope, BASE_CONFIG, $modalInstance, resource, users) {
-        $scope.resourceContext = "resourceEdit";
+        $scope.resourcePanelContext = "resourceEdit";
 
         $scope.BASE_CONFIG = BASE_CONFIG;
         $scope.resource = resource;
@@ -174,7 +174,7 @@ resourceControllers.controller('resourceViewController', ['$scope', 'BASE_CONFIG
 
 resourceControllers.controller('resourceListController', ['$scope', '$state', 'Resource',
     function ($scope, $state, Resource) {
-        $scope.resourceContext = "list";
+        $scope.resourcePanelContext = "list";
 
         // delete resource method
         $scope.deleteResource = function (resource) {
@@ -384,7 +384,7 @@ resourceControllers.filter('myFilters', function () {
 
 resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'Resource', 'Upload', '$location', '$stateParams', 'User', '$upload',
     function ($scope, $modal, Resource, Upload, $location, $stateParams, User, $upload) {
-        $scope.resourceContext = "resourceEdit";
+        $scope.resourcePanelContext = "resourceEdit";
 
         // retrieve resource
         if (typeof $scope.resources === "undefined") {

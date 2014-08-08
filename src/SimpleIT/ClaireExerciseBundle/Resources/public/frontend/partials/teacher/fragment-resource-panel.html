@@ -25,7 +25,7 @@
             <div class="col-centered pull-right" ui-draggable="true" drag="resource">
                 <h4>
                     <ng-switch on="parentSection"
-                        ng-if="resourceContext == 'list' && !isSelectResource">
+                        ng-if="resourcePanelContext == 'list' && !isSelectResource">
                         <span ng-switch-when="model"
                               ui-sref="modelEdit.resourceEdit({ resourceid:resource.id })"
                               class="glyphicon"
@@ -39,37 +39,37 @@
                     </ng-switch>
                     &nbsp;
                     <span
-                        ng-if="resource.owner == BASE_CONFIG.currentUserId && resourceContext == 'list' && !isSelectResource"
+                        ng-if="resource.owner == BASE_CONFIG.currentUserId && resourcePanelContext == 'list' && !isSelectResource"
                         ng-click="$event.stopPropagation();duplicateResource(resource)"
                         class="glyphicon glyphicon-plus"
                         title="Dupliquer cette ressource : créer une nouvelle ressource identique à celle-ci."></span>
                     <span
-                        ng-if="resource.owner !== BASE_CONFIG.currentUserId && resourceContext == 'list' && !isSelectResource"
+                        ng-if="resource.owner !== BASE_CONFIG.currentUserId && resourcePanelContext == 'list' && !isSelectResource"
                         ng-click="$event.stopPropagation();importResource(resource)"
                         class="glyphicon glyphicon-log-in"
                         title="Importer cette ressource : créer une nouvelle ressource identique à celle-ci et dont vous êtes le propriétaire."></span>
                     <span
-                        ng-if="resource.owner !== BASE_CONFIG.currentUserId && resourceContext == 'list' && !isSelectResource"
+                        ng-if="resource.owner !== BASE_CONFIG.currentUserId && resourcePanelContext == 'list' && !isSelectResource"
                         ng-click="$event.stopPropagation();subscribeResource(resource)"
                         class="glyphicon glyphicon-share-alt"
                         title="S'abonner à cette ressource : elle fait à présent partie de vos ressources privées mais vous faites confiance à l'auteur. Vous bénéficierez des modifications qu'il apportera à la ressource. Vous ne pourrez pas la modifier de votre côté. Il s'agit d'un raccourci vers la ressource d'un autre utilisateur."></span>
                     &nbsp;
                     <span
-                        ng-if="resource.owner == BASE_CONFIG.currentUserId && resource.archived && resourceContext == 'list' && !isSelectResource"
+                        ng-if="resource.owner == BASE_CONFIG.currentUserId && resource.archived && resourcePanelContext == 'list' && !isSelectResource"
                         ng-click="$event.stopPropagation();restoreResource(resource)"
                         class="glyphicon glyphicon-open"
                         title="Restaurer cette ressource"></span>
                     <span
-                        ng-if="resource.owner == BASE_CONFIG.currentUserId && !resource.archived && resourceContext == 'list' && !isSelectResource"
+                        ng-if="resource.owner == BASE_CONFIG.currentUserId && !resource.archived && resourcePanelContext == 'list' && !isSelectResource"
                         ng-click="$event.stopPropagation();archiveResource(resource)"
                         class="glyphicon glyphicon-save"
                         title="Archiver cette ressource"></span>
                     <span
-                        ng-if="resource.owner == BASE_CONFIG.currentUserId && resourceContext == 'list' && !isSelectResource && resource.removable"
+                        ng-if="resource.owner == BASE_CONFIG.currentUserId && resourcePanelContext == 'list' && !isSelectResource && resource.removable"
                           ng-click="$event.stopPropagation();deleteResource(resource)" class="glyphicon glyphicon-remove"
                           title="Supprimer cette ressource"></span>
                     <span
-                        ng-if="resource.owner == BASE_CONFIG.currentUserId && resourceContext == 'list' && !isSelectResource && !resource.removable"
+                        ng-if="resource.owner == BASE_CONFIG.currentUserId && resourcePanelContext == 'list' && !isSelectResource && !resource.removable"
                           class="glyphicon glyphicon-remove"
                           style="opacity: 0.3"
                           ng-click="$event.stopPropagation()"
