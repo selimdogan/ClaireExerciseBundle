@@ -308,16 +308,16 @@
                     </accordion-group>
                 </accordion>
             </div>
-            <div class="col-xs-1">
+            <div class="col-xs-2">
                 <span data-ng-click="resourceCancelMD()"
                       class="glyphicon glyphicon-remove"
                       title="Annuler la ressource sélectionnée"></span>
+                <span data-ng-click="openSelectResource()"
+                      class="glyphicon glyphicon-file"
+                      title="Sélectionner une ressoure comme métadonnée"></span>
                 <span data-ng-click="resourceAddMetadataField(editedResource.metadata)"
                       class="glyphicon glyphicon-ok"
                       title="Ajouter ce couple de métadonnées"></span>
-            </div>
-            <div class="col-xs-1">
-                <button class="btn btn-default" ng-click="openSelectResource()">Ressource</button>
             </div>
         </div>
     </div>
