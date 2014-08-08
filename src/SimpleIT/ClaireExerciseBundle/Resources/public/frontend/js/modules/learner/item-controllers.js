@@ -247,17 +247,48 @@ itemControllers.controller('orderItemsController', ['$scope', 'Answer', '$routeP
         // init answer array
         $scope.drops = [];
         $scope.solution = [];
+        $scope.help = null;
         for (var i = 0; i < $scope.item['content'].objects.length; ++i) {
             $scope.solution[i] = null;
             $scope.item['content'].objects[i].id = i;
         }
+
         if ($scope.item['corrected'] == true) {
             $scope.fillLearnerAnswers();
             $scope.displayCorrection($scope.item);
             console.log($scope.drops);
             console.log($scope.corrected);
             console.log($scope.solution);
+        } else {
+            // give first, give last
+            if ($scope.item.content.give_last != '-1' && $scope.item.content.give_first != '-1') {
+                $scope.help = 'Pour vous aider, le premier et le dernier objet ont été placés.'
+
+                if ($scope.item.content.give_last < $scope.item.content.give_first) {
+                    $scope.drops.splice(0, 0, $scope.item['content'].objects[$scope.item.content.give_first]);
+                    $scope.item['content'].objects.splice($scope.item.content.give_first, 1);
+                    $scope.drops.splice(0, 0, $scope.item['content'].objects[$scope.item.content.give_last]);
+                    $scope.item['content'].objects.splice($scope.item.content.give_last, 1);
+                } else {
+                    $scope.drops.splice(0, 0, $scope.item['content'].objects[$scope.item.content.give_last]);
+                    $scope.item['content'].objects.splice($scope.item.content.give_last, 1);
+                    $scope.drops.splice(0, 0, $scope.item['content'].objects[$scope.item.content.give_first]);
+                    $scope.item['content'].objects.splice($scope.item.content.give_first, 1);
+                }
+            }
+            else if ($scope.item.content.give_first != '-1') {
+                $scope.help = 'Pour vous aider, le premier objet a été placé.'
+                $scope.drops.splice(0, 0, $scope.item['content'].objects[$scope.item.content.give_first]);
+                $scope.item['content'].objects.splice($scope.item.content.give_first, 1);
+            }
+            else if ($scope.item.content.give_last != '-1') {
+                $scope.help = 'Pour vous aider, le dernier objet a été placé.'
+                $scope.drops.splice(0, 0, $scope.item['content'].objects[$scope.item.content.give_last]);
+                $scope.item['content'].objects.splice($scope.item.content.give_last, 1);
+            }
+
         }
+
 
         // dnd init
         $scope.toDrop = {'id': null, 'data': null};
