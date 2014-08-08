@@ -832,6 +832,7 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
         $scope.importModel = function (model) {
             Model.import({id: model.id}, function (data) {
                 $scope.models[data.id] = data;
+                $scope.loadResourcesAndUsers();
             });
         };
 
