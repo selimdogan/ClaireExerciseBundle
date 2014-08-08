@@ -746,18 +746,19 @@ abstract class SharedEntityService extends TransactionalService implements Share
             $entity->deleteResourceNode();
         }
 
+        $this->em->persist($entity);
+
         // metadata
         $metadatas = array();
         /** @var Metadata $md */
         foreach ($original->getMetadata() as $md) {
             $newMd = clone($md);
             $newMd->setEntity($entity);
-            $metadatas[] = $newMd;
             $this->em->persist($newMd);
+            $metadatas[] = $newMd;
         }
         $entity->setMetadata(new ArrayCollection($metadatas));
 
-        $this->em->persist($entity);
         $this->em->flush();
 
         return $entity;
