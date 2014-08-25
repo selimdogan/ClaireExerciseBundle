@@ -33,7 +33,6 @@ class TextResource extends CommonResource
      * @var string $text The text
      * @Serializer\Type("string")
      * @Serializer\Groups({"details", "resource_storage"})
-     * @Assert\NotBlank(groups={"create"})
      */
     private $text;
 

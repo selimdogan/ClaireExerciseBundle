@@ -68,7 +68,7 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
             "newResources": {
                 "text": {
                     "type": "text",
-                    "title": "Nouvelle ressource",
+                    "title": "Nouveau texte",
                     "public": false,
                     "archived": false,
                     "draft": false,
@@ -76,7 +76,7 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                     "metadata": [],
                     "keywords": [],
                     "content": {
-                        "text": "Texte de la resource",
+                        "text": null,
                         "object_type": "text"
                     },
                     "required_exercise_resources": null,
@@ -84,7 +84,7 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                 },
                 "picture": {
                     "type": "picture",
-                    "title": "Nouvelle ressource",
+                    "title": "Nouvelle image",
                     "public": false,
                     "archived": false,
                     "draft": false,
@@ -100,7 +100,7 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                 },
                 "multiple_choice_question": {
                     "type": "multiple-choice-question",
-                    "title": "Nouvelle ressource",
+                    "title": "Nouvelle question",
                     "public": false,
                     "archived": false,
                     "draft": false,
@@ -109,14 +109,14 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                     "keywords": [],
                     "content": {
                         "do_not_shuffle": true,
-                        "question": "Question ressource QCM",
+                        "question": null,
                         "propositions": [
                             {
-                                "text": "Bonne réponse",
+                                "text": null,
                                 "right": true
                             }
                         ],
-                        "comment": "Commentaire",
+                        "comment": null,
                         "max_number_of_propositions": 0,
                         "max_number_of_right_propositions": 0,
                         "object_type": "multiple_choice_question"
@@ -126,7 +126,7 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                 },
                 "open_ended_question": {
                     "type": "open-ended-question",
-                    "title": "Nouvelle ressource",
+                    "title": "Nouvelle question",
                     "public": false,
                     "archived": false,
                     "draft": false,
@@ -134,9 +134,9 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                     "metadata": [],
                     "keywords": [],
                     "content": {
-                        "question": "Question à réponse courte",
+                        "question": null,
                         "solutions": [],
-                        "comment": "Commentaire",
+                        "comment": null,
                         "object_type": "open_ended_question"
                     },
                     "required_exercise_resources": null,
@@ -555,7 +555,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                 },
                 "pair_items": {
                     "type": "pair-items",
-                    "title": "nouvel appariement",
+                    "title": "Nouvel appariement",
                     "public": false,
                     "archived": false,
                     "draft": false,
@@ -563,7 +563,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                     "metadata": [],
                     "keywords": [],
                     "content": {
-                        "wording": "Consigne de l'exercice",
+                        "wording": null,
                         "documents": [],
                         "pair_blocks": [
                             {
@@ -586,7 +586,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                 },
                 "order_items": {
                     "type": "order-items",
-                    "title": "nouvel ordonnancement",
+                    "title": "Nouvel ordonnancement",
                     "public": false,
                     "archived": false,
                     "draft": false,
@@ -594,7 +594,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                     "metadata": [],
                     "keywords": [],
                     "content": {
-                        "wording": "Consigne de l'exercice",
+                        "wording": null,
                         "documents": [],
                         "object_blocks": [
                             {
@@ -630,7 +630,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                     "metadata": [],
                     "keywords": [],
                     "content": {
-                        "wording": "consigne",
+                        "wording": null,
                         "documents": [],
                         "question_blocks": [
                             {
@@ -658,7 +658,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                 },
                 "group_items": {
                     "type": "group-items",
-                    "title": "Nouvelle ressource",
+                    "title": "Nouveau groupement",
                     "public": true,
                     "archived": false,
                     "draft": false,
@@ -666,7 +666,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                     "metadata": [],
                     "keywords": [],
                     "content": {
-                        "wording": "Consigne",
+                        "wording": null,
                         "documents": [],
                         "object_blocks": [
                             {
@@ -699,7 +699,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                 },
                 "open_ended_question": {
                     "type": "open-ended-question",
-                    "title": "Nouvelle question à réponse ouverte courte",
+                    "title": "Nouveau modèle d'exercice de question à réponse ouverte courte",
                     "public": false,
                     "archived": false,
                     "draft": false,
@@ -707,7 +707,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                     "metadata": [],
                     "keywords": [],
                     "content": {
-                        "wording": "consigne",
+                        "wording": null,
                         "documents": [],
                         "question_blocks": [
                             {
@@ -904,6 +904,9 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                     $scope.acceptedTypes = ['open-ended-question'];
                     break;
                 case 'pair-items':
+                    $scope.acceptedTypes = ['picture', 'text'];
+                    break;
+                case 'order-items':
                     $scope.acceptedTypes = ['picture', 'text'];
                     break;
                 case 'group-items':
@@ -1109,7 +1112,7 @@ modelControllers.controller('modelEditGroupItemsController', ['$scope',
             $scope.model.content.classif_constr.groups.splice(
                 $scope.model.content.classif_constr.groups.length,
                 0,
-                $scope.modelContext.newModel.group_items_group
+                jQuery.extend(true, {}, $scope.modelContext.newModel.group_items_group)
             );
         };
 

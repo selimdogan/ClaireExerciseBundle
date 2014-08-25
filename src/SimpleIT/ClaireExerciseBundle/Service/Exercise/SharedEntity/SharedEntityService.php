@@ -747,6 +747,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
         }
 
         $this->em->persist($entity);
+        $this->em->flush();
 
         // metadata
         $metadatas = array();

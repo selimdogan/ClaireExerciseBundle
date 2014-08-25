@@ -65,7 +65,6 @@ abstract class CommonModel
      * @var string The wording
      * @Serializer\Type("string")
      * @Serializer\Groups({"details", "exercise_model_storage", "owner_exercise_model_list"})
-     * @Assert\NotBlank(groups={"create"})
      */
     protected $wording;
 
