@@ -738,13 +738,8 @@ abstract class SharedEntityService extends TransactionalService implements Share
         $entity->setForkFrom($original);
         $entity->setPublic(false);
         $entity->setId(null);
-        if (get_class(
-                $entity
-            ) === 'SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel'
-        ) {
-            /** @var ExerciseModel $entity */
-            $entity->deleteResourceNode();
-        }
+
+        $this->duplicateDetail($entity);
 
         $this->em->persist($entity);
         $this->em->flush();
@@ -844,6 +839,15 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * @return SharedEntity
      */
     abstract protected function importDetail($ownerId, $entity);
+
+    /**
+     * Duplicate an entity. Additionnal work, specific to entity type
+     *
+     * @param SharedEntity $entity The duplicata
+     *
+     * @return SharedEntity
+     */
+    abstract protected function duplicateDetail($entity);
 
     /**
      * Import an entity if no direct children is owned by the user. (no flush if existing)

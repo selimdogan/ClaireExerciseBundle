@@ -20,6 +20,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\SerializationContext;
+use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
@@ -291,6 +292,10 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
         $knowledge = parent::subscribe($ownerId, $parentEntityId);
         $knowledge->setRequiredKnowledges(new ArrayCollection());
 
+        $knowledge->setRequiredByModels(new ArrayCollection());
+        $knowledge->setRequiredByResources(new ArrayCollection());
+        $knowledge->setRequiredByKnowledges(new ArrayCollection());
+
         return $knowledge;
     }
 
@@ -308,6 +313,10 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
 
         // requirement
         $entity = $this->computeRequirements($resource, $entity, true, $ownerId);
+
+        $entity->setRequiredByModels(new ArrayCollection());
+        $entity->setRequiredByResources(new ArrayCollection());
+        $entity->setRequiredByKnowledges(new ArrayCollection());
 
         $this->em->flush();
 
@@ -350,5 +359,19 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
         }
 
         return true;
+    }
+
+    /**
+     * Duplicate an entity. Additionnal work, specific to entity type
+     *
+     * @param Knowledge $entity The duplicata
+     *
+     * @return Knowledge
+     */
+    protected function duplicateDetail($entity)
+    {
+        $entity->setRequiredByModels(new ArrayCollection());
+        $entity->setRequiredByResources(new ArrayCollection());
+        $entity->setRequiredByKnowledges(new ArrayCollection());
     }
 }

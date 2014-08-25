@@ -21,6 +21,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
+use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResourceFactory;
@@ -741,6 +742,9 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         $resource->setRequiredExerciseResources(new ArrayCollection());
         $resource->setRequiredKnowledges(new ArrayCollection());
 
+        $resource->setRequiredByModels(new ArrayCollection());
+        $resource->setRequiredByResources(new ArrayCollection());
+
         return $resource;
     }
 
@@ -758,6 +762,9 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
 
         // requirement
         $entity = $this->computeRequirements($entity, $resource, true, $ownerId);
+
+        $entity->setRequiredByModels(new ArrayCollection());
+        $entity->setRequiredByResources(new ArrayCollection());
 
         $this->em->flush();
 
@@ -801,4 +808,16 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
 
         return true;
     }
-}
+
+    /**
+     * Duplicate an entity. Additionnal work, specific to entity type
+     *
+     * @param ExerciseResource $entity The duplicata
+     *
+     * @return ExerciseResource
+     */
+    protected function duplicateDetail($entity)
+    {
+        $entity->setRequiredByModels(new ArrayCollection());
+        $entity->setRequiredByResources(new ArrayCollection());
+    }}

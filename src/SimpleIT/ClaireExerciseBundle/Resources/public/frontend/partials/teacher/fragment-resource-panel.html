@@ -140,7 +140,7 @@
 </div>
 <div class="col-centered" ng-switch="resource.type">
     <div ng-switch-when="text">
-        <label>Contenu&nbsp;:&nbsp;</label>{{ resource.content.text }}
+        <label>Contenu&nbsp;:&nbsp;</label><div ng-bind-html="to_trusted(resource.content.text)"></div>
     </div>
     <div ng-switch-when="picture">
         <label>Contenu&nbsp;:&nbsp;</label>

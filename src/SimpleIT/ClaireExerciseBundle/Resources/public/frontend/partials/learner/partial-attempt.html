@@ -15,7 +15,7 @@
                 <div ng-repeat="doc in exercise.content.documents track by $index"
                      class="exercise-doc">
                     <div ng-if="doc.object_type == 'text'">
-                        {{ doc.text }}
+                        <div ng-bind-html="to_trusted(doc.text)"></div>
                     </div>
                     <div ng-if="doc.object_type == 'picture'">
                         <a href="{{ imageUrl }}{{ doc.source }}"

@@ -31,6 +31,7 @@ use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModelFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata;
+use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
@@ -1431,5 +1432,17 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     public function canBeRemoved($entity)
     {
         return true;
+    }
+
+    /**
+     * Duplicate an entity. Additionnal work, specific to entity type
+     *
+     * @param ExerciseModel $entity The duplicata
+     *
+     * @return ExerciseModel
+     */
+    protected function duplicateDetail($entity)
+    {
+        $entity->deleteResourceNode();
     }
 }
