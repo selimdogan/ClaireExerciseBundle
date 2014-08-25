@@ -939,9 +939,11 @@ class FormulaService implements FormulaServiceInterface
      */
     private function instantiateVariable(ResourceVariable $resourceVariable, array $variables)
     {
-        if (count($resourceVariable->getValues()) > 0) {
+        if ($resourceVariable->getValueType() === Formula\Variable::VALUES &&
+        count($resourceVariable->getValues()) > 0) {
             $value = $resourceVariable->getValues()[array_rand($resourceVariable->getValues())];
-        } elseif ($resourceVariable->getInterval() !== null) {
+        } elseif ($resourceVariable->getValueType() === Formula\Variable::INTERVAL &&
+            $resourceVariable->getInterval() !== null) {
             $step = $resourceVariable->getInterval()->getStep();
             $min = $resourceVariable->getInterval()->getMin();
             $max = $resourceVariable->getInterval()->getMax();
@@ -984,7 +986,8 @@ class FormulaService implements FormulaServiceInterface
                     throw new InvalidKnowledgeException('Type of variable must be specified.');
                 }
             }
-        } elseif ($resourceVariable->getExpression() !== null) {
+        } elseif ($resourceVariable->getValueType() === Formula\Variable::EXPRESSION &&
+            $resourceVariable->getExpression() !== null) {
             $value = $this->instantiateVariableWithExpression($resourceVariable, $variables);
         } else {
             $value = false;

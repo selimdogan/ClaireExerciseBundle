@@ -51,7 +51,7 @@ class LocalFormula
     /**
      * @var Unknown $unknown
      * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Unknown")
-     * @Serializer\Groups({"details", "knowledge_storage"})
+     * @Serializer\Groups({"details", "knowledge_storage", "resource_storage", "exercise_model_storage"})
      */
     private $unknown;
 

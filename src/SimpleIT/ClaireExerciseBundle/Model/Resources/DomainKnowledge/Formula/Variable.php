@@ -28,6 +28,19 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Variable extends Unknown
 {
+    const INTERVAL = 'interval';
+
+    const VALUES = 'values';
+
+    const EXPRESSION = 'expression';
+
+    /**
+     * @var array $valueType
+     * @Serializer\Type("string")
+     * @Serializer\Groups({"details", "knowledge_storage", "resource_storage", "exercise_model_storage"})
+     */
+    private $valueType;
+
     /**
      * @var Interval $interval
      * @Serializer\Type("SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Interval")
@@ -161,5 +174,25 @@ class Variable extends Unknown
     public function getWrongValues()
     {
         return $this->wrongValues;
+    }
+
+    /**
+     * Set valueType
+     *
+     * @param array $valueType
+     */
+    public function setValueType($valueType)
+    {
+        $this->valueType = $valueType;
+    }
+
+    /**
+     * Get valueType
+     *
+     * @return array
+     */
+    public function getValueType()
+    {
+        return $this->valueType;
     }
 }

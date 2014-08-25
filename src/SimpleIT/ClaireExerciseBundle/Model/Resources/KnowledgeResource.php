@@ -35,7 +35,7 @@ class KnowledgeResource extends SharedResource
     const RESOURCE_NAME = 'Knowledge';
 
     /**
-     * @const MULTIPLE_CHOICE_QUESTION = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource'
+     * @const FORMULA_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula'
      */
     const FORMULA_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula';
 

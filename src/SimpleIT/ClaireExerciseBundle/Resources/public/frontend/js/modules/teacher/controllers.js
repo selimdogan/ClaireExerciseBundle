@@ -65,6 +65,22 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
         }
 
         $scope.resourceContext = {
+            "formula": {
+                "newVariable": {
+                    "type": "integer",
+                    "value_type": "values",
+                    "values": []
+                },
+                "newFormula": {
+                    "variables": [
+                        {
+                            "type": "integer",
+                            "value_type": "values",
+                            "values": []
+                        }
+                    ]
+                }
+            },
             "newResources": {
                 "text": {
                     "type": "text",
@@ -505,6 +521,20 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
                 $scope.resourceAddMD.value = '__' + val;
                 $scope.resource = $scope.resources[val];
             });
+        };
+
+        $scope.formulaAddVariable = function (collection) {
+            collection.splice(collection.length,
+                0,
+                jQuery.extend(true, {}, $scope.resourceContext.formula.newVariable)
+            );
+        };
+
+        $scope.resourceAddFormula = function (collection) {
+            collection.splice(collection.length,
+                0,
+                jQuery.extend(true, {}, $scope.resourceContext.formula.newFormula)
+            );
         };
 
     }]);
@@ -1061,7 +1091,11 @@ modelControllers.controller('modelEditPairItemsController', ['$scope',
     function ($scope) {
 
         $scope.modelAddBlockField = function (collection) {
-            collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_pair_items.block_field);
+            collection.splice(
+                collection.length,
+                0,
+                jQuery.extend(true, {}, $scope.modelContext.newModel.sub_pair_items.block_field)
+            );
         };
 
         $scope.getMobilePart = function (collection, key) {
@@ -1079,7 +1113,10 @@ modelControllers.controller('modelEditOrderItemsController', ['$scope',
     function ($scope) {
 
         $scope.modelAddBlockField = function (collection) {
-            collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_order_items.block_field);
+            collection.splice(collection.length,
+                0,
+                jQuery.extend(true, {}, $scope.modelContext.newModel.sub_order_items.block_field)
+            );
         };
 
         $scope.getOrderValue = function (collection, key) {
@@ -1097,7 +1134,11 @@ modelControllers.controller('modelEditMultipleChoiceController', ['$scope',
     function ($scope) {
 
         $scope.modelAddBlockField = function (collection) {
-            collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_multiple_choice.block_field);
+            collection.splice(
+                collection.length,
+                0,
+                jQuery.extend(true, {}, $scope.modelContext.newModel.sub_multiple_choice.block_field)
+            );
         };
     }]);
 
@@ -1105,7 +1146,10 @@ modelControllers.controller('modelEditGroupItemsController', ['$scope',
     function ($scope) {
 
         $scope.modelAddBlockField = function (collection) {
-            collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_group_items.block_field);
+            collection.splice(
+                collection.length,
+                0, jQuery.extend(true, {}, $scope.modelContext.newModel.sub_group_items.block_field)
+            );
         };
 
         $scope.addGroup = function () {
@@ -1198,7 +1242,11 @@ modelControllers.controller('modelEditOpenEndedQuestionController', ['$scope',
     function ($scope) {
 
         $scope.modelAddBlockField = function (collection) {
-            collection.splice(collection.length, 0, $scope.modelContext.newModel.sub_group_items.block_field);
+            collection.splice(
+                collection.length,
+                0,
+                jQuery.extend(true, {}, $scope.modelContext.newModel.sub_group_items.block_field)
+            );
         }
 
     }]);

@@ -377,13 +377,13 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
             }
         } else {
             if ($content !== null) {
-                throw new InconsistentEntityException('A model must be a pointer OR have a content');
+                throw new InconsistentEntityException('A resource must be a pointer OR have a content');
             }
             try {
 
                 $parentModel = $this->get($parentId);
             } catch (NonExistingObjectException $neoe) {
-                throw new InconsistentEntityException('The parent model cannot be found.');
+                throw new InconsistentEntityException('The parent resource cannot be found.');
             }
 
             $complete = $parentModel->getPublic();
@@ -708,16 +708,18 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         if (is_array($resourceResource->getContent()->getFormulas())) {
             /** @var LocalFormula $formula */
             foreach ($resourceResource->getContent()->getFormulas() as $formula) {
-                if ($import) {
-                    $requiredId = $this->knowledgeService->importOrLink(
-                        $ownerId,
-                        $formula->getFormulaId()
-                    );
-                    $formula->setFormulaId($requiredId);
-                } else {
-                    $requiredId = $formula->getFormulaId();
+                if ($formula->getFormulaId() !== null) {
+                    if ($import) {
+                        $requiredId = $this->knowledgeService->importOrLink(
+                            $ownerId,
+                            $formula->getFormulaId()
+                        );
+                        $formula->setFormulaId($requiredId);
+                    } else {
+                        $requiredId = $formula->getFormulaId();
+                    }
+                    $reqKno[] = $requiredId;
                 }
-                $reqKno[] = $requiredId;
             }
 
             $resourceResource->setRequiredKnowledges(array_unique($reqKno));
@@ -820,4 +822,5 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     {
         $entity->setRequiredByModels(new ArrayCollection());
         $entity->setRequiredByResources(new ArrayCollection());
-    }}
+    }
+}
