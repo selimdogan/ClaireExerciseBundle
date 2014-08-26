@@ -28,7 +28,7 @@ mainAppControllers.controller('mainManagerController', ['$scope', '$sce', '$rout
             '504': 'Une ressource ne dispose pas de la clé de métadonnée requise par le bloc',
             '601': 'Contrainte invalide : le comparateur est vide',
             '602': 'Contrainte invalide : la clé est vide',
-            '701': 'Classificateur de groupe invalide',
+            '701': 'Il faut choisir quoi faire des ressources invalides : les placer dans le groupe autre ou ne pas les utiliser.',
             '702': 'Un nom de groupe ne peut pas être vide',
             '703': 'Chaque groupe doit comporter au moins une contrainte',
             '801': 'La source d\'une image ne doit pas être vide',
