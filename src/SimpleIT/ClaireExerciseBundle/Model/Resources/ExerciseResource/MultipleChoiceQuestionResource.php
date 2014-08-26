@@ -34,7 +34,6 @@ class MultipleChoiceQuestionResource extends CommonResource
      * @var string $question The wording of this question
      * @Serializer\Type("string")
      * @Serializer\Groups({"details", "resource_storage", "resource_list", "owner_resource_list"})
-     * @Assert\NotBlank(groups={"create"})
      */
     private $question;
 
@@ -42,7 +41,6 @@ class MultipleChoiceQuestionResource extends CommonResource
      * @var array $propositions An array of Proposition
      * @Serializer\Type("array<SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoice\MultipleChoicePropositionResource>")
      * @Serializer\Groups({"details", "resource_storage"})
-     * @Assert\NotBlank(groups={"create"})
      */
     private $propositions = array();
 
@@ -58,7 +56,6 @@ class MultipleChoiceQuestionResource extends CommonResource
      * @var int The recommended max number of propositions when using this question
      * @Serializer\Type("integer")
      * @Serializer\Groups({"details", "resource_storage"})
-     * @Assert\NotBlank(groups={"create"})
      */
     private $maxNumberOfPropositions;
 
@@ -66,7 +63,6 @@ class MultipleChoiceQuestionResource extends CommonResource
      * @var int The recommended max number of right propositions when using this question
      * @Serializer\Type("integer")
      * @Serializer\Groups({"details", "resource_storage"})
-     * @Assert\NotBlank(groups={"create"})
      */
     private $maxNumberOfRightPropositions;
 
@@ -74,7 +70,6 @@ class MultipleChoiceQuestionResource extends CommonResource
      * @var boolean $doNotShuffle
      * @Serializer\Type("boolean")
      * @Serializer\Groups({"details", "resource_storage"})
-     * @Assert\NotBlank(groups={"create"})
      */
     private $doNotShuffle;
 

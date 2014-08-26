@@ -32,7 +32,6 @@ class OpenEndedQuestionResource extends CommonResource
      * @var string $question The wording of this question
      * @Serializer\Type("string")
      * @Serializer\Groups({"details", "resource_storage", "resource_list", "owner_resource_list"})
-     * @Assert\NotBlank(groups={"create"})
      */
     private $question;
 
@@ -40,7 +39,6 @@ class OpenEndedQuestionResource extends CommonResource
      * @var array $solutions An array of valid solutions
      * @Serializer\Type("array<string>")
      * @Serializer\Groups({"details", "resource_storage"})
-     * @Assert\NotNull(groups={"create"})
      */
     private $solutions = array();
 

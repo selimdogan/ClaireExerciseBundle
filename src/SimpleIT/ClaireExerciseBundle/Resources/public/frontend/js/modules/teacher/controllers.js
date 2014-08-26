@@ -124,6 +124,7 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                     "metadata": [],
                     "keywords": [],
                     "content": {
+                        "formulas": [],
                         "do_not_shuffle": true,
                         "question": null,
                         "propositions": [
@@ -150,6 +151,7 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                     "metadata": [],
                     "keywords": [],
                     "content": {
+                        "formulas": [],
                         "question": null,
                         "solutions": [],
                         "comment": null,
