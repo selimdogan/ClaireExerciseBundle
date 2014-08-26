@@ -1,23 +1,14 @@
 {
-    "name": "openclassrooms/claire-exercise-bundle",
-    "type": "symfony-bundle",
-    "description": "OpenClassrooms - LIRIS Claire Exercise Bundle",
-    "keywords": ["claire","api","app"],
-    "homepage": "https://github.com/openclassrooms/ClaireExerciseBundle",
+    "name": "marie-lefevre/claire-exercise-bundle",
+    "type": "claroline-plugin",
+    "description": "LIRIS Claire Exercise Bundle (collaboration with open classrooms)",
+    "keywords": ["claire","exercise"],
+    "homepage": "https://github.com/marielefevre/ClaireExerciseBundle",
+    "license": "GNU GPL",
     "authors": [
-        {
-            "name": "Simple IT",
-            "email": "technique@simple-it.fr"
-        },
         {
             "name": "LIRIS",
             "email": "marie.lefevre@liris.cnrs.fr"
-        }
-    ],
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "http://packages.simple-it.fr"
         }
     ],
     "require": {
