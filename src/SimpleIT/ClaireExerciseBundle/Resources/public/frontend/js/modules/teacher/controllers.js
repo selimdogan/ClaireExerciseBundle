@@ -242,6 +242,24 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
             });
         };
 
+        $scope.resourceAddKeywordsField = function (collection) {
+            var keyword = $('#resourceAddKeyword');
+            collection.push(keyword[0].value);
+            keyword[0].value = '';
+        };
+
+        $scope.resourceAddMetadataField = function (collection) {
+            var key = $("#resourceAddMetadataKey"), val = $("#resourceAddMetadataValue");
+            var newElement = {key: key[0].value, value: val[0].value};
+            collection.splice(collection.length, 0, newElement);
+            key[0].value = '';
+            val[0].value = '';
+        };
+
+        $scope.resourceRemoveField = function (collection, index) {
+            collection.splice(index, 1);
+        };
+
         // create resource method
         $scope.createResource = function (type) {
             if (type == 'text') {
