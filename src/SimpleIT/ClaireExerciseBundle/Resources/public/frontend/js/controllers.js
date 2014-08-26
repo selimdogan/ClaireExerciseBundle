@@ -39,6 +39,8 @@ mainAppControllers.controller('mainManagerController', ['$scope', '$sce', '$rout
             '806': 'Le contenu d\'une porposition ne peut pas être vide',
             '807': 'Le type de séquence doit être précisé',
             '808': 'Impossible de valider le contenu de la séquence',
+            '809': 'Chaque formule doit posséder un nom',
+            '810': 'Chaque formule doit posséder une équation ou faire référence à une connaissance du domaine'
         };
 
         // load only once every necessary user

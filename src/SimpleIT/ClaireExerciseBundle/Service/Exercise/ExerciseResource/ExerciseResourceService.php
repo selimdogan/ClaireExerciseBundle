@@ -465,6 +465,24 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
             return false;
         }
 
+        if ($content->getFormulas() != null) {
+            foreach ($content->getFormulas() as $formula) /** @var LocalFormula $formula */ {
+                if ($formula->getName() == null || $formula->getName() == '') {
+                    $errorCode = '809';
+
+                    return false;
+                }
+
+                if (($formula->getEquation() == null || $formula->getEquation() == '') &&
+                    ($formula->getFormulaId() == null || $formula->getFormulaId() == '')
+                ) {
+                    $errorCode = '810';
+
+                    return false;
+                }
+            }
+        }
+
         return true;
     }
 
