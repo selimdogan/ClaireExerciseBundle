@@ -911,7 +911,7 @@ class FormulaService implements FormulaServiceInterface
                 }
             }
             $resourceVariables = $notInstantiated;
-            if (count($resourceVariables) === $count) {
+            if (count($resourceVariables) === $count && $count > 0) {
                 $varNames = array();
                 /** @var ResourceVariable $resVar */
                 foreach ($resourceVariables as $resVar) {
