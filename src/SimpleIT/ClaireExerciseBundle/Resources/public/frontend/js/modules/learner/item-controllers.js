@@ -369,16 +369,18 @@ itemControllers.controller('openEndedQuestionController', ['$scope', 'Answer', '
 
         // post answer
         $scope.saveAnswer = function () {
-            $scope.validable = false;
+            if ($scope.item['content'].answer != null && $scope.item['content'].answer != '') {
+                $scope.validable = false;
 
-            var answer = new Answer;
-            answer.content = {answer: $scope.item['content'].answer};
+                var answer = new Answer;
+                answer.content = {answer: $scope.item['content'].answer};
 
-            answer.$save({itemId: $scope.item.item_id, attemptId: $stateParams.attemptId},
-                function (item) {
-                    $scope.items[$stateParams.itemId] = item;
-                    $scope.displayCorrection(item)
-                });
+                answer.$save({itemId: $scope.item.item_id, attemptId: $stateParams.attemptId},
+                    function (item) {
+                        $scope.items[$stateParams.itemId] = item;
+                        $scope.displayCorrection(item)
+                    });
+            }
         };
 
         // correction
