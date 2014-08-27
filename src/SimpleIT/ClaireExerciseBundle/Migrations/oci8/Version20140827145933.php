@@ -8,210 +8,12 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated migration based on mapping information: modify it with caution
  *
- * Generation date: 2014/08/26 10:22:22
+ * Generation date: 2014/08/27 02:59:42
  */
-class Version20140826102207 extends AbstractMigration
+class Version20140827145933 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
-        $this->addSql("
-            DROP SEQUENCE claro_announcement_aggregate_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_announcement_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_forum_category_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_forum_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_forum_message_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_forum_notification_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_forum_options_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_forum_subject_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_link_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_log_desktop_widget_config_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_log_workspace_widget_config_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_resource_type_custom_action_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_rssreader_configuration_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claro_widget_display_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE icap__blog_comment_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE icap__blog_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE icap__blog_options_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE icap__blog_post_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE icap__blog_tag_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE icap__dropzonebundle_correction_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE icap__dropzonebundle_criterion_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE icap__dropzonebundle_document_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE icap__dropzonebundle_drop_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE icap__dropzonebundle_dropzone_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE icap__dropzonebundle_grade_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE icap__lesson_chapter_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE icap__lesson_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE icap__wiki_contribution_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE icap__wiki_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE icap__wiki_section_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE simple_text_dekstop_widget_config_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE simple_text_workspace_widget_config_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_category_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_choice_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_coords_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_document_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_exercise_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_expertise_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_group_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_hint_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_hole_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_interaction_graphic_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_interaction_hole_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_interaction_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_interaction_open_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_interaction_qcm_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_lock_attempt_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_paper_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_planning_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_question_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_response_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_subscription_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_type_open_question_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_type_qcm_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_unit_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE ujm_word_response_id_seq
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_answer_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_attempt_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_item_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_stored_exercise_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_knowledge_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_model_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_resource_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_test_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_test_attempt_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claire_exercise_test_model_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
         $this->addSql("
             CREATE TABLE claire_exercise_answer (
                 id NUMBER(10) NOT NULL, 
@@ -221,6 +23,34 @@ class Version20140826102207 extends AbstractMigration
                 mark DOUBLE PRECISION DEFAULT NULL, 
                 PRIMARY KEY(id)
             )
+        ");
+        $this->addSql("
+            DECLARE constraints_Count NUMBER; BEGIN 
+            SELECT COUNT(CONSTRAINT_NAME) INTO constraints_Count 
+            FROM USER_CONSTRAINTS 
+            WHERE TABLE_NAME = 'CLAIRE_EXERCISE_ANSWER' 
+            AND CONSTRAINT_TYPE = 'P'; IF constraints_Count = 0 
+            OR constraints_Count = '' THEN EXECUTE IMMEDIATE 'ALTER TABLE CLAIRE_EXERCISE_ANSWER ADD CONSTRAINT CLAIRE_EXERCISE_ANSWER_AI_PK PRIMARY KEY (ID)'; END IF; END;
+        ");
+        $this->addSql("
+            CREATE SEQUENCE CLAIRE_EXERCISE_ANSWER_ID_SEQ START WITH 1 MINVALUE 1 INCREMENT BY 1
+        ");
+        $this->addSql("
+            CREATE TRIGGER CLAIRE_EXERCISE_ANSWER_AI_PK BEFORE INSERT ON CLAIRE_EXERCISE_ANSWER FOR EACH ROW DECLARE last_Sequence NUMBER; last_InsertID NUMBER; BEGIN 
+            SELECT CLAIRE_EXERCISE_ANSWER_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; IF (
+                : NEW.ID IS NULL 
+                OR : NEW.ID = 0
+            ) THEN 
+            SELECT CLAIRE_EXERCISE_ANSWER_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; ELSE 
+            SELECT NVL(Last_Number, 0) INTO last_Sequence 
+            FROM User_Sequences 
+            WHERE Sequence_Name = 'CLAIRE_EXERCISE_ANSWER_ID_SEQ'; 
+            SELECT : NEW.ID INTO last_InsertID 
+            FROM DUAL; WHILE (last_InsertID > last_Sequence) LOOP 
+            SELECT CLAIRE_EXERCISE_ANSWER_ID_SEQ.NEXTVAL INTO last_Sequence 
+            FROM DUAL; END LOOP; END IF; END;
         ");
         $this->addSql("
             CREATE INDEX IDX_D0B3344126F525E ON claire_exercise_answer (item_id)
@@ -238,6 +68,34 @@ class Version20140826102207 extends AbstractMigration
                 position NUMBER(10) DEFAULT NULL, 
                 PRIMARY KEY(id)
             )
+        ");
+        $this->addSql("
+            DECLARE constraints_Count NUMBER; BEGIN 
+            SELECT COUNT(CONSTRAINT_NAME) INTO constraints_Count 
+            FROM USER_CONSTRAINTS 
+            WHERE TABLE_NAME = 'CLAIRE_EXERCISE_ATTEMPT' 
+            AND CONSTRAINT_TYPE = 'P'; IF constraints_Count = 0 
+            OR constraints_Count = '' THEN EXECUTE IMMEDIATE 'ALTER TABLE CLAIRE_EXERCISE_ATTEMPT ADD CONSTRAINT CLAIRE_EXERCISE_ATTEMPT_AI_PK PRIMARY KEY (ID)'; END IF; END;
+        ");
+        $this->addSql("
+            CREATE SEQUENCE CLAIRE_EXERCISE_ATTEMPT_ID_SEQ START WITH 1 MINVALUE 1 INCREMENT BY 1
+        ");
+        $this->addSql("
+            CREATE TRIGGER CLAIRE_EXERCISE_ATTEMPT_AI_PK BEFORE INSERT ON CLAIRE_EXERCISE_ATTEMPT FOR EACH ROW DECLARE last_Sequence NUMBER; last_InsertID NUMBER; BEGIN 
+            SELECT CLAIRE_EXERCISE_ATTEMPT_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; IF (
+                : NEW.ID IS NULL 
+                OR : NEW.ID = 0
+            ) THEN 
+            SELECT CLAIRE_EXERCISE_ATTEMPT_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; ELSE 
+            SELECT NVL(Last_Number, 0) INTO last_Sequence 
+            FROM User_Sequences 
+            WHERE Sequence_Name = 'CLAIRE_EXERCISE_ATTEMPT_ID_SEQ'; 
+            SELECT : NEW.ID INTO last_InsertID 
+            FROM DUAL; WHILE (last_InsertID > last_Sequence) LOOP 
+            SELECT CLAIRE_EXERCISE_ATTEMPT_ID_SEQ.NEXTVAL INTO last_Sequence 
+            FROM DUAL; END LOOP; END IF; END;
         ");
         $this->addSql("
             CREATE INDEX IDX_228E85D1E934951A ON claire_exercise_attempt (exercise_id)
@@ -258,6 +116,34 @@ class Version20140826102207 extends AbstractMigration
             )
         ");
         $this->addSql("
+            DECLARE constraints_Count NUMBER; BEGIN 
+            SELECT COUNT(CONSTRAINT_NAME) INTO constraints_Count 
+            FROM USER_CONSTRAINTS 
+            WHERE TABLE_NAME = 'CLAIRE_EXERCISE_ITEM' 
+            AND CONSTRAINT_TYPE = 'P'; IF constraints_Count = 0 
+            OR constraints_Count = '' THEN EXECUTE IMMEDIATE 'ALTER TABLE CLAIRE_EXERCISE_ITEM ADD CONSTRAINT CLAIRE_EXERCISE_ITEM_AI_PK PRIMARY KEY (ID)'; END IF; END;
+        ");
+        $this->addSql("
+            CREATE SEQUENCE CLAIRE_EXERCISE_ITEM_ID_SEQ START WITH 1 MINVALUE 1 INCREMENT BY 1
+        ");
+        $this->addSql("
+            CREATE TRIGGER CLAIRE_EXERCISE_ITEM_AI_PK BEFORE INSERT ON CLAIRE_EXERCISE_ITEM FOR EACH ROW DECLARE last_Sequence NUMBER; last_InsertID NUMBER; BEGIN 
+            SELECT CLAIRE_EXERCISE_ITEM_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; IF (
+                : NEW.ID IS NULL 
+                OR : NEW.ID = 0
+            ) THEN 
+            SELECT CLAIRE_EXERCISE_ITEM_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; ELSE 
+            SELECT NVL(Last_Number, 0) INTO last_Sequence 
+            FROM User_Sequences 
+            WHERE Sequence_Name = 'CLAIRE_EXERCISE_ITEM_ID_SEQ'; 
+            SELECT : NEW.ID INTO last_InsertID 
+            FROM DUAL; WHILE (last_InsertID > last_Sequence) LOOP 
+            SELECT CLAIRE_EXERCISE_ITEM_ID_SEQ.NEXTVAL INTO last_Sequence 
+            FROM DUAL; END LOOP; END IF; END;
+        ");
+        $this->addSql("
             CREATE INDEX IDX_F5D1234E934951A ON claire_exercise_item (exercise_id)
         ");
         $this->addSql("
@@ -267,6 +153,34 @@ class Version20140826102207 extends AbstractMigration
                 content CLOB NOT NULL, 
                 PRIMARY KEY(id)
             )
+        ");
+        $this->addSql("
+            DECLARE constraints_Count NUMBER; BEGIN 
+            SELECT COUNT(CONSTRAINT_NAME) INTO constraints_Count 
+            FROM USER_CONSTRAINTS 
+            WHERE TABLE_NAME = 'CLAIRE_EXERCISE_STORED_EXERCISE' 
+            AND CONSTRAINT_TYPE = 'P'; IF constraints_Count = 0 
+            OR constraints_Count = '' THEN EXECUTE IMMEDIATE 'ALTER TABLE CLAIRE_EXERCISE_STORED_EXERCISE ADD CONSTRAINT CLAIRE_EXERCISE_STORED_EXERCISE_AI_PK PRIMARY KEY (ID)'; END IF; END;
+        ");
+        $this->addSql("
+            CREATE SEQUENCE CLAIRE_EXERCISE_STORED_EXERCISE_ID_SEQ START WITH 1 MINVALUE 1 INCREMENT BY 1
+        ");
+        $this->addSql("
+            CREATE TRIGGER CLAIRE_EXERCISE_STORED_EXERCISE_AI_PK BEFORE INSERT ON CLAIRE_EXERCISE_STORED_EXERCISE FOR EACH ROW DECLARE last_Sequence NUMBER; last_InsertID NUMBER; BEGIN 
+            SELECT CLAIRE_EXERCISE_STORED_EXERCISE_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; IF (
+                : NEW.ID IS NULL 
+                OR : NEW.ID = 0
+            ) THEN 
+            SELECT CLAIRE_EXERCISE_STORED_EXERCISE_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; ELSE 
+            SELECT NVL(Last_Number, 0) INTO last_Sequence 
+            FROM User_Sequences 
+            WHERE Sequence_Name = 'CLAIRE_EXERCISE_STORED_EXERCISE_ID_SEQ'; 
+            SELECT : NEW.ID INTO last_InsertID 
+            FROM DUAL; WHILE (last_InsertID > last_Sequence) LOOP 
+            SELECT CLAIRE_EXERCISE_STORED_EXERCISE_ID_SEQ.NEXTVAL INTO last_Sequence 
+            FROM DUAL; END LOOP; END IF; END;
         ");
         $this->addSql("
             CREATE INDEX IDX_7270807A7F19170F ON claire_exercise_stored_exercise (exercise_model_id)
@@ -288,6 +202,34 @@ class Version20140826102207 extends AbstractMigration
                 archived NUMBER(1) NOT NULL, 
                 PRIMARY KEY(id)
             )
+        ");
+        $this->addSql("
+            DECLARE constraints_Count NUMBER; BEGIN 
+            SELECT COUNT(CONSTRAINT_NAME) INTO constraints_Count 
+            FROM USER_CONSTRAINTS 
+            WHERE TABLE_NAME = 'CLAIRE_EXERCISE_KNOWLEDGE' 
+            AND CONSTRAINT_TYPE = 'P'; IF constraints_Count = 0 
+            OR constraints_Count = '' THEN EXECUTE IMMEDIATE 'ALTER TABLE CLAIRE_EXERCISE_KNOWLEDGE ADD CONSTRAINT CLAIRE_EXERCISE_KNOWLEDGE_AI_PK PRIMARY KEY (ID)'; END IF; END;
+        ");
+        $this->addSql("
+            CREATE SEQUENCE CLAIRE_EXERCISE_KNOWLEDGE_ID_SEQ START WITH 1 MINVALUE 1 INCREMENT BY 1
+        ");
+        $this->addSql("
+            CREATE TRIGGER CLAIRE_EXERCISE_KNOWLEDGE_AI_PK BEFORE INSERT ON CLAIRE_EXERCISE_KNOWLEDGE FOR EACH ROW DECLARE last_Sequence NUMBER; last_InsertID NUMBER; BEGIN 
+            SELECT CLAIRE_EXERCISE_KNOWLEDGE_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; IF (
+                : NEW.ID IS NULL 
+                OR : NEW.ID = 0
+            ) THEN 
+            SELECT CLAIRE_EXERCISE_KNOWLEDGE_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; ELSE 
+            SELECT NVL(Last_Number, 0) INTO last_Sequence 
+            FROM User_Sequences 
+            WHERE Sequence_Name = 'CLAIRE_EXERCISE_KNOWLEDGE_ID_SEQ'; 
+            SELECT : NEW.ID INTO last_InsertID 
+            FROM DUAL; WHILE (last_InsertID > last_Sequence) LOOP 
+            SELECT CLAIRE_EXERCISE_KNOWLEDGE_ID_SEQ.NEXTVAL INTO last_Sequence 
+            FROM DUAL; END LOOP; END IF; END;
         ");
         $this->addSql("
             CREATE INDEX IDX_465F3A83727ACA70 ON claire_exercise_knowledge (parent_id)
@@ -343,6 +285,34 @@ class Version20140826102207 extends AbstractMigration
                 archived NUMBER(1) DEFAULT NULL, 
                 PRIMARY KEY(id)
             )
+        ");
+        $this->addSql("
+            DECLARE constraints_Count NUMBER; BEGIN 
+            SELECT COUNT(CONSTRAINT_NAME) INTO constraints_Count 
+            FROM USER_CONSTRAINTS 
+            WHERE TABLE_NAME = 'CLAIRE_EXERCISE_MODEL' 
+            AND CONSTRAINT_TYPE = 'P'; IF constraints_Count = 0 
+            OR constraints_Count = '' THEN EXECUTE IMMEDIATE 'ALTER TABLE CLAIRE_EXERCISE_MODEL ADD CONSTRAINT CLAIRE_EXERCISE_MODEL_AI_PK PRIMARY KEY (ID)'; END IF; END;
+        ");
+        $this->addSql("
+            CREATE SEQUENCE CLAIRE_EXERCISE_MODEL_ID_SEQ START WITH 1 MINVALUE 1 INCREMENT BY 1
+        ");
+        $this->addSql("
+            CREATE TRIGGER CLAIRE_EXERCISE_MODEL_AI_PK BEFORE INSERT ON CLAIRE_EXERCISE_MODEL FOR EACH ROW DECLARE last_Sequence NUMBER; last_InsertID NUMBER; BEGIN 
+            SELECT CLAIRE_EXERCISE_MODEL_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; IF (
+                : NEW.ID IS NULL 
+                OR : NEW.ID = 0
+            ) THEN 
+            SELECT CLAIRE_EXERCISE_MODEL_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; ELSE 
+            SELECT NVL(Last_Number, 0) INTO last_Sequence 
+            FROM User_Sequences 
+            WHERE Sequence_Name = 'CLAIRE_EXERCISE_MODEL_ID_SEQ'; 
+            SELECT : NEW.ID INTO last_InsertID 
+            FROM DUAL; WHILE (last_InsertID > last_Sequence) LOOP 
+            SELECT CLAIRE_EXERCISE_MODEL_ID_SEQ.NEXTVAL INTO last_Sequence 
+            FROM DUAL; END LOOP; END IF; END;
         ");
         $this->addSql("
             CREATE UNIQUE INDEX UNIQ_C3EFD3877C292AE ON claire_exercise_model (resourcenode_id)
@@ -415,6 +385,34 @@ class Version20140826102207 extends AbstractMigration
             )
         ");
         $this->addSql("
+            DECLARE constraints_Count NUMBER; BEGIN 
+            SELECT COUNT(CONSTRAINT_NAME) INTO constraints_Count 
+            FROM USER_CONSTRAINTS 
+            WHERE TABLE_NAME = 'CLAIRE_EXERCISE_RESOURCE' 
+            AND CONSTRAINT_TYPE = 'P'; IF constraints_Count = 0 
+            OR constraints_Count = '' THEN EXECUTE IMMEDIATE 'ALTER TABLE CLAIRE_EXERCISE_RESOURCE ADD CONSTRAINT CLAIRE_EXERCISE_RESOURCE_AI_PK PRIMARY KEY (ID)'; END IF; END;
+        ");
+        $this->addSql("
+            CREATE SEQUENCE CLAIRE_EXERCISE_RESOURCE_ID_SEQ START WITH 1 MINVALUE 1 INCREMENT BY 1
+        ");
+        $this->addSql("
+            CREATE TRIGGER CLAIRE_EXERCISE_RESOURCE_AI_PK BEFORE INSERT ON CLAIRE_EXERCISE_RESOURCE FOR EACH ROW DECLARE last_Sequence NUMBER; last_InsertID NUMBER; BEGIN 
+            SELECT CLAIRE_EXERCISE_RESOURCE_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; IF (
+                : NEW.ID IS NULL 
+                OR : NEW.ID = 0
+            ) THEN 
+            SELECT CLAIRE_EXERCISE_RESOURCE_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; ELSE 
+            SELECT NVL(Last_Number, 0) INTO last_Sequence 
+            FROM User_Sequences 
+            WHERE Sequence_Name = 'CLAIRE_EXERCISE_RESOURCE_ID_SEQ'; 
+            SELECT : NEW.ID INTO last_InsertID 
+            FROM DUAL; WHILE (last_InsertID > last_Sequence) LOOP 
+            SELECT CLAIRE_EXERCISE_RESOURCE_ID_SEQ.NEXTVAL INTO last_Sequence 
+            FROM DUAL; END LOOP; END IF; END;
+        ");
+        $this->addSql("
             CREATE INDEX IDX_E9AEB0BE727ACA70 ON claire_exercise_resource (parent_id)
         ");
         $this->addSql("
@@ -473,6 +471,34 @@ class Version20140826102207 extends AbstractMigration
             )
         ");
         $this->addSql("
+            DECLARE constraints_Count NUMBER; BEGIN 
+            SELECT COUNT(CONSTRAINT_NAME) INTO constraints_Count 
+            FROM USER_CONSTRAINTS 
+            WHERE TABLE_NAME = 'CLAIRE_EXERCISE_TEST' 
+            AND CONSTRAINT_TYPE = 'P'; IF constraints_Count = 0 
+            OR constraints_Count = '' THEN EXECUTE IMMEDIATE 'ALTER TABLE CLAIRE_EXERCISE_TEST ADD CONSTRAINT CLAIRE_EXERCISE_TEST_AI_PK PRIMARY KEY (ID)'; END IF; END;
+        ");
+        $this->addSql("
+            CREATE SEQUENCE CLAIRE_EXERCISE_TEST_ID_SEQ START WITH 1 MINVALUE 1 INCREMENT BY 1
+        ");
+        $this->addSql("
+            CREATE TRIGGER CLAIRE_EXERCISE_TEST_AI_PK BEFORE INSERT ON CLAIRE_EXERCISE_TEST FOR EACH ROW DECLARE last_Sequence NUMBER; last_InsertID NUMBER; BEGIN 
+            SELECT CLAIRE_EXERCISE_TEST_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; IF (
+                : NEW.ID IS NULL 
+                OR : NEW.ID = 0
+            ) THEN 
+            SELECT CLAIRE_EXERCISE_TEST_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; ELSE 
+            SELECT NVL(Last_Number, 0) INTO last_Sequence 
+            FROM User_Sequences 
+            WHERE Sequence_Name = 'CLAIRE_EXERCISE_TEST_ID_SEQ'; 
+            SELECT : NEW.ID INTO last_InsertID 
+            FROM DUAL; WHILE (last_InsertID > last_Sequence) LOOP 
+            SELECT CLAIRE_EXERCISE_TEST_ID_SEQ.NEXTVAL INTO last_Sequence 
+            FROM DUAL; END LOOP; END IF; END;
+        ");
+        $this->addSql("
             CREATE INDEX IDX_C8394926EC16BCB1 ON claire_exercise_test (test_model_id)
         ");
         $this->addSql("
@@ -483,6 +509,34 @@ class Version20140826102207 extends AbstractMigration
                 created_at TIMESTAMP(0) NOT NULL, 
                 PRIMARY KEY(id)
             )
+        ");
+        $this->addSql("
+            DECLARE constraints_Count NUMBER; BEGIN 
+            SELECT COUNT(CONSTRAINT_NAME) INTO constraints_Count 
+            FROM USER_CONSTRAINTS 
+            WHERE TABLE_NAME = 'CLAIRE_EXERCISE_TEST_ATTEMPT' 
+            AND CONSTRAINT_TYPE = 'P'; IF constraints_Count = 0 
+            OR constraints_Count = '' THEN EXECUTE IMMEDIATE 'ALTER TABLE CLAIRE_EXERCISE_TEST_ATTEMPT ADD CONSTRAINT CLAIRE_EXERCISE_TEST_ATTEMPT_AI_PK PRIMARY KEY (ID)'; END IF; END;
+        ");
+        $this->addSql("
+            CREATE SEQUENCE CLAIRE_EXERCISE_TEST_ATTEMPT_ID_SEQ START WITH 1 MINVALUE 1 INCREMENT BY 1
+        ");
+        $this->addSql("
+            CREATE TRIGGER CLAIRE_EXERCISE_TEST_ATTEMPT_AI_PK BEFORE INSERT ON CLAIRE_EXERCISE_TEST_ATTEMPT FOR EACH ROW DECLARE last_Sequence NUMBER; last_InsertID NUMBER; BEGIN 
+            SELECT CLAIRE_EXERCISE_TEST_ATTEMPT_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; IF (
+                : NEW.ID IS NULL 
+                OR : NEW.ID = 0
+            ) THEN 
+            SELECT CLAIRE_EXERCISE_TEST_ATTEMPT_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; ELSE 
+            SELECT NVL(Last_Number, 0) INTO last_Sequence 
+            FROM User_Sequences 
+            WHERE Sequence_Name = 'CLAIRE_EXERCISE_TEST_ATTEMPT_ID_SEQ'; 
+            SELECT : NEW.ID INTO last_InsertID 
+            FROM DUAL; WHILE (last_InsertID > last_Sequence) LOOP 
+            SELECT CLAIRE_EXERCISE_TEST_ATTEMPT_ID_SEQ.NEXTVAL INTO last_Sequence 
+            FROM DUAL; END LOOP; END IF; END;
         ");
         $this->addSql("
             CREATE INDEX IDX_783E4D1F1E5D0459 ON claire_exercise_test_attempt (test_id)
@@ -497,6 +551,34 @@ class Version20140826102207 extends AbstractMigration
                 title VARCHAR2(255) NOT NULL, 
                 PRIMARY KEY(id)
             )
+        ");
+        $this->addSql("
+            DECLARE constraints_Count NUMBER; BEGIN 
+            SELECT COUNT(CONSTRAINT_NAME) INTO constraints_Count 
+            FROM USER_CONSTRAINTS 
+            WHERE TABLE_NAME = 'CLAIRE_EXERCISE_TEST_MODEL' 
+            AND CONSTRAINT_TYPE = 'P'; IF constraints_Count = 0 
+            OR constraints_Count = '' THEN EXECUTE IMMEDIATE 'ALTER TABLE CLAIRE_EXERCISE_TEST_MODEL ADD CONSTRAINT CLAIRE_EXERCISE_TEST_MODEL_AI_PK PRIMARY KEY (ID)'; END IF; END;
+        ");
+        $this->addSql("
+            CREATE SEQUENCE CLAIRE_EXERCISE_TEST_MODEL_ID_SEQ START WITH 1 MINVALUE 1 INCREMENT BY 1
+        ");
+        $this->addSql("
+            CREATE TRIGGER CLAIRE_EXERCISE_TEST_MODEL_AI_PK BEFORE INSERT ON CLAIRE_EXERCISE_TEST_MODEL FOR EACH ROW DECLARE last_Sequence NUMBER; last_InsertID NUMBER; BEGIN 
+            SELECT CLAIRE_EXERCISE_TEST_MODEL_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; IF (
+                : NEW.ID IS NULL 
+                OR : NEW.ID = 0
+            ) THEN 
+            SELECT CLAIRE_EXERCISE_TEST_MODEL_ID_SEQ.NEXTVAL INTO : NEW.ID 
+            FROM DUAL; ELSE 
+            SELECT NVL(Last_Number, 0) INTO last_Sequence 
+            FROM User_Sequences 
+            WHERE Sequence_Name = 'CLAIRE_EXERCISE_TEST_MODEL_ID_SEQ'; 
+            SELECT : NEW.ID INTO last_InsertID 
+            FROM DUAL; WHILE (last_InsertID > last_Sequence) LOOP 
+            SELECT CLAIRE_EXERCISE_TEST_MODEL_ID_SEQ.NEXTVAL INTO last_Sequence 
+            FROM DUAL; END LOOP; END IF; END;
         ");
         $this->addSql("
             CREATE INDEX IDX_CB243285F675F31B ON claire_exercise_test_model (author_id)
@@ -876,204 +958,6 @@ class Version20140826102207 extends AbstractMigration
         $this->addSql("
             ALTER TABLE claire_exercise_test_model_position 
             DROP CONSTRAINT FK_C31B436DEC16BCB1
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_answer_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_attempt_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_item_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_stored_exercise_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_knowledge_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_model_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_resource_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_test_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_test_attempt_id_seq
-        ");
-        $this->addSql("
-            DROP SEQUENCE claire_exercise_test_model_id_seq
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_announcement_aggregate_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_announcement_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_forum_category_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_forum_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_forum_message_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_forum_notification_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_forum_options_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_forum_subject_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_link_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_log_desktop_widget_config_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_log_workspace_widget_config_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_resource_type_custom_action_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_rssreader_configuration_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE claro_widget_display_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE icap__blog_comment_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE icap__blog_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE icap__blog_options_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE icap__blog_post_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE icap__blog_tag_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE icap__dropzonebundle_correction_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE icap__dropzonebundle_criterion_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE icap__dropzonebundle_document_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE icap__dropzonebundle_drop_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE icap__dropzonebundle_dropzone_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE icap__dropzonebundle_grade_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE icap__lesson_chapter_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE icap__lesson_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE icap__wiki_contribution_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE icap__wiki_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE icap__wiki_section_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE simple_text_dekstop_widget_config_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE simple_text_workspace_widget_config_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_category_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_choice_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_coords_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_document_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_exercise_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_expertise_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_group_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_hint_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_hole_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_interaction_graphic_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_interaction_hole_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_interaction_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_interaction_open_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_interaction_qcm_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_lock_attempt_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_paper_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_planning_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_question_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_response_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_subscription_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_type_open_question_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_type_qcm_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_unit_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
-        ");
-        $this->addSql("
-            CREATE SEQUENCE ujm_word_response_id_seq START WITH 1 MINVALUE 1 INCREMENT BY 1
         ");
         $this->addSql("
             DROP TABLE claire_exercise_answer
