@@ -1,7 +1,7 @@
 {
     "name": "marie-lefevre/claire-exercise-bundle",
     "type": "claroline-plugin",
-    "description": "LIRIS Claire Exercise Bundle (collaboration with open classrooms)",
+    "description": "LIRIS Claire Exercise Bundle for claroline connect",
     "keywords": ["claire","exercise"],
     "homepage": "https://github.com/marielefevre/ClaireExerciseBundle",
     "license": "GNU GPL",
