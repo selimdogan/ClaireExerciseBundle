@@ -185,9 +185,15 @@
                     </div>
                     <div class="col-centered pull-right">
                         <h4>
-                            <span ng-click="$event.stopPropagation();tryModel(model)"
+                            <span ng-if="model.complete"
+                                  ng-click="$event.stopPropagation();tryModel(model)"
                                   class="glyphicon glyphicon-repeat"
                                   title="Essayer de répondre à un exercice pour ce modèle"></span>
+                            <span ng-if="!model.complete"
+                                  class="glyphicon glyphicon-repeat"
+                                  style="opacity: 0.3"
+                                  ng-click="$event.stopPropagation()"
+                                  title="Essayer de répondre à un exercice pour ce modèle (impossible car modèle non complet)"></span>
                             &nbsp;
                             <span
                                 ng-if="model.owner != BASE_CONFIG.currentUserId || model.parent != null"
