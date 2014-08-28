@@ -37,11 +37,15 @@
                     <input type="number" ng-click="$event.stopPropagation();" ng-model="block.number_of_occurrences" class="form-control" style="height: 25px">
                 </div>
                 <div class="col-xs-6">
-                    <h5>Nombre de réponses par question</h5>
+                    <h5 title="Nombre de propositions par question. Si cette option vaut 0, elle est ignorée. Sinon, elle remplace la valeur éventuelle précisée dans chacune des ressources.">
+                        Nombre de propositions
+                    </h5>
                     <input type="number" ng-model="block.max_number_of_propositions" ng-click="$event.stopPropagation();" class="form-control" style="height: 25px">
                 </div>
                 <div class="col-xs-6">
-                    <h5>Nombre de réponses justes</h5>
+                    <h5 title="Nombre de propositions justes par question. Si cette option vaut 0, elle est ignorée. Sinon, elle remplace la valeur éventuelle précisée dans chacune des ressources.">
+                        Nombre de propositions justes
+                    </h5>
                     <input type="number" ng-model="block.max_number_of_right_propositions" ng-click="$event.stopPropagation();" class="form-control" style="height: 25px">
                 </div>
             </div>
