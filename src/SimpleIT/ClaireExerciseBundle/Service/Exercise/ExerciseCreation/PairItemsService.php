@@ -70,29 +70,6 @@ class PairItemsService extends ExerciseCreationService
     }
 
     /**
-     * Check the number of pairs in each block
-     *
-     * @param CommonModel $model
-     *
-     * @return boolean true is the model is valid
-     */
-    public function validateModel(CommonModel $model)
-    {
-        /** @var Model $model */
-        foreach ($model->getPairBlocks() as $block) {
-            /** @var PairBlock $block */
-            if (
-                $block->isList() &&
-                $block->getNumberOfOccurrences() > count($block->getResources())
-            ) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * Correct the pair items. Modify the solution to keep only one of the
      * possible solutions, which must be the closest to the learner's answer.
      *
