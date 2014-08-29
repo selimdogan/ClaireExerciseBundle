@@ -54,6 +54,13 @@ class Question extends CommonItem implements Markable
     private $doNotShuffle;
 
     /**
+     * @var int $originResource The resource from which the question is taken
+     * @Serializer\Type("integer")
+     * @Serializer\Groups({"details", "corrected", "not_corrected", "item_storage"})
+     */
+    private $originResource;
+
+    /**
      * Shuffle the order of the propositions
      */
     public function shufflePropositionsOrder()
@@ -134,5 +141,25 @@ class Question extends CommonItem implements Markable
     public function getDoNotShuffle()
     {
         return $this->doNotShuffle;
+    }
+
+    /**
+     * Set originResource
+     *
+     * @param int $originResource
+     */
+    public function setOriginResource($originResource)
+    {
+        $this->originResource = $originResource;
+    }
+
+    /**
+     * Get originResource
+     *
+     * @return int
+     */
+    public function getOriginResource()
+    {
+        return $this->originResource;
     }
 }

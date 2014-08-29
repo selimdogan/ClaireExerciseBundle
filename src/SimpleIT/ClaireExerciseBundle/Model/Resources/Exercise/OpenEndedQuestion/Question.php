@@ -59,6 +59,13 @@ class Question extends CommonItem implements Markable
     private $answer;
 
     /**
+     * @var int $originResource The resource from which the question is taken
+     * @Serializer\Type("integer")
+     * @Serializer\Groups({"details", "corrected", "not_corrected", "item_storage"})
+     */
+    private $originResource;
+
+    /**
      * Set answer
      *
      * @param string $answer
@@ -136,5 +143,25 @@ class Question extends CommonItem implements Markable
     public function getAnswerFormat()
     {
         return $this->answerFormat;
+    }
+
+    /**
+     * Set originResource
+     *
+     * @param int $originResource
+     */
+    public function setOriginResource($originResource)
+    {
+        $this->originResource = $originResource;
+    }
+
+    /**
+     * Get originResource
+     *
+     * @return int
+     */
+    public function getOriginResource()
+    {
+        return $this->originResource;
     }
 }

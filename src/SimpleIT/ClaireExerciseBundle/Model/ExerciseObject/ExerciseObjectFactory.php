@@ -44,6 +44,7 @@ abstract class ExerciseObjectFactory
      * @param CommonResource $resource
      * @param Collection     $metadata
      * @param array          $requiredResource
+     * @param null           $resourceId
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException
      * @return ExerciseObject The output exercise object
@@ -51,7 +52,8 @@ abstract class ExerciseObjectFactory
     public static function createExerciseObject(
         CommonResource $resource,
         Collection $metadata = null,
-        array $requiredResource = null
+        array $requiredResource = null,
+        $resourceId = null
     )
     {
         // Depending on the type of the resource, call to the right factory
@@ -95,6 +97,10 @@ abstract class ExerciseObjectFactory
             }
         }
 
+        // add the resource id
+        $object->setOriginResource($resourceId);
+
+        // formulas
         if ($resource->getFormulas() !== null) {
             $object->setFormulas($resource->getFormulas());
         }

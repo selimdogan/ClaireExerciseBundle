@@ -58,6 +58,13 @@ abstract class ExerciseObject
     protected $formulas;
 
     /**
+     * @var int $originResource The resource from which the question is taken
+     * @Serializer\Type("integer")
+     * @Serializer\Groups({"details", "corrected", "not_corrected", "item_storage"})
+     */
+    private $originResource;
+
+    /**
      * Get metadata
      *
      * @return array
@@ -148,5 +155,25 @@ abstract class ExerciseObject
     public function getType()
     {
         return static::OBJECT_TYPE;
+    }
+
+    /**
+     * Set originResource
+     *
+     * @param int $originResource
+     */
+    public function setOriginResource($originResource)
+    {
+        $this->originResource = $originResource;
+    }
+
+    /**
+     * Get originResource
+     *
+     * @return int
+     */
+    public function getOriginResource()
+    {
+        return $this->originResource;
     }
 }

@@ -117,12 +117,13 @@ class MultipleChoiceService extends ExerciseCreationService
     {
         /** @var MultipleChoiceQuestion $modelQuestion */
         foreach ($modelQuestionToAdd as $modelQuestion) {
-            // initialize the exercise
+            // initialize the exercise question
             $exerciseQuestion = new Question();
             $exerciseQuestion->setDoNotShuffle($modelQuestion->getDoNotShuffle());
 
             $exerciseQuestion->setQuestion($modelQuestion->getQuestion());
             $exerciseQuestion->setComment($modelQuestion->getComment());
+            $exerciseQuestion->setOriginResource($modelQuestion->getOriginResource());
 
             // organise the propositions ids
             $forcedRightId = array();

@@ -155,6 +155,7 @@ class PairItemsService extends ExerciseCreationService
      * @param Model $model the model
      * @param User  $owner
      *
+     * @throws InvalidTypeException
      * @return Exercise The exercise
      */
     private function generatePIExercise(Model $model, User $owner)
@@ -244,7 +245,7 @@ class PairItemsService extends ExerciseCreationService
         User $owner
     )
     {
-        // Get the objects from the block and the associated metadata.
+        // Get the objects from the block and the associated metadata
         // Array of ExerciseObject
         $blockFixObjects = $this->exerciseObjectsFromBlock($pb, $owner);
 

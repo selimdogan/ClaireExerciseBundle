@@ -47,13 +47,15 @@ abstract class ExerciseTextFactory
      * Create a text object from a string
      *
      * @param string $text
+     * @param int    $resourceId
      *
      * @return ExerciseTextObject
      */
-    public static function createFromText($text)
+    public static function createFromText($text, $resourceId = null)
     {
         $textObj = new ExerciseTextObject();
         $textObj->setText($text);
+        $textObj->setOriginResource($resourceId);
 
         return $textObj;
     }

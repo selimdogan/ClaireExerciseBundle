@@ -124,6 +124,8 @@ class OpenEndedQuestionService extends ExerciseCreationService
 
             $exerciseQuestion = new Question();
 
+            $exerciseQuestion->setOriginResource($modelQuestion->getOriginResource());
+
             $exerciseQuestion->setQuestion(
                 $this->parseStringWithVariables($modelQuestion->getQuestion(), $variables)
             );
