@@ -105,7 +105,7 @@ class OpenEndedQuestionService extends ExerciseCreationService
     }
 
     /**
-     * Add questions from an array of MultipleChoiceExerciseQuestions to the Exercise
+     * Add questions from an array of OpenEndedQuestion to the Exercise
      *
      * @param array    $modelQuestionToAdd The array of questions
      * @param Exercise $exercise           The Exercise
