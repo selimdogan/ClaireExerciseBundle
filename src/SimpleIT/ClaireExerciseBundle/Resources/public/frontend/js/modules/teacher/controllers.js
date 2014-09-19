@@ -473,11 +473,11 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
                 data: {myObj: $scope.myModelObj},
                 file: file
             }).progress(function (evt) {
-                    console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-                }).success(function (data) {
-                    // file is uploaded successfully
-                    $scope.editedResource.content.source = data.fileName;
-                });
+                console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+            }).success(function (data) {
+                // file is uploaded successfully
+                $scope.editedResource.content.source = data.fileName;
+            });
         };
 
         // delete resource method
@@ -631,7 +631,11 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                         "is_list": true,
                         "number_of_occurrences": 0,
                         "resources": [],
-                        "meta_key": ""
+                        "meta_key": "",
+                        "resource_constraint": {
+                            "metadata_constraints": [],
+                            "excluded": []
+                        }
                     }
                 },
                 "order_items": {
@@ -667,7 +671,11 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                         "is_list": true,
                         "number_of_occurrences": 0,
                         "resources": [],
-                        "meta_key": ""
+                        "meta_key": "",
+                        "resource_constraint": {
+                            "metadata_constraints": [],
+                            "excluded": []
+                        }
                     }
                 },
                 "multiple_choice": {
@@ -703,7 +711,11 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                         "resources": [],
                         "is_list": true,
                         "max_number_of_propositions": 0,
-                        "max_number_of_right_propositions": 0
+                        "max_number_of_right_propositions": 0,
+                        "resource_constraint": {
+                            "metadata_constraints": [],
+                            "excluded": []
+                        }
                     }
                 },
                 "group_items": {
@@ -740,7 +752,11 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                     "block_field": {
                         "number_of_occurrences": 0,
                         "resources": [],
-                        "is_list": true
+                        "is_list": true,
+                        "resource_constraint": {
+                            "metadata_constraints": [],
+                            "excluded": []
+                        }
                     }
                 },
                 "group_items_group": {
@@ -771,6 +787,17 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                     },
                     "required_exercise_resources": null,
                     "required_knowledges": null
+                },
+                "sub_open_ended_question": {
+                    "block_field": {
+                        "number_of_occurrences": 0,
+                        "resources": [],
+                        "is_list": true,
+                        "resource_constraint": {
+                            "metadata_constraints": [],
+                            "excluded": []
+                        }
+                    }
                 }
             }
         };
@@ -803,6 +830,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
 
         $scope.modelAddBlockResourceConstraint = function (metadata_constraints, type) {
             var newElement;
+
             if (type == 'exists') {
                 newElement = jQuery.extend(true, {}, $scope.modelContext.newModel.block_constraint.exists);
             } else if (type == 'in') {
@@ -843,7 +871,8 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                     $scope.tryExercise(exercise);
                 });
         };
-    }]);
+    }])
+;
 
 modelControllers.controller('modelListController', ['$scope', 'Model', '$location',
     function ($scope, Model, $location) {
@@ -1265,7 +1294,7 @@ modelControllers.controller('modelEditOpenEndedQuestionController', ['$scope',
             collection.splice(
                 collection.length,
                 0,
-                jQuery.extend(true, {}, $scope.modelContext.newModel.sub_group_items.block_field)
+                jQuery.extend(true, {}, $scope.modelContext.newModel.sub_open_ended_question.block_field)
             );
         }
 
