@@ -740,6 +740,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
         $entity->setId(null);
 
         $this->duplicateDetail($entity);
+        $entity->setMetadata(new ArrayCollection());
 
         $this->em->persist($entity);
         $this->em->flush();
