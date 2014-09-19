@@ -225,7 +225,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * The id of an entity can never be modified (ignored if not null)
      *
      * @param ExerciseModelResource $modelResource
-     * @param ExerciseModel         $model
+     * @param ExerciseModel $model
      *
      * @throws NoAuthorException
      * @return ExerciseModel
@@ -305,9 +305,9 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * this case.
      *
      * @param ExerciseModelResource $modelResource
-     * @param ExerciseModel         $model
-     * @param bool                  $import
-     * @param int                   $ownerId
+     * @param ExerciseModel $model
+     * @param bool $import
+     * @param int $ownerId
      *
      * @return ExerciseModel
      */
@@ -377,8 +377,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Check if the content of an exercise model is sufficient to generate exercises.
      *
      * @param ExerciseModel $entity
-     * @param string        $type
-     * @param int           $parentId
+     * @param string $type
+     * @param int $parentId
      * @param               $content
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException
@@ -438,7 +438,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Check if a multiple choice content is complete
      *
      * @param MultipleChoice $content
-     * @param string         $errorCode
+     * @param string $errorCode
      *
      * @return boolean
      */
@@ -485,7 +485,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Check if a pair items content is complete
      *
      * @param PairItems $content
-     * @param string    $errorCode
+     * @param string $errorCode
      *
      * @return bool
      */
@@ -530,7 +530,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Check if a group items model is complete
      *
      * @param GroupItems $content
-     * @param string     $errorCode
+     * @param string $errorCode
      *
      * @return bool
      */
@@ -594,7 +594,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Check if an order items model is complete
      *
      * @param OrderItems $content
-     * @param string     $errorCode
+     * @param string $errorCode
      *
      * @return bool
      */
@@ -687,7 +687,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Check if an open ended question model is complete
      *
      * @param OpenEnded $content
-     * @param string    $errorCode
+     * @param string $errorCode
      *
      * @return bool
      */
@@ -727,9 +727,9 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Checks if a resource block is complete
      *
      * @param ResourceBlock $block
-     * @param array         $resourceTypes
-     * @param string        $metaKey
-     * @param string        $errorCode
+     * @param array $resourceTypes
+     * @param string $metaKey
+     * @param string $errorCode
      *
      * @return boolean
      */
@@ -783,8 +783,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Check if and object constraints object is complete
      *
      * @param ObjectConstraints $resourceConstraints
-     * @param array             $resourceTypes
-     * @param string            $errorCode
+     * @param array $resourceTypes
+     * @param string $errorCode
      *
      * @return boolean
      */
@@ -828,9 +828,9 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Check if an obect Id is valid (and exists)
      *
      * @param ObjectId $objectId
-     * @param array    $resourceTypes
-     * @param string   $metaKey
-     * @param string   $errorCode
+     * @param array $resourceTypes
+     * @param string $metaKey
+     * @param string $errorCode
      *
      * @return bool
      */
@@ -882,7 +882,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Check if a metadata constraint is complete
      *
      * @param MetadataConstraint $mdc
-     * @param string             $errorCode
+     * @param string $errorCode
      *
      * @return bool
      */
@@ -909,7 +909,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Check if a classification constraint is complete
      *
      * @param ClassificationConstraints $classifConstr
-     * @param string                    $errorCode
+     * @param string $errorCode
      *
      * @return bool
      */
@@ -986,8 +986,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * The resource can be imported if owned by another user.
      *
      * @param ExerciseModelResource $modelResource
-     * @param bool                  $import
-     * @param int                   $ownerId
+     * @param bool $import
+     * @param int $ownerId
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException
      * @return ExerciseModelResource
@@ -1087,8 +1087,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * List all the required resources found in a list of blocks
      *
      * @param array $blocks
-     * @param bool  $import
-     * @param int   $ownerId
+     * @param bool $import
+     * @param int $ownerId
      *
      * @return array
      */
@@ -1119,8 +1119,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * List all the required resource found in a block
      *
      * @param ResourceBlock $block
-     * @param bool          $import
-     * @param int           $ownerId
+     * @param bool $import
+     * @param int $ownerId
      *
      * @return array
      */
@@ -1157,8 +1157,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      *The knowledge can be imported if owned by another user.
      *
      * @param ExerciseModelResource $modelResource
-     * @param bool                  $import
-     * @param int                   $ownerId
+     * @param bool $import
+     * @param int $ownerId
      *
      * @throws InvalidTypeException
      * @return ExerciseModelResource
@@ -1197,7 +1197,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Subscribe to an entity: the new entity is a pointer to the parent entity. It has no
      * content and no metadata because these elements rely on the parent.
      *
-     * @param int $ownerId        The id of the owner who wants to get the new pointer
+     * @param int $ownerId The id of the owner who wants to get the new pointer
      * @param int $parentEntityId The id of the parent entity
      *
      * @return ExerciseModel
@@ -1215,7 +1215,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     /**
      * Import an entity. Additionnal work, specific to entity type
      *
-     * @param int           $ownerId
+     * @param int $ownerId
      * @param ExerciseModel $entity The duplicata
      *
      * @return ExerciseModel
@@ -1242,14 +1242,16 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     /**
      * @return ExerciseModel
      */
-    protected function newEntity() {
+    protected function newEntity()
+    {
         return new ExerciseModel();
     }
 
     /**
      * @return Metadata
      */
-    protected function newMetadata() {
+    protected function newMetadata()
+    {
         return new Metadata();
     }
 
@@ -1258,7 +1260,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      *
      * @param ExerciseModel $entity
      */
-    protected function clearEntityDetail($entity) {
+    protected function clearEntityDetail($entity)
+    {
         $entity->setRequiredKnowledges(new ArrayCollection());
         $entity->setRequiredExerciseResources(new ArrayCollection());
     }
@@ -1293,7 +1296,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Computes the used resources according to the content of the resource resource.
      *
      * @param ExerciseModelResource $modelResource
-     * @param User                  $owner
+     * @param User $owner
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException
      * @return array
@@ -1371,7 +1374,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * List all the required resources found in a list of blocks
      *
      * @param array $blocks
-     * @param User  $owner
+     * @param User $owner
      *
      * @return array
      */
@@ -1394,7 +1397,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Import all the used resource found in a block
      *
      * @param ResourceBlock $block
-     * @param User          $owner
+     * @param User $owner
      *
      * @return array
      */
@@ -1428,7 +1431,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     /**
      * Create the claroline resource node associated to the model
      *
-     * @param User          $user
+     * @param User $user
      * @param ExerciseModel $model
      */
     public function createClarolineResourceNode($user, $model)
@@ -1462,11 +1465,13 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * Duplicate an entity. Additionnal work, specific to entity type
      *
      * @param ExerciseModel $entity The duplicata
+     * @param ExerciseModel $original
      *
-     * @return ExerciseModel
+     * @return Knowledge
      */
-    protected function duplicateDetail($entity)
+    protected function duplicateDetail($entity, $original)
     {
-        $entity->deleteResourceNode();
+        $entity->setRequiredKnowledges($original->getRequiredKnowledges());
+        $entity->setRequiredExerciseResources($original->getRequiredKnowledges());
     }
 }

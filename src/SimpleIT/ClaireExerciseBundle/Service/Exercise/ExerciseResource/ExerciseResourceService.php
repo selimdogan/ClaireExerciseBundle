@@ -861,12 +861,13 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * Duplicate an entity. Additionnal work, specific to entity type
      *
      * @param ExerciseResource $entity The duplicata
+     * @param ExerciseResource $original
      *
-     * @return ExerciseResource
+     * @return Knowledge
      */
-    protected function duplicateDetail($entity)
+    protected function duplicateDetail($entity, $original)
     {
-        $entity->setRequiredByModels(new ArrayCollection());
-        $entity->setRequiredByResources(new ArrayCollection());
+        $entity->setRequiredKnowledges($original->getRequiredKnowledges());
+        $entity->setRequiredExerciseResources($original->getRequiredKnowledges());
     }
 }

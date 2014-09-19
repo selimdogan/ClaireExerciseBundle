@@ -736,8 +736,9 @@ abstract class SharedEntityService extends TransactionalService implements Share
 
         $entity = $this->cloneEntity($original);
         $entity->setForkFrom($original);
+        $entity->setOwner($original->getOwner());
 
-        $this->duplicateDetail($entity);
+        $this->duplicateDetail($entity, $original);
         $entity->setMetadata(new ArrayCollection());
 
         $this->em->persist($entity);
@@ -791,9 +792,6 @@ abstract class SharedEntityService extends TransactionalService implements Share
      */
     public function importByEntity($ownerId, $original)
     {
-        // clone original
-//        $entity = clone($original);
-//        $this->clearEntity($entity);
         $entity = $this->cloneEntity($original);
 
         $entity->setOwner($this->userService->get($ownerId));
@@ -905,10 +903,11 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * Duplicate an entity. Additionnal work, specific to entity type
      *
      * @param SharedEntity $entity The duplicata
+     * @param SharedEntity $original
      *
      * @return SharedEntity
      */
-    abstract protected function duplicateDetail($entity);
+    abstract protected function duplicateDetail($entity, $original);
 
     /**
      * Import an entity if no direct children is owned by the user. (no flush if existing)

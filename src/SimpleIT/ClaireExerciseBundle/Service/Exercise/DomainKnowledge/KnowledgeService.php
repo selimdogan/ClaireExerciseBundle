@@ -391,13 +391,12 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
      * Duplicate an entity. Additionnal work, specific to entity type
      *
      * @param Knowledge $entity The duplicata
+     * @param Knowledge $original
      *
      * @return Knowledge
      */
-    protected function duplicateDetail($entity)
+    protected function duplicateDetail($entity, $original)
     {
-        $entity->setRequiredByModels(new ArrayCollection());
-        $entity->setRequiredByResources(new ArrayCollection());
-        $entity->setRequiredByKnowledges(new ArrayCollection());
+        $entity->setRequiredKnowledges($original->getRequiredKnowledges());
     }
 }
