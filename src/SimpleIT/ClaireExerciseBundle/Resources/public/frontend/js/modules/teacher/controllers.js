@@ -709,7 +709,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                 "group_items": {
                     "type": "group-items",
                     "title": "Nouveau groupement",
-                    "public": true,
+                    "public": false,
                     "archived": false,
                     "draft": false,
                     "complete": null,
@@ -727,7 +727,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                         ],
                         "display_group_names": "ask",
                         "classif_constr": {
-                            "other": "own",
+                            "other": "misc",
                             "meta_keys": [],
                             "groups": []
                         },

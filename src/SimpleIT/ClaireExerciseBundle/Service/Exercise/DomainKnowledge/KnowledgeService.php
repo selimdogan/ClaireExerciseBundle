@@ -20,6 +20,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\SerializationContext;
+use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Metadata;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException;
@@ -93,7 +94,7 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
      * The id of an entity can never be modified (ignored if not null)
      *
      * @param KnowledgeResource $knowledgeResource
-     * @param Knowledge         $knowledge
+     * @param Knowledge $knowledge
      *
      * @return Knowledge
      */
@@ -117,9 +118,9 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
      * no change)
      *
      * @param KnowledgeResource $knowledgeResource
-     * @param Knowledge         $knowledge
-     * @param bool              $import
-     * @param int               $ownerId
+     * @param Knowledge $knowledge
+     * @param bool $import
+     * @param int $ownerId
      *
      * @return Knowledge
      */
@@ -187,8 +188,8 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
      * Check if the content of an exercise model is sufficient to generate exercises.
      *
      * @param Knowledge $entity
-     * @param string    $type
-     * @param int       $parentId
+     * @param string $type
+     * @param int $parentId
      * @param           $content
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException
@@ -261,8 +262,8 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
      * write it in the corresponding field of the output resource
      *
      * @param KnowledgeResource $knowledgeResource
-     * @param bool              $import
-     * @param int               $ownerId
+     * @param bool $import
+     * @param int $ownerId
      *
      * @throws InvalidTypeException
      * @return KnowledgeResource
@@ -281,7 +282,7 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
      * Subscribe to an entity: the new entity is a pointer to the parent entity. It has no
      * content and no metadata because these elements rely on the parent.
      *
-     * @param int $ownerId        The id of the owner who wants to get the new pointer
+     * @param int $ownerId The id of the owner who wants to get the new pointer
      * @param int $parentEntityId The id of the parent entity
      *
      * @return Knowledge
@@ -302,7 +303,7 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
     /**
      * Import an entity. Additionnal work, specific to entity type
      *
-     * @param int       $ownerId
+     * @param int $ownerId
      * @param Knowledge $entity The duplicata
      *
      * @return Knowledge
@@ -320,11 +321,28 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
     }
 
     /**
+     * @return Knowledge
+     */
+    protected function newEntity()
+    {
+        return new Knowledge();
+    }
+
+    /**
+     * @return Metadata
+     */
+    protected function newMetadata()
+    {
+        return new Metadata();
+    }
+
+    /**
      * Clear an entity before import
      *
      * @param Knowledge $entity
      */
-    protected function clearEntityDetail($entity) {
+    protected function clearEntityDetail($entity)
+    {
         $entity->setRequiredByModels(new ArrayCollection());
         $entity->setRequiredByResources(new ArrayCollection());
         $entity->setRequiredByKnowledges(new ArrayCollection());

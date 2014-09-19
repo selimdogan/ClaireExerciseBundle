@@ -21,6 +21,7 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
@@ -87,7 +88,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * Get a resource in the form of an ExerciseObject (useful for exercise generation)
      *
      * @param ObjectId $resId
-     * @param User     $owner
+     * @param User $owner
      *
      * @throws ApiNotFoundException
      * @return ExerciseObject
@@ -103,8 +104,8 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * Returns a list of ExerciseObjects matching the constraints
      *
      * @param ObjectConstraints $oc The constraints
-     * @param int               $numberOfObjects
-     * @param User              $owner
+     * @param int $numberOfObjects
+     * @param User $owner
      *
      * @return array An array of ExerciseObjects
      */
@@ -136,7 +137,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * Get all the resources that match the constraint and belong to the owner
      *
      * @param ObjectConstraints $oc
-     * @param User              $owner
+     * @param User $owner
      *
      * @return array
      */
@@ -200,8 +201,8 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      *
      * @param ExerciseResource $exerciseResource
      * @param ResourceResource $resourceResource
-     * @param bool             $import
-     * @param int              $ownerId
+     * @param bool $import
+     * @param int $ownerId
      *
      * @return ExerciseResource
      */
@@ -298,7 +299,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         while ($res->getContent() === null) {
             if ($res->getParent() === null) {
                 throw new InvalidExerciseResourceException('Resource ' . $res->getId() .
-                ' has not content and no parent');
+                    ' has not content and no parent');
             }
             $res = $this->get($res->getParent()->getId());
         }
@@ -339,9 +340,9 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * Check if the content of a resource is sufficient to use it to generate exercises.
      *
      * @param ExerciseResource $entity
-     * @param string           $type
-     * @param int              $parentId
-     * @param CommonResource   $content
+     * @param string $type
+     * @param int $parentId
+     * @param CommonResource $content
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException
      * @internal param \SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource $resource
@@ -401,7 +402,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * Check if a picture resource is complete
      *
      * @param PictureResource $content
-     * @param string          $errorCode
+     * @param string $errorCode
      *
      * @return bool
      */
@@ -423,7 +424,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * Check if a text resource is complete
      *
      * @param TextResource $content
-     * @param string       $errorCode
+     * @param string $errorCode
      *
      * @return bool
      */
@@ -445,7 +446,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * Check if an open ended question resource is complete
      *
      * @param OpenEndedQuestionResource $content
-     * @param string                    $errorCode
+     * @param string $errorCode
      *
      * @return bool
      */
@@ -491,7 +492,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * Check if a multiple choice question resource is complete
      *
      * @param MultipleChoiceQuestionResource $content
-     * @param string                         $errorCode
+     * @param string $errorCode
      *
      * @return bool
      */
@@ -528,7 +529,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * Check if a sequence resource is complete
      *
      * @param SequenceResource $content
-     * @param string           $errorCode
+     * @param string $errorCode
      *
      * @return bool
      */
@@ -587,8 +588,8 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * write it in the corresponding field of the output resource
      *
      * @param ResourceResource $resourceResource
-     * @param bool             $import
-     * @param int              $ownerId
+     * @param bool $import
+     * @param int $ownerId
      *
      * @throws InvalidTypeException
      * @return ResourceResource
@@ -624,8 +625,8 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * Compute the required resources for a sequence resource
      *
      * @param ResourceResource $resourceResource
-     * @param bool             $import
-     * @param int              $ownerId
+     * @param bool $import
+     * @param int $ownerId
      *
      * @return ResourceResource
      */
@@ -667,8 +668,8 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * Get all the required resources in this block
      *
      * @param SequenceBlock $block
-     * @param bool          $import
-     * @param int           $ownerId
+     * @param bool $import
+     * @param int $ownerId
      *
      * @return array
      */
@@ -710,8 +711,8 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * write it in the corresponding field of the output resource
      *
      * @param ResourceResource $resourceResource
-     * @param bool             $import
-     * @param int              $ownerId
+     * @param bool $import
+     * @param int $ownerId
      *
      * @throws InvalidTypeException
      * @return ResourceResource
@@ -751,7 +752,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      * Subscribe to an entity: the new entity is a pointer to the parent entity. It has no
      * content and no metadata because these elements rely on the parent.
      *
-     * @param int $ownerId        The id of the owner who wants to get the new pointer
+     * @param int $ownerId The id of the owner who wants to get the new pointer
      * @param int $parentEntityId The id of the parent entity
      *
      * @return ExerciseResource
@@ -772,7 +773,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     /**
      * Import an entity. Additionnal work, specific to entity type
      *
-     * @param int              $ownerId
+     * @param int $ownerId
      * @param ExerciseResource $entity The duplicata
      *
      * @return ExerciseResource
@@ -790,11 +791,28 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     }
 
     /**
+     * @return ExerciseResource
+     */
+    protected function newEntity()
+    {
+        return new ExerciseResource();
+    }
+
+    /**
+     * @return Metadata
+     */
+    protected function newMetadata()
+    {
+        return new Metadata();
+    }
+
+    /**
      * Clear an entity before import
      *
      * @param ExerciseResource $entity
      */
-    protected function clearEntityDetail($entity) {
+    protected function clearEntityDetail($entity)
+    {
         $entity->setRequiredByModels(new ArrayCollection());
         $entity->setRequiredByResources(new ArrayCollection());
         $entity->setRequiredKnowledges(new ArrayCollection());

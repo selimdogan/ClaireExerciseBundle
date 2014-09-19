@@ -734,10 +734,8 @@ abstract class SharedEntityService extends TransactionalService implements Share
             throw new AccessDeniedException();
         }
 
-        $entity = clone($original);
+        $entity = $this->cloneEntity($original);
         $entity->setForkFrom($original);
-        $entity->setPublic(false);
-        $entity->setId(null);
 
         $this->duplicateDetail($entity);
         $entity->setMetadata(new ArrayCollection());
@@ -749,7 +747,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
         $metadatas = array();
         /** @var Metadata $md */
         foreach ($original->getMetadata() as $md) {
-            $newMd = clone($md);
+            $newMd = $this->cloneMetadata($md);
             $newMd->setEntity($entity);
             $this->em->persist($newMd);
             $metadatas[] = $newMd;
@@ -794,19 +792,12 @@ abstract class SharedEntityService extends TransactionalService implements Share
     public function importByEntity($ownerId, $original)
     {
         // clone original
-        $entity = clone($original);
-        $this->clearEntity($entity);
+//        $entity = clone($original);
+//        $this->clearEntity($entity);
+        $entity = $this->cloneEntity($original);
 
-        if (get_class(
-                $entity
-            ) === 'SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel'
-        ) {
-            /** @var ExerciseModel $entity */
-            $entity->deleteResourceNode();
-        }
         $entity->setOwner($this->userService->get($ownerId));
         $entity->setForkFrom($original);
-        $entity->setPublic(false);
 
         $this->em->persist($entity);
         $this->em->flush();
@@ -815,7 +806,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
         $metadatas = array();
         /** @var Metadata $md */
         foreach ($original->getMetadata() as $md) {
-            $newMd = clone($md);
+            $newMd = $this->cloneMetadata($md);
             $newMd->setEntity($entity);
             $this->em->persist($newMd);
 
@@ -852,8 +843,56 @@ abstract class SharedEntityService extends TransactionalService implements Share
     {
         $entity->setId(null);
         $entity->setMetadata(new ArrayCollection());
+        $entity->setChildren(new ArrayCollection());
+        $entity->setForkedBy(new ArrayCollection());
         $this->clearEntityDetail($entity);
     }
+
+    /**
+     * @param SharedEntity $original
+     *
+     * @return SharedEntity
+     */
+    protected function cloneEntity($original)
+    {
+        $entity = $this->newEntity();
+        $entity->setArchived(false);
+        $entity->setType($original->getType());
+        $entity->setTitle($original->getTitle());
+        $entity->setContent($original->getContent());
+        $entity->setAuthor($original->getAuthor());
+        $entity->setComplete($original->getComplete());
+        $entity->setCompleteError($original->getCompleteError());
+        $entity->setDraft($entity->getDraft());
+        $entity->setPublic(false);
+        $entity->setDraft($original->getDraft());
+
+        return $entity;
+    }
+
+    /**
+     * @return SharedEntity
+     */
+    abstract protected function newEntity();
+
+    /**
+     * @param Metadata $original
+     *
+     * @return Metadata
+     */
+    protected function cloneMetadata($original)
+    {
+        $metadata = $this->newMetadata();
+        $metadata->setKey($original->getKey());
+        $metadata->setValue($original->getValue());
+
+        return $metadata;
+    }
+
+    /**
+     * @return Metadata
+     */
+    abstract protected function newMetadata();
 
     /**
      * Clear an entity before import

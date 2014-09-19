@@ -1240,6 +1240,20 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     }
 
     /**
+     * @return ExerciseModel
+     */
+    protected function newEntity() {
+        return new ExerciseModel();
+    }
+
+    /**
+     * @return Metadata
+     */
+    protected function newMetadata() {
+        return new Metadata();
+    }
+
+    /**
      * Clear an entity before import
      *
      * @param ExerciseModel $entity
