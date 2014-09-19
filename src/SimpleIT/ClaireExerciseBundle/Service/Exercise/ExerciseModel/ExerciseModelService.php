@@ -292,9 +292,15 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
         try {
             return $this->entityRepository->findAllByUserWhoAttemptedByModel($userId, $modelId);
         } catch (NonUniqueResultException $e) {
-            return $this->get($modelId);
+            /** @var ExerciseModel $model */
+            $model = $this->get($modelId);
+            $model->setExercises(new ArrayCollection());
+            return $model;
         } catch (NoResultException $e) {
-            return $this->get($modelId);
+            /** @var ExerciseModel $model */
+            $model = $this->get($modelId);
+            $model->setExercises(new ArrayCollection());
+            return $model;
         }
     }
 
