@@ -68,7 +68,7 @@ class MultipleChoiceService extends ExerciseCreationService
      * Generate a multiple choice exercise from a model
      *
      * @param Model $model
-     * @param User  $owner
+     * @param User $owner
      *
      * @return Exercise
      */
@@ -107,8 +107,8 @@ class MultipleChoiceService extends ExerciseCreationService
      * Add questions from an array of MultipleChoiceExerciseQuestions
      * to the Exercise
      *
-     * @param array    $modelQuestionToAdd The array of questions
-     * @param Exercise $exercise           The MultipleChoiceExercise
+     * @param array $modelQuestionToAdd The array of questions
+     * @param Exercise $exercise The MultipleChoiceExercise
      */
     private function addQuestionsToTheExercise(
         array $modelQuestionToAdd,
@@ -191,13 +191,15 @@ class MultipleChoiceService extends ExerciseCreationService
      * Compute the number of propositions and right propositions for one question.
      * The result are stored in $numberOfRAToAdd and $numberOfWAToAdd
      *
-     * @param MultipleChoiceQuestion $modelQuestion   The question
-     * @param array                  $forcedRightId
-     * @param array                  $forcedWrongId
-     * @param array                  $rightId
-     * @param array                  $wrongId
-     * @param int                    $numberOfRAToAdd (result) number of right propositions to be added
-     * @param int                    $numberOfWAToAdd (result) number of wrong propositions to be added
+     * EDIT: Max for right prop number is used if not let blank by the user
+     *
+     * @param MultipleChoiceQuestion $modelQuestion The question
+     * @param array $forcedRightId
+     * @param array $forcedWrongId
+     * @param array $rightId
+     * @param array $wrongId
+     * @param int $numberOfRAToAdd (result) number of right propositions to be added
+     * @param int $numberOfWAToAdd (result) number of wrong propositions to be added
      */
     private function numberOfPropositions(
         MultipleChoiceQuestion $modelQuestion,
@@ -228,6 +230,7 @@ class MultipleChoiceService extends ExerciseCreationService
 
         if ($modelQuestion->getMaxNOfRightPropositions() == 0) {
             $maxNumberOfRightPropositions = $numberOfRightPropositions;
+            $useMaxForRight = false;
         } else {
             $maxNumberOfRightPropositions = $modelQuestion->getMaxNOfRightPropositions()
                 - $numberOfForcedRightPropositions;
@@ -235,6 +238,7 @@ class MultipleChoiceService extends ExerciseCreationService
             if ($maxNumberOfRightPropositions < 0) {
                 $maxNumberOfRightPropositions = 0;
             }
+            $useMaxForRight = true;
         }
 
         // determine the real possible max number of propositions
@@ -264,7 +268,11 @@ class MultipleChoiceService extends ExerciseCreationService
         }
 
         // number of right proposition (RA) and wrong proposition (WA) to add
-        $numberOfRAToAdd = rand($minNumberOfRightPropositions, $maxNumberOfRightPropositions);
+        if ($useMaxForRight) {
+            $numberOfRAToAdd = $maxNumberOfRightPropositions;
+        } else {
+            $numberOfRAToAdd = rand($minNumberOfRightPropositions, $maxNumberOfRightPropositions);
+        }
         $numberOfWAToAdd = $maxNumberOfPropositions - $numberOfRAToAdd;
         if ($numberOfWAToAdd > $numberOfWrongPropositions) {
             $numberOfWAToAdd = $numberOfWrongPropositions;
@@ -276,8 +284,8 @@ class MultipleChoiceService extends ExerciseCreationService
      * Add questions to the question-to-add list from a questionBlock
      *
      * @param QuestionBlock $questionBlock
-     * @param array         $modelQuestionToAdd
-     * @param User          $owner
+     * @param array $modelQuestionToAdd
+     * @param User $owner
      */
     private function addQuestionsFromBlock(
         QuestionBlock $questionBlock,
@@ -310,7 +318,7 @@ class MultipleChoiceService extends ExerciseCreationService
      * Retrieve MultipleChoiceQuestions from a question block
      *
      * @param QuestionBlock $questionBlock
-     * @param User          $owner
+     * @param User $owner
      *
      * @return array An array of MultipleChoiceQuestion
      */
@@ -344,7 +352,7 @@ class MultipleChoiceService extends ExerciseCreationService
     /**
      * Correct the multiple choice question
      *
-     * @param Item   $item
+     * @param Item $item
      * @param Answer $answer
      *
      * @return ItemResource
@@ -395,7 +403,7 @@ class MultipleChoiceService extends ExerciseCreationService
     /**
      * Validate the answer to an item
      *
-     * @param Item  $itemEntity
+     * @param Item $itemEntity
      * @param array $answer
      *
      * @throws InvalidAnswerException
