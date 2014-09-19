@@ -784,12 +784,21 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
         // requirement
         $entity = $this->computeRequirements($entity, $resource, true, $ownerId);
 
-        $entity->setRequiredByModels(new ArrayCollection());
-        $entity->setRequiredByResources(new ArrayCollection());
-
         $this->em->flush();
 
         return $entity;
+    }
+
+    /**
+     * Clear an entity before import
+     *
+     * @param ExerciseResource $entity
+     */
+    protected function clearEntityDetail($entity) {
+        $entity->setRequiredByModels(new ArrayCollection());
+        $entity->setRequiredByResources(new ArrayCollection());
+        $entity->setRequiredKnowledges(new ArrayCollection());
+        $entity->setRequiredExerciseResources(new ArrayCollection());
     }
 
     /**

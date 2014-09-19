@@ -192,7 +192,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
     /**
      * Fill an entity from a resource
      *
-     * @param SharedEntity   $entity
+     * @param SharedEntity $entity
      * @param SharedResource $sharedResource
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException
@@ -255,7 +255,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * Create an array of metadata entities from metadata and keyword in resource
      *
      * @param SharedResource $sharedResource
-     * @param SharedEntity   $entity
+     * @param SharedEntity $entity
      *
      * @return ArrayCollection
      */
@@ -321,8 +321,8 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * Update an entity object from a Resource
      *
      * @param SharedResource $resource
-     * @param SharedEntity   $entity
-     * @param string         $storageGroup
+     * @param SharedEntity $entity
+     * @param string $storageGroup
      */
     protected function updateFromSharedResource(
         SharedResource $resource,
@@ -387,7 +387,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * Update the complete property of all the children of an entity
      *
      * @param SharedEntity $entity
-     * @param bool         $complete
+     * @param bool $complete
      */
     private function updateChildrenComplete($entity, $complete)
     {
@@ -557,15 +557,15 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * content
      *
      * @param CollectionInformation $collectionInformation
-     * @param int                   $ownerId
-     * @param int                   $authorId
-     * @param int                   $parentEntityId
-     * @param int                   $forkFromEntityId
-     * @param int                   $isRoot
-     * @param int                   $isPointer
-     * @param boolean               $ignoreArchived
-     * @param int                   $publicExceptUser Get the public entities that are not owned by this user
-     * @param boolean               $complete
+     * @param int $ownerId
+     * @param int $authorId
+     * @param int $parentEntityId
+     * @param int $forkFromEntityId
+     * @param int $isRoot
+     * @param int $isPointer
+     * @param boolean $ignoreArchived
+     * @param int $publicExceptUser Get the public entities that are not owned by this user
+     * @param boolean $complete
      *
      * @return array An array of SharedResource
      */
@@ -661,8 +661,8 @@ abstract class SharedEntityService extends TransactionalService implements Share
      * Check if the content of an entity is sufficient to use it to generate exercises.
      *
      * @param SharedEntity $entity
-     * @param string       $type
-     * @param int          $parentId
+     * @param string $type
+     * @param int $parentId
      * @param              $content
      *
      * @internal param \SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResource $resource
@@ -785,7 +785,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
     /**
      * Import an entity from the entity. Base work.
      *
-     * @param int          $ownerId
+     * @param int $ownerId
      * @param SharedEntity $original The original entity that must be duplicated
      *
      * @return SharedEntity
@@ -794,7 +794,8 @@ abstract class SharedEntityService extends TransactionalService implements Share
     {
         // clone original
         $entity = clone($original);
-        $entity->setId(null);
+        $this->clearEntity($entity);
+
         if (get_class(
                 $entity
             ) === 'SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel'
@@ -832,14 +833,33 @@ abstract class SharedEntityService extends TransactionalService implements Share
     }
 
     /**
-     * Import an entity. Additionnal work, specific to entity type
+     * Import an entity. Additional work, specific to entity type
      *
-     * @param int          $ownerId
+     * @param int $ownerId
      * @param SharedEntity $entity The duplicata
      *
      * @return SharedEntity
      */
     abstract protected function importDetail($ownerId, $entity);
+
+    /**
+     * Clear an entity before import
+     *
+     * @param SharedEntity $entity
+     */
+    protected function clearEntity($entity)
+    {
+        $entity->setId(null);
+        $entity->setMetadata(new ArrayCollection());
+        $this->clearEntityDetail($entity);
+    }
+
+    /**
+     * Clear an entity before import
+     *
+     * @param SharedEntity $entity
+     */
+    abstract protected function clearEntityDetail($entity);
 
     /**
      * Duplicate an entity. Additionnal work, specific to entity type

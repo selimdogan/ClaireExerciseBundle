@@ -314,13 +314,21 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
         // requirement
         $entity = $this->computeRequirements($resource, $entity, true, $ownerId);
 
-        $entity->setRequiredByModels(new ArrayCollection());
-        $entity->setRequiredByResources(new ArrayCollection());
-        $entity->setRequiredByKnowledges(new ArrayCollection());
-
         $this->em->flush();
 
         return $entity;
+    }
+
+    /**
+     * Clear an entity before import
+     *
+     * @param Knowledge $entity
+     */
+    protected function clearEntityDetail($entity) {
+        $entity->setRequiredByModels(new ArrayCollection());
+        $entity->setRequiredByResources(new ArrayCollection());
+        $entity->setRequiredByKnowledges(new ArrayCollection());
+        $entity->setRequiredKnowledges(new ArrayCollection());
     }
 
     /**

@@ -1240,6 +1240,16 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     }
 
     /**
+     * Clear an entity before import
+     *
+     * @param ExerciseModel $entity
+     */
+    protected function clearEntityDetail($entity) {
+        $entity->setRequiredKnowledges(new ArrayCollection());
+        $entity->setRequiredExerciseResources(new ArrayCollection());
+    }
+
+    /**
      * Import the public resources that can be used by constraints in a public exercise model.
      *
      * @param $ownerId
