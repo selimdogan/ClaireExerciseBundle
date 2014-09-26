@@ -924,7 +924,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
 
             return $fork->getId();
         } catch (NonExistingObjectException $neoe) {
-            $entity = $this->import($ownerId, $originalId, false);
+            $entity = $this->import($ownerId, $originalId);
 
             return $entity->getId();
         }
