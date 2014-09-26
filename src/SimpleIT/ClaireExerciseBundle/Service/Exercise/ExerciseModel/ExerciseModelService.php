@@ -28,9 +28,9 @@ use Doctrine\ORM\NoResultException;
 use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModelFactory;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\Metadata;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
@@ -39,23 +39,16 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalF
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonExercise;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\ResourceBlock;
-use
-    SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ClassificationConstraints;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ClassificationConstraints;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\Group;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\Model as GroupItems;
-use
-    SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ObjectBlock as GIObjectBlock;
-use
-    SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\Model as MultipleChoice;
-use
-    SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\QuestionBlock as MCQuestionBlock;
-use
-    SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\Model as OpenEnded;
-use
-    SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\QuestionBlock as OEQuestionBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\ObjectBlock as GIObjectBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\Model as MultipleChoice;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\QuestionBlock as MCQuestionBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\Model as OpenEnded;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\QuestionBlock as OEQuestionBlock;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\Model as OrderItems;
-use
-    SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\ObjectBlock as OIObjectBlock;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OrderItems\ObjectBlock as OIObjectBlock;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\Model as PairItems;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\PairItems\PairBlock;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
@@ -69,8 +62,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectId;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseModel\ExerciseModelRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\KnowledgeServiceInterface;
-use
-    SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\ExerciseResourceServiceInterface;
+use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\ExerciseResourceServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityService;
 
 /**
@@ -313,6 +305,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * @param ExerciseModel $model
      * @param bool $import
      * @param int $ownerId
+     * @param User $originalOwner
      *
      * @return ExerciseModel
      */
@@ -320,7 +313,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
         $modelResource,
         $model,
         $import = false,
-        $ownerId = null
+        $ownerId = null,
+        $originalOwner = null
     )
     {
         if ($modelResource->getContent() != null) {
@@ -328,7 +322,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
             $modelResource = $this->computeRequiredResourcesFromResource(
                 $modelResource,
                 $import,
-                $ownerId
+                $ownerId,
+                $originalOwner
             );
             $reqResources = array();
             foreach ($modelResource->getRequiredExerciseResources() as $reqRes) {
@@ -993,6 +988,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * @param ExerciseModelResource $modelResource
      * @param bool $import
      * @param int $ownerId
+     * @param User $originalOwner
      *
      * @throws \SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException
      * @return ExerciseModelResource
@@ -1000,7 +996,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
     private function computeRequiredResourcesFromResource(
         $modelResource,
         $import = false,
-        $ownerId = null
+        $ownerId = null,
+        $originalOwner = null
     )
     {
         $reqRes = array();
@@ -1029,7 +1026,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                         (
                             $content->getObjectBlocks(),
                             $import,
-                            $ownerId
+                            $ownerId,
+                            $originalOwner
                         )
                 );
                 $reqRes = array_merge(
@@ -1038,7 +1036,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                         (
                             $content->getSequenceBlock(),
                             $import,
-                            $ownerId
+                            $ownerId,
+                            $originalOwner
                         )
                 );
                 break;
@@ -1050,7 +1049,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                         (
                             $content->getPairBlocks(),
                             $import,
-                            $ownerId
+                            $ownerId,
+                            $originalOwner
                         )
                 );
                 break;
@@ -1062,7 +1062,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                         (
                             $content->getObjectBlocks(),
                             $import,
-                            $ownerId
+                            $ownerId,
+                            $originalOwner
                         )
                 );
                 break;
@@ -1075,7 +1076,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                         (
                             $content->getQuestionBlocks(),
                             $import,
-                            $ownerId
+                            $ownerId,
+                            $originalOwner
                         )
                 );
                 break;
@@ -1094,13 +1096,15 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * @param array $blocks
      * @param bool $import
      * @param int $ownerId
+     * @param User $originalOwner
      *
      * @return array
      */
     private function computeRequiredResourcesFromModelBlocks(
         $blocks,
         $import = false,
-        $ownerId = null
+        $ownerId = null,
+        $originalOwner = null
     )
     {
         $reqRes = array();
@@ -1112,7 +1116,8 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                 $this->computeRequiredResourcesFromModelBlock(
                     $block,
                     $import,
-                    $ownerId
+                    $ownerId,
+                    $originalOwner
                 )
             );
         }
@@ -1126,13 +1131,15 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      * @param ResourceBlock $block
      * @param bool $import
      * @param int $ownerId
+     * @param User $originalOwner
      *
      * @return array
      */
     private function computeRequiredResourcesFromModelBlock(
         $block,
         $import = false,
-        $ownerId = null
+        $ownerId = null,
+        $originalOwner = null
     )
     {
         $reqRes = array();
@@ -1150,6 +1157,23 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                     $requiredId = $resource->getId();
                 }
                 $reqRes[] = $requiredId;
+            }
+
+            // if import, if constraints, import all the public resources matching the constraints
+            // but they must not be considered as required resources
+            if ($import && $block->isList() === false && $originalOwner !== null) {
+                // get all the public matching resources
+                $resList = $this->exerciseResourceService->getResourcesFromConstraintsByOwner($block->getResourceConstraint(), $originalOwner, true);
+
+                // for each of them, import it
+                foreach ($resList as $res)
+                {
+                    $this->exerciseResourceService->importOrLink(
+                        $ownerId,
+                        $res->getId()
+                    );
+                }
+
             }
         }
 
@@ -1222,15 +1246,16 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
      *
      * @param int $ownerId
      * @param ExerciseModel $entity The duplicata
+     * @param User $originalOwner
      *
      * @return ExerciseModel
      */
-    protected function importDetail($ownerId, $entity)
+    protected function importDetail($ownerId, $entity, $originalOwner = null)
     {
         $resource = ExerciseModelResourceFactory::create($entity);
 
         // requirement
-        $entity = $this->computeRequirements($resource, $entity, true, $ownerId);
+        $entity = $this->computeRequirements($resource, $entity, true, $ownerId, $originalOwner);
 
         // updated content
         $context = SerializationContext::create();

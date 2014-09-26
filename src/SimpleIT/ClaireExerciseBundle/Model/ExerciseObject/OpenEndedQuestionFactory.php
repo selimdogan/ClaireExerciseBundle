@@ -18,7 +18,6 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Model\ExerciseObject;
 
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource;
 
 /**

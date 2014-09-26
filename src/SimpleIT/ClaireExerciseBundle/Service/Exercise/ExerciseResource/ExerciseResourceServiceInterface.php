@@ -18,9 +18,9 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource;
 
-use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
 use Claroline\CoreBundle\Entity\User;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
@@ -176,11 +176,12 @@ interface ExerciseResourceServiceInterface extends SharedEntityServiceInterface
      * Get all the resources that match the constraint and belong to the owner
      *
      * @param ObjectConstraints $oc
-     * @param User              $owner
+     * @param User $owner
+     * @param bool $publicOnly True if only the public resources must be returned
      *
      * @return array
      */
-    public function getResourcesFromConstraintsByOwner(ObjectConstraints $oc, User $owner);
+    public function getResourcesFromConstraintsByOwner(ObjectConstraints $oc, User $owner, $publicOnly = false);
 
     /**
      * Computes the required resources according to the content of the resource resource and

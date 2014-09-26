@@ -18,13 +18,12 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity;
 
-use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\Metadata;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
-use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use SimpleIT\ClaireExerciseBundle\Model\Collection\Sort;
+use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 
 /**
  * SharedMetadata repository

@@ -18,10 +18,11 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge;
 
+use Claroline\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
-use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Metadata;
 use SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
+use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Metadata;
 use SimpleIT\ClaireExerciseBundle\Entity\KnowledgeFactory;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
@@ -302,10 +303,11 @@ class KnowledgeService extends SharedEntityService implements KnowledgeServiceIn
      *
      * @param int $ownerId
      * @param Knowledge $entity The duplicata
+     * @param User $originalOwner
      *
      * @return Knowledge
      */
-    protected function importDetail($ownerId, $entity)
+    protected function importDetail($ownerId, $entity, $originalOwner = null)
     {
         $resource = KnowledgeResourceFactory::create($entity);
 

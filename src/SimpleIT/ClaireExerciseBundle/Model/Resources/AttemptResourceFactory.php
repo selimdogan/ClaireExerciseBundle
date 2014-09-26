@@ -19,7 +19,6 @@
 namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\AttemptResource;
 
 /**
  * Class AttemptResourceFactory

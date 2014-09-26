@@ -18,7 +18,6 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\CreatedExercise;
 
-use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Answer;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Item;

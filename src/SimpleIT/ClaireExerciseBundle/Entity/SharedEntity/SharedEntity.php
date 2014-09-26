@@ -19,9 +19,9 @@
 namespace SimpleIT\ClaireExerciseBundle\Entity\SharedEntity;
 
 use Claroline\CoreBundle\Entity\Resource\AbstractResource;
+use Claroline\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Claroline\CoreBundle\Entity\User;
 
 /**
  * Claire exercise knowledge entity

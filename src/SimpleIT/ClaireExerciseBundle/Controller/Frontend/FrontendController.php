@@ -19,7 +19,6 @@
 namespace SimpleIT\ClaireExerciseBundle\Controller\Frontend;
 
 use SimpleIT\ClaireExerciseBundle\Controller\BaseController;
-use Symfony\Component\Security\Core\Exception\InsufficientAuthenticationException;
 
 /**
  * Class FrontendController

@@ -20,7 +20,6 @@ namespace SimpleIT\ClaireExerciseBundle\Listener;
 
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
 use SimpleIT\ClaireExerciseBundle\Service\Serializer\SerializerInterface;
-use Symfony\Component\HttpFoundation\AcceptHeader;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
 /**

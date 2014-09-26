@@ -31,9 +31,9 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\Common\CommonMod
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\Model;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\OpenEndedQuestion\QuestionBlock;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResourceFactory;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 
 /**
  * Service which manages OpenEndedQuestion

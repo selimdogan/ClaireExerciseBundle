@@ -19,8 +19,7 @@
 namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
 
 use JMS\Serializer\Annotation as Serializer;
-use
-    SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoice\MultipleChoicePropositionResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoice\MultipleChoicePropositionResource;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**

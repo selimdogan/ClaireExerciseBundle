@@ -20,7 +20,6 @@ namespace SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems;
 
 use JMS\Serializer\Annotation as Serializer;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\CommonItem;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\Common\Markable;
 
 /**
  * Class Exercise

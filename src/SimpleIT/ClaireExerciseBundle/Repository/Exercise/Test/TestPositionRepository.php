@@ -18,7 +18,6 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test;
 
-use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ClaireExerciseBundle\Repository\BaseRepository;
 
 /**

@@ -18,7 +18,6 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel;
 
-use Claroline\CoreBundle\Entity\Resource\ResourceNode;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;

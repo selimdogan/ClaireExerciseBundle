@@ -18,7 +18,6 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\User;
 
-use Claroline\CoreBundle\Entity\Role;
 use Claroline\CoreBundle\Entity\User;
 use Claroline\CoreBundle\Repository\UserRepository;
 use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;

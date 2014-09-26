@@ -22,8 +22,6 @@ use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModelPosition;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ItemResource;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\TestModelResource;
 
 /**
  * Class TestModelResourceFactory

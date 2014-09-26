@@ -18,8 +18,6 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity;
 
-use JMS\Serializer\Handler\HandlerRegistry;
-use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 

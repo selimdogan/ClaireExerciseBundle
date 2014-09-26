@@ -18,10 +18,10 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity;
 
+use Claroline\CoreBundle\Entity\User;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\Attempt;
 use SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise\StoredExercise;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
-use Claroline\CoreBundle\Entity\User;
 
 /**
  * Class to manage the creation of Attempts

@@ -27,13 +27,13 @@ use SimpleIT\ClaireExerciseBundle\Entity\TestModelPositionFactory;
 use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestModelResource;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestModelPositionRepository;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\Test\TestModelRepository;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseModel\ExerciseModelService;
 use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
 use SimpleIT\ClaireExerciseBundle\Service\User\UserService;
-use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 
 /**
  * Class TestModelService

@@ -21,13 +21,11 @@ namespace SimpleIT\ClaireExerciseBundle\Controller\Api\CreatedExercise;
 use SimpleIT\ClaireExerciseBundle\Controller\BaseController;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
-use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
-use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AttemptResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\AttemptResourceFactory;
-use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * API Attempt controller

@@ -30,10 +30,9 @@ use SimpleIT\ClaireExerciseBundle\Model\DomainKnowledge\Formula\Power;
 use SimpleIT\ClaireExerciseBundle\Model\DomainKnowledge\Formula\Sin;
 use SimpleIT\ClaireExerciseBundle\Model\DomainKnowledge\Formula\Value;
 use SimpleIT\ClaireExerciseBundle\Model\DomainKnowledge\Formula\Variable;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Unknown;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula;
-use
-    SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Variable as ResourceVariable;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Unknown;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\Variable as ResourceVariable;
 
 /**
  * Service that manages formulas

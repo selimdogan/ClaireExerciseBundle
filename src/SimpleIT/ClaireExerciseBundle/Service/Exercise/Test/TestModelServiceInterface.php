@@ -20,7 +20,6 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\Test;
 
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
 use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 
 /**

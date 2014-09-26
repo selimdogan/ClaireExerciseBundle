@@ -19,24 +19,23 @@
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\DomainKnowledge;
 
 use Doctrine\DBAL\DBALException;
+use SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException;
+use SimpleIT\ClaireExerciseBundle\Controller\BaseController;
+use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiConflictException;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
+use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
+use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
+use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiCreatedResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiDeletedResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiEditedResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
-use SimpleIT\ApiResourcesBundle\Exception\InvalidKnowledgeException;
-use SimpleIT\ClaireExerciseBundle\Controller\BaseController;
-use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
-use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
-use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
-use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResourceFactory;
-use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * API Knowledge controller

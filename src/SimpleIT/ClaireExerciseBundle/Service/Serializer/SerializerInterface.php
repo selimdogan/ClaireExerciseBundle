@@ -19,7 +19,6 @@
 namespace SimpleIT\ClaireExerciseBundle\Service\Serializer;
 
 use JMS\Serializer\DeserializationContext;
-use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\SerializationContext;
 
 /**

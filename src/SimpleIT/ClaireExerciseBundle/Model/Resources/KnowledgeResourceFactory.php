@@ -18,9 +18,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
-use JMS\Serializer\Handler\HandlerRegistry;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 
 /**
  * Class KnowledgeResourceFactory

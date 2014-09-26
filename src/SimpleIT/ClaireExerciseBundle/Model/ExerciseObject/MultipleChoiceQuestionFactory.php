@@ -18,9 +18,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Model\ExerciseObject;
 
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
-use
-    SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoice\MultipleChoicePropositionResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoice\MultipleChoicePropositionResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource;
 
 /**

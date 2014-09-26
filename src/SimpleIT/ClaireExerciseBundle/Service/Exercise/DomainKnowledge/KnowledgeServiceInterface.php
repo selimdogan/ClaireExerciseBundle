@@ -18,12 +18,9 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge;
 
-use JMS\Serializer\SerializationContext;
-use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\KnowledgeResource;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityServiceInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;

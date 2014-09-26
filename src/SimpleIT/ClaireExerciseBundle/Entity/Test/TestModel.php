@@ -18,8 +18,8 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity\Test;
 
-use Doctrine\Common\Collections\Collection;
 use Claroline\CoreBundle\Entity\User;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * Class Test for the test sessions models containing exercise models.

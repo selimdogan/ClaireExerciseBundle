@@ -21,7 +21,6 @@ namespace SimpleIT\ClaireExerciseBundle\Model\ExerciseObject;
 use Doctrine\Common\Collections\Collection;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
-use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\MultipleChoiceQuestionFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource;

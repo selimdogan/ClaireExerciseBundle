@@ -18,7 +18,6 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Controller\Api\ExerciseModel;
 
-use Doctrine\DBAL\DBALException;
 use SimpleIT\ClaireExerciseBundle\Controller\BaseController;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseModel\ExerciseModel;
 use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiBadRequestException;
@@ -26,10 +25,8 @@ use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Exception\FilterException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
-use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResourceFactory;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * API Exercise Model controller

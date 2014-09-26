@@ -18,10 +18,10 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity\CreatedExercise;
 
+use Claroline\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use SimpleIT\ClaireExerciseBundle\Entity\Test\TestAttempt;
-use Claroline\CoreBundle\Entity\User;
 
 /**
  * Claire attempt entity

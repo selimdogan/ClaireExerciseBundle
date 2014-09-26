@@ -18,6 +18,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity;
 
+use Claroline\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\DBALException;
 use JMS\Serializer\SerializationContext;
@@ -31,8 +32,6 @@ use SimpleIT\ClaireExerciseBundle\Exception\MissingIdException;
 use SimpleIT\ClaireExerciseBundle\Exception\NoAuthorException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\CommonKnowledge;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResourceFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResource;
@@ -774,7 +773,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
     {
         $original = $this->get($originalId);
         if ($original->getOwner()->getId() === $userId) {
-            throw new BadRequestHttpException('Model is already owned.');
+            throw new BadRequestHttpException('Object is already owned.');
         } elseif (!$original->getPublic()) {
             throw new BadRequestHttpException('The imported object must be public');
         }
@@ -819,7 +818,7 @@ abstract class SharedEntityService extends TransactionalService implements Share
         }
         $entity->setMetadata(new ArrayCollection($metadatas));
 
-        return $this->importDetail($ownerId, $entity);
+        return $this->importDetail($ownerId, $entity, $original->getOwner());
     }
 
     /**
@@ -827,10 +826,11 @@ abstract class SharedEntityService extends TransactionalService implements Share
      *
      * @param int $ownerId
      * @param SharedEntity $entity The duplicata
+     * @param User $originalOwner
      *
      * @return SharedEntity
      */
-    abstract protected function importDetail($ownerId, $entity);
+    abstract protected function importDetail($ownerId, $entity, $originalOwner = null);
 
     /**
      * Clear an entity before import

@@ -33,7 +33,6 @@ use SimpleIT\ClaireExerciseBundle\Model\Api\ApiEditedResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiGotResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Api\ApiResponse;
 use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResourceFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

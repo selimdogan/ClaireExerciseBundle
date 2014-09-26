@@ -20,9 +20,7 @@ namespace SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequenc
 
 use JMS\Serializer\Annotation as Serializer;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidExerciseResourceException;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\SequenceResource;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ResourceResource;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**

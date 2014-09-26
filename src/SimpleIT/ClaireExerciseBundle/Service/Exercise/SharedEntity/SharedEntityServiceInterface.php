@@ -20,14 +20,11 @@ namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use JMS\Serializer\SerializationContext;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
-use SimpleIT\ClaireExerciseBundle\Entity\SharedEntityMetadataFactory;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResource;
 use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\SharedResource;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**

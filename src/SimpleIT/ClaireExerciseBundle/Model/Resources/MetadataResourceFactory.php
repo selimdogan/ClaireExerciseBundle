@@ -19,7 +19,6 @@
 namespace SimpleIT\ClaireExerciseBundle\Model\Resources;
 
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\Metadata;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 
 /**
  * Class ResourceMetadataResourceFactory

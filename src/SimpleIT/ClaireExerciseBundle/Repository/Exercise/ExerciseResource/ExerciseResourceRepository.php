@@ -18,11 +18,9 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseResource;
 
+use Claroline\CoreBundle\Entity\User;
 use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
-use Claroline\CoreBundle\Entity\User;
-use SimpleIT\ClaireExerciseBundle\Exception\EntityAlreadyExistsException;
-use SimpleIT\ClaireExerciseBundle\Exception\EntityDeletionException;
 use SimpleIT\ClaireExerciseBundle\Exception\NonExistingObjectException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\MetadataConstraint;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ModelObject\ObjectConstraints;
@@ -58,13 +56,15 @@ class ExerciseResourceRepository extends SharedEntityRepository
      * Get all the exercise resources matching constraints
      *
      * @param ObjectConstraints $objectConstraints
-     * @param User              $owner
+     * @param User $owner
+     * @param bool $publicOnly True if only the public resources must be returned
      *
      * @return array An array of ExerciseResource which match the constraints
      */
     public function findResourcesFromConstraintsByOwner(
         ObjectConstraints $objectConstraints,
-        User $owner
+        User $owner,
+        $publicOnly = false
     )
     {
         $qb = $this->createQueryBuilder('r')
@@ -92,6 +92,16 @@ class ExerciseResourceRepository extends SharedEntityRepository
                     "'"
                     . $objectConstraints->getType()
                     . "'"
+                )
+            );
+        }
+
+        // Public only
+        if ($publicOnly) {
+            $qb->andWhere(
+                $qb->expr()->eq(
+                    'r.public',
+                    "true"
                 )
             );
         }
@@ -139,10 +149,10 @@ class ExerciseResourceRepository extends SharedEntityRepository
      * in the count
      *
      * @param QueryBuilder $qb
-     * @param int          $numberOfMetadataConstraints
-     * @param int          $numberOfExcluded
-     * @param string       $queryMetadataPart
-     * @param string       $queryExcludedPart
+     * @param int $numberOfMetadataConstraints
+     * @param int $numberOfExcluded
+     * @param string $queryMetadataPart
+     * @param string $queryExcludedPart
      */
     private function finalizeConstraintsQuery(
         &$qb,
@@ -180,8 +190,8 @@ class ExerciseResourceRepository extends SharedEntityRepository
      * Add a metadata constraint to a query part from a MetadataConstraint
      * object
      *
-     * @param QueryBuilder       $qb
-     * @param string             $queryPart
+     * @param QueryBuilder $qb
+     * @param string $queryPart
      * @param MetadataConstraint $mdc
      */
     private function addMetadataConstraintFromMdc(
@@ -219,11 +229,11 @@ class ExerciseResourceRepository extends SharedEntityRepository
      * Completes the part of the request about metadata. Insert the LEFT JOIN in the
      * request if metadata constraints are added.
      *
-     * @param QueryBuilder $qb             The queryBuilder
-     * @param string       $queryPart      The query part about metadata to be completed
-     * @param string       $metaKey        The metadata key
-     * @param string       $comparison     Name of a comparison function of Expr from queryBuilder ('in', 'eq', 'lte', 'lt', 'gte' or 'gt')
-     * @param mixed        $value          The value or array of value
+     * @param QueryBuilder $qb The queryBuilder
+     * @param string $queryPart The query part about metadata to be completed
+     * @param string $metaKey The metadata key
+     * @param string $comparison Name of a comparison function of Expr from queryBuilder ('in', 'eq', 'lte', 'lt', 'gte' or 'gt')
+     * @param mixed $value The value or array of value
      *
      * @return int The number of criteria that are added to the request part
      */
@@ -274,9 +284,9 @@ class ExerciseResourceRepository extends SharedEntityRepository
      * Completes the part of the request about excluded. Insert the LEFT JOIN in the
      * request if exclude constraints are added.
      *
-     * @param QueryBuilder $qb           The queryBuilder
-     * @param string       $queryPart    The query part about excluded to be completed
-     * @param array        $excludedList An array of ObjectId that are excluded
+     * @param QueryBuilder $qb The queryBuilder
+     * @param string $queryPart The query part about excluded to be completed
+     * @param array $excludedList An array of ObjectId that are excluded
      *
      * @return int The number of criteria that are added to the request part
      */
@@ -307,7 +317,7 @@ class ExerciseResourceRepository extends SharedEntityRepository
     /**
      * Find a knowledge if it is owned by the user
      *
-     * @param int  $entityId
+     * @param int $entityId
      * @param User $owner
      *
      * @return mixed
@@ -324,7 +334,7 @@ class ExerciseResourceRepository extends SharedEntityRepository
 
         if (empty($result)) {
             throw new NonExistingObjectException('Unable to find resource ' . $entityId .
-            ' for owner ' . $owner->getId());
+                ' for owner ' . $owner->getId());
         } else {
             return $result[0];
         }

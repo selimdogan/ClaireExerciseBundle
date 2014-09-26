@@ -18,8 +18,6 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Exception\Api;
 
-use Symfony\Component\HttpFoundation\Response;
-
 /**
  * Class ApiBadRequestException
  *

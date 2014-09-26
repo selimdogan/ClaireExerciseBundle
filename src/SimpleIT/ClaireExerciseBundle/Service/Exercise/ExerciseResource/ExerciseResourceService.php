@@ -18,13 +18,13 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource;
 
+use Claroline\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use SimpleIT\ClaireExerciseBundle\Entity\DomainKnowledge\Knowledge;
-use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata;
-use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\ExerciseResource;
+use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResource\Metadata;
 use SimpleIT\ClaireExerciseBundle\Entity\ExerciseResourceFactory;
-use Claroline\CoreBundle\Entity\User;
+use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Exception\InconsistentEntityException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidExerciseResourceException;
 use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
@@ -33,8 +33,7 @@ use SimpleIT\ClaireExerciseBundle\Model\ExerciseObject\ExerciseObjectFactory;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\DomainKnowledge\Formula\LocalFormula;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
-use
-    SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoice\MultipleChoicePropositionResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoice\MultipleChoicePropositionResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\PictureResource;
@@ -136,14 +135,16 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      *
      * @param ObjectConstraints $oc
      * @param User $owner
+     * @param bool $publicOnly True if only the public resources must be returned
      *
      * @return array
      */
-    public function getResourcesFromConstraintsByOwner(ObjectConstraints $oc, User $owner)
+    public function getResourcesFromConstraintsByOwner(ObjectConstraints $oc, User $owner, $publicOnly = false)
     {
         return $this->entityRepository->findResourcesFromConstraintsByOwner(
             $oc,
-            $owner
+            $owner,
+            $publicOnly
         );
     }
 
@@ -773,10 +774,11 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
      *
      * @param int $ownerId
      * @param ExerciseResource $entity The duplicata
+     * @param User $originalOwner
      *
      * @return ExerciseResource
      */
-    protected function importDetail($ownerId, $entity)
+    protected function importDetail($ownerId, $entity, $originalOwner = null)
     {
         $resource = ResourceResourceFactory::create($entity);
 

@@ -18,9 +18,7 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Repository\Exercise\ExerciseModel;
 
-use Doctrine\ORM\QueryBuilder;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedMetadataRepository;
-use SimpleIT\ClaireExerciseBundle\Model\Collection\Sort;
 
 /**
  * ExerciseModel repository

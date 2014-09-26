@@ -18,17 +18,13 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity;
 
-use JMS\Serializer\SerializationContext;
-use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
-use SimpleIT\ClaireExerciseBundle\Exception\Api\ApiNotFoundException;
 use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\Metadata;
+use SimpleIT\ClaireExerciseBundle\Entity\SharedEntity\SharedEntity;
+use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\MetadataResource;
 use SimpleIT\ClaireExerciseBundle\Repository\Exercise\SharedEntity\SharedMetadataRepository;
-use
-    SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\ExerciseResourceServiceInterface;
-use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityService;
+use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\ExerciseResourceServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\TransactionalService;
-use SimpleIT\ClaireExerciseBundle\Model\Collection\CollectionInformation;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**

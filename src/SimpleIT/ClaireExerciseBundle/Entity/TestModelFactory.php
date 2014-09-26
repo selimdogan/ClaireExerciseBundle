@@ -18,10 +18,8 @@
 
 namespace SimpleIT\ClaireExerciseBundle\Entity;
 
-use JMS\Serializer\SerializationContext;
-use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel;
 use Claroline\CoreBundle\Entity\User;
-use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModelResource;
+use SimpleIT\ClaireExerciseBundle\Entity\Test\TestModel;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\TestModelResource;
 
 /**
