@@ -60,6 +60,12 @@ class ItemResource
     const PAIR_ITEMS_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\PairItems\Item';
 
     /**
+     * @const MULTIPLE_CHOICE__FORMULA_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoiceFormula\Question'
+     */
+    const MULTIPLE_CHOICE_FORMULA_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoiceFormula\Question';
+
+
+    /**
      * @var int $itemId Id of item
      * @Serializer\Type("integer")
      * @Serializer\Groups({"details", "exercise", "list", "corrected", "not_corrected"})
@@ -192,6 +198,9 @@ class ItemResource
                 break;
             case CommonExercise::PAIR_ITEMS:
                 $class = self::PAIR_ITEMS_CLASS;
+                break;
+            case CommonExercise::MULTIPLE_CHOICE_FORMULA:
+                $class = self::MULTIPLE_CHOICE_FORMULA_CLASS;
                 break;
             default:
                 throw new \LogicException('Unknown type');

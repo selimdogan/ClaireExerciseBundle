@@ -35,6 +35,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoice\MultipleChoicePropositionResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceFormulaQuestionResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\PictureResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\Sequence\ResourceId;
@@ -373,6 +374,10 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
                     /** @var SequenceResource $content */
                     $complete = $this->checkSequenceComplete($content, $errorCode);
                     break;
+                case CommonResource::MULTIPLE_CHOICE_FORMULA_QUESTION:
+                    /** @var SequenceResource $content */
+                    $complete = $this->checkMCQFComplete($content, $errorCode);
+                    break;
                 default:
                     throw new InconsistentEntityException('Invalid type');
             }
@@ -525,6 +530,45 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
     }
 
     /**
+     * Check if a multiple choice question resource is complete
+     *
+     * @param MultipleChoiceQuestionResource $content
+     * @param string $errorCode
+     *
+     * @return bool
+     */
+    private function checkMCQFComplete(
+        MultipleChoiceFormulaQuestionResource $content,
+        &$errorCode
+    )
+    {
+        if ($content->getQuestion() === null) {
+            $errorCode = '803';
+
+            return false;
+        }
+
+        if ($content->getPropositions() === null || count($content->getPropositions()) == 0) {
+            $errorCode = '805';
+
+            return false;
+        }
+
+        /** @var MultipleChoicePropositionResource $proposition */
+        foreach ($content->getPropositions() as $proposition) {
+            if ($proposition->getText() === null) {
+                $errorCode = '806';
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+
+    /**
      * Check if a sequence resource is complete
      *
      * @param SequenceResource $content
@@ -577,6 +621,8 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
                 get_class($content) !== ResourceResource::TEXT_CLASS)
             || ($type === CommonResource::PICTURE &&
                 get_class($content) !== ResourceResource::PICTURE_CLASS)
+            || ($type === CommonResource::MULTIPLE_CHOICE_FORMULA_QUESTION &&
+                get_class($content) !== ResourceResource::MULTIPLE_CHOICE_FORMULA_QUESTION_CLASS)
         ) {
             throw new InvalidTypeException('Content does not match exercise model type');
         }
@@ -603,6 +649,7 @@ class ExerciseResourceService extends SharedEntityService implements ExerciseRes
             case ResourceResource::PICTURE_CLASS:
             case ResourceResource::TEXT_CLASS:
             case ResourceResource::MULTIPLE_CHOICE_QUESTION_CLASS:
+            case ResourceResource::MULTIPLE_CHOICE_FORMULA_QUESTION_CLASS:
             case ResourceResource::OPEN_ENDED_QUESTION_CLASS:
                 $resourceResource->setRequiredExerciseResources(array());
                 break;

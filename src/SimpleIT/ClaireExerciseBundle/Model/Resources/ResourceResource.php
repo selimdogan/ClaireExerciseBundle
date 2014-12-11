@@ -45,6 +45,13 @@ class ResourceResource extends SharedResource
     const MULTIPLE_CHOICE_QUESTION_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource';
 
     /**
+     * @const MULTIPLE_CHOICE_FORMULA_QUESTION = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceFormulaQuestionResource'
+     */
+    const MULTIPLE_CHOICE_FORMULA_QUESTION_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceFormulaQuestionResource';
+
+
+
+    /**
      * @const PICTURE = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\PictureResource'
      */
     const PICTURE_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\PictureResource';
@@ -58,6 +65,7 @@ class ResourceResource extends SharedResource
      * @const OPEN_ENDED_QUESTION = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource'
      */
     const OPEN_ENDED_QUESTION_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource';
+
 
     /**
      * @const TEXT = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\TextResource'
@@ -290,6 +298,9 @@ class ResourceResource extends SharedResource
                 break;
             case CommonResource::OPEN_ENDED_QUESTION:
                 $class = self::OPEN_ENDED_QUESTION_CLASS;
+                break;
+            case CommonResource::MULTIPLE_CHOICE_FORMULA_QUESTION:
+                $class = self::MULTIPLE_CHOICE_FORMULA_QUESTION_CLASS;
                 break;
             default:
                 throw new \LogicException('Unknown type');

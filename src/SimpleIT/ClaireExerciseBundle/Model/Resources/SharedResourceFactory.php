@@ -130,7 +130,7 @@ abstract class SharedResourceFactory
                 $resource = KnowledgeResourceFactory::create($entity);
                 break;
             default:
-                throw new InvalidTypeException('Unknown type:' . $type);
+                throw new InvalidTypeException('    Unknown type:' . $type);
         }
 
         return $resource;

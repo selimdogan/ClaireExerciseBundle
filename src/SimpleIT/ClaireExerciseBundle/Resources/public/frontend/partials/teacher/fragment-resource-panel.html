@@ -10,6 +10,9 @@
             <div ng-switch-when="multiple-choice-question">
                 <span title="Question de QCM" class="glyphicon glyphicon-check" style="font-size: 320%"></span>
             </div>
+            <div ng-switch-when="multiple-choice-formula-question">
+                <span title="Question de QCM avec formules" class="glyphicon glyphicon-check" style="font-size: 320%"></span>
+            </div>
             <div ng-switch-when="open-ended-question">
                 <span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign" style="font-size: 320%"></span>
             </div>
@@ -131,6 +134,9 @@
     <div ng-switch-when="multiple-choice-question">
         <label>Type de ressource&nbsp;:&nbsp;</label>Question de QCM
     </div>
+    <div ng-switch-when="multiple-choice-formula-question">
+    <label>Type de ressource&nbsp;:&nbsp;</label>Question de QCM avec formule
+    </div>
     <div ng-switch-when="open-ended-question">
         <label>Type de ressource&nbsp;:&nbsp;</label>Question à réponse courte ouverte
     </div>
@@ -152,12 +158,18 @@
     <div ng-switch-when="multiple-choice-question">
         <label>Question&nbsp;:&nbsp;</label>{{ resource.content.question }}
     </div>
+    <div ng-switch-when="multiple-choice-formula-question">
+        <label>Question&nbsp;:&nbsp;</label>{{ resource.content.question }}
+    </div>
     <div ng-switch-when="open-ended-question">
         <label>Question&nbsp;:&nbsp;</label>{{ resource.content.question }}
     </div>
 </div>
 <div class="col-centered" ng-switch="resource.type">
     <div ng-switch-when="multiple-choice-question">
+    <label>Commentaire&nbsp;:&nbsp;</label>{{ resource.content.comment }}
+</div>
+    <div ng-switch-when="multiple-choice-formula-question">
         <label>Commentaire&nbsp;:&nbsp;</label>{{ resource.content.comment }}
     </div>
     <div ng-switch-when="open-ended-question">

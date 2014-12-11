@@ -59,6 +59,12 @@ class ExerciseResource
     const OPEN_ENDED_QUESTION_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\OpenEndedQuestion\Exercise';
 
     /**
+     * @const MULTIPLE_CHOICE_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoice\Exercise'
+     */
+    const MULTIPLE_CHOICE_FORMULA_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\Exercise\MultipleChoiceFormula\Exercise';
+
+
+    /**
      * @var int $id Id of exercise
      * @Serializer\Type("integer")
      * @Serializer\Groups({"details", "exercise", "list"})
@@ -245,6 +251,9 @@ class ExerciseResource
             case CommonExercise::OPEN_ENDED_QUESTION:
                 $class = self::OPEN_ENDED_QUESTION_CLASS;
                 break;
+            case CommonExercise::MULTIPLE_CHOICE_FORMULA:
+            $class = self::MULTIPLE_CHOICE_FORMULA_CLASS;
+            break;
             default:
                 throw new \LogicException('Unknown type');
         }

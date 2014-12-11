@@ -62,6 +62,9 @@
                         <button class="btn" ng-model="$parent.$parent.filters.type.multiple_choice" btn-checkbox-true="'multiple-choice'" btn-checkbox-false="''" btn-checkbox>
                             <span title="QCM" class="glyphicon glyphicon-check"></span>
                         </button>
+                        <button class="btn" ng-model="$parent.$parent.filters.type.multiple_choice" btn-checkbox-true="'multiple-choice-formula'" btn-checkbox-false="''" btn-checkbox>
+                        <span title="QCM" class="glyphicon glyphicon-check"></span>
+                         </button>
                         <button class="btn" ng-model="$parent.$parent.filters.type.open_ended_question" btn-checkbox-true="'open-ended-question'" btn-checkbox-false="''" btn-checkbox>
                             <span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign"></span>
                         </button>
@@ -140,6 +143,7 @@
             <div><a href data-ng-click="createModel('order-items')" class="list-group-item"><span title="Exercice d'ordonnancement" class="glyphicon glyphicon-sort"></span>&nbsp;Créer un exercice d'ordonancement</a></div>
             <div><a href data-ng-click="createModel('group-items')" class="list-group-item"><span title="Exercice de groupement" class="glyphicon glyphicon-link"></span>&nbsp;Créer un exercice de groupement</a></div>
             <div><a href data-ng-click="createModel('multiple-choice')" class="list-group-item"><span title="QCM" class="glyphicon glyphicon-check"></span>&nbsp;Créer un questionaire à choix multiple</a></div>
+            <div><a href data-ng-click="createModel('multiple-choice-formula')" class="list-group-item"><span title="QCM avec formules" class="glyphicon glyphicon-check"></span>&nbsp;Créer un questionaire à choix multiple avec formules</a></div>
             <div><a href data-ng-click="createModel('open-ended-question')" class="list-group-item"><span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign"></span>&nbsp;Créer un questionaire à réponse courte</a></div>
         </div>
     </accordion-group>
@@ -163,6 +167,9 @@
             <div class="row">
                 <div class="col-xs-1" ng-switch="model.type">
                     <div ng-switch-when="multiple-choice">
+                        <span title="QCM" class="glyphicon glyphicon-check" style="font-size: 320%"></span>
+                    </div>
+                    <div ng-switch-when="multiple-choice-formula">
                         <span title="QCM" class="glyphicon glyphicon-check" style="font-size: 320%"></span>
                     </div>
                     <div ng-switch-when="open-ended-question">
@@ -280,6 +287,9 @@
         <div class="col-centered" ng-switch="model.type">
             <div ng-switch-when="multiple-choice">
                 <label>Type de modèle&nbsp;:&nbsp;</label>QCM
+            </div>
+            <div ng-switch-when="multiple-choice-formula">
+                <label>Type de modèle&nbsp;:&nbsp;</label>QCM avec formules
             </div>
             <div ng-switch-when="open-ended-question">
                 <label>Type de modèle&nbsp;:&nbsp;</label>Question à réponse courte ouverte

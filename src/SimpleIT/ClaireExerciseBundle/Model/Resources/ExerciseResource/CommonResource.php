@@ -30,6 +30,7 @@ use SimpleIT\ClaireExerciseBundle\Model\Resources\Validable;
  *    "text": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\TextResource",
  *    "sequence": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\SequenceResource",
  *    "multiple_choice_question": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource",
+ *    "multiple_choice_formula_question": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceFormulaQuestionResource",
  *    "open_ended_question": "SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource"
  * })
  */
@@ -49,6 +50,11 @@ abstract class CommonResource implements Validable
      * @const MULTIPLE_CHOICE_QUESTION = "multiple-choice-question"
      */
     const MULTIPLE_CHOICE_QUESTION = "multiple-choice-question";
+
+    /**
+     * @const MULTIPLE_CHOICE_FORMULA_QUESTION = "multiple-choice-formula-question"
+     */
+    const MULTIPLE_CHOICE_FORMULA_QUESTION = "multiple-choice-formula-question";
 
     /**
      * @const OPEN_ENDED_QUESTION = "open-ended-question"
@@ -101,6 +107,7 @@ abstract class CommonResource implements Validable
             || $type === self::SEQUENCE
             || $type === self::PICTURE
             || $type === self::MULTIPLE_CHOICE_QUESTION
+            || $type === self::MULTIPLE_CHOICE_FORMULA_QUESTION
             || $type === self::OPEN_ENDED_QUESTION
         ) {
             return true;

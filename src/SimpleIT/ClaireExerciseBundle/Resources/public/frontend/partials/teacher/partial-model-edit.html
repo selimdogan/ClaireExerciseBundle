@@ -117,6 +117,9 @@
                                 <div ng-switch-when="multiple-choice-question">
                                     <span title="QCM" class="glyphicon glyphicon-check" style="font-size: 260%"></span>
                                 </div>
+                                <div ng-switch-when="multiple-choice-formula-question">
+                                    <span title="QCM avec formules" class="glyphicon glyphicon-check" style="font-size: 260%"></span>
+                                </div>
                                 <div ng-switch-when="open-ended-question">
                                                 <span class="glyphicon glyphicon-question-sign" title="Question à réponse courte ouverte"
                                                       style="font-size: 260%"></span>
@@ -175,12 +178,18 @@
                         <div ng-switch-when="multiple-choice-question">
                             <label>Question&nbsp;:&nbsp;</label>{{ resources[documentId.id].content.question }}
                         </div>
+                    <div ng-switch-when="multiple-choice-formula-question">
+                        <label>Question&nbsp;:&nbsp;</label>{{ resources[documentId.id].content.question }}
+                    </div>
                         <div ng-switch-when="open-ended-question">
                             <label>Question&nbsp;:&nbsp;</label>{{ resources[documentId.id].content.question }}
                         </div>
                     </div>
                     <div class="col-centered" ng-switch="resources[documentId.id].type">
                         <div ng-switch-when="multiple-choice-question">
+                            <label>Commentaire&nbsp;:&nbsp;</label>{{ resources[documentId.id].content.comment }}
+                        </div>
+                        <div ng-switch-when="multiple-choice-formula-question">
                             <label>Commentaire&nbsp;:&nbsp;</label>{{ resources[documentId.id].content.comment }}
                         </div>
                         <div ng-switch-when="open-ended-question">
@@ -221,6 +230,11 @@
         <div ng-include
              src="BASE_CONFIG.urls.partials.teacher+'/partial-model-edit-multiple-choice.html'"
              data-ng-controller="modelEditMultipleChoiceController"></div>
+    </div>
+    <div ng-switch-when="multiple-choice-formula">
+        <div ng-include
+             src="BASE_CONFIG.urls.partials.teacher+'/partial-model-edit-multiple-choice-formula.html'"
+             data-ng-controller="modelEditMultipleChoiceFormulaController"></div>
     </div>
     <div ng-switch-when="group-items">
         <div ng-include

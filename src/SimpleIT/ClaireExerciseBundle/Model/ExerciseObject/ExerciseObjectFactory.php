@@ -24,6 +24,7 @@ use SimpleIT\ClaireExerciseBundle\Exception\InvalidTypeException;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseObject\ExerciseObject;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\CommonResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceQuestionResource;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\MultipleChoiceFormulaQuestionResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\OpenEndedQuestionResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\PictureResource;
 use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseResource\SequenceResource;
@@ -82,6 +83,15 @@ abstract class ExerciseObjectFactory
                     $requiredResource
                 );
                 break;
+
+            case ResourceResource::MULTIPLE_CHOICE_FORMULA_QUESTION_CLASS:
+                /** @var MultipleChoiceFormulaQuestionResource $resource  */
+                $object = MultipleChoiceFormulaQuestionFactory::createFromCommonResource(
+                    $resource,
+                    $requiredResource
+                );
+                break;
+
             default:
                 throw new InvalidTypeException(
                     'Resource type is incorrect: ' . get_class($resource)

@@ -24,6 +24,9 @@
                             <div ng-switch-when="multiple-choice-question">
                                 <span title="QCM" class="glyphicon glyphicon-check" style="font-size: 260%"></span>
                             </div>
+                            <div ng-switch-when="multiple-choice-formula-question">
+                                <span title="QCM formules" class="glyphicon glyphicon-check" style="font-size: 260%"></span>
+                            </div>
                             <div ng-switch-when="open-ended-question">
                                 <span class="glyphicon glyphicon-question-sign"
                                       title="Question à réponse courte ouverte"
@@ -107,6 +110,10 @@
                         <label>Question&nbsp;:&nbsp;</label>{{
                         resources[blockResourceId.id].content.question }}
                     </div>
+                    <div ng-switch-when="multiple-choice-formula-question">
+                    <label>Question&nbsp;:&nbsp;</label>{{
+                    resources[blockResourceId.id].content.question }}
+                </div>
                     <div ng-switch-when="open-ended-question">
                         <label>Question&nbsp;:&nbsp;</label>{{
                         resources[blockResourceId.id].content.question }}
@@ -118,6 +125,10 @@
                         <label>Commentaire&nbsp;:&nbsp;</label>{{
                         resources[blockResourceId.id].content.comment }}
                     </div>
+                    <div ng-switch-when="multiple-choice-formula-question">
+                    <label>Commentaire&nbsp;:&nbsp;</label>{{
+                    resources[blockResourceId.id].content.comment }}
+                </div>
                     <div ng-switch-when="open-ended-question">
                         <label>Commentaire&nbsp;:&nbsp;</label>{{
                         resources[blockResourceId.id].content.comment }}
@@ -191,6 +202,9 @@
                                     <div ng-switch-when="multiple-choice-question">
                                         <span title="QCM" class="glyphicon glyphicon-check" style="font-size: 260%"></span>
                                     </div>
+                                    <div ng-switch-when="multiple-choice-formula-question">
+                                        <span title="QCM avec formules" class="glyphicon glyphicon-check" style="font-size: 260%"></span>
+                                    </div>
                                     <div ng-switch-when="open-ended-question">
                                 <span class="glyphicon glyphicon-question-sign"
                                       title="Question à réponse courte ouverte" style="font-size: 260%"></span>
@@ -255,6 +269,10 @@
                                 <label>Question&nbsp;:&nbsp;</label>{{
                                 resources[blockResourceId.id].content.question }}
                             </div>
+                            <div ng-switch-when="multiple-choice-formula-question">
+                                <label>Question&nbsp;:&nbsp;</label>{{
+                                resources[blockResourceId.id].content.question }}
+                            </div>
                             <div ng-switch-when="open-ended-question">
                                 <label>Question&nbsp;:&nbsp;</label>{{
                                 resources[blockResourceId.id].content.question }}
@@ -266,6 +284,10 @@
                                 <label>Commentaire&nbsp;:&nbsp;</label>{{
                                 resources[blockResourceId.id].content.comment }}
                             </div>
+                        <div ng-switch-when="multiple-choice-formula-question">
+                            <label>Commentaire&nbsp;:&nbsp;</label>{{
+                            resources[blockResourceId.id].content.comment }}
+                        </div>
                             <div ng-switch-when="open-ended-question">
                                 <label>Commentaire&nbsp;:&nbsp;</label>{{
                                 resources[blockResourceId.id].content.comment }}

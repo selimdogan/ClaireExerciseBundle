@@ -996,6 +996,23 @@ class FormulaService implements FormulaServiceInterface
     }
 
     /**
+     * Get prefix+name for each variable of the formula in an array
+     *
+     * @param Formula $formula
+     *
+     * @return array
+     */
+    public function getListFormulaNamePrefixed($formula)
+    {
+        $return_array = array();
+        foreach($formula->getVariables() as $newVar )
+        {
+            $return_array[$formula->getName() . ':' . $newVar->getName()] = $newVar;
+        }
+        return $return_array;
+    }
+
+    /**
      * Instantiate a variable with an expression
      *
      * @param ResourceVariable $resourceVariable A resource variable containing an expression
@@ -1099,6 +1116,7 @@ class FormulaService implements FormulaServiceInterface
 
         return $values;
     }
+
 
     /**
      * Get the format (mask) for a value

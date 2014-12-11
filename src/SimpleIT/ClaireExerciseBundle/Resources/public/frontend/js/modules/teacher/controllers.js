@@ -18,7 +18,7 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
             archived: false, // select archived resources or not (boolean)
             public: false, // select public resources or not (boolean)
             type: { // resources types to be selected
-                multiple_choice_question: 'multiple-choice-question', text: 'text', picture: 'picture', open_ended_question: 'open-ended-question', sequence: ''
+                multiple_choice_question: 'multiple-choice-question', text: 'text', picture: 'picture', open_ended_question: 'open-ended-question', sequence: '', multiple_choice_formula:'multiple-choice-formula-question'
             },
             keywords: [], // list of keywords that a resource must have to be selected
             metadata: [] // list of metadata objects that a resource must have to be selected
@@ -55,6 +55,13 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                 $scope.filters.type.picture = '';
                 $scope.filters.type.open_ended_question = 'open-ended-question';
                 $scope.filters.type.sequence = '';
+            } else if(newValue == 'multiple-choice-formula') {
+                $scope.filters.type.multiple_choice_question = '';
+                $scope.filters.type.text = '';
+                $scope.filters.type.picture = '';
+                $scope.filters.type.open_ended_question = '';
+                $scope.filters.type.sequence = '';
+                $scope.filters.type.multiple_choice_formula_question = 'multiple-choice-formula-question';
             }
         });
 
@@ -116,7 +123,7 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                 },
                 "multiple_choice_question": {
                     "type": "multiple-choice-question",
-                    "title": "Nouvelle question",
+                    "title": "Nouvelle question Ancienne",
                     "public": false,
                     "archived": false,
                     "draft": false,
@@ -143,7 +150,7 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                 },
                 "open_ended_question": {
                     "type": "open-ended-question",
-                    "title": "Nouvelle question",
+                    "title": "Nouvelle question OPEN ENDED",
                     "public": false,
                     "archived": false,
                     "draft": false,
@@ -159,7 +166,35 @@ resourceControllers.controller('resourceController', ['$scope', '$modal',
                     },
                     "required_exercise_resources": null,
                     "required_knowledges": null
+                },
+                "multiple_choice_formula_question": {
+                    "type": "multiple-choice-formula-question",
+                    "title": "Nouvelle question QCM avec formules",
+                    "public": false,
+                    "archived": false,
+                    "draft": false,
+                    "complete": null,
+                    "metadata": [],
+                    "keywords": [],
+                    "content": {
+                        "formulas": [],
+                        "do_not_shuffle": true,
+                        "question": null,
+                        "propositions": [
+                            {
+                                "text": null,
+                                "right": true
+                            }
+                        ],
+                        "comment": null,
+                        "max_number_of_propositions": 0,
+                        "max_number_of_right_propositions": 0,
+                        "object_type": "multiple_choice_formula_question"
+                    },
+                    "required_exercise_resources": null,
+                    "required_knowledges": null
                 }
+
             }
         };
 
@@ -291,6 +326,15 @@ resourceControllers.controller('resourceListController', ['$scope', '$state', 'R
                 });
             } else if (type == 'open-ended-question') {
                 Resource.save($scope.resourceContext.newResources.open_ended_question, function (data) {
+                    $scope.resources[data.id] = data;
+                    if ($scope.parentSection === 'model') {
+                        $state.go('modelEdit.resourceEdit', {resourceid: data.id});
+                    } else {
+                        $state.go('resourceEdit', {resourceid: data.id});
+                    }
+                });
+            } else if (type == 'multiple-choice-formula-question') {
+                Resource.save($scope.resourceContext.newResources.multiple_choice_formula_question, function (data) {
                     $scope.resources[data.id] = data;
                     if ($scope.parentSection === 'model') {
                         $state.go('modelEdit.resourceEdit', {resourceid: data.id});
@@ -590,6 +634,7 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
             public: false, // select public resources or not (boolean)
             type: { // resources types to be selected
                 multiple_choice: 'multiple-choice', pair_items: 'pair-items', order_items: 'order-items', open_ended_question: 'open-ended-question', group_items: 'group-items'
+                , multiple_choice_formula: 'multiple-choice-formula'
             },
             keywords: [], // list of keywords that a resource must have to be selected
             metadata: [] // list of metadata objects that a resource must have to be selected
@@ -798,8 +843,86 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                             "excluded": []
                         }
                     }
+                },
+                "test_exercise": {
+                    "type": "open-ended-question",
+                    "title": "Nouveau modèle d'exercice de question de mon NTE exercise Test Exercise",
+                    "public": false,
+                    "archived": false,
+                    "draft": false,
+                    "complete": null,
+                    "metadata": [],
+                    "keywords": [],
+                    "content": {
+                        "wording": null,
+                        "documents": [],
+                        "question_blocks": [
+                            {
+                                "number_of_occurrences": 0,
+                                "resources": [],
+                                "is_list": true
+                            }
+                        ],
+                        "shuffle_questions_order": true,
+                        "exercise_model_type": "open-ended-question"
+                    },
+                    "required_exercise_resources": null,
+                    "required_knowledges": null
+                },
+                "sub_test_exercise": {
+                    "block_field": {
+                        "number_of_occurrences": 0,
+                        "resources": [],
+                        "is_list": true,
+                        "resource_constraint": {
+                            "metadata_constraints": [],
+                            "excluded": []
+                        }
+                    }
+                },
+                "multiple_choice_formula": {
+                    "type": "multiple-choice-formula",
+                    "title": "Nouveau QCM avec formules",
+                    "public": false,
+                    "archived": false,
+                    "draft": false,
+                    "complete": null,
+                    "metadata": [],
+                    "keywords": [],
+                    "content": {
+                        "wording": null,
+                        "documents": [],
+                        "question_blocks": [
+                            {
+                                "number_of_occurrences": 0,
+                                "resources": [],
+                                "is_list": true,
+                                "max_number_of_propositions": 0,
+                                "max_number_of_right_propositions": 0
+                            }
+                        ],
+                        "shuffle_questions_order": true,
+                        "exercise_model_type": "multiple-choice-formula"
+                    },
+                    "required_exercise_resources": null,
+                    "required_knowledges": null
+                },
+                "sub_multiple_choice_formula": {
+                    "block_field": {
+                        "number_of_occurrences": 0,
+                        "resources": [],
+                        "is_list": true,
+                        "max_number_of_propositions": 0,
+                        "max_number_of_right_propositions": 0,
+                        "resource_constraint": {
+                            "metadata_constraints": [],
+                            "excluded": []
+                        }
+                    }
                 }
-            }
+
+                }
+
         };
 
         $scope.modelAddKeywordsField = function (collection) {
@@ -963,6 +1086,16 @@ modelControllers.controller('modelListController', ['$scope', 'Model', '$locatio
                     $location.path('/teacher/model/' + data.id)
                 });
             }
+            else if ( type == 'test-exercise'){ /** TODO HERE décommenter si cela n'est pas fait. */
+            Model.save($scope.modelContext.newModel.test_exercise, function (data) {
+                $location.path('/teacher/model/' + data.id)
+            });
+            }
+            else if ( type == 'multiple-choice-formula'){
+            Model.save($scope.modelContext.newModel.multiple_choice_formula, function (data) {
+                $location.path('/teacher/model/' + data.id)
+            });
+            }
         };
     }]);
 
@@ -979,6 +1112,9 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                 case 'multiple-choice':
                     $scope.acceptedTypes = ['multiple-choice-question'];
                     break;
+                case 'multiple-choice-formula':
+                     $scope.acceptedTypes = ['multiple-choice-formula-question'];
+                     break;
                 case 'open-ended-question':
                     $scope.acceptedTypes = ['open-ended-question'];
                     break;
@@ -1006,6 +1142,9 @@ modelControllers.controller('modelEditController', ['$scope', 'Model', 'Resource
                     $scope.fillConstraints(model.content.object_blocks);
                     break;
                 case 'multiple-choice':
+                    $scope.fillConstraints(model.content.question_blocks);
+                    break;
+                case 'multiple-choice-formula':
                     $scope.fillConstraints(model.content.question_blocks);
                     break;
                 case 'open-ended-question':
@@ -1298,4 +1437,29 @@ modelControllers.controller('modelEditOpenEndedQuestionController', ['$scope',
             );
         }
 
+    }]);
+
+modelControllers.controller('modelEditTestExerciseController', ['$scope',
+    function ($scope) {
+
+        $scope.modelAddBlockField = function (collection) {
+            collection.splice(
+                collection.length,
+                0,
+                jQuery.extend(true, {}, $scope.modelContext.newModel.sub_open_ended_question.block.block_field)
+            );
+        }
+
+    }]);
+
+modelControllers.controller('modelEditMultipleChoiceFormulaController', ['$scope',
+    function ($scope) {
+
+        $scope.modelAddBlockField = function (collection) {
+            collection.splice(
+                collection.length,
+                0,
+                jQuery.extend(true, {}, $scope.modelContext.newModel.sub_multiple_choice_formula.block_field)
+            );
+        };
     }]);

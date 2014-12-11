@@ -352,6 +352,7 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
         $context = SerializationContext::create();
         $context->setGroups(array('item_storage', 'Default'));
 
+        /** @var $itemContent TYPE_NAME */
         $itemContent = $this->serializer->jmsSerialize(
             $item,
             'json',

@@ -65,6 +65,11 @@ use SimpleIT\ClaireExerciseBundle\Service\Exercise\DomainKnowledge\KnowledgeServ
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\ExerciseResource\ExerciseResourceServiceInterface;
 use SimpleIT\ClaireExerciseBundle\Service\Exercise\SharedEntity\SharedEntityService;
 
+/* TODO BRYAN : L'endroit est important*/
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoiceFormula\Model as MultipleChoiceFormula;
+use SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoiceFormula\QuestionBlock as MCFQuestionBlock;
+
+
 /**
  * Service which manages the exercise generation
  *
@@ -181,7 +186,11 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                 break;
             case CommonExercise::OPEN_ENDED_QUESTION:
                 $class = ExerciseModelResource::OPEN_ENDED_QUESTION_CLASS;
+            break;
+            case CommonExercise::MULTIPLE_CHOICE_FORMULA:
+                $class = ExerciseModelResource::MULTIPLE_CHOICE_FORMULA_MODEL_CLASS;
                 break;
+
             default:
                 throw new \LogicException('Unknown type of model');
         }
@@ -394,6 +403,10 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                     /** @var MultipleChoice $content */
                     $complete = $this->checkMCComplete($content, $errorCode);
                     break;
+                case CommonModel::MULTIPLE_CHOICE_FORMULA:
+                    /** @var MultipleChoiceFormula $content */
+                    $complete = $this->checkMCFComplete($content, $errorCode);
+                    break;
                 case CommonModel::PAIR_ITEMS:
                     /** @var PairItems $content */
                     $complete = $this->checkPIComplete($content, $errorCode);
@@ -480,6 +493,55 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
 
         return true;
     }
+
+    /** TODO BRYAN :: Il faut checker les conditions : Au moins 2 propositions, dont une vraie ? utiliser une formule ?
+     * Non, ça c'est pas défaut... Il nous faut "de base" 4 champs préremplis, ainsi que 2 champs 'formules'
+     * Check if a multiple choice  formula content is complete
+     *
+     * @param MultipleChoiceFormula $content
+     * @param string $errorCode
+     *
+     * @return boolean
+     */
+    private function checkMCFComplete(
+        MultipleChoiceFormula $content,
+        &$errorCode
+    )
+    {
+        if (is_null($content->isShuffleQuestionsOrder())) {
+            $errorCode = '201';
+
+            return false;
+        }
+        $questionBlocks = $content->getQuestionBlocks();
+        if (!count($questionBlocks) > 0) {
+            $errorCode = '202';
+
+            return false;
+        }
+        /** @var MCFQuestionBlock $questionBlock */
+        foreach ($questionBlocks as $questionBlock) {
+            if (!($questionBlock->getMaxNumberOfPropositions() >= 0
+                && $questionBlock->getMaxNumberOfRightPropositions() >= 0)
+            ) {
+                $errorCode = '301';
+
+                return false;
+            }
+
+            if (!$this->checkBlockComplete(
+                $questionBlock,
+                array(CommonResource::MULTIPLE_CHOICE_FORMULA_QUESTION),
+                $errorCode
+            )
+            ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
     /**
      * Check if a pair items content is complete
@@ -1068,6 +1130,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                 );
                 break;
             case ExerciseModelResource::MULTIPLE_CHOICE_MODEL_CLASS:
+            case ExerciseModelResource::MULTIPLE_CHOICE_FORMULA_MODEL_CLASS:
             case ExerciseModelResource::OPEN_ENDED_QUESTION_CLASS:
                 /** @var MultipleChoice|OpenEnded $content */
                 $reqRes = array_merge(
@@ -1382,6 +1445,7 @@ class ExerciseModelService extends SharedEntityService implements ExerciseModelS
                 );
                 break;
             case ExerciseModelResource::MULTIPLE_CHOICE_MODEL_CLASS:
+            case ExerciseModelResource::MULTIPLE_CHOICE_FORMULA_MODEL_CLASS:
             case ExerciseModelResource::OPEN_ENDED_QUESTION_CLASS:
                 /** @var MultipleChoice|OpenEnded $content */
                 $usedRes = array_merge(

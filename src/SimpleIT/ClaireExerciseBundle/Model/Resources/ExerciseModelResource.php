@@ -41,6 +41,12 @@ class ExerciseModelResource extends SharedResource
     const MULTIPLE_CHOICE_MODEL_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\Model';
 
     /**
+     * @const MULTIPLE_CHOICE_FORMULA_MODEL_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoice\Model'
+     */
+    const MULTIPLE_CHOICE_FORMULA_MODEL_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\MultipleChoiceFormula\Model';
+
+
+    /**
      * @const GROUP_ITEMS_MODEL_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\Model'
      */
     const GROUP_ITEMS_MODEL_CLASS = 'SimpleIT\ClaireExerciseBundle\Model\Resources\ExerciseModel\GroupItems\Model';
@@ -312,6 +318,9 @@ class ExerciseModelResource extends SharedResource
                 break;
             case CommonExercise::OPEN_ENDED_QUESTION:
                 $class = self::OPEN_ENDED_QUESTION_CLASS;
+                break;
+            case CommonExercise::MULTIPLE_CHOICE_FORMULA:
+                $class = self::MULTIPLE_CHOICE_FORMULA_MODEL_CLASS;
                 break;
             default:
                 throw new \LogicException('Unknown type');

@@ -16,6 +16,9 @@
                         <div ng-switch-when="multiple-choice-question">
                             <span title="Question de QCM" class="glyphicon glyphicon-check" style="font-size: 500%"></span>
                         </div>
+                        <div ng-switch-when="multiple-choice-formula-question">
+                            <span title="Question de QCM avec formule" class="glyphicon glyphicon-check" style="font-size: 500%"></span>
+                        </div>
                         <div ng-switch-when="open-ended-question">
                             <span title="Question à réponse courte ouverte" class="glyphicon glyphicon-question-sign" style="font-size: 500%"></span>
                         </div>
@@ -237,7 +240,281 @@
         </div>
     </div>
 
+
+    <div ng-switch-when="multiple-choice-formula-question">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-centered">
+                        <h4>Nombre de propositions</h4>
+                        <input type="number" ng-model="editedResource.content.max_number_of_propositions" class="form-control" style="height: 25px">
+                    </div>
+                    <div class="col-centered">
+                        <h4>Nombre de propositions justes</h4>
+                        <input type="number" ng-model="editedResource.content.max_number_of_right_propositions" class="form-control" style="height: 25px">
+                    </div>
+                    <div class="col-centered">
+                        <h4>Mélanger les propositions</h4>
+                            <span data-ng-click="editedResource.content.do_not_shuffle=!editedResource.content.do_not_shuffle">
+                                <span class="glyphicon" ng-class="{'glyphicon-check': editedResource.content.do_not_shuffle, 'glyphicon-unchecked': !editedResource.content.do_not_shuffle}"></span>
+                                Ne pas mélanger les propositions
+                            </span> &nbsp;&nbsp;
+                            <span data-ng-click="editedResource.content.do_not_shuffle=!editedResource.content.do_not_shuffle">
+                                <span class="glyphicon" ng-class="{'glyphicon-unchecked': editedResource.content.do_not_shuffle, 'glyphicon-check': !editedResource.content.do_not_shuffle}"></span>
+                                Mélanger les propositions
+                            </span>
+                    </div>
+                    <div class="col-xs-12">
+                        <h4>Indice de correction</h4>
+                        <input type="text" ng-model="editedResource.content.comment" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-success" is-open="true">
+            <div class="panel-heading">
+                <h4>Question de QCM</h4>
+                <input type="text" ng-model="editedResource.content.question" class="form-control">
+            </div>
+            <div style="margin-left:1%; margin-right: 1%">
+                <h4>Propositions</h4>
+
+                <div class="panel panel-success row" data-ng-repeat="proposition in editedResource.content.propositions track by $index">
+                    <div class="col-xs-5">
+                        <label>Intitulé de la proposition</label>
+                        <input type="text" ng-model="proposition.text" class="form-control">
+                    </div>
+                    <div class="col-xs-3 text-center" data-ng-click="proposition.right=!proposition.right">
+                        <span class="glyphicon" ng-class="{'glyphicon-check': proposition.right, 'glyphicon-unchecked': !proposition.right}"></span>
+                        <label>Proposition correcte</label>
+                    </div>
+                    <div class="col-xs-3 text-center" data-ng-click="proposition.force_use=!proposition.force_use">
+                        <span class="glyphicon" ng-class="{'glyphicon-check': proposition.force_use, 'glyphicon-unchecked': !proposition.force_use}"></span>
+                        <label>Forcer l'utilisation</label>
+                    </div>
+                    <div class="col-xs-1">
+                        <span class="glyphicon glyphicon-remove" data-ng-click="removeFromCollection(editedResource.content.propositions, $index)"></span>
+                    </div>
+                </div>
+                <div data-ng-click="addProposition(editedResource.content.propositions)">
+                    <div>
+                        <span class="glyphicon glyphicon-plus" title="Ajouter une proposition"></span>&nbsp;&nbsp;
+                        <strong>Ajouter une proposition</strong>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 </div>
+
+
+<div ng-if="editedResource.type === 'multiple-choice-formula-question'"
+     class="panel panel-success">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>Formules</h4>
+            </div>
+        </div>
+    </div>
+    <div class="row"
+         data-ng-repeat="formula in editedResource.content.formulas track by $index">
+        <div class="col-xs-12">
+            <div class="panel-body panel panel-success" style="margin:1%">
+                <label>Nom de la formule</label>
+
+                <div class="col-centred pull-right">
+                        <span
+                                data-ng-click="removeFromCollection(editedResource.content.formulas, $index)"
+                                class="glyphicon glyphicon-remove"></span>
+                </div>
+                <br>
+                <input type="text" ng-model="formula.name" class="form-control"/>
+
+                <label>Formule</label>
+                <input type="text" ng-model="formula.equation" class="form-control"/>
+
+                <label>Variables</label>
+
+                <div class="row"
+                     data-ng-repeat="variable in formula.variables track by $index">
+                    <div class="col-xs-12">
+                        <div class="panel-body panel panel-success" style="margin:1%">
+                            <div class="row">
+                                <div class="col-xs-3">Nom de la variable</div>
+                                <input type="text" ng-model="variable.name"
+                                       class="col-xs-8"/>
+
+                                <div class="col-xs-1">
+                                    <span
+                                            data-ng-click="removeFromCollection(formula.variables, $index)"
+                                            class="glyphicon glyphicon-remove"></span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-3">Type</div>
+                                <div class="btn-group col-xs-9"
+                                     style="margin-top: 4px;margin-bottom: 16px">
+                                    <label class="btn btn-success"
+                                           ng-model="variable.type" btn-radio="'integer'">
+                                        Entier
+                                    </label>
+                                    <label class="btn btn-success"
+                                           ng-model="variable.type" btn-radio="'float'">
+                                        Décimal
+                                    </label>
+                                    <!--<label class="btn btn-success"-->
+                                    <!--ng-model="variable.type" btn-radio="'scientific'">-->
+                                    <!--Scientifique-->
+                                    <!--</label>-->
+                                </div>
+                            </div>
+
+                            <div class="row" ng-if="variable.type === 'float' || variable.type === 'scientific'">
+                                <div class="col-xs-3">Nombre de décimales après la virgule</div>
+                                <input type="text" ng-model="variable.digits_after_point"
+                                       class="col-xs-8">
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-3">Valeur</div>
+                                <div class="btn-group col-xs-9"
+                                     style="margin-top: 4px;margin-bottom: 16px">
+                                    <label class="btn btn-success"
+                                           ng-model="variable.value_type"
+                                           btn-radio="'values'">
+                                        Liste de valeurs
+                                    </label>
+                                    <label class="btn btn-success"
+                                           ng-model="variable.value_type" btn-radio="'interval'">
+                                        Intervalle
+                                    </label>
+                                    <label class="btn btn-success"
+                                           ng-model="variable.value_type" btn-radio="'expression'">
+                                        Expression
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="row"
+                                 ng-if="variable.value_type === 'values'">
+                                <div data-ng-repeat="value in variable.values track by $index">
+                                    <div class="col-xs-5">
+                                        <div class="variable-value">
+                                            {{ value }}
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <span
+                                                data-ng-click="removeFromCollection(variable.values, $index)"
+                                                class="glyphicon glyphicon-remove"></span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="col-xs-5">
+                                        <input type="text" ng-model="newValue" class="form-control"
+                                               placeholder="nouvelle valeur">
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <span data-ng-click="variable.values.push(newValue); newValue = ''"
+                                              class="glyphicon glyphicon-ok"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row"
+                                 ng-if="variable.value_type === 'interval'">
+                                <div class="col-xs-2">Min :</div>
+                                <input type="text" ng-model="variable.interval.min" class="col-xs-2">
+
+                                <div class="col-xs-2">Max :</div>
+                                <input type="text" ng-model="variable.interval.max" class="col-xs-2">
+
+                                <div class="col-xs-2">Pas :</div>
+                                <input type="text" ng-model="variable.interval.step" class="col-xs-2">
+                            </div>
+                            <div class="row"
+                                 ng-if="variable.value_type === 'expression'">
+                                <div class="col-xs-3">Expression :</div>
+                                <input type="text" ng-model="variable.expression" class="col-xs-9">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-success" style="margin:1%">
+                    <div class="panel-heading"
+                         data-ng-click="formulaAddVariable(formula.variables)">
+                        <div class="row">
+                            <div class="col-xs-1">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </div>
+                            <div class="col-xs-10">Nouvelle variable</div>
+                        </div>
+                    </div>
+                </div>
+
+                <label>Inconnue</label>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="panel-body panel panel-success" style="margin:1%">
+                            <div class="row">
+                                <div class="col-xs-3">Nom de l'inconnue</div>
+                                <input type="text" ng-model="formula.unknown.name"
+                                       class="col-xs-8"/>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-3">Type</div>
+                                <div class="btn-group col-xs-9"
+                                     style="margin-top: 4px;margin-bottom: 16px">
+                                    <label class="btn btn-success"
+                                           ng-model="formula.unknown.type" btn-radio="'integer'">
+                                        Entier
+                                    </label>
+                                    <label class="btn btn-success"
+                                           ng-model="formula.unknown.type" btn-radio="'float'">
+                                        Décimal
+                                    </label>
+                                    <!--<label class="btn btn-success"-->
+                                    <!--ng-model="formula.unknown.type" btn-radio="'scientific'">-->
+                                    <!--Scientifique-->
+                                    <!--</label>-->
+                                </div>
+                            </div>
+
+                            <div class="row" ng-if="formula.unknown.type === 'float' || formula.unknown.type === 'scientific'">
+                                <div class="col-xs-3">Nombre de décimales après la virgule</div>
+                                <input type="text" ng-model="formula.unknown.digits_after_point"
+                                       class="col-xs-8">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-success" style="margin:1%">
+        <div class="panel-heading"
+             data-ng-click="resourceAddFormula(editedResource.content.formulas)">
+            <div class="row">
+                <div class="col-xs-1">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </div>
+                <div class="col-xs-10">Nouvelle formule</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <div ng-if="editedResource.type === 'open-ended-question'"
      class="panel panel-success">
