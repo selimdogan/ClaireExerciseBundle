@@ -80,10 +80,36 @@ class MultipleChoiceFormulaQuestion extends ExerciseObject
      */
     private $maxNOfRightPropositions;
 
+     /**
+     * @var string generated_proposition The proposition pattern to generate other proposition.
+     */
+    private $generated_proposition;
+
     /**
      * @var boolean $doNotShuffle
      */
     private $doNotShuffle;
+
+    /**
+     * setWording for generated proposition
+     *
+     * @param string $generated_proposition
+     */
+    public function setGeneratedProposition($generated_proposition)
+    {
+        $this->generated_proposition = $generated_proposition;
+    }
+
+    /**
+     *
+     * getWording for generated proposition
+     *
+     * @return string
+     */
+    public function getGeneratedProposition()
+    {
+        return $this->generated_proposition;
+    }
 
     /**
      * Set comment

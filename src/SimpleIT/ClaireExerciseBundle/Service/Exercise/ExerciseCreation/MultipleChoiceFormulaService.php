@@ -230,7 +230,7 @@ class MultipleChoiceFormulaService extends ExerciseCreationService
 
             /* Une fois que j'ai tout généré, il me faut juste remplacer partout !!
                1) Je remplace dans la question de QCM les valeurs qui vont bien... */
-            $wording = $this->parseStringWithVariables($modelQuestion->getQuestion(), $variables);
+            $wording = $this->parseStringWithVariablesForMCFQ($modelQuestion->getQuestion(), $variables);
 
             /*
             foreach ($array_variable_unique as $key => $newVar)
@@ -314,9 +314,32 @@ class MultipleChoiceFormulaService extends ExerciseCreationService
             foreach ($propositionIds as $propId) {
                 $exerciseQuestion->addProposition(
                     $modelQuestion->getRight()[$propId],
-                    $this->parseStringWithVariables($modelQuestion->getPropositions()[$propId], $variables)
+                    $this->parseStringWithVariablesForMCFQ($modelQuestion->getPropositions()[$propId], $variables)
                 );
             }
+
+            // TODO BRYAN : Autre modification ici ! Generation de propositions supplémentaires si pas assez.
+            // TODO BRYAN : INCOMPLET... Et cela fait planter !
+            $nb_actuel = count($modelQuestion->getPropositions());
+            $nb_voulu = $modelQuestion->getMaxNumberOfPropositions() ;
+            $nb_a_generer = $nb_voulu - $nb_actuel;
+            while($nb_a_generer>0)
+            {
+                $iteration_actuelle = 100;
+
+
+                $nb_a_generer = $nb_a_generer -1;
+            }
+            /*$wording = $modelQuestion->getGeneratedProposition();
+            $nb_proposition = $modelQuestion->getMaxNOfRightPropositions();
+
+            $number_total = $nb_proposition - $modelQuestion->getPropositions().length();
+            $generate = array();
+            $variables_generated = [];
+            while($number_total>0)
+            {
+
+            } */
 
             $exercise->addQuestion($exerciseQuestion);
         }

@@ -236,6 +236,52 @@ abstract class ExerciseCreationService implements ExerciseCreationServiceInterfa
     }
 
     /**
+     * Version for Multiple choice question with Formula, or multiple-choice-formula-question
+     * that doesn't need to have the ':' prefixe due to having multiple formula
+     * with same array of variables. I just need to take the first split occurence
+     *  Fonction Valable uniquement pour les MCFQ pour le moment, vu qu il suppose un array commun de variables.
+     *
+     * @param string $string
+     * @param array  $variables
+     *
+     * @return string
+     */
+    protected function parseStringWithVariablesForMCFQ($string, $variables)
+    {
+        if (!empty($variables)) {
+            preg_match_all('#\$[a-z|A-Z|0-9]+#', $string, $foundVarNames);
+
+            // On génère les préfixes...
+            $prefix_var = array();
+            /* On prend les préfixes ! */
+            foreach($variables as $key_var => $val )
+            {
+                $e = substr($key_var, 0, strpos( $key_var, ':' )+1);
+                if( in_array( $e, $prefix_var ) ) { } else
+                {$prefix_var[] = $e;}
+            }
+
+            foreach ($foundVarNames[0] as $varName) {
+                /* Je pense que c'est ici qu'il faut remplacer dans variable... et rajouter le "bon" firstname. */
+
+                /* Donc avec une variable récupérer le premier des préfixes et rechercher les valeurs quoi. */
+                $shortName = substr($varName, strpos($varName,':')+1);
+
+                foreach( $prefix_var as $pref )
+                {
+                    $Name = $pref.$shortName;
+                    if (isset($variables[$Name])) {
+                        $string = str_replace($varName, $variables[$Name], $string);
+                    }
+                }
+            }
+        }
+
+        return $string;
+    }
+
+
+    /**
      * Inject variable values in an array of strings
      *
      * @param $array

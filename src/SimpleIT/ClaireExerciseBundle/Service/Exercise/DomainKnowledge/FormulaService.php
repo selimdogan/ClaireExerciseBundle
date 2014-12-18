@@ -1012,6 +1012,7 @@ class FormulaService implements FormulaServiceInterface
         return $return_array;
     }
 
+
     /**
      * Instantiate a variable with an expression
      *

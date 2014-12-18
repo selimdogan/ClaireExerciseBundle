@@ -49,6 +49,9 @@
                                 <h4 ng-switch-when="multiple-choice">
                                     {{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>
                                 </h4>
+                                <h4 ng-switch-when="multiple-choice-formula">
+                                    {{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>
+                                </h4>
                                 <h4 ng-switch-when="group-items">
                                     <!--{{ resources[blockResourceId.id].title }}&nbsp;<span class="caret"></span>-->
                                     {{ resources[blockResourceId.id].title }}
@@ -128,7 +131,7 @@
                     <div ng-switch-when="multiple-choice-formula-question">
                     <label>Commentaire&nbsp;:&nbsp;</label>{{
                     resources[blockResourceId.id].content.comment }}
-                </div>
+                    </div>
                     <div ng-switch-when="open-ended-question">
                         <label>Commentaire&nbsp;:&nbsp;</label>{{
                         resources[blockResourceId.id].content.comment }}

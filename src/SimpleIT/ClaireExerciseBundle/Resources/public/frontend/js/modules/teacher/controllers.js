@@ -594,6 +594,51 @@ resourceControllers.controller('resourceEditController', ['$scope', '$modal', 'R
             );
         };
 
+        /* MULTIPLE CHOICE FORMULA : Ajoute la variable à toute les formules */
+        /* Y a mieux j'imagine... Mais bon, ne faisons point la fine bouche */
+        /* TODO BRYAN : Complete ça !
+
+         /* TODO BRYAN : Cela me parait trop compliqué... Mieux vaut faire une fonction de save différente... */
+         /* Lorsque l'une des variables est créée, on la crée dans la formule, et pour chaque autre formule on fait un watch ! */
+        $scope.formulaMVFAddVariable = function (collection) {
+            collection.splice(collection.length,
+                0,
+                jQuery.extend(true, {}, $scope.resourceContext.formula.newVariable)
+            );
+            /* Pour chaque formule existente, on ajoute l'élément et on synchronise avec les autres */
+            angular.forEach(collection.parent.parent, function( value, key)
+            {
+                formulaMVFAddVariable( value.variables );
+                $scope.$watch( collection.variables[collection.variables.length-1],
+                    function(v){ value.variables[value.variables.length-1] = v; });
+            } );
+        };
+
+        //$scope.$watch( '$editedResources', function(){} );
+        /* TODO BRYAN : Fonction de sauvegarde pour les MCFQ particulièrement */
+        $scope.saveMultiple_choice_formula_question = function (element) {
+            if(element.formulas.length>0)
+            {
+                for(j=1; j<element.formulas.length; j++)
+                {
+                    element.formulas[j].variables.length = 0;
+                    for(i=0; i<element.formulas[0].variables.length; i++)
+                        {
+                            //alert("COBRA !");
+                            $scope.formulaAddVariable(element.formulas[j].variables);
+                            element.formulas[j].variables[i] = element.formulas[0].variables[i];
+                        }
+                }
+            }
+            else
+            {
+                //alert("PAS COBRA : " + element.formulas.length );
+            }
+            $scope.updateResource();
+        };
+
+        /* MULTIPLE CHOICE FORMULA */
+
         $scope.resourceAddFormula = function (collection) {
             collection.splice(collection.length,
                 0,
