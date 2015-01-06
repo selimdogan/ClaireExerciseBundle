@@ -70,6 +70,7 @@ attemptControllers.controller('attemptController', ['$scope', '$state', 'Attempt
                 });
         };
 
+
     }]);
 
 var itemControllers = angular.module('itemControllers', ['ui.router']);

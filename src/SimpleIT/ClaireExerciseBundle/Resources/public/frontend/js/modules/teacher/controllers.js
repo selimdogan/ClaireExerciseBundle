@@ -664,8 +664,8 @@ resourceControllers.controller('resourceSelectListController', ['$scope', 'BASE_
 
 var modelControllers = angular.module('modelControllers', ['ui.router']);
 
-modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'AttemptByExercise', '$routeParams', '$location',
-    function ($scope, ExerciseByModel, AttemptByExercise, $routeParams, $location) {
+modelControllers.controller('modelController', ['$scope', 'Exercise','Item', 'ExerciseByModel', 'AttemptByExercise', '$routeParams', '$location',
+    function ($scope, Exercise, Item, ExerciseByModel ,AttemptByExercise, $routeParams, $location) {
 
         $scope.section = 'model';
 
@@ -1039,6 +1039,89 @@ modelControllers.controller('modelController', ['$scope', 'ExerciseByModel', 'At
                     $scope.tryExercise(exercise);
                 });
         };
+
+
+        /* TODO BRYAN = EXPORT EN COUR ; FUNCTION ICI*/
+        /* export_model function_list */
+        //var MCFQ_number_export = 3;
+        var MCFQ_actual_number_export;
+        var MCFQ_list_exercise = new Array();
+        var MCFQ_actual_exercise;
+        //var A_popup;
+
+        //function that create an attempt without visualing it
+        $scope.MCQF_export_tryExercise = function (exercise) {
+            // create attempt from exercise
+            var exo_items;
+            //alert("exercise cree");
+
+            exo_items = Exercise.get({exerciseId : exercise.id});
+            //exo_items = Exercise.query({exerciseId : exercise.id});
+            //exo_items = Item.query({exerciseId : exercise.id},null );
+            //exo_items = Item.query({attemptId: 10},null );
+            exo_items = ItemByExercise.list({exerciseId : exercise.id});
+
+
+            //$scope.items = Item.query({attemptId: $stateParams.attemptId},
+            //retrieve those elements...
+            //alert(JSON.stringify(exo_items));
+        };
+
+        //function that return one exercise
+        $scope.MCFQ_export_1 = function(model, MCFQ_number_export)
+        {
+            var exercise;
+            MCFQ_list_exercise = new Array();
+            $scope.MCFQ_actual_number_export = 0;
+            console.log('export MCFQ exercise...');
+
+            //alert(">< : " + MCFQ_number_export);
+
+            //alert("actuel : " + $scope.MCFQ_actual_number_export + " max : "+ $scope.MCFQ_number_export);
+            //alert("actuel : " + element(by.model('MCFQ_actual_number_export')) + " max : "+ element(by.model('MCF_number_export')));
+            while($scope.MCFQ_actual_number_export<MCFQ_number_export)
+            {
+                // Repeat until exercise completion.
+                MCFQ_actual_exercise = ExerciseByModel.try({modelId: model.id},
+                function (exercise) {
+                    alert("id :"+MCFQ_actual_exercise.id + " :: idExo :" + exercise.id);
+                    $scope.MCQF_export_tryExercise(exercise);
+                });
+
+
+                // Si la génération s'est bien passée, on peut passer à la génération suivante
+                $scope.MCFQ_actual_number_export =  $scope.MCFQ_actual_number_export + 1;
+
+
+                // On oublie pas de stocker l'exercice
+                MCFQ_list_exercise.push(MCFQ_actual_exercise);
+
+            }
+        };
+
+        //function that generate exercise until MCFQ_number_export
+        // This function export an exercise without further verifications
+        $scope.exportExerciceFromModel = function ( model ){
+            // create exercise from model
+            console.log('export exercise...');
+
+            //A_popup = window.open("export.html", "popup_id", "scrollbars,resizable,width=200,heigh=400,");
+            //A_popup = window.open("partial-model-edit.html", "popup_id", "scrollbars,resizable,width=200,heigh=400,");
+            A_popup = window.open(BASE_CONFIG.urls.partials.teacher + "/partial-export-question.html", "popup_id", "scrollbars,resizable,width=200,heigh=400,");
+            // TODO BRYAN : Ce n'est pas un chemin absolu qu'il me faut là
+            ///A_popup = window.open("C:/wamp/www/Claroline/web/bundles/simpleitclaireexercise/partials/teacher/partial-model-edit.html",
+            ///        "popup_id", "scrollbars,resizable,width=200,heigh=400,");
+
+            //alert("exportation");
+            //scope.go("");
+            //$location.path("/teacher/attempt/" + attempt.id);
+            //$state.go( exportEdit, {resourceId: model.modelID});
+            /*exercise = ExerciseByModel.try({modelId: modelId},
+             function (exercise) {
+             $scope.tryExercise(exercise);
+             });*/
+        };
+
     }])
 ;
 
@@ -1508,3 +1591,4 @@ modelControllers.controller('modelEditMultipleChoiceFormulaController', ['$scope
             );
         };
     }]);
+

@@ -10,6 +10,19 @@ itemServices.factory('Item', ['$resource',
 
     }]);
 
+/* TODO BRYAN : pour recuperer le contenu des exercises */
+var itemByExerciseServices = angular.module('itemByExerciseServices', ['ngResource']);
+
+itemByExerciseServices.factory('ItemByExercise', ['$resource',
+    function ($resource) {
+
+        return $resource(
+            BASE_CONFIG.urls.api.exercises + ':exerciseId/items/:itemId',
+            {'exerciseId': '@exerciseId', 'itemId': '@itemId'}
+        );}
+]);
+/* TODO BRYAN : pour recuperer le contenu des exercises */
+
 var exerciseServices = angular.module('exerciseServices', ['ngResource']);
 
 exerciseServices.factory('Exercise', ['$resource',

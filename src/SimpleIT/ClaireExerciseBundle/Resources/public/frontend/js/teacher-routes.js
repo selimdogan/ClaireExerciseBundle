@@ -31,6 +31,13 @@ mainApp.config(
                 url: '/teacher/resource/:resourceid',
                 templateUrl: BASE_CONFIG.urls.partials.teacher + '/partial-resource-edit.html'
             });
+
+            /* TODO BRYAN : Route pour export ici */
+            $stateProvider.state('exportEdit', {
+                url: '/teacher/resource/export/:resourceid',
+                templateUrl: BASE_CONFIG.urls.partials.teacher + '/partial-export-question.html'
+            });
+
         }
     ]
 );

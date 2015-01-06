@@ -14,6 +14,36 @@
     </div>
 </div>
 
+<!-- TODO BRYAN : Pour l'export--><!--
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <div class="col-centered">
+            <h5>Exporter des Exercices</h5>
+
+            <input name="MQCF_export" type="number" ng-model="MCFQ_number_export"
+                   value="1" min="1" max="200" required >
+
+
+            <div class="row">
+                 <div class="col-xs-12">
+                    <span ng-model="MCFQ_actual_number_export">0</span>
+                    <span> / </span>
+                   <span ng-bind="MCFQ_number_export">{{MCFQ_number_export}}</span>
+                 </div>
+            </div>
+
+
+            <button
+                    ng-disabled="!model.complete"
+                    ng-click="MCFQ_export_1(model, MCFQ_number_export)" class="btn btn-primary"
+                    title="Exporter un ensemble d'exercices generes">
+                Exporter
+            </button>
+        </div>
+    </div>
+</div> -->
+<!-- TODO Bryan : Fin de l'export -->
+
 <accordion>
     <accordion-group class="panel panel-primary" name="accordionBlock"
                      data-ng-repeat="block in model.content.question_blocks track by $index"
@@ -64,5 +94,7 @@
             </div>
         </div>
     </div>
+
+
 
 </accordion>

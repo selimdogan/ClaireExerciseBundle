@@ -320,6 +320,14 @@
             title="Essayer le modèle">
         Essayer
     </button>
+
+    <!--ng-click="exportExerciceFromModel(model)" class="btn btn-primary"-->
+    <!--<button
+            ng-disabled="!model.complete"
+            ng-click="exportExerciceFromModel(model)" class="btn btn-primary"
+            title="Exporter un ensemble d'exercices generes">
+        Exporter
+    </button>-->
     <button ng-if="BASE_CONFIG.currentUserId == model.owner && model.removable"
             ng-click="deleteModel(model)" back-Button
             class="btn btn-danger pull-right"
